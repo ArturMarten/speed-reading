@@ -1,0 +1,60 @@
+import React, {Component} from 'react';
+import { Editor, EditorState, Modifier, SelectionState } from 'draft-js';
+
+import TextOptionsContainer from '../../containers/TextOptionsContainer';
+import TimingContainer from '../../containers/TimingContainer';
+
+const styleMap = {
+  'HIDE': {
+    visibility: 'hidden'
+  },
+};
+
+class Disappearing extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidUpdate() {
+    const scrollTop = this.refs.text.scrollTop;
+    //console.log('Updating! ScrollTop: ' + scrollTop);
+    this.refs.text.scrollTop = scrollTop + 1;
+  }
+
+  disappearing() {
+    let contentState = this.props.exercise.editorState.getCurrentContent();
+    let firstBlock = contentState.getFirstBlock();
+    
+    let disappearing = EditorState.createWithContent(
+      Modifier.applyInlineStyle(
+        contentState, 
+        new SelectionState({
+          anchorKey: firstBlock.getKey(), 
+          anchorOffset: 0, 
+          focusKey: firstBlock.getKey(), 
+          focusOffset: this.props.exercise.position - 1
+        }), 
+        'HIDE'
+      )
+    );
+    return disappearing;
+  }
+
+  render() {
+    return(
+      <div className="disappearing">
+        <TextOptionsContainer />
+        <TimingContainer />
+        <div className="text" style={{...this.props.exercise.options}} ref="text">
+          <Editor 
+            editorState = {this.disappearing()}
+            readOnly = {true}
+            customStyleMap={styleMap}
+          />
+        </div>
+      </div>
+    );
+  }
+};
+
+export default Disappearing;

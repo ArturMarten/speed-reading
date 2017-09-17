@@ -1,0 +1,38 @@
+body {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  /*user-select: none;*/
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.text-editor {
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  justify-content: center;
+  text-align: start;
+}
+
+.text {
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  justify-content: center;
+  text-align: start;
+  margin: 0 auto;
+  overflow: hidden;
+  max-height: 150px;
+  line-height: 25px;
+  user-select: none;
+}
+
+.text ::selection {
+  color: black; 
+  background: yellow;
+}
