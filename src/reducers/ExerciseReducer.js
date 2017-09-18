@@ -9,7 +9,8 @@ import {
   TICK,
   EDITOR_STATE_UPDATED,
   OPTIONS_UPDATED,
-  EXERCISE_SELECTED
+  EXERCISE_SELECTED,
+  FIXATION_UPDATED
 } from '../actions';
 
 const text = `Lorem ipsum dolor sit amet, praesent torquent dictum vel augue proin at, sollicitudin orci rhoncus semper, arcu et ut accumsan metus amet, mauris tellus tortor, magna imperdiet erat. Vel leo est velit tellus tellus, aliquet in, vestibulum ut erat, mi arcu elit arcu et amet. Elit orci hymenaeos accumsan sed sem ac, nec augue arcu sed in id, ac proin. Lacus aliquam diam pulvinar, neque mauris elementum eu, mauris auctor vestibulum amet turpis. Nunc sem aenean nec elit, elementum nulla, mauris est cillum et.`;
@@ -98,7 +99,8 @@ const words = firstBlock.getText().split(' ');
 
 const initialState = {
   started: false,
-  type: 'reading',
+  fixation: 200,
+  type: '',
   counter: 0,
   position: 0,
   editorState: EditorState.createWithContent(normalContent),
@@ -135,20 +137,35 @@ const ExerciseReducer = (state = initialState, action) => {
       let contentState = state.editorState.getCurrentContent();
       const firstBlock = contentState.getFirstBlock();
       const lastBlock = contentState.getLastBlock();
+      contentState = Modifier.removeInlineStyle(
+        contentState, 
+        new SelectionState({
+          anchorKey: firstBlock.getKey(), 
+          anchorOffset: 0, 
+          focusKey: lastBlock.getKey(), 
+          focusOffset: lastBlock.getLength()
+        }), 
+        style
+      );
+
+      if(state.type === 'wordGroup') {
+        let allInvisibleState = Modifier.applyInlineStyle(
+          contentState, 
+          new SelectionState({
+            anchorKey: firstBlock.getKey(), 
+            anchorOffset: 0, 
+            focusKey: lastBlock.getKey(), 
+            focusOffset: lastBlock.getLength()
+          }), 
+          style
+        );
+        contentState = allInvisibleState;
+      }
+
       return {
         ...state, 
         started: false,
-        editorState: EditorState.createWithContent(
-          Modifier.removeInlineStyle(
-            state.editorState.getCurrentContent(), 
-            new SelectionState({
-              anchorKey: firstBlock.getKey(), 
-              anchorOffset: 0, 
-              focusKey: lastBlock.getKey(), 
-              focusOffset: lastBlock.getLength()
-            }), 
-            style), 
-          decorator),
+        editorState: EditorState.createWithContent(contentState, decorator),       
         counter: 0,
         position: 0
       }
@@ -160,7 +177,7 @@ const ExerciseReducer = (state = initialState, action) => {
       }
     }
     case TICK: {
-      console.log('Tick!');
+      //console.log('Tick!');
       let contentState = state.editorState.getCurrentContent();
       const firstBlock = contentState.getFirstBlock();
       let newState = {...state};
@@ -219,9 +236,32 @@ const ExerciseReducer = (state = initialState, action) => {
       }
     }
     case EXERCISE_SELECTED: {
+      let editorState = state.editorState;
+      if(action.payload === 'wordGroup') {
+        let contentState = state.editorState.getCurrentContent();
+        const firstBlock = contentState.getFirstBlock();
+        let allInvisibleState = Modifier.applyInlineStyle(
+          contentState, 
+          new SelectionState({
+            anchorKey: firstBlock.getKey(), 
+            anchorOffset: 0, 
+            focusKey: firstBlock.getKey(), 
+            focusOffset: firstBlock.getLength()
+          }), 
+          'HIDE'
+        );
+        editorState = EditorState.createWithContent(allInvisibleState);
+      }
       return {
         ...state,
-        type: action.payload
+        type: action.payload,
+        editorState: editorState
+      }
+    }
+    case FIXATION_UPDATED: {
+      return {
+        ...state,
+        fixation: action.payload
       }
     }
     default:

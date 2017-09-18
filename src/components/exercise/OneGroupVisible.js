@@ -18,6 +18,10 @@ class OneGroupVisible extends Component {
     super(props);
   }
 
+  componentWillMount() {
+    this.props.onExerciseSelect('wordGroup');
+  }
+
   componentDidUpdate() {
     const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);
@@ -27,27 +31,15 @@ class OneGroupVisible extends Component {
   oneGroupVisibleState() {
     let contentState = this.props.exercise.editorState.getCurrentContent();
     let firstBlock = contentState.getFirstBlock();
-    
-    let allInvisibleState = Modifier.applyInlineStyle(
-      contentState, 
-      new SelectionState({
-        anchorKey: firstBlock.getKey(), 
-        anchorOffset: 0, 
-        focusKey: firstBlock.getKey(), 
-        focusOffset: firstBlock.getLength()
-      }), 
-      'HIDE'
-    );
 
     let oneGroupVisibleState = EditorState.createWithContent(
       Modifier.applyInlineStyle(
-        allInvisibleState, 
+        contentState, 
         this.props.exercise.selection, 
         'VISIBLE'
       )
     );
 
-    //if (this.props.exercise.selection) oneGroupVisibleState = EditorState.forceSelection(oneGroupVisibleState, this.props.exercise.selection);
     return oneGroupVisibleState;
   }
 

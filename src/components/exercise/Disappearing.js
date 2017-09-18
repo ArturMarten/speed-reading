@@ -15,6 +15,10 @@ class Disappearing extends Component {
     super(props);
   }
 
+  componentWillMount() {
+    this.props.onExerciseSelect('disappearing');
+  }
+
   componentDidUpdate() {
     const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);

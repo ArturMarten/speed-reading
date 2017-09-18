@@ -17,6 +17,10 @@ class Reading extends Component {
     this.currentPage = 1;
   }
 
+  componentWillMount() {
+    this.props.onExerciseSelect('reading');
+  }
+
   componentDidUpdate() {
     const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);

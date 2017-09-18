@@ -5,24 +5,19 @@ export const TICK = 'TICK';
 export const EDITOR_STATE_UPDATED = 'EDITOR_STATE_UPDATED';
 export const OPTIONS_UPDATED = 'OPTIONS_UPDATED';
 export const EXERCISE_SELECTED = 'EXERCISE_SELECTED';
-
-let timer = null;
+export const FIXATION_UPDATED = 'FIXATION_UPDATED';
 
 export const startRequested = () => (dispatch) => {
-  clearInterval(timer);
-  timer = setInterval(() => dispatch(tick()), 200);
   dispatch({type: START_REQUESTED});
 };
 
 export const stopRequested = () => {
-  clearInterval(timer);
   return {
     type: STOP_REQUESTED
   };
 };
 
 export const resetRequested = () => {
-  clearInterval(timer);
   return {
     type: RESET_REQUESTED
   }
@@ -45,4 +40,9 @@ export const optionsUpdated = (options) => ({
 export const exerciseSelected = (type) => ({
   type: EXERCISE_SELECTED,
   payload: type
-})
+});
+
+export const fixationUpdated = (fixation) => ({
+  type: FIXATION_UPDATED,
+  payload: fixation
+});
