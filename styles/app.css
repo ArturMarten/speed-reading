@@ -27,7 +27,7 @@ ul {
   text-align: start;
   margin: 0 auto;
   overflow: hidden;
-  max-height: 150px;
+  max-height: 350px;
   line-height: 25px;
   user-select: none;
 }

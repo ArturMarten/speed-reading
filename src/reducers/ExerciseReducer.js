@@ -99,7 +99,8 @@ const words = firstBlock.getText().split(' ');
 
 const initialState = {
   started: false,
-  fixation: 200,
+  finished: false,
+  fixation: 300,
   type: '',
   counter: 0,
   position: 0,
@@ -114,30 +115,46 @@ const initialState = {
   }
 };
 
-const style = 'HIDE';
+const hiddenStyle = 'HIDDEN';
 
 const ExerciseReducer = (state = initialState, action) => {
   switch (action.type) {
     case START_REQUESTED: {
       console.log('Started!');
+      let contentState = state.editorState.getCurrentContent();
+      switch(state.type) {
+        case 'wordGroup': {
+          // Keep hidden
+          break;
+        }
+        default:
+          const firstBlock = contentState.getFirstBlock();
+          const lastBlock = contentState.getLastBlock();
+          contentState = Modifier.removeInlineStyle(
+            contentState, 
+            new SelectionState({
+              anchorKey: firstBlock.getKey(), 
+              anchorOffset: 0, 
+              focusKey: lastBlock.getKey(), 
+              focusOffset: lastBlock.getLength()
+            }), 
+            hiddenStyle
+          );
+          break;
+      }
+
       return {
         ...state, 
-        started: true
+        started: true,
+        editorState: EditorState.createWithContent(contentState, decorator)
       }
     }
     case STOP_REQUESTED: {
       console.log('Stopped!');
-      return {
-        ...state, 
-        started: false
-      }
-    }
-    case RESET_REQUESTED: {
-      console.log('Resetted!');
       let contentState = state.editorState.getCurrentContent();
       const firstBlock = contentState.getFirstBlock();
       const lastBlock = contentState.getLastBlock();
-      contentState = Modifier.removeInlineStyle(
+      contentState = Modifier.applyInlineStyle(
         contentState, 
         new SelectionState({
           anchorKey: firstBlock.getKey(), 
@@ -145,29 +162,37 @@ const ExerciseReducer = (state = initialState, action) => {
           focusKey: lastBlock.getKey(), 
           focusOffset: lastBlock.getLength()
         }), 
-        style
+        hiddenStyle
       );
-
-      if(state.type === 'wordGroup') {
-        let allInvisibleState = Modifier.applyInlineStyle(
-          contentState, 
-          new SelectionState({
-            anchorKey: firstBlock.getKey(), 
-            anchorOffset: 0, 
-            focusKey: lastBlock.getKey(), 
-            focusOffset: lastBlock.getLength()
-          }), 
-          style
-        );
-        contentState = allInvisibleState;
-      }
-
       return {
         ...state, 
         started: false,
+        editorState: EditorState.createWithContent(contentState, decorator)
+      }
+    }
+    case RESET_REQUESTED: {
+      console.log('Resetted!');
+      let contentState = state.editorState.getCurrentContent();
+      const firstBlock = contentState.getFirstBlock();
+      const lastBlock = contentState.getLastBlock();
+      contentState = Modifier.applyInlineStyle(
+        contentState, 
+        new SelectionState({
+          anchorKey: firstBlock.getKey(), 
+          anchorOffset: 0, 
+          focusKey: lastBlock.getKey(), 
+          focusOffset: lastBlock.getLength()
+        }), 
+        hiddenStyle
+      );
+      return {
+        ...state, 
+        started: false,
+        finished: false,
         editorState: EditorState.createWithContent(contentState, decorator),       
         counter: 0,
-        position: 0
+        position: 0,
+        selection: emptySelection
       }
     }
     case EDITOR_STATE_UPDATED: {
@@ -224,6 +249,9 @@ const ExerciseReducer = (state = initialState, action) => {
           console.error('Unknown exercise type!');
           break;
       }
+      if (newState.position >= firstBlock.getLength()) {
+        newState.finished = true;
+      }
       //console.log(getVisibleSelectionRect(window));
       return {
         ...newState
@@ -237,21 +265,20 @@ const ExerciseReducer = (state = initialState, action) => {
     }
     case EXERCISE_SELECTED: {
       let editorState = state.editorState;
-      if(action.payload === 'wordGroup') {
-        let contentState = state.editorState.getCurrentContent();
-        const firstBlock = contentState.getFirstBlock();
-        let allInvisibleState = Modifier.applyInlineStyle(
-          contentState, 
-          new SelectionState({
-            anchorKey: firstBlock.getKey(), 
-            anchorOffset: 0, 
-            focusKey: firstBlock.getKey(), 
-            focusOffset: firstBlock.getLength()
-          }), 
-          'HIDE'
-        );
-        editorState = EditorState.createWithContent(allInvisibleState);
-      }
+      let contentState = state.editorState.getCurrentContent();
+      const firstBlock = contentState.getFirstBlock();
+      let allInvisibleState = Modifier.applyInlineStyle(
+        contentState, 
+        new SelectionState({
+          anchorKey: firstBlock.getKey(), 
+          anchorOffset: 0, 
+          focusKey: firstBlock.getKey(), 
+          focusOffset: firstBlock.getLength()
+        }), 
+        hiddenStyle
+      );
+      editorState = EditorState.createWithContent(allInvisibleState);
+      
       return {
         ...state,
         type: action.payload,

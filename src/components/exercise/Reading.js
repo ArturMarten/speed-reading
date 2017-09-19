@@ -5,7 +5,7 @@ import TextOptionsContainer from '../../containers/TextOptionsContainer';
 import TimingContainer from '../../containers/TimingContainer';
 
 const styleMap = {
-  'HIDE': {
+  'HIDDEN': {
     visibility: 'hidden'
   },
 };
@@ -15,20 +15,21 @@ class Reading extends Component {
     super(props);
     this.totalPages = 1;
     this.currentPage = 1;
+    this.editorState = props.exercise.editorState;
   }
 
   componentWillMount() {
     this.props.onExerciseSelect('reading');
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(previous) {
     const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);
-    this.refs.text.scrollTop = scrollTop + 1;
+    //this.refs.text.scrollTop = scrollTop + 1;
 
     // Current page and total pages calculations
     this.totalPages = Math.ceil(this.refs.text.scrollHeight / this.refs.text.clientHeight);
-    this.currentPage = this.refs.text.scrollTop ===  this.refs.text.scrollHeight - this.refs.text.clientHeight ? this.totalPages : Math.ceil(this.refs.text.scrollTop / this.refs.text.clientHeight);
+    this.currentPage = this.refs.text.scrollTop ===  this.refs.text.scrollHeight - this.refs.text.clientHeight ? this.totalPages : Math.max(1, Math.ceil(this.refs.text.scrollTop / this.refs.text.clientHeight));
   }
 
   render() {

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => ({
   started: state.exercise.started,
+  finished: state.exercise.finished,
   fixation: state.exercise.fixation,
   counter: state.exercise.counter
 });

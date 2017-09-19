@@ -5,7 +5,7 @@ import TextOptionsContainer from '../../containers/TextOptionsContainer';
 import TimingContainer from '../../containers/TimingContainer';
 
 const styleMap = {
-  'HIDE': {
+  'HIDDEN': {
     visibility: 'hidden'
   },
 };
@@ -22,7 +22,7 @@ class Disappearing extends Component {
   componentDidUpdate() {
     const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);
-    this.refs.text.scrollTop = scrollTop + 1;
+    //this.refs.text.scrollTop = scrollTop + 1;
   }
 
   disappearing() {
@@ -38,7 +38,7 @@ class Disappearing extends Component {
           focusKey: firstBlock.getKey(), 
           focusOffset: this.props.exercise.position - 1
         }), 
-        'HIDE'
+        'HIDDEN'
       )
     );
     return disappearing;

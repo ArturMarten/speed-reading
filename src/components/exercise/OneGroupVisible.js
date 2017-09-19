@@ -5,13 +5,15 @@ import TextOptionsContainer from '../../containers/TextOptionsContainer';
 import TimingContainer from '../../containers/TimingContainer';
 
 const styleMap = {
-  'HIDE': {
+  'HIDDEN': {
     visibility: 'hidden'
   },
   'VISIBLE': {
     visibility: 'visible'
   }
 };
+
+const hiddenStyle = 'HIDDEN';
 
 class OneGroupVisible extends Component {
   constructor(props) {
@@ -25,22 +27,20 @@ class OneGroupVisible extends Component {
   componentDidUpdate() {
     const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);
-    this.refs.text.scrollTop = scrollTop + 1;
+    //this.refs.text.scrollTop = scrollTop + 1;
   }
   
   oneGroupVisibleState() {
     let contentState = this.props.exercise.editorState.getCurrentContent();
-    let firstBlock = contentState.getFirstBlock();
-
-    let oneGroupVisibleState = EditorState.createWithContent(
-      Modifier.applyInlineStyle(
+    if(this.props.exercise.started) {
+      let firstBlock = contentState.getFirstBlock();
+      contentState = Modifier.removeInlineStyle(
         contentState, 
         this.props.exercise.selection, 
-        'VISIBLE'
-      )
-    );
-
-    return oneGroupVisibleState;
+        hiddenStyle
+      );
+    }
+    return EditorState.createWithContent(contentState);
   }
 
   render() {
