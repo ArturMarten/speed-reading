@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Editor, EditorState, SelectionState, Modifier, getVisibleSelectionRect } from 'draft-js';
 
 import TextOptionsContainer from '../../containers/TextOptionsContainer';
+import ExerciseOptionsContainer from '../../containers/ExerciseOptionsContainer';
 import TimingContainer from '../../containers/TimingContainer';
 
 const styleMap = {
@@ -47,6 +48,7 @@ class OneGroupVisible extends Component {
     return(
       <div className="one-group">
         <TextOptionsContainer />
+        <ExerciseOptionsContainer />
         <TimingContainer />
         <div className="text" style={{...this.props.exercise.options}} ref="text">
           <Editor 

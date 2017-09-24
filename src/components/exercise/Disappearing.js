@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Editor, EditorState, Modifier, SelectionState } from 'draft-js';
 
 import TextOptionsContainer from '../../containers/TextOptionsContainer';
+import ExerciseOptionsContainer from '../../containers/ExerciseOptionsContainer';
 import TimingContainer from '../../containers/TimingContainer';
 
 const styleMap = {
@@ -20,7 +21,7 @@ class Disappearing extends Component {
   }
 
   componentDidUpdate() {
-    const scrollTop = this.refs.text.scrollTop;
+    //const scrollTop = this.refs.text.scrollTop;
     //console.log('Updating! ScrollTop: ' + scrollTop);
     //this.refs.text.scrollTop = scrollTop + 1;
   }
@@ -48,6 +49,7 @@ class Disappearing extends Component {
     return(
       <div className="disappearing">
         <TextOptionsContainer />
+        <ExerciseOptionsContainer />
         <TimingContainer />
         <div className="text" style={{...this.props.exercise.options}} ref="text">
           <Editor 

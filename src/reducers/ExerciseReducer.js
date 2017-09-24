@@ -8,7 +8,8 @@ import {
   RESET_REQUESTED,
   TICK,
   EDITOR_STATE_UPDATED,
-  OPTIONS_UPDATED,
+  TEXT_OPTIONS_UPDATED,
+  EXERCISE_OPTIONS_UPDATED,
   EXERCISE_SELECTED,
   FIXATION_UPDATED
 } from '../actions';
@@ -100,18 +101,22 @@ const words = firstBlock.getText().split(' ');
 const initialState = {
   started: false,
   finished: false,
-  fixation: 300,
   type: '',
   counter: 0,
   position: 0,
   editorState: EditorState.createWithContent(normalContent),
 //editorState: EditorState.createWithContent(wordGroupContent, decorator),
+  text: text,
   wordGroups: wordGroups,
   words: words,
   selection: emptySelection,
-  options: {
-    width: '90%',
-    fontSize: '20px'
+  exerciseOptions: {
+    wpm: 200,
+    fixation: 300
+  },
+  textOptions: {
+    width: 500,
+    fontSize: 16
   }
 };
 
@@ -257,10 +262,16 @@ const ExerciseReducer = (state = initialState, action) => {
         ...newState
       }
     }
-    case OPTIONS_UPDATED: {
+    case TEXT_OPTIONS_UPDATED: {
       return {
         ...state,
-        options: Object.assign(state.options, action.payload)
+        textOptions: Object.assign(state.textOptions, action.payload)
+      }
+    }
+    case EXERCISE_OPTIONS_UPDATED: {
+      return {
+        ...state,
+        exerciseOptions: Object.assign(state.exerciseOptions, action.payload)
       }
     }
     case EXERCISE_SELECTED: {

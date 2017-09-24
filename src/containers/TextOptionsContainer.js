@@ -1,14 +1,14 @@
 import {connect} from 'react-redux';
 
 import TextOptions from '../components/TextOptions';
-import {optionsUpdated} from '../actions';
+import {textOptionsUpdated} from '../actions';
 
 const mapStateToProps = (state) => ({
-  options: state.exercise.options
+  options: state.exercise.textOptions
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (options) => dispatch(optionsUpdated(options))
+  onSubmit: (options) => dispatch(textOptionsUpdated(options))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextOptions);

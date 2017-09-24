@@ -34,9 +34,11 @@ module.exports = {
       allChunks: true
     }),
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
+      'process.env': {NODE_ENV: '"production"'}
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: false,
+      warnings: false,
     }),
     new MinifyPlugin()
   ]
