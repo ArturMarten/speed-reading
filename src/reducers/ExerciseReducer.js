@@ -101,6 +101,7 @@ const words = firstBlock.getText().split(' ');
 const initialState = {
   started: false,
   finished: false,
+  resetted: false,
   type: '',
   counter: 0,
   position: 0,
@@ -151,6 +152,7 @@ const ExerciseReducer = (state = initialState, action) => {
       return {
         ...state, 
         started: true,
+        resetted: false,
         editorState: EditorState.createWithContent(contentState, decorator)
       }
     }
@@ -193,6 +195,7 @@ const ExerciseReducer = (state = initialState, action) => {
       return {
         ...state, 
         started: false,
+        resetted: true,
         finished: false,
         editorState: EditorState.createWithContent(contentState, decorator),       
         counter: 0,

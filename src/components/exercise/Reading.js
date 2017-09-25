@@ -24,7 +24,7 @@ const initialState = {
 class Reading extends Component {
   constructor(props) {
     super(props);
-    this.cursorState = initialState;
+    this.cursorState = {...initialState};
   }
 
   componentWillMount() {
@@ -37,15 +37,25 @@ class Reading extends Component {
   }
 
   componentDidUpdate(previous) {
-    this.renderText();
-    this.renderCanvas();
     if (!previous.started && this.props.started) {
       // Exercise started
       update = setTimeout(() => this.nextCharacter(), START_DELAY);
+    } else if(!previous.resetted && this.props.resetted) {
+      clearTimeout(update);
+      this.cursorState = {...initialState};
+      this.renderText();
+      this.renderCanvas();
     } else if (previous.started && !this.props.started) {
       // Exercise stopped
       clearTimeout(update);
+    } else {
+      this.renderText();
+      this.renderCanvas();
     }
+  }
+
+  resetExercise() {
+
   }
 
   renderCanvas() {
@@ -53,7 +63,7 @@ class Reading extends Component {
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(this.refs.baseCanvas, 0, 0);
-    ctx.fillStyle="rgba(0, 255, 0, 0.9)";
+    ctx.fillStyle='rgba(0, 255, 0, 0.9)';
     ctx.fillRect(this.cursorState.linePosition - 2, this.cursorState.line * 30 + 22, this.cursorState.characterWidth + 2, 3);
   }
 
@@ -127,18 +137,18 @@ class Reading extends Component {
     context.fillText(line, x, y);
     // calculate update interval from wpm
     const timeInSeconds = (words.length/this.props.wpm)*60;
-    this.updateInterval = (timeInSeconds/text.split("").length)*1000;
+    this.updateInterval = (timeInSeconds/text.split('').length)*1000;
   }
 
   render() {
     return(
-      <div className="reading">
+      <div className='reading'>
         <TextOptionsContainer />
         <ExerciseOptionsContainer />
         <TimingContainer />
-        <div className="text" style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-          <canvas ref="shownCanvas" width={this.props.width} height={450} />
-          <canvas ref="baseCanvas" width={this.props.width} height={450} 
+        <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+          <canvas ref='shownCanvas' width={this.props.width} height={450} />
+          <canvas ref='baseCanvas' width={this.props.width} height={450} 
             style={{display: 'none'}}
           />
         </div>

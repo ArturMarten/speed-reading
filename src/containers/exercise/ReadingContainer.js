@@ -8,7 +8,8 @@ const mapStateToProps = (state) => ({
   width: state.exercise.textOptions.width,
   fontSize: state.exercise.textOptions.fontSize,
   wpm: state.exercise.exerciseOptions.wpm,
-  started: state.exercise.started
+  started: state.exercise.started,
+  resetted: state.exercise.resetted
 });
 
 const mapDispatchToProps = (dispatch) => ({
