@@ -41,6 +41,7 @@ class Reading extends Component {
       // Exercise started
       update = setTimeout(() => this.nextCharacter(), START_DELAY);
     } else if(!previous.resetted && this.props.resetted) {
+      // Exercise resetted
       clearTimeout(update);
       this.cursorState = {...initialState};
       this.renderText();
@@ -49,13 +50,10 @@ class Reading extends Component {
       // Exercise stopped
       clearTimeout(update);
     } else {
+      // Text/exercise options or text changed
       this.renderText();
       this.renderCanvas();
     }
-  }
-
-  resetExercise() {
-
   }
 
   renderCanvas() {

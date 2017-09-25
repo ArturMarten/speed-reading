@@ -113,7 +113,7 @@ const initialState = {
   selection: emptySelection,
   exerciseOptions: {
     wpm: 200,
-    fixation: 300
+    fixation: 200
   },
   textOptions: {
     width: 500,

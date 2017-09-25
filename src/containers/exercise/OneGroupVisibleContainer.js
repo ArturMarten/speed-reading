@@ -4,7 +4,13 @@ import OneGroupVisible from '../../components/exercise/OneGroupVisible';
 import {exerciseSelected} from '../../actions';
 
 const mapStateToProps = (state) => ({
-  exercise: state.exercise
+  text: state.exercise.text,
+  wordGroups: state.exercise.wordGroups,
+  width: state.exercise.textOptions.width,
+  fontSize: state.exercise.textOptions.fontSize,
+  fixation: state.exercise.exerciseOptions.fixation,
+  started: state.exercise.started,
+  resetted: state.exercise.resetted
 });
 
 const mapDispatchToProps = (dispatch) => ({

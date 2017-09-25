@@ -53,7 +53,7 @@ class ExerciseOptions extends Component {
   }
 
   options() {
-    if (this.props.exerciseType === 'reading') {
+    if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return(
         <div className="exercise-options-wpm">
           <span>Reading speed </span>
