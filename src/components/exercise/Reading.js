@@ -6,8 +6,8 @@ import TimingContainer from '../../containers/TimingContainer';
 
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;
-const START_DELAY = 300;
-const LINE_BREAK_DELAY = 300;
+const START_DELAY = 400;
+const LINE_BREAK_DELAY = 400;
 
 let update = null;
 

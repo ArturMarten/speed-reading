@@ -32,17 +32,17 @@ const splitIntoWordGroups = (text, character_count) => {
 
 // First split groups at "."
 const splitWithPeriod = (text, character_count) => {
-  return text.match(sentenceRegex).flatMap((sentence) => sentence.length > character_count ? splitWithComma(sentence, character_count) : sentence.trim() + " ")/*?*/
+  return text.match(sentenceRegex).flatMap((sentence) => sentence.length > character_count ? splitWithComma(sentence, character_count) : sentence.trim())
 }
 
 // Then split groups at ","
 const splitWithComma = (sentence, character_count) => {
-  return sentence.match(commaRegex).flatMap((words) => words.length > character_count ? splitWords(words, character_count) : words.trim() + " ")
+  return sentence.match(commaRegex).flatMap((words) => words.length > character_count ? splitWords(words, character_count) : words.trim())
 }
 
 // Finally, split groups at " "
 const splitWords = (words, character_count) => {
-  return words.match(wordRegex).map((group) => group.trim() + " ");
+  return words.match(wordRegex).map((group) => group.trim());
 }
 
 const wordGroups = splitIntoWordGroups(text, character_count);

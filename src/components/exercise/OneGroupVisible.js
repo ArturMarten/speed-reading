@@ -56,19 +56,33 @@ class OneGroupVisible extends Component {
 
   renderGroup() {
     const canvas = this.refs.shownCanvas;
-    let ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = this.props.fontSize + 'pt Calibri';
+    let context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = this.props.fontSize + 'pt Calibri';
     const lineHeight = 30;
-    ctx.fillText(this.props.wordGroups[this.cursorState.counter], this.cursorState.linePosition, lineHeight * this.cursorState.line + 20);
+    context.fillText(this.props.wordGroups[this.cursorState.counter], this.cursorState.linePosition, lineHeight * this.cursorState.line + 20);
   }
 
   nextGroup() {
+    // Calculate next word group new line position
+    const canvas = this.refs.shownCanvas;
+    let context = canvas.getContext('2d');
+    let maxWidth = canvas.width;
+    const previousWordGroupWidth = context.measureText(this.wordGroup).width;
+    this.cursorState.linePosition = this.cursorState.linePosition + previousWordGroupWidth;
     if (this.props.wordGroups[this.cursorState.counter + 1]) {
       this.cursorState.counter = this.cursorState.counter + 1;
       this.wordGroup = this.props.wordGroups[this.cursorState.counter];
-      this.renderGroup();
-      update = setTimeout(() => this.nextGroup(), this.props.fixation);
+      const nextWordGroupWidth = context.measureText(this.wordGroup).width;
+      if ((this.cursorState.linePosition + nextWordGroupWidth) > maxWidth) {
+        this.cursorState.line = this.cursorState.line + 1;
+        this.cursorState.linePosition = 0;
+        this.renderGroup();
+        update = setTimeout(() => this.nextGroup(), LINE_BREAK_DELAY);
+      } else {
+        this.renderGroup();
+        update = setTimeout(() => this.nextGroup(), this.props.fixation);
+      }
     }
   }
 
