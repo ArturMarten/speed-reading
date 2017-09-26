@@ -21,11 +21,11 @@ const App = ({history}) => {
         <DebuggingContainer />
         <MenuContainer />
         <AppHeader />
-        <Route path="/textEntry" component={TextEditorContainer} />
-        <Route path="/exercise" component={ExerciseMenuContainer} />
-        <Route path="/exercise/reading" component={ReadingContainer} />
-        <Route path="/exercise/wordGroup" component={OneGroupVisibleContainer} />
-        <Route path="/exercise/disappearing" component={DisappearingContainer} />
+        <Route path='/textEntry' component={TextEditorContainer} />
+        <Route path='/exercise' component={ExerciseMenuContainer} />
+        <Route path='/exercise/reading' component={ReadingContainer} />
+        <Route path='/exercise/wordGroup' component={OneGroupVisibleContainer} />
+        <Route path='/exercise/disappearing' component={DisappearingContainer} />
       </div>
     </ConnectedRouter>
   );

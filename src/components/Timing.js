@@ -3,17 +3,24 @@ import React, {Component} from 'react';
 class Timing extends Component  {
   constructor(props) {
     super(props);
+    this.time = 0;
+    this.offset = 0;
   }
 
   onStart() {
+    this.offset = Date.now();
+    this.update = setInterval(() => {this.progress()}, 950);
     this.props.onStart();
   }
 
   onStop() {
+    clearInterval(this.update);
     this.props.onStop();
   }
 
   onReset() {
+    clearInterval(this.update);
+    this.time = 0;
     this.props.onReset();
   }
 
@@ -30,16 +37,37 @@ class Timing extends Component  {
       );
     }
   }
+
+  format(time) {
+    const pad = (time, length) => {
+      while (time.length < length) {
+        time = '0' + time;
+      }
+      return time;
+    }
+    time = new Date(time);
+    let minutes = pad(time.getMinutes().toString(), 2);
+    let seconds = pad(time.getSeconds().toString(), 2);
+    return `${minutes}:${seconds}`;
+  }
+
+  progress() {
+    this.time = Date.now() - this.offset;
+    this.forceUpdate();
+	}
   
   render() {
     return (
       <div className='timing'>
         {this.buttons()}
         <span className='reset-button'>
-        <button type='button' onClick={() => this.onReset()}>
-          Reset
-        </button>
-      </span>
+          <button type='button' onClick={() => this.onReset()}>
+            Reset
+          </button>
+        </span>
+        <span>
+          {' Time ' + this.format(this.time)}
+        </span>
       </div>
     );
   }

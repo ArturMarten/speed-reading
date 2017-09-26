@@ -28,7 +28,7 @@ class Disappearing extends Component {
   }
 
   componentWillMount() {
-    this.props.onExerciseSelect('reading');
+    this.props.onExerciseSelect('disappearing');
   }
 
   componentDidMount() {
@@ -40,14 +40,14 @@ class Disappearing extends Component {
     if (!previous.started && this.props.started) {
       // Exercise started
       update = setTimeout(() => this.nextCharacter(), START_DELAY);
-    } else if(!previous.resetted && this.props.resetted) {
+    } else if (!previous.resetted && this.props.resetted) {
       // Exercise resetted
       clearTimeout(update);
       this.cursorState = {...initialState};
       this.renderText();
       const canvas = this.refs.shownCanvas;
-      let ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
       this.refs.shownCanvas.getContext('2d').drawImage(this.refs.baseCanvas, 0, 0);
     } else if (previous.started && !this.props.started) {
       // Exercise stopped
@@ -58,11 +58,15 @@ class Disappearing extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (update) clearTimeout(update);
+  }
+
   renderCanvas() {
     const canvas = this.refs.shownCanvas;
-    let ctx = canvas.getContext('2d');
-    ctx.fillStyle='rgba(0, 255, 0, 0.9)';
-    ctx.clearRect(this.cursorState.linePosition - 2, this.cursorState.line * 30, this.cursorState.characterWidth + 2, 30);
+    let context = canvas.getContext('2d');
+    context.fillStyle='rgba(0, 255, 0, 0.9)';
+    context.clearRect(this.cursorState.linePosition - 2, this.cursorState.line * 30, this.cursorState.characterWidth + 2, 30);
   }
 
   nextCharacter() {
@@ -95,17 +99,17 @@ class Disappearing extends Component {
 
   renderText() {
     const canvas = this.refs.baseCanvas;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
     const maxWidth = this.props.width;
     const lineHeight = 30;
     const x = (canvas.width - maxWidth) / 2;
     const y = 20;
-    ctx.font = this.props.fontSize + 'pt Calibri';
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.wrapText(ctx, this.props.text, x, y, maxWidth, lineHeight);
+    context.font = this.props.fontSize + 'pt Calibri';
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.wrapText(context, this.props.text, x, y, maxWidth, lineHeight);
     if (this.cursorState.lines[this.cursorState.line]) {
-      this.cursorState.lineLength = ctx.measureText(this.cursorState.lines[this.cursorState.line]).width;
+      this.cursorState.lineLength = context.measureText(this.cursorState.lines[this.cursorState.line]).width;
       this.cursorState.characterWidth = (this.cursorState.lineLength/this.cursorState.lines[this.cursorState.line].length) * 1;
     }
   }

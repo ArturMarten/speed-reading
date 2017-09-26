@@ -1,5 +1,4 @@
 import React from 'react';
-import { convertToRaw } from 'draft-js';
 
 const Debugging = (props) => {
   return (
@@ -12,13 +11,6 @@ const Debugging = (props) => {
             }
           }
         >Log state</button>
-        <button type='button' 
-          onClick={
-            () => {
-              console.log(convertToRaw(props.exercise.editorState.getCurrentContent()));
-            }
-          }
-        >Log editor state</button>
       </div>
     </div>
   );

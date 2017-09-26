@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editor, Modifier } from 'draft-js';
+import {Editor} from 'draft-js';
 
 const TextEditor = (props) => {
   return(

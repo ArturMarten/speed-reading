@@ -75,7 +75,7 @@ class TextOptions extends Component {
             onChange={this.handleFontSizeChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '14px', textAlign: 'right' }}
+            style={{ width: '15px', textAlign: 'right' }}
           />
           <span>pt</span>
         </div>

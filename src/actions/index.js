@@ -6,23 +6,18 @@ export const EDITOR_STATE_UPDATED = 'EDITOR_STATE_UPDATED';
 export const TEXT_OPTIONS_UPDATED = 'TEXT_OPTIONS_UPDATED';
 export const EXERCISE_OPTIONS_UPDATED = 'EXERCISE_OPTIONS_UPDATED';
 export const EXERCISE_SELECTED = 'EXERCISE_SELECTED';
-export const FIXATION_UPDATED = 'FIXATION_UPDATED';
 
-export const startRequested = () => (dispatch) => {
-  dispatch({type: START_REQUESTED});
-};
+export const startRequested = () => ({
+  type: START_REQUESTED
+});
 
-export const stopRequested = () => {
-  return {
-    type: STOP_REQUESTED
-  };
-};
+export const stopRequested = () => ({
+  type: STOP_REQUESTED
+});
 
-export const resetRequested = () => {
-  return {
-    type: RESET_REQUESTED
-  }
-}
+export const resetRequested = () => ({
+  type: RESET_REQUESTED
+});
 
 export const tick = () => ({
   type: TICK
@@ -46,9 +41,4 @@ export const exerciseOptionsUpdated = (options) => ({
 export const exerciseSelected = (type) => ({
   type: EXERCISE_SELECTED,
   payload: type
-});
-
-export const fixationUpdated = (fixation) => ({
-  type: FIXATION_UPDATED,
-  payload: fixation
 });

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 
 const MIN_WPM = 10;
 const MAX_WPM = 1500;
+const MIN_CHARACTER_COUNT = 5;
+const MAX_CHARACTER_COUNT = 30;
 const MIN_FIXATION = 20;
 const MAX_FIXATION = 500;
 
@@ -31,6 +33,16 @@ class ExerciseOptions extends Component {
     }
   }
 
+  handleCharacterCountChange(event) {
+    if (/^-?\d*$/.test(event.target.value)) {
+      if (event.target.value > MAX_CHARACTER_COUNT) {
+        this.setState({characterCount: MAX_CHARACTER_COUNT});
+      } else {
+        this.setState({characterCount: +event.target.value});
+      }
+    }
+  }
+
   handleKeyPress(event) {
     if(event.key == 'Enter') {
       this.submitOptions();
@@ -44,9 +56,10 @@ class ExerciseOptions extends Component {
   submitOptions() {
     const correctedOptions = {
       wpm: this.state.wpm === '' || this.state.wpm < MIN_WPM ? MIN_WPM : this.state.wpm,
+      characterCount: this.state.characterCount === '' || this.state.characterCount < MIN_CHARACTER_COUNT ? MIN_CHARACTER_COUNT : this.state.characterCount,
       fixation: this.state.fixation === '' || this.state.fixation < MIN_FIXATION ? MIN_FIXATION : this.state.fixation,
     }
-    if (this.props.options.wpm !== correctedOptions.wpm || this.props.options.fixation !== correctedOptions.fixation) {
+    if (this.props.options.wpm !== correctedOptions.wpm || this.props.options.characterCount !== correctedOptions.characterCount || this.props.options.fixation !== correctedOptions.fixation) {
       this.props.onSubmit(correctedOptions);
     }
     this.setState(correctedOptions);
@@ -55,7 +68,7 @@ class ExerciseOptions extends Component {
   options() {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return(
-        <div className="exercise-options-wpm">
+        <div className='exercise-options-wpm'>
           <span>Reading speed </span>
           <input
             type='text'
@@ -68,20 +81,38 @@ class ExerciseOptions extends Component {
           <span> words per minute</span>
         </div>
       );
+    } else if (this.props.exerciseType === 'wordGroup') {
+      return (
+        <div className='word-group-exercise options'>
+          <div className='exercise-options-character-count'>
+            <span>Character count </span>
+            <input
+              type='text'
+              value={this.state.characterCount}
+              onChange={this.handleCharacterCountChange.bind(this)}
+              onKeyPress={this.handleKeyPress.bind(this)}
+              onBlur={this.handleBlur.bind(this)}
+              style={{ width: '15px', textAlign: 'right' }}
+            />
+            <span> characters</span>
+          </div>
+          <div className='exercise-options-fixation'>
+            <span>Fixation time </span>
+            <input
+              type='text'
+              value={this.state.fixation}
+              onChange={this.handleFixationChange.bind(this)}
+              onKeyPress={this.handleKeyPress.bind(this)}
+              onBlur={this.handleBlur.bind(this)}
+              style={{ width: '22px', textAlign: 'right' }}
+            />
+            <span>ms</span>
+          </div>
+        </div>
+      );
     } else {
       return (
-        <div className="exercise-options-fixation">
-          <span>Fixation time </span>
-          <input
-            type='text'
-            value={this.state.fixation}
-            onChange={this.handleFixationChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-            onBlur={this.handleBlur.bind(this)}
-            style={{ width: '22px', textAlign: 'right' }}
-          />
-          <span>ms</span>
-        </div>
+        <div></div>
       );
     }
   }

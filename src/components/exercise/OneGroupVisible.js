@@ -40,7 +40,7 @@ class OneGroupVisible extends Component {
     if (!previous.started && this.props.started) {
       // Exercise started
       update = setTimeout(() => this.nextGroup(), START_DELAY);      
-    } else if(!previous.resetted && this.props.resetted) {
+    } else if (!previous.resetted && this.props.resetted) {
       // Exercise resetted
       clearTimeout(update);
       this.cursorState = {...initialState};
@@ -52,6 +52,10 @@ class OneGroupVisible extends Component {
       // Text/exercise options or text changed
       this.renderGroup();
     }
+  }
+
+  componentWillUnmount() {
+    if (update) clearTimeout(update);
   }
 
   renderGroup() {
