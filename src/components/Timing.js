@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Button, Label, Icon} from 'semantic-ui-react';
 
 let update = null;
 
@@ -37,9 +38,7 @@ class Timing extends Component  {
     } else {
       return(
         <span className={this.props.started ? 'start-button' : 'stop-button'}>
-          <button type='button' onClick={() => this.props.started ? this.onStop() : this.onStart()}>
-            {this.props.started ? 'Stop' : 'Start'}
-          </button>
+          <Button circular icon={this.props.started ? 'pause' : 'play'} onClick={() => this.props.started ? this.onStop() : this.onStart()}></Button>
         </span>
       );
     }
@@ -65,16 +64,14 @@ class Timing extends Component  {
   
   render() {
     return (
-      <div className='timing'>
-        {this.buttons()}
-        <span className='reset-button'>
-          <button type='button' onClick={() => this.onReset()}>
-            Reset
-          </button>
-        </span>
-        <span>
-          {' Time ' + this.format(this.time)}
-        </span>
+      <div>
+        <Button circular positive={!this.props.started} negative={this.props.started} icon={this.props.started ? 'pause' : 'play'} 
+          onClick={() => this.props.started ? this.onStop() : this.onStart()}/>
+        <Button circular color='blue' inverted icon='undo' 
+          onClick={() => this.onReset()}/>
+        <Label basic size='big'>
+          <Icon name='clock' />{this.format(this.time)}
+        </Label>
       </div>
     );
   }

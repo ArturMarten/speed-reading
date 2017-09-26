@@ -1,17 +1,20 @@
 import React from 'react';
+import {Button} from 'semantic-ui-react';
 
 const Debugging = (props) => {
   return (
-    <div className='debugging'>
-      <div className='log-button'>
-      <button type='button' 
-          onClick={
-            () => {
-              console.log(props.exercise);
-            }
+    <div>
+      <Button 
+        type='button'
+        negative
+        basic
+        size='mini'
+        onClick={
+          () => {
+            console.log(props.exercise);
           }
-        >Log state</button>
-      </div>
+        }
+      >Log state</Button>
     </div>
   );
 };

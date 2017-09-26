@@ -38,6 +38,7 @@
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
+    "semantic-ui-react": "^0.74.2",
     "websocket": "^1.0.24"
   },
   "scripts": {

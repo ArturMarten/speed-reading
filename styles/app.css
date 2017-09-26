@@ -1,8 +1,8 @@
+/*
 body {
   display: flex;
   justify-content: center;
   text-align: center;
-  /*user-select: none;*/
 }
 
 ul {
@@ -20,8 +20,6 @@ ul {
 }
 
 .text {
-  border-style: solid;
-  border-width: 1px;
   display: flex;
   justify-content: center;
   text-align: start;
@@ -35,3 +33,4 @@ ul {
   color: black; 
   background: yellow;
 }
+*/

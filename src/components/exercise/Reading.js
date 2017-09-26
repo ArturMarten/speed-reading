@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Container, Grid, Segment} from 'semantic-ui-react';
 
 import TextOptionsContainer from '../../containers/TextOptionsContainer';
 import ExerciseOptionsContainer from '../../containers/ExerciseOptionsContainer';
@@ -143,16 +144,30 @@ class Reading extends Component {
 
   render() {
     return(
-      <div className='reading'>
-        <TextOptionsContainer />
-        <ExerciseOptionsContainer />
-        <TimingContainer />
-        <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-          <canvas ref='shownCanvas' width={this.props.width} height={450} />
-          <canvas ref='baseCanvas' width={this.props.width} height={450} 
-            style={{display: 'none'}}
-          />
-        </div>
+      <div>
+        <Container style={{ marginTop: '5em' }}>
+          <Grid centered>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <TextOptionsContainer />
+                <ExerciseOptionsContainer />
+              </Grid.Column>
+              <Grid.Column textAlign='center'>
+                <TimingContainer />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Segment compact>
+                <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+                  <canvas ref='shownCanvas' width={this.props.width} height={450} />
+                  <canvas ref='baseCanvas' width={this.props.width} height={450} 
+                    style={{display: 'none'}}
+                  />
+                </div>
+              </Segment>
+            </Grid.Row>
+          </Grid>
+        </Container>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Label, Input, Button} from 'semantic-ui-react';
 
 const MIN_WPM = 10;
 const MAX_WPM = 1500;
@@ -68,45 +69,57 @@ class ExerciseOptions extends Component {
   options() {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return(
-        <div className='exercise-options-wpm'>
-          <span>Reading speed </span>
-          <input
+        <div>
+          {'Reading speed '}
+          <Button icon='minus' size='mini' />
+          <Input 
             type='text'
+            inverted
+            size='small'
             value={this.state.wpm}
             onChange={this.handleWPMChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '31px', textAlign: 'right' }}
+            style={{ width: '64px', textAlign: 'right' }}
           />
-          <span> words per minute</span>
+          <Button icon='plus' size='mini' />
+          {' words per minute'}
         </div>
       );
     } else if (this.props.exerciseType === 'wordGroup') {
       return (
-        <div className='word-group-exercise options'>
-          <div className='exercise-options-character-count'>
-            <span>Character count </span>
-            <input
+        <div>
+          <div>
+            {'Character count '}
+            <Button icon='minus' size='mini' />
+            <Input 
               type='text'
+              inverted
+              size='small'
               value={this.state.characterCount}
               onChange={this.handleCharacterCountChange.bind(this)}
               onKeyPress={this.handleKeyPress.bind(this)}
               onBlur={this.handleBlur.bind(this)}
-              style={{ width: '15px', textAlign: 'right' }}
+              style={{ width: '52px' }}
             />
-            <span> characters</span>
+            <Button icon='plus' size='mini' />
+            {' characters'}
           </div>
-          <div className='exercise-options-fixation'>
-            <span>Fixation time </span>
-            <input
+          <div>
+            {'Fixation time '}
+            <Button icon='minus' size='mini' />
+            <Input 
               type='text'
+              inverted
+              size='small'
               value={this.state.fixation}
               onChange={this.handleFixationChange.bind(this)}
               onKeyPress={this.handleKeyPress.bind(this)}
               onBlur={this.handleBlur.bind(this)}
-              style={{ width: '22px', textAlign: 'right' }}
+              style={{ width: '52px' }}
             />
-            <span>ms</span>
+            <Button icon='plus' size='mini' />
+            {' ms'}
           </div>
         </div>
       );

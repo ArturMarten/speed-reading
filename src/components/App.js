@@ -1,9 +1,9 @@
 import React from 'react';
 import {ConnectedRouter} from 'connected-react-router';
+import {Container} from 'semantic-ui-react';
 
-import DebuggingContainer from '../containers/DebuggingContainer';
-import MenuContainer from '../containers/MenuContainer';
-import AppHeader from './AppHeader';
+import Home from './Home';
+import TopMenuContainer from '../containers/TopMenuContainer';
 import TextEditorContainer from '../containers/TextEditorContainer';
 import ExerciseMenuContainer from '../containers/ExerciseMenuContainer';
 import ReadingContainer from '../containers/exercise/ReadingContainer';
@@ -18,11 +18,10 @@ const App = ({history}) => {
   return (
     <ConnectedRouter history={history}>
       <div>
-        <DebuggingContainer />
-        <MenuContainer />
-        <AppHeader />
+        <TopMenuContainer />
+        <Route exact path='/' component={Home} />
         <Route path='/textEntry' component={TextEditorContainer} />
-        <Route path='/exercise' component={ExerciseMenuContainer} />
+        <Route exact path='/exercise' component={ExerciseMenuContainer} />
         <Route path='/exercise/reading' component={ReadingContainer} />
         <Route path='/exercise/wordGroup' component={OneGroupVisibleContainer} />
         <Route path='/exercise/disappearing' component={DisappearingContainer} />

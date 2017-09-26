@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Label, Input, Button} from 'semantic-ui-react';
 
 const MIN_TEXT_WIDTH = 400;
 const MAX_TEXT_WIDTH = 1000;
@@ -54,30 +55,38 @@ class TextOptions extends Component {
 
   render() {
     return(
-      <div className="text-options">
-        <div className="text-options-width">
-          <span>Text width </span>
-          <input
+      <div>
+        <div>
+          {'Text width '}
+          <Button icon='minus' size='mini' />
+          <Input 
             type='text'
+            inverted
+            size='small'
             value={this.state.width}
             onChange={this.handleWidthChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '31px', textAlign: 'right' }}
+            style={{ width: '58px' }}
           />
-          <span>px</span>
+          <Button icon='plus' size='mini' />
+          {' px'}
         </div>
-        <div className="text-options-font-size">
-          <span>Font size </span>
-          <input
+        <div>
+          {'Font size '}
+          <Button icon='minus' size='mini' />
+          <Input 
             type='text'
+            inverted
+            size='small'
             value={this.state.fontSize}
             onChange={this.handleFontSizeChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '15px', textAlign: 'right' }}
+            style={{ width: '42px' }}
           />
-          <span>pt</span>
+          <Button icon='plus' size='mini' />
+          {' pt'}
         </div>
       </div>
     );
