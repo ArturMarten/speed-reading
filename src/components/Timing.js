@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+let update = null;
+
 class Timing extends Component  {
   constructor(props) {
     super(props);
@@ -7,20 +9,25 @@ class Timing extends Component  {
     this.offset = 0;
   }
 
+  componentWillUnmount() {
+    if (update) clearInterval(update);
+  }
+
   onStart() {
     this.offset = Date.now();
-    this.update = setInterval(() => {this.progress()}, 950);
+    update = setInterval(() => {this.progress()}, 1000);
     this.props.onStart();
   }
 
   onStop() {
-    clearInterval(this.update);
+    clearInterval(update);
     this.props.onStop();
   }
 
   onReset() {
-    clearInterval(this.update);
+    clearInterval(update);
     this.time = 0;
+    this.forceUpdate();
     this.props.onReset();
   }
 

@@ -100,7 +100,6 @@ class Disappearing extends Component {
   renderText() {
     const canvas = this.refs.baseCanvas;
     const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
     const maxWidth = this.props.width;
     const lineHeight = 30;
     const x = (canvas.width - maxWidth) / 2;
