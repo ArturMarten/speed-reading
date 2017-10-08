@@ -1,7 +1,9 @@
+import {combineReducers} from 'redux';
+import {localeReducer} from 'react-localize-redux';
+
 import ExerciseReducer from './ExerciseReducer';
 
-import {combineReducers} from 'redux';
-
 export default combineReducers({
-  exercise: ExerciseReducer
+  exercise: ExerciseReducer,
+  locale: localeReducer
 });

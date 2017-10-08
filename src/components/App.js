@@ -1,5 +1,6 @@
 import React from 'react';
 import {ConnectedRouter} from 'connected-react-router';
+import {Route} from 'react-router-dom';
 import {Container} from 'semantic-ui-react';
 
 import Home from './Home';
@@ -9,10 +10,6 @@ import ExerciseMenuContainer from '../containers/ExerciseMenuContainer';
 import ReadingContainer from '../containers/exercise/ReadingContainer';
 import OneGroupVisibleContainer from '../containers/exercise/OneGroupVisibleContainer';
 import DisappearingContainer from '../containers/exercise/DisappearingContainer';
-
-import {
-  Route
-} from 'react-router-dom';
 
 const App = ({history}) => {
   return (

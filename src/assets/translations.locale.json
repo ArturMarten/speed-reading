@@ -1,0 +1,12 @@
+{
+  "menu": {
+    "title": ["Kiirlugemine", "Speed Reading"],
+    "home": ["Esileht", "Home"],
+    "text-entry": ["Tekstide sisestamine", "Text entry"],
+    "exercise": ["Harjuta", "Exercise"],
+    "reading-test": ["Lugemistest", "Reading test"],
+    "word-groups": ["Sõnarühmad", "Word groups"],
+    "disappearing-text": ["Kustuv tekst", "Disappearing text"],
+    "login": ["Logi sisse", "Login"]
+  }
+}
