@@ -31,19 +31,7 @@ class Timing extends Component  {
     this.forceUpdate();
     this.props.onReset();
   }
-
-  buttons() {
-    if (this.props.finished) {
-      return(<span> Exercise finished </span>);
-    } else {
-      return(
-        <span className={this.props.started ? 'start-button' : 'stop-button'}>
-          <Button circular icon={this.props.started ? 'pause' : 'play'} onClick={() => this.props.started ? this.onStop() : this.onStart()}></Button>
-        </span>
-      );
-    }
-  }
-
+  
   format(time) {
     const pad = (time, length) => {
       while (time.length < length) {

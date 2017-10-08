@@ -17,11 +17,11 @@ const App = ({history}) => {
       <div>
         <TopMenuContainer />
         <Route exact path='/' component={Home} />
-        <Route path='/textEntry' component={TextEditorContainer} />
+        <Route path='/text-entry' component={TextEditorContainer} />
         <Route exact path='/exercise' component={ExerciseMenuContainer} />
-        <Route path='/exercise/reading' component={ReadingContainer} />
-        <Route path='/exercise/wordGroup' component={OneGroupVisibleContainer} />
-        <Route path='/exercise/disappearing' component={DisappearingContainer} />
+        <Route path='/exercise/reading-test' component={ReadingContainer} />
+        <Route path='/exercise/word-groups' component={OneGroupVisibleContainer} />
+        <Route path='/exercise/disappearing-text' component={DisappearingContainer} />
       </div>
     </ConnectedRouter>
   );

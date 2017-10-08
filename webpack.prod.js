@@ -25,7 +25,8 @@ module.exports = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract('css-loader'),
-      }
+      },
+      { test: /\.json$/, use: 'json-loader' }
     ]
   },
   plugins: [

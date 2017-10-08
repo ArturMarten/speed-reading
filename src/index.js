@@ -13,7 +13,9 @@ import * as translations from './assets/translations.locale.json';
 
 const composeStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const history = createBrowserHistory({basename: '/~arturmar'});
+const history = createBrowserHistory({
+  basename: '/~arturmar/'
+});
 
 let store = createStore(
   connectRouter(history)(reducer),
