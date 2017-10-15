@@ -32,7 +32,7 @@ class TopMenu extends Component {
   render() {
     return (
       <div>
-        <Menu fixed='top' secondary>
+        <Menu attached='top' secondary>
           <Container>
             <Menu.Item header>
               <Icon name='book'></Icon>
@@ -62,7 +62,7 @@ class TopMenu extends Component {
                       {this.props.translate('menu.word-groups')}
                   </Dropdown.Item>
                   <Dropdown.Item 
-                    name='disappearing' 
+                    name='disappearing-text' 
                     active={this.state.activeItem === 'disappearing-text'} 
                     onClick={this.handleItemClick.bind(this)} 
                     as={Link} to='/exercise/disappearing-text'>

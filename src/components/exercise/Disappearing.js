@@ -142,25 +142,25 @@ class Disappearing extends Component {
   render() {
     return(
       <div className='reading'>
-        <Container style={{ marginTop: '5em' }}>
-        <Grid centered>
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <TextOptionsContainer />
-              <ExerciseOptionsContainer />
-            </Grid.Column>
-            <Grid.Column textAlign='center'>
-              <TimingContainer />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Segment compact>
-              <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-                <canvas ref='shownCanvas' width={this.props.width} height={450} />
-                <canvas ref='baseCanvas' width={this.props.width} height={450} 
-                  style={{display: 'none'}}
-                />
-              </div>
+        <Container style={{ marginTop: '14px' }}>
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column width={12}>
+                <TextOptionsContainer />
+                <ExerciseOptionsContainer />
+              </Grid.Column>
+              <Grid.Column textAlign='center' width={4}>
+                <TimingContainer />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row centered>
+              <Segment compact>
+                <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+                  <canvas ref='shownCanvas' width={this.props.width} height={450} />
+                  <canvas ref='baseCanvas' width={this.props.width} height={450} 
+                    style={{display: 'none'}}
+                  />
+                </div>
               </Segment>
             </Grid.Row>
           </Grid>

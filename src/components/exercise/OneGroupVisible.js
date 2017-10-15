@@ -94,18 +94,18 @@ class OneGroupVisible extends Component {
   render() {
     return(
       <div>
-        <Container style={{ marginTop: '5em' }}>
-          <Grid centered>
+        <Container style={{ marginTop: '14px' }}>
+          <Grid>
             <Grid.Row columns={2}>
-              <Grid.Column>
+              <Grid.Column width={12}>
                 <TextOptionsContainer />
                 <ExerciseOptionsContainer />
               </Grid.Column>
-              <Grid.Column textAlign='center'>
+              <Grid.Column textAlign='center' width={4}>
                 <TimingContainer />
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
+            <Grid.Row centered>
               <Segment compact>
                 <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                   <canvas ref='shownCanvas' width={this.props.width} height={450} />

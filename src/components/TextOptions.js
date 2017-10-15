@@ -22,6 +22,25 @@ class TextOptions extends Component {
     }
   }
 
+  decreaseWidth() {
+    this.changeWidth(this.state.width - 50);
+  }
+
+  increaseWidth() {
+    this.changeWidth(this.state.width + 50);
+  }
+
+  changeWidth(newValue) {
+    if (newValue > MAX_TEXT_WIDTH) {
+      this.setState({width: MAX_TEXT_WIDTH});
+    } else if (newValue < MIN_TEXT_WIDTH) {
+      this.setState({width: MIN_TEXT_WIDTH});
+    } else {
+      this.setState({width: newValue});
+    }
+    this.props.onSubmit(this.state);
+  }
+
   handleFontSizeChange(event) {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_FONT_SIZE) {
@@ -30,6 +49,25 @@ class TextOptions extends Component {
         this.setState({fontSize: +event.target.value});
       }
     }
+  }
+
+  decreaseFontSize() {
+    this.changeFontSize(this.state.fontSize - 1);
+  }
+
+  increaseFontSize() {
+    this.changeFontSize(this.state.fontSize + 1);
+  }
+
+  changeFontSize(newValue) {
+    if (newValue > MAX_FONT_SIZE) {
+      this.setState({fontSize: MAX_FONT_SIZE});
+    } else if (newValue < MIN_FONT_SIZE) {
+      this.setState({fontSize: MIN_FONT_SIZE});
+    } else {
+      this.setState({fontSize: newValue});
+    }
+    this.props.onSubmit(this.state);
   }
 
   handleKeyPress(event) {
@@ -58,7 +96,7 @@ class TextOptions extends Component {
       <div>
         <div>
           {'Text width '}
-          <Button icon='minus' size='mini' />
+          <Button icon='minus' size='mini' onClick={this.decreaseWidth.bind(this)} />
           <Input 
             type='text'
             inverted
@@ -69,12 +107,12 @@ class TextOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{ width: '58px' }}
           />
-          <Button icon='plus' size='mini' />
+          <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
           {' px'}
         </div>
         <div>
           {'Font size '}
-          <Button icon='minus' size='mini' />
+          <Button icon='minus' size='mini' onClick={this.decreaseFontSize.bind(this)} />
           <Input 
             type='text'
             inverted
@@ -85,7 +123,7 @@ class TextOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{ width: '42px' }}
           />
-          <Button icon='plus' size='mini' />
+          <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
           {' pt'}
         </div>
       </div>

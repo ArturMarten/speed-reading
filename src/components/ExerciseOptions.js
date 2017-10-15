@@ -24,6 +24,25 @@ class ExerciseOptions extends Component {
     }
   }
 
+  decreaseWPM() {
+    this.changeWPM(this.state.wpm - 10);
+  }
+
+  increaseWPM() {
+    this.changeWPM(this.state.wpm + 10);
+  }
+
+  changeWPM(newValue) {
+    if (newValue > MAX_WPM) {
+      this.setState({wpm: MAX_WPM});
+    } else if (newValue < MIN_WPM) {
+      this.setState({wpm: MIN_WPM});
+    } else {
+      this.setState({wpm: newValue});
+    }
+    this.props.onSubmit(this.state);
+  }
+
   handleFixationChange(event) {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_FIXATION) {
@@ -34,6 +53,25 @@ class ExerciseOptions extends Component {
     }
   }
 
+  decreaseFixation() {
+    this.changeFixation(this.state.fixation - 10);
+  }
+
+  increaseFixation() {
+    this.changeFixation(this.state.fixation + 10);
+  }
+
+  changeFixation(newValue) {
+    if (newValue > MAX_FIXATION) {
+      this.setState({fixation: MAX_FIXATION});
+    } else if (newValue < MIN_FIXATION) {
+      this.setState({fixation: MIN_FIXATION});
+    } else {
+      this.setState({fixation: newValue});
+    }
+    this.props.onSubmit(this.state);
+  }
+
   handleCharacterCountChange(event) {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_CHARACTER_COUNT) {
@@ -42,6 +80,25 @@ class ExerciseOptions extends Component {
         this.setState({characterCount: +event.target.value});
       }
     }
+  }
+
+  decreaseCharacterCount() {
+    this.changeCharacterCount(this.state.characterCount - 1);
+  }
+
+  increaseCharacterCount() {
+    this.changeCharacterCount(this.state.characterCount + 1);
+  }
+
+  changeCharacterCount(newValue) {
+    if (newValue > MAX_CHARACTER_COUNT) {
+      this.setState({characterCount: MAX_CHARACTER_COUNT});
+    } else if (newValue < MIN_CHARACTER_COUNT) {
+      this.setState({characterCount: MIN_CHARACTER_COUNT});
+    } else {
+      this.setState({characterCount: newValue});
+    }
+    this.props.onSubmit(this.state);
   }
 
   handleKeyPress(event) {
@@ -66,12 +123,13 @@ class ExerciseOptions extends Component {
     this.setState(correctedOptions);
   }
 
+
   options() {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return(
         <div>
           {'Reading speed '}
-          <Button icon='minus' size='mini' />
+          <Button icon='minus' size='mini' onClick={this.decreaseWPM.bind(this)} />
           <Input 
             type='text'
             inverted
@@ -82,7 +140,7 @@ class ExerciseOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{ width: '64px', textAlign: 'right' }}
           />
-          <Button icon='plus' size='mini' />
+          <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
           {' words per minute'}
         </div>
       );
@@ -91,7 +149,7 @@ class ExerciseOptions extends Component {
         <div>
           <div>
             {'Character count '}
-            <Button icon='minus' size='mini' />
+            <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount.bind(this)} />
             <Input 
               type='text'
               inverted
@@ -102,12 +160,12 @@ class ExerciseOptions extends Component {
               onBlur={this.handleBlur.bind(this)}
               style={{ width: '52px' }}
             />
-            <Button icon='plus' size='mini' />
+            <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
             {' characters'}
           </div>
           <div>
             {'Fixation time '}
-            <Button icon='minus' size='mini' />
+            <Button icon='minus' size='mini' onClick={this.decreaseFixation.bind(this)} />
             <Input 
               type='text'
               inverted
@@ -118,7 +176,7 @@ class ExerciseOptions extends Component {
               onBlur={this.handleBlur.bind(this)}
               style={{ width: '52px' }}
             />
-            <Button icon='plus' size='mini' />
+            <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
             {' ms'}
           </div>
         </div>
