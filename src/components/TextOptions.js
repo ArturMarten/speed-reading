@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {Label, Input, Button} from 'semantic-ui-react';
+import {Input, Button} from 'semantic-ui-react';
 
 const MIN_TEXT_WIDTH = 400;
 const MAX_TEXT_WIDTH = 1000;
-const MIN_FONT_SIZE = 10;
+const MIN_TEXT_LINE_COUNT = 5;
+const MAX_TEXT_LINE_COUNT = 20;
+const MIN_FONT_SIZE = 5;
 const MAX_FONT_SIZE = 25;
 
 class TextOptions extends Component {
@@ -22,23 +24,56 @@ class TextOptions extends Component {
     }
   }
 
-  decreaseWidth() {
-    this.changeWidth(this.state.width - 50);
-  }
-
   increaseWidth() {
     this.changeWidth(this.state.width + 50);
   }
 
+  decreaseWidth() {
+    this.changeWidth(this.state.width - 50);
+  }
+
   changeWidth(newValue) {
+    let newWidth = this.state.width;
     if (newValue > MAX_TEXT_WIDTH) {
-      this.setState({width: MAX_TEXT_WIDTH});
+      newWidth = MAX_TEXT_WIDTH;
     } else if (newValue < MIN_TEXT_WIDTH) {
-      this.setState({width: MIN_TEXT_WIDTH});
+      newWidth = MIN_TEXT_WIDTH;
     } else {
-      this.setState({width: newValue});
+      newWidth = newValue;
     }
-    this.props.onSubmit(this.state);
+    this.props.onSubmit({...this.state, width: newWidth});
+    this.setState({width: newWidth});
+  }
+
+  handleLineCountChange(event) {
+    if (/^-?\d*$/.test(event.target.value)) {
+      if (event.target.value > MAX_TEXT_LINE_COUNT) {
+        this.setState({lineCount: MAX_TEXT_LINE_COUNT});
+      } else {
+        this.setState({lineCount: +event.target.value});
+      }
+    }
+  }
+
+  increaseLineCount() {
+    this.changeLineCount(this.state.lineCount + 1);
+  }
+
+  decreaseLineCount() {
+    this.changeLineCount(this.state.lineCount - 1);
+  }
+
+  changeLineCount(newValue) {
+    let newLineCount = this.state.lineCount;
+    if (newValue > MAX_TEXT_LINE_COUNT) {
+      newLineCount = MAX_TEXT_LINE_COUNT;
+    } else if (newValue < MIN_TEXT_LINE_COUNT) {
+      newLineCount = MIN_TEXT_LINE_COUNT;
+    } else {
+      newLineCount = newValue;
+    }
+    this.props.onSubmit({...this.state, lineCount: newLineCount});
+    this.setState({lineCount: newLineCount});
   }
 
   handleFontSizeChange(event) {
@@ -51,23 +86,25 @@ class TextOptions extends Component {
     }
   }
 
-  decreaseFontSize() {
-    this.changeFontSize(this.state.fontSize - 1);
-  }
-
   increaseFontSize() {
     this.changeFontSize(this.state.fontSize + 1);
   }
 
+  decreaseFontSize() {
+    this.changeFontSize(this.state.fontSize - 1);
+  }
+
   changeFontSize(newValue) {
+    let newFontSize = this.state.fontSize;
     if (newValue > MAX_FONT_SIZE) {
-      this.setState({fontSize: MAX_FONT_SIZE});
+      newFontSize = MAX_FONT_SIZE;
     } else if (newValue < MIN_FONT_SIZE) {
-      this.setState({fontSize: MIN_FONT_SIZE});
+      newFontSize = MIN_FONT_SIZE;
     } else {
-      this.setState({fontSize: newValue});
+      newFontSize = newValue;
     }
-    this.props.onSubmit(this.state);
+    this.props.onSubmit({...this.state, fontSize: newFontSize});
+    this.setState({fontSize: newFontSize});
   }
 
   handleKeyPress(event) {
@@ -83,9 +120,12 @@ class TextOptions extends Component {
   submitOptions() {
     const correctedOptions = {
       width: this.state.width === '' || this.state.width < MIN_TEXT_WIDTH ? MIN_TEXT_WIDTH : this.state.width,
-      fontSize: this.state.fontSize === '' || this.state.fontSize < MIN_FONT_SIZE ? MIN_FONT_SIZE : this.state.fontSize,
-    }
-    if (this.props.options.width !== correctedOptions.width || this.props.options.fontSize !== correctedOptions.fontSize) {
+      lineCount: this.state.lineCount === '' || this.state.lineCount < MIN_TEXT_LINE_COUNT ? MIN_TEXT_LINE_COUNT : this.state.lineCount,
+      fontSize: this.state.fontSize === '' || this.state.fontSize < MIN_FONT_SIZE ? MIN_FONT_SIZE : this.state.fontSize
+    };
+    if (this.props.options.width !== correctedOptions.width
+     || this.props.options.lineCount !== correctedOptions.lineCount
+     || this.props.options.fontSize !== correctedOptions.fontSize) {
       this.props.onSubmit(correctedOptions);
     }
     this.setState(correctedOptions);
@@ -96,8 +136,9 @@ class TextOptions extends Component {
       <div>
         <div>
           {'Text width '}
+          <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseWidth.bind(this)} />
-          <Input 
+          <Input
             type='text'
             inverted
             size='small'
@@ -105,15 +146,31 @@ class TextOptions extends Component {
             onChange={this.handleWidthChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '58px' }}
+            style={{width: '58px'}}
           />
-          <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
           {' px'}
         </div>
         <div>
+          {'Line count '}
+          <Button icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
+          <Button icon='minus' size='mini' onClick={this.decreaseLineCount.bind(this)} />
+          <Input
+            type='text'
+            inverted
+            size='small'
+            value={this.state.lineCount}
+            onChange={this.handleLineCountChange.bind(this)}
+            onKeyPress={this.handleKeyPress.bind(this)}
+            onBlur={this.handleBlur.bind(this)}
+            style={{width: '58px'}}
+          />
+          {' lines'}
+        </div>
+        <div>
           {'Font size '}
+          <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseFontSize.bind(this)} />
-          <Input 
+          <Input
             type='text'
             inverted
             size='small'
@@ -121,9 +178,8 @@ class TextOptions extends Component {
             onChange={this.handleFontSizeChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '42px' }}
+            style={{width: '42px'}}
           />
-          <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
           {' pt'}
         </div>
       </div>

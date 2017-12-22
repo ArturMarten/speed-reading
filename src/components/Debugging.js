@@ -4,7 +4,7 @@ import {Button} from 'semantic-ui-react';
 const Debugging = (props) => {
   return (
     <div>
-      <Button 
+      <Button
         type='button'
         negative
         basic

@@ -4,7 +4,7 @@ import {Container, Header} from 'semantic-ui-react';
 const Home = (props) => {
   return (
     <div>
-      <Container style={{ marginTop: '5em' }} text>
+      <Container text>
         <Header as='h2'>Welcome</Header>
         <p>To get started, choose an exercise from the menu above!</p>
       </Container>

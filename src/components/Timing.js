@@ -3,7 +3,7 @@ import {Button, Label, Icon} from 'semantic-ui-react';
 
 let update = null;
 
-class Timing extends Component  {
+class Timing extends Component {
   constructor(props) {
     super(props);
     this.time = 0;
@@ -16,7 +16,9 @@ class Timing extends Component  {
 
   onStart() {
     this.offset = Date.now();
-    update = setInterval(() => {this.progress()}, 1000);
+    update = setInterval(() => {
+      this.progress();
+    }, 1000);
     this.props.onStart();
   }
 
@@ -31,14 +33,14 @@ class Timing extends Component  {
     this.forceUpdate();
     this.props.onReset();
   }
-  
+
   format(time) {
     const pad = (time, length) => {
       while (time.length < length) {
         time = '0' + time;
       }
       return time;
-    }
+    };
     time = new Date(time);
     let minutes = pad(time.getMinutes().toString(), 2);
     let seconds = pad(time.getSeconds().toString(), 2);
@@ -49,13 +51,13 @@ class Timing extends Component  {
     this.time = Date.now() - this.offset;
     this.forceUpdate();
 	}
-  
+
   render() {
     return (
       <div>
-        <Button circular positive={!this.props.started} negative={this.props.started} icon={this.props.started ? 'pause' : 'play'} 
+        <Button circular positive={!this.props.started} negative={this.props.started} icon={this.props.started ? 'pause' : 'play'}
           onClick={() => this.props.started ? this.onStop() : this.onStart()}/>
-        <Button circular color='blue' inverted icon='undo' 
+        <Button circular color='blue' inverted icon='undo'
           onClick={() => this.onReset()}/>
         <Label basic size='big'>
           <Icon name='clock' />{this.format(this.time)}
@@ -63,7 +65,7 @@ class Timing extends Component  {
       </div>
     );
   }
-};
+}
 
 Timing.propTypes = {
   started: React.PropTypes.bool.isRequired

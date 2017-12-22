@@ -3,27 +3,29 @@ const sentenceRegex = /[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g;
 const commaRegex = /[^,]+[\,]+|[^,]+$/g;
 let wordRegex = RegExp('(.{1,15}(\\s|$))\\s*', 'g');
 
-Array.prototype.flatMap = function(lambda) { 
-  return Array.prototype.concat.apply([], this.map(lambda)); 
+Array.prototype.flatMap = function(lambda) {
+  return Array.prototype.concat.apply([], this.map(lambda));
 };
 
-export const splitIntoWordGroups = (text, character_count) => {
+export const splitIntoWordGroups = (text, characterCount) => {
   console.log('Splitting');
-  wordRegex = RegExp('(.{1,' + character_count + '}(\\s|$))\\s*', 'g');  
-  return text.length > character_count ? splitWithPeriod(text, character_count) : [text]
-}
+  wordRegex = RegExp('(.{1,' + characterCount + '}(\\s|$))\\s*', 'g');
+  return text.length > characterCount ? splitWithPeriod(text, characterCount) : [text];
+};
 
 // First split groups at '.'
-const splitWithPeriod = (text, character_count) => {
-  return text.match(sentenceRegex).flatMap((sentence) => sentence.length > character_count ? splitWithComma(sentence, character_count) : sentence.trim())
-}
+const splitWithPeriod = (text, characterCount) => {
+  return text.match(sentenceRegex).flatMap(
+    (sentence) => sentence.length > characterCount ? splitWithComma(sentence, characterCount) : sentence.trim()
+  );
+};
 
 // Then split groups at ','
-const splitWithComma = (sentence, character_count) => {
-  return sentence.match(commaRegex).flatMap((words) => words.length > character_count ? splitWords(words, character_count) : words.trim())
-}
+const splitWithComma = (sentence, characterCount) => {
+  return sentence.match(commaRegex).flatMap((words) => words.length > characterCount ? splitWords(words, characterCount) : words.trim());
+};
 
 // Finally, split groups at ' '
-const splitWords = (words, character_count) => {
+const splitWords = (words, characterCount) => {
   return words.match(wordRegex).map((group) => group.trim());
-}
+};

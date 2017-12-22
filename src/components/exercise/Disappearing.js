@@ -79,7 +79,7 @@ class Disappearing extends Component {
         if (this.cursorState.lines[this.cursorState.line + 1]) {
           this.cursorState.linePosition = 0;
           this.cursorState.line = this.cursorState.line + 1;
-          this.cursorState.lineLength = this.refs.baseCanvas.getContext('2d').measureText(this.cursorState.lines[this.cursorState.line]).width;        
+          this.cursorState.lineLength = this.refs.baseCanvas.getContext('2d').measureText(this.cursorState.lines[this.cursorState.line]).width;
           this.cursorState.characterWidth = (this.cursorState.lineLength/this.cursorState.lines[this.cursorState.line].length) * 1;
           this.cursorState.lineBreak = true;
           update = setTimeout(() => this.nextCharacter(), LINE_BREAK_DELAY);
@@ -115,20 +115,19 @@ class Disappearing extends Component {
   }
 
   wrapText(context, text, x, y, maxWidth, lineHeight) {
-    var words = text.split(' ');
-    var line = '';
+    const words = text.split(' ');
+    let line = '';
     this.cursorState.lines = [];
-    for(var n = 0; n < words.length; n++) {
-      var testLine = line + words[n] + ' ';
-      var metrics = context.measureText(testLine);
-      var testWidth = metrics.width;
+    for(let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = context.measureText(testLine);
+      const testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
         this.cursorState.lines.push(line);
         context.fillText(line, x, y);
         line = words[n] + ' ';
         y += lineHeight;
-      }
-      else {
+      } else {
         line = testLine;
       }
     }
@@ -142,7 +141,7 @@ class Disappearing extends Component {
   render() {
     return(
       <div className='reading'>
-        <Container style={{ marginTop: '14px' }}>
+        <Container style={{marginTop: '14px'}}>
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column width={12}>
@@ -155,9 +154,10 @@ class Disappearing extends Component {
             </Grid.Row>
             <Grid.Row centered>
               <Segment compact>
-                <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+                <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
+                                                       TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                   <canvas ref='shownCanvas' width={this.props.width} height={450} />
-                  <canvas ref='baseCanvas' width={this.props.width} height={450} 
+                  <canvas ref='baseCanvas' width={this.props.width} height={450}
                     style={{display: 'none'}}
                   />
                 </div>
@@ -168,6 +168,6 @@ class Disappearing extends Component {
       </div>
     );
   }
-};
+}
 
 export default Disappearing;

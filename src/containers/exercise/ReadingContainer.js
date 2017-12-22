@@ -6,6 +6,7 @@ import {exerciseSelected} from '../../actions';
 const mapStateToProps = (state) => ({
   text: state.exercise.text,
   width: state.exercise.textOptions.width,
+  lineCount: state.exercise.textOptions.lineCount,
   fontSize: state.exercise.textOptions.fontSize,
   wpm: state.exercise.exerciseOptions.wpm,
   started: state.exercise.started,

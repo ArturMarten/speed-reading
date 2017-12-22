@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Label, Input, Button} from 'semantic-ui-react';
+import {Input, Button} from 'semantic-ui-react';
 
 const MIN_WPM = 10;
 const MAX_WPM = 1500;
@@ -33,14 +33,16 @@ class ExerciseOptions extends Component {
   }
 
   changeWPM(newValue) {
+    let newWPM = this.state.wpm;
     if (newValue > MAX_WPM) {
-      this.setState({wpm: MAX_WPM});
+      newWPM = MAX_WPM;
     } else if (newValue < MIN_WPM) {
-      this.setState({wpm: MIN_WPM});
+      newWPM = MIN_WPM;
     } else {
-      this.setState({wpm: newValue});
+      newWPM = newValue;
     }
-    this.props.onSubmit(this.state);
+    this.props.onSubmit({...this.state, wpm: newWPM});
+    this.setState({wpm: newWPM});
   }
 
   handleFixationChange(event) {
@@ -62,14 +64,16 @@ class ExerciseOptions extends Component {
   }
 
   changeFixation(newValue) {
+    let newFixation = this.state.fixation;
     if (newValue > MAX_FIXATION) {
-      this.setState({fixation: MAX_FIXATION});
+      newFixation = MAX_FIXATION;
     } else if (newValue < MIN_FIXATION) {
-      this.setState({fixation: MIN_FIXATION});
+      newFixation = MIN_FIXATION;
     } else {
-      this.setState({fixation: newValue});
+      newFixation = newValue;
     }
-    this.props.onSubmit(this.state);
+    this.props.onSubmit({...this.state, fixation: newFixation});
+    this.setState({fixation: newFixation});
   }
 
   handleCharacterCountChange(event) {
@@ -91,14 +95,16 @@ class ExerciseOptions extends Component {
   }
 
   changeCharacterCount(newValue) {
+    let newCharacterCount = this.state.characterCount;
     if (newValue > MAX_CHARACTER_COUNT) {
-      this.setState({characterCount: MAX_CHARACTER_COUNT});
+      newCharacterCount = MAX_CHARACTER_COUNT;
     } else if (newValue < MIN_CHARACTER_COUNT) {
-      this.setState({characterCount: MIN_CHARACTER_COUNT});
+      newCharacterCount = MIN_CHARACTER_COUNT;
     } else {
-      this.setState({characterCount: newValue});
+      newCharacterCount = newValue;
     }
-    this.props.onSubmit(this.state);
+    this.props.onSubmit({...this.state, characterCount: newCharacterCount});
+    this.setState({characterCount: newCharacterCount});
   }
 
   handleKeyPress(event) {
@@ -114,23 +120,29 @@ class ExerciseOptions extends Component {
   submitOptions() {
     const correctedOptions = {
       wpm: this.state.wpm === '' || this.state.wpm < MIN_WPM ? MIN_WPM : this.state.wpm,
-      characterCount: this.state.characterCount === '' || this.state.characterCount < MIN_CHARACTER_COUNT ? MIN_CHARACTER_COUNT : this.state.characterCount,
+      characterCount:
+        (this.state.characterCount === '' || this.state.characterCount < MIN_CHARACTER_COUNT) ?
+          MIN_CHARACTER_COUNT : this.state.characterCount,
       fixation: this.state.fixation === '' || this.state.fixation < MIN_FIXATION ? MIN_FIXATION : this.state.fixation,
-    }
-    if (this.props.options.wpm !== correctedOptions.wpm || this.props.options.characterCount !== correctedOptions.characterCount || this.props.options.fixation !== correctedOptions.fixation) {
+    };
+    if (
+      this.props.options.wpm !== correctedOptions.wpm ||
+      this.props.options.characterCount !== correctedOptions.characterCount ||
+      this.props.options.fixation !== correctedOptions.fixation
+    ) {
       this.props.onSubmit(correctedOptions);
     }
     this.setState(correctedOptions);
   }
-
 
   options() {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return(
         <div>
           {'Reading speed '}
+          <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseWPM.bind(this)} />
-          <Input 
+          <Input
             type='text'
             inverted
             size='small'
@@ -138,9 +150,8 @@ class ExerciseOptions extends Component {
             onChange={this.handleWPMChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-            style={{ width: '64px', textAlign: 'right' }}
+            style={{width: '64px', textAlign: 'right'}}
           />
-          <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
           {' words per minute'}
         </div>
       );
@@ -149,8 +160,9 @@ class ExerciseOptions extends Component {
         <div>
           <div>
             {'Character count '}
+            <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
             <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount.bind(this)} />
-            <Input 
+            <Input
               type='text'
               inverted
               size='small'
@@ -158,15 +170,15 @@ class ExerciseOptions extends Component {
               onChange={this.handleCharacterCountChange.bind(this)}
               onKeyPress={this.handleKeyPress.bind(this)}
               onBlur={this.handleBlur.bind(this)}
-              style={{ width: '52px' }}
+              style={{width: '52px'}}
             />
-            <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
             {' characters'}
           </div>
           <div>
             {'Fixation time '}
+            <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
             <Button icon='minus' size='mini' onClick={this.decreaseFixation.bind(this)} />
-            <Input 
+            <Input
               type='text'
               inverted
               size='small'
@@ -174,9 +186,8 @@ class ExerciseOptions extends Component {
               onChange={this.handleFixationChange.bind(this)}
               onKeyPress={this.handleKeyPress.bind(this)}
               onBlur={this.handleBlur.bind(this)}
-              style={{ width: '52px' }}
+              style={{width: '52px'}}
             />
-            <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
             {' ms'}
           </div>
         </div>

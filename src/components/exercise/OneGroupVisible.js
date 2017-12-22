@@ -40,7 +40,7 @@ class OneGroupVisible extends Component {
   componentDidUpdate(previous) {
     if (!previous.started && this.props.started) {
       // Exercise started
-      update = setTimeout(() => this.nextGroup(), START_DELAY);      
+      update = setTimeout(() => this.nextGroup(), START_DELAY);
     } else if (!previous.resetted && this.props.resetted) {
       // Exercise resetted
       clearTimeout(update);
@@ -94,7 +94,7 @@ class OneGroupVisible extends Component {
   render() {
     return(
       <div>
-        <Container style={{ marginTop: '14px' }}>
+        <Container style={{marginTop: '14px'}}>
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column width={12}>
@@ -107,9 +107,10 @@ class OneGroupVisible extends Component {
             </Grid.Row>
             <Grid.Row centered>
               <Segment compact>
-                <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+                <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
+                                                       TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                   <canvas ref='shownCanvas' width={this.props.width} height={450} />
-                  <canvas ref='baseCanvas' width={this.props.width} height={450} 
+                  <canvas ref='baseCanvas' width={this.props.width} height={450}
                     style={{display: 'none'}}
                   />
                 </div>
@@ -120,6 +121,6 @@ class OneGroupVisible extends Component {
       </div>
     );
   }
-};
+}
 
 export default OneGroupVisible;

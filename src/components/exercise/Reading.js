@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Grid, Segment, Sidebar, Menu, Icon, Header} from 'semantic-ui-react';
+import {Container, Grid, Segment} from 'semantic-ui-react';
 
 import TextOptionsContainer from '../../containers/TextOptionsContainer';
 import ExerciseOptionsContainer from '../../containers/ExerciseOptionsContainer';
@@ -13,12 +13,15 @@ const LINE_BREAK_DELAY = 400;
 let update = null;
 
 const initialState = {
-  line: 0,
+  pageNumber: 0,
+  lineNumber: 0,
   lines: [],
   linePosition: 0,
+  lineLengthInPixels: 0,
   characterWidth: 0,
-  lineLength: 0,
+  lineHeight: 30,
   lineBreak: false,
+  pageBreak: false,
   end: false
 };
 
@@ -67,20 +70,28 @@ class Reading extends Component {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(this.refs.baseCanvas, 0, 0);
     context.fillStyle='rgba(0, 255, 0, 0.9)';
-    context.fillRect(this.cursorState.linePosition - 2, this.cursorState.line * 30 + 22, this.cursorState.characterWidth + 2, 3);
+    context.fillRect(
+      (this.cursorState.linePosition * this.cursorState.characterWidth) - 2,
+      this.cursorState.lineNumber * 30 + 22, this.cursorState.characterWidth + 2, 3
+    );
   }
 
   nextCharacter() {
     if(!this.cursorState.end) {
-      this.cursorState.linePosition = this.cursorState.linePosition + this.cursorState.characterWidth;
-      if (this.cursorState.lineLength - this.cursorState.linePosition <= 1) {
-        // New line
-        if (this.cursorState.lines[this.cursorState.line + 1]) {
+      this.cursorState.linePosition = this.cursorState.linePosition + 1;
+      if (this.cursorState.lineLengthInPixels - (this.cursorState.characterWidth * this.cursorState.linePosition) <= 1) {
+        if (this.cursorState.lineNumber + 1 > this.props.lineCount) {
+          this.cursorState.pageNumber = this.cursorState.pageNumber + 1;
           this.cursorState.linePosition = 0;
-          this.cursorState.line = this.cursorState.line + 1;
-          this.cursorState.lineLength = this.refs.baseCanvas.getContext('2d').measureText(this.cursorState.lines[this.cursorState.line]).width;        
-          this.cursorState.characterWidth = (this.cursorState.lineLength/this.cursorState.lines[this.cursorState.line].length) * 1;
+          this.cursorState.lineNumber = 0;
+          this.pageBreak = true;
+          console.log('Page break!');
+        } else if (this.cursorState.lines[this.cursorState.lineNumber + 1]) {
+          // New line
           this.cursorState.lineBreak = true;
+          this.cursorState.linePosition = 0;
+          this.cursorState.lineNumber = this.cursorState.lineNumber + 1;
+          this.calculatePixelsLengths(this.refs.baseCanvas.getContext('2d'));
           this.renderCanvas();
           update = setTimeout(() => this.nextCharacter(), LINE_BREAK_DELAY);
         } else {
@@ -103,33 +114,74 @@ class Reading extends Component {
 
   renderText() {
     const canvas = this.refs.baseCanvas;
-    const context = canvas.getContext('2d');
+    let context = canvas.getContext('2d');
     const maxWidth = this.props.width;
-    const lineHeight = 30;
-    const x = (canvas.width - maxWidth) / 2;
-    const y = 20;
+    context.textBaseline = 'top';
     context.font = this.props.fontSize + 'pt Calibri';
     context.clearRect(0, 0, canvas.width, canvas.height);
-    this.wrapText(context, this.props.text, x, y, maxWidth, lineHeight);
-    if (this.cursorState.lines[this.cursorState.line]) {
-      this.cursorState.lineLength = context.measureText(this.cursorState.lines[this.cursorState.line]).width;
-      this.cursorState.characterWidth = (this.cursorState.lineLength/this.cursorState.lines[this.cursorState.line].length) * 1;
+    const words = this.props.text.split(' ');
+    this.cursorState.lines = this.calculateWordLines(context, words, maxWidth);
+    this.drawLines(context, this.cursorState.lines, this.cursorState.pageNumber, this.props.lineCount, this.cursorState.lineHeight);
+    // calculate update interval from wpm
+    const timeInSeconds = (words.length/this.props.wpm) * 60;
+    this.updateInterval = (timeInSeconds/this.props.text.length) * 1000;
+    if (this.cursorState.lines[this.cursorState.lineNumber]) {
+      this.calculatePixelsLengths(context);
     }
   }
 
+  calculateWordLines(context, words, maxWidth) {
+    let line = '';
+    let lines = [];
+    words.forEach((word) => {
+      const testLine = line + word + ' ';
+      const testWidth = context.measureText(testLine).width;
+      if (testWidth > maxWidth) {
+        // New line
+        lines.push(line);
+        line = word + ' ';
+      } else {
+        line = testLine;
+      }
+    });
+    return lines;
+  }
+
+  drawLines(context, lines, pageNumber, maxLines, lineHeight) {
+    const x = 0;
+    let y = 0;
+    const startIndex = pageNumber * maxLines;
+    const endIndex = Math.min(lines.length, (pageNumber + 1) * maxLines);
+    for (let i = startIndex; i < endIndex; i++) {
+      context.fillText(lines[i], x, y);
+      y += lineHeight;
+    }
+  }
+
+  calculatePixelsLengths(context) {
+    this.cursorState.lineLengthInPixels = context.measureText(this.cursorState.lines[this.cursorState.lineNumber]).width;
+    this.cursorState.characterWidth = (this.cursorState.lineLengthInPixels/this.cursorState.lines[this.cursorState.lineNumber].length) * 1;
+  }
+  /*
   wrapText(context, text, x, y, maxWidth, lineHeight) {
-    var words = text.split(' ');
-    var line = '';
+    const words = text.split(' ');
+    let line = '';
     this.cursorState.lines = [];
-    for(var n = 0; n < words.length; n++) {
-      var testLine = line + words[n] + ' ';
-      var metrics = context.measureText(testLine);
-      var testWidth = metrics.width;
+    for(let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = context.measureText(testLine);
+      const testWidth = metrics.width;
       if (testWidth > maxWidth && n > 0) {
         this.cursorState.lines.push(line);
-        context.fillText(line, x, y);
-        line = words[n] + ' ';
-        y += lineHeight;
+        console.log(this.cursorState.lines.length);
+        console.log(this.props.lineCount);
+        if (this.cursorState.lines.length >= this.props.lineCount) {
+          console.log('Page break');
+        } else {
+          context.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        }
       }
       else {
         line = testLine;
@@ -137,15 +189,12 @@ class Reading extends Component {
     }
     this.cursorState.lines.push(line);
     context.fillText(line, x, y);
-    // calculate update interval from wpm
-    const timeInSeconds = (words.length/this.props.wpm)*60;
-    this.updateInterval = (timeInSeconds/text.split('').length)*1000;
   }
-
+  */
   render() {
     return(
       <div>
-        <Container style={{ marginTop: '14px' }}>
+        <Container style={{marginTop: '14px'}}>
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column width={12}>
@@ -158,11 +207,13 @@ class Reading extends Component {
             </Grid.Row>
             <Grid.Row centered>
               <Segment compact>
-                <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' + TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-                  <canvas ref='shownCanvas' width={this.props.width} height={450} />
-                  <canvas ref='baseCanvas' width={this.props.width} height={450} 
+                <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
+                                      TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+                  <canvas ref='shownCanvas' width={this.props.width} height={this.props.lineCount * this.cursorState.lineHeight} />
+                  <canvas ref='baseCanvas' width={this.props.width} height={this.props.lineCount * this.cursorState.lineHeight}
                     style={{display: 'none'}}
                   />
+                  <div>Page {this.cursorState.pageNumber + 1} of {Math.ceil(this.cursorState.lines.length/this.props.lineCount)}</div>
                 </div>
               </Segment>
             </Grid.Row>
@@ -171,6 +222,6 @@ class Reading extends Component {
       </div>
     );
   }
-};
+}
 
 export default Reading;

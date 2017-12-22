@@ -1,7 +1,6 @@
 import React from 'react';
 import {ConnectedRouter} from 'connected-react-router';
 import {Route} from 'react-router-dom';
-import {Container} from 'semantic-ui-react';
 
 import Home from './Home';
 import TopMenuContainer from '../containers/TopMenuContainer';
