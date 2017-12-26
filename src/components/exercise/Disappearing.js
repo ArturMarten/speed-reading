@@ -26,6 +26,9 @@ class Disappearing extends Component {
   constructor(props) {
     super(props);
     this.cursorState = {...initialState};
+    this.offscreenCanvas = document.createElement('canvas');
+    this.offscreenCanvas.width = this.props.width;
+    this.offscreenCanvas.height = 400;
   }
 
   componentWillMount() {
@@ -34,7 +37,7 @@ class Disappearing extends Component {
 
   componentDidMount() {
     this.renderText();
-    this.refs.shownCanvas.getContext('2d').drawImage(this.refs.baseCanvas, 0, 0);
+    this.refs.shownCanvas.getContext('2d').drawImage(this.offscreenCanvas, 0, 0);
   }
 
   componentDidUpdate(previous) {
@@ -49,7 +52,7 @@ class Disappearing extends Component {
       const canvas = this.refs.shownCanvas;
       let context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      this.refs.shownCanvas.getContext('2d').drawImage(this.refs.baseCanvas, 0, 0);
+      this.refs.shownCanvas.getContext('2d').drawImage(this.offscreenCanvas, 0, 0);
     } else if (previous.started && !this.props.started) {
       // Exercise stopped
       clearTimeout(update);
@@ -79,7 +82,7 @@ class Disappearing extends Component {
         if (this.cursorState.lines[this.cursorState.line + 1]) {
           this.cursorState.linePosition = 0;
           this.cursorState.line = this.cursorState.line + 1;
-          this.cursorState.lineLength = this.refs.baseCanvas.getContext('2d').measureText(this.cursorState.lines[this.cursorState.line]).width;
+          this.cursorState.lineLength = this.offscreenCanvas.getContext('2d').measureText(this.cursorState.lines[this.cursorState.line]).width;
           this.cursorState.characterWidth = (this.cursorState.lineLength/this.cursorState.lines[this.cursorState.line].length) * 1;
           this.cursorState.lineBreak = true;
           update = setTimeout(() => this.nextCharacter(), LINE_BREAK_DELAY);
@@ -99,14 +102,13 @@ class Disappearing extends Component {
   }
 
   renderText() {
-    const canvas = this.refs.baseCanvas;
-    const context = canvas.getContext('2d');
+    const context = this.offscreenCanvas.getContext('2d');
     const maxWidth = this.props.width;
     const lineHeight = 30;
-    const x = (canvas.width - maxWidth) / 2;
+    const x = (this.offscreenCanvas.width - maxWidth) / 2;
     const y = 20;
     context.font = this.props.fontSize + 'pt Calibri';
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     this.wrapText(context, this.props.text, x, y, maxWidth, lineHeight);
     if (this.cursorState.lines[this.cursorState.line]) {
       this.cursorState.lineLength = context.measureText(this.cursorState.lines[this.cursorState.line]).width;
@@ -157,9 +159,6 @@ class Disappearing extends Component {
                 <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                                        TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                   <canvas ref='shownCanvas' width={this.props.width} height={450} />
-                  <canvas ref='baseCanvas' width={this.props.width} height={450}
-                    style={{display: 'none'}}
-                  />
                 </div>
               </Segment>
             </Grid.Row>

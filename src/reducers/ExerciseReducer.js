@@ -13,14 +13,8 @@ import {
   EXERCISE_SELECTED
 } from '../actions';
 
-const text = `
-  Lorem ipsum dolor sit amet, praesent torquent dictum vel augue proin at, 
-  sollicitudin orci rhoncus semper, arcu et ut accumsan metus amet, 
-  mauris tellus tortor, magna imperdiet erat. Vel leo est velit tellus tellus, 
-  aliquet in, vestibulum ut erat, mi arcu elit arcu et amet. 
-  Elit orci hymenaeos accumsan sed sem ac, nec augue arcu sed in id, ac proin. 
-  Lacus aliquam diam pulvinar, neque mauris elementum eu, mauris auctor vestibulum amet turpis. 
-  Nunc sem aenean nec elit, elementum nulla, mauris est cillum et.`;
+// eslint-disable-next-line
+const text = 'Lorem ipsum dolor sit amet, praesent torquent dictum vel augue proin at, sollicitudin orci rhoncus semper, arcu et ut accumsan metus amet, mauris tellus tortor, magna imperdiet erat. Vel leo est velit tellus tellus, aliquet in, vestibulum ut erat, mi arcu elit arcu et amet. Elit orci hymenaeos accumsan sed sem ac, nec augue arcu sed in id, ac proin. Lacus aliquam diam pulvinar, neque mauris elementum eu, mauris auctor vestibulum amet turpis. Nunc sem aenean nec elit, elementum nulla, mauris est cillum et.';
 
 const initialState = {
   started: false,

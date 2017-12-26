@@ -110,9 +110,6 @@ class OneGroupVisible extends Component {
                 <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                                        TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                   <canvas ref='shownCanvas' width={this.props.width} height={450} />
-                  <canvas ref='baseCanvas' width={this.props.width} height={450}
-                    style={{display: 'none'}}
-                  />
                 </div>
               </Segment>
             </Grid.Row>

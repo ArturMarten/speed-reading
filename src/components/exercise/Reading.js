@@ -28,7 +28,10 @@ const initialState = {
 class Reading extends Component {
   constructor(props) {
     super(props);
-    this.cursorState = {...initialState};
+    this.cursorState = {...initialState, lineHeight: this.props.fontSize + 5};
+    this.offscreenCanvas = document.createElement('canvas');
+    this.offscreenCanvas.width = this.props.width;
+    this.offscreenCanvas.height = 400;
   }
 
   componentWillMount() {
@@ -55,6 +58,7 @@ class Reading extends Component {
       clearTimeout(update);
     } else {
       // Text/exercise options or text changed
+      this.cursorState.lineHeight = this.props.fontSize + 5;
       this.renderText();
       this.renderCanvas();
     }
@@ -68,11 +72,11 @@ class Reading extends Component {
     const canvas = this.refs.shownCanvas;
     let context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(this.refs.baseCanvas, 0, 0);
+    context.drawImage(this.offscreenCanvas, 0, 0);
     context.fillStyle='rgba(0, 255, 0, 0.9)';
     context.fillRect(
       (this.cursorState.linePosition * this.cursorState.characterWidth) - 2,
-      this.cursorState.lineNumber * 30 + 22, this.cursorState.characterWidth + 2, 3
+      this.cursorState.lineNumber * this.cursorState.lineHeight + 22, this.cursorState.characterWidth + 2, 3
     );
   }
 
@@ -91,7 +95,7 @@ class Reading extends Component {
           this.cursorState.lineBreak = true;
           this.cursorState.linePosition = 0;
           this.cursorState.lineNumber = this.cursorState.lineNumber + 1;
-          this.calculatePixelsLengths(this.refs.baseCanvas.getContext('2d'));
+          this.calculatePixelsLengths(this.offscreenCanvas.getContext('2d'));
           this.renderCanvas();
           update = setTimeout(() => this.nextCharacter(), LINE_BREAK_DELAY);
         } else {
@@ -113,12 +117,11 @@ class Reading extends Component {
   }
 
   renderText() {
-    const canvas = this.refs.baseCanvas;
-    let context = canvas.getContext('2d');
+    let context = this.offscreenCanvas.getContext('2d');
     const maxWidth = this.props.width;
     context.textBaseline = 'top';
     context.font = this.props.fontSize + 'pt Calibri';
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     const words = this.props.text.split(' ');
     this.cursorState.lines = this.calculateWordLines(context, words, maxWidth);
     this.drawLines(context, this.cursorState.lines, this.cursorState.pageNumber, this.props.lineCount, this.cursorState.lineHeight);
@@ -210,9 +213,6 @@ class Reading extends Component {
                 <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                       TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                   <canvas ref='shownCanvas' width={this.props.width} height={this.props.lineCount * this.cursorState.lineHeight} />
-                  <canvas ref='baseCanvas' width={this.props.width} height={this.props.lineCount * this.cursorState.lineHeight}
-                    style={{display: 'none'}}
-                  />
                   <div>Page {this.cursorState.pageNumber + 1} of {Math.ceil(this.cursorState.lines.length/this.props.lineCount)}</div>
                 </div>
               </Segment>

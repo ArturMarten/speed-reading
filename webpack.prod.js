@@ -1,10 +1,10 @@
-var path = require('path');
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const MinifyPlugin = require("babel-minify-webpack-plugin")
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 module.exports = {
-  devtool: "cheap-module-source-map",
+  devtool: 'cheap-module-source-map',
   entry: [
     './src/index.js',
     './styles/app.css'
@@ -14,19 +14,19 @@ module.exports = {
     path: path.join(__dirname, '/'),
   },
   devServer: {
-    port: 8080
-  },
-  devServer: {
+    port: 8080,
     historyApiFallback: true
   },
   module: {
     rules: [
-      { test: /\.js/, use: 'babel-loader' },
       {
+        test: /\.js/, use: 'babel-loader'
+      }, {
         test: /\.css$/,
         use: ExtractTextPlugin.extract('css-loader'),
-      },
-      { test: /\.json$/, use: 'json-loader' }
+      }, {
+        test: /\.json$/, use: 'json-loader'
+      }
     ]
   },
   plugins: [
