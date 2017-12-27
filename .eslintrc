@@ -22,9 +22,9 @@
     "require-jsdoc": "off",
     "comma-dangle": "off",
     "linebreak-style": ["error", "windows"],
-    "no-console": "off",
     "no-extend-native": "off",
-
+    
+    "no-console": "off",
     "react/prop-types": "off"
   }
 }

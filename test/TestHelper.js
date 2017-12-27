@@ -2,10 +2,16 @@ const chai = require('chai');
 const chaiEnzyme = require('chai-enzyme');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
+const pixelmatch = require('pixelmatch');
+const fs = require('fs');
+const jsdom = require('jsdom-global');
 
 global.chai = chai;
 global.expect = chai.expect;
 global.sinon = sinon;
+global.pixelmatch = pixelmatch;
+global.fs = fs;
+jsdom();
 
 chai.use(chaiEnzyme());
 chai.use(sinonChai);

@@ -8,12 +8,13 @@
   "env": {
     "browser": true,
     "node": true,
-    "jasmine": true,
     "mocha": true
   },
   "globals": {
     "expect": true,
-    "sinon": true
+    "sinon": true,
+    "pixelmatch": true,
+    "fs": true
   },
   "plugins": ["import","react"],
   "extends": [
@@ -24,9 +25,11 @@
     "plugin:import/warnings"
   ],
   "rules": {
-    "max-len": ["error", 120],
+    "max-len": ["error", 150],
     "require-jsdoc": "off",
     "comma-dangle": "off",
-    "linebreak-style": ["error", "windows"]
+    "linebreak-style": ["error", "windows"],
+    "no-invalid-this": "off",
+    "no-console": "off"
   }
 }
