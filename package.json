@@ -55,7 +55,7 @@
     "lint": "eslint src/ test/ || exit 0",
     "test": "mocha || exit 0",
     "test-debug": "mocha --inspect-brk",
-    "test-watch": "mocha --watch",
+    "test-watch": "mocha --watch --reporter list",
     "pretest": "npm run lint"
   }
 }
