@@ -148,11 +148,11 @@ class ReadingWithStyle extends Component {
         <Container style={{marginTop: '14px'}}>
           <Grid>
             <Grid.Row columns={2}>
-              <Grid.Column width={12}>
+              <Grid.Column width={10}>
                 <TextOptionsContainer />
                 <ExerciseOptionsContainer />
               </Grid.Column>
-              <Grid.Column textAlign='center' width={4}>
+              <Grid.Column textAlign='center' width={6}>
                 <TimingContainer />
               </Grid.Column>
             </Grid.Row>

@@ -60,3 +60,23 @@ ul {
   transition:.1s filter ease !important;
   transition:.1s filter ease,.1s -webkit-filter ease !important;
 }
+
+/* Graph */
+.dot {
+  stroke: #293b47;
+  fill: rgb(47, 117, 167)
+}
+
+.axis text {
+  font-size: 12px;
+}
+
+.text-label {
+  font-size: 12px;
+}
+
+.regression-line {
+  stroke: #E4002B;
+  fill: none;
+  stroke-width: 3;
+}

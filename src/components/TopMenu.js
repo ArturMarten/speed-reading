@@ -43,7 +43,7 @@ class TopMenu extends Component {
               onClick={this.itemClickHandler.bind(this)} as={Link} to='/text-entry'>
               {this.props.translate('menu.text-entry')}
             </Menu.Item>
-            <Menu.Item name='exercise' active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry'}>
+            <Menu.Item name='exercise' active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' && this.state.activeItem !== 'statistics'}>
               <Dropdown text={this.props.translate('menu.exercise')}>
                 <Dropdown.Menu>
                   <Dropdown.Item
@@ -76,6 +76,10 @@ class TopMenu extends Component {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+            </Menu.Item>
+            <Menu.Item name='statistics' active={this.state.activeItem === 'statistics'}
+              onClick={this.itemClickHandler.bind(this)} as={Link} to='/statistics'>
+              {this.props.translate('menu.statistics')}
             </Menu.Item>
             <Menu.Menu position='right'>
               <Menu.Item fitted>

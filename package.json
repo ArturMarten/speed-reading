@@ -38,6 +38,11 @@
   },
   "dependencies": {
     "connected-react-router": "^4.3.0",
+    "d3-axis": "1.0.8",
+    "d3-scale": "1.0.7",
+    "d3-selection": "1.2.0",
+    "d3-shape": "1.2.0",
+    "d3-transition": "1.1.1",
     "draft-js": "^0.10.4",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",

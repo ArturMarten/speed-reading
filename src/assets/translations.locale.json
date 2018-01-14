@@ -8,6 +8,7 @@
     "reading-with-style-test": ["Lugemistest (stiilidega)", "Reading test (with styles)"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
+    "statistics": ["Statistika", "Statistics"],
     "login": ["Logi sisse", "Login"]
   }
 }

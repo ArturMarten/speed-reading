@@ -11,6 +11,7 @@ import ReadingContainer from '../containers/exercise/ReadingContainer';
 import ReadingWithStyleContainer from '../containers/exercise/ReadingWithStyleContainer';
 import OneGroupVisibleContainer from '../containers/exercise/OneGroupVisibleContainer';
 import DisappearingContainer from '../containers/exercise/DisappearingContainer';
+import StatisticsContainer from '../containers/statistics/StatisticsContainer';
 
 const App = ({history}) => {
   return (
@@ -24,6 +25,7 @@ const App = ({history}) => {
         <Route path='/exercise/reading-with-style-test' component={ReadingWithStyleContainer} />
         <Route path='/exercise/word-groups' component={OneGroupVisibleContainer} />
         <Route path='/exercise/disappearing-text' component={DisappearingContainer} />
+        <Route path='/statistics' component={StatisticsContainer} />
       </div>
     </ConnectedRouter>
   );

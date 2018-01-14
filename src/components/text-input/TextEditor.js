@@ -29,7 +29,7 @@ class TextEditor extends Component {
   render() {
     return (
       <div>
-        <Container style={{marginTop: '5em'}} textAlign='left'>
+        <Container style={{marginTop: '4em'}} textAlign='left'>
           <Header as='h2'>Text entry</Header>
           <p>Here you can add your own texts for exercises</p>
           <Segment compact>
