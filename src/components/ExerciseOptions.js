@@ -139,7 +139,7 @@ class ExerciseOptions extends Component {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return (
         <div>
-          {'Reading speed '}
+          {this.props.translate('exercise-options.reading-speed') + ' '}
           <Button icon='minus' size='mini' onClick={this.decreaseWPM.bind(this)} />
           <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
           <Input
@@ -152,14 +152,14 @@ class ExerciseOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{width: '64px', textAlign: 'right'}}
           />
-          {' words per minute'}
+          {' ' + this.props.translate('exercise-options.wpm')}
         </div>
       );
     } else if (this.props.exerciseType === 'wordGroup') {
       return (
         <div>
           <div>
-            {'Character count '}
+            {this.props.translate('exercise-options.character-count') + ' '}
             <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount.bind(this)} />
             <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
             <Input
@@ -172,10 +172,10 @@ class ExerciseOptions extends Component {
               onBlur={this.handleBlur.bind(this)}
               style={{width: '52px'}}
             />
-            {' characters'}
+            {' ' + this.props.translate('exercise-options.characters')}
           </div>
           <div>
-            {'Fixation time '}
+            {this.props.translate('exercise-options.fixation-time') + ' '}
             <Button icon='minus' size='mini' onClick={this.decreaseFixation.bind(this)} />
             <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
             <Input
@@ -188,7 +188,7 @@ class ExerciseOptions extends Component {
               onBlur={this.handleBlur.bind(this)}
               style={{width: '52px'}}
             />
-            {' ms'}
+            {' ' + this.props.translate('exercise-options.ms')}
           </div>
         </div>
       );

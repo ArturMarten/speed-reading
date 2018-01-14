@@ -2,8 +2,8 @@ import React from 'react';
 import StyleButton from './StyleButton';
 
 const INLINE_STYLES = [
-  {label: 'Bold', style: 'BOLD'},
-  {label: 'Italic', style: 'ITALIC'},
+  {label: 'Bold', style: 'BOLD', translate: 'text-editor.bold'},
+  {label: 'Italic', style: 'ITALIC', translate: 'text-editor.italic'},
 //  {label: 'Underline', style: 'UNDERLINE'},
 //  {label: 'Monospace', style: 'CODE'},
 ];
@@ -16,7 +16,7 @@ const InlineStyleControls = (props) => {
         <StyleButton
           key={type.label}
           active={currentStyle.has(type.style)}
-          label={type.label}
+          label={props.translate(type.translate)}
           onToggle={props.onToggle}
           style={type.style}
         />

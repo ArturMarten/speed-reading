@@ -44,11 +44,11 @@ class RegressionChart extends Component {
     this.xAxis = select(svg).append('g');
     this.xAxis.attr('class', 'x axis').attr('transform', 'translate(0, ' + 380 + ')').call(xAxis)
       .append('text').attr('class', 'label').style('fill', 'black')
-      .attr('y', -6).attr('x', '1000').style('text-anchor', 'end').text('Date');
+      .attr('y', -6).attr('x', '1000').style('text-anchor', 'end').text(this.props.translate('statistics.date'));
     this.yAxis = select(svg).append('g');
     this.yAxis.attr('class', 'y axis').attr('transform', 'translate(' + 30 + ', 0)').call(yAxis)
       .append('text').attr('class', 'label').style('fill', 'black').attr('transform', 'rotate(-90)')
-      .attr('y', 6).attr('x', -20).attr('dy', '.60em').style('text-anchor', 'end').text('Words Per Minute');
+      .attr('y', 6).attr('x', -20).attr('dy', '.60em').style('text-anchor', 'end').text(this.props.translate('statistics.wpm'));
 
     const xSeries = this.props.data.map(function(d) {
       return this.xScale(new Date(d.date));

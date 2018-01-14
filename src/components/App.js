@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {ConnectedRouter} from 'connected-react-router';
 import {Route} from 'react-router-dom';
 
-import Home from './Home';
+import HomeContainer from '../containers/HomeContainer';
 import TopMenuContainer from '../containers/TopMenuContainer';
 import TextEditorContainer from '../containers/text-input/TextEditorContainer';
 import ExerciseMenuContainer from '../containers/ExerciseMenuContainer';
@@ -18,7 +18,7 @@ const App = ({history}) => {
     <ConnectedRouter history={history}>
       <div>
         <TopMenuContainer />
-        <Route exact path='/' component={Home} />
+        <Route exact path='/' component={HomeContainer} />
         <Route path='/text-entry' component={TextEditorContainer} />
         <Route exact path='/exercise' component={ExerciseMenuContainer} />
         <Route path='/exercise/reading-test' component={ReadingContainer} />

@@ -61,24 +61,28 @@ class Statistics extends Component {
 
   render() {
     const exercises = [
-      {text: 'Reading test', value: 'Reading test'},
-      {text: 'Word groups', value: 'Word groups'},
-      {text: 'Disappearing text', value: 'Disappearing text'}
+      {text: this.props.translate('statistics.reading-test'), value: 'Reading test'},
+      {text: this.props.translate('statistics.word-groups'), value: 'Word groups'},
+      {text: this.props.translate('statistics.disappearing-text'), value: 'Disappearing text'}
     ];
     return (
       <div>
         <Container style={{marginTop: '4em'}} textAlign='left'>
-          <Header as='h2'>Statistics</Header>
-          <p>Here you can select an exercise and see your statistics</p>
+          <Header as='h2'>{this.props.translate('statistics.title')}</Header>
+          <p>{this.props.translate('statistics.description')}</p>
           <Message warning>
-            <Message.Header>Chart below does not show actual statistics</Message.Header>
-            <p>It is rendered using generated data</p>
+            <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
+            <p>{this.props.translate('statistics.warning-content')}</p>
           </Message>
           <Dropdown
             onChange={this.exerciseSelectionHandler.bind(this)}
             defaultValue='Reading test' fluid selection options={exercises} />
           <Segment>
-            <RegressionChart data={this.state.selectedData} size={[1000, 400]} />
+            <RegressionChart
+              data={this.state.selectedData}
+              size={[1000, 400]}
+              translate={this.props.translate}
+            />
           </Segment>
         </Container>
       </div>

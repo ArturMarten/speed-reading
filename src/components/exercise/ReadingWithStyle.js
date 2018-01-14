@@ -5,6 +5,7 @@ import {writeText, getLineMetadata, WordMetadata, LineMetadata} from '../../../s
 import TextOptionsContainer from '../../containers/TextOptionsContainer';
 import ExerciseOptionsContainer from '../../containers/ExerciseOptionsContainer';
 import TimingContainer from '../../containers/TimingContainer';
+import TextPreviewContainer from '../../containers/TextPreviewContainer';
 
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;
@@ -146,6 +147,7 @@ class ReadingWithStyle extends Component {
     return (
       <div>
         <Container style={{marginTop: '14px'}}>
+          <TextPreviewContainer />
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column width={10}>

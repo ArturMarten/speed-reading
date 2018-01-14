@@ -135,7 +135,7 @@ class TextOptions extends Component {
     return (
       <div>
         <div>
-          {'Text width '}
+          {this.props.translate('text-options.text-width') + ' '}
           <Button icon='minus' size='mini' onClick={this.decreaseWidth.bind(this)} />
           <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
           <Input
@@ -148,10 +148,10 @@ class TextOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{width: '58px'}}
           />
-          {' px'}
+          {' ' + this.props.translate('text-options.px')}
         </div>
         <div>
-          {'Line count '}
+          {this.props.translate('text-options.line-count') + ' '}
           <Button icon='minus' size='mini' onClick={this.decreaseLineCount.bind(this)} />
           <Button icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
           <Input
@@ -164,10 +164,10 @@ class TextOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{width: '58px'}}
           />
-          {' lines'}
+          {' ' + this.props.translate('text-options.lines')}
         </div>
         <div>
-          {'Font size '}
+          {this.props.translate('text-options.font-size') + ' '}
           <Button icon='minus' size='mini' onClick={this.decreaseFontSize.bind(this)} />
           <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
           <Input
@@ -180,7 +180,7 @@ class TextOptions extends Component {
             onBlur={this.handleBlur.bind(this)}
             style={{width: '42px'}}
           />
-          {' pt'}
+          {' ' + this.props.translate('text-options.pt')}
         </div>
       </div>
     );

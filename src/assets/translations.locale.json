@@ -8,7 +8,57 @@
     "reading-with-style-test": ["Lugemistest (stiilidega)", "Reading test (with styles)"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
+    "help-exercises": ["Abiharjutused", "Help exercises"],
+    "schulte-tables": ["Schulte tabelid", "Schulte tables"],
+    "concentration": ["Keskendumine", "Concentration"],
     "statistics": ["Statistika", "Statistics"],
-    "login": ["Logi sisse", "Login"]
+    "login": ["Logi sisse", "Login"],
+    "feedback-popup": ["Anna tagasisidet või teata veast", "Give feedback or report a bug"]
+  },
+  "home": {
+    "welcome": ["Tere tulemast", "Welcome"],
+    "description": [
+      "Alustamiseks vali harjutus ülevalt menüüst!", 
+      "To get started, choose an exercise from the menu above!"
+    ]
+  },
+  "text-editor": {
+    "title": ["Tekstide sisestamine", "Text entry"],
+    "description": [
+      "Siin saab lisada enda tekste harjutustes kasutamiseks.", 
+      "Here you can add your own texts for exercises with styling."
+    ],
+    "bold": ["Rasvane", "Bold"],
+    "italic": ["Kaldkirjas", "Italic"]
+  },
+  "exercises": {
+
+  },
+  "text-options": {
+    "text-width": ["Teksti laius", "Text width"],
+    "px": ["pikslit", "px"],
+    "line-count": ["Ridade arv", "Line count"],
+    "lines": ["rida", "lines"],
+    "font-size": ["Kirja suurus", "Font size"],
+    "pt": ["pt", "pt"]
+  },
+  "exercise-options": {
+    "reading-speed": ["Lugemiskiirus", "Reading speed"],
+    "wpm": ["sõnu minutis", "words per minute"],
+    "character-count": ["Tähemärkide arv", "Character count"],
+    "characters": ["tähemärki", "characters"],
+    "fixation-time": ["Fiksatsiooni aeg", "Fixation time"],
+    "ms": ["ms", "ms"]
+  },
+  "statistics": {
+    "title": ["Statistika", "Statistics"],
+    "description": ["Siin saab harjutuse valikul näha selle statistikat", "Here you can select an exercise and see your statistics"],
+    "warning-title": ["Allolev joonis ei näita tegelikku statistikat", "Chart below does not show actual statistics"],
+    "warning-content": ["See on kujutatud genereeritud andmetel", "It is rendered using generated data"],
+    "reading-test": ["Lugemistest", "Reading test"],
+    "word-groups": ["Sõnarühmad", "Word groups"],
+    "disappearing-text": ["Kustuv tekst", "Disappearing text"],
+    "wpm": ["Sõnu minutis", "Words Per Minute"],
+    "date": ["Kuupäev", "Date"]
   }
 }

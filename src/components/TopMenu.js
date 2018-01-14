@@ -43,7 +43,8 @@ class TopMenu extends Component {
               onClick={this.itemClickHandler.bind(this)} as={Link} to='/text-entry'>
               {this.props.translate('menu.text-entry')}
             </Menu.Item>
-            <Menu.Item name='exercise' active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' && this.state.activeItem !== 'statistics'}>
+            <Menu.Item name='exercise'
+              active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' && this.state.activeItem !== 'statistics'}>
               <Dropdown text={this.props.translate('menu.exercise')}>
                 <Dropdown.Menu>
                   <Dropdown.Item
@@ -74,6 +75,14 @@ class TopMenu extends Component {
                     as={Link} to='/exercise/disappearing-text'>
                       {this.props.translate('menu.disappearing-text')}
                   </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Dropdown text={this.props.translate('menu.help-exercises')}>
+                      <Dropdown.Menu>
+                        <Dropdown.Item disabled>{this.props.translate('menu.schulte-tables')}</Dropdown.Item>
+                        <Dropdown.Item disabled>{this.props.translate('menu.concentration')}</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
@@ -91,7 +100,7 @@ class TopMenu extends Component {
               <Menu.Item fitted>
                 <Popup
                   trigger={<Icon fitted name='comment' color='grey' size='big' />}
-                  content='Give feedback or report a bug'
+                  content={this.props.translate('menu.feedback-popup')}
                   on='hover'
                 />
               </Menu.Item>

@@ -30,19 +30,19 @@ class TextEditor extends Component {
     return (
       <div>
         <Container style={{marginTop: '4em'}} textAlign='left'>
-          <Header as='h2'>Text entry</Header>
-          <p>Here you can add your own texts for exercises</p>
+          <Header as='h2'>{this.props.translate('text-editor.title')}</Header>
+          <p>{this.props.translate('text-editor.description')}</p>
           <Segment compact>
             <Editor
               editorState = {this.props.editorState}
               onChange = {this.props.onSaveEditorState}
             />
           </Segment>
-          <p>Here you can add your own texts for exercises with styling</p>
           <Segment compact>
             <InlineStyleControls
               editorState={this.props.editorState}
               onToggle={this.toggleInlineStyle}
+              translate={this.props.translate}
             />
             <Editor
               editorState = {this.props.editorState}
