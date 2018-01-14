@@ -1,6 +1,6 @@
 // Word grouping
-const sentenceRegex = /[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g;
-const commaRegex = /[^,]+[\,]+|[^,]+$/g;
+const sentenceRegex = /[^.!?]+[.!?]+|[^.!?]+$/g;
+const commaRegex = /[^,]+[,]+|[^,]+$/g;
 let wordRegex = RegExp('(.{1,15}(\\s|$))\\s*', 'g');
 
 Array.prototype.flatMap = function(lambda) {

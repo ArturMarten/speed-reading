@@ -47,7 +47,7 @@ class OneGroupVisible extends Component {
       this.cursorState = {...initialState};
       this.renderGroup();
     } else if (previous.started && !this.props.started) {
-      // Exercise stopped
+      // Exercise paused
       clearTimeout(update);
     } else {
       // Text/exercise options or text changed
@@ -60,7 +60,7 @@ class OneGroupVisible extends Component {
   }
 
   renderGroup() {
-    const canvas = this.refs.shownCanvas;
+    const canvas = this.shownCanvas;
     let context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.font = this.props.fontSize + 'pt Calibri';
@@ -70,7 +70,7 @@ class OneGroupVisible extends Component {
 
   nextGroup() {
     // Calculate next word group new line position
-    const canvas = this.refs.shownCanvas;
+    const canvas = this.shownCanvas;
     let context = canvas.getContext('2d');
     let maxWidth = canvas.width;
     const previousWordGroupWidth = context.measureText(this.wordGroup).width;
@@ -92,7 +92,7 @@ class OneGroupVisible extends Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <Container style={{marginTop: '14px'}}>
           <Grid>
@@ -109,7 +109,7 @@ class OneGroupVisible extends Component {
               <Segment compact>
                 <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                                        TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-                  <canvas ref='shownCanvas' width={this.props.width} height={450} />
+                  <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
                 </div>
               </Segment>
             </Grid.Row>

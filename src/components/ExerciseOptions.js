@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Input, Button} from 'semantic-ui-react';
 
 const MIN_WPM = 10;
-const MAX_WPM = 1500;
+const MAX_WPM = 500;
 const MIN_CHARACTER_COUNT = 5;
 const MAX_CHARACTER_COUNT = 30;
 const MIN_FIXATION = 20;
@@ -108,7 +108,7 @@ class ExerciseOptions extends Component {
   }
 
   handleKeyPress(event) {
-    if(event.key == 'Enter') {
+    if (event.key == 'Enter') {
       this.submitOptions();
     }
   }
@@ -137,11 +137,11 @@ class ExerciseOptions extends Component {
 
   options() {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
-      return(
+      return (
         <div>
           {'Reading speed '}
-          <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseWPM.bind(this)} />
+          <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
           <Input
             type='text'
             inverted
@@ -160,8 +160,8 @@ class ExerciseOptions extends Component {
         <div>
           <div>
             {'Character count '}
-            <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
             <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount.bind(this)} />
+            <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
             <Input
               type='text'
               inverted
@@ -176,8 +176,8 @@ class ExerciseOptions extends Component {
           </div>
           <div>
             {'Fixation time '}
-            <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
             <Button icon='minus' size='mini' onClick={this.decreaseFixation.bind(this)} />
+            <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
             <Input
               type='text'
               inverted
@@ -200,7 +200,7 @@ class ExerciseOptions extends Component {
   }
 
   render() {
-    return(
+    return (
       <div className="exercise-options">
         {this.options()}
       </div>

@@ -108,7 +108,7 @@ class TextOptions extends Component {
   }
 
   handleKeyPress(event) {
-    if(event.key == 'Enter') {
+    if (event.key == 'Enter') {
       this.submitOptions();
     }
   }
@@ -132,12 +132,12 @@ class TextOptions extends Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <div>
           {'Text width '}
-          <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseWidth.bind(this)} />
+          <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
           <Input
             type='text'
             inverted
@@ -152,8 +152,8 @@ class TextOptions extends Component {
         </div>
         <div>
           {'Line count '}
-          <Button icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseLineCount.bind(this)} />
+          <Button icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
           <Input
             type='text'
             inverted
@@ -168,8 +168,8 @@ class TextOptions extends Component {
         </div>
         <div>
           {'Font size '}
-          <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
           <Button icon='minus' size='mini' onClick={this.decreaseFontSize.bind(this)} />
+          <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
           <Input
             type='text'
             inverted

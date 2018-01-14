@@ -1,10 +1,11 @@
 {
   "menu": {
-    "title": ["Kiirlugemine", "Speed Reading"],
+    "title": ["Kiirlugemine 5.0", "Kiirlugemine 5.0"],
     "home": ["Esileht", "Home"],
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
     "reading-test": ["Lugemistest", "Reading test"],
+    "reading-with-style-test": ["Lugemistest (stiilidega)", "Reading test (with styles)"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "login": ["Logi sisse", "Login"]

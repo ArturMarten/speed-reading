@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -27,6 +28,9 @@ module.exports = {
         use: ExtractTextPlugin.extract('css-loader'),
       }, {
         test: /\.json$/, use: 'json-loader'
+      }, {
+        test: /\.(png|jpg)$/,
+        use: 'file-loader'
       }
     ]
   },
@@ -34,6 +38,9 @@ module.exports = {
     new ExtractTextPlugin({
       filename: 'dist/app.css',
       allChunks: true
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {NODE_ENV: '"development"'}
     }),
     new BundleAnalyzerPlugin({
       openAnalyzer: false

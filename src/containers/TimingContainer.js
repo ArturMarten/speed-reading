@@ -1,10 +1,9 @@
 import Timing from '../components/Timing';
-import {startRequested, stopRequested, resetRequested, tick} from '../actions';
+import {startRequested, pauseRequested, resetRequested, finishRequested} from '../actions';
 import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => ({
-  started: state.exercise.started,
-  finished: state.exercise.finished,
+  exerciseState: state.exercise.exerciseState,
   counter: state.exercise.counter
 });
 
@@ -12,14 +11,14 @@ const mapDispatchToProps = (dispatch) => ({
   onStart: () => {
     dispatch(startRequested());
   },
-  onStop: () => {
-    dispatch(stopRequested());
+  onPause: () => {
+    dispatch(pauseRequested());
   },
   onReset: () => {
     dispatch(resetRequested());
   },
-  onTick: () => {
-    dispatch(tick());
+  onFinish: () => {
+    dispatch(finishRequested());
   }
 });
 

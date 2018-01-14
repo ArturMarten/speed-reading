@@ -26,6 +26,9 @@ module.exports = {
         use: ExtractTextPlugin.extract('css-loader'),
       }, {
         test: /\.json$/, use: 'json-loader'
+      }, {
+        test: /\.(png|jpg)$/,
+        use: 'file-loader'
       }
     ]
   },

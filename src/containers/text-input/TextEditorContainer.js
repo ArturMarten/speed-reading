@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 
-import TextEditor from '../components/TextEditor';
-import {editorStateUpdated} from '../actions';
+import TextEditor from '../../components/text-input/TextEditor';
+import {editorStateUpdated} from '../../actions';
 
 const mapStateToProps = (state) => ({
   editorState: state.exercise.editorState

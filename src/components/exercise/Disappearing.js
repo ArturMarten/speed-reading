@@ -37,7 +37,7 @@ class Disappearing extends Component {
 
   componentDidMount() {
     this.renderText();
-    this.refs.shownCanvas.getContext('2d').drawImage(this.offscreenCanvas, 0, 0);
+    this.shownCanvas.getContext('2d').drawImage(this.offscreenCanvas, 0, 0);
   }
 
   componentDidUpdate(previous) {
@@ -49,12 +49,12 @@ class Disappearing extends Component {
       clearTimeout(update);
       this.cursorState = {...initialState};
       this.renderText();
-      const canvas = this.refs.shownCanvas;
+      const canvas = this.shownCanvas;
       let context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
-      this.refs.shownCanvas.getContext('2d').drawImage(this.offscreenCanvas, 0, 0);
+      this.shownCanvas.getContext('2d').drawImage(this.offscreenCanvas, 0, 0);
     } else if (previous.started && !this.props.started) {
-      // Exercise stopped
+      // Exercise paused
       clearTimeout(update);
     } else {
       // Text/exercise options or text changed
@@ -67,7 +67,7 @@ class Disappearing extends Component {
   }
 
   renderCanvas() {
-    const canvas = this.refs.shownCanvas;
+    const canvas = this.shownCanvas;
     let context = canvas.getContext('2d');
     context.fillStyle='rgba(0, 255, 0, 0.9)';
     context.clearRect(this.cursorState.linePosition - 2, this.cursorState.line * 30, this.cursorState.characterWidth + 2, 30);
@@ -75,7 +75,7 @@ class Disappearing extends Component {
 
   nextCharacter() {
     this.renderCanvas();
-    if(!this.cursorState.end) {
+    if (!this.cursorState.end) {
       this.cursorState.linePosition = this.cursorState.linePosition + this.cursorState.characterWidth;
       if (this.cursorState.lineLength - this.cursorState.linePosition <= 1) {
         // New line
@@ -120,7 +120,7 @@ class Disappearing extends Component {
     const words = text.split(' ');
     let line = '';
     this.cursorState.lines = [];
-    for(let n = 0; n < words.length; n++) {
+    for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
       const metrics = context.measureText(testLine);
       const testWidth = metrics.width;
@@ -141,7 +141,7 @@ class Disappearing extends Component {
   }
 
   render() {
-    return(
+    return (
       <div className='reading'>
         <Container style={{marginTop: '14px'}}>
           <Grid>
@@ -158,7 +158,7 @@ class Disappearing extends Component {
               <Segment compact>
                 <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                                        TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-                  <canvas ref='shownCanvas' width={this.props.width} height={450} />
+                  <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
                 </div>
               </Segment>
             </Grid.Row>

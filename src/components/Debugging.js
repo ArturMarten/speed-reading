@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Button} from 'semantic-ui-react';
 
 const Debugging = (props) => {
@@ -20,7 +21,7 @@ const Debugging = (props) => {
 };
 
 Debugging.propTypes = {
-  exercise: React.PropTypes.object.isRequired
+  exercise: PropTypes.object.isRequired
 };
 
 export default Debugging;

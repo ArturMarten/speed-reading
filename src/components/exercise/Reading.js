@@ -54,7 +54,7 @@ class Reading extends Component {
       this.renderText();
       this.renderCanvas();
     } else if (previous.started && !this.props.started) {
-      // Exercise stopped
+      // Exercise paused
       clearTimeout(update);
     } else {
       // Text/exercise options or text changed
@@ -69,7 +69,7 @@ class Reading extends Component {
   }
 
   renderCanvas() {
-    const canvas = this.refs.shownCanvas;
+    const canvas = this.shownCanvas;
     let context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(this.offscreenCanvas, 0, 0);
@@ -81,7 +81,7 @@ class Reading extends Component {
   }
 
   nextCharacter() {
-    if(!this.cursorState.end) {
+    if (!this.cursorState.end) {
       this.cursorState.linePosition = this.cursorState.linePosition + 1;
       if (this.cursorState.lineLengthInPixels - (this.cursorState.characterWidth * this.cursorState.linePosition) <= 1) {
         if (this.cursorState.lineNumber + 1 > this.props.lineCount) {
@@ -195,7 +195,7 @@ class Reading extends Component {
   }
   */
   render() {
-    return(
+    return (
       <div>
         <Container style={{marginTop: '14px'}}>
           <Grid>
@@ -212,7 +212,11 @@ class Reading extends Component {
               <Segment compact>
                 <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                       TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-                  <canvas ref='shownCanvas' width={this.props.width} height={this.props.lineCount * this.cursorState.lineHeight} />
+                  <canvas
+                    ref={(ref) => this.shownCanvas = ref }
+                    width={this.props.width}
+                    height={this.props.lineCount * this.cursorState.lineHeight}
+                  />
                   <div>Page {this.cursorState.pageNumber + 1} of {Math.ceil(this.cursorState.lines.length/this.props.lineCount)}</div>
                 </div>
               </Segment>

@@ -1,7 +1,7 @@
 export const START_REQUESTED = 'START_REQUESTED';
-export const STOP_REQUESTED = 'STOP_REQUESTED';
+export const PAUSE_REQUESTED = 'PAUSE_REQUESTED';
 export const RESET_REQUESTED = 'RESET_REQUESTED';
-export const TICK = 'TICK';
+export const FINISH_REQUESTED = 'FINISH_REQUESTED';
 export const EDITOR_STATE_UPDATED = 'EDITOR_STATE_UPDATED';
 export const TEXT_OPTIONS_UPDATED = 'TEXT_OPTIONS_UPDATED';
 export const EXERCISE_OPTIONS_UPDATED = 'EXERCISE_OPTIONS_UPDATED';
@@ -11,16 +11,16 @@ export const startRequested = () => ({
   type: START_REQUESTED
 });
 
-export const stopRequested = () => ({
-  type: STOP_REQUESTED
+export const pauseRequested = () => ({
+  type: PAUSE_REQUESTED
 });
 
 export const resetRequested = () => ({
   type: RESET_REQUESTED
 });
 
-export const tick = () => ({
-  type: TICK
+export const finishRequested = () => ({
+  type: FINISH_REQUESTED
 });
 
 export const editorStateUpdated = (editorState) => ({

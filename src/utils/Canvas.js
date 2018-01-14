@@ -1,16 +1,31 @@
+export const WordMetadata = {
+    Word: 0,
+  StartX: 1,
+    EndX: 2,
+  StartY: 3
+};
+
+export const LineMetadata = {
+  CharacterCount: 0,
+  AverageCharacterWidth: 1,
+  StartX: 2,
+  EndX: 3
+};
+
 export function writeText(canvasContext, content, textOptions = {lineHeight: 20, paragraphSpace: 5}) {
   const canvasWidth = canvasContext.canvas.width;
   const text = content.getPlainText('\n').replace(/\n/g, '');
   let currentBlock = content.getFirstBlock();
   let currentBlockKey = currentBlock.getKey();
   let characterMetadata = currentBlock.getCharacterList();
-  let blockLength = currentBlock.getText().length;
+  let currentBlockLength = currentBlock.getText().length;
   let previousBlocksLength = 0;
   const defaultStyle = canvasContext.font;
   /*
     WordMetadata: [word, startPosition, endPosition, lineNumber][]
   */
   const wordMetadata = [];
+  const lines = [textOptions.lineHeight];
   const letters = text.split('');
   const textLength = letters.length;
   let currentStyle = defaultStyle;
@@ -22,11 +37,11 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
   let fillText = '';
 
   const nextBlock = () => {
-    previousBlocksLength += blockLength;
+    previousBlocksLength += currentBlockLength;
     currentBlock = content.getBlockAfter(currentBlockKey);
     currentBlockKey = currentBlock.getKey();
     characterMetadata = currentBlock.getCharacterList();
-    blockLength = currentBlock.getText().length;
+    currentBlockLength = currentBlock.getText().length;
   };
 
   const newLine = ({additionalSpacing = 0, text = ''}) => {
@@ -34,6 +49,12 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
     fillYStart += textOptions.lineHeight + additionalSpacing;
     fillText = text;
     wordStartPosition = 0;
+    lines.push(fillYStart);
+  };
+
+  const draw = () => {
+    // console.log(fillText, fillXStart, fillYStart);
+    canvasContext.fillText(fillText, fillXStart, fillYStart);
   };
 
   const addWordMetadata = () => {
@@ -45,20 +66,25 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
 
   letters.forEach(
     (currentLetter, letterIndex) => {
-      if (letterIndex === blockLength) {
+      if (letterIndex === previousBlocksLength + currentBlockLength) {
         // Block ended
         nextBlock();
-        canvasContext.fillText(fillText, fillXStart, fillYStart);
+        while (currentBlockLength === 0) {
+          newLine({});
+          nextBlock();
+        }
+        draw();
         addWordMetadata();
         newLine({additionalSpacing: textOptions.paragraphSpace});
       }
-      const nextStyle = characterMetadata.get(letterIndex - previousBlocksLength).getStyle();
+      const styledBlock = characterMetadata.get(letterIndex - previousBlocksLength);
+      const nextStyle = styledBlock.getStyle();
       if (currentStyle !== nextStyle) {
         // Style changed
-        // Draw previous styled block
-        canvasContext.fillText(fillText, fillXStart, fillYStart);
+        // Draw previous styled text
+        draw();
         const fillTextWidth = canvasContext.measureText(fillText).width;
-        fillXStart = fillTextWidth;
+        fillXStart += fillTextWidth;
         fillText = currentLetter;
         // Update with new style
         canvasContext.font = getCanvasFont(defaultStyle, nextStyle);
@@ -73,7 +99,7 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
         const wordWidth = canvasContext.measureText(currentWord).width;
         if (wordStartPosition + wordWidth > canvasWidth) {
           fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
-          canvasContext.fillText(fillText, fillXStart, fillYStart);
+          draw();
           newLine({text: currentWord + ' '});
         }
         addWordMetadata();
@@ -84,7 +110,7 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
           // Text ended
           // Draw all remaining text
           const fillTextWidth = canvasContext.measureText(fillText).width;
-          canvasContext.fillText(fillText, fillXStart, fillYStart);
+          draw();
           fillXStart = fillTextWidth;
           fillText = currentLetter;
           // Add remaining word metadata
@@ -94,7 +120,7 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
       }
     }
   );
-  return wordMetadata;
+  return {wordMetadata: wordMetadata, lines: lines};
 }
 
 function getCanvasFont(defaultStyle, nextStyle) {
@@ -106,4 +132,28 @@ function getCanvasFont(defaultStyle, nextStyle) {
     result = 'italic ' + result;
   }
   return result;
+}
+
+export function getLineMetadata(textMetadata) {
+  let lineMetadata = [];
+  let line = textMetadata.wordMetadata[0][WordMetadata.StartY];
+  let lineLength = 0;
+  let lineStartX = textMetadata.wordMetadata[0][1];
+  let lineEndX = textMetadata.wordMetadata[0][2];
+  textMetadata.wordMetadata.forEach((wordMetadata) => {
+    if (line === wordMetadata[WordMetadata.StartY]) {
+      // Same line
+      lineLength += wordMetadata[WordMetadata.Word].length;
+      lineEndX = Math.round(wordMetadata[WordMetadata.EndX]);
+    } else {
+      // New line
+      lineMetadata.push([lineLength, (lineEndX - lineStartX) / lineLength, lineStartX, lineEndX]);
+      lineStartX = wordMetadata[WordMetadata.StartX];
+      lineEndX = wordMetadata[WordMetadata.EndX];
+      lineLength = wordMetadata[WordMetadata.Word].length;
+      line = wordMetadata[WordMetadata.StartY];
+    }
+  });
+  lineMetadata.push([lineLength, (lineEndX - lineStartX) / lineLength, lineStartX, lineEndX]);
+  return lineMetadata;
 }

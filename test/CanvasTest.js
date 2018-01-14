@@ -94,12 +94,15 @@ describe('Canvas', () => {
 
   it('passes style change test', () => {
     const defaultStyle = expectedContext.font;
-    expectedContext.font = 'bold ' + expectedContext.font;
+    expectedContext.font = 'bold ' + defaultStyle;
     expectedContext.fillText('style', 0, lineHeight);
-    const position = expectedContext.measureText('style').width;
+    let position = expectedContext.measureText('style').width;
     expectedContext.font = defaultStyle;
-    expectedContext.fillText(' change test', position, lineHeight);
-    const content = getDraftJSContentFromHTML('<b>style</b> change test');
+    expectedContext.fillText(' change ', position, lineHeight);
+    position += expectedContext.measureText(' change ').width;
+    expectedContext.font = 'italic ' + defaultStyle;
+    expectedContext.fillText('test', position, lineHeight);
+    const content = getDraftJSContentFromHTML('<b>style</b> change <i>test</i>');
     writeText(actualContext, content, {lineHeight: lineHeight});
     expect(getPixelDifference(expectedContext, actualContext, diffContext)).to.equal(0);
   });
@@ -123,11 +126,12 @@ describe('Canvas', () => {
   it('returns single word metadata', () => {
     const content = getDraftJSContentFromHTML('metadata');
     const singleWordWidth = expectedContext.measureText('metadata').width;
-    const expectedTextMetadata = [
+    const expectedWordMetadata = [
       ['metadata', 0, singleWordWidth, lineHeight]
     ];
     const actualTextMetadata = writeText(actualContext, content, {lineHeight: lineHeight});
-    expect(actualTextMetadata).to.eql(expectedTextMetadata);
+    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
+    expect(actualTextMetadata.lines.length).to.equal(1);
   });
 
   it('returns multiple words metadata', () => {
@@ -138,13 +142,14 @@ describe('Canvas', () => {
     const spaceWidth = expectedContext.measureText(' ').width;
     const secondWordStart = firstWordWidth + spaceWidth;
     const thirdWordStart = secondWordStart + secondWordWidth + spaceWidth;
-    const expectedTextMetadata = [
+    const expectedWordMetadata = [
       ['multiple', 0, firstWordWidth, lineHeight],
       ['word', secondWordStart, secondWordStart + secondWordWidth, lineHeight],
       ['metadata', thirdWordStart, thirdWordStart + thirdWordWidth, lineHeight]
     ];
     const actualTextMetadata = writeText(actualContext, content, {lineHeight: lineHeight});
-    expect(actualTextMetadata).to.eql(expectedTextMetadata);
+    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
+    expect(actualTextMetadata.lines.length).to.equal(1);
   });
 
   it('returns multiple line metadata', () => {
@@ -155,13 +160,14 @@ describe('Canvas', () => {
     const spaceWidth = expectedContext.measureText(' ').width;
     const secondWordStart = firstWordWidth + spaceWidth;
     const thirdWordStart = secondWordStart + secondWordWidth + spaceWidth;
-    const expectedTextMetadata = [
+    const expectedWordMetadata = [
       ['should', 0, firstWordWidth, lineHeight + lineHeight],
       ['be', secondWordStart, secondWordStart + secondWordWidth, lineHeight + lineHeight],
       ['wrapped', thirdWordStart, thirdWordStart + thirdWordWidth, lineHeight + lineHeight]
     ];
     const actualTextMetadata = writeText(actualContext, content, {lineHeight: lineHeight});
-    expect(actualTextMetadata).to.include.deep.members(expectedTextMetadata);
+    expect(actualTextMetadata.wordMetadata).to.include.deep.members(expectedWordMetadata);
+    expect(actualTextMetadata.lines.length).to.equal(2);
   });
 
   it('returns multiple paragraph metadata', () => {
@@ -170,14 +176,15 @@ describe('Canvas', () => {
     const secondWordWidth = expectedContext.measureText('text').width;
     const spaceWidth = expectedContext.measureText(' ').width;
     const secondWordStart = firstWordWidth + spaceWidth;
-    const expectedTextMetadata = [
+    const expectedWordMetadata = [
       ['paragraph1', 0, firstWordWidth, lineHeight],
       ['text', secondWordStart, secondWordStart + secondWordWidth, lineHeight],
       ['paragraph2', 0, firstWordWidth, lineHeight + paragraphSpace + lineHeight],
       ['text', secondWordStart, secondWordStart + secondWordWidth, lineHeight + paragraphSpace + lineHeight]
     ];
     const actualTextMetadata = writeText(actualContext, content, {lineHeight: lineHeight, paragraphSpace: paragraphSpace});
-    expect(actualTextMetadata).to.eql(expectedTextMetadata);
+    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
+    expect(actualTextMetadata.lines.length).to.equal(2);
   });
 
   function getPixelDifference(expectedContext, actualContext, diffContext) {
@@ -193,7 +200,7 @@ describe('Canvas', () => {
     const data = canvas.toDataURL().replace(/^data:image\/\w+;base64,/, '');
     const buffer = new Buffer(data, 'base64');
     fs.writeFile(filePath, buffer, (err) => {
-      if(err) return console.log(err);
+      if (err) return console.log(err);
     });
   }
 
