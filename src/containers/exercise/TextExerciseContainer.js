@@ -1,10 +1,12 @@
 import {connect} from 'react-redux';
+import {getTranslate} from 'react-localize-redux';
 
-import ReadingWithStyle from '../../components/exercise/ReadingWithStyle';
-import {exerciseSelected, finishRequested} from '../../actions';
+import TextExercise from '../../components/exercise/TextExercise';
+import {exerciseSelected} from '../../actions';
 
 const mapStateToProps = (state) => ({
-  content: state.exercise.content,
+  translate: getTranslate(state.locale),
+  selectedText: state.exercise.selectedText,
   textOptions: state.exercise.textOptions,
   exerciseOptions: state.exercise.exerciseOptions,
   exerciseState: state.exercise.exerciseState,
@@ -15,9 +17,6 @@ const mapDispatchToProps = (dispatch) => ({
   onExerciseSelect: (type) => {
     dispatch(exerciseSelected(type));
   },
-  onExerciseFinish: () => {
-    dispatch(finishRequested());
-  }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReadingWithStyle);
+export default connect(mapStateToProps, mapDispatchToProps)(TextExercise);

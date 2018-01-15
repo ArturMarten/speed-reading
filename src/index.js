@@ -28,7 +28,7 @@ let store = createStore(
 );
 
 const languages = ['ee', 'gb'];
-store.dispatch(initialize(languages, {defaultLanguage: 'gb'}));
+store.dispatch(initialize(languages, {defaultLanguage: 'ee'}));
 store.dispatch(addTranslation(translations));
 
 ReactDOM.render(

@@ -7,11 +7,8 @@ import HomeContainer from '../containers/HomeContainer';
 import TopMenuContainer from '../containers/TopMenuContainer';
 import TextEditorContainer from '../containers/text-input/TextEditorContainer';
 import ExerciseMenuContainer from '../containers/ExerciseMenuContainer';
-import ReadingContainer from '../containers/exercise/ReadingContainer';
-import ReadingWithStyleContainer from '../containers/exercise/ReadingWithStyleContainer';
-import OneGroupVisibleContainer from '../containers/exercise/OneGroupVisibleContainer';
-import DisappearingContainer from '../containers/exercise/DisappearingContainer';
 import StatisticsContainer from '../containers/statistics/StatisticsContainer';
+import TextExerciseContainer from '../containers/exercise/TextExerciseContainer';
 
 const App = ({history}) => {
   return (
@@ -21,10 +18,9 @@ const App = ({history}) => {
         <Route exact path='/' component={HomeContainer} />
         <Route path='/text-entry' component={TextEditorContainer} />
         <Route exact path='/exercise' component={ExerciseMenuContainer} />
-        <Route path='/exercise/reading-test' component={ReadingContainer} />
-        <Route path='/exercise/reading-with-style-test' component={ReadingWithStyleContainer} />
-        <Route path='/exercise/word-groups' component={OneGroupVisibleContainer} />
-        <Route path='/exercise/disappearing-text' component={DisappearingContainer} />
+        <Route path='/exercise/reading-test' render={() => <TextExerciseContainer type='reading' />} />
+        <Route path='/exercise/word-groups' render={() => <TextExerciseContainer type='wordGroup' />} />
+        <Route path='/exercise/disappearing-text' render={() => <TextExerciseContainer type='disappearing' />} />
         <Route path='/statistics' component={StatisticsContainer} />
       </div>
     </ConnectedRouter>

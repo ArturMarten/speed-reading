@@ -1,21 +1,21 @@
 import {connect} from 'react-redux';
+import {getTranslate} from 'react-localize-redux';
 
 import Reading from '../../components/exercise/Reading';
-import {exerciseSelected} from '../../actions';
+import {finishRequested} from '../../actions';
 
 const mapStateToProps = (state) => ({
-  text: state.exercise.text,
-  width: state.exercise.textOptions.width,
-  lineCount: state.exercise.textOptions.lineCount,
-  fontSize: state.exercise.textOptions.fontSize,
-  wpm: state.exercise.exerciseOptions.wpm,
-  started: state.exercise.started,
-  resetted: state.exercise.resetted
+  selectedText: state.exercise.selectedText,
+  textOptions: state.exercise.textOptions,
+  exerciseOptions: state.exercise.exerciseOptions,
+  exerciseState: state.exercise.exerciseState,
+  elapsedTime: state.exercise.elapsedTime,
+  translate: getTranslate(state.locale)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onExerciseSelect: (type) => {
-    dispatch(exerciseSelected(type));
+  onExerciseFinish: () => {
+    dispatch(finishRequested());
   }
 });
 

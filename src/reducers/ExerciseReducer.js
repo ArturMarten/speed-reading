@@ -19,7 +19,10 @@ const text = 'Lorem ipsum dolor sit amet, praesent torquent dictum vel augue pro
 // eslint-disable-next-line
 const blocksFromHTML = convertFromHTML('<p><b>Musuo hõim – kas naiste maailm või meeste paradiis?</b></p><p>Toimetas: Ksenia Kask</p><p>Peamine, mis muutub, on see, et seni kehtinud patriarhaalne võim laguneb ning naiselik energia pääseb valitsema. Mehelikku energiat iseloomustavad ego, sõjad, võistlemine ja agressiivsus ning läbi aastasadade on seda olnud enam kui küllalt. Naiselikku energiat iseloomustab hoolitsemine, hoolimine ja kaitsemine, mida meie planeedil oleks hädasti vaja. Kas uskuda maiade ennustusi või mitte, see jääb igaühe enda otsustada, aga Tiibeti mägede varjus Lugu järve ääres elav mosuo hõim võib oma kogukonna ülesehituse osas olla üks näide sellest, kuidas toimib matriarhaat – ühiskond, kus naised otsustavad.</p><p>Mosuo rahvas on väike etniline grupp, kes elab Yunnani ja Sichuani provintsides Hiinas, Tiibeti piiri lähedal. Neid on umbes 40 000 ning enamus elab Lugu järve ääres Himaalaja mägedes. Tuhandeid aastaid ei olnud järvele ligipääsuteed ning lähimasse asulasse reisimine võttis aega enam kui kolm päeva. Nii et inimesed elasid oma elu traditsioonilisel moel ilma välismaailmast tulenevate mõjudeta. Nende kogukonna organiseeritust on lääne definitsioonide abil keeruline selgitada, kuid kõige enam kasutatakse selle kirjeldamisel sõna matriarhaat. Naised on sageli perepead, pärimine käib naisliini pidi ning ka äriotsuseid langetavad naised. Kuid erinevalt tõelisest matriarhaadist kipub poliitiline võim olema meeste käes.</p><p>Mosuod on mitmes mõttes väga traditsiooniline kultuur. Peredes elab koos mitu põlvkonda, nad tegelevad peamiselt põllumajandusega, valmistavad suurema hulga tarbeesemetest ise ning on toidu kasvatamisel sõltumatud. Naised teevad ise valdava enamuse majapidamistöid, mehed on enamasti vastutavad loomade eest hoolitsemise ja kalastamise eest. Kuid mosuode ühiskonnas on üks oluline erinevus, mis teeb neid unikaalseks: neil on kombeks n-ö visiitabielu, kus naine otsustab, millise mehe ta ööseks enda juurde lubab ning kui kaua ta sellest mehest huvitatud on. Traditsioonilises mõttes ei ole kummalgi partneril abikaasa kohustusi, nad ei jaga majapidamiskohustusi ning lapsed elavad koos ema laiendatud perega.</p>');
 
-const content = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+const selectedText = {
+  content: ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap),
+  wordCount: 288
+};
 
 const initialState = {
   exerciseState: {
@@ -35,7 +38,7 @@ const initialState = {
   type: '',
   editorState: EditorState.createWithContent(ContentState.createFromText(text)),
   text: text,
-  content: content,
+  selectedText: selectedText,
   wordGroups: splitIntoWordGroups(text, 15),
   words: text.split(' '),
   startTime: 0,
@@ -47,7 +50,7 @@ const initialState = {
   },
   textOptions: {
     font: 'Calibri',
-    width: 500,
+    width: 700,
     lineCount: 5,
     fontSize: 16
   }
@@ -93,7 +96,6 @@ const ExerciseReducer = (state = initialState, action) => {
         resetted: true,
         finished: false,
         exerciseState: {
-          ...state.exerciseState,
           started: false,
           paused: true,
           resetted: true,
@@ -134,6 +136,7 @@ const ExerciseReducer = (state = initialState, action) => {
         state.wordGroups : splitIntoWordGroups(text, action.payload.characterCount);
       return {
         ...state,
+
         exerciseOptions: {...action.payload},
         wordGroups: wordGroups
       };
@@ -142,7 +145,14 @@ const ExerciseReducer = (state = initialState, action) => {
       console.log('Exercise selected: ' + action.payload);
       return {
         ...state,
-        type: action.payload
+        type: action.payload,
+        exerciseState: {
+          started: false,
+          paused: false,
+          resetted: false,
+          finished: false
+        },
+        elapsedTime: 0
       };
     }
     default:

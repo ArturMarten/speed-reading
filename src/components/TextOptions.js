@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {Input, Button} from 'semantic-ui-react';
 
-const MIN_TEXT_WIDTH = 400;
+const MIN_TEXT_WIDTH = 500;
 const MAX_TEXT_WIDTH = 1000;
 const MIN_TEXT_LINE_COUNT = 5;
-const MAX_TEXT_LINE_COUNT = 20;
-const MIN_FONT_SIZE = 5;
-const MAX_FONT_SIZE = 25;
+const MAX_TEXT_LINE_COUNT = 50;
+const MIN_FONT_SIZE = 12;
+const MAX_FONT_SIZE = 18;
 
 class TextOptions extends Component {
   constructor(props) {
@@ -152,8 +152,8 @@ class TextOptions extends Component {
         </div>
         <div>
           {this.props.translate('text-options.line-count') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseLineCount.bind(this)} />
-          <Button icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
+          <Button disabled icon='minus' size='mini' onClick={this.decreaseLineCount.bind(this)} />
+          <Button disabled icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
           <Input
             type='text'
             inverted

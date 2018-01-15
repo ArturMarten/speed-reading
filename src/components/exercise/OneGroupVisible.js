@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Grid, Segment} from 'semantic-ui-react';
 
-import TextOptionsContainer from '../../containers/TextOptionsContainer';
-import ExerciseOptionsContainer from '../../containers/ExerciseOptionsContainer';
-import TimingContainer from '../../containers/TimingContainer';
-
-const TEXT_VERTICAL_PADDING = 15;
-const TEXT_HORIZONTAL_PADDING = 70;
 const START_DELAY = 300;
 const LINE_BREAK_DELAY = 300;
 
@@ -27,10 +20,6 @@ class OneGroupVisible extends Component {
   constructor(props) {
     super(props);
     this.cursorState = {...initialState};
-  }
-
-  componentWillMount() {
-    this.props.onExerciseSelect('wordGroup');
   }
 
   componentDidMount() {
@@ -94,27 +83,7 @@ class OneGroupVisible extends Component {
   render() {
     return (
       <div>
-        <Container style={{marginTop: '14px'}}>
-          <Grid>
-            <Grid.Row columns={2}>
-              <Grid.Column width={12}>
-                <TextOptionsContainer />
-                <ExerciseOptionsContainer />
-              </Grid.Column>
-              <Grid.Column textAlign='center' width={4}>
-                <TimingContainer />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row centered>
-              <Segment compact>
-                <div className='text' style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
-                                                       TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
-                  <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
-                </div>
-              </Segment>
-            </Grid.Row>
-          </Grid>
-        </Container>
+        <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
       </div>
     );
   }

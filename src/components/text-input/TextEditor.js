@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Editor, RichUtils} from 'draft-js';
-import {Container, Segment, Header} from 'semantic-ui-react';
+import {Container, Segment, Header, Message} from 'semantic-ui-react';
 
 import InlineStyleControls from './InlineStyleControls';
 
@@ -32,12 +32,10 @@ class TextEditor extends Component {
         <Container style={{marginTop: '4em'}} textAlign='left'>
           <Header as='h2'>{this.props.translate('text-editor.title')}</Header>
           <p>{this.props.translate('text-editor.description')}</p>
-          <Segment compact>
-            <Editor
-              editorState = {this.props.editorState}
-              onChange = {this.props.onSaveEditorState}
-            />
-          </Segment>
+          <Message warning>
+            <Message.Header>{this.props.translate('text-editor.warning-title')}</Message.Header>
+            <p>{this.props.translate('text-editor.warning-content')}</p>
+          </Message>
           <Segment compact>
             <InlineStyleControls
               editorState={this.props.editorState}

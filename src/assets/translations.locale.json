@@ -5,7 +5,6 @@
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
     "reading-test": ["Lugemistest", "Reading test"],
-    "reading-with-style-test": ["Lugemistest (stiilidega)", "Reading test (with styles)"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "help-exercises": ["Abiharjutused", "Help exercises"],
@@ -26,13 +25,31 @@
     "title": ["Tekstide sisestamine", "Text entry"],
     "description": [
       "Siin saab lisada enda tekste harjutustes kasutamiseks.", 
-      "Here you can add your own texts for exercises with styling."
+      "Here you can add your own texts for exercises"
     ],
+    "warning-title": ["Tekstile stiili lisamine", "Text styling"],
+    "warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
     "bold": ["Rasvane", "Bold"],
     "italic": ["Kaldkirjas", "Italic"]
   },
   "exercises": {
-
+    "title-reading": ["Lugemisharjutus", "Reading exercise"],
+    "description-reading": ["Lugemisharjutuse kirjeldus", "Reading exercise description"],
+    "title-wordGroup": ["Sõnarühmade harjutus", "Word group exercise"],
+    "description-wordGroup": ["Sõnarühmade harjutuse kirjeldus", "Word group exercise description"],
+    "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
+    "description-disappearing": ["Kustuva teksti harjutuse kirjeldus", "Disappearing text exercise description"],
+    "proceed": ["Jätka", "Proceed"],
+    "text-selection": ["Teksti valik", "Text selection"],
+    "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"],
+    "text-preview": ["Teksti eelvaade", "Text preview"],
+    "page": ["Lehekülg", "Page"],
+    "modal-heading": ["Harjutus lõpetatud", "Exercise finished"],
+    "modal-result": ["Lugemiskiirus (sõnade arv minutis)", "Reading speed (Words Per Minute)"],
+    "modal-question": ["Jätka omandamistaseme testiga", "Proceed with comprehension test"],
+    "modal-no": ["Ei", "No"],
+    "test-title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
+    "test-description": ["Siin kontrollitakse teksti mõistmist.", "Text comprehension is tested here."]
   },
   "text-options": {
     "text-width": ["Teksti laius", "Text width"],

@@ -55,13 +55,6 @@ class TopMenu extends Component {
                       {this.props.translate('menu.reading-test')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    name='reading-with-style-test'
-                    active={this.state.activeItem === 'reading-with-style-test'}
-                    onClick={this.itemClickHandler.bind(this)}
-                    as={Link} to='/exercise/reading-with-style-test'>
-                      {this.props.translate('menu.reading-with-style-test')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
                     name='word-groups'
                     active={this.state.activeItem === 'word-groups'}
                     onClick={this.itemClickHandler.bind(this)}

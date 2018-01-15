@@ -1,15 +1,14 @@
 import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
-import TextPreview from '../components/TextPreview';
+import TextSelection from '../components/TextSelection';
 
 const mapStateToProps = (state) => ({
-  textOptions: state.exercise.textOptions,
-  exerciseOptions: state.exercise.exerciseOptions,
+  selectedText: state.selectedText,
   translate: getTranslate(state.locale)
 });
 
 const mapDispatchToProps = (dispatch) => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextPreview);
+export default connect(mapStateToProps, mapDispatchToProps)(TextSelection);
