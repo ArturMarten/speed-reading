@@ -2,14 +2,14 @@ import {connect} from 'react-redux';
 import {push} from 'connected-react-router';
 
 import ExerciseMenu from '../components/ExerciseMenu';
-import {resetRequested} from '../actions';
+import * as actionCreators from '../store/actions';
 
 const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onExerciseSelect: (type) => {
-    dispatch(resetRequested());
+    dispatch(actionCreators.resetRequested());
     dispatch(push('/exercise/' + type));
   }
 });

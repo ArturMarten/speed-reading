@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Editor, RichUtils} from 'draft-js';
-import {Container, Segment, Header, Message} from 'semantic-ui-react';
+import {Container, Segment, Header, Message, Button, Icon} from 'semantic-ui-react';
 
 import InlineStyleControls from './InlineStyleControls';
 
@@ -48,6 +48,13 @@ class TextEditor extends Component {
               onTab={this.onTab}
             />
           </Segment>
+          <Button positive floated='right'
+            loading={this.props.textSaveStatus === 'Saving'}
+            disabled={this.props.textSaveStatus === 'Saving'}
+            onClick={() => this.props.onSaveText()}>
+            {this.props.textSaveStatus === 'Saved' ? <Icon fitted name='checkmark' size='small' style={{opacity: 1}} /> : null}
+            {this.props.translate('text-editor.save')}
+          </Button>
         </Container>
       </div>
     );

@@ -30,7 +30,8 @@
     "warning-title": ["Tekstile stiili lisamine", "Text styling"],
     "warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
     "bold": ["Rasvane", "Bold"],
-    "italic": ["Kaldkirjas", "Italic"]
+    "italic": ["Kaldkirjas", "Italic"],
+    "save": ["Salvesta", "Save"]
   },
   "exercises": {
     "title-reading": ["Lugemisharjutus", "Reading exercise"],
@@ -61,7 +62,7 @@
   },
   "exercise-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
-    "wpm": ["sõnu minutis", "words per minute"],
+    "wpm": ["sõna minutis", "words per minute"],
     "character-count": ["Tähemärkide arv", "Character count"],
     "characters": ["tähemärki", "characters"],
     "fixation-time": ["Fiksatsiooni aeg", "Fixation time"],

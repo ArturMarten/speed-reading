@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
 import TextExercise from '../../components/exercise/TextExercise';
-import {exerciseSelected} from '../../actions';
+import * as actionCreators from '../../store/actions';
 
 const mapStateToProps = (state) => ({
   translate: getTranslate(state.locale),
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onExerciseSelect: (type) => {
-    dispatch(exerciseSelected(type));
+    dispatch(actionCreators.exerciseSelected(type));
   },
 });
 

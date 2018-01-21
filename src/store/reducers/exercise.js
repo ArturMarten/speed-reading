@@ -1,17 +1,6 @@
+import * as actionTypes from '../actions/actionTypes';
 import {EditorState, ContentState, convertFromHTML} from 'draft-js';
-
-import {splitIntoWordGroups} from '../utils/TextUtils';
-
-import {
-  START_REQUESTED,
-  PAUSE_REQUESTED,
-  RESET_REQUESTED,
-  FINISH_REQUESTED,
-  EDITOR_STATE_UPDATED,
-  TEXT_OPTIONS_UPDATED,
-  EXERCISE_OPTIONS_UPDATED,
-  EXERCISE_SELECTED
-} from '../actions';
+import {splitIntoWordGroups} from '../../utils/TextUtils';
 
 // eslint-disable-next-line
 const text = 'Lorem ipsum dolor sit amet, praesent torquent dictum vel augue proin at, sollicitudin orci rhoncus semper, arcu et ut accumsan metus amet, mauris tellus tortor, magna imperdiet erat. Vel leo est velit tellus tellus, aliquet in, vestibulum ut erat, mi arcu elit arcu et amet. Elit orci hymenaeos accumsan sed sem ac, nec augue arcu sed in id, ac proin. Lacus aliquam diam pulvinar, neque mauris elementum eu, mauris auctor vestibulum amet turpis. Nunc sem aenean nec elit, elementum nulla, mauris est cillum et.';
@@ -53,12 +42,13 @@ const initialState = {
     width: 700,
     lineCount: 5,
     fontSize: 16
-  }
+  },
+  textSaveStatus: 'Unsaved'
 };
 
-const ExerciseReducer = (state = initialState, action) => {
+const exerciseReducer = (state = initialState, action) => {
   switch (action.type) {
-    case START_REQUESTED: {
+    case actionTypes.START_REQUESTED: {
       console.log('Started!');
       return {
         ...state,
@@ -73,7 +63,7 @@ const ExerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case PAUSE_REQUESTED: {
+    case actionTypes.PAUSE_REQUESTED: {
       const elapsedTime = state.elapsedTime + (Date.now() - state.startTime);
       console.log('Paused! Elapsed: ' + elapsedTime + 'ms');
       return {
@@ -86,7 +76,7 @@ const ExerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case RESET_REQUESTED: {
+    case actionTypes.RESET_REQUESTED: {
       console.log('Resetted!');
       return {
         ...state,
@@ -103,7 +93,7 @@ const ExerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case FINISH_REQUESTED: {
+    case actionTypes.FINISH_REQUESTED: {
       const elapsedTime = state.elapsedTime + (Date.now() - state.startTime);
       console.log('Finished! Elapsed: ' + elapsedTime + 'ms');
       return {
@@ -116,7 +106,7 @@ const ExerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case EDITOR_STATE_UPDATED: {
+    case actionTypes.EDITOR_STATE_UPDATED: {
       return {
         ...state,
         editorState: action.payload,
@@ -124,24 +114,23 @@ const ExerciseReducer = (state = initialState, action) => {
         content: action.payload.getCurrentContent()
       };
     }
-    case TEXT_OPTIONS_UPDATED: {
+    case actionTypes.TEXT_OPTIONS_UPDATED: {
       return {
         ...state,
         textOptions: {...action.payload}
       };
     }
-    case EXERCISE_OPTIONS_UPDATED: {
+    case actionTypes.EXERCISE_OPTIONS_UPDATED: {
       const wordGroups =
         state.exerciseOptions.characterCount === action.payload.characterCount ?
         state.wordGroups : splitIntoWordGroups(text, action.payload.characterCount);
       return {
         ...state,
-
         exerciseOptions: {...action.payload},
         wordGroups: wordGroups
       };
     }
-    case EXERCISE_SELECTED: {
+    case actionTypes.EXERCISE_SELECTED: {
       console.log('Exercise selected: ' + action.payload);
       return {
         ...state,
@@ -155,9 +144,21 @@ const ExerciseReducer = (state = initialState, action) => {
         elapsedTime: 0
       };
     }
+    case actionTypes.TEXT_SAVE_REQUESTED: {
+      return {
+        ...state,
+        textSaveStatus: 'Saving'
+      };
+    }
+    case actionTypes.TEXT_SAVE_SUCCEEDED: {
+      return {
+        ...state,
+        textSaveStatus: 'Saved'
+      };
+    }
     default:
       return state;
   }
 };
 
-export default ExerciseReducer;
+export default exerciseReducer;

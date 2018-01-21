@@ -1,5 +1,5 @@
 import Timing from '../components/Timing';
-import {startRequested, pauseRequested, resetRequested, finishRequested} from '../actions';
+import * as actionCreators from '../store/actions';
 import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => ({
@@ -9,16 +9,16 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onStart: () => {
-    dispatch(startRequested());
+    dispatch(actionCreators.startRequested());
   },
   onPause: () => {
-    dispatch(pauseRequested());
+    dispatch(actionCreators.pauseRequested());
   },
   onReset: () => {
-    dispatch(resetRequested());
+    dispatch(actionCreators.resetRequested());
   },
   onFinish: () => {
-    dispatch(finishRequested());
+    dispatch(actionCreators.finishRequested());
   }
 });
 

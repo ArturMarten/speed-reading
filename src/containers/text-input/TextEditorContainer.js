@@ -2,16 +2,20 @@ import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
 import TextEditor from '../../components/text-input/TextEditor';
-import {editorStateUpdated} from '../../actions';
+import * as actionCreators from '../../store/actions';
 
 const mapStateToProps = (state) => ({
   editorState: state.exercise.editorState,
-  translate: getTranslate(state.locale)
+  translate: getTranslate(state.locale),
+  textSaveStatus: state.exercise.textSaveStatus
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onSaveEditorState: (editorState) => {
-    dispatch(editorStateUpdated(editorState));
+    dispatch(actionCreators.editorStateUpdated(editorState));
+  },
+  onSaveText: () => {
+    dispatch(actionCreators.storeText());
   }
 });
 

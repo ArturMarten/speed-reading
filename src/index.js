@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
+import logger from './utils/logger';
 import {createMemoryHistory} from 'history';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {initialize, addTranslation} from 'react-localize-redux';
 
-import reducer from './reducers';
+import reducer from './store/reducers';
 import App from './components/App';
 import * as translations from './assets/translations.locale.json';
 
@@ -22,6 +23,7 @@ let store = createStore(
   composeStoreEnhancers(
     applyMiddleware(
       routerMiddleware(memoryHistory),
+      logger,
       thunk
     )
   )

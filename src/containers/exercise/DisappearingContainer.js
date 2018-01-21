@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
 import Disappearing from '../../components/exercise/Disappearing';
-import {finishRequested} from '../../actions';
+import * as actionCreators from '../../store/actions';
 
 const mapStateToProps = (state) => ({
   selectedText: state.exercise.selectedText,
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onExerciseFinish: () => {
-    dispatch(finishRequested());
+    dispatch(actionCreators.finishRequested());
   }
 });
 

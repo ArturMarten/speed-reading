@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
 import TextOptions from '../components/TextOptions';
-import {textOptionsUpdated} from '../actions';
+import * as actionCreators from '../store/actions';
 
 const mapStateToProps = (state) => ({
   options: state.exercise.textOptions,
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (options) => dispatch(textOptionsUpdated(options))
+  onSubmit: (options) => dispatch(actionCreators.textOptionsUpdated(options))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextOptions);

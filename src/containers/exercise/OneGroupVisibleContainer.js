@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 
 import OneGroupVisible from '../../components/exercise/OneGroupVisible';
-import {exerciseSelected} from '../../actions';
+import * as actionCreators from '../../store/actions';
 
 const mapStateToProps = (state) => ({
   text: state.exercise.text,
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onExerciseSelect: (type) => {
-    dispatch(exerciseSelected(type));
+    dispatch(actionCreators.exerciseSelected(type));
   }
 });
 

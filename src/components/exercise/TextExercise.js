@@ -128,7 +128,11 @@ class TextExercise extends Component {
           <Modal.Header>{this.props.translate('exercises.modal-heading')}</Modal.Header>
           <Modal.Content image>
             <Modal.Description>
-              <p>{this.props.translate('exercises.modal-result')}: {Math.round(this.props.selectedText.wordCount / (this.props.elapsedTime / (1000 * 60)))}</p>
+              <p>
+                {this.props.translate('exercises.modal-result')}: {
+                  Math.round(this.props.selectedText.wordCount / (this.props.elapsedTime / (1000 * 60)))
+                }
+              </p>
               <p>{this.props.translate('exercises.modal-question')}?</p>
             </Modal.Description>
             <Modal.Actions>

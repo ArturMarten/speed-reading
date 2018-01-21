@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
 import SpeedOptions from '../components/SpeedOptions';
-import {exerciseOptionsUpdated} from '../actions';
+import * as actionCreators from '../store/actions';
 
 const mapStateToProps = (state) => ({
   options: state.exercise.exerciseOptions,
@@ -11,7 +11,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (options) => dispatch(exerciseOptionsUpdated(options))
+  onSubmit: (options) => dispatch(actionCreators.exerciseOptionsUpdated(options))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpeedOptions);
