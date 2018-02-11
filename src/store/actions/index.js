@@ -9,3 +9,8 @@ export {
   exerciseSelected,
   storeText
 } from './exercise';
+
+export {
+  authLogin,
+  authLogout
+} from './auth';

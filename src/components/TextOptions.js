@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Input, Button} from 'semantic-ui-react';
+import Aux from '../hoc/Auxiliary';
 
 const MIN_TEXT_WIDTH = 500;
 const MAX_TEXT_WIDTH = 1000;
@@ -133,56 +134,56 @@ class TextOptions extends Component {
 
   render() {
     return (
-      <div>
+      <Aux>
         <div>
           {this.props.translate('text-options.text-width') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseWidth.bind(this)} />
-          <Button icon='plus' size='mini' onClick={this.increaseWidth.bind(this)} />
+          <Button icon='minus' size='mini' onClick={() => this.decreaseWidth()} />
+          <Button icon='plus' size='mini' onClick={() => this.increaseWidth()} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.width}
-            onChange={this.handleWidthChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-            onBlur={this.handleBlur.bind(this)}
+            onChange={(event) => this.handleWidthChange(event)}
+            onKeyPress={(event) => this.handleKeyPress(event)}
+            onBlur={(event) => this.handleBlur(event)}
             style={{width: '58px'}}
           />
           {' ' + this.props.translate('text-options.px')}
         </div>
         <div>
           {this.props.translate('text-options.line-count') + ' '}
-          <Button disabled icon='minus' size='mini' onClick={this.decreaseLineCount.bind(this)} />
-          <Button disabled icon='plus' size='mini' onClick={this.increaseLineCount.bind(this)} />
+          <Button disabled icon='minus' size='mini' onClick={() => this.decreaseLineCount()} />
+          <Button disabled icon='plus' size='mini' onClick={() => this.increaseLineCount()} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.lineCount}
-            onChange={this.handleLineCountChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-            onBlur={this.handleBlur.bind(this)}
+            onChange={(event) => this.handleLineCountChange(event)}
+            onKeyPress={(event) => this.handleKeyPress(event)}
+            onBlur={(event) => this.handleBlur(event)}
             style={{width: '58px'}}
           />
           {' ' + this.props.translate('text-options.lines')}
         </div>
         <div>
           {this.props.translate('text-options.font-size') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseFontSize.bind(this)} />
-          <Button icon='plus' size='mini' onClick={this.increaseFontSize.bind(this)} />
+          <Button icon='minus' size='mini' onClick={() => this.decreaseFontSize()} />
+          <Button icon='plus' size='mini' onClick={() => this.increaseFontSize()} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.fontSize}
-            onChange={this.handleFontSizeChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-            onBlur={this.handleBlur.bind(this)}
+            onChange={(event) => this.handleFontSizeChange(event)}
+            onKeyPress={(event) => this.handleKeyPress(event)}
+            onBlur={(event) => this.handleBlur(event)}
             style={{width: '42px'}}
           />
           {' ' + this.props.translate('text-options.pt')}
         </div>
-      </div>
+      </Aux>
     );
   }
 }

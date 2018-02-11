@@ -46,9 +46,9 @@ const initialState = {
   textSaveStatus: 'Unsaved'
 };
 
-const exerciseReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.START_REQUESTED: {
+    case actionTypes.TIMER_START: {
       console.log('Started!');
       return {
         ...state,
@@ -63,7 +63,7 @@ const exerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case actionTypes.PAUSE_REQUESTED: {
+    case actionTypes.TIMER_PAUSE: {
       const elapsedTime = state.elapsedTime + (Date.now() - state.startTime);
       console.log('Paused! Elapsed: ' + elapsedTime + 'ms');
       return {
@@ -76,7 +76,7 @@ const exerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case actionTypes.RESET_REQUESTED: {
+    case actionTypes.TIMER_RESET: {
       console.log('Resetted!');
       return {
         ...state,
@@ -93,7 +93,7 @@ const exerciseReducer = (state = initialState, action) => {
         }
       };
     }
-    case actionTypes.FINISH_REQUESTED: {
+    case actionTypes.TIMER_STOP: {
       const elapsedTime = state.elapsedTime + (Date.now() - state.startTime);
       console.log('Finished! Elapsed: ' + elapsedTime + 'ms');
       return {
@@ -161,4 +161,4 @@ const exerciseReducer = (state = initialState, action) => {
   }
 };
 
-export default exerciseReducer;
+export default reducer;

@@ -21,14 +21,12 @@ class Home extends Component {
       </Image.Group>;
     }
     return (
-      <div>
-        <Container style={{marginTop: '4em'}} textAlign='left'>
-          <Header as='h2'>{this.props.translate('home.welcome')}</Header>
-          <p>{this.props.translate('home.description')}</p>
-          <Divider />
-          {logos}
-        </Container>
-      </div>
+      <Container style={{marginTop: '4em'}} textAlign='left'>
+        <Header as='h2'>{this.props.translate('home.welcome')}</Header>
+        <p>{this.props.translate('home.description')}</p>
+        <Divider />
+        {logos}
+      </Container>
     );
   }
 }

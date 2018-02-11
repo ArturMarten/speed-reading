@@ -23,7 +23,7 @@
     "comma-dangle": "off",
     "linebreak-style": ["error", "windows"],
     "no-extend-native": "off",
-    
+    "guard-for-in": "off",
     "no-console": "off",
     "react/prop-types": "off"
   }

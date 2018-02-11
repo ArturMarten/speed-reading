@@ -2,25 +2,25 @@ import * as actionTypes from './actionTypes';
 
 export const startRequested = () => {
   return {
-    type: actionTypes.START_REQUESTED
+    type: actionTypes.TIMER_START
   };
 };
 
 export const pauseRequested = () => {
   return {
-    type: actionTypes.PAUSE_REQUESTED
+    type: actionTypes.TIMER_PAUSE
   };
 };
 
 export const resetRequested = () => {
   return {
-    type: actionTypes.RESET_REQUESTED
+    type: actionTypes.TIMER_RESET
   };
 };
 
 export const finishRequested = () => {
   return {
-    type: actionTypes.FINISH_REQUESTED
+    type: actionTypes.TIMER_STOP
   };
 };
 

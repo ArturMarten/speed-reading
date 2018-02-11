@@ -66,26 +66,24 @@ class Statistics extends Component {
       {text: this.props.translate('statistics.disappearing-text'), value: 'Disappearing text'}
     ];
     return (
-      <div>
-        <Container style={{marginTop: '4em'}} textAlign='left'>
-          <Header as='h2'>{this.props.translate('statistics.title')}</Header>
-          <p>{this.props.translate('statistics.description')}</p>
-          <Message warning>
-            <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
-            <p>{this.props.translate('statistics.warning-content')}</p>
-          </Message>
-          <Dropdown
-            onChange={this.exerciseSelectionHandler.bind(this)}
-            defaultValue='Reading test' fluid selection options={exercises} />
-          <Segment>
-            <RegressionChart
-              data={this.state.selectedData}
-              size={[1000, 400]}
-              translate={this.props.translate}
-            />
-          </Segment>
-        </Container>
-      </div>
+      <Container style={{marginTop: '4em'}} textAlign='left'>
+        <Header as='h2'>{this.props.translate('statistics.title')}</Header>
+        <p>{this.props.translate('statistics.description')}</p>
+        <Message warning>
+          <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
+          <p>{this.props.translate('statistics.warning-content')}</p>
+        </Message>
+        <Dropdown
+          onChange={(event, data) => this.exerciseSelectionHandler(event, data)}
+          defaultValue='Reading test' fluid selection options={exercises} />
+        <Segment>
+          <RegressionChart
+            data={this.state.selectedData}
+            size={[1000, 400]}
+            translate={this.props.translate}
+          />
+        </Segment>
+      </Container>
     );
   }
 }

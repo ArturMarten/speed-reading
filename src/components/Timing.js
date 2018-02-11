@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Button, Label, Icon} from 'semantic-ui-react';
+import Aux from '../hoc/Auxiliary';
 
 let update = null;
 
@@ -61,7 +62,7 @@ class Timing extends Component {
 
   render() {
     return (
-      <div>
+      <Aux>
         <Button circular
           disabled={this.props.exerciseState.finished}
           positive={!this.props.exerciseState.started || this.props.exerciseState.paused}
@@ -76,7 +77,7 @@ class Timing extends Component {
         <Label basic size='big' style={{marginTop: '5px'}}>
           <Icon name='clock' />{this.format(this.state.elapsedTime)}
         </Label>
-      </div>
+      </Aux>
     );
   }
 

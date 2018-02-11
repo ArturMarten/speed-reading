@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Input, Button} from 'semantic-ui-react';
+import Aux from '../hoc/Auxiliary';
 
 const MIN_WPM = 10;
 const MAX_WPM = 500;
@@ -101,43 +102,41 @@ class SpeedOptions extends Component {
   options() {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return (
-        <div>
+        <Aux>
           {this.props.translate('exercise-options.reading-speed') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseWPM.bind(this)} />
-          <Button icon='plus' size='mini' onClick={this.increaseWPM.bind(this)} />
+          <Button icon='minus' size='mini' onClick={() => this.decreaseWPM()} />
+          <Button icon='plus' size='mini' onClick={() => this.increaseWPM()} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.wpm}
-            onChange={this.handleWPMChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-            onBlur={this.handleBlur.bind(this)}
+            onChange={(event) => this.handleWPMChange(event)}
+            onKeyPress={(event) => this.handleKeyPress(event)}
+            onBlur={(event) => this.handleBlur(event)}
             style={{width: '64px', textAlign: 'right'}}
           />
           {' ' + this.props.translate('exercise-options.wpm')}
-        </div>
+        </Aux>
       );
     } else if (this.props.exerciseType === 'wordGroup') {
       return (
-        <div>
-          <div>
-            {this.props.translate('exercise-options.fixation-time') + ' '}
-            <Button icon='minus' size='mini' onClick={this.decreaseFixation.bind(this)} />
-            <Button icon='plus' size='mini' onClick={this.increaseFixation.bind(this)} />
-            <Input
-              type='text'
-              inverted
-              size='small'
-              value={this.state.fixation}
-              onChange={this.handleFixationChange.bind(this)}
-              onKeyPress={this.handleKeyPress.bind(this)}
-              onBlur={this.handleBlur.bind(this)}
-              style={{width: '52px'}}
-            />
-            {' ' + this.props.translate('exercise-options.ms')}
-          </div>
-        </div>
+        <Aux>
+          {this.props.translate('exercise-options.fixation-time') + ' '}
+          <Button icon='minus' size='mini' onClick={() => this.decreaseFixation()} />
+          <Button icon='plus' size='mini' onClick={() => this.increaseFixation()} />
+          <Input
+            type='text'
+            inverted
+            size='small'
+            value={this.state.fixation}
+            onChange={(event) => this.handleFixationChange(event)}
+            onKeyPress={(event) => this.handleKeyPress(event)}
+            onBlur={(event) => this.handleBlur(event)}
+            style={{width: '52px'}}
+          />
+          {' ' + this.props.translate('exercise-options.ms')}
+        </Aux>
       );
     } else {
       return null;

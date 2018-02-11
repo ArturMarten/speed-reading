@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Aux from '../hoc/Auxiliary';
 import {Button} from 'semantic-ui-react';
 
 const Debugging = (props) => {
   return (
-    <div>
+    <Aux>
       <Button
         type='button'
         negative
@@ -16,7 +17,7 @@ const Debugging = (props) => {
           }
         }
       >Log state</Button>
-    </div>
+    </Aux>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Input, Button} from 'semantic-ui-react';
+import Aux from '../hoc/Auxiliary';
 
 const MIN_CHARACTER_COUNT = 5;
 const MAX_CHARACTER_COUNT = 30;
@@ -68,22 +69,22 @@ class ExerciseOptions extends Component {
   options() {
     if (this.props.exerciseType === 'wordGroup') {
       return (
-        <div>
+        <Aux>
           {this.props.translate('exercise-options.character-count') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount.bind(this)} />
-          <Button icon='plus' size='mini' onClick={this.increaseCharacterCount.bind(this)} />
+          <Button icon='minus' size='mini' onClick={() => this.decreaseCharacterCount()} />
+          <Button icon='plus' size='mini' onClick={() => this.increaseCharacterCount()} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.characterCount}
-            onChange={this.handleCharacterCountChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-            onBlur={this.handleBlur.bind(this)}
+            onChange={(event) => this.handleCharacterCountChange(event)}
+            onKeyPress={(event) => this.handleKeyPress(event)}
+            onBlur={(event) => this.handleBlur(event)}
             style={{width: '52px'}}
           />
           {' ' + this.props.translate('exercise-options.characters')}
-        </div>
+        </Aux>
       );
     } else {
       return null;

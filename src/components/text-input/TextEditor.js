@@ -28,35 +28,33 @@ class TextEditor extends Component {
 
   render() {
     return (
-      <div>
-        <Container style={{marginTop: '4em'}} textAlign='left'>
-          <Header as='h2'>{this.props.translate('text-editor.title')}</Header>
-          <p>{this.props.translate('text-editor.description')}</p>
-          <Message warning>
-            <Message.Header>{this.props.translate('text-editor.warning-title')}</Message.Header>
-            <p>{this.props.translate('text-editor.warning-content')}</p>
-          </Message>
-          <Segment compact>
-            <InlineStyleControls
-              editorState={this.props.editorState}
-              onToggle={this.toggleInlineStyle}
-              translate={this.props.translate}
-            />
-            <Editor
-              editorState = {this.props.editorState}
-              onChange = {this.props.onSaveEditorState}
-              onTab={this.onTab}
-            />
-          </Segment>
-          <Button positive floated='right'
-            loading={this.props.textSaveStatus === 'Saving'}
-            disabled={this.props.textSaveStatus === 'Saving'}
-            onClick={() => this.props.onSaveText()}>
-            {this.props.textSaveStatus === 'Saved' ? <Icon fitted name='checkmark' size='small' style={{opacity: 1}} /> : null}
-            {this.props.translate('text-editor.save')}
-          </Button>
-        </Container>
-      </div>
+      <Container style={{marginTop: '4em'}} textAlign='left'>
+        <Header as='h2'>{this.props.translate('text-editor.title')}</Header>
+        <p>{this.props.translate('text-editor.description')}</p>
+        <Message warning>
+          <Message.Header>{this.props.translate('text-editor.warning-title')}</Message.Header>
+          <p>{this.props.translate('text-editor.warning-content')}</p>
+        </Message>
+        <Segment compact>
+          <InlineStyleControls
+            editorState={this.props.editorState}
+            onToggle={this.toggleInlineStyle}
+            translate={this.props.translate}
+          />
+          <Editor
+            editorState = {this.props.editorState}
+            onChange = {this.props.onSaveEditorState}
+            onTab={this.onTab}
+          />
+        </Segment>
+        <Button positive floated='right'
+          loading={this.props.textSaveStatus === 'Saving'}
+          disabled={this.props.textSaveStatus === 'Saving'}
+          onClick={() => this.props.onSaveText()}>
+          {this.props.textSaveStatus === 'Saved' ? <Icon fitted name='checkmark' size='small' style={{opacity: 1}} /> : null}
+          {this.props.translate('text-editor.save')}
+        </Button>
+      </Container>
     );
   }
 }

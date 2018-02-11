@@ -1,6 +1,6 @@
 {
   "menu": {
-    "title": ["Kiirlugemine 5.0", "Kiirlugemine 5.0"],
+    "title": ["Kiirlugemine", "Kiirlugemine"],
     "home": ["Esileht", "Home"],
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
@@ -11,8 +11,14 @@
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
     "statistics": ["Statistika", "Statistics"],
-    "login": ["Logi sisse", "Login"],
     "feedback-popup": ["Anna tagasisidet või teata veast", "Give feedback or report a bug"]
+  },
+  "login": {
+    "login-button": ["Logi sisse", "Login"],
+    "modal-header": ["Kasutaja autentimine", "Account authentication"],
+    "username": ["Kasutajanimi", "Username"],
+    "password": ["Parool", "Password"],
+    "sign-in": ["Logi sisse", "Login"]
   },
   "home": {
     "welcome": ["Tere tulemast", "Welcome"],

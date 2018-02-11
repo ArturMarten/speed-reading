@@ -82,9 +82,7 @@ class OneGroupVisible extends Component {
 
   render() {
     return (
-      <div>
-        <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
-      </div>
+      <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
     );
   }
 }
