@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -41,9 +42,31 @@ module.exports = {
       'process.env': {NODE_ENV: '"production"'}
     }),
     new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+      mangle: {
+        safari10: true
+      },
+      output: {
+        comments: false
+      },
       sourceMap: false,
-      warnings: false,
     }),
-    new MinifyPlugin()
+    new MinifyPlugin(),
+    new SWPrecacheWebpackPlugin({
+      dontCacheBustUrlsMatching: /\.\w{8}\./,
+      filename: 'service-worker.js',
+      logger(message) {
+        if (message.indexOf('Total precache size is') === 0) {
+          return;
+        }
+        if (message.indexOf('Skipping static resource') === 0) {
+          return;
+        }
+        console.log(message);
+      },
+      minify: true,
+    }),
   ]
 };

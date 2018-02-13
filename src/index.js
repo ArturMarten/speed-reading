@@ -7,6 +7,7 @@ import logger from './utils/logger';
 import {createMemoryHistory} from 'history';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {initialize, addTranslation} from 'react-localize-redux';
+import registerServiceWorker from './registerServiceWorker';
 
 import reducer from './store/reducers';
 import App from './components/App';
@@ -39,3 +40,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+registerServiceWorker();

@@ -104,33 +104,25 @@ class Login extends Component {
       <Aux>
         {authRedirect}
         {authButton}
-        <Modal size='tiny' open={this.state.open && !this.props.isAuthenticated} onClose={() => this.closeClickHandler()}>
+        <Modal size='mini' open={this.state.open && !this.props.isAuthenticated} onClose={() => this.closeClickHandler()}>
           <Modal.Header>{this.props.translate('login.modal-header')}</Modal.Header>
           <Modal.Content>
             <Form>
-              <Form.Group widths={2}>
-                <Form.Field required>
-                  <label>{this.props.translate('login.username')}</label>
-                  <Form.Input icon='at' iconPosition='left'
-                    name='email'
-                    value={this.state.loginForm.email.value}
-                    error={!this.state.loginForm.email.valid && this.state.loginForm.email.touched}
-                    onChange={(event, data) => this.inputChangeHandler(event, data)}
-                    placeholder='Email' type='email'
-                    autoComplete='email' />
-                </Form.Field>
-                <Form.Field required>
-                  <label>{this.props.translate('login.password')}</label>
-                  <Form.Input icon='lock'
-                    iconPosition='left'
-                    name='password'
-                    value={this.state.loginForm.password.value}
-                    error={!this.state.loginForm.password.valid && this.state.loginForm.password.touched}
-                    onChange={(event, data) => this.inputChangeHandler(event, data)}
-                    placeholder='Password' type='password'
-                    autoComplete='password' />
-                </Form.Field>
-              </Form.Group>
+              <Form.Input icon='user' iconPosition='left'
+                name='email' required
+                value={this.state.loginForm.email.value}
+                error={!this.state.loginForm.email.valid && this.state.loginForm.email.touched}
+                onChange={(event, data) => this.inputChangeHandler(event, data)}
+                placeholder={this.props.translate('login.username')} type='email'
+                autoComplete='email' />
+              <Form.Input icon='lock'
+                iconPosition='left'
+                name='password' required
+                value={this.state.loginForm.password.value}
+                error={!this.state.loginForm.password.valid && this.state.loginForm.password.touched}
+                onChange={(event, data) => this.inputChangeHandler(event, data)}
+                placeholder={this.props.translate('login.password')} type='password'
+                autoComplete='password' />
             </Form>
           </Modal.Content>
           <Modal.Actions>

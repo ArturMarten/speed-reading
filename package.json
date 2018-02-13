@@ -1,6 +1,6 @@
 {
   "name": "speed-reading-software",
-  "version": "5.0.10",
+  "version": "5.0.11",
   "private": true,
   "devDependencies": {
     "@types/chai": "^4.1.2",
@@ -33,6 +33,7 @@
     "replace-in-file": "^3.0.0",
     "sinon": "^4.2.3",
     "sinon-chai": "^2.14.0",
+    "sw-precache-webpack-plugin": "0.11.4",
     "webpack": "^3.11.0",
     "webpack-bundle-analyzer": "^2.10.0",
     "webpack-dev-server": "^2.11.1"
@@ -59,8 +60,9 @@
     "websocket": "^1.0.25"
   },
   "scripts": {
-    "build": "npm version patch --no-commit-hooks --no-git-tag-version && node ./replace.build.js && webpack --config webpack.prod.js",
-    "start": "webpack-dev-server --config webpack.dev.js",
+    "build": "npm version patch --no-commit-hooks --no-git-tag-version && node ./replace.build.js && webpack --config config/webpack.config.prod.js",
+    "build-no-patch": "webpack --config config/webpack.config.prod.js",
+    "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "lint": "eslint src/ test/ || exit 0",
     "test": "mocha || exit 0",
     "test-debug": "mocha --inspect-brk",

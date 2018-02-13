@@ -3,6 +3,7 @@ import {scaleLinear, scaleTime} from 'd3-scale';
 import {axisBottom, axisLeft} from 'd3-axis';
 import {max} from 'd3-array';
 import {select} from 'd3-selection';
+// eslint-disable-next-line no-unused-vars
 import {transition} from 'd3-transition';
 import {line} from 'd3-shape';
 

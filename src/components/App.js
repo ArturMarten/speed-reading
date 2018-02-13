@@ -10,12 +10,13 @@ import TextEditorContainer from '../containers/text-input/TextEditorContainer';
 import ExerciseMenuContainer from '../containers/ExerciseMenuContainer';
 import StatisticsContainer from '../containers/statistics/StatisticsContainer';
 import TextExerciseContainer from '../containers/exercise/TextExerciseContainer';
+import ResponsiveContainer from '../containers/ResponsiveContainer';
 
 const App = ({history}) => {
   return (
     <ConnectedRouter history={history}>
       <Aux>
-        <TopMenuContainer />
+        <ResponsiveContainer>
         <Route exact path='/' component={HomeContainer} />
         <Route path='/text-entry' component={TextEditorContainer} />
         <Route exact path='/exercise' component={ExerciseMenuContainer} />
@@ -23,6 +24,8 @@ const App = ({history}) => {
         <Route path='/exercise/word-groups' render={() => <TextExerciseContainer type='wordGroup' />} />
         <Route path='/exercise/disappearing-text' render={() => <TextExerciseContainer type='disappearing' />} />
         <Route path='/statistics' component={StatisticsContainer} />
+          </ResponsiveContainer>
+
       </Aux>
     </ConnectedRouter>
   );

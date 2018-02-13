@@ -6,6 +6,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
   cache: true,
   entry: [
+    require.resolve('./polyfills'),
     './src/index.js',
     './styles/app.css'
   ],
@@ -22,15 +23,18 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js/, use: 'babel-loader'
+        test: /\.js/,
+        loader: require.resolve('babel-loader'),
+        options: {cacheDirectory: true}
       }, {
         test: /\.css$/,
         use: ExtractTextPlugin.extract('css-loader'),
       }, {
-        test: /\.json$/, use: 'json-loader'
+        test: /\.json$/,
+        loader: require.resolve('json-loader')
       }, {
         test: /\.(png|jpg)$/,
-        use: 'file-loader'
+        loader: require.resolve('file-loader')
       }
     ]
   },

@@ -51,7 +51,9 @@ class TextEditor extends Component {
           loading={this.props.textSaveStatus === 'Saving'}
           disabled={this.props.textSaveStatus === 'Saving'}
           onClick={() => this.props.onSaveText()}>
-          {this.props.textSaveStatus === 'Saved' ? <Icon fitted name='checkmark' size='small' style={{opacity: 1}} /> : null}
+          {this.props.textSaveStatus === 'Saved' ?
+            <Icon fitted name='checkmark' size='large' style={{opacity: 1}} /> :
+            <Icon fitted name='save' size='large' style={{opacity: 1}} />}
           {this.props.translate('text-editor.save')}
         </Button>
       </Container>

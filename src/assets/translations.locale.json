@@ -16,7 +16,7 @@
   "login": {
     "login-button": ["Logi sisse", "Login"],
     "modal-header": ["Kasutaja autentimine", "Account authentication"],
-    "username": ["Kasutajanimi", "Username"],
+    "username": ["E-maili aadress", "E-mail address"],
     "password": ["Parool", "Password"],
     "sign-in": ["Logi sisse", "Login"]
   },
