@@ -27,8 +27,8 @@ class Disappearing extends Component {
   }
 
   componentDidUpdate(previous) {
-    if (!previous.exerciseState.started && this.props.exerciseState.started ||
-        previous.exerciseState.paused && !this.props.exerciseState.paused) {
+    if ((!previous.exerciseState.started && this.props.exerciseState.started) ||
+        (previous.exerciseState.paused && !this.props.exerciseState.paused)) {
       // Exercise started
       update = setTimeout(() => this.update(), this.updateInterval + START_DELAY);
     } else if (!previous.exerciseState.resetted && this.props.exerciseState.resetted) {

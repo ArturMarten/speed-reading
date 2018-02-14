@@ -26,6 +26,8 @@ class TopMenu extends Component {
               <Flag name={language.code}/>
             </Dropdown.Item>
           );
+        } else {
+          return null;
         }
       })
     );

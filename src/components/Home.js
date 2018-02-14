@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import {Container, Header, Divider, Image, Message} from 'semantic-ui-react';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     let logos = null;
     if (this.props.currentLanguage === 'ee') {

@@ -4,10 +4,6 @@ import {getLanguages, getActiveLanguage, setActiveLanguage} from 'react-localize
 import {Dropdown, Flag} from 'semantic-ui-react';
 
 class ResponsiveContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   languageList() {
     return (
       this.props.languages.map((language, index) => {
@@ -17,6 +13,8 @@ class ResponsiveContainer extends Component {
               <Flag name={language.code}/>
             </Dropdown.Item>
           );
+        } else {
+          return null;
         }
       })
     );

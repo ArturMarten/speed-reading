@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 import {Link} from 'react-router-dom';
-import {Responsive, Sidebar, Container, Menu, Dropdown, Icon, Flag, Popup} from 'semantic-ui-react';
+import {Responsive, Sidebar, Menu, Dropdown, Icon} from 'semantic-ui-react';
 import {environment} from '../environment';
 
 import LoginContainer from '../containers/auth/LoginContainer';

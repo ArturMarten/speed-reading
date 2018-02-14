@@ -9,6 +9,8 @@ import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {initialize, addTranslation} from 'react-localize-redux';
 import registerServiceWorker from './registerServiceWorker';
 
+import 'semantic-ui-css/semantic.min.css';
+
 import reducer from './store/reducers';
 import App from './components/App';
 import * as translations from './assets/translations.locale.json';

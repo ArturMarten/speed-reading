@@ -2,16 +2,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 import {Link} from 'react-router-dom';
-import {Responsive, Menu, Dropdown, Icon, Flag, Popup} from 'semantic-ui-react';
+import {Responsive, Menu, Dropdown, Icon, Popup} from 'semantic-ui-react';
 import {environment} from '../environment';
 
 import LoginContainer from '../containers/auth/LoginContainer';
 import LanguageSelectionContainer from './LanguageSelectionContainer';
 
 class DesktopContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const {children} = this.props;

@@ -3,6 +3,7 @@ const sentenceRegex = /[^.!?]+[.!?]+|[^.!?]+$/g;
 const commaRegex = /[^,]+[,]+|[^,]+$/g;
 let wordRegex = RegExp('(.{1,15}(\\s|$))\\s*', 'g');
 
+// eslint-disable-next-line
 Array.prototype.flatMap = function(lambda) {
   return Array.prototype.concat.apply([], this.map(lambda));
 };

@@ -1,5 +1,18 @@
-import {writeText} from '../src/utils/Canvas';
+import { expect } from 'chai';
+import pixelmatch from 'pixelmatch';
+import fs from 'fs';
+import {writeText} from './Canvas';
 import {ContentState, convertFromHTML} from 'draft-js';
+
+const imgOutputFolder = __dirname + '/../test/output';
+
+// To get test name
+let testName = '';
+jasmine.getEnv().addReporter({
+  specStarted: (result) => {
+    testName = result.fullName;
+  }
+});
 
 describe('Canvas', () => {
   const expectedCanvas = document.createElement('canvas');
@@ -16,7 +29,7 @@ describe('Canvas', () => {
   let actualContext = actualCanvas.getContext('2d');
   let diffContext = diffCanvas.getContext('2d');
 
-  before(function() {
+  beforeAll(function() {
     expectedCanvas.width = canvasWidth; expectedCanvas.height = canvasHeight;
     actualCanvas.width = canvasWidth; actualCanvas.height = canvasHeight;
     diffCanvas.width = canvasWidth; diffCanvas.height = canvasHeight;
@@ -32,17 +45,16 @@ describe('Canvas', () => {
   });
 
   afterEach(function() {
-    // console.log(this.currentTest);
     // Reset any applied styling
     expectedContext.font = fontSize + 'pt ' + font; expectedContext.textBaseline = textBaseline;
     actualContext.font = fontSize + 'pt ' + font; actualContext.textBaseline = textBaseline;
     diffContext.font = fontSize + 'pt ' + font; diffContext.textBaseline = textBaseline;
-    outputPNG(diffCanvas, __dirname + '/output/diff/' + this.currentTest.title + '.png');
-    if (this.currentTest.state !== 'passed') {
-      // console.log(this.currentTest);
-      outputPNG(expectedCanvas, __dirname + '/output/expected/' + this.currentTest.title + '.png');
-      outputPNG(actualCanvas, __dirname + '/output/actual/' + this.currentTest.title + '.png');
-    }
+    outputPNG(diffCanvas, imgOutputFolder + '/diff/' + testName + '.png');
+    /*
+    // When required, output actual and expected images
+    outputPNG(expectedCanvas, imgOutputFolder + '/expected/' + testName + '.png');
+    outputPNG(actualCanvas,  imgOutputFolder + '/actual/' + testName + '.png');
+    */
   });
 
   it('exists', () => {

@@ -11,10 +11,7 @@ const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p>
 const content = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
 
 class TextPreview extends Component {
-  constructor() {
-    super();
-  }
-
+  
   componentDidMount() {
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenContext = this.offscreenCanvas.getContext('2d');

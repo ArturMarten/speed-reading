@@ -1,5 +1,0 @@
---require jsdom-global/register
---require test/TestHelper
---recursive
---reporter spec
---ui bdd

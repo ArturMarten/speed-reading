@@ -3,9 +3,6 @@ import {Segment} from 'semantic-ui-react';
 import Aux from '../hoc/Auxiliary';
 
 class TextSelection extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

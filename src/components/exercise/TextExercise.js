@@ -35,6 +35,8 @@ class TextExercise extends Component {
           return <DisappearingContainer />;
         case 'wordGroup':
           return <OneGroupVisibleContainer />;
+        default:
+          return null;
       }
     })(this.props.type);
     // console.log(process.env.NODE_ENV === 'development');
@@ -107,6 +109,8 @@ class TextExercise extends Component {
             <p>{this.props.translate('exercises.test-description')}</p>
           </Container>
         );
+      default:
+        return null;
     }
   }
 

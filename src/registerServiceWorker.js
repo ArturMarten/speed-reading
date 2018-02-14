@@ -53,8 +53,8 @@ export default function register() {
 }
 
 function registerValidSW(swUrl) {
-  // Only register when using HTTPS
-  location.protocol === 'https:' && navigator.serviceWorker
+  // Only register when using HTTPS: location.protocol === 'https:' && 
+  navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
       registration.onupdatefound = () => {
