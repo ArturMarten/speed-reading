@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './RegressionChart.css';
 import {scaleLinear, scaleTime} from 'd3-scale';
 import {axisBottom, axisLeft} from 'd3-axis';
 import {max} from 'd3-array';

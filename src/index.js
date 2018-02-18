@@ -8,7 +8,7 @@ import registerServiceWorker from './registerServiceWorker';
 import 'semantic-ui-css/semantic.min.css';
 
 import configureStore from './store/configureStore';
-import App from './components/App';
+import App from './App';
 
 const history = createMemoryHistory({
   basename: '/~arturmar/'
