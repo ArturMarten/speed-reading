@@ -4,9 +4,14 @@
   "private": true,
   "homepage": "http://kodu.ut.ee/~arturmar/test",
   "devDependencies": {
+    "@storybook/addon-actions": "^3.3.13",
+    "@storybook/addon-links": "^3.3.13",
+    "@storybook/addons": "^3.3.13",
+    "@storybook/react": "^3.3.13",
     "@types/chai": "^4.1.2",
     "@types/chai-enzyme": "^0.6.3",
-    "@types/draft-js": "^0.10.19",
+    "@types/draft-js": "^0.10.20",
+    "babel-core": "^6.26.0",
     "canvas-prebuilt": "^1.6.5-prerelease.1",
     "chai": "^4.1.2",
     "chai-enzyme": "^1.0.0-beta.0",
@@ -14,9 +19,10 @@
     "pixelmatch": "^4.0.2",
     "react-scripts": "^1.1.1",
     "replace-in-file": "^3.0.0",
+    "serve": "^6.4.9",
     "sinon": "^4.3.0",
     "sinon-chai": "^2.14.0",
-    "webpack-bundle-analyzer": "^2.10.0"
+    "source-map-explorer": "^1.5.0"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -37,15 +43,19 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.14",
-    "semantic-ui-react": "^0.78.2",
-    "websocket": "^1.0.25"
+    "semantic-ui-react": "^0.78.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-patch": "npm version patch --no-commit-hooks --no-git-tag-version && node ./replace.build.js && react-scripts build",
+    "analyze": "source-map-explorer build/static/js/main.*",
     "test": "react-scripts test --env=jsdom",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --env=jsdom",
     "test-coverage": "react-scripts test --env=jsdom --coverage",
+    "serve": "serve -s build",
     "eject": "react-scripts eject",
-    "build-old": "npm version patch --no-commit-hooks --no-git-tag-version && node ./replace.build.js && webpack --config config/webpack.config.prod.js"
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   }
 }

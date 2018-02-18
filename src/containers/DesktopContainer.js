@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import {Responsive, Menu, Dropdown, Icon, Popup} from 'semantic-ui-react';
 import {environment} from '../environment';
 
-import LoginContainer from '../containers/auth/LoginContainer';
+import LoginContainer from '../containers/Auth/LoginContainer';
 import LanguageSelectionContainer from './LanguageSelectionContainer';
 
 class DesktopContainer extends Component {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {writeText, getLineMetadata, WordMetadata, LineMetadata} from '../../../src/utils/Canvas';
+import {writeText, getLineMetadata, WordMetadata, LineMetadata} from '../../../src/utils/Canvas/Canvas';
 
 // Move to exercise options
 const START_DELAY = 300;

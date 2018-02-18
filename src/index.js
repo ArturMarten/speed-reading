@@ -1,44 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {createStore, applyMiddleware, compose} from 'redux';
-import thunk from 'redux-thunk';
-import logger from './utils/logger';
 import {createMemoryHistory} from 'history';
-import {connectRouter, routerMiddleware} from 'connected-react-router';
-import {initialize, addTranslation} from 'react-localize-redux';
+import {ConnectedRouter} from 'connected-react-router';
 import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
 
-import reducer from './store/reducers';
+import configureStore from './store/configureStore';
 import App from './components/App';
-import * as translations from './assets/translations.locale.json';
 
-const composeStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-const memoryHistory = createMemoryHistory({
+const history = createMemoryHistory({
   basename: '/~arturmar/'
 });
 
-let store = createStore(
-  connectRouter(memoryHistory)(reducer),
-  composeStoreEnhancers(
-    applyMiddleware(
-      routerMiddleware(memoryHistory),
-      logger,
-      thunk
-    )
-  )
-);
-
-const languages = ['ee', 'gb'];
-store.dispatch(initialize(languages, {defaultLanguage: 'ee'}));
-store.dispatch(addTranslation(translations));
+let store = configureStore(history);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App history={memoryHistory} />
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 );

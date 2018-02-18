@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 import {Link} from 'react-router-dom';
-import {Responsive, Sidebar, Menu, Dropdown, Icon} from 'semantic-ui-react';
+import {Responsive, Sidebar, Menu, Dropdown, Icon, Grid} from 'semantic-ui-react';
 import {environment} from '../environment';
 
-import LoginContainer from '../containers/auth/LoginContainer';
+import LoginContainer from '../containers/Auth/LoginContainer';
 import LanguageSelectionContainer from './LanguageSelectionContainer';
 
 class MobileContainer extends Component {
@@ -83,18 +83,20 @@ class MobileContainer extends Component {
               <Icon name='line graph' size='large' />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
-            <Menu icon>
-              <Menu.Item fitted>
-                <LanguageSelectionContainer />
-              </Menu.Item>
-              <Menu.Item fitted>
-                <Icon name='comment' color='grey' size='big' />
-              </Menu.Item>
-            </Menu>
+            <Grid container columns='equal'>
+              <Grid.Row verticalAlign='middle'>
+                <Grid.Column textAlign='center'>
+                  <LanguageSelectionContainer />
+                </Grid.Column>
+                <Grid.Column>
+                  <Icon name='comment' color='grey' size='big' />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Sidebar>
 
           <Sidebar.Pusher dimmed={this.state.sidebarOpened} style={{minHeight: '100vh'}}>
-            <Menu pointing secondary>
+            <Menu compact attached='top' secondary>
               <Menu.Item onClick={() => this.sidebarToggleHandler()}>
                 <Icon name='sidebar' size='large' />
               </Menu.Item>

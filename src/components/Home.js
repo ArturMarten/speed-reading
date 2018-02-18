@@ -7,14 +7,14 @@ class Home extends Component {
     if (this.props.currentLanguage === 'ee') {
       logos =
       <Image.Group>
-        <Image src={require('../assets/images/ut_est.png')} size='medium' />
-        <Image src={require('../assets/images/study_est.jpg')} size='small' />
+        <Image src={require('../assets/images/ut_est.png')} size='medium' alt='University of Tartu logo' />
+        <Image src={require('../assets/images/study_est.jpg')} size='small' alt='Study IT logo' />
       </Image.Group>;
     } else {
       logos =
       <Image.Group>
-        <Image src={require('../assets/images/ut_eng.png')} size='medium' />
-        <Image src={require('../assets/images/study_eng.jpg')} size='small' />
+        <Image src={require('../assets/images/ut_eng.png')} size='medium' alt='University of Tartu logo' />
+        <Image src={require('../assets/images/study_eng.jpg')} size='small' alt='Study IT logo' />
       </Image.Group>;
     }
     return (

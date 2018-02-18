@@ -58,7 +58,7 @@ describe('Canvas', () => {
   });
 
   it('exists', () => {
-    expect(actualCanvas).to.exist;
+    expect(actualCanvas).to.not.equal(undefined)
   });
 
   it('passes similarity test', () => {
