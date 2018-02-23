@@ -2,25 +2,18 @@ import React, {Component} from 'react';
 import './RegressionChart.css';
 import {scaleLinear, scaleTime} from 'd3-scale';
 import {axisBottom, axisLeft} from 'd3-axis';
-import {max} from 'd3-array';
 import {select} from 'd3-selection';
 // eslint-disable-next-line no-unused-vars
 import {transition} from 'd3-transition';
 import {line} from 'd3-shape';
 
 class RegressionChart extends Component {
-  constructor(props) {
-    super(props);
-    this.createBarChart = this.createBarChart.bind(this);
-  }
 
   componentDidMount() {
     this.init();
-    // this.createBarChart();
   }
 
-  componentDidUpdate() {
-    // this.createBarChart();
+  componentDidUpdate(prevProps, prevState) {
     this.update();
   }
 
@@ -138,34 +131,6 @@ class RegressionChart extends Component {
 
     return [slope, intercept, rSquare];
   }
-
-  createBarChart() {
-    const svg = this.svg;
-    const dataMax = max(this.props.data);
-    const yScale = scaleLinear()
-      .domain([0, dataMax])
-      .range([0, this.props.size[1]]);
-    select(svg)
-      .selectAll('rect')
-      .data(this.props.data)
-      .enter()
-      .append('rect');
-
-    select(svg)
-      .selectAll('rect')
-      .data(this.props.data)
-      .exit()
-      .remove();
-
-    select(svg)
-      .selectAll('rect')
-      .data(this.props.data)
-      .style('fill', '#fe9922')
-      .attr('x', (d, i) => i * 25)
-      .attr('y', (d) => this.props.size[1] - yScale(d))
-      .attr('height', (d) => yScale(d))
-      .attr('width', 25);
-   }
 
   render() {
     return (

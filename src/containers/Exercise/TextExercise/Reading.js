@@ -19,10 +19,9 @@ const initialState = {
 };
 
 export class Reading extends Component {
-  constructor(props) {
-    super(props);
-    this.cursorState = {...initialState};
-  }
+  cursorState = {
+    ...initialState
+  };
 
   componentDidMount() {
     this.offscreenCanvas = document.createElement('canvas');
@@ -31,20 +30,20 @@ export class Reading extends Component {
     this.init();
   }
 
-  componentDidUpdate(previous) {
-    if ((!previous.exerciseState.started && this.props.exerciseState.started) ||
-        (previous.exerciseState.paused && !this.props.exerciseState.paused)) {
+  componentDidUpdate(prevProps, prevState) {
+    if ((!prevProps.timerState.started && this.props.timerState.started) ||
+        (prevProps.timerState.paused && !this.props.timerState.paused)) {
       // Exercise started
       update = setTimeout(() => this.update(), this.updateInterval + START_DELAY);
-    } else if (!previous.exerciseState.resetted && this.props.exerciseState.resetted) {
+    } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
       this.cursorState = {...initialState};
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
-    } else if (!previous.exerciseState.finished && this.props.exerciseState.finished) {
+    } else if (!prevProps.timerState.stopped && this.props.timerState.stopped) {
       clearTimeout(update);
-    } else if (!previous.exerciseState.paused && this.props.exerciseState.paused) {
+    } else if (!prevProps.timerState.paused && this.props.timerState.paused) {
       // Exercise paused
       clearTimeout(update);
     } else {
@@ -147,14 +146,14 @@ const mapStateToProps = (state) => ({
   selectedText: state.exercise.selectedText,
   textOptions: state.exercise.textOptions,
   exerciseOptions: state.exercise.exerciseOptions,
-  exerciseState: state.exercise.exerciseState,
-  elapsedTime: state.exercise.elapsedTime,
+  timerState: state.timing.timer,
+  elapsedTime: state.timing.elapsedTime,
   translate: getTranslate(state.locale)
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onExerciseFinish: () => {
-    dispatch(actionCreators.finishRequested());
+    dispatch(actionCreators.exerciseFinished());
   }
 });
 

@@ -1,12 +1,17 @@
 export {
   startRequested,
   pauseRequested,
+  resumeRequested,
   resetRequested,
-  finishRequested,
+  stopRequested
+} from './timing';
+
+export {
   editorStateUpdated,
   textOptionsUpdated,
   exerciseOptionsUpdated,
   exerciseSelected,
+  exerciseFinished,
   storeText
 } from './exercise';
 

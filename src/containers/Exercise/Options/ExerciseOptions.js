@@ -10,12 +10,11 @@ const MIN_CHARACTER_COUNT = 5;
 const MAX_CHARACTER_COUNT = 30;
 
 export class ExerciseOptions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = props.options;
-  }
+  state = {
+    ...this.props.options
+  };
 
-  handleCharacterCountChange(event) {
+  handleCharacterCountChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_CHARACTER_COUNT) {
         this.setState({characterCount: MAX_CHARACTER_COUNT});
@@ -25,15 +24,15 @@ export class ExerciseOptions extends Component {
     }
   }
 
-  decreaseCharacterCount() {
+  decreaseCharacterCount = () => {
     this.changeCharacterCount(this.state.characterCount - 1);
   }
 
-  increaseCharacterCount() {
+  increaseCharacterCount = () => {
     this.changeCharacterCount(this.state.characterCount + 1);
   }
 
-  changeCharacterCount(newValue) {
+  changeCharacterCount = (newValue) => {
     let newCharacterCount = this.state.characterCount;
     if (newValue > MAX_CHARACTER_COUNT) {
       newCharacterCount = MAX_CHARACTER_COUNT;
@@ -46,17 +45,17 @@ export class ExerciseOptions extends Component {
     this.setState({characterCount: newCharacterCount});
   }
 
-  handleKeyPress(event) {
+  handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       this.submitOptions();
     }
   }
 
-  handleBlur(event) {
+  handleBlur = (event) => {
     this.submitOptions();
   }
 
-  submitOptions() {
+  submitOptions = () => {
     const correctedOptions = {
       characterCount:
         (this.state.characterCount === '' || this.state.characterCount < MIN_CHARACTER_COUNT) ?
@@ -75,16 +74,16 @@ export class ExerciseOptions extends Component {
       return (
         <Aux>
           {this.props.translate('exercise-options.character-count') + ' '}
-          <Button icon='minus' size='mini' onClick={() => this.decreaseCharacterCount()} />
-          <Button icon='plus' size='mini' onClick={() => this.increaseCharacterCount()} />
+          <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount} />
+          <Button icon='plus' size='mini' onClick={this.increaseCharacterCount} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.characterCount}
-            onChange={(event) => this.handleCharacterCountChange(event)}
-            onKeyPress={(event) => this.handleKeyPress(event)}
-            onBlur={(event) => this.handleBlur(event)}
+            onChange={this.handleCharacterCountChange}
+            onKeyPress={this.handleKeyPress}
+            onBlur={this.handleBlur}
             style={{width: '52px'}}
           />
           {' ' + this.props.translate('exercise-options.characters')}

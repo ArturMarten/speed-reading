@@ -20,25 +20,26 @@ const initialState = {
 };
 
 export class OneGroupVisible extends Component {
-  constructor(props) {
-    super(props);
-    this.cursorState = {...initialState};
-  }
+  cursorState = {
+    ...initialState
+  };
 
   componentDidMount() {
     this.renderGroup();
   }
 
-  componentDidUpdate(previous) {
-    if (!previous.started && this.props.started) {
+  componentDidUpdate(prevProps, prevState) {
+    console.error(prevProps);
+    console.error(this.props);
+    if (!prevProps.timerState.started && this.props.timerState.started) {
       // Exercise started
       update = setTimeout(() => this.nextGroup(), START_DELAY);
-    } else if (!previous.resetted && this.props.resetted) {
+    } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
       this.cursorState = {...initialState};
       this.renderGroup();
-    } else if (previous.started && !this.props.started) {
+    } else if (!prevProps.timerState.paused && this.props.timerState.paused) {
       // Exercise paused
       clearTimeout(update);
     } else {
@@ -85,7 +86,11 @@ export class OneGroupVisible extends Component {
 
   render() {
     return (
-      <canvas ref={(ref) => this.shownCanvas = ref } width={this.props.width} height={450} />
+      <canvas 
+        ref={(ref) => this.shownCanvas = ref } 
+        width={this.props.width} 
+        height={450}
+      />
     );
   }
 }
@@ -96,8 +101,7 @@ const mapStateToProps = (state) => ({
   width: state.exercise.textOptions.width,
   fontSize: state.exercise.textOptions.fontSize,
   fixation: state.exercise.exerciseOptions.fixation,
-  started: state.exercise.started,
-  resetted: state.exercise.resetted
+  timerState: state.timing.timer,
 });
 
 const mapDispatchToProps = (dispatch) => ({

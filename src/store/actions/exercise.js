@@ -1,29 +1,5 @@
 import * as actionTypes from './actionTypes';
 
-export const startRequested = () => {
-  return {
-    type: actionTypes.TIMER_START
-  };
-};
-
-export const pauseRequested = () => {
-  return {
-    type: actionTypes.TIMER_PAUSE
-  };
-};
-
-export const resetRequested = () => {
-  return {
-    type: actionTypes.TIMER_RESET
-  };
-};
-
-export const finishRequested = () => {
-  return {
-    type: actionTypes.TIMER_STOP
-  };
-};
-
 export const editorStateUpdated = (editorState) => {
   return {
     type: actionTypes.EDITOR_STATE_UPDATED,
@@ -49,6 +25,12 @@ export const exerciseSelected = (type) => {
   return {
     type: actionTypes.EXERCISE_SELECTED,
     payload: type
+  };
+};
+
+export const exerciseFinished = () => {
+  return {
+    type: actionTypes.EXERCISE_FINISHED
   };
 };
 

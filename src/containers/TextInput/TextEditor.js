@@ -8,19 +8,14 @@ import * as actionCreators from '../../store/actions';
 import InlineStyleControls from '../../components/TextInput/InlineStyleControls';
 
 export class TextEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.onTab = this._onTab.bind(this);
-    this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
-  }
 
-  _onTab(e) {
+  onTab = (event) => {
     // Currently works only with lists
-    e.preventDefault();
-    this.props.onSaveEditorState(RichUtils.onTab(e, this.props.editorState, 4));
+    event.preventDefault();
+    this.props.onSaveEditorState(RichUtils.onTab(event, this.props.editorState, 4));
   }
 
-  _toggleInlineStyle(inlineStyle) {
+  toggleInlineStyle = (inlineStyle) => {
     this.props.onSaveEditorState(
       RichUtils.toggleInlineStyle(
         this.props.editorState,
@@ -53,7 +48,7 @@ export class TextEditor extends Component {
         <Button positive floated='right'
           loading={this.props.textSaveStatus === 'Saving'}
           disabled={this.props.textSaveStatus === 'Saving'}
-          onClick={() => this.props.onSaveText()}>
+          onClick={this.props.onSaveText}>
           {this.props.textSaveStatus === 'Saved' ?
             <Icon fitted name='checkmark' size='large' style={{opacity: 1}} /> :
             <Icon fitted name='save' size='large' style={{opacity: 1}} />}

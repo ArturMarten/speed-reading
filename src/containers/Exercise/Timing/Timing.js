@@ -9,39 +9,45 @@ import Aux from '../../../hoc/Auxiliary/Auxiliary';
 let update = null;
 
 export class Timing extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      startTime: 0,
-      elapsedTime: 0
-    };
-  }
+  state = {
+    startTime: 0,
+    elapsedTime: 0
+  };
 
   componentWillUnmount() {
     if (update) clearInterval(update);
   }
 
-  componentDidUpdate(previous) {
-    if (this.props.exerciseState.finished) clearInterval(update);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.timerState.stopped) clearInterval(update);
   }
 
-  startClickHandler() {
+  startTimer = () => {
     this.setState({
       startTime: Date.now()
     });
     update = setInterval(() => {
       this.progress();
     }, 1001);
+  }
+
+  startClickHandler = () => {
+    this.startTimer();
     this.props.onStart();
   }
 
-  pauseClickHandler() {
+  pauseClickHandler = () => {
     clearInterval(update);
     this.progress();
     this.props.onPause();
   }
 
-  resetClickHandler() {
+  resumeClickHandler = () => {
+    this.startTimer();
+    this.props.onResume();
+  }
+
+  resetClickHandler = () => {
     clearInterval(update);
     this.setState({
       startTime: 0,
@@ -50,13 +56,13 @@ export class Timing extends Component {
     this.props.onReset();
   }
 
-  finishClickHandler() {
+  stopClickHandler = () => {
     clearInterval(update);
     this.progress();
-    this.props.onFinish();
+    this.props.onStop();
   }
 
-  progress() {
+  progress = () => {
     this.setState({
       elapsedTime: this.state.elapsedTime + (Date.now() - this.state.startTime),
       startTime: Date.now()
@@ -67,16 +73,18 @@ export class Timing extends Component {
     return (
       <Aux>
         <Button circular
-          disabled={this.props.exerciseState.finished}
-          positive={!this.props.exerciseState.started || this.props.exerciseState.paused}
-          negative={this.props.exerciseState.started && !this.props.exerciseState.paused}
-          icon={this.props.exerciseState.started && !this.props.exerciseState.paused ? 'pause' : 'play'}
-          onClick={() => this.props.exerciseState.started && !this.props.exerciseState.paused ? this.pauseClickHandler() : this.startClickHandler()}/>
-        <Button circular color='orange' icon='repeat' inverted disabled={!this.props.exerciseState.started}
-          onClick={() => this.resetClickHandler()}/>
+          disabled={this.props.timerState.stopped}
+          positive={!this.props.timerState.started || this.props.timerState.paused}
+          negative={this.props.timerState.started && !this.props.timerState.paused}
+          icon={!this.props.timerState.started || this.props.timerState.paused ? 'play' : 'pause'}
+          onClick={this.props.timerState.started ? 
+            (this.props.timerState.paused ? this.resumeClickHandler : this.pauseClickHandler) : 
+            this.startClickHandler}/>
+        <Button circular color='orange' icon='repeat' inverted disabled={!this.props.timerState.started}
+          onClick={this.resetClickHandler}/>
         <Button circular color='blue' icon='flag checkered' inverted
-          disabled={!this.props.exerciseState.started || this.props.exerciseState.finished}
-          onClick={() => this.finishClickHandler()}/>
+          disabled={!this.props.timerState.started || this.props.timerState.stopped}
+          onClick={this.stopClickHandler}/>
         <Label basic size='big' style={{marginTop: '5px'}}>
           <Icon name='clock' />{this.format(this.state.elapsedTime)}
         </Label>
@@ -99,12 +107,11 @@ export class Timing extends Component {
 }
 
 Timing.propTypes = {
-  exerciseState: PropTypes.object.isRequired
+  timerState: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  exerciseState: state.exercise.exerciseState,
-  counter: state.exercise.counter
+  timerState: state.timing.timer,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -114,11 +121,14 @@ const mapDispatchToProps = (dispatch) => ({
   onPause: () => {
     dispatch(actionCreators.pauseRequested());
   },
+  onResume: () => {
+    dispatch(actionCreators.resumeRequested());
+  },
   onReset: () => {
     dispatch(actionCreators.resetRequested());
   },
-  onFinish: () => {
-    dispatch(actionCreators.finishRequested());
+  onStop: () => {
+    dispatch(actionCreators.stopRequested());
   }
 });
 

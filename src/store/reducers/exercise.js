@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 import {EditorState, ContentState, convertFromHTML} from 'draft-js';
 import {splitIntoWordGroups} from '../../utils/TextUtils';
+import { updateObject } from '../../shared/utility';
 
 // eslint-disable-next-line
 const text = 'Lorem ipsum dolor sit amet, praesent torquent dictum vel augue proin at, sollicitudin orci rhoncus semper, arcu et ut accumsan metus amet, mauris tellus tortor, magna imperdiet erat. Vel leo est velit tellus tellus, aliquet in, vestibulum ut erat, mi arcu elit arcu et amet. Elit orci hymenaeos accumsan sed sem ac, nec augue arcu sed in id, ac proin. Lacus aliquam diam pulvinar, neque mauris elementum eu, mauris auctor vestibulum amet turpis. Nunc sem aenean nec elit, elementum nulla, mauris est cillum et.';
@@ -14,24 +15,14 @@ const selectedText = {
 };
 
 const initialState = {
-  exerciseState: {
-    started: false,
-    paused: false,
-    resetted: false,
-    finished: false
-  },
-  settingsConfirmed: false,
-  started: false,
-  finished: false,
-  resetted: false,
   type: '',
   editorState: EditorState.createWithContent(ContentState.createFromText(text)),
   text: text,
+  started: false,
+  finished: false,
   selectedText: selectedText,
   wordGroups: splitIntoWordGroups(text, 15),
   words: text.split(' '),
-  startTime: 0,
-  elapsedTime: 0,
   exerciseOptions: {
     wpm: 300,
     fixation: 150,
@@ -49,62 +40,14 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.TIMER_START: {
-      console.log('Started!');
-      return {
-        ...state,
-        startTime: Date.now(),
-        started: true,
-        resetted: false,
-        exerciseState: {
-          ...state.exerciseState,
-          started: true,
-          resetted: false,
-          paused: false
-        }
-      };
-    }
-    case actionTypes.TIMER_PAUSE: {
-      const elapsedTime = state.elapsedTime + (Date.now() - state.startTime);
-      console.log('Paused! Elapsed: ' + elapsedTime + 'ms');
-      return {
-        ...state,
-        elapsedTime: elapsedTime,
-        started: false,
-        exerciseState: {
-          ...state.exerciseState,
-          paused: true
-        }
-      };
-    }
-    case actionTypes.TIMER_RESET: {
-      console.log('Resetted!');
-      return {
-        ...state,
-        startTime: 0,
-        elapsedTime: 0,
-        started: false,
-        resetted: true,
-        finished: false,
-        exerciseState: {
-          started: false,
-          paused: true,
-          resetted: true,
-          finished: false
-        }
-      };
+      return updateObject(state, {
+        started: true
+      });
     }
     case actionTypes.TIMER_STOP: {
-      const elapsedTime = state.elapsedTime + (Date.now() - state.startTime);
-      console.log('Finished! Elapsed: ' + elapsedTime + 'ms');
-      return {
-        ...state,
-        elapsedTime: elapsedTime,
-        exerciseState: {
-          ...state.exerciseState,
-          paused: true,
-          finished: true
-        }
-      };
+      return updateObject(state, {
+        finished: true
+      });
     }
     case actionTypes.EDITOR_STATE_UPDATED: {
       return {
@@ -135,13 +78,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         type: action.payload,
-        exerciseState: {
-          started: false,
-          paused: false,
-          resetted: false,
-          finished: false
-        },
-        elapsedTime: 0
+        started: false,
+        finished: false
       };
     }
     case actionTypes.TEXT_SAVE_REQUESTED: {

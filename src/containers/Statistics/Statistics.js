@@ -36,14 +36,11 @@ const statistics = [
 ];
 
 export class Statistics extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedData: statistics[0]
-    };
-  }
+  state = {
+    selectedData: statistics[0]
+  };
 
-  exerciseSelectionHandler(event, data) {
+  exerciseSelectionHandler = (event, data) => {
     let selectedData = statistics[0];
     switch (data.value) {
       case 'Reading test':
@@ -77,7 +74,7 @@ export class Statistics extends Component {
           <p>{this.props.translate('statistics.warning-content')}</p>
         </Message>
         <Dropdown
-          onChange={(event, data) => this.exerciseSelectionHandler(event, data)}
+          onChange={this.exerciseSelectionHandler}
           defaultValue='Reading test' fluid selection options={exercises} />
         <Segment>
           <RegressionChart

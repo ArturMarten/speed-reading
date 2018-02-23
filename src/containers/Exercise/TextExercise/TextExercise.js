@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Container, Grid, Segment, Dimmer, Modal, Button, Divider, Message} from 'semantic-ui-react';
 import {getTranslate} from 'react-localize-redux';
-// import './TextExercise.css';
+import './TextExercise.css';
 
 import * as actionCreators from '../../../store/actions';
 import TextOptions from '../Options/TextOptions';
@@ -25,26 +25,23 @@ export const Status = {
 };
 
 export class TextExercise extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      status: Status.Preparation,
-      popupOpen: false
-    };
-    this.exercise = ((props) => {
-      switch (props) {
-        case 'reading':
-          return <Reading />;
-        case 'disappearing':
-          return <Disappearing />;
-        case 'wordGroup':
-          return <OneGroupVisible />;
-        default:
-          return null;
-      }
-    })(this.props.type);
-    // console.log(process.env.NODE_ENV === 'development');
-  }
+  state = {
+    status: Status.Preparation,
+    popupOpen: false
+  };
+
+  exercise = ((props) => {
+    switch (props) {
+      case 'reading':
+        return <Reading />;
+      case 'disappearing':
+        return <Disappearing />;
+      case 'wordGroup':
+        return <OneGroupVisible />;
+      default:
+        return null;
+    }
+  })(this.props.type);
 
   componentWillMount() {
     this.props.onExerciseSelect(this.props.type);
@@ -83,7 +80,7 @@ export class TextExercise extends Component {
         return (
           <Container style={{marginTop: '14px'}}>
             <Grid>
-              <Grid.Row columns={2}>
+              <Grid.Row verticalAlign='middle' columns={2}>
                 <Grid.Column textAlign='center' width={8}>
                   <SpeedOptions />
                 </Grid.Column>
@@ -94,7 +91,7 @@ export class TextExercise extends Component {
               <Grid.Row centered>
                 <Segment compact>
                   <Dimmer.Dimmable blurring
-                    dimmed={!this.props.exerciseState.started || this.props.exerciseState.paused || this.props.exerciseState.finished }>
+                    dimmed={!this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped }>
                     <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
                                           TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
                         {this.exercise}
@@ -122,8 +119,8 @@ export class TextExercise extends Component {
     this.setState({status: status, popupOpen: false});
   }
 
-  componentDidUpdate(previous) {
-    if (!previous.exerciseState.finished && this.props.exerciseState.finished) {
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.timerState.stopped && this.props.timerState.stopped) {
       this.setState({popupOpen: true});
     }
   }
@@ -160,8 +157,8 @@ const mapStateToProps = (state) => ({
   selectedText: state.exercise.selectedText,
   textOptions: state.exercise.textOptions,
   exerciseOptions: state.exercise.exerciseOptions,
-  exerciseState: state.exercise.exerciseState,
-  elapsedTime: state.exercise.elapsedTime
+  timerState: state.timing.timer,
+  elapsedTime: state.timing.elapsedTime
 });
 
 const mapDispatchToProps = (dispatch) => ({

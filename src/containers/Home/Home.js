@@ -3,20 +3,25 @@ import {connect} from 'react-redux';
 import {Container, Header, Divider, Image, Message} from 'semantic-ui-react';
 import {getTranslate, getActiveLanguage} from 'react-localize-redux';
 
+import ut_est_logo from '../../assets/images/ut_est.png';
+import ut_eng_logo from '../../assets/images/ut_eng.png';
+import study_est_logo from '../../assets/images/study_est.jpg';
+import study_eng_logo from '../../assets/images/study_eng.jpg';
+
 export class Home extends Component {
   render() {
     let logos = null;
     if (this.props.currentLanguage === 'ee') {
       logos =
       <Image.Group>
-        <Image src={require('../../assets/images/ut_est.png')} size='medium' alt='University of Tartu logo' />
-        <Image src={require('../../assets/images/study_est.jpg')} size='small' alt='Study IT logo' />
+        <Image src={ut_est_logo} size='medium' alt='University of Tartu logo' />
+        <Image src={study_est_logo} size='small' alt='Study IT logo' />
       </Image.Group>;
     } else {
       logos =
       <Image.Group>
-        <Image src={require('../../assets/images/ut_eng.png')} size='medium' alt='University of Tartu logo' />
-        <Image src={require('../../assets/images/study_eng.jpg')} size='small' alt='Study IT logo' />
+        <Image src={ut_eng_logo} size='medium' alt='University of Tartu logo' />
+        <Image src={study_eng_logo} size='small' alt='Study IT logo' />
       </Image.Group>;
     }
     return (

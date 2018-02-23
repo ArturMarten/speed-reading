@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {Modal, Form, Button, Icon, Label} from 'semantic-ui-react';
+import {Modal, Form, Button, Label} from 'semantic-ui-react';
 import {getTranslate} from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -9,7 +9,6 @@ import Aux from '../../hoc/Auxiliary/Auxiliary';
 import {checkValidity} from '../../shared/utility';
 
 const initialState = {
-  open: false,
   loginForm: {
     email: {
       value: '',
@@ -34,12 +33,11 @@ const initialState = {
 };
 
 export class Auth extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {...initialState};
+  state = {
+    ...initialState
   }
 
-  inputChangeHandler(event, {name, value}) {
+  inputChangeHandler = (event, {name, value}) => {
     const updatedLoginForm = {...this.state.loginForm};
     const updatedFormElement = {...updatedLoginForm[name]};
     updatedFormElement.value = value;
@@ -53,20 +51,8 @@ export class Auth extends Component {
     this.setState({loginForm: updatedLoginForm, loginFormValid: formIsValid});
   }
 
-  openClickHandler() {
-    this.setState({open: true});
-  }
-
-  closeClickHandler() {
-    this.setState({...initialState});
-  }
-
-  onLogin() {
+  onLogin = () => {
     this.props.onLogin(this.state.loginForm.email.value, this.state.loginForm.password.value);
-  }
-
-  onLogout() {
-    this.props.onLogout();
   }
 
   render() {
@@ -74,20 +60,10 @@ export class Auth extends Component {
     if (this.props.isAuthenticated) {
       authRedirect = <Redirect to='/' />;
     }
-    const authButton = this.props.isAuthenticated ?
-      <Button positive icon labelPosition='right' onClick={() => this.onLogout()}>
-        Logi välja
-        <Icon name='sign out' style={{opacity: 1}}></Icon>
-      </Button> :
-      <Button positive icon labelPosition='right' onClick={() => this.openClickHandler()}>
-        {this.props.translate('login.login-button')}
-        <Icon name='sign in' style={{opacity: 1}}></Icon>
-      </Button>;
     return (
       <Aux>
         {authRedirect}
-        {authButton}
-        <Modal size='mini' open={this.state.open && !this.props.isAuthenticated} onClose={() => this.closeClickHandler()}>
+        <Modal size='mini' open={this.props.open && !this.props.isAuthenticated} onClose={this.props.onClose}>
           <Modal.Header>{this.props.translate('login.modal-header')}</Modal.Header>
           <Modal.Content>
             <Form>
@@ -95,7 +71,7 @@ export class Auth extends Component {
                 name='email' required
                 value={this.state.loginForm.email.value}
                 error={!this.state.loginForm.email.valid && this.state.loginForm.email.touched}
-                onChange={(event, data) => this.inputChangeHandler(event, data)}
+                onChange={this.inputChangeHandler}
                 placeholder={this.props.translate('login.username')} type='email'
                 autoComplete='email' />
               <Form.Input icon='lock'
@@ -103,7 +79,7 @@ export class Auth extends Component {
                 name='password' required
                 value={this.state.loginForm.password.value}
                 error={!this.state.loginForm.password.valid && this.state.loginForm.password.touched}
-                onChange={(event, data) => this.inputChangeHandler(event, data)}
+                onChange={this.inputChangeHandler}
                 placeholder={this.props.translate('login.password')} type='password'
                 autoComplete='password' />
             </Form>
@@ -114,7 +90,7 @@ export class Auth extends Component {
               type='submit'
               loading={this.props.loading}
               disabled={!this.state.loginFormValid || this.props.loading}
-              onClick={() => this.onLogin()}
+              onClick={this.onLogin}
             >
               {this.props.translate('login.sign-in')}
             </Button>
@@ -135,9 +111,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onLogin: (email, password) => {
     dispatch(actionCreators.authLogin(email, password));
-  },
-  onLogout: () => {
-    dispatch(actionCreators.authLogout());
   }
 });
 

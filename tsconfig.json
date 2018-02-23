@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "lib": ["es6", "dom"],
+    "lib": ["es2018", "dom"],
     "jsx": "react",
     "allowJs": true,
-    "checkJs": false,
-    "strict": false
+    "checkJs": true,
+    "strict": true
   }
 }

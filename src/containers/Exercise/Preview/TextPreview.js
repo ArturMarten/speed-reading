@@ -22,7 +22,7 @@ export class TextPreview extends Component {
     this.init();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.init();
   }
 

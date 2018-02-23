@@ -14,12 +14,11 @@ const MIN_FONT_SIZE = 12;
 const MAX_FONT_SIZE = 18;
 
 export class TextOptions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = props.options;
-  }
-
-  handleWidthChange(event) {
+  state = {
+    ...this.props.options
+  };
+  
+  handleWidthChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_TEXT_WIDTH) {
         this.setState({width: MAX_TEXT_WIDTH});
@@ -29,15 +28,15 @@ export class TextOptions extends Component {
     }
   }
 
-  increaseWidth() {
+  increaseWidth = () => {
     this.changeWidth(this.state.width + 50);
   }
 
-  decreaseWidth() {
+  decreaseWidth = () => {
     this.changeWidth(this.state.width - 50);
   }
 
-  changeWidth(newValue) {
+  changeWidth = (newValue) => {
     let newWidth = this.state.width;
     if (newValue > MAX_TEXT_WIDTH) {
       newWidth = MAX_TEXT_WIDTH;
@@ -50,7 +49,7 @@ export class TextOptions extends Component {
     this.setState({width: newWidth});
   }
 
-  handleLineCountChange(event) {
+  handleLineCountChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_TEXT_LINE_COUNT) {
         this.setState({lineCount: MAX_TEXT_LINE_COUNT});
@@ -60,15 +59,15 @@ export class TextOptions extends Component {
     }
   }
 
-  increaseLineCount() {
+  increaseLineCount = () => {
     this.changeLineCount(this.state.lineCount + 1);
   }
 
-  decreaseLineCount() {
+  decreaseLineCount = () => {
     this.changeLineCount(this.state.lineCount - 1);
   }
 
-  changeLineCount(newValue) {
+  changeLineCount = (newValue) => {
     let newLineCount = this.state.lineCount;
     if (newValue > MAX_TEXT_LINE_COUNT) {
       newLineCount = MAX_TEXT_LINE_COUNT;
@@ -81,7 +80,7 @@ export class TextOptions extends Component {
     this.setState({lineCount: newLineCount});
   }
 
-  handleFontSizeChange(event) {
+  handleFontSizeChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_FONT_SIZE) {
         this.setState({fontSize: MAX_FONT_SIZE});
@@ -91,15 +90,15 @@ export class TextOptions extends Component {
     }
   }
 
-  increaseFontSize() {
+  increaseFontSize = () => {
     this.changeFontSize(this.state.fontSize + 1);
   }
 
-  decreaseFontSize() {
+  decreaseFontSize = () => {
     this.changeFontSize(this.state.fontSize - 1);
   }
 
-  changeFontSize(newValue) {
+  changeFontSize = (newValue) => {
     let newFontSize = this.state.fontSize;
     if (newValue > MAX_FONT_SIZE) {
       newFontSize = MAX_FONT_SIZE;
@@ -112,17 +111,17 @@ export class TextOptions extends Component {
     this.setState({fontSize: newFontSize});
   }
 
-  handleKeyPress(event) {
+  handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       this.submitOptions();
     }
   }
 
-  handleBlur(event) {
+  handleBlur = (event) => {
     this.submitOptions();
   }
 
-  submitOptions() {
+  submitOptions = () => {
     const correctedOptions = {
       width: this.state.width === '' || this.state.width < MIN_TEXT_WIDTH ? MIN_TEXT_WIDTH : this.state.width,
       lineCount: this.state.lineCount === '' || this.state.lineCount < MIN_TEXT_LINE_COUNT ? MIN_TEXT_LINE_COUNT : this.state.lineCount,
@@ -141,48 +140,48 @@ export class TextOptions extends Component {
       <Aux>
         <div>
           {this.props.translate('text-options.text-width') + ' '}
-          <Button icon='minus' size='mini' onClick={() => this.decreaseWidth()} />
-          <Button icon='plus' size='mini' onClick={() => this.increaseWidth()} />
+          <Button icon='minus' size='mini' onClick={this.decreaseWidth} />
+          <Button icon='plus' size='mini' onClick={this.increaseWidth} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.width}
-            onChange={(event) => this.handleWidthChange(event)}
-            onKeyPress={(event) => this.handleKeyPress(event)}
-            onBlur={(event) => this.handleBlur(event)}
+            onChange={this.handleWidthChange}
+            onKeyPress={this.handleKeyPress}
+            onBlur={this.handleBlur}
             style={{width: '58px'}}
           />
           {' ' + this.props.translate('text-options.px')}
         </div>
         <div>
           {this.props.translate('text-options.line-count') + ' '}
-          <Button disabled icon='minus' size='mini' onClick={() => this.decreaseLineCount()} />
-          <Button disabled icon='plus' size='mini' onClick={() => this.increaseLineCount()} />
+          <Button disabled icon='minus' size='mini' onClick={this.decreaseLineCount} />
+          <Button disabled icon='plus' size='mini' onClick={this.increaseLineCount} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.lineCount}
-            onChange={(event) => this.handleLineCountChange(event)}
-            onKeyPress={(event) => this.handleKeyPress(event)}
-            onBlur={(event) => this.handleBlur(event)}
+            onChange={this.handleLineCountChange}
+            onKeyPress={this.handleKeyPress}
+            onBlur={this.handleBlur}
             style={{width: '58px'}}
           />
           {' ' + this.props.translate('text-options.lines')}
         </div>
         <div>
           {this.props.translate('text-options.font-size') + ' '}
-          <Button icon='minus' size='mini' onClick={() => this.decreaseFontSize()} />
-          <Button icon='plus' size='mini' onClick={() => this.increaseFontSize()} />
+          <Button icon='minus' size='mini' onClick={this.decreaseFontSize} />
+          <Button icon='plus' size='mini' onClick={this.increaseFontSize} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.fontSize}
-            onChange={(event) => this.handleFontSizeChange(event)}
-            onKeyPress={(event) => this.handleKeyPress(event)}
-            onBlur={(event) => this.handleBlur(event)}
+            onChange={this.handleFontSizeChange}
+            onKeyPress={this.handleKeyPress}
+            onBlur={this.handleBlur}
             style={{width: '42px'}}
           />
           {' ' + this.props.translate('text-options.pt')}

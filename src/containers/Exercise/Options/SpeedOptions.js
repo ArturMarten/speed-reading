@@ -12,12 +12,11 @@ const MIN_FIXATION = 20;
 const MAX_FIXATION = 500;
 
 export class SpeedOptions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = props.options;
-  }
-
-  handleWPMChange(event) {
+  state = {
+    ...this.props.options
+  };
+  
+  handleWPMChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_WPM) {
         this.setState({wpm: MAX_WPM});
@@ -27,15 +26,15 @@ export class SpeedOptions extends Component {
     }
   }
 
-  decreaseWPM() {
+  decreaseWPM = () => {
     this.changeWPM(this.state.wpm - 10);
   }
 
-  increaseWPM() {
+  increaseWPM = () => {
     this.changeWPM(this.state.wpm + 10);
   }
 
-  changeWPM(newValue) {
+  changeWPM = (newValue) => {
     let newWPM = this.state.wpm;
     if (newValue > MAX_WPM) {
       newWPM = MAX_WPM;
@@ -48,7 +47,7 @@ export class SpeedOptions extends Component {
     this.setState({wpm: newWPM});
   }
 
-  handleFixationChange(event) {
+  handleFixationChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_FIXATION) {
         this.setState({fixation: MAX_FIXATION});
@@ -58,15 +57,15 @@ export class SpeedOptions extends Component {
     }
   }
 
-  decreaseFixation() {
+  decreaseFixation = () => {
     this.changeFixation(this.state.fixation - 10);
   }
 
-  increaseFixation() {
+  increaseFixation = () => {
     this.changeFixation(this.state.fixation + 10);
   }
 
-  changeFixation(newValue) {
+  changeFixation = (newValue) => {
     let newFixation = this.state.fixation;
     if (newValue > MAX_FIXATION) {
       newFixation = MAX_FIXATION;
@@ -79,17 +78,17 @@ export class SpeedOptions extends Component {
     this.setState({fixation: newFixation});
   }
 
-  handleKeyPress(event) {
+  handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       this.submitOptions();
     }
   }
 
-  handleBlur(event) {
+  handleBlur = (event) => {
     this.submitOptions();
   }
 
-  submitOptions() {
+  submitOptions = () => {
     const correctedOptions = {
       wpm: this.state.wpm === '' || this.state.wpm < MIN_WPM ? MIN_WPM : this.state.wpm,
       fixation: this.state.fixation === '' || this.state.fixation < MIN_FIXATION ? MIN_FIXATION : this.state.fixation,
@@ -103,21 +102,21 @@ export class SpeedOptions extends Component {
     this.setState(correctedOptions);
   }
 
-  options() {
+  options = () => {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return (
         <Aux>
           {this.props.translate('exercise-options.reading-speed') + ' '}
-          <Button icon='minus' size='mini' onClick={() => this.decreaseWPM()} />
-          <Button icon='plus' size='mini' onClick={() => this.increaseWPM()} />
+          <Button icon='minus' size='mini' onClick={this.decreaseWPM} />
+          <Button icon='plus' size='mini' onClick={this.increaseWPM} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.wpm}
-            onChange={(event) => this.handleWPMChange(event)}
-            onKeyPress={(event) => this.handleKeyPress(event)}
-            onBlur={(event) => this.handleBlur(event)}
+            onChange={this.handleWPMChange}
+            onKeyPress={this.handleKeyPress}
+            onBlur={this.handleBlur}
             style={{width: '64px', textAlign: 'right'}}
           />
           {' ' + this.props.translate('exercise-options.wpm')}
@@ -127,16 +126,16 @@ export class SpeedOptions extends Component {
       return (
         <Aux>
           {this.props.translate('exercise-options.fixation-time') + ' '}
-          <Button icon='minus' size='mini' onClick={() => this.decreaseFixation()} />
-          <Button icon='plus' size='mini' onClick={() => this.increaseFixation()} />
+          <Button icon='minus' size='mini' onClick={this.decreaseFixation} />
+          <Button icon='plus' size='mini' onClick={this.increaseFixation} />
           <Input
             type='text'
             inverted
             size='small'
             value={this.state.fixation}
-            onChange={(event) => this.handleFixationChange(event)}
-            onKeyPress={(event) => this.handleKeyPress(event)}
-            onBlur={(event) => this.handleBlur(event)}
+            onChange={this.handleFixationChange}
+            onKeyPress={this.handleKeyPress}
+            onBlur={this.handleBlur}
             style={{width: '52px'}}
           />
           {' ' + this.props.translate('exercise-options.ms')}

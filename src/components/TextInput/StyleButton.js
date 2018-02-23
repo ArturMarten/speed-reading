@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import './StyleButton.css';
 
 class StyleButton extends Component {
-  constructor() {
-    super();
-    this.onToggle = (e) => {
-      e.preventDefault();
-      this.props.onToggle(this.props.style);
-    };
-  }
+
+  onToggle = (event) => {
+    event.preventDefault();
+    this.props.onToggle(this.props.style);
+  };
 
   render() {
     let className = 'RichEditor-styleButton';
@@ -17,7 +15,7 @@ class StyleButton extends Component {
     }
 
     return (
-      <span className={className} onMouseDown={this.onToggle}>
+      <span role="button" tabIndex="0" className={className} onMouseDown={this.onToggle}>
         {this.props.label}
       </span>
     );
