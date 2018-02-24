@@ -6,7 +6,7 @@ import {getTranslate} from 'react-localize-redux';
 import * as actionCreators from '../../../store/actions';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
 
-const MIN_TEXT_WIDTH = 500;
+const MIN_TEXT_WIDTH = 250;
 const MAX_TEXT_WIDTH = 1000;
 const MIN_TEXT_LINE_COUNT = 5;
 const MAX_TEXT_LINE_COUNT = 50;
@@ -192,7 +192,7 @@ export class TextOptions extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  options: state.exercise.textOptions,
+  options: state.options.textOptions,
   translate: getTranslate(state.locale)
 });
 

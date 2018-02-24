@@ -20,6 +20,10 @@
     "password": ["Parool", "Password"],
     "sign-in": ["Logi sisse", "Login"]
   },
+  "feedback": {
+    "modal-header": ["Tagasiside", "Feedback"],
+    "send": ["Saada", "Send"]
+  },
   "home": {
     "welcome": ["Tere tulemast", "Welcome"],
     "description": [

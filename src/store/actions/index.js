@@ -7,15 +7,22 @@ export {
 } from './timing';
 
 export {
-  editorStateUpdated,
   textOptionsUpdated,
   exerciseOptionsUpdated,
+  speedOptionsUpdated
+} from './options';
+
+export {
   exerciseSelected,
-  exerciseFinished,
-  storeText
+  exerciseFinished
 } from './exercise';
 
 export {
   authLogin,
   authLogout
 } from './auth';
+
+export {
+  editorStateUpdated,
+  storeText
+} from './text';

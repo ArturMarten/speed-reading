@@ -66,7 +66,7 @@ export class Statistics extends Component {
       {text: this.props.translate('statistics.disappearing-text'), value: 'Disappearing text'}
     ];
     return (
-      <Container style={{marginTop: '4em'}} textAlign='left'>
+      <Container style={{marginTop: '4vh'}} textAlign='left'>
         <Header as='h2'>{this.props.translate('statistics.title')}</Header>
         <p>{this.props.translate('statistics.description')}</p>
         <Message warning>

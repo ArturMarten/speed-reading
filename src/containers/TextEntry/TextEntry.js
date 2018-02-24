@@ -5,9 +5,9 @@ import {Container, Segment, Header, Message, Button, Icon} from 'semantic-ui-rea
 import {getTranslate} from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-import InlineStyleControls from '../../components/TextInput/InlineStyleControls';
+import InlineStyleControls from '../../components/TextEntry/InlineStyleControls';
 
-export class TextEditor extends Component {
+export class TextEntry extends Component {
 
   onTab = (event) => {
     // Currently works only with lists
@@ -26,7 +26,7 @@ export class TextEditor extends Component {
 
   render() {
     return (
-      <Container style={{marginTop: '4em'}} textAlign='left'>
+      <Container style={{marginTop: '4vh'}} textAlign='left'>
         <Header as='h2'>{this.props.translate('text-editor.title')}</Header>
         <p>{this.props.translate('text-editor.description')}</p>
         <Message warning>
@@ -60,9 +60,9 @@ export class TextEditor extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  editorState: state.exercise.editorState,
-  translate: getTranslate(state.locale),
-  textSaveStatus: state.exercise.textSaveStatus
+  editorState: state.text.editorState,
+  textSaveStatus: state.text.textSaveStatus,
+  translate: getTranslate(state.locale)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -74,4 +74,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(TextEntry);

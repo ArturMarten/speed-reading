@@ -25,7 +25,7 @@ export class Home extends Component {
       </Image.Group>;
     }
     return (
-      <Container style={{marginTop: '4em'}} textAlign='left'>
+      <Container style={{marginTop: '4vh'}} textAlign='left'>
         <Header as='h2'>{this.props.translate('home.welcome')}</Header>
         <p>{this.props.translate('home.description')}</p>
         <Message

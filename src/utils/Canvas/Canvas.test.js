@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import {expect} from 'chai';
 import pixelmatch from 'pixelmatch';
 import fs from 'fs';
 import {writeText} from './Canvas';

@@ -29,8 +29,6 @@ export class OneGroupVisible extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.error(prevProps);
-    console.error(this.props);
     if (!prevProps.timerState.started && this.props.timerState.started) {
       // Exercise started
       update = setTimeout(() => this.nextGroup(), START_DELAY);
@@ -56,7 +54,7 @@ export class OneGroupVisible extends Component {
     const canvas = this.shownCanvas;
     let context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = this.props.fontSize + 'pt Calibri';
+    context.font = this.props.textOptions.fontSize + 'pt Calibri';
     const lineHeight = 30;
     context.fillText(this.props.wordGroups[this.cursorState.counter], this.cursorState.linePosition, lineHeight * this.cursorState.line + 20);
   }
@@ -79,7 +77,7 @@ export class OneGroupVisible extends Component {
         update = setTimeout(() => this.nextGroup(), LINE_BREAK_DELAY);
       } else {
         this.renderGroup();
-        update = setTimeout(() => this.nextGroup(), this.props.fixation);
+        update = setTimeout(() => this.nextGroup(), this.props.speedOptions.fixation);
       }
     }
   }
@@ -88,7 +86,7 @@ export class OneGroupVisible extends Component {
     return (
       <canvas 
         ref={(ref) => this.shownCanvas = ref } 
-        width={this.props.width} 
+        width={this.props.textOptions.width} 
         height={450}
       />
     );
@@ -96,11 +94,11 @@ export class OneGroupVisible extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  text: state.exercise.text,
-  wordGroups: state.exercise.wordGroups,
-  width: state.exercise.textOptions.width,
-  fontSize: state.exercise.textOptions.fontSize,
-  fixation: state.exercise.exerciseOptions.fixation,
+  text: state.text.text,
+  wordGroups: state.text.wordGroups,
+  textOptions: state.options.textOptions,
+  exerciseOptions: state.options.exerciseOptions,
+  speedOptions: state.options.speedOptions,
   timerState: state.timing.timer,
 });
 

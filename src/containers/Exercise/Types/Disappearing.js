@@ -52,7 +52,7 @@ export class Disappearing extends Component {
       const characters = this.textMetadata.wordMetadata.map(
         (wordMetadata) => wordMetadata[0].length
       ).reduce((prev, curr) => prev + curr);
-      const timeInSeconds = (this.textMetadata.wordMetadata.length/this.props.exerciseOptions.wpm) * 60;
+      const timeInSeconds = (this.textMetadata.wordMetadata.length/this.props.speedOptions.wpm) * 60;
       this.updateInterval = (timeInSeconds/characters) * 1000;
     }
   }
@@ -73,7 +73,7 @@ export class Disappearing extends Component {
       (wordMetadata) => wordMetadata[0].length
     ).reduce((prev, curr) => prev + curr);
     this.lineMetadata = getLineMetadata(this.textMetadata);
-    const timeInSeconds = (this.textMetadata.wordMetadata.length/this.props.exerciseOptions.wpm) * 60;
+    const timeInSeconds = (this.textMetadata.wordMetadata.length/this.props.speedOptions.wpm) * 60;
     this.updateInterval = (timeInSeconds/characters) * 1000;
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
@@ -99,7 +99,6 @@ export class Disappearing extends Component {
       currentWordMetadata = this.textMetadata.wordMetadata[this.cursorState.word];
     }
     if (this.cursorState.word === this.textMetadata.wordMetadata.length) {
-      console.error('ENDED');
       this.props.onExerciseFinish();
     } else {
       this.cursorState.linePosition =
@@ -135,9 +134,9 @@ export class Disappearing extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  selectedText: state.exercise.selectedText,
-  textOptions: state.exercise.textOptions,
-  exerciseOptions: state.exercise.exerciseOptions,
+  selectedText: state.text.selectedText,
+  textOptions: state.options.textOptions,
+  speedOptions: state.options.speedOptions,
   timerState: state.timing.timer,
   elapsedTime: state.timing.elapsedTime,
   translate: getTranslate(state.locale)

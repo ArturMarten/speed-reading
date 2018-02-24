@@ -104,7 +104,7 @@ export class ExerciseOptions extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  options: state.exercise.exerciseOptions,
+  options: state.options.exerciseOptions,
   exerciseType: state.exercise.type,
   translate: getTranslate(state.locale)
 });

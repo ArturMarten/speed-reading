@@ -156,13 +156,13 @@ export class SpeedOptions extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  options: state.exercise.exerciseOptions,
+  options: state.options.speedOptions,
   exerciseType: state.exercise.type,
   translate: getTranslate(state.locale)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (options) => dispatch(actionCreators.exerciseOptionsUpdated(options))
+  onSubmit: (options) => dispatch(actionCreators.speedOptionsUpdated(options))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpeedOptions);

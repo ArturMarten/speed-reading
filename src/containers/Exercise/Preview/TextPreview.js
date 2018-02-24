@@ -62,8 +62,7 @@ export class TextPreview extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  textOptions: state.exercise.textOptions,
-  exerciseOptions: state.exercise.exerciseOptions,
+  textOptions: state.options.textOptions,
   translate: getTranslate(state.locale)
 });
 

@@ -10,7 +10,7 @@ import * as translations from '../assets/translations.locale.json';
 
 const composeStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default function configureStore(history) {  
+export default function configureStore(history) {
   const store = createStore(
     connectRouter(history)(rootReducer),
     composeStoreEnhancers(
