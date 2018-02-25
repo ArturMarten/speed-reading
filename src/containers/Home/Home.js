@@ -32,7 +32,7 @@ export class Home extends Component {
           warning
           icon='chrome'
           header='Browser compatibility'
-          content='Google Chrome is currently supported.'
+          content='Only Google Chrome is currently supported.'
         />
         <Divider />
         {logos}
