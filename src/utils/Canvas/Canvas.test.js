@@ -4,7 +4,7 @@ import fs from 'fs';
 import {writeText} from './Canvas';
 import {ContentState, convertFromHTML} from 'draft-js';
 
-const imgOutputFolder = __dirname + '/../test/output';
+const imgOutputFolder = __dirname + '/../../test/output';
 
 // To get test name
 let testName = '';
