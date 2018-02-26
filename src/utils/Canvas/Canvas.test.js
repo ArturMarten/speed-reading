@@ -1,18 +1,20 @@
 import {expect} from 'chai';
 import pixelmatch from 'pixelmatch';
-import fs from 'fs';
 import {writeText} from './Canvas';
+import fs from 'fs';
 import {ContentState, convertFromHTML} from 'draft-js';
 
 const imgOutputFolder = __dirname + '/../../test/output';
 
-// To get test name
+// To get test name in Jasmine
+/*
 let testName = '';
 jasmine.getEnv().addReporter({
   specStarted: (result) => {
     testName = result.fullName;
   }
 });
+*/
 
 describe('Canvas', () => {
   const expectedCanvas = document.createElement('canvas');
@@ -29,7 +31,7 @@ describe('Canvas', () => {
   let actualContext = actualCanvas.getContext('2d');
   let diffContext = diffCanvas.getContext('2d');
 
-  beforeAll(function() {
+  before(function() {
     expectedCanvas.width = canvasWidth; expectedCanvas.height = canvasHeight;
     actualCanvas.width = canvasWidth; actualCanvas.height = canvasHeight;
     diffCanvas.width = canvasWidth; diffCanvas.height = canvasHeight;
@@ -45,6 +47,7 @@ describe('Canvas', () => {
   });
 
   afterEach(function() {
+    const testName = this.currentTest.title;
     // Reset any applied styling
     expectedContext.font = fontSize + 'pt ' + font; expectedContext.textBaseline = textBaseline;
     actualContext.font = fontSize + 'pt ' + font; actualContext.textBaseline = textBaseline;

@@ -3,6 +3,7 @@
   "plugins": ["jsx-a11y"],
   "env": {
     "jest": true,
-    "jasmine": true
+    "jasmine": true,
+    "mocha": true
   }
 }
