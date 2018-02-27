@@ -1,22 +1,27 @@
 import React from 'react';
-import {shallow} from 'enzyme';
 import {Header, Image} from 'semantic-ui-react';
-import {expect} from 'chai';
 
 import {Home} from './Home';
 
 describe('<Home />', () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = shallow(<Home translate={() => {}}/>);
+  it('renders', () => {
+    const home = shallow(<Home translate={sinon.stub()}/>);
+    expect(home).to.be.present();
   });
 
   it('should render header', () => {
-    expect(wrapper.find(Header)).to.have.length(1);
+    const home = shallow(<Home translate={sinon.stub()}/>);
+    expect(home.find(Header)).to.have.length(1);
+  });
+
+  it('should translate header', () => {
+    const translateStub = sinon.stub();
+    shallow(<Home translate={translateStub}/>);
+    expect(translateStub).to.have.been.calledWith('home.welcome')
   });
 
   it('should render two logos', () => {
-    expect(wrapper.find(Image)).to.have.length(2);
+    const home = shallow(<Home translate={sinon.stub()}/>);
+    expect(home.find(Image)).to.have.length(2);
   });
 });

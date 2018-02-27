@@ -1,9 +1,16 @@
 import jsdom from 'jsdom-global';
-import Enzyme from 'enzyme';
+import {configure, shallow, mount, render} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import chai from 'chai';
+import chaiEnzyme from 'chai-enzyme';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
 // React 16 Enzyme adapter
-Enzyme.configure({ adapter: new Adapter() });
+configure({
+  adapter: new Adapter(),
+  disableLifecycleMethods: true
+});
 
 const noop = () => 1;
 require.extensions['.css'] = noop;
@@ -14,8 +21,14 @@ require.extensions['.jpeg'] = noop;
 require.extensions['.gif'] = noop;
 require.extensions['.svg'] = noop;
 
-global.requestAnimationFrame = function(callback) {
-  setTimeout(callback, 0);
-};
-
+global.shallow = shallow;
+global.mount = mount;
+global.render = render;
+global.chai = chai;
+global.expect = chai.expect;
+global.sinon = sinon;
 jsdom();
+
+chai.should();
+chai.use(chaiEnzyme());
+chai.use(sinonChai);

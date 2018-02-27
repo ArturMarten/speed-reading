@@ -1,38 +1,60 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
 import {Modal, Rating, Button} from 'semantic-ui-react';
-import {expect} from 'chai';
 
 import {Feedback} from './Feedback';
 
-import {configure} from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-configure({ adapter: new Adapter() });
-
 describe('<Feedback />', () => {
-  let shallowWrapper;
-  let mountWrapper;
-  
-  beforeEach(() => {
-    shallowWrapper = shallow(<Feedback translate={() => {}} />);
-    // mountWrapper = mount(<Feedback translate={() => {}} />);
+  it('renders', () => {
+    const feedback = shallow(<Feedback translate={sinon.stub()} />);
+    expect(feedback).to.be.present();
   });
 
-  it('should render modal', () => {
-    expect(shallowWrapper.find(Modal)).to.have.length(1);
-    // expect(mountWrapper.find(Modal)).toHaveLength(1);
+  it('should render as modal', () => {
+    const feedback = shallow(<Feedback translate={sinon.stub()} />);
+    expect(feedback.find(Modal)).to.have.length(1);
   });
 
-  it('should contain header', () => {
-    expect(shallowWrapper.find(Modal.Header)).to.have.length(1);
+  it('should not render modal when closed', () => {
+    const feedback = shallow(<Feedback open={false} translate={sinon.stub()} />);
+    expect(feedback.find(Modal)).to.have.prop('open', false);
+  });
+
+  it('should not render modal when closed', () => {
+    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    expect(feedback.find(Modal)).to.have.prop('open', true);
+  });
+
+  it('should contain modal header', () => {
+    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    expect(feedback.find(Modal.Header)).to.have.length(1);
+  });
+
+  it('should translate modal header', () => {
+    const translateStub = sinon.stub();
+    shallow(<Feedback open={true} translate={translateStub} />);
+    expect(translateStub).to.have.been.calledWith('feedback.modal-header')
   });
 
   it('should contain rating', () => {
-    expect(shallowWrapper.find(Rating)).to.have.length(1);
+    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    expect(feedback.find(Rating)).to.have.length(1);
   });
 
   it('should contain button', () => {
-    expect(shallowWrapper.find(Button)).to.have.length(1);
+    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    expect(feedback.find(Button)).to.have.length(1);
+  });
+
+  it('should translate button', () => {
+    const translateStub = sinon.stub();
+    shallow(<Feedback open={true} translate={translateStub} />);
+    expect(translateStub).to.have.been.calledWith('feedback.send');
+  });
+
+  it('should submit on click', () => {
+    const submitStub = sinon.stub();
+    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} onSubmit={submitStub} />);
+    feedback.find(Button).simulate('click');
+    expect(submitStub).to.have.been.calledWith({});
   });
 });

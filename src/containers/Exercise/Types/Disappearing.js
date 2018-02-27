@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {getTranslate} from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-import {writeText, getLineMetadata, WordMetadata, LineMetadata} from '../../../../src/utils/Canvas/Canvas';
+import {writeText, getLineMetadata, WordMetadata, LineMetadata} from '../../../../src/utils/CanvasUtils/CanvasUtils';
 
 // Move to exercise options
 const START_DELAY = 300;

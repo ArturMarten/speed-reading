@@ -5,5 +5,12 @@
     "jest": true,
     "jasmine": true,
     "mocha": true
+  },
+  "globals": {
+    "shallow": true,
+    "mount": true,
+    "render": true,
+    "expect": true,
+    "sinon": true
   }
 }

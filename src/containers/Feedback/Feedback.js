@@ -4,6 +4,11 @@ import {Modal, Form, Button, Rating} from 'semantic-ui-react';
 import {getTranslate} from 'react-localize-redux';
 
 export class Feedback extends Component {
+
+  onSubmit = () => {
+    this.props.onSubmit({});
+  }
+
   render() {
     return(
       <Modal size='small' open={this.props.open} onClose={this.props.onClose}>
@@ -14,7 +19,7 @@ export class Feedback extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button positive>
+          <Button positive onClick={this.onSubmit}>
             {this.props.translate('feedback.send')}
           </Button>
         </Modal.Actions>
@@ -28,6 +33,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  onSubmit: () => {}
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feedback);

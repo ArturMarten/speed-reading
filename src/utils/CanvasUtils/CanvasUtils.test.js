@@ -1,6 +1,5 @@
-import {expect} from 'chai';
 import pixelmatch from 'pixelmatch';
-import {writeText} from './Canvas';
+import {writeText} from './CanvasUtils';
 import fs from 'fs';
 import {ContentState, convertFromHTML} from 'draft-js';
 
@@ -16,7 +15,7 @@ jasmine.getEnv().addReporter({
 });
 */
 
-describe('Canvas', () => {
+describe('CanvasUtils', () => {
   const expectedCanvas = document.createElement('canvas');
   const actualCanvas = document.createElement('canvas');
   const diffCanvas = document.createElement('canvas');
@@ -47,12 +46,14 @@ describe('Canvas', () => {
   });
 
   afterEach(function() {
-    const testName = this.currentTest.title;
     // Reset any applied styling
     expectedContext.font = fontSize + 'pt ' + font; expectedContext.textBaseline = textBaseline;
     actualContext.font = fontSize + 'pt ' + font; actualContext.textBaseline = textBaseline;
     diffContext.font = fontSize + 'pt ' + font; diffContext.textBaseline = textBaseline;
+    /*
+    const testName = this.currentTest.title;
     outputPNG(diffCanvas, imgOutputFolder + '/diff/' + testName + '.png');
+    */
     /*
     // When required, output actual and expected images
     outputPNG(expectedCanvas, imgOutputFolder + '/expected/' + testName + '.png');

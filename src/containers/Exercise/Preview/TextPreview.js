@@ -4,7 +4,7 @@ import {convertFromHTML, ContentState} from 'draft-js';
 import {Grid, Segment} from 'semantic-ui-react';
 import {getTranslate} from 'react-localize-redux';
 
-import {writeText} from '../../../utils/Canvas/Canvas';
+import {writeText} from '../../../utils/CanvasUtils/CanvasUtils';
 
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;

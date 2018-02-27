@@ -10,20 +10,15 @@ import study_eng_logo from '../../assets/images/study_eng.jpg';
 
 export class Home extends Component {
   render() {
-    let logos = null;
-    if (this.props.currentLanguage === 'ee') {
-      logos =
+    let logos = this.props.currentLanguage === 'ee' ?
       <Image.Group>
         <Image src={ut_est_logo} size='medium' alt='University of Tartu logo' />
         <Image src={study_est_logo} size='small' alt='Study IT logo' />
-      </Image.Group>;
-    } else {
-      logos =
+      </Image.Group> :
       <Image.Group>
         <Image src={ut_eng_logo} size='medium' alt='University of Tartu logo' />
         <Image src={study_eng_logo} size='small' alt='Study IT logo' />
       </Image.Group>;
-    }
     return (
       <Container style={{marginTop: '4vh'}} textAlign='left'>
         <Header as='h2'>{this.props.translate('home.welcome')}</Header>
