@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {convertFromHTML, ContentState} from 'draft-js';
-import {Grid, Segment} from 'semantic-ui-react';
-import {getTranslate} from 'react-localize-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { convertFromHTML, ContentState } from 'draft-js';
+import { Grid, Segment } from 'semantic-ui-react';
+import { getTranslate } from 'react-localize-redux';
 
-import {writeText} from '../../../utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../utils/CanvasUtils/CanvasUtils';
 
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;
@@ -14,7 +14,6 @@ const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p>
 const content = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
 
 export class TextPreview extends Component {
-  
   componentDidMount() {
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
@@ -22,14 +21,14 @@ export class TextPreview extends Component {
     this.init();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     this.init();
   }
 
   init() {
     this.offscreenCanvas.width = this.shownCanvas.width;
     this.offscreenCanvas.height = this.shownCanvas.height;
-    this.offscreenContext.font = this.props.textOptions.fontSize + 'pt ' + this.props.textOptions.font;
+    this.offscreenContext.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
     this.offscreenContext.textBaseline = 'bottom';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     this.textMetadata = writeText(this.offscreenContext, content);
@@ -45,10 +44,13 @@ export class TextPreview extends Component {
         </Grid.Row>
         <Grid.Row centered>
           <Segment compact>
-            <div style={{padding: TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px ' +
-                                  TEXT_VERTICAL_PADDING + 'px ' + TEXT_HORIZONTAL_PADDING + 'px'}}>
+            <div
+              style={{
+                padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
+              }}
+            >
               <canvas
-                ref={(ref) => this.shownCanvas = ref}
+                ref={(ref) => { this.shownCanvas = ref; }}
                 width={this.props.textOptions.width}
                 height={400}
               />
@@ -61,12 +63,13 @@ export class TextPreview extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   textOptions: state.options.textOptions,
-  translate: getTranslate(state.locale)
+  translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = (dispatch) => ({
+// eslint-disable-next-line no-unused-vars
+const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextPreview);

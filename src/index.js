@@ -1,29 +1,29 @@
-import 'raf/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {createMemoryHistory} from 'history';
-import {ConnectedRouter} from 'connected-react-router';
-import registerServiceWorker from './registerServiceWorker';
-
+import { Provider } from 'react-redux';
+import { createMemoryHistory } from 'history';
+import { ConnectedRouter } from 'connected-react-router';
 import 'semantic-ui-css/semantic.min.css';
 
+import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import App from './App';
 
 const history = createMemoryHistory({
-  basename: '/~arturmar/'
+  basename: '/~arturmar/',
 });
 
-let store = configureStore(history);
+const store = configureStore(history);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
-  document.getElementById('root')
+  React.createElement(
+    Provider, { store },
+    React.createElement(
+      ConnectedRouter, { history },
+      React.createElement(App),
+    ),
+  ),
+  document.getElementById('root'),
 );
 
 registerServiceWorker();

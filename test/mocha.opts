@@ -1,6 +1,6 @@
 --require babel-core/register
 --require jsdom-global/register
 --require test/MochaSetup
---recursive ./src/**/*.test.js
+--recursive ./src/**/*.test.js*
 --reporter spec
 --ui bdd

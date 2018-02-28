@@ -1,7 +1,8 @@
 {
-  "extends": ["react-app", "plugin:jsx-a11y/recommended"],
-  "plugins": ["jsx-a11y"],
+  "extends": "airbnb",
+  "parser": "babel-eslint",
   "env": {
+    "browser": true,
     "jest": true,
     "jasmine": true,
     "mocha": true
@@ -12,5 +13,22 @@
     "render": true,
     "expect": true,
     "sinon": true
+  },
+  "rules": {
+    "max-len": ["error", 150],
+    "linebreak-style": 0,
+    "react/prop-types": 0,
+    "import/no-named-as-default": 0,
+    "import/no-extraneous-dependencies": [
+      "error", {
+        "dependencies": true,
+        "devDependencies": true,
+        "optionalDependencies": true,
+        "peerDependencies": true 
+      }
+    ],
+    "no-console": [
+      "error", { "allow": ["log"]}
+    ]
   }
 }

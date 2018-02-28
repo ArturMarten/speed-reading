@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Input, Button} from 'semantic-ui-react';
-import {getTranslate} from 'react-localize-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Input, Button } from 'semantic-ui-react';
+import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
@@ -13,15 +13,15 @@ const MAX_FIXATION = 500;
 
 export class SpeedOptions extends Component {
   state = {
-    ...this.props.options
+    ...this.props.options,
   };
-  
+
   handleWPMChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_WPM) {
-        this.setState({wpm: MAX_WPM});
+        this.setState({ wpm: MAX_WPM });
       } else {
-        this.setState({wpm: +event.target.value});
+        this.setState({ wpm: +event.target.value });
       }
     }
   }
@@ -43,16 +43,16 @@ export class SpeedOptions extends Component {
     } else {
       newWPM = newValue;
     }
-    this.props.onSubmit({...this.state, wpm: newWPM});
-    this.setState({wpm: newWPM});
+    this.props.onSubmit({ ...this.state, wpm: newWPM });
+    this.setState({ wpm: newWPM });
   }
 
   handleFixationChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_FIXATION) {
-        this.setState({fixation: MAX_FIXATION});
+        this.setState({ fixation: MAX_FIXATION });
       } else {
-        this.setState({fixation: +event.target.value});
+        this.setState({ fixation: +event.target.value });
       }
     }
   }
@@ -74,8 +74,8 @@ export class SpeedOptions extends Component {
     } else {
       newFixation = newValue;
     }
-    this.props.onSubmit({...this.state, fixation: newFixation});
-    this.setState({fixation: newFixation});
+    this.props.onSubmit({ ...this.state, fixation: newFixation });
+    this.setState({ fixation: newFixation });
   }
 
   handleKeyPress = (event) => {
@@ -84,7 +84,7 @@ export class SpeedOptions extends Component {
     }
   }
 
-  handleBlur = (event) => {
+  handleBlur = () => {
     this.submitOptions();
   }
 
@@ -106,44 +106,43 @@ export class SpeedOptions extends Component {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return (
         <Aux>
-          {this.props.translate('exercise-options.reading-speed') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseWPM} />
-          <Button icon='plus' size='mini' onClick={this.increaseWPM} />
+          {`${this.props.translate('exercise-options.reading-speed')} `}
+          <Button icon="minus" size="mini" onClick={this.decreaseWPM} />
+          <Button icon="plus" size="mini" onClick={this.increaseWPM} />
           <Input
-            type='text'
+            type="text"
             inverted
-            size='small'
+            size="small"
             value={this.state.wpm}
             onChange={this.handleWPMChange}
             onKeyPress={this.handleKeyPress}
             onBlur={this.handleBlur}
-            style={{width: '64px', textAlign: 'right'}}
+            style={{ width: '64px', textAlign: 'right' }}
           />
-          {' ' + this.props.translate('exercise-options.wpm')}
+          {` ${this.props.translate('exercise-options.wpm')}`}
         </Aux>
       );
     } else if (this.props.exerciseType === 'wordGroup') {
       return (
         <Aux>
-          {this.props.translate('exercise-options.fixation-time') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseFixation} />
-          <Button icon='plus' size='mini' onClick={this.increaseFixation} />
+          {`${this.props.translate('exercise-options.fixation-time')} `}
+          <Button icon="minus" size="mini" onClick={this.decreaseFixation} />
+          <Button icon="plus" size="mini" onClick={this.increaseFixation} />
           <Input
-            type='text'
+            type="text"
             inverted
-            size='small'
+            size="small"
             value={this.state.fixation}
             onChange={this.handleFixationChange}
             onKeyPress={this.handleKeyPress}
             onBlur={this.handleBlur}
-            style={{width: '52px'}}
+            style={{ width: '52px' }}
           />
-          {' ' + this.props.translate('exercise-options.ms')}
+          {` ${this.props.translate('exercise-options.ms')}`}
         </Aux>
       );
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
@@ -155,14 +154,14 @@ export class SpeedOptions extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   options: state.options.speedOptions,
   exerciseType: state.exercise.type,
-  translate: getTranslate(state.locale)
+  translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (options) => dispatch(actionCreators.speedOptionsUpdated(options))
+const mapDispatchToProps = dispatch => ({
+  onSubmit: options => dispatch(actionCreators.speedOptionsUpdated(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpeedOptions);

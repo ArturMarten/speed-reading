@@ -4,7 +4,7 @@ const initialState = {
   token: null,
   userId: null,
   error: null,
-  loading: false
+  loading: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         error: null,
-        loading: true
+        loading: true,
       };
     case actionTypes.AUTH_SUCCEEDED:
       return {
@@ -21,19 +21,19 @@ const reducer = (state = initialState, action) => {
         token: action.token,
         userId: action.userId,
         error: null,
-        loading: false
+        loading: false,
       };
     case actionTypes.AUTH_FAILED:
       return {
         ...state,
         error: action.error,
-        loading: false
+        loading: false,
       };
     case actionTypes.AUTH_LOGOUT:
       return {
         ...state,
         token: null,
-        userId: null
+        userId: null,
       };
     default:
       return state;

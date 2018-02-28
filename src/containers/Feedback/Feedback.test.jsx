@@ -1,7 +1,7 @@
 import React from 'react';
-import {Modal, Rating, Button} from 'semantic-ui-react';
+import { Modal, Rating, Button } from 'semantic-ui-react';
 
-import {Feedback} from './Feedback';
+import { Feedback } from './Feedback';
 
 describe('<Feedback />', () => {
   it('renders', () => {
@@ -20,40 +20,40 @@ describe('<Feedback />', () => {
   });
 
   it('should not render modal when closed', () => {
-    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    const feedback = shallow(<Feedback open translate={sinon.stub()} />);
     expect(feedback.find(Modal)).to.have.prop('open', true);
   });
 
   it('should contain modal header', () => {
-    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    const feedback = shallow(<Feedback open translate={sinon.stub()} />);
     expect(feedback.find(Modal.Header)).to.have.length(1);
   });
 
   it('should translate modal header', () => {
     const translateStub = sinon.stub();
-    shallow(<Feedback open={true} translate={translateStub} />);
-    expect(translateStub).to.have.been.calledWith('feedback.modal-header')
+    shallow(<Feedback open translate={translateStub} />);
+    expect(translateStub).to.have.been.calledWith('feedback.modal-header');
   });
 
   it('should contain rating', () => {
-    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    const feedback = shallow(<Feedback open translate={sinon.stub()} />);
     expect(feedback.find(Rating)).to.have.length(1);
   });
 
   it('should contain button', () => {
-    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} />);
+    const feedback = shallow(<Feedback open translate={sinon.stub()} />);
     expect(feedback.find(Button)).to.have.length(1);
   });
 
   it('should translate button', () => {
     const translateStub = sinon.stub();
-    shallow(<Feedback open={true} translate={translateStub} />);
+    shallow(<Feedback open translate={translateStub} />);
     expect(translateStub).to.have.been.calledWith('feedback.send');
   });
 
   it('should submit on click', () => {
     const submitStub = sinon.stub();
-    const feedback = shallow(<Feedback open={true} translate={sinon.stub()} onSubmit={submitStub} />);
+    const feedback = shallow(<Feedback open translate={sinon.stub()} onSubmit={submitStub} />);
     feedback.find(Button).simulate('click');
     expect(submitStub).to.have.been.calledWith({});
   });

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {getTranslate} from 'react-localize-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-import {writeText, getLineMetadata, WordMetadata, LineMetadata} from '../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText, getLineMetadata, WordMetadata, LineMetadata } from '../../../../src/utils/CanvasUtils/CanvasUtils';
 
 // Move to exercise options
 const START_DELAY = 300;
@@ -14,14 +14,10 @@ const initialState = {
   word: 0,
   lineCharacter: -1,
   linePosition: 0,
-  currentRect: [0, 0, 0, 0]
+  currentRect: [0, 0, 0, 0],
 };
 
 export class Disappearing extends Component {
-  cursorState = {
-    ...initialState
-  };
-
   componentDidMount() {
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
@@ -37,7 +33,7 @@ export class Disappearing extends Component {
     } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
-      this.cursorState = {...initialState};
+      this.cursorState = { ...initialState };
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     } else if (!prevProps.timerState.stopped && this.props.timerState.stopped) {
@@ -49,11 +45,11 @@ export class Disappearing extends Component {
       // Text/exercise options or text changed
       // this.init();
       // this.draw();
-      const characters = this.textMetadata.wordMetadata.map(
-        (wordMetadata) => wordMetadata[0].length
-      ).reduce((prev, curr) => prev + curr);
-      const timeInSeconds = (this.textMetadata.wordMetadata.length/this.props.speedOptions.wpm) * 60;
-      this.updateInterval = (timeInSeconds/characters) * 1000;
+      const characters = this.textMetadata.wordMetadata
+        .map(wordMetadata => wordMetadata[0].length)
+        .reduce((prev, curr) => prev + curr);
+      const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
+      this.updateInterval = (timeInSeconds / characters) * 1000;
     }
   }
 
@@ -61,20 +57,22 @@ export class Disappearing extends Component {
     clearTimeout(update);
   }
 
+  cursorState = { ...initialState };
+
   init() {
     this.offscreenCanvas.width = this.shownCanvas.width;
     this.offscreenCanvas.height = this.shownCanvas.height;
-    this.offscreenContext.font = this.props.textOptions.fontSize + 'pt ' + this.props.textOptions.font;
+    this.offscreenContext.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
     this.offscreenContext.textBaseline = 'bottom';
-    this.shownContext.fillStyle='rgba(0, 255, 0, 0.9)';
+    this.shownContext.fillStyle = 'rgba(0, 255, 0, 0.9)';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.content);
-    const characters = this.textMetadata.wordMetadata.map(
-      (wordMetadata) => wordMetadata[0].length
-    ).reduce((prev, curr) => prev + curr);
+    const characters = this.textMetadata.wordMetadata
+      .map(wordMetadata => wordMetadata[0].length)
+      .reduce((prev, curr) => prev + curr);
     this.lineMetadata = getLineMetadata(this.textMetadata);
-    const timeInSeconds = (this.textMetadata.wordMetadata.length/this.props.speedOptions.wpm) * 60;
-    this.updateInterval = (timeInSeconds/characters) * 1000;
+    const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
+    this.updateInterval = (timeInSeconds / characters) * 1000;
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
   }
@@ -103,16 +101,19 @@ export class Disappearing extends Component {
     } else {
       this.cursorState.linePosition =
       this.lineMetadata[lineNumber][LineMetadata.StartX] +
-      this.cursorState.lineCharacter * this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth];
+      (this.cursorState.lineCharacter * this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth]);
       // console.error(this.cursorState.linePosition);
 
       this.cursorState.currentRect = [
         this.cursorState.linePosition,
         currentWordMetadata[WordMetadata.StartY] - 20,
         this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth],
-        this.props.textOptions.fontSize + 2
+        this.props.textOptions.fontSize + 2,
       ];
-      update = setTimeout(() => this.update(), this.cursorState.newLine ? this.updateInterval + LINE_BREAK_DELAY : this.updateInterval);
+      update = setTimeout(
+        () => this.update(),
+        this.cursorState.newLine ? this.updateInterval + LINE_BREAK_DELAY : this.updateInterval,
+      );
       requestAnimationFrame(() => this.draw());
     }
   }
@@ -125,7 +126,7 @@ export class Disappearing extends Component {
   render() {
     return (
       <canvas
-        ref={(ref) => this.shownCanvas = ref}
+        ref={(ref) => { this.shownCanvas = ref; }}
         width={this.props.textOptions.width}
         height={1000}
       />
@@ -133,19 +134,19 @@ export class Disappearing extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   selectedText: state.text.selectedText,
   textOptions: state.options.textOptions,
   speedOptions: state.options.speedOptions,
   timerState: state.timing.timer,
   elapsedTime: state.timing.elapsedTime,
-  translate: getTranslate(state.locale)
+  translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   onExerciseFinish: () => {
     dispatch(actionCreators.exerciseFinished());
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Disappearing);

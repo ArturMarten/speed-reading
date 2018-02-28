@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Segment} from 'semantic-ui-react';
-import {getTranslate} from 'react-localize-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Segment } from 'semantic-ui-react';
+import { getTranslate } from 'react-localize-redux';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 export class TextSelection extends Component {
+  state = {};
   render() {
     return (
       <Aux>
@@ -18,12 +19,13 @@ export class TextSelection extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   selectedText: state.selectedText,
-  translate: getTranslate(state.locale)
+  translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = (dispatch) => ({
+// eslint-disable-next-line no-unused-vars
+const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSelection);

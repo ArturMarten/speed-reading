@@ -1,18 +1,29 @@
 export const WordMetadata = {
-    Word: 0,
+  Word: 0,
   StartX: 1,
-    EndX: 2,
-  StartY: 3
+  EndX: 2,
+  StartY: 3,
 };
 
 export const LineMetadata = {
   CharacterCount: 0,
   AverageCharacterWidth: 1,
   StartX: 2,
-  EndX: 3
+  EndX: 3,
 };
 
-export function writeText(canvasContext, content, textOptions = {lineHeight: 20, paragraphSpace: 5}) {
+function getCanvasFont(defaultStyle, nextStyle) {
+  let result = defaultStyle;
+  if (nextStyle.contains('BOLD')) {
+    result = `bold ${result}`;
+  }
+  if (nextStyle.contains('ITALIC')) {
+    result = `italic ${result}`;
+  }
+  return result;
+}
+
+export function writeText(canvasContext, content, textOptions = { lineHeight: 20, paragraphSpace: 5 }) {
   const canvasWidth = canvasContext.canvas.width;
   const text = content.getPlainText('\n').replace(/\n/g, '');
   let currentBlock = content.getFirstBlock();
@@ -44,10 +55,10 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
     currentBlockLength = currentBlock.getText().length;
   };
 
-  const newLine = ({additionalSpacing = 0, text = ''}) => {
+  const newLine = ({ additionalSpacing = 0, overflowText = '' }) => {
     fillXStart = 0;
     fillYStart += textOptions.lineHeight + additionalSpacing;
-    fillText = text;
+    fillText = overflowText;
     wordStartPosition = 0;
     lines.push(fillYStart);
   };
@@ -64,78 +75,66 @@ export function writeText(canvasContext, content, textOptions = {lineHeight: 20,
   };
   // console.log(content.getBlockMap().toArray()[0].getCharacterList());
 
-  letters.forEach(
-    (currentLetter, letterIndex) => {
-      if (letterIndex === previousBlocksLength + currentBlockLength) {
-        // Block ended
+  letters.forEach((currentLetter, letterIndex) => {
+    if (letterIndex === previousBlocksLength + currentBlockLength) {
+      // Block ended
+      nextBlock();
+      while (currentBlockLength === 0) {
+        newLine({});
         nextBlock();
-        while (currentBlockLength === 0) {
-          newLine({});
-          nextBlock();
-        }
-        draw();
-        addWordMetadata();
-        newLine({additionalSpacing: textOptions.paragraphSpace});
       }
-      const styledBlock = characterMetadata.get(letterIndex - previousBlocksLength);
-      const nextStyle = styledBlock.getStyle();
-      if (currentStyle !== nextStyle) {
-        // Style changed
-        // Draw previous styled text
+      draw();
+      addWordMetadata();
+      newLine({ additionalSpacing: textOptions.paragraphSpace });
+    }
+    const styledBlock = characterMetadata.get(letterIndex - previousBlocksLength);
+    const nextStyle = styledBlock.getStyle();
+    if (currentStyle !== nextStyle) {
+      // Style changed
+      // Draw previous styled text
+      draw();
+      const fillTextWidth = canvasContext.measureText(fillText).width;
+      fillXStart += fillTextWidth;
+      fillText = currentLetter;
+      // Update with new style
+      canvasContext.font = getCanvasFont(defaultStyle, nextStyle); // eslint-disable-line no-param-reassign
+      spaceWidth = canvasContext.measureText(' ').width;
+      currentStyle = nextStyle;
+    } else {
+      fillText += currentLetter;
+    }
+    if (currentLetter === ' ') {
+      // Word ended
+      // Check if it fits in current line
+      const wordWidth = canvasContext.measureText(currentWord).width;
+      if (wordStartPosition + wordWidth > canvasWidth) {
+        fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
         draw();
+        newLine({ overflowText: `${currentWord} ` });
+      }
+      addWordMetadata();
+      wordStartPosition = wordStartPosition + spaceWidth + wordWidth;
+    } else {
+      currentWord += currentLetter;
+      if (letterIndex + 1 === textLength) {
+        // Text ended
+        // Draw all remaining text
         const fillTextWidth = canvasContext.measureText(fillText).width;
-        fillXStart += fillTextWidth;
+        draw();
+        fillXStart = fillTextWidth;
         fillText = currentLetter;
-        // Update with new style
-        canvasContext.font = getCanvasFont(defaultStyle, nextStyle);
-        spaceWidth = canvasContext.measureText(' ').width;
-        currentStyle = nextStyle;
-      } else {
-        fillText += currentLetter;
-      }
-      if (currentLetter === ' ') {
-        // Word ended
-        // Check if it fits in current line
-        const wordWidth = canvasContext.measureText(currentWord).width;
-        if (wordStartPosition + wordWidth > canvasWidth) {
-          fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
-          draw();
-          newLine({text: currentWord + ' '});
-        }
+        // Add remaining word metadata
         addWordMetadata();
-        wordStartPosition = wordStartPosition + spaceWidth + wordWidth;
-      } else {
-        currentWord += currentLetter;
-        if (letterIndex + 1 === textLength) {
-          // Text ended
-          // Draw all remaining text
-          const fillTextWidth = canvasContext.measureText(fillText).width;
-          draw();
-          fillXStart = fillTextWidth;
-          fillText = currentLetter;
-          // Add remaining word metadata
-          addWordMetadata();
-          wordStartPosition = 0;
-        }
+        wordStartPosition = 0;
       }
     }
-  );
-  return {wordMetadata: wordMetadata, lines: lines};
+  });
+  return { wordMetadata, lines };
 }
 
-function getCanvasFont(defaultStyle, nextStyle) {
-  let result = defaultStyle;
-  if (nextStyle.contains('BOLD')) {
-    result = 'bold ' + result;
-  }
-  if (nextStyle.contains('ITALIC')) {
-    result = 'italic ' + result;
-  }
-  return result;
-}
 
 export function getLineMetadata(textMetadata) {
-  let lineMetadata = [];
+  const lineMetadata = [];
   let line = textMetadata.wordMetadata[0][WordMetadata.StartY];
   let lineLength = 0;
   let lineStartX = textMetadata.wordMetadata[0][1];

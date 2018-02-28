@@ -1,5 +1,5 @@
-import {combineReducers} from 'redux';
-import {localeReducer} from 'react-localize-redux';
+import { combineReducers } from 'redux';
+import { localeReducer } from 'react-localize-redux';
 
 import authReducer from './auth';
 import textReducer from './text';
@@ -13,5 +13,5 @@ export default combineReducers({
   timing: timingReducer,
   options: optionsReducer,
   exercise: exerciseReducer,
-  locale: localeReducer
+  locale: localeReducer,
 });

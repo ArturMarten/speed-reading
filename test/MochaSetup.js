@@ -1,5 +1,5 @@
 import jsdom from 'jsdom-global';
-import {configure, shallow, mount, render} from 'enzyme';
+import { configure, shallow, mount, render } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import chai from 'chai';
 import chaiEnzyme from 'chai-enzyme';
@@ -9,7 +9,7 @@ import sinonChai from 'sinon-chai';
 // React 16 Enzyme adapter
 configure({
   adapter: new Adapter(),
-  disableLifecycleMethods: true
+  disableLifecycleMethods: true,
 });
 
 const noop = () => 1;

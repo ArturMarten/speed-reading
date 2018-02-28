@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './StyleButton.css';
 
 class StyleButton extends Component {
-
   onToggle = (event) => {
     event.preventDefault();
     this.props.onToggle(this.props.style);

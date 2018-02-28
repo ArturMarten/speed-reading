@@ -3,26 +3,26 @@ export {
   pauseRequested,
   resumeRequested,
   resetRequested,
-  stopRequested
+  stopRequested,
 } from './timing';
 
 export {
   textOptionsUpdated,
   exerciseOptionsUpdated,
-  speedOptionsUpdated
+  speedOptionsUpdated,
 } from './options';
 
 export {
   exerciseSelected,
-  exerciseFinished
+  exerciseFinished,
 } from './exercise';
 
 export {
   authLogin,
-  authLogout
+  authLogout,
 } from './auth';
 
 export {
   editorStateUpdated,
-  storeText
+  storeText,
 } from './text';

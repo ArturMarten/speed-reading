@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import * as actionCreators from '../../../store/actions';
 
@@ -16,26 +16,22 @@ const initialState = {
   characterWidth: 0,
   lineLength: 0,
   lineBreak: false,
-  end: false
+  end: false,
 };
 
 export class OneGroupVisible extends Component {
-  cursorState = {
-    ...initialState
-  };
-
   componentDidMount() {
     this.renderGroup();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (!prevProps.timerState.started && this.props.timerState.started) {
       // Exercise started
       update = setTimeout(() => this.nextGroup(), START_DELAY);
     } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
-      this.cursorState = {...initialState};
+      this.cursorState = { ...initialState };
       this.renderGroup();
     } else if (!prevProps.timerState.paused && this.props.timerState.paused) {
       // Exercise paused
@@ -50,20 +46,13 @@ export class OneGroupVisible extends Component {
     if (update) clearTimeout(update);
   }
 
-  renderGroup() {
-    const canvas = this.shownCanvas;
-    let context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = this.props.textOptions.fontSize + 'pt Calibri';
-    const lineHeight = 30;
-    context.fillText(this.props.wordGroups[this.cursorState.counter], this.cursorState.linePosition, lineHeight * this.cursorState.line + 20);
-  }
+  cursorState = { ...initialState };
 
   nextGroup() {
     // Calculate next word group new line position
     const canvas = this.shownCanvas;
-    let context = canvas.getContext('2d');
-    let maxWidth = canvas.width;
+    const context = canvas.getContext('2d');
+    const maxWidth = canvas.width;
     const previousWordGroupWidth = context.measureText(this.wordGroup).width;
     this.cursorState.linePosition = this.cursorState.linePosition + previousWordGroupWidth;
     if (this.props.wordGroups[this.cursorState.counter + 1]) {
@@ -82,18 +71,31 @@ export class OneGroupVisible extends Component {
     }
   }
 
+  renderGroup() {
+    const canvas = this.shownCanvas;
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = `${this.props.textOptions.fontSize}pt Calibri`;
+    const lineHeight = 30;
+    context.fillText(
+      this.props.wordGroups[this.cursorState.counter],
+      this.cursorState.linePosition,
+      (lineHeight * this.cursorState.line) + 20,
+    );
+  }
+
   render() {
     return (
-      <canvas 
-        ref={(ref) => this.shownCanvas = ref } 
-        width={this.props.textOptions.width} 
+      <canvas
+        ref={(ref) => { this.shownCanvas = ref; }}
+        width={this.props.textOptions.width}
         height={450}
       />
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   text: state.text.text,
   wordGroups: state.text.wordGroups,
   textOptions: state.options.textOptions,
@@ -102,10 +104,10 @@ const mapStateToProps = (state) => ({
   timerState: state.timing.timer,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   onExerciseSelect: (type) => {
     dispatch(actionCreators.exerciseSelected(type));
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OneGroupVisible);

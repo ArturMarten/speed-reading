@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Input, Button} from 'semantic-ui-react';
-import {getTranslate} from 'react-localize-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Input, Button } from 'semantic-ui-react';
+import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
@@ -11,15 +11,15 @@ const MAX_CHARACTER_COUNT = 30;
 
 export class ExerciseOptions extends Component {
   state = {
-    ...this.props.options
+    ...this.props.options,
   };
 
   handleCharacterCountChange = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       if (event.target.value > MAX_CHARACTER_COUNT) {
-        this.setState({characterCount: MAX_CHARACTER_COUNT});
+        this.setState({ characterCount: MAX_CHARACTER_COUNT });
       } else {
-        this.setState({characterCount: +event.target.value});
+        this.setState({ characterCount: +event.target.value });
       }
     }
   }
@@ -41,8 +41,8 @@ export class ExerciseOptions extends Component {
     } else {
       newCharacterCount = newValue;
     }
-    this.props.onSubmit({...this.state, characterCount: newCharacterCount});
-    this.setState({characterCount: newCharacterCount});
+    this.props.onSubmit({ ...this.state, characterCount: newCharacterCount });
+    this.setState({ characterCount: newCharacterCount });
   }
 
   handleKeyPress = (event) => {
@@ -51,7 +51,7 @@ export class ExerciseOptions extends Component {
     }
   }
 
-  handleBlur = (event) => {
+  handleBlur = () => {
     this.submitOptions();
   }
 
@@ -73,25 +73,24 @@ export class ExerciseOptions extends Component {
     if (this.props.exerciseType === 'wordGroup') {
       return (
         <Aux>
-          {this.props.translate('exercise-options.character-count') + ' '}
-          <Button icon='minus' size='mini' onClick={this.decreaseCharacterCount} />
-          <Button icon='plus' size='mini' onClick={this.increaseCharacterCount} />
+          {`${this.props.translate('exercise-options.character-count')} `}
+          <Button icon="minus" size="mini" onClick={this.decreaseCharacterCount} />
+          <Button icon="plus" size="mini" onClick={this.increaseCharacterCount} />
           <Input
-            type='text'
+            type="text"
             inverted
-            size='small'
+            size="small"
             value={this.state.characterCount}
             onChange={this.handleCharacterCountChange}
             onKeyPress={this.handleKeyPress}
             onBlur={this.handleBlur}
-            style={{width: '52px'}}
+            style={{ width: '52px' }}
           />
-          {' ' + this.props.translate('exercise-options.characters')}
+          {` ${this.props.translate('exercise-options.characters')}`}
         </Aux>
       );
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
@@ -103,14 +102,14 @@ export class ExerciseOptions extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   options: state.options.exerciseOptions,
   exerciseType: state.exercise.type,
-  translate: getTranslate(state.locale)
+  translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (options) => dispatch(actionCreators.exerciseOptionsUpdated(options))
+const mapDispatchToProps = dispatch => ({
+  onSubmit: options => dispatch(actionCreators.exerciseOptionsUpdated(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExerciseOptions);

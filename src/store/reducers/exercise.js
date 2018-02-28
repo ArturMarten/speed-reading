@@ -1,46 +1,46 @@
 import * as actionTypes from '../actions/actionTypes';
-import {splitIntoWordGroups} from '../../utils/TextUtils';
-import {updateObject} from '../../shared/utility';
+import { splitIntoWordGroups } from '../../utils/TextUtils';
+import { updateObject } from '../../shared/utility';
 
 
 const initialState = {
   type: '',
   started: false,
   finished: false,
-  textSaveStatus: 'Unsaved'
+  textSaveStatus: 'Unsaved',
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.TIMER_START: {
       return updateObject(state, {
-        started: true
+        started: true,
       });
     }
     case actionTypes.TIMER_STOP: {
       return updateObject(state, {
-        finished: true
+        finished: true,
       });
     }
     case actionTypes.EXERCISE_FINISHED: {
       return updateObject(state, {
-        finished: true
+        finished: true,
       });
     }
     case actionTypes.PREPARE_EXERCISE: {
       const wordGroups = splitIntoWordGroups(action.payload.text, action.payload.characterCount);
       return {
         ...state,
-        wordGroups: wordGroups
+        wordGroups,
       };
     }
     case actionTypes.EXERCISE_SELECTED: {
-      console.log('Exercise selected: ' + action.payload);
+      console.log(`Exercise selected: ${action.payload}`);
       return {
         ...state,
         type: action.payload,
         started: false,
-        finished: false
+        finished: false,
       };
     }
     default:
