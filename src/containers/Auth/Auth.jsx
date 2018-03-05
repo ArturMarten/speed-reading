@@ -33,9 +33,7 @@ const initialState = {
 };
 
 export class Auth extends Component {
-  state = {
-    ...initialState,
-  }
+  state = { ...initialState };
 
   onLogin = () => {
     this.props.onLogin(this.state.loginForm.email.value, this.state.loginForm.password.value);
@@ -67,8 +65,8 @@ export class Auth extends Component {
     return (
       <Aux>
         {authRedirect}
-        <Modal size="mini" open={this.props.open && !this.props.isAuthenticated} onClose={this.props.onClose}>
-          <Modal.Header>{this.props.translate('login.modal-header')}</Modal.Header>
+        <Modal size="mini" open={this.props.open && !this.props.isAuthenticated} onClose={this.props.onClose} closeIcon>
+          <Modal.Header>{this.props.translate('auth.modal-header')}</Modal.Header>
           <Modal.Content>
             <Form>
               <Form.Input
@@ -78,7 +76,7 @@ export class Auth extends Component {
                 value={this.state.loginForm.email.value}
                 error={!this.state.loginForm.email.valid && this.state.loginForm.email.touched}
                 onChange={this.inputChangeHandler}
-                placeholder={this.props.translate('login.username')}
+                placeholder={this.props.translate('auth.username')}
                 type="email"
                 autoComplete="email"
                 required
@@ -90,7 +88,7 @@ export class Auth extends Component {
                 value={this.state.loginForm.password.value}
                 error={!this.state.loginForm.password.valid && this.state.loginForm.password.touched}
                 onChange={this.inputChangeHandler}
-                placeholder={this.props.translate('login.password')}
+                placeholder={this.props.translate('auth.password')}
                 type="password"
                 autoComplete="password"
                 required
@@ -106,7 +104,7 @@ export class Auth extends Component {
               disabled={!this.state.loginFormValid || this.props.loading}
               onClick={this.onLogin}
             >
-              {this.props.translate('login.sign-in')}
+              {this.props.translate('auth.login-button')}
             </Button>
           </Modal.Actions>
         </Modal>

@@ -8,12 +8,14 @@ import { environment } from '../../environment';
 import * as actionCreators from '../../store/actions';
 import Auth from '../../containers/Auth/Auth';
 import LanguageSelection from '../LanguageSelection/LanguageSelection';
+import Feedback from '../Feedback/Feedback';
 
 export class ResponsiveLayout extends Component {
   state = {
     activeItem: this.props.path.split('/').pop(),
     sidebarOpened: false,
     authOpened: false,
+    feedbackOpened: false,
   };
 
   onLogout = () => {
@@ -28,6 +30,10 @@ export class ResponsiveLayout extends Component {
     this.setState({ authOpened: !this.state.authOpened });
   }
 
+  feedbackToggleHandler = () => {
+    this.setState({ feedbackOpened: !this.state.feedbackOpened });
+  }
+
   itemClickHandler = (event, { name }) => {
     this.setState({
       sidebarOpened: false,
@@ -40,7 +46,23 @@ export class ResponsiveLayout extends Component {
 
     return (
       <Sidebar.Pushable>
+        <Auth open={this.state.authOpened} onClose={this.authToggleHandler} />
+        <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} />
         <Sidebar as={Menu} animation="push" vertical visible={this.state.sidebarOpened}>
+          <Menu.Menu>
+            <Menu.Item>
+              {this.props.isAuthenticated ?
+                <Button fluid positive icon labelPosition="right" onClick={this.onLogout}>
+                  {this.props.translate('auth.logout-button')}
+                  <Icon name="sign out" style={{ opacity: 1 }} />
+                </Button> :
+                <Button fluid positive icon labelPosition="right" onClick={this.authToggleHandler}>
+                  {this.props.translate('auth.login-button')}
+                  <Icon name="sign in" style={{ opacity: 1 }} />
+                </Button>
+              }
+            </Menu.Item>
+          </Menu.Menu>
           <Menu.Item
             name=""
             active={this.state.activeItem === ''}
@@ -122,7 +144,7 @@ export class ResponsiveLayout extends Component {
                 <LanguageSelection />
               </Grid.Column>
               <Grid.Column>
-                <Icon name="comment" color="grey" size="big" />
+                <Icon name="talk" color="grey" size="big" onClick={this.feedbackToggleHandler} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -229,19 +251,18 @@ export class ResponsiveLayout extends Component {
                 <Menu.Item fitted>
                   {this.props.isAuthenticated ?
                     <Button positive icon labelPosition="right" onClick={this.onLogout}>
-                      Logi välja
+                      {this.props.translate('auth.logout-button')}
                       <Icon name="sign out" style={{ opacity: 1 }} />
                     </Button> :
                     <Button positive icon labelPosition="right" onClick={this.authToggleHandler}>
-                      {this.props.translate('login.login-button')}
+                      {this.props.translate('auth.login-button')}
                       <Icon name="sign in" style={{ opacity: 1 }} />
                     </Button>
                   }
-                  <Auth open={this.state.authOpened} onClose={this.authToggleHandler} />
                 </Menu.Item>
                 <Menu.Item fitted>
                   <Popup
-                    trigger={<Icon fitted name="comment" color="grey" size="big" />}
+                    trigger={<Icon fitted name="talk" color="grey" size="big" onClick={this.feedbackToggleHandler} />}
                     content={this.props.translate('menu.feedback-popup')}
                     on="hover"
                   />
@@ -269,6 +290,5 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actionCreators.authLogout());
   },
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResponsiveLayout);

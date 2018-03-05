@@ -1,9 +1,10 @@
 import React from 'react';
 import StyleButton from './StyleButton';
+import TextCounter from './TextCounter';
 
 const INLINE_STYLES = [
-  { label: 'Bold', style: 'BOLD', translate: 'text-editor.bold' },
-  { label: 'Italic', style: 'ITALIC', translate: 'text-editor.italic' },
+  { label: 'Bold', style: 'BOLD', translate: 'text-entry.editor-bold' },
+  { label: 'Italic', style: 'ITALIC', translate: 'text-entry.editor-italic' },
 //  { label: 'Underline', style: 'UNDERLINE' },
 //  { label: 'Monospace', style: 'CODE' },
 ];
@@ -11,7 +12,7 @@ const INLINE_STYLES = [
 const InlineStyleControls = (props) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
-    <div className="RichEditor-controls">
+    <div className="DraftEditor-controls">
       {INLINE_STYLES.map(type =>
         (<StyleButton
           key={type.label}
@@ -20,6 +21,10 @@ const InlineStyleControls = (props) => {
           onToggle={props.onToggle}
           style={type.style}
         />))}
+      <TextCounter
+        translate={props.translate}
+        editorState={props.editorState}
+      />
     </div>
   );
 };

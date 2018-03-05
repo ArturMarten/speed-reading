@@ -17,7 +17,7 @@ storiesOf('Home', module)
   .addDecorator(story => <Provider story={story()} />)
   .add('Default', () => <Home />);
 
-storiesOf('Text input', module)
+storiesOf('Text entry', module)
   .addDecorator(story => <Provider story={story()} />)
   .add('Editor', () => <TextEntry />);
 
@@ -39,4 +39,6 @@ storiesOf('Auth', module)
 
 storiesOf('Feedback', module)
   .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <Feedback open />);
+  .add('Before submission', () => <Feedback open loading={false} sent={false} />)
+  .add('Submitted', () => <Feedback open loading sent={false} />)
+  .add('After Submission', () => <Feedback open loading={false} sent />);

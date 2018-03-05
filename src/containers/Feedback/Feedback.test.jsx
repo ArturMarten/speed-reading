@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Rating, Button } from 'semantic-ui-react';
+import { Modal, Rating, TextArea, Button } from 'semantic-ui-react';
 
 import { Feedback } from './Feedback';
 
@@ -35,9 +35,14 @@ describe('<Feedback />', () => {
     expect(translateStub).to.have.been.calledWith('feedback.modal-header');
   });
 
-  it('should contain rating', () => {
+  it('should contain three rating bars', () => {
     const feedback = shallow(<Feedback open translate={sinon.stub()} />);
-    expect(feedback.find(Rating)).to.have.length(1);
+    expect(feedback.find(Rating)).to.have.length(3);
+  });
+
+  it('should contain a textarea', () => {
+    const feedback = shallow(<Feedback open translate={sinon.stub()} />);
+    expect(feedback.find(TextArea)).to.have.length(1);
   });
 
   it('should contain button', () => {

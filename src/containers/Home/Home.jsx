@@ -12,7 +12,7 @@ export class Home extends Component {
   state = {};
   render() {
     return (
-      <Container style={{ marginTop: '4vh' }} textAlign="left">
+      <Container style={{ marginTop: '4vh' }}>
         <Header as="h2">{this.props.translate('home.welcome')}</Header>
         <p>{this.props.translate('home.description')}</p>
         <Message

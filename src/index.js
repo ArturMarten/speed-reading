@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createMemoryHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
 import 'semantic-ui-css/semantic.min.css';
+import './polyfill';
 
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';

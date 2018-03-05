@@ -11,18 +11,26 @@
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
     "statistics": ["Statistika", "Statistics"],
-    "feedback-popup": ["Anna tagasisidet või teata veast", "Give feedback or report a bug"]
+    "feedback-popup": ["Anna tagasisidet", "Give feedback"]
   },
-  "login": {
+  "auth": {
     "login-button": ["Logi sisse", "Login"],
     "modal-header": ["Kasutaja autentimine", "Account authentication"],
     "username": ["E-maili aadress", "E-mail address"],
     "password": ["Parool", "Password"],
-    "sign-in": ["Logi sisse", "Login"]
+    "logout-button": ["Logi välja", "Logout"]
   },
   "feedback": {
     "modal-header": ["Tagasiside", "Feedback"],
-    "send": ["Saada", "Send"]
+    "functionality-rating": ["Funktsionaalsus", "Functionality"],
+    "usability-rating": ["Kasutusmugavus", "Usability"],
+    "design-rating": ["Disain", "Design"],
+    "textarea-message": ["Tagasiside", "Feedback"],
+    "textarea-placeholder": ["Sisesta tagasiside siia...", "Insert feedback here..."],
+    "anonymous": ["Anonüümne", "Anonymous"],
+    "send": ["Saada", "Send"],
+    "sent-message-header": ["Tagasiside saadetud", "Feedback sent"],
+    "sent-message-content": ["Tänud abistamast!", "Thank you for your contribution!"]
   },
   "home": {
     "welcome": ["Tere tulemast", "Welcome"],
@@ -31,16 +39,29 @@
       "To get started, choose an exercise from the menu above!"
     ]
   },
-  "text-editor": {
+  "text-entry": {
     "title": ["Tekstide sisestamine", "Text entry"],
     "description": [
       "Siin saab lisada enda tekste harjutustes kasutamiseks.", 
       "Here you can add your own texts for exercises"
     ],
-    "warning-title": ["Tekstile stiili lisamine", "Text styling"],
-    "warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
-    "bold": ["Rasvane", "Bold"],
-    "italic": ["Kaldkirjas", "Italic"],
+    "text-title": ["Pealkiri", "Title"],
+    "text-title-placeholder": ["Teksti pealkiri", "Text title"],
+    "text-author": ["Autor", "Author"],
+    "text-author-placeholder": ["Teksti autor", "Text author"],
+    "text-collection": ["Kogumik", "Collection"],
+    "text-collection-placeholder": ["Teksti kogumik", "Text collection"],
+    "editor-text": ["Tekst", "Text"],
+    "editor-warning-title": ["Tekstile stiili lisamine", "Text styling"],
+    "editor-warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
+    "editor-bold": ["Rasvane", "Bold"],
+    "editor-italic": ["Kaldkirjas", "Italic"],
+    "editor-characters": ["Tähemärke", "Characters"],
+    "editor-words": ["Sõnu", "Words"],
+    "editor-sentences": ["Lauseid", "Sentences"],
+    "text-complexity": ["Keerukus", "Complexity"],
+    "text-keyword-placeholder": ["Lisa märksõna", "Add keyword"],
+    "text-keyword-popup": ["Lisamiseks vajuta Enterit", "Press Enter to add"],
     "save": ["Salvesta", "Save"]
   },
   "exercises": {

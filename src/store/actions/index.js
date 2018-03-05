@@ -26,3 +26,5 @@ export {
   editorStateUpdated,
   storeText,
 } from './text';
+
+export { sendFeedback } from './feedback';

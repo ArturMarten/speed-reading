@@ -5,18 +5,18 @@ import thunk from 'redux-thunk';
 import { initialize, addTranslation } from 'react-localize-redux';
 
 import rootReducer from './reducers';
-import logger from '../utils/logger';
+// import logger from '../utils/logger';
 import * as translations from '../assets/translations.locale.json';
 
 // eslint-disable-next-line no-underscore-dangle
-const composeStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeStoreEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 export default function configureStore(history) {
   const store = createStore(
     connectRouter(history)(rootReducer),
     composeStoreEnhancers(applyMiddleware(
       routerMiddleware(history),
-      logger,
+      // logger,
       thunk,
     )),
   );
