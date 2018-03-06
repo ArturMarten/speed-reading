@@ -42,8 +42,8 @@
   "text-entry": {
     "title": ["Tekstide sisestamine", "Text entry"],
     "description": [
-      "Siin saab lisada enda tekste harjutustes kasutamiseks.", 
-      "Here you can add your own texts for exercises"
+      "Siin saab lisada tekste lugemisharjutustes kasutamiseks. Lisatud tekst salvestatakse ja muutub teistele kasutajatele nähtavaks.", 
+      "Here you can add texts for reading exercises. Added text is saved and becomes visible to other users."
     ],
     "text-title": ["Pealkiri", "Title"],
     "text-title-placeholder": ["Teksti pealkiri", "Text title"],
@@ -63,6 +63,14 @@
     "text-keyword-placeholder": ["Lisa märksõna", "Add keyword"],
     "text-keyword-popup": ["Lisamiseks vajuta Enterit", "Press Enter to add"],
     "save": ["Salvesta", "Save"]
+  },
+  "text-selection": {
+    "modal-header": ["Teksti valimine", "Text selection"],
+    "search-placeholder": ["Otsi tekste pealkirja, autori või märksõnade kaudu", "You can search text by title, author or keywords"],
+    "filter": ["Filtreeri", "Filter"],
+    "sort": ["Sorteeri", "Sort"],
+    "sort-by-placeholder": ["Sorteeri kriteeriumi järgi", "Sort by criteria"],
+    "choose": ["Vali tekst", "Choose text"]
   },
   "exercises": {
     "title-reading": ["Lugemisharjutus", "Reading exercise"],

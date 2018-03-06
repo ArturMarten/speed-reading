@@ -8,6 +8,7 @@ import Provider from './Provider';
 import Home from '../containers/Home/Home';
 import TextEntry from '../containers/TextEntry/TextEntry';
 import TextExercisePreparation from '../containers/Exercise/Preparation/TextExercisePreparation';
+import TextSelection from '../containers/TextSelection/TextSelection';
 import TextExerciseTest from '../containers/Exercise/Test/TextExerciseTest';
 import Statistics from '../containers/Statistics/Statistics';
 import Auth from '../containers/Auth/Auth';
@@ -24,6 +25,10 @@ storiesOf('Text entry', module)
 storiesOf('Preparation', module)
   .addDecorator(story => <Provider story={story()} />)
   .add('Reading exercise', () => <TextExercisePreparation type="reading" onProceed={action('clicked')} />);
+
+storiesOf('Text selection', module)
+  .addDecorator(story => <Provider story={story()} />)
+  .add('Default', () => <TextSelection open />);
 
 storiesOf('Test', module)
   .addDecorator(story => <Provider story={story()} />)

@@ -66,7 +66,7 @@ export class TextEntry extends Component {
       title: this.state.textEntryForm.title.value,
       author: this.state.textEntryForm.author.value,
       collectionId: +this.state.textEntryForm.collectionId.value,
-      plain: contentState.getPlainText(),
+      plain: contentState.getPlainText(''),
       text: convertToRaw(contentState),
       complexity: this.state.textEntryForm.complexity.value,
       keywords: this.state.textEntryForm.keywords.value,
