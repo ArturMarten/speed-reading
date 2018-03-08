@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Divider, Image, Message } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
+import AppStats from './AppStats/AppStats';
 import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
 import studyEstLogo from '../../assets/img/study_est.jpg';
@@ -13,14 +14,16 @@ export class Home extends Component {
   render() {
     return (
       <Container style={{ marginTop: '4vh' }}>
-        <Header as="h2">{this.props.translate('home.welcome')}</Header>
+        <Header as="h2">{this.props.translate('home.welcome')}!</Header>
         <p>{this.props.translate('home.description')}</p>
         <Message
           warning
           icon="chrome"
-          header="Browser compatibility"
-          content="Only Google Chrome is currently supported."
+          header={this.props.translate('home.browser-warning-title')}
+          content={this.props.translate('home.browser-warning-content')}
         />
+        <Divider />
+        <AppStats />
         <Divider />
         {this.props.currentLanguage === 'ee' ?
           <Image.Group>

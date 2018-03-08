@@ -24,7 +24,6 @@ const splitWithPeriod = (text, characterCount) =>
 
 // eslint-disable-next-line import/prefer-default-export
 export const splitIntoWordGroups = (text, characterCount) => {
-  console.log('Splitting');
   wordRegex = RegExp(`(.{1,${characterCount}}(\\s|$))\\s*`, 'g');
   return text.length > characterCount ? splitWithPeriod(text, characterCount) : [text];
 };

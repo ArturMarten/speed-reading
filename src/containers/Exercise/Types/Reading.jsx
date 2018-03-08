@@ -62,7 +62,7 @@ export class Reading extends Component {
     this.offscreenContext.textBaseline = 'bottom';
     this.shownContext.fillStyle = 'rgba(0, 255, 0, 0.9)';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
-    this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.content);
+    this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.text);
     const characters = this.textMetadata.wordMetadata
       .map(wordMetadata => wordMetadata[0].length)
       .reduce((prev, curr) => prev + curr);

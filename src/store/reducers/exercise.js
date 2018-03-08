@@ -2,7 +2,6 @@ import * as actionTypes from '../actions/actionTypes';
 import { splitIntoWordGroups } from '../../utils/TextUtils';
 import { updateObject } from '../../shared/utility';
 
-
 const initialState = {
   type: '',
   started: false,

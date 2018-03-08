@@ -77,17 +77,21 @@ export class TextExerciseContainer extends Component {
               </p>
               <p>{this.props.translate('exercises.modal-question')}?</p>
             </Modal.Description>
-            <Modal.Actions>
-              <Button negative onClick={() => this.setState({ popupOpen: false })}>{this.props.translate('exercises.modal-no')}</Button>
-              <Button
-                positive
-                onClick={() => this.switchViewHandler(Status.Test)}
-                labelPosition="right"
-                icon="checkmark"
-                content={this.props.translate('exercises.proceed')}
-              />
-            </Modal.Actions>
           </Modal.Content>
+          <Modal.Actions>
+            <Button
+              negative
+              onClick={() => this.setState({ popupOpen: false })}
+              content={this.props.translate('exercises.modal-no')}
+            />
+            <Button
+              positive
+              onClick={() => this.switchViewHandler(Status.Test)}
+              labelPosition="right"
+              icon="checkmark"
+              content={this.props.translate('exercises.proceed')}
+            />
+          </Modal.Actions>
         </Modal>
       </Aux>
     );

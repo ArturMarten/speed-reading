@@ -24,6 +24,8 @@ export {
 
 export {
   editorStateUpdated,
+  fetchTexts,
+  selectText,
   storeText,
 } from './text';
 

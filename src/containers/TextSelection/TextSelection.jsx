@@ -3,63 +3,42 @@ import { connect } from 'react-redux';
 import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader, Dropdown } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-const dummyData = [
-  {
-    author: 'test',
-    characterCount: 510,
-    collectionId: 1,
-    complexity: 4,
-    id: 1,
-    keywords: [
-      'test',
-    ],
-    sentenceCount: 5,
-    title: 'Test title 2',
-    wordCount: 84,
-  },
-  {
-    author: 'test',
-    characterCount: 510,
-    collectionId: 1,
-    complexity: 4,
-    id: 2,
-    keywords: [
-      'test',
-    ],
-    sentenceCount: 5,
-    title: 'Test title 2',
-    wordCount: 84,
-  },
-  { id: 3, title: 'Test', author: 'Test' },
-  { id: 4, title: 'Test', author: 'Test' },
-  { id: 5, title: 'Test', author: 'Test' },
-  { id: 6, title: 'Test', author: 'Test' },
-  { id: 7, title: 'Test', author: 'Test' },
-  { id: 8, title: 'Test', author: 'Test' },
-  { id: 9, title: 'Test', author: 'Test' },
-  { id: 10, title: 'Test', author: 'Test' },
-  { id: 11, title: 'Test', author: 'Test' },
-  { id: 12, title: 'Test', author: 'Test' },
-  { id: 13, title: 'Test', author: 'Test' },
-  { id: 14, title: 'Test', author: 'Test' },
-  { id: 15, title: 'Test', author: 'Test' },
-  { id: 16, title: 'Test', author: 'Test' },
-  { id: 17, title: 'Test', author: 'Test' },
-  { id: 18, title: 'Test', author: 'Test' },
-];
+import * as actionCreators from '../../store/actions';
 
 const initialState = {
   selectedTextId: null,
   searchLoading: false,
   searchValue: '',
-  searchResults: dummyData,
 };
 
 export class TextSelection extends Component {
-  state = { ...initialState };
+  state = {
+    ...initialState,
+    searchResults: this.props.texts,
+  };
+
+  componentDidMount() {
+    this.props.onFetchTexts();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.texts.length === 0 && this.props.texts.length !== 0) {
+      this.resetSearch();
+    }
+    if (prevProps.selecting && !this.props.selecting) {
+      this.props.onClose();
+    }
+  }
 
   onSubmit = () => {
-    console.log('Chosen');
+    this.props.onTextSelect(this.state.selectedTextId);
+  }
+
+  resetSearch = () => {
+    this.setState({
+      ...initialState,
+      searchResults: this.props.texts,
+    });
   }
 
   searchTimeout = null;
@@ -68,11 +47,12 @@ export class TextSelection extends Component {
     this.setState({ searchValue: value, searchLoading: true, selectedTextId: null });
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      if (this.state.searchValue.length < 1) return this.setState({ ...initialState });
-      const foundResults = dummyData
+      if (this.state.searchValue.length < 1) return this.resetSearch();
+      const foundResults = this.props.texts
         .filter((text) => {
           const term = this.state.searchValue.toLowerCase();
-          return text.title.toLowerCase().indexOf(term) !== -1
+          return term === ''
+              || text.title.toLowerCase().indexOf(term) !== -1
               || text.author.toLowerCase().indexOf(term) !== -1;
         });
       return this.setState({
@@ -94,17 +74,17 @@ export class TextSelection extends Component {
         onClick={() => this.textSelectionHandler(text.id)}
       >
         <List.Content floated="right">
-          Complexity
+          {this.props.translate('text-selection.complexity')}
           <Rating
             disabled
             maxRating={10}
             icon="star"
-            defaultRating={Math.round(Math.random() * 10)}
+            defaultRating={text.complexity}
           />
         </List.Content>
         <List.Content>
-          <List.Header>Title: {text.title}</List.Header>
-          <List.Description>Author: {text.author}</List.Description>
+          <List.Header>{text.title}</List.Header>
+          <List.Description>{this.props.translate('text-selection.author')}: {text.author}</List.Description>
         </List.Content>
       </List.Item>
     ));
@@ -112,8 +92,8 @@ export class TextSelection extends Component {
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Dimmer active={false} inverted>
-            <Loader active inline="centered" content="Loading texts" />
+          <Dimmer active={this.props.fetching} inverted>
+            <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
           </Dimmer>
           <Grid centered style={{ maxHeight: '6vh' }}>
             <Grid.Row columns={2} style={{ paddingTop: 0 }}>
@@ -122,6 +102,7 @@ export class TextSelection extends Component {
                   showNoResults={false}
                   open={false}
                   input={{ fluid: true }}
+                  value={this.state.searchValue}
                   placeholder={this.props.translate('text-selection.search-placeholder')}
                   onSearchChange={this.searchHandler}
                   loading={this.state.searchLoading}
@@ -150,6 +131,7 @@ export class TextSelection extends Component {
                     </Button>
                     <Dropdown
                       disabled
+                      options={null}
                       placeholder={this.props.translate('text-selection.sort-by-placeholder')}
                       selection
                     />
@@ -166,8 +148,9 @@ export class TextSelection extends Component {
           <Button
             positive
             type="button"
+            loading={this.props.selecting}
             onClick={this.onSubmit}
-            disabled={this.state.selectedTextId === null}
+            disabled={this.state.selectedTextId === null || this.props.selecting}
           >
             {this.props.translate('text-selection.choose')}
           </Button>
@@ -178,12 +161,19 @@ export class TextSelection extends Component {
 }
 
 const mapStateToProps = state => ({
-  selectedText: state.selectedText,
+  texts: state.text.texts,
+  fetching: state.text.fetching,
+  selecting: state.text.selecting,
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
+  onFetchTexts: () => {
+    dispatch(actionCreators.fetchTexts());
+  },
+  onTextSelect: (textId) => {
+    dispatch(actionCreators.selectText(textId));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSelection);

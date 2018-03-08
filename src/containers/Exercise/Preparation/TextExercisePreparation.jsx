@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Button, Divider, Message, Segment } from 'semantic-ui-react';
+import { Container, Button, Divider, Message } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import TextSelection from '../../TextSelection/TextSelection';
@@ -19,6 +19,9 @@ export class TextExercisePreparation extends Component {
   }
 
   render() {
+    const selectedText = this.props.selectedText ?
+      <span>{this.props.translate('exercises.text-selected')}: <b>{this.props.selectedText.title}</b></span> :
+      <b>{this.props.translate('exercises.text-not-selected')}</b>;
     return (
       <Container style={{ marginTop: '4vh' }}>
         <h2>{this.props.translate(`exercises.title-${this.props.type}`)}</h2>
@@ -26,17 +29,18 @@ export class TextExercisePreparation extends Component {
         <Button
           positive
           floated="right"
+          disabled={!this.props.selectedText}
           onClick={this.props.onProceed}
           content={this.props.translate('exercises.proceed')}
         />
         <h3>{this.props.translate('exercises.text-selection')}</h3>
-        <Segment compact>
-          Musuo hõim – kas naiste maailm või meeste paradiis?
-        </Segment>
+        {selectedText}{' '}
         <Button
           color="facebook"
           onClick={this.textSelectionToggleHandler}
-          content="Choose text"
+          content={this.props.selectedText ?
+            this.props.translate('exercises.change-text') :
+            this.props.translate('exercises.select-text')}
         />
         <TextSelection
           open={this.state.textSelectionOpened}
@@ -56,6 +60,7 @@ export class TextExercisePreparation extends Component {
 }
 
 const mapStateToProps = state => ({
+  selectedText: state.text.selectedText,
   translate: getTranslate(state.locale),
 });
 

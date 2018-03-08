@@ -10,7 +10,8 @@ import { checkValidity } from '../../shared/utility';
 import InlineStyleControls from '../../components/TextEntry/InlineStyleControls';
 
 const options = [
-  { key: 0, text: 'Test collection', value: '1' },
+  { key: 0, text: 'Test', value: '1' },
+  { key: 1, text: 'Tudengite tekstid', value: '2' },
 ];
 
 const MAX_RATING = 10;
@@ -245,7 +246,7 @@ export class TextEntry extends Component {
             {this.props.textSaveStatus === 'Saved' ?
               <Icon fitted name="checkmark" size="large" style={{ opacity: 1 }} /> :
               <Icon fitted name="save" size="large" style={{ opacity: 1 }} />}
-            {this.props.translate('text-entry.save')}
+            {this.props.translate('text-entry.add-text')}
           </Button>
         </Form>
       </Container>

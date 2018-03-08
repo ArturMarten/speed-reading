@@ -44,6 +44,6 @@ storiesOf('Auth', module)
 
 storiesOf('Feedback', module)
   .addDecorator(story => <Provider story={story()} />)
-  .add('Before submission', () => <Feedback open loading={false} sent={false} />)
-  .add('Submitted', () => <Feedback open loading sent={false} />)
-  .add('After Submission', () => <Feedback open loading={false} sent />);
+  .add('Before submission', () => <Feedback open loading={false} sent={false} />);
+//  .add('Submitted', () => <Feedback open loading sent={false} />)
+//  .add('After Submission', () => <Feedback open loading={false} sent />);

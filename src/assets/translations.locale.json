@@ -35,9 +35,17 @@
   "home": {
     "welcome": ["Tere tulemast", "Welcome"],
     "description": [
-      "Alustamiseks vali harjutus ülevalt menüüst!", 
-      "To get started, choose an exercise from the menu above!"
-    ]
+      "Alustamiseks vali harjutus menüüst.", 
+      "To get started, choose an exercise from the menu."
+    ],
+    "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
+    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."]
+  },
+  "app-stats": {
+    "exercises": ["Harjutust", "Exercises"],
+    "texts": ["Teksti", "Texts"],
+    "users": ["Kasutajat", "Users"],
+    "feedback": ["Tagasisidet", "Feedback"]
   },
   "text-entry": {
     "title": ["Tekstide sisestamine", "Text entry"],
@@ -62,14 +70,17 @@
     "text-complexity": ["Keerukus", "Complexity"],
     "text-keyword-placeholder": ["Lisa märksõna", "Add keyword"],
     "text-keyword-popup": ["Lisamiseks vajuta Enterit", "Press Enter to add"],
-    "save": ["Salvesta", "Save"]
+    "add-text": ["Lisa tekst", "Add tekst"]
   },
   "text-selection": {
     "modal-header": ["Teksti valimine", "Text selection"],
+    "fetching": ["Laen tekste...", "Loading texts..."],
     "search-placeholder": ["Otsi tekste pealkirja, autori või märksõnade kaudu", "You can search text by title, author or keywords"],
     "filter": ["Filtreeri", "Filter"],
     "sort": ["Sorteeri", "Sort"],
     "sort-by-placeholder": ["Sorteeri kriteeriumi järgi", "Sort by criteria"],
+    "author": ["Autor", "Author"],
+    "complexity": ["Keerukus", "Complexity"],
     "choose": ["Vali tekst", "Choose text"]
   },
   "exercises": {
@@ -81,15 +92,29 @@
     "description-disappearing": ["Kustuva teksti harjutuse kirjeldus", "Disappearing text exercise description"],
     "proceed": ["Jätka", "Proceed"],
     "text-selection": ["Teksti valik", "Text selection"],
+    "text-selected": ["Valitud tekst", "Text selected"],
+    "text-not-selected": ["Tekst valimata", "Text not selected"],
+    "select-text": ["Vali tekst", "Choose text"],
+    "change-text": ["Muuda teksti", "Change text"],
     "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"],
     "text-preview": ["Teksti eelvaade", "Text preview"],
     "page": ["Lehekülg", "Page"],
     "modal-heading": ["Harjutus lõpetatud", "Exercise finished"],
     "modal-result": ["Lugemiskiirus (sõnade arv minutis)", "Reading speed (Words Per Minute)"],
     "modal-question": ["Jätka omandamistaseme testiga", "Proceed with comprehension test"],
-    "modal-no": ["Ei", "No"],
-    "test-title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
-    "test-description": ["Siin kontrollitakse teksti mõistmist.", "Text comprehension is tested here."]
+    "modal-no": ["Ei", "No"]
+  },
+  "text-exercise-test": {
+    "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
+    "description": ["Siin kontrollitakse teksti mõistmist.", "Text comprehension is tested here."],
+    "start-test": ["Alusta testiga", "Start test"],
+    "previous-question": ["Eelmine küsimus", "Previous question"],
+    "next-question": ["Järgmine küsimus", "Next question"],
+    "modal-heading": ["Test lõpetatud", "Test finished"],
+    "modal-result": ["Tulemus", "Result"],
+    "finish-test": ["Lõpeta test", "Finish test"],
+    "check-correct-answers": ["Vaata vastuseid", "Check answers"],
+    "proceed": ["Jätka", "Proceed"]
   },
   "text-options": {
     "text-width": ["Teksti laius", "Text width"],
