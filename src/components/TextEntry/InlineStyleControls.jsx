@@ -3,8 +3,8 @@ import StyleButton from './StyleButton';
 import TextCounter from './TextCounter';
 
 const INLINE_STYLES = [
-  { label: 'Bold', style: 'BOLD', translate: 'text-entry.editor-bold' },
-  { label: 'Italic', style: 'ITALIC', translate: 'text-entry.editor-italic' },
+  { label: 'Bold', style: 'BOLD', translate: 'text-editor.bold' },
+  { label: 'Italic', style: 'ITALIC', translate: 'text-editor.italic' },
 //  { label: 'Underline', style: 'UNDERLINE' },
 //  { label: 'Monospace', style: 'CODE' },
 ];

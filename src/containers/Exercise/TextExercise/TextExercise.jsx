@@ -7,7 +7,7 @@ import SpeedOptions from '../Options/SpeedOptions';
 import Timing from '../Timing/Timing';
 import Reading from '../Types/Reading';
 import Disappearing from '../Types/Disappearing';
-import OneGroupVisible from '../Types/OneGroupVisible';
+import WordGroups from '../Types/WordGroups';
 
 import './TextExercise.css';
 
@@ -24,7 +24,7 @@ class TextExercise extends Component {
         case 'disappearing':
           return <Disappearing />;
         case 'wordGroup':
-          return <OneGroupVisible />;
+          return <WordGroups />;
         default:
           return null;
       }

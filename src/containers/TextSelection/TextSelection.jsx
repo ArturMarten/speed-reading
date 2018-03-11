@@ -92,7 +92,7 @@ export class TextSelection extends Component {
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Dimmer active={this.props.fetching} inverted>
+          <Dimmer active={this.props.fetchingTexts} inverted>
             <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
           </Dimmer>
           <Grid centered style={{ maxHeight: '6vh' }}>
@@ -162,7 +162,7 @@ export class TextSelection extends Component {
 
 const mapStateToProps = state => ({
   texts: state.text.texts,
-  fetching: state.text.fetching,
+  fetchingTexts: state.text.fetchingTexts,
   selecting: state.text.selecting,
   translate: getTranslate(state.locale),
 });

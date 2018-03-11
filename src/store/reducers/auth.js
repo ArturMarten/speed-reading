@@ -18,15 +18,15 @@ const reducer = (state = initialState, action) => {
     case actionTypes.AUTH_SUCCEEDED:
       return {
         ...state,
-        token: action.token,
-        userId: action.userId,
+        token: action.payload.token,
+        userId: action.payload.userId,
         error: null,
         loading: false,
       };
     case actionTypes.AUTH_FAILED:
       return {
         ...state,
-        error: action.error,
+        error: action.payload.error,
         loading: false,
       };
     case actionTypes.AUTH_LOGOUT:

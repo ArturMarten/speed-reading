@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Container, Button, Divider, Message } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
+import * as actionCreators from '../../../store/actions';
 import TextSelection from '../../TextSelection/TextSelection';
 import TextOptions from '../Options/TextOptions';
 import ExerciseOptions from '../Options/ExerciseOptions';
@@ -14,8 +15,22 @@ export class TextExercisePreparation extends Component {
     textSelectionOpened: false,
   };
 
+  componentDidUpdate(prevProps) {
+    if (!prevProps.prepared && this.props.prepared) {
+      this.props.onProceed();
+    }
+  }
+
   textSelectionToggleHandler = () => {
     this.setState({ textSelectionOpened: !this.state.textSelectionOpened });
+  }
+
+  textPreparationHandler = () => {
+    if (this.props.prepared) {
+      this.props.onProceed();
+    } else {
+      this.props.onExercisePrepare(this.props.selectedText.plain, this.props.exerciseOptions.characterCount);
+    }
   }
 
   render() {
@@ -30,22 +45,23 @@ export class TextExercisePreparation extends Component {
           positive
           floated="right"
           disabled={!this.props.selectedText}
-          onClick={this.props.onProceed}
+          onClick={this.textPreparationHandler}
           content={this.props.translate('exercises.proceed')}
         />
         <h3>{this.props.translate('exercises.text-selection')}</h3>
         {selectedText}{' '}
         <Button
-          color="facebook"
+          primary
           onClick={this.textSelectionToggleHandler}
           content={this.props.selectedText ?
             this.props.translate('exercises.change-text') :
             this.props.translate('exercises.select-text')}
         />
-        <TextSelection
-          open={this.state.textSelectionOpened}
-          onClose={this.textSelectionToggleHandler}
-        />
+        {this.state.textSelectionOpened ?
+          <TextSelection
+            open={this.state.textSelectionOpened}
+            onClose={this.textSelectionToggleHandler}
+          /> : null}
         <Divider />
         <Message info>
           <p>{this.props.translate('exercises.info-content')}</p>
@@ -61,11 +77,16 @@ export class TextExercisePreparation extends Component {
 
 const mapStateToProps = state => ({
   selectedText: state.text.selectedText,
+  exerciseOptions: state.options.exerciseOptions,
+  prepared: state.exercise.prepared,
   translate: getTranslate(state.locale),
 });
 
 // eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
+  onExercisePrepare: (text, characterCount) => {
+    dispatch(actionCreators.prepareExercise(text, characterCount));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextExercisePreparation);

@@ -24,7 +24,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SEND_FEEDBACK_FAILED:
       return {
         ...state,
-        error: action.error,
+        error: action.payload.error,
         loading: false,
       };
     default:

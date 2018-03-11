@@ -19,7 +19,7 @@ const initialState = {
   end: false,
 };
 
-export class OneGroupVisible extends Component {
+export class WordGroups extends Component {
   componentDidMount() {
     this.renderGroup();
   }
@@ -96,8 +96,7 @@ export class OneGroupVisible extends Component {
 }
 
 const mapStateToProps = state => ({
-  text: state.text.text,
-  wordGroups: state.text.wordGroups,
+  wordGroups: state.exercise.wordGroups,
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
@@ -110,4 +109,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OneGroupVisible);
+export default connect(mapStateToProps, mapDispatchToProps)(WordGroups);

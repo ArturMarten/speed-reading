@@ -1,8 +1,8 @@
-import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
+import { convertFromRaw } from 'draft-js';
 import * as actionTypes from '../actions/actionTypes';
-import { splitIntoWordGroups } from '../../utils/TextUtils';
 import { updateObject } from '../../shared/utility';
 
+/*
 // eslint-disable-next-line max-len
 const text = 'Lorem ipsum dolor sit amet, praesent torquent dictum vel augue proin at, sollicitudin orci rhoncus semper, arcu et ut accumsan metus amet, mauris tellus tortor, magna imperdiet erat. Vel leo est velit tellus tellus, aliquet in, vestibulum ut erat, mi arcu elit arcu et amet. Elit orci hymenaeos accumsan sed sem ac, nec augue arcu sed in id, ac proin. Lacus aliquam diam pulvinar, neque mauris elementum eu, mauris auctor vestibulum amet turpis. Nunc sem aenean nec elit, elementum nulla, mauris est cillum et.';
 
@@ -15,51 +15,60 @@ const selectedText = {
   title: 'Musuo hõim – kas naiste maailm või meeste paradiis?',
   author: 'Teadmata',
 };
+*/
 
 const initialState = {
-  editorState: EditorState.createWithContent(ContentState.createFromText(text)),
-  text,
-  selectedText,
-  wordGroups: splitIntoWordGroups(text, 15),
-  words: text.split(' '),
-  fetching: false,
+  selectedText: null,
+  savingText: false,
+  fetchingTexts: false,
+  fetchingCollections: false,
   selecting: false,
   texts: [],
+  collections: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.EDITOR_STATE_UPDATED: {
-      return updateObject(state, {
-        editorState: action.payload,
-        text: action.payload.getCurrentContent().getPlainText('\n').replace(/\n/g, ''),
-        content: action.payload.getCurrentContent(),
-      });
-    }
     case actionTypes.TEXT_SAVE_REQUESTED: {
       return updateObject(state, {
-        textSaveStatus: 'Saving',
+        savingText: true,
       });
     }
     case actionTypes.TEXT_SAVE_SUCCEEDED: {
       return updateObject(state, {
-        textSaveStatus: 'Saved',
+        savingText: false,
+      });
+    }
+    case actionTypes.FETCH_TEXT_COLLECTIONS_START: {
+      return updateObject(state, {
+        fetchingCollections: true,
+      });
+    }
+    case actionTypes.FETCH_TEXT_COLLECTIONS_SUCCEEDED: {
+      return updateObject(state, {
+        collections: action.payload,
+        fetchingCollections: false,
+      });
+    }
+    case actionTypes.FETCH_TEXT_COLLECTIONS_FAILED: {
+      return updateObject(state, {
+        fetchingCollections: false,
       });
     }
     case actionTypes.FETCH_TEXTS_START: {
       return updateObject(state, {
-        fetching: true,
+        fetchingTexts: true,
       });
     }
     case actionTypes.FETCH_TEXTS_SUCCEEDED: {
       return updateObject(state, {
-        texts: action.texts,
-        fetching: false,
+        texts: action.payload,
+        fetchingTexts: false,
       });
     }
     case actionTypes.FETCH_TEXTS_FAILED: {
       return updateObject(state, {
-        fetching: false,
+        fetchingTexts: false,
       });
     }
     case actionTypes.GET_TEXT_START: {
@@ -68,8 +77,8 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.GET_TEXT_SUCCEEDED: {
-      const updatedText = updateObject(action.text, {
-        text: convertFromRaw(action.text.text),
+      const updatedText = updateObject(action.payload, {
+        text: convertFromRaw(action.payload.text),
       });
       return updateObject(state, {
         selectedText: updatedText,
@@ -79,6 +88,11 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_TEXT_FAILED: {
       return updateObject(state, {
         selecting: false,
+      });
+    }
+    case actionTypes.UNSELECT_TEXT: {
+      return updateObject(state, {
+        selectedText: null,
       });
     }
     default:

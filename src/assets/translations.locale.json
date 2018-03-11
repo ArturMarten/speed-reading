@@ -18,6 +18,7 @@
     "modal-header": ["Kasutaja autentimine", "Account authentication"],
     "username": ["E-maili aadress", "E-mail address"],
     "password": ["Parool", "Password"],
+    "demo": ["Demo kasutaja", "Demo user"],
     "logout-button": ["Logi välja", "Logout"]
   },
   "feedback": {
@@ -53,24 +54,31 @@
       "Siin saab lisada tekste lugemisharjutustes kasutamiseks. Lisatud tekst salvestatakse ja muutub teistele kasutajatele nähtavaks.", 
       "Here you can add texts for reading exercises. Added text is saved and becomes visible to other users."
     ],
+    "new-text": ["Uus tekst", "New text"],
+    "change-text": ["Vali muu tekst", "Choose other text"],
+    "change-questions": ["Muuda testi küsimusi", "Change test questions"],
+    "select-text": ["Vali salvestatud tekst", "Choose saved text"],
     "text-title": ["Pealkiri", "Title"],
     "text-title-placeholder": ["Teksti pealkiri", "Text title"],
     "text-author": ["Autor", "Author"],
     "text-author-placeholder": ["Teksti autor", "Text author"],
     "text-collection": ["Kogumik", "Collection"],
     "text-collection-placeholder": ["Teksti kogumik", "Text collection"],
-    "editor-text": ["Tekst", "Text"],
-    "editor-warning-title": ["Tekstile stiili lisamine", "Text styling"],
-    "editor-warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
-    "editor-bold": ["Rasvane", "Bold"],
-    "editor-italic": ["Kaldkirjas", "Italic"],
-    "editor-characters": ["Tähemärke", "Characters"],
-    "editor-words": ["Sõnu", "Words"],
-    "editor-sentences": ["Lauseid", "Sentences"],
+    "text-editor": ["Tekst", "Text"],
     "text-complexity": ["Keerukus", "Complexity"],
     "text-keyword-placeholder": ["Lisa märksõna", "Add keyword"],
     "text-keyword-popup": ["Lisamiseks vajuta Enterit", "Press Enter to add"],
-    "add-text": ["Lisa tekst", "Add tekst"]
+    "add-text": ["Lisa tekst", "Add tekst"],
+    "modify-text": ["Muuda tekst", "Modify text"]
+  },
+  "text-editor": {
+    "warning-title": ["Tekstile stiili lisamine", "Text styling"],
+    "warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
+    "bold": ["Rasvane", "Bold"],
+    "italic": ["Kaldkirjas", "Italic"],
+    "characters": ["Tähemärke", "Characters"],
+    "words": ["Sõnu", "Words"],
+    "sentences": ["Lauseid", "Sentences"]
   },
   "text-selection": {
     "modal-header": ["Teksti valimine", "Text selection"],

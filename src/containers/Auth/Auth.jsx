@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Label } from 'semantic-ui-react';
+import { Modal, Form, Button, Label, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -97,6 +97,17 @@ export class Auth extends Component {
           </Modal.Content>
           <Modal.Actions>
             {this.props.error ? <Label basic color="red">{this.props.error}</Label> : null}
+            <Button
+              primary
+              icon
+              type="button"
+              labelPosition="right"
+              loading={this.props.loading}
+              disabled={this.props.loading}
+            >
+              {this.props.translate('auth.demo')}
+              <Icon name="sign in" style={{ opacity: 1 }} />
+            </Button>
             <Button
               positive
               type="submit"

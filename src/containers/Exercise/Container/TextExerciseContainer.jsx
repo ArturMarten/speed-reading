@@ -66,43 +66,45 @@ export class TextExerciseContainer extends Component {
     return (
       <Aux>
         {this.getCurrentView()}
-        <Modal open={this.state.popupOpen} size="tiny">
-          <Modal.Header>{this.props.translate('exercises.modal-heading')}</Modal.Header>
-          <Modal.Content image>
-            <Modal.Description>
-              <p>
-                {this.props.translate('exercises.modal-result')}: {
-                  Math.round(this.props.selectedText.wordCount / (this.props.elapsedTime / (1000 * 60)))
-                }
-              </p>
-              <p>{this.props.translate('exercises.modal-question')}?</p>
-            </Modal.Description>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              negative
-              onClick={() => this.setState({ popupOpen: false })}
-              content={this.props.translate('exercises.modal-no')}
-            />
-            <Button
-              positive
-              onClick={() => this.switchViewHandler(Status.Test)}
-              labelPosition="right"
-              icon="checkmark"
-              content={this.props.translate('exercises.proceed')}
-            />
-          </Modal.Actions>
-        </Modal>
+        {this.props.selectedText ?
+          <Modal open={this.state.popupOpen} size="tiny">
+            <Modal.Header>{this.props.translate('exercises.modal-heading')}</Modal.Header>
+            <Modal.Content image>
+              <Modal.Description>
+                <p>
+                  {this.props.translate('exercises.modal-result')}: {
+                    Math.round(this.props.selectedText.wordCount / (this.props.elapsedTime / (1000 * 60)))
+                  }
+                </p>
+                <p>{this.props.translate('exercises.modal-question')}?</p>
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button
+                negative
+                onClick={() => this.setState({ popupOpen: false })}
+                content={this.props.translate('exercises.modal-no')}
+              />
+              <Button
+                positive
+                onClick={() => this.switchViewHandler(Status.Test)}
+                labelPosition="right"
+                icon="checkmark"
+                content={this.props.translate('exercises.proceed')}
+              />
+            </Modal.Actions>
+          </Modal> : null
+        }
       </Aux>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  translate: getTranslate(state.locale),
   selectedText: state.text.selectedText,
   timerState: state.timing.timer,
   elapsedTime: state.timing.elapsedTime,
+  translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({

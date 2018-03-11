@@ -6,7 +6,8 @@ const initialState = {
   type: '',
   started: false,
   finished: false,
-  textSaveStatus: 'Unsaved',
+  prepared: false,
+  wordGroups: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -31,6 +32,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         wordGroups,
+        prepared: true,
       };
     }
     case actionTypes.EXERCISE_SELECTED: {
@@ -40,6 +42,7 @@ const reducer = (state = initialState, action) => {
         type: action.payload,
         started: false,
         finished: false,
+        prepared: action.payload !== 'wordGroup',
       };
     }
     default:

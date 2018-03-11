@@ -7,12 +7,12 @@ export const sendFeedbackStart = () => ({
 
 export const sendFeedbackSucceeded = message => ({
   type: actionTypes.SEND_FEEDBACK_SUCCEEDED,
-  message,
+  payload: message,
 });
 
 export const sendFeedbackFailed = error => ({
   type: actionTypes.SEND_FEEDBACK_FAILED,
-  error,
+  payload: error,
 });
 
 export const sendFeedback = feedback => (dispatch) => {

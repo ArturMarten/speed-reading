@@ -7,13 +7,15 @@ export const authStart = () => ({
 
 export const authSucceeded = (token, userId) => ({
   type: actionTypes.AUTH_SUCCEEDED,
-  token,
-  userId,
+  payload: {
+    token,
+    userId,
+  },
 });
 
 export const authFailed = error => ({
   type: actionTypes.AUTH_FAILED,
-  error,
+  payload: error,
 });
 
 export const authLogout = () => ({

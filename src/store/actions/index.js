@@ -14,6 +14,7 @@ export {
 
 export {
   exerciseSelected,
+  prepareExercise,
   exerciseFinished,
 } from './exercise';
 
@@ -23,9 +24,10 @@ export {
 } from './auth';
 
 export {
-  editorStateUpdated,
+  fetchTextCollections,
   fetchTexts,
   selectText,
+  unselectText,
   storeText,
 } from './text';
 
