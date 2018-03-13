@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import { initialize, addTranslation } from 'react-localize-redux';
 
 import rootReducer from './reducers';
+import errorHandler from '../utils/errorHandler';
 // import logger from '../utils/logger';
 import * as translations from '../assets/translations.locale.json';
 
@@ -15,6 +16,7 @@ export default function configureStore(history) {
   const store = createStore(
     connectRouter(history)(rootReducer),
     composeStoreEnhancers(applyMiddleware(
+      errorHandler,
       routerMiddleware(history),
       // logger,
       thunk,

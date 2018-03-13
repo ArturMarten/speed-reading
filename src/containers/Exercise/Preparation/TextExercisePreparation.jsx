@@ -82,7 +82,6 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
   onExercisePrepare: (text, characterCount) => {
     dispatch(actionCreators.prepareExercise(text, characterCount));

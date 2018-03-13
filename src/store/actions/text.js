@@ -23,7 +23,7 @@ export const storeText = (text, textId) => (dispatch) => {
         dispatch(textSaveSucceeded());
       })
       .catch((error) => {
-        dispatch(textSaveFailed(error));
+        dispatch(textSaveFailed(error.message));
       });
   } else {
     axios.post('/texts', text)
@@ -32,7 +32,7 @@ export const storeText = (text, textId) => (dispatch) => {
         dispatch(textSaveSucceeded());
       })
       .catch((error) => {
-        dispatch(textSaveFailed(error));
+        dispatch(textSaveFailed(error.message));
       });
   }
 };
@@ -59,7 +59,7 @@ export const fetchTextCollections = () => (dispatch) => {
       dispatch(fetchTextCollectionsSucceeded(fetchedTextCollections));
     })
     .catch((error) => {
-      dispatch(fetchTextCollectionsFailed(error));
+      dispatch(fetchTextCollectionsFailed(error.message));
     });
 };
 
@@ -85,7 +85,8 @@ export const fetchTexts = () => (dispatch) => {
       dispatch(fetchTextsSucceeded(fetchedTexts));
     })
     .catch((error) => {
-      dispatch(fetchTextsFailed(error));
+      console.log(error);
+      dispatch(fetchTextsFailed(error.message));
     });
 };
 
@@ -110,9 +111,11 @@ export const selectText = textId => (dispatch) => {
     .then((response) => {
       const text = response.data;
       dispatch(getTextSucceeded(text));
+    }, (error) => {
+      console.log(error);
     })
     .catch((error) => {
-      dispatch(getTextFailed(error));
+      dispatch(getTextFailed(error.message));
     });
 };
 

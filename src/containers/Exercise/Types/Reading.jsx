@@ -44,8 +44,8 @@ export class Reading extends Component {
       clearTimeout(update);
     } else {
       // Text/exercise options or text changed
-      this.init();
-      // this.draw();
+      const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
+      this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
     }
   }
 

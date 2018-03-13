@@ -36,11 +36,14 @@ export const authLogin = (email, password) => (dispatch) => {
   };
   axios.get('/login', { auth })
     .then((response) => {
-      console.log(response);
       dispatch(authSucceeded(response.data.token, response.data.userId));
       dispatch(checkAuthTimeout(response.data.expiresIn));
+    }, (error) => {
+      const errorMessage = error.response && error.response.data && error.response.data.error ?
+        error.response.data.error : error.message;
+      dispatch(authFailed(errorMessage));
     })
     .catch((error) => {
-      dispatch(authFailed(error.response.data.error));
+      dispatch(authFailed(error.message));
     });
 };

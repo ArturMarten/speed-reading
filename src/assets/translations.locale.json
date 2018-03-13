@@ -4,7 +4,7 @@
     "home": ["Esileht", "Home"],
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
-    "reading-test": ["Lugemistest", "Reading test"],
+    "reading-test": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "help-exercises": ["Abiharjutused", "Help exercises"],
@@ -91,9 +91,13 @@
     "complexity": ["Keerukus", "Complexity"],
     "choose": ["Vali tekst", "Choose text"]
   },
+  "text-test-editor": {
+    "modal-header": ["Testi küsimused", "Test questions"],
+    "ok": ["OK", "OK"]
+  },
   "exercises": {
-    "title-reading": ["Lugemisharjutus", "Reading exercise"],
-    "description-reading": ["Lugemisharjutuse kirjeldus", "Reading exercise description"],
+    "title-reading": ["Lugemise soodustaja", "Reading aid"],
+    "description-reading": ["Kirjeldus", "Description"],
     "title-wordGroup": ["Sõnarühmade harjutus", "Word group exercise"],
     "description-wordGroup": ["Sõnarühmade harjutuse kirjeldus", "Word group exercise description"],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
@@ -145,10 +149,18 @@
     "description": ["Siin saab harjutuse valikul näha selle statistikat", "Here you can select an exercise and see your statistics"],
     "warning-title": ["Allolev joonis ei näita tegelikku statistikat", "Chart below does not show actual statistics"],
     "warning-content": ["See on kujutatud genereeritud andmetel", "It is rendered using generated data"],
-    "reading-test": ["Lugemistest", "Reading test"],
+    "reading-test": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "wpm": ["Sõnu minutis", "Words Per Minute"],
     "date": ["Kuupäev", "Date"]
+  },
+  "error-popup" : {
+    "modal-header": ["Viga", "Error"],
+    "network-error": ["Probleem ühendusega", "Network problem"],
+    "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],
+    "user-not-found": ["Sellist kasutajat ei eksisteeri", "User does not exist"],
+    "incorrect-password": ["Vale parool", "Incorrect password"],
+    "ok": ["OK", "OK"]
   }
 }

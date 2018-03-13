@@ -6,6 +6,7 @@ import { getTranslate } from 'react-localize-redux';
 import * as actionCreators from '../../store/actions';
 import TextSelection from '../TextSelection/TextSelection';
 import TextEditor from '../TextEditor/TextEditor';
+import TextTestEditor from './TextTestEditor/TextTestEditor';
 import { checkValidity } from '../../shared/utility';
 
 const MAX_RATING = 10;
@@ -51,6 +52,7 @@ const initialState = {
   },
   textEntryFormValid: false,
   textSelectionOpened: false,
+  textTestOpened: false,
 };
 
 export class TextEntry extends Component {
@@ -165,6 +167,10 @@ export class TextEntry extends Component {
 
   textSelectionToggleHandler = () => {
     this.setState({ textSelectionOpened: !this.state.textSelectionOpened });
+  }
+
+  textTestToggleHandler = () => {
+    this.setState({ textTestOpened: !this.state.textTestOpened });
   }
 
   render() {
@@ -299,11 +305,17 @@ export class TextEntry extends Component {
               this.props.translate('text-entry.add-text')
             }
           </Button>
+          {this.state.textTestOpened ?
+            <TextTestEditor
+              open={this.state.textTestOpened}
+              onClose={this.textTestToggleHandler}
+            /> : null}
           {this.props.selectedText ?
             <Button
               primary
               type="button"
               floated="right"
+              onClick={this.textTestToggleHandler}
             >
               {this.props.translate('text-entry.change-questions')}
             </Button> : null}

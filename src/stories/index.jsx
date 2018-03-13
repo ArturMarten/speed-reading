@@ -7,8 +7,10 @@ import Provider from './Provider';
 
 import Home from '../containers/Home/Home';
 import TextEntry from '../containers/TextEntry/TextEntry';
+import TextEditor from '../containers/TextEditor/TextEditor';
 import TextExercisePreparation from '../containers/Exercise/Preparation/TextExercisePreparation';
 import TextSelection from '../containers/TextSelection/TextSelection';
+import TextTestEditor from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTest from '../containers/Exercise/Test/TextExerciseTest';
 import Statistics from '../containers/Statistics/Statistics';
 import Auth from '../containers/Auth/Auth';
@@ -20,7 +22,11 @@ storiesOf('Home', module)
 
 storiesOf('Text entry', module)
   .addDecorator(story => <Provider story={story()} />)
-  .add('Editor', () => <TextEntry />);
+  .add('Default', () => <TextEntry />);
+
+storiesOf('Text editor', module)
+  .addDecorator(story => <Provider story={story()} />)
+  .add('Default', () => <TextEditor />);
 
 storiesOf('Preparation', module)
   .addDecorator(story => <Provider story={story()} />)
@@ -29,6 +35,10 @@ storiesOf('Preparation', module)
 storiesOf('Text selection', module)
   .addDecorator(story => <Provider story={story()} />)
   .add('Default', () => <TextSelection open />);
+
+storiesOf('Text test editor', module)
+  .addDecorator(story => <Provider story={story()} />)
+  .add('Default', () => <TextTestEditor open />);
 
 storiesOf('Test', module)
   .addDecorator(story => <Provider story={story()} />)

@@ -27,8 +27,12 @@ export const sendFeedback = feedback => (dispatch) => {
     .then((response) => {
       console.log(response);
       dispatch(sendFeedbackSucceeded(response.data.message));
+    }, (error) => {
+      const errorMessage = error.response && error.response.data && error.response.data.error ?
+        error.response.data.error : error.message;
+      dispatch(sendFeedbackFailed(errorMessage));
     })
     .catch((error) => {
-      dispatch(sendFeedbackFailed(error.response.data.error));
+      dispatch(sendFeedbackFailed(error.message));
     });
 };
