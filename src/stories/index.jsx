@@ -38,7 +38,7 @@ storiesOf('Text selection', module)
 
 storiesOf('Text test editor', module)
   .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <TextTestEditor open />);
+  .add('Default', () => <TextTestEditor open readingTextId={9} />);
 
 storiesOf('Test', module)
   .addDecorator(story => <Provider story={story()} />)

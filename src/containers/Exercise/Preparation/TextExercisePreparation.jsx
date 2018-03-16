@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Button, Divider, Message } from 'semantic-ui-react';
+import { Container, Header, Button, Divider, Message } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -39,7 +39,7 @@ export class TextExercisePreparation extends Component {
       <b>{this.props.translate('exercises.text-not-selected')}</b>;
     return (
       <Container style={{ marginTop: '4vh' }}>
-        <h2>{this.props.translate(`exercises.title-${this.props.type}`)}</h2>
+        <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
         <p>{this.props.translate(`exercises.description-${this.props.type}`)}</p>
         <Button
           positive
@@ -48,7 +48,7 @@ export class TextExercisePreparation extends Component {
           onClick={this.textPreparationHandler}
           content={this.props.translate('exercises.proceed')}
         />
-        <h3>{this.props.translate('exercises.text-selection')}</h3>
+        <Header as="h3" content={this.props.translate('exercises.text-selection')} />
         {selectedText}{' '}
         <Button
           primary

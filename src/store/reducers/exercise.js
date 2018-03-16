@@ -29,21 +29,19 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.PREPARE_EXERCISE: {
       const wordGroups = splitIntoWordGroups(action.payload.text, action.payload.characterCount);
-      return {
-        ...state,
+      return updateObject(state, {
         wordGroups,
         prepared: true,
-      };
+      });
     }
     case actionTypes.EXERCISE_SELECTED: {
       console.log(`Exercise selected: ${action.payload}`);
-      return {
-        ...state,
+      return updateObject(state, {
         type: action.payload,
         started: false,
         finished: false,
         prepared: action.payload !== 'wordGroup',
-      };
+      });
     }
     default:
       return state;

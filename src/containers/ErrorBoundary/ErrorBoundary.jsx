@@ -6,8 +6,7 @@ import ErrorPopup from '../ErrorPopup/ErrorPopup';
 export class ErrorBoundary extends Component {
   state = { error: null };
 
-  componentDidCatch(error, info) {
-    console.log(error, info);
+  componentDidCatch(error) {
     this.setState({ error });
   }
 

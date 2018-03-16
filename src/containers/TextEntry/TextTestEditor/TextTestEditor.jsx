@@ -1,141 +1,146 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, Input, Grid, Label, Select, Icon } from 'semantic-ui-react';
+import { Modal, Button, Input, Icon, List } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-const dummyData = [
-  { id: 1, questionText: 'Mehelikku energiat iseloomustavad ego, sõjad, võistlemine ja............ning läbi aastasadade on seda olnud enam kui küllalt.', answers: [{ id: 1, answerText: 'passiivsus' }, { id: 2, answerText: 'vägivaldsus' }, { id: 3, answerText: 'agressiivsus' }, { id: 4, answerText: 'sõjakus' }] },
-  { id: 2, questionText: 'Nende kogukonna organiseeritust on lääne definitsioonide abil keeruline selgitada, kuid kõige enam kasutatakse selle kirjeldamisel sõna........', answers: [{ id: 1, answerText: 'esmaõiguslikkus' }, { id: 2, answerText: 'patriaarhia' }, { id: 3, answerText: 'matriarhaat' }, { id: 4, answerText: 'sugulusjärgus' }] },
-  { id: 3, questionText: 'Mosuode ühiskonnas on oluline erinevus, mis teistes ühiskondades on olemas ning,  mis teeb neid unikaalseks', answers: [{ id: 1, answerText: 'neil on kombeks n-ö visiitabielu, naine otsustab, millise mehe ta ööseks enda juurde lubab' }, { id: 2, answerText: 'nad ei tunne sõdu, vägistamisi ega mõrvu' }, { id: 3, answerText: 'isad on need, kes kasvatavad lapsi, samas kui naised teevad tööd' }, { id: 4, answerText: 'kummalgi partneril pole abikaasa kohustusi, kuid nad jagavad majapidamist ja lapsi' }] },
-  { id: 4, questionText: 'Mis on meeste suurim kohustus mosuode hõmus?', answers: [{ id: 1, answerText: 'toetada naisi majanduslikult' }, { id: 2, answerText: 'hoolitseda laste eest' }, { id: 3, answerText: 'oma öistel "visiitidel" edukalt hakkama saamine' }, { id: 4, answerText: 'pere valitsemine' }] },
-  { id: 5, questionText: 'Millel põhinevad muoso hõimu inimeste vahelised suhted?', answers: [{ id: 1, answerText: 'armastusel' }, { id: 2, answerText: 'poliitikal' }, { id: 3, answerText: 'majanduslikul heaolul' }, { id: 4, answerText: 'sotsiaalsel survel' }] },
-];
-
-const questionOptions = [
-  { key: 'question', text: 'Question', value: 'question' },
-  { key: 'blank', text: 'Blank', value: 'blank' },
-];
+import * as actionCreators from '../../../store/actions';
+import QuestionEditor from './QuestionEditor';
+import AnswerEditor from './AnswerEditor';
 
 export class TextTestEditor extends Component {
-  state = {}
+  state = {
+    questionEditorOpened: false,
+    answerEditorOpened: false,
+    selectedQuestion: null,
+    selectedAnswer: null,
+  }
+
+  componentDidMount() {
+    this.props.onFetchQuestions(this.props.readingTextId);
+  }
 
   onSubmit = () => {
     this.props.onClose();
+  }
+
+  removeQuestionHandler = (questionId) => {
+    this.props.onRemoveQuestion(questionId);
+  }
+
+  questionEditorToggleHandler = (event, data) => {
+    if (event.nativeEvent) {
+      event.nativeEvent.stopImmediatePropagation();
+    }
+    this.setState({
+      questionEditorOpened: !this.state.questionEditorOpened,
+      selectedQuestion: data.question ? data.question : null,
+    });
+  }
+
+  answerEditorToggleHandler = (event, data) => {
+    if (event.nativeEvent) {
+      event.nativeEvent.stopImmediatePropagation();
+    }
+    this.setState({
+      answerEditorOpened: !this.state.answerEditorOpened,
+      selectedQuestion: data.question ? data.question : null,
+      selectedAnswer: data.answer ? data.answer : null,
+    });
   }
 
   render() {
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-test-editor.modal-header')}</Modal.Header>
-        <Modal.Content>
-          <Grid>
-            {dummyData.map((question, questionIndex) => (
-              <Grid.Row key={question.id}>
-                <Grid.Column>
-                  <Input
-                    fluid
-                    value={question.questionText}
-                    labelPosition="left"
-                    action
-                  >
-                    <Label>{`${questionIndex + 1} `}</Label>
-                    <input />
-                    <Select
-                      compact
-                      options={questionOptions}
-                      defaultValue="question"
-                    />
-                    <Button
-                      primary
-                      compact
-                      content="Change"
-                    />
-                    <Button
-                      negative
-                      compact
-                      icon="close"
-                    />
-                  </Input>
-                  {dummyData[questionIndex].answers.map((answer, answerIndex) => (
-                    <Grid.Row key={answer.id} style={{ padding: '1vh 0 0 5vh' }}>
-                      <Grid.Column>
-                        <Input
-                          fluid
-                          labelPosition="left"
-                          value={answer.answerText}
-                          action
-                        >
-                          <Label>{`${answerIndex + 1} `}</Label>
-                          <Button
-                            compact
-                            icon={<Icon fitted name="check" color="green" />}
-                          />
-                          <input />
-                          <Button
-                            primary
-                            compact
-                            content="Change"
-                          />
-                          <Button
-                            negative
-                            compact
-                            icon="close"
-                          />
-                        </Input>
-                      </Grid.Column>
-                    </Grid.Row>
-                  ))}
-                  <Grid.Row style={{ padding: '1vh 0 0 5vh' }}>
-                    <Grid.Column>
-                      <Input
-                        fluid
-                        labelPosition="left"
-                        value=""
-                        action
-                        placeholder="Insert new answer here..."
-                      >
-                        <Label>{`${dummyData[questionIndex].answers.length + 1} `}</Label>
-                        <input />
-                        <Button
-                          positive
-                          compact
-                          content="Add answer"
-                        />
-                      </Input>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid.Column>
-              </Grid.Row>
-            ))}
-            <Grid.Row>
-              <Grid.Column>
-                <Input
-                  fluid
-                  labelPosition="left"
-                  value=""
-                  action
-                  placeholder="Insert new question here..."
-                >
-                  <Label>{`${dummyData.length + 1} `}</Label>
-                  <input />
+        <Modal.Content scrolling>
+          {this.state.questionEditorOpened ?
+            <QuestionEditor
+              open={this.state.questionEditorOpened}
+              onClose={this.questionEditorToggleHandler}
+              readingTextId={this.props.readingTextId}
+              question={this.state.selectedQuestion}
+            /> : null}
+          {this.state.answerEditorOpened ?
+            <AnswerEditor
+              open={this.state.answerEditorOpened}
+              onClose={this.answerEditorToggleHandler}
+              questionId={this.state.selectedQuestion ? this.state.selectedQuestion.id : null}
+              answer={this.state.selectedAnswer}
+            /> : null}
+          <List>
+            {this.props.questions.map((question, questionIndex) => (
+              <List.Item key={question.id}>
+                <List.Content floated="left" verticalAlign="middle">
+                  {`${questionIndex + 1}. ${question.questionText}`}
+                </List.Content>
+                <List.Content floated="right">
                   <Button
-                    positive
                     compact
-                    content="Add question"
+                    primary
+                    content="Change"
+                    onClick={event => this.questionEditorToggleHandler(event, { question })}
                   />
-                </Input>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+                  <Button
+                    compact
+                    negative
+                    icon="close"
+                    onClick={() => this.removeQuestionHandler(question.id)}
+                  />
+                </List.Content>
+                <List.List>
+                  {this.props.questions[questionIndex].answers.map((answer, answerIndex) => (
+                    <List.Item key={answer.id}>
+                      <List.Content floated="left" verticalAlign="middle">
+                        {`${answerIndex + 1}. ${answer.answerText}`}
+                      </List.Content>
+                      <List.Content floated="right">
+                        <Button
+                          compact
+                          icon={<Icon fitted name="check" color={answer.correct ? 'green' : 'grey'} />}
+                        />
+                        <Button
+                          primary
+                          compact
+                          content="Change"
+                          onClick={event => this.answerEditorToggleHandler(event, { question, answer })}
+                        />
+                        <Button
+                          negative
+                          compact
+                          icon="close"
+                        />
+                      </List.Content>
+                    </List.Item>
+                  ))}
+                  <List.Item key="newAnswer">
+                    <List.Content content="" />
+                    <List.Content floated="right">
+                      <Button
+                        positive
+                        compact
+                        onClick={event => this.answerEditorToggleHandler(event, { question })}
+                        content="Add answer"
+                      />
+                    </List.Content>
+                  </List.Item>
+                </List.List>
+              </List.Item>
+            ))}
+          </List>
         </Modal.Content>
         <Modal.Actions>
           <Button
+            positive
+            content="Add question"
+            disabled={this.props.error !== null}
+            onClick={this.questionEditorToggleHandler}
+          />
+          <Button
             primary
-            type="button"
+            content={this.props.translate('text-test-editor.ok')}
+            disabled={this.props.error !== null}
             onClick={this.onSubmit}
-          >
-            {this.props.translate('text-test-editor.ok')}
-          </Button>
+          />
         </Modal.Actions>
       </Modal>
     );
@@ -143,11 +148,18 @@ export class TextTestEditor extends Component {
 }
 
 const mapStateToProps = state => ({
+  questions: state.test.questions,
+  error: state.test.error,
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
+  onFetchQuestions: (readingTextId) => {
+    dispatch(actionCreators.fetchQuestions(readingTextId));
+  },
+  onRemoveQuestion: (questionId) => {
+    dispatch(actionCreators.removeQuestion(questionId));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextTestEditor);

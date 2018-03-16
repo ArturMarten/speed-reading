@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Button, Grid, Pagination, List, Modal } from 'semantic-ui-react';
+import { Container, Header, Button, Grid, Pagination, List, Modal } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 const dummyData = [
@@ -78,12 +78,12 @@ export class TextExerciseTest extends Component {
             />
           </Modal.Actions>
         </Modal>
-        <h2>{this.props.translate('text-exercise-test.title')}</h2>
+        <Header as="h2" content={this.props.translate('text-exercise-test.title')} />
         <p>{this.props.translate('text-exercise-test.description')}</p>
         {this.state.started ?
           <Grid>
             <Grid.Row centered>
-              <h4>{this.state.selectedQuestion.questionText}</h4>
+              <Header as="h4" content={this.state.selectedQuestion.questionText} />
             </Grid.Row>
             <Grid.Row centered>
               <Grid.Column mobile={16} computer={12}>

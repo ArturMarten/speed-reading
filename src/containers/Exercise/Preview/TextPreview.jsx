@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { convertFromHTML, ContentState } from 'draft-js';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Grid, Header, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import { writeText } from '../../../utils/CanvasUtils/CanvasUtils';
@@ -40,7 +40,7 @@ export class TextPreview extends Component {
     return (
       <Grid>
         <Grid.Row centered>
-          <h3>{this.props.translate('exercises.text-preview')}</h3>
+          <Header as="h3" content={this.props.translate('exercises.text-preview')} />
         </Grid.Row>
         <Grid.Row centered>
           <Segment compact>

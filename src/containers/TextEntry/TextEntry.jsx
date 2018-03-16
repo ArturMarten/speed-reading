@@ -309,6 +309,7 @@ export class TextEntry extends Component {
             <TextTestEditor
               open={this.state.textTestOpened}
               onClose={this.textTestToggleHandler}
+              readingTextId={this.props.selectedText.id}
             /> : null}
           {this.props.selectedText ?
             <Button

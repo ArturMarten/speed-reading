@@ -9,13 +9,15 @@ import errorHandler from '../utils/errorHandler';
 // import logger from '../utils/logger';
 import * as translations from '../assets/translations.locale.json';
 
-// eslint-disable-next-line no-underscore-dangle
-const composeStoreEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+/* eslint-enable */
 
 export default function configureStore(history) {
   const store = createStore(
     connectRouter(history)(rootReducer),
-    composeStoreEnhancers(applyMiddleware(
+    composeEnhancers(applyMiddleware(
       errorHandler,
       routerMiddleware(history),
       // logger,

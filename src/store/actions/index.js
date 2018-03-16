@@ -19,6 +19,14 @@ export {
 } from './exercise';
 
 export {
+  fetchQuestions,
+  addQuestion,
+  changeQuestion,
+  removeQuestion,
+  addAnswer,
+} from './test';
+
+export {
   authLogin,
   authLogout,
 } from './auth';

@@ -6,6 +6,7 @@ import textReducer from './text';
 import timingReducer from './timing';
 import optionsReducer from './options';
 import exerciseReducer from './exercise';
+import testReducer from './test';
 import feedbackReducer from './feedback';
 
 export default combineReducers({
@@ -14,6 +15,7 @@ export default combineReducers({
   timing: timingReducer,
   options: optionsReducer,
   exercise: exerciseReducer,
+  test: testReducer,
   feedback: feedbackReducer,
   locale: localeReducer,
 });
