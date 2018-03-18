@@ -17,6 +17,12 @@ class AnswerEditor extends Component {
     if (this.props.answer) {
       this.setAnswer(this.props.answer);
     }
+    setTimeout(() => {
+      this.inputRef.focus();
+      const { inputRef } = this.inputRef;
+      const { length } = inputRef.value;
+      inputRef.setSelectionRange(length, length);
+    }, 100);
   }
 
   setAnswer(answer) {
@@ -34,6 +40,16 @@ class AnswerEditor extends Component {
       correct: this.state.correct,
     };
     this.props.onAddAnswer(answer);
+    this.props.onClose(event, data);
+  }
+
+  changeAnswerHandler = (event, data) => {
+    const answer = {
+      questionId: this.props.questionId,
+      answerText: this.state.answerText,
+      correct: this.state.correct,
+    };
+    this.props.onChangeAnswer(this.props.questionId, this.props.answer.id, answer);
     this.props.onClose(event, data);
   }
 
@@ -71,16 +87,21 @@ class AnswerEditor extends Component {
         closeIcon
       >
         <Modal.Header>
-          {this.props.answer ? 'Change answer' : 'New answer'}
+          {this.props.answer ?
+            this.props.translate('answer-editor.modal-header-change') :
+            this.props.translate('answer-editor.modal-header-new')}
         </Modal.Header>
         <Modal.Content>
           <Input
             fluid
             action
+            ref={(ref) => { this.inputRef = ref; }}
             value={this.state.answerText}
             onChange={this.answerInputChangeHandler}
             onKeyPress={this.keyPressHandler}
-            placeholder={this.props.answer ? 'Insert changed answer here...' : 'Insert new answer here...'}
+            placeholder={this.props.answer ?
+              this.props.translate('answer-editor.insert-changed-placeholder') :
+              this.props.translate('answer-editor.insert-new-placeholder')}
           >
             <input />
             <Button
@@ -96,13 +117,13 @@ class AnswerEditor extends Component {
             <Button
               primary
               disabled={!this.state.touched || !this.state.valid}
-              content="Change answer"
+              content={this.props.translate('answer-editor.change-answer')}
               onClick={this.changeAnswerHandler}
             /> :
             <Button
               positive
               disabled={!this.state.touched || !this.state.valid}
-              content="Add answer"
+              content={this.props.translate('answer-editor.add-answer')}
               onClick={this.addAnswerHandler}
             />
           }
@@ -120,6 +141,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onAddAnswer: (answer) => {
     dispatch(actionCreators.addAnswer(answer));
+  },
+  onChangeAnswer: (questionId, answerId, answer) => {
+    dispatch(actionCreators.changeAnswer(questionId, answerId, answer));
   },
 });
 

@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Input, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-import Aux from '../../../hoc/Auxiliary/Auxiliary';
 
 const MIN_CHARACTER_COUNT = 5;
 const MAX_CHARACTER_COUNT = 30;
@@ -72,7 +71,7 @@ export class ExerciseOptions extends Component {
   options() {
     if (this.props.exerciseType === 'wordGroup') {
       return (
-        <Aux>
+        <Fragment>
           {`${this.props.translate('exercise-options.character-count')} `}
           <Button icon="minus" size="mini" onClick={this.decreaseCharacterCount} />
           <Button icon="plus" size="mini" onClick={this.increaseCharacterCount} />
@@ -87,7 +86,7 @@ export class ExerciseOptions extends Component {
             style={{ width: '52px' }}
           />
           {` ${this.props.translate('exercise-options.characters')}`}
-        </Aux>
+        </Fragment>
       );
     }
     return null;

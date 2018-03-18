@@ -6,10 +6,10 @@ import { getLanguages, getActiveLanguage, setActiveLanguage } from 'react-locali
 export class LanguageSelection extends Component {
   languageList() {
     return (
-      this.props.languages.map((language, index) => {
+      this.props.languages.map((language) => {
         if (!language.active) {
           return (
-            <Dropdown.Item key={index} onClick={() => this.props.onSettingLanguage(language.code)}>
+            <Dropdown.Item key={language.code} onClick={() => this.props.onSettingLanguage(language.code)}>
               <Flag name={language.code} />
             </Dropdown.Item>
           );

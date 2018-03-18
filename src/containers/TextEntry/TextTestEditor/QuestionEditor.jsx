@@ -5,11 +5,6 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 
-const questionOptions = [
-  { key: 'question', text: 'Question', value: 'question' },
-  { key: 'blank', text: 'Blank', value: 'blank' },
-];
-
 class QuestionEditor extends Component {
   state = {
     questionText: '',
@@ -22,6 +17,12 @@ class QuestionEditor extends Component {
     if (this.props.question) {
       this.setQuestion(this.props.question);
     }
+    setTimeout(() => {
+      this.inputRef.focus();
+      const { inputRef } = this.inputRef;
+      const { length } = inputRef.value;
+      inputRef.setSelectionRange(length, length);
+    }, 100);
   }
 
   setQuestion(question) {
@@ -78,6 +79,10 @@ class QuestionEditor extends Component {
   }
 
   render() {
+    const questionOptions = [
+      { key: 'question', text: this.props.translate('question-editor.category-question'), value: 'question' },
+      { key: 'blank', text: this.props.translate('question-editor.category-blank'), value: 'blank' },
+    ];
     return (
       <Modal
         open={this.props.open}
@@ -86,21 +91,25 @@ class QuestionEditor extends Component {
         closeIcon
       >
         <Modal.Header>
-          {this.props.question ? 'Change question' : 'New question'}
+          {this.props.question ?
+            this.props.translate('question-editor.modal-header-change') :
+            this.props.translate('question-editor.modal-header-new')}
         </Modal.Header>
         <Modal.Content>
           <Input
             fluid
             action
+            ref={(ref) => { this.inputRef = ref; }}
             value={this.state.questionText}
             onChange={this.questionInputChangeHandler}
             onKeyPress={this.keyPressHandler}
-            placeholder={this.props.question ? 'Insert changed question here...' : 'Insert new question here...'}
+            placeholder={this.props.question ?
+              this.props.translate('question-editor.insert-new-placeholder') :
+              this.props.translate('question-editor.insert-changed-placeholder')}
           >
             <input />
             <Dropdown
               selection
-              compact
               value={this.state.category}
               onChange={this.questionCategoryChangeHandler}
               options={questionOptions}
@@ -112,13 +121,13 @@ class QuestionEditor extends Component {
             <Button
               primary
               disabled={!this.state.touched || !this.state.valid}
-              content="Change question"
+              content={this.props.translate('question-editor.change-question')}
               onClick={this.changeQuestionHandler}
             /> :
             <Button
               positive
               disabled={!this.state.touched || !this.state.valid}
-              content="Add question"
+              content={this.props.translate('question-editor.add-question')}
               onClick={this.addQuestionHandler}
             />
           }

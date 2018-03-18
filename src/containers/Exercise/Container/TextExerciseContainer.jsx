@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-
-import Aux from '../../../hoc/Auxiliary/Auxiliary';
 import TextExercisePreparation from '../Preparation/TextExercisePreparation';
 import TextExercise from '../TextExercise/TextExercise';
 import TextExerciseTest from '../Test/TextExerciseTest';
@@ -22,7 +20,7 @@ export class TextExerciseContainer extends Component {
     popupOpen: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.onExerciseSelect(this.props.type);
   }
 
@@ -35,36 +33,38 @@ export class TextExerciseContainer extends Component {
 
   getCurrentView() {
     switch (this.state.status) {
-      case Status.Preparation:
+      case Status.Preparation: {
         return (
           <TextExercisePreparation
             type={this.props.type}
             onProceed={() => this.switchViewHandler(Status.Exercise)}
           />
         );
-      case Status.Exercise:
+      }
+      case Status.Exercise: {
         return (
           <TextExercise
             type={this.props.type}
           />
         );
-      case Status.Test:
+      }
+      case Status.Test: {
         return (
           <TextExerciseTest />
         );
+      }
       default:
         return null;
     }
   }
 
   switchViewHandler = (status) => {
-    console.log(status);
     this.setState({ status, popupOpen: false });
   }
 
   render() {
     return (
-      <Aux>
+      <Fragment>
         {this.getCurrentView()}
         {this.props.selectedText ?
           <Modal open={this.state.popupOpen} size="tiny">
@@ -95,7 +95,7 @@ export class TextExerciseContainer extends Component {
             </Modal.Actions>
           </Modal> : null
         }
-      </Aux>
+      </Fragment>
     );
   }
 }

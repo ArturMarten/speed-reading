@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Input, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-import Aux from '../../../hoc/Auxiliary/Auxiliary';
 
 const MIN_TEXT_WIDTH = 250;
 const MAX_TEXT_WIDTH = 1000;
@@ -137,7 +136,7 @@ export class TextOptions extends Component {
 
   render() {
     return (
-      <Aux>
+      <Fragment>
         <div>
           {`${this.props.translate('text-options.text-width')} `}
           <Button icon="minus" size="mini" onClick={this.decreaseWidth} />
@@ -186,7 +185,7 @@ export class TextOptions extends Component {
           />
           {` ${this.props.translate('text-options.pt')}`}
         </div>
-      </Aux>
+      </Fragment>
     );
   }
 }

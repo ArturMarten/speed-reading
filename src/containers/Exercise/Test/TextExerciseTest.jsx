@@ -25,7 +25,6 @@ export class TextExerciseTest extends Component {
   }
 
   onAnswerChange = (questionId, answerId) => {
-    console.log(answerId);
     const updatedAnswers = this.state.answers.slice();
     updatedAnswers[questionId - 1] = answerId;
     this.setState({ answers: updatedAnswers });

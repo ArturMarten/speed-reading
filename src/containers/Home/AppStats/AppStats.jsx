@@ -14,6 +14,7 @@ export class AppStats extends Component {
     stats: {
       exercises: EXERCISES,
       texts: 0,
+      questions: 0,
       users: 0,
       feedback: 0,
     },
@@ -37,7 +38,7 @@ export class AppStats extends Component {
   }
   render() {
     return (
-      <Statistic.Group size="small" widths={4}>
+      <Statistic.Group size="small" widths={5}>
         <Statistic>
           <Statistic.Value>
             <Icon name="winner" />
@@ -54,6 +55,13 @@ export class AppStats extends Component {
         </Statistic>
         <Statistic>
           <Statistic.Value>
+            <Icon name="question circle" />
+            {this.state.loading ? <Icon loading name="spinner" /> : this.state.stats.questions}
+          </Statistic.Value>
+          <Statistic.Label>{this.props.translate('app-stats.questions')}</Statistic.Label>
+        </Statistic>
+        <Statistic>
+          <Statistic.Value>
             <Icon name="talk" />
             {this.state.loading ? <Icon loading name="spinner" /> : this.state.stats.feedback}
           </Statistic.Value>
@@ -61,7 +69,7 @@ export class AppStats extends Component {
         </Statistic>
         <Statistic>
           <Statistic.Value>
-            <Icon name="user" />
+            <Icon name="users" />
             {this.state.loading ? <Icon loading name="spinner" /> : this.state.stats.users}
           </Statistic.Value>
           <Statistic.Label>{this.props.translate('app-stats.users')}</Statistic.Label>

@@ -26,11 +26,7 @@ export class TextExercisePreparation extends Component {
   }
 
   textPreparationHandler = () => {
-    if (this.props.prepared) {
-      this.props.onProceed();
-    } else {
-      this.props.onExercisePrepare(this.props.selectedText.plain, this.props.exerciseOptions.characterCount);
-    }
+    this.props.onExercisePrepare(this.props.selectedText, this.props.exerciseOptions);
   }
 
   render() {

@@ -43,7 +43,7 @@ export class WordGroups extends Component {
   }
 
   componentWillUnmount() {
-    if (update) clearTimeout(update);
+    clearTimeout(update);
   }
 
   cursorState = { ...initialState };

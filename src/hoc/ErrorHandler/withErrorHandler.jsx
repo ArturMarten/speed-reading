@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react';
+
+import { stopPropagation } from '../../shared/utility';
 import ErrorPopup from '../../containers/ErrorPopup/ErrorPopup';
 
 const withErrorHandler = (WrappedComponent, axios) =>
@@ -22,9 +24,7 @@ const withErrorHandler = (WrappedComponent, axios) =>
     }
 
     errorConfirmedHandler = (event) => {
-      if (event.nativeEvent) {
-        event.nativeEvent.stopImmediatePropagation();
-      }
+      stopPropagation(event);
       this.setState({ error: null });
     }
 

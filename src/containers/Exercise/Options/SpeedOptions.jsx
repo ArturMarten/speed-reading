@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Input, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-import Aux from '../../../hoc/Auxiliary/Auxiliary';
 
 const MIN_WPM = 10;
 const MAX_WPM = 500;
@@ -105,7 +104,7 @@ export class SpeedOptions extends Component {
   options = () => {
     if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
       return (
-        <Aux>
+        <Fragment>
           {`${this.props.translate('exercise-options.reading-speed')} `}
           <Button icon="minus" size="mini" onClick={this.decreaseWPM} />
           <Button icon="plus" size="mini" onClick={this.increaseWPM} />
@@ -120,11 +119,11 @@ export class SpeedOptions extends Component {
             style={{ width: '64px', textAlign: 'right' }}
           />
           {` ${this.props.translate('exercise-options.wpm')}`}
-        </Aux>
+        </Fragment>
       );
     } else if (this.props.exerciseType === 'wordGroup') {
       return (
-        <Aux>
+        <Fragment>
           {`${this.props.translate('exercise-options.fixation-time')} `}
           <Button icon="minus" size="mini" onClick={this.decreaseFixation} />
           <Button icon="plus" size="mini" onClick={this.increaseFixation} />
@@ -139,7 +138,7 @@ export class SpeedOptions extends Component {
             style={{ width: '52px' }}
           />
           {` ${this.props.translate('exercise-options.ms')}`}
-        </Aux>
+        </Fragment>
       );
     }
     return null;

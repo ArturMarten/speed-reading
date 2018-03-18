@@ -3,6 +3,12 @@ export const updateObject = (oldObject, newValues) => ({
   ...newValues,
 });
 
+export const isEmail = (value) => {
+  // eslint-disable-next-line
+  const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  return pattern.test(value);
+};
+
 export const checkValidity = (value, rules) => {
   let isValid = true;
   if (!rules) {
@@ -18,9 +24,13 @@ export const checkValidity = (value, rules) => {
     isValid = value.length <= rules.maxLength && isValid;
   }
   if (rules.isEmail) {
-    // eslint-disable-next-line
-    const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-    isValid = pattern.test(value) && isValid;
+    isValid = isEmail(value) && isValid;
   }
   return isValid;
+};
+
+export const stopPropagation = (event) => {
+  if (event.nativeEvent) {
+    event.nativeEvent.stopImmediatePropagation();
+  }
 };

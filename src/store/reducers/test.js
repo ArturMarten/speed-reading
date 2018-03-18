@@ -68,7 +68,8 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.REMOVE_QUESTION_SUCCEEDED: {
       return updateObject(state, {
-        questions: state.questions.filter(question => question.id !== action.payload),
+        questions: state.questions
+          .filter(question => question.id !== action.payload),
       });
     }
     case actionTypes.REMOVE_QUESTION_FAILED: {
@@ -92,6 +93,44 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.ADD_ANSWER_FAILED: {
+      return updateObject(state, {
+      });
+    }
+    case actionTypes.CHANGE_ANSWER_START: {
+      return updateObject(state, {
+      });
+    }
+    case actionTypes.CHANGE_ANSWER_SUCCEEDED: {
+      const updatedQuestions = state.questions
+        .map(question => (question.id === action.payload.questionId ?
+          updateObject(question, {
+            answers: question.answers
+              .map(answer => (answer.id === action.payload.answerId ? updateObject(answer, action.payload.answerData) : answer)),
+          }) : question));
+      return updateObject(state, {
+        questions: updatedQuestions,
+      });
+    }
+    case actionTypes.CHANGE_ANSWER_FAILED: {
+      return updateObject(state, {
+      });
+    }
+    case actionTypes.REMOVE_ANSWER_START: {
+      return updateObject(state, {
+      });
+    }
+    case actionTypes.REMOVE_ANSWER_SUCCEEDED: {
+      const updatedQuestions = state.questions
+        .map(question => (question.id === action.payload.questionId ?
+          updateObject(question, {
+            answers: question.answers
+              .filter(answer => answer.id !== action.payload.answerId),
+          }) : question));
+      return updateObject(state, {
+        questions: updatedQuestions,
+      });
+    }
+    case actionTypes.REMOVE_ANSWER_FAILED: {
       return updateObject(state, {
       });
     }

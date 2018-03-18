@@ -24,11 +24,14 @@ export {
   changeQuestion,
   removeQuestion,
   addAnswer,
+  changeAnswer,
+  removeAnswer,
 } from './test';
 
 export {
   authLogin,
   authLogout,
+  authCheckState,
 } from './auth';
 
 export {
@@ -38,5 +41,14 @@ export {
   unselectText,
   storeText,
 } from './text';
+
+export {
+  fetchUsers,
+  addUser,
+  changeUser,
+  fetchGroups,
+  addGroup,
+  changeGroup,
+} from './manage';
 
 export { sendFeedback } from './feedback';

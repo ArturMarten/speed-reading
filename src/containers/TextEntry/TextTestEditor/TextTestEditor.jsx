@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, Input, Icon, List } from 'semantic-ui-react';
+import { Modal, Button, Icon, Grid } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import { stopPropagation } from '../../../shared/utility';
 import QuestionEditor from './QuestionEditor';
 import AnswerEditor from './AnswerEditor';
 
@@ -27,10 +28,12 @@ export class TextTestEditor extends Component {
     this.props.onRemoveQuestion(questionId);
   }
 
+  removeAnswerHandler = (questionId, answerId) => {
+    this.props.onRemoveAnswer(questionId, answerId);
+  }
+
   questionEditorToggleHandler = (event, data) => {
-    if (event.nativeEvent) {
-      event.nativeEvent.stopImmediatePropagation();
-    }
+    stopPropagation(event);
     this.setState({
       questionEditorOpened: !this.state.questionEditorOpened,
       selectedQuestion: data.question ? data.question : null,
@@ -38,9 +41,7 @@ export class TextTestEditor extends Component {
   }
 
   answerEditorToggleHandler = (event, data) => {
-    if (event.nativeEvent) {
-      event.nativeEvent.stopImmediatePropagation();
-    }
+    stopPropagation(event);
     this.setState({
       answerEditorOpened: !this.state.answerEditorOpened,
       selectedQuestion: data.question ? data.question : null,
@@ -52,7 +53,7 @@ export class TextTestEditor extends Component {
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-test-editor.modal-header')}</Modal.Header>
-        <Modal.Content scrolling>
+        <Modal.Content scrolling style={{ height: '65vh', maxHeight: '65vh' }}>
           {this.state.questionEditorOpened ?
             <QuestionEditor
               open={this.state.questionEditorOpened}
@@ -67,71 +68,102 @@ export class TextTestEditor extends Component {
               questionId={this.state.selectedQuestion ? this.state.selectedQuestion.id : null}
               answer={this.state.selectedAnswer}
             /> : null}
-          <List>
+          <Grid verticalAlign="middle">
             {this.props.questions.map((question, questionIndex) => (
-              <List.Item key={question.id}>
-                <List.Content floated="left" verticalAlign="middle">
-                  {`${questionIndex + 1}. ${question.questionText}`}
-                </List.Content>
-                <List.Content floated="right">
-                  <Button
-                    compact
-                    primary
-                    content="Change"
-                    onClick={event => this.questionEditorToggleHandler(event, { question })}
-                  />
-                  <Button
-                    compact
-                    negative
-                    icon="close"
-                    onClick={() => this.removeQuestionHandler(question.id)}
-                  />
-                </List.Content>
-                <List.List>
-                  {this.props.questions[questionIndex].answers.map((answer, answerIndex) => (
-                    <List.Item key={answer.id}>
-                      <List.Content floated="left" verticalAlign="middle">
-                        {`${answerIndex + 1}. ${answer.answerText}`}
-                      </List.Content>
-                      <List.Content floated="right">
-                        <Button
-                          compact
-                          icon={<Icon fitted name="check" color={answer.correct ? 'green' : 'grey'} />}
-                        />
-                        <Button
-                          primary
-                          compact
-                          content="Change"
-                          onClick={event => this.answerEditorToggleHandler(event, { question, answer })}
-                        />
-                        <Button
-                          negative
-                          compact
-                          icon="close"
-                        />
-                      </List.Content>
-                    </List.Item>
-                  ))}
-                  <List.Item key="newAnswer">
-                    <List.Content content="" />
-                    <List.Content floated="right">
-                      <Button
-                        positive
-                        compact
-                        onClick={event => this.answerEditorToggleHandler(event, { question })}
-                        content="Add answer"
+              <Fragment key={question.id}>
+                <Grid.Row
+                  style={{
+                    paddingTop: '0',
+                    paddingBottom: '0',
+                    marginTop: '0.2rem',
+                    marginBottom: '0.2rem',
+                    background: 'whitesmoke',
+                  }}
+                >
+                  <Grid.Column mobile={16} tablet={12} computer={13}>
+                    {`${questionIndex + 1}. ${question.questionText}`}
+                  </Grid.Column>
+                  <Grid.Column floated="right" mobile={16} tablet={4} computer={3}>
+                    <Button
+                      compact
+                      negative
+                      floated="right"
+                      icon="close"
+                      onClick={() => this.removeQuestionHandler(question.id)}
+                    />
+                    <Button
+                      compact
+                      primary
+                      content={this.props.translate('text-test-editor.change')}
+                      floated="right"
+                      onClick={event => this.questionEditorToggleHandler(event, { question })}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+                {this.props.questions[questionIndex].answers.map((answer, answerIndex) => (
+                  <Grid.Row
+                    key={answer.id}
+                    style={{
+                      paddingTop: '0',
+                      paddingBottom: '0',
+                      marginTop: '0.2rem',
+                      marginBottom: '0.2rem',
+                      background: 'whitesmoke',
+                    }}
+                  >
+                    <Grid.Column mobile={1} tablet={1} computer={1} textAlign="center">
+                      <Icon
+                        fitted
+                        name="check"
+                        size="large"
+                        color={answer.correct ? 'green' : 'grey'}
                       />
-                    </List.Content>
-                  </List.Item>
-                </List.List>
-              </List.Item>
+                    </Grid.Column>
+                    <Grid.Column mobile={14} tablet={10} computer={11}>
+                      {`${answerIndex + 1}. ${answer.answerText}`}
+                    </Grid.Column>
+                    <Grid.Column floated="right" mobile={16} tablet={5} computer={3}>
+                      <Button
+                        negative
+                        compact
+                        icon="close"
+                        floated="right"
+                        onClick={() => this.removeAnswerHandler(question.id, answer.id)}
+                      />
+                      <Button
+                        primary
+                        compact
+                        content={this.props.translate('text-test-editor.change')}
+                        floated="right"
+                        onClick={event => this.answerEditorToggleHandler(event, { question, answer })}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                ))}
+                <Grid.Row
+                  style={{
+                    paddingTop: '0.2rem',
+                    paddingBottom: '0.2rem',
+                  }}
+                >
+                  <Grid.Column floated="right" width={16}>
+                    <Button
+                      positive
+                      compact
+                      floated="right"
+                      onClick={event => this.answerEditorToggleHandler(event, { question })}
+                      content={this.props.translate('text-test-editor.add-answer')}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Fragment>
             ))}
-          </List>
+          </Grid>
         </Modal.Content>
         <Modal.Actions>
           <Button
             positive
-            content="Add question"
+            content={this.props.translate('text-test-editor.add-question')}
             disabled={this.props.error !== null}
             onClick={this.questionEditorToggleHandler}
           />
@@ -159,6 +191,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onRemoveQuestion: (questionId) => {
     dispatch(actionCreators.removeQuestion(questionId));
+  },
+  onRemoveAnswer: (questionId, answerId) => {
+    dispatch(actionCreators.removeAnswer(questionId, answerId));
   },
 });
 

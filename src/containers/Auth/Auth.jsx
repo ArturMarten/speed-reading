@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Modal, Form, Button, Label, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-import Aux from '../../hoc/Auxiliary/Auxiliary';
 import { checkValidity } from '../../shared/utility';
 
 const initialState = {
@@ -63,7 +62,7 @@ export class Auth extends Component {
       authRedirect = <Redirect to="/" />;
     }
     return (
-      <Aux>
+      <Fragment>
         {authRedirect}
         <Modal size="mini" open={this.props.open && !this.props.isAuthenticated} onClose={this.props.onClose} closeIcon>
           <Modal.Header>{this.props.translate('auth.modal-header')}</Modal.Header>
@@ -119,7 +118,7 @@ export class Auth extends Component {
             </Button>
           </Modal.Actions>
         </Modal>
-      </Aux>
+      </Fragment>
     );
   }
 }

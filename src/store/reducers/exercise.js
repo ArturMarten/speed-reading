@@ -28,9 +28,14 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.PREPARE_EXERCISE: {
-      const wordGroups = splitIntoWordGroups(action.payload.text, action.payload.characterCount);
+      if (state.type === 'wordGroup') {
+        const wordGroups = splitIntoWordGroups(action.payload.selectedText.plain, action.payload.exerciseOptions.characterCount);
+        return updateObject(state, {
+          wordGroups,
+          prepared: true,
+        });
+      }
       return updateObject(state, {
-        wordGroups,
         prepared: true,
       });
     }
@@ -40,7 +45,7 @@ const reducer = (state = initialState, action) => {
         type: action.payload,
         started: false,
         finished: false,
-        prepared: action.payload !== 'wordGroup',
+        prepared: false,
       });
     }
     default:

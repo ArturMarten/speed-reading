@@ -11,6 +11,7 @@ import 'semantic-ui-css/semantic.css';
 import 'semantic-ui-css/components/site.css';
 import 'semantic-ui-css/components/reset.css';
 import 'semantic-ui-css/components/transition.css';
+import 'semantic-ui-css/components/table.css';
 import 'semantic-ui-css/components/menu.css';
 import 'semantic-ui-css/components/sidebar.css';
 import 'semantic-ui-css/components/modal.css';

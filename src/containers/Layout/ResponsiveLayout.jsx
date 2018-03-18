@@ -50,7 +50,9 @@ export class ResponsiveLayout extends Component {
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
-          <Auth open={this.state.authOpened} onClose={this.authToggleHandler} />
+          {this.state.authOpened ?
+            <Auth open={this.state.authOpened} onClose={this.authToggleHandler} /> : null
+          }
           <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} />
           <Sidebar as={Menu} animation="overlay" vertical visible={this.state.sidebarOpened}>
             <Menu.Menu>
@@ -89,7 +91,8 @@ export class ResponsiveLayout extends Component {
             </Menu.Item>
             <Menu.Item
               name="exercise"
-              active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' && this.state.activeItem !== 'statistics'}
+              active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' &&
+                     this.state.activeItem !== 'statistics' && this.state.activeItem !== 'manage'}
             >
               <Icon name="winner" size="large" />
               <Dropdown text={this.props.translate('menu.exercise')}>
@@ -142,6 +145,17 @@ export class ResponsiveLayout extends Component {
               <Icon name="line graph" size="large" />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
+            {this.props.isAuthenticated ?
+              <Menu.Item
+                name="manage"
+                active={this.state.activeItem === 'manage'}
+                onClick={this.itemClickHandler}
+                as={Link}
+                to="/manage"
+              >
+                <Icon name="settings" size="large" />
+                {this.props.translate('menu.manage')}
+              </Menu.Item> : null}
             <Grid container columns="equal">
               <Grid.Row verticalAlign="middle">
                 <Grid.Column textAlign="center">
@@ -198,7 +212,8 @@ export class ResponsiveLayout extends Component {
                 </Menu.Item>
                 <Menu.Item
                   name="exercise"
-                  active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' && this.state.activeItem !== 'statistics'}
+                  active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' &&
+                        this.state.activeItem !== 'statistics' && this.state.activeItem !== 'manage'}
                 >
                   <Icon name="winner" size="large" />
                   <Dropdown text={this.props.translate('menu.exercise')}>
@@ -251,13 +266,29 @@ export class ResponsiveLayout extends Component {
                   <Icon name="line graph" size="large" />
                   {this.props.translate('menu.statistics')}
                 </Menu.Item>
+                {this.props.isAuthenticated ?
+                  <Menu.Item
+                    name="manage"
+                    active={this.state.activeItem === 'manage'}
+                    onClick={this.itemClickHandler}
+                    as={Link}
+                    to="/manage"
+                  >
+                    <Icon name="settings" size="large" />
+                    {this.props.translate('menu.manage')}
+                  </Menu.Item> : null}
                 <Menu.Menu position="right">
                   <Menu.Item fitted>
                     {this.props.isAuthenticated ?
-                      <Button positive icon labelPosition="right" onClick={this.onLogout}>
-                        {this.props.translate('auth.logout-button')}
-                        <Icon name="sign out" style={{ opacity: 1 }} />
-                      </Button> :
+                      <Popup
+                        trigger={<Icon fitted name="user" color="red" size="big" />}
+                        content={
+                          <Button positive icon labelPosition="right" onClick={this.onLogout}>
+                            {this.props.translate('auth.logout-button')}
+                            <Icon name="sign out" style={{ opacity: 1 }} />
+                          </Button>}
+                        on="click"
+                      /> :
                       <Button positive icon labelPosition="right" onClick={this.authToggleHandler}>
                         {this.props.translate('auth.login-button')}
                         <Icon name="sign in" style={{ opacity: 1 }} />
@@ -287,6 +318,7 @@ export class ResponsiveLayout extends Component {
 
 const mapStateToProps = state => ({
   path: state.router.location.pathname,
+  isAuthenticated: state.auth.token !== null,
   translate: getTranslate(state.locale),
 });
 

@@ -5,11 +5,11 @@ export const exerciseSelected = type => ({
   payload: type,
 });
 
-export const prepareExercise = (text, characterCount) => ({
+export const prepareExercise = (selectedText, exerciseOptions) => ({
   type: actionTypes.PREPARE_EXERCISE,
   payload: {
-    text,
-    characterCount,
+    selectedText,
+    exerciseOptions,
   },
 });
 

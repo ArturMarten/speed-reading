@@ -1,6 +1,6 @@
 {
   "name": "speed-reading-software",
-  "version": "5.0.14",
+  "version": "5.0.15",
   "private": true,
   "homepage": "http://kodu.ut.ee/~arturmar",
   "devDependencies": {
@@ -15,7 +15,7 @@
     "chai-enzyme": "^1.0.0-beta.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "^4.18.2",
+    "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
@@ -29,7 +29,7 @@
     "react-test-renderer": "^16.2.0",
     "replace-in-file": "^3.2.0",
     "serve": "^6.5.3",
-    "sinon": "^4.4.5",
+    "sinon": "^4.4.6",
     "sinon-chai": "^2.14.0",
     "source-map-explorer": "^1.5.0"
   },
@@ -38,7 +38,7 @@
     "connected-react-router": "^4.3.0",
     "d3-axis": "^1.0.8",
     "d3-scale": "^2.0.0",
-    "d3-selection": "^1.2.0",
+    "d3-selection": "^1.3.0",
     "d3-shape": "^1.2.0",
     "d3-transition": "^1.1.1",
     "draft-js": "^0.10.5",
@@ -48,7 +48,7 @@
     "react-dom": "^16.2.0",
     "react-loadable": "^5.3.1",
     "react-localize-redux": "^2.16.0",
-    "react-redux": "^5.0.6",
+    "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",

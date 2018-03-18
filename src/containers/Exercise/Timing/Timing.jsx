@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Button, Label, Icon } from 'semantic-ui-react';
 
 import * as actionCreators from '../../../store/actions';
-import Aux from '../../../hoc/Auxiliary/Auxiliary';
 
 let update = null;
 
@@ -92,7 +91,7 @@ export class Timing extends Component {
       }
     }
     return (
-      <Aux>
+      <Fragment>
         <Button
           circular
           disabled={this.props.timerState.stopped}
@@ -120,7 +119,7 @@ export class Timing extends Component {
         <Label basic size="big" style={{ marginTop: '5px' }}>
           <Icon name="clock" />{format(this.state.elapsedTime)}
         </Label>
-      </Aux>
+      </Fragment>
     );
   }
 }

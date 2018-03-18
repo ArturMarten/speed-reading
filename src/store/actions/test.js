@@ -135,3 +135,60 @@ export const addAnswer = answerData => (dispatch) => {
       dispatch(addAnswerFailed(error.message));
     });
 };
+
+const changeAnswerStart = () => ({
+  type: actionTypes.CHANGE_ANSWER_START,
+});
+
+const changeAnswerSucceeded = (questionId, answerId, answerData) => ({
+  type: actionTypes.CHANGE_ANSWER_SUCCEEDED,
+  payload: {
+    questionId,
+    answerId,
+    answerData,
+  },
+});
+
+const changeAnswerFailed = error => ({
+  type: actionTypes.CHANGE_ANSWER_FAILED,
+  payload: error,
+});
+
+export const changeAnswer = (questionId, answerId, answerData) => (dispatch) => {
+  dispatch(changeAnswerStart());
+  axios.put(`/answers/${answerId}`, answerData)
+    .then(() => {
+      dispatch(changeAnswerSucceeded(questionId, answerId, answerData));
+    })
+    .catch((error) => {
+      dispatch(changeAnswerFailed(error.message));
+    });
+};
+
+const removeAnswerStart = () => ({
+  type: actionTypes.REMOVE_ANSWER_START,
+});
+
+const removeAnswerSucceeded = (questionId, answerId) => ({
+  type: actionTypes.REMOVE_ANSWER_SUCCEEDED,
+  payload: {
+    questionId,
+    answerId,
+  },
+});
+
+const removeAnswerFailed = error => ({
+  type: actionTypes.REMOVE_ANSWER_FAILED,
+  payload: error,
+});
+
+export const removeAnswer = (questionId, answerId) => (dispatch) => {
+  dispatch(removeAnswerStart());
+  axios.delete(`/answers/${answerId}`)
+    .then(() => {
+      dispatch(removeAnswerSucceeded(questionId, answerId));
+    })
+    .catch((error) => {
+      dispatch(removeAnswerFailed(error.message));
+    });
+};

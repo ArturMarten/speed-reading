@@ -13,6 +13,7 @@ import TextSelection from '../containers/TextSelection/TextSelection';
 import TextTestEditor from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTest from '../containers/Exercise/Test/TextExerciseTest';
 import Statistics from '../containers/Statistics/Statistics';
+import Manage from '../containers/Manage/Manage';
 import Auth from '../containers/Auth/Auth';
 import Feedback from '../containers/Feedback/Feedback';
 
@@ -47,6 +48,10 @@ storiesOf('Test', module)
 storiesOf('Statistics', module)
   .addDecorator(story => <Provider story={story()} />)
   .add('Chart', () => <Statistics />);
+
+storiesOf('Manage', module)
+  .addDecorator(story => <Provider story={story()} />)
+  .add('Default', () => <Manage />);
 
 storiesOf('Auth', module)
   .addDecorator(story => <Provider story={story()} />)

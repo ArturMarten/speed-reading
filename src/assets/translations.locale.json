@@ -11,6 +11,7 @@
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
     "statistics": ["Statistika", "Statistics"],
+    "manage": ["Halda", "Manage"],
     "feedback-popup": ["Anna tagasisidet", "Give feedback"]
   },
   "auth": {
@@ -45,6 +46,7 @@
   "app-stats": {
     "exercises": ["Harjutust", "Exercises"],
     "texts": ["Teksti", "Texts"],
+    "questions": ["Küsimust", "Questions"],
     "users": ["Kasutajat", "Users"],
     "feedback": ["Tagasisidet", "Feedback"]
   },
@@ -93,7 +95,28 @@
   },
   "text-test-editor": {
     "modal-header": ["Testi küsimused", "Test questions"],
+    "change": ["Muuda", "Change"],
+    "add-question": ["Lisa küsimus", "Add question"],
+    "add-answer": ["Lisa vastus", "Add answer"],
     "ok": ["OK", "OK"]
+  },
+  "question-editor": {
+    "modal-header-new": ["Uus küsimus", "New question"],
+    "modal-header-change": ["Muuda küsimust", "Change question"],
+    "insert-new-placeholder": ["Sisesta uus küsimus siia...", "Insert new question here..."],
+    "insert-changed-placeholder": ["Sisesta muudetud küsimus siia...", "Insert changed question here..."],
+    "category-question": ["Küsimus", "Question"],
+    "category-blank": ["Lünkülesanne", "Blank"],
+    "add-question": ["Lisa", "Add"],
+    "change-question": ["Muuda", "Change"]
+  },
+  "answer-editor": {
+    "modal-header-new": ["Uus vastusevariant", "New answer"],
+    "modal-header-change": ["Muuda vastusevarianti", "Change answer"],
+    "insert-new-placeholder": ["Sisesta uus vastus siia...", "Insert new answer here..."],
+    "insert-changed-placeholder": ["Sisesta muudetud vastus siia...", "Insert changed answer here..."],
+    "add-answer": ["Lisa", "Add"],
+    "change-answer": ["Muuda", "Change"]
   },
   "exercises": {
     "title-reading": ["Lugemise soodustaja", "Reading aid"],
@@ -154,6 +177,40 @@
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "wpm": ["Sõnu minutis", "Words Per Minute"],
     "date": ["Kuupäev", "Date"]
+  },
+  "manage": {
+    "title": ["Halda", "Manage"],
+    "description": ["Siin saab kasutajaid hallata", "Here you can manage users"],
+    "fetching-users": ["Laen kasutajaid", "Fetching users"],
+    "table-group": ["Grupp", "Group"],
+    "table-email": ["E-maili aadress", "E-mail address"],
+    "table-registration": ["Registreerimise kuupäev", "Registration date"],
+    "table-last-login": ["Viimane sisselogimine", "Last login"],
+    "table-role": ["Roll", "Role"],
+    "table-change": ["Muuda", "Change"],
+    "last-login-never": ["Mitte kunagi", "Never"],
+    "role-student": ["Õpilane", "Student"],
+    "role-teacher": ["Õpetaja", "Teacher"],
+    "role-developer": ["Arendaja", "Developer"],
+    "role-admin": ["Admin", "Admin"],
+    "table-add-user": ["Lisa kasutaja", "Add user"]
+  },
+  "group-editor": {
+    "modal-header-new": ["Uus grupp", "New group"],
+    "modal-header-change": ["Muuda gruppi", "Change group"],
+    "insert-new-placeholder": ["Sisesta uus grupp siia...", "Insert new group here..."],
+    "insert-changed-placeholder": ["Sisesta muudetud grupp siia...", "Insert changed group here..."],
+    "add-group": ["Lisa", "Add"],
+    "change-group": ["Muuda", "Change"]
+  },
+  "user-editor": {
+    "modal-header-new": ["Uus kasutaja", "New user"],
+    "modal-header-change": ["Muuda kasutajat", "Change user"],
+    "group-placeholder": ["Grupp", "Group"],
+    "insert-new-placeholder": ["Sisesta uue kasutaja e-mail siia...", "Insert new user e-mail here..."],
+    "notify-user-password": ["Teavita kasutajat paroolist", "Notify user about password"],
+    "add-user": ["Lisa", "Add"],
+    "change-user": ["Muuda", "Change"]
   },
   "error-popup" : {
     "modal-header": ["Viga", "Error"],
