@@ -139,13 +139,12 @@ const mapStateToProps = state => ({
   textOptions: state.options.textOptions,
   speedOptions: state.options.speedOptions,
   timerState: state.timing.timer,
-  elapsedTime: state.timing.elapsedTime,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
   onExerciseFinish: () => {
-    dispatch(actionCreators.exerciseFinished());
+    dispatch(actionCreators.finishExercise());
   },
 });
 

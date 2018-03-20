@@ -19,7 +19,8 @@
     "modal-header": ["Kasutaja autentimine", "Account authentication"],
     "username": ["E-maili aadress", "E-mail address"],
     "password": ["Parool", "Password"],
-    "demo": ["Demo kasutaja", "Demo user"],
+    "demo": ["Demo", "Demo"],
+    "required": ["Vajalik autentimine", "Authentication required"],
     "logout-button": ["Logi välja", "Logout"]
   },
   "feedback": {
@@ -132,12 +133,16 @@
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],
     "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"],
-    "text-preview": ["Teksti eelvaade", "Text preview"],
-    "page": ["Lehekülg", "Page"],
-    "modal-heading": ["Harjutus lõpetatud", "Exercise finished"],
-    "modal-result": ["Lugemiskiirus (sõnade arv minutis)", "Reading speed (Words Per Minute)"],
-    "modal-question": ["Jätka omandamistaseme testiga", "Proceed with comprehension test"],
-    "modal-no": ["Ei", "No"]
+    "text-preview": ["Teksti eelvaade", "Text preview"]
+  },
+  "text-exercise-results": {
+    "modal-header": ["Harjutus lõpetatud", "Exercise finished"],
+    "elapsed-time": ["Kulunud aeg", "Elapsed time"],
+    "reading-speed": ["Lugemiskiirus", "Reading speed"],
+    "wpm": ["sõna minutis", "words per minute"],
+    "cpm": ["tähemärki minutis", "characters per minute"],
+    "proceed": ["Jätka testiga", "Proceed with test"],
+    "finish": ["Lõpeta", "Finish"]
   },
   "text-exercise-test": {
     "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
@@ -145,11 +150,13 @@
     "start-test": ["Alusta testiga", "Start test"],
     "previous-question": ["Eelmine küsimus", "Previous question"],
     "next-question": ["Järgmine küsimus", "Next question"],
-    "modal-heading": ["Test lõpetatud", "Test finished"],
-    "modal-result": ["Tulemus", "Result"],
-    "finish-test": ["Lõpeta test", "Finish test"],
+    "finish-test": ["Lõpeta test", "Finish test"]
+  },
+  "test-results": {
+    "modal-header": ["Test lõpetatud", "Test finished"],
+    "result": ["Tulemus", "Result"],
     "check-correct-answers": ["Vaata vastuseid", "Check answers"],
-    "proceed": ["Jätka", "Proceed"]
+    "finish": ["Lõpeta", "Finish"]
   },
   "text-options": {
     "text-width": ["Teksti laius", "Text width"],
@@ -216,8 +223,11 @@
     "modal-header": ["Viga", "Error"],
     "network-error": ["Probleem ühendusega", "Network problem"],
     "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],
+    "authentication-token-missing": ["Autentimise võti puudub", "Authentication token is missing"],
+    "authentication-token-invalid": ["Autentimise võti vigane", "Authentication token is invalid"],
     "user-not-found": ["Sellist kasutajat ei eksisteeri", "User does not exist"],
     "incorrect-password": ["Vale parool", "Incorrect password"],
+    "no-permission": ["Puuduvad vajalikud õigused", "You do not have required permission"],
     "ok": ["OK", "OK"]
   }
 }

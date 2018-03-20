@@ -104,6 +104,7 @@ export class Manage extends Component {
                       primary
                       compact
                       content={this.props.translate('manage.table-change')}
+                      disabled={user.role === 'admin'}
                       onClick={event => this.userEditorToggleHandler(event, { user })}
                     />
                   </Table.Cell>

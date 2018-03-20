@@ -1,21 +1,21 @@
 import * as actionTypes from './actionTypes';
 
-export const startRequested = () => ({
+export const startTimer = () => ({
   type: actionTypes.TIMER_START,
 });
 
-export const pauseRequested = () => ({
+export const pauseTimer = () => ({
   type: actionTypes.TIMER_PAUSE,
 });
 
-export const resumeRequested = () => ({
+export const resumeTimer = () => ({
   type: actionTypes.TIMER_RESUME,
 });
 
-export const resetRequested = () => ({
+export const resetTimer = () => ({
   type: actionTypes.TIMER_RESET,
 });
 
-export const stopRequested = () => ({
+export const stopTimer = () => ({
   type: actionTypes.TIMER_STOP,
 });

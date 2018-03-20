@@ -1,9 +1,9 @@
 export {
-  startRequested,
-  pauseRequested,
-  resumeRequested,
-  resetRequested,
-  stopRequested,
+  startTimer,
+  pauseTimer,
+  resumeTimer,
+  resetTimer,
+  stopTimer,
 } from './timing';
 
 export {
@@ -13,9 +13,10 @@ export {
 } from './options';
 
 export {
-  exerciseSelected,
+  selectExercise,
   prepareExercise,
-  exerciseFinished,
+  startExercise,
+  finishExercise,
 } from './exercise';
 
 export {
@@ -26,6 +27,9 @@ export {
   addAnswer,
   changeAnswer,
   removeAnswer,
+  prepareTest,
+  startTest,
+  finishTest,
 } from './test';
 
 export {

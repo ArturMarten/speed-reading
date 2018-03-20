@@ -14,16 +14,19 @@ const initialState = {
   timer: initialTimer,
 };
 
-const updateElapsedTime = state => state.elapsedTime + (Date.now() - state.startTime);
+const calculateElapsedTime = state => state.elapsedTime + (Date.now() - state.startTime);
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.TIMER_INIT: {
+      return updateObject(state, initialState);
+    }
     case actionTypes.TIMER_START: {
       console.log('Started!');
       const updatedTimer = updateObject(state.timer, {
         started: true,
-        resetted: false,
         paused: false,
+        resetted: false,
         stopped: false,
       });
       return updateObject(state, {
@@ -32,7 +35,7 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.TIMER_PAUSE: {
-      const updatedElapsedTime = updateElapsedTime(state);
+      const updatedElapsedTime = calculateElapsedTime(state);
       console.log(`Paused! Elapsed: ${updatedElapsedTime}ms`);
       const updatedTimer = updateObject(state.timer, {
         paused: true,
@@ -53,34 +56,21 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.TIMER_RESET: {
       console.log('Resetted!');
-      const updatedTimer = updateObject(state.timer, {
-        started: false,
+      const updatedTimer = updateObject(initialState.timer, {
         resetted: true,
-        stopped: false,
+        paused: true,
       });
-      return updateObject(state, {
-        startTime: 0,
-        elapsedTime: 0,
+      const resettedState = updateObject(initialState, {
         timer: updatedTimer,
       });
+      return updateObject(state, resettedState);
     }
     case actionTypes.TIMER_STOP: {
-      const updatedElapsedTime = updateElapsedTime(state);
+      let updatedElapsedTime = state.elapsedTime;
+      if (!state.timer.paused) {
+        updatedElapsedTime = calculateElapsedTime(state);
+      }
       console.log(`Stopped! Elapsed: ${updatedElapsedTime}ms`);
-      const updatedTimer = updateObject(state.timer, {
-        stopped: true,
-      });
-      return updateObject(state, {
-        elapsedTime: updatedElapsedTime,
-        timer: updatedTimer,
-      });
-    }
-    case actionTypes.EXERCISE_SELECTED: {
-      return updateObject(state, initialState);
-    }
-    case actionTypes.EXERCISE_FINISHED: {
-      const updatedElapsedTime = updateElapsedTime(state);
-      console.log(`Exercise finished! Elapsed: ${updatedElapsedTime}ms`);
       const updatedTimer = updateObject(state.timer, {
         stopped: true,
       });
