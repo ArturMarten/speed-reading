@@ -8,26 +8,25 @@ const initialState = {
   finished: false,
   prepared: false,
   wordGroups: [],
+  results: {
+    elapsedTime: 0,
+    wpm: 0,
+    cpm: 0,
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.TIMER_START: {
+    case actionTypes.EXERCISE_SELECT: {
+      console.log(`Exercise selected: ${action.payload}`);
       return updateObject(state, {
-        started: true,
+        type: action.payload,
+        started: false,
+        finished: false,
+        prepared: false,
       });
     }
-    case actionTypes.TIMER_STOP: {
-      return updateObject(state, {
-        finished: true,
-      });
-    }
-    case actionTypes.EXERCISE_FINISHED: {
-      return updateObject(state, {
-        finished: true,
-      });
-    }
-    case actionTypes.PREPARE_EXERCISE: {
+    case actionTypes.EXERCISE_PREPARE: {
       if (state.type === 'wordGroup') {
         const wordGroups = splitIntoWordGroups(action.payload.selectedText.plain, action.payload.exerciseOptions.characterCount);
         return updateObject(state, {
@@ -39,13 +38,21 @@ const reducer = (state = initialState, action) => {
         prepared: true,
       });
     }
-    case actionTypes.EXERCISE_SELECTED: {
-      console.log(`Exercise selected: ${action.payload}`);
+    case actionTypes.EXERCISE_START: {
       return updateObject(state, {
-        type: action.payload,
-        started: false,
-        finished: false,
-        prepared: false,
+        started: true,
+      });
+    }
+    case actionTypes.EXERCISE_FINISH: {
+      const { elapsedTime, selectedText } = action.payload;
+      const results = {
+        elapsedTime,
+        wpm: Math.round(selectedText.wordCount / (elapsedTime / (1000 * 60))),
+        cpm: Math.round(selectedText.characterCount / (elapsedTime / (1000 * 60))),
+      };
+      return updateObject(state, {
+        finished: true,
+        results,
       });
     }
     default:

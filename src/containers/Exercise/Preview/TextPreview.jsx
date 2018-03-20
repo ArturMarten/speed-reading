@@ -54,7 +54,6 @@ export class TextPreview extends Component {
                 width={this.props.textOptions.width}
                 height={400}
               />
-              <div>{this.props.translate('exercises.page')} 1</div>
             </div>
           </Segment>
         </Grid.Row>

@@ -6,7 +6,7 @@ import configureStore from '../store/configureStore';
 
 const history = createMemoryHistory();
 
-const store = configureStore(history, {});
+export const store = configureStore(history, {});
 
 export default function Provider({ story }) {
   return (

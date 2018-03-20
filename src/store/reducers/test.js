@@ -6,6 +6,11 @@ const initialState = {
   loading: false,
   error: null,
   questions: [],
+  started: false,
+  finished: false,
+  results: {
+    elapsedTime: 0,
+  },
 };
 
 const reducer = (state = initialState, action) => {
@@ -132,6 +137,27 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.REMOVE_ANSWER_FAILED: {
       return updateObject(state, {
+      });
+    }
+    case actionTypes.TEST_PREPARE: {
+      return updateObject(state, {
+        started: false,
+        finished: false,
+      });
+    }
+    case actionTypes.TEST_START: {
+      return updateObject(state, {
+        started: true,
+      });
+    }
+    case actionTypes.TEST_FINISH: {
+      const { elapsedTime } = action.payload;
+      const results = {
+        elapsedTime,
+      };
+      return updateObject(state, {
+        finished: true,
+        results,
       });
     }
     default:

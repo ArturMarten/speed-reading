@@ -29,7 +29,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.TEXT_SAVE_REQUESTED: {
+    case actionTypes.TEXT_SAVE_START: {
       return updateObject(state, {
         savingText: true,
       });

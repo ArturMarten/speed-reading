@@ -38,6 +38,10 @@ export class Auth extends Component {
     this.props.onLogin(this.state.loginForm.email.value, this.state.loginForm.password.value);
   }
 
+  onDemoLogin = () => {
+    this.props.onLogin('***DEMO_EMAIL***', '***REMOVED***');
+  }
+
   inputChangeHandler = (event, { name, value }) => {
     const updatedLoginForm = { ...this.state.loginForm };
     const updatedFormElement = { ...updatedLoginForm[name] };
@@ -103,6 +107,7 @@ export class Auth extends Component {
               labelPosition="right"
               loading={this.props.loading}
               disabled={this.props.loading}
+              onClick={this.onDemoLogin}
             >
               {this.props.translate('auth.demo')}
               <Icon name="sign in" style={{ opacity: 1 }} />

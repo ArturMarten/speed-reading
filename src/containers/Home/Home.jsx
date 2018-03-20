@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Divider, Image, Message } from 'semantic-ui-react';
+import { Container, Header, Divider, Image, Message, Grid } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import AppStats from './AppStats/AppStats';
@@ -11,6 +11,7 @@ import studyEngLogo from '../../assets/img/study_eng.jpg';
 
 export class Home extends Component {
   state = {};
+
   render() {
     return (
       <Container style={{ marginTop: '4vh' }}>
@@ -25,16 +26,31 @@ export class Home extends Component {
         <Divider />
         <AppStats />
         <Divider />
-        {this.props.currentLanguage === 'ee' ?
-          <Image.Group>
-            <Image src={utEstLogo} size="medium" alt="University of Tartu logo" />
-            <Image src={studyEstLogo} size="small" alt="Study IT logo" />
-          </Image.Group> :
-          <Image.Group>
-            <Image src={utEngLogo} size="medium" alt="University of Tartu logo" />
-            <Image src={studyEngLogo} size="small" alt="Study IT logo" />
-          </Image.Group>
-        }
+        <Grid verticalAlign="middle">
+          <Grid.Row columns={2} style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <Grid.Column>
+              <Image
+                centered
+                src={this.props.currentLanguage === 'ee' ? utEstLogo : utEngLogo}
+                size="medium"
+                alt="University of Tartu logo"
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Image
+                centered
+                src={this.props.currentLanguage === 'ee' ? studyEstLogo : studyEngLogo}
+                size="small"
+                alt="Study IT logo"
+              />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={1}>
+            <Grid.Column textAlign="right">
+              MIT license © {(new Date()).getFullYear()} <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Container>
     );
   }

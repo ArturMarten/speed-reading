@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Grid, Pagination, List, Modal } from 'semantic-ui-react';
+import { Container, Header, Button, Grid, Pagination, List } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
+
+import * as actionCreators from '../../../store/actions';
 
 const dummyData = [
   { id: 1, questionText: 'Mehelikku energiat iseloomustavad ego, sõjad, võistlemine ja............ning läbi aastasadade on seda olnud enam kui küllalt.', answers: [{ id: 1, answerText: 'passiivsus' }, { id: 2, answerText: 'vägivaldsus' }, { id: 3, answerText: 'agressiivsus' }, { id: 4, answerText: 'sõjakus' }] },
@@ -13,12 +15,14 @@ const dummyData = [
 
 export class TextExerciseTest extends Component {
   state = {
-    started: false,
     selectedQuestion: dummyData[0],
     answers: [],
     loading: false,
-    finished: false,
   };
+
+  componentDidMount() {
+    this.props.onTestPrepare();
+  }
 
   onQuestionChange = (event, data) => {
     this.setState({ selectedQuestion: dummyData[data.activePage - 1] });
@@ -31,13 +35,14 @@ export class TextExerciseTest extends Component {
   }
 
   onTestStartHandler = () => {
-    this.setState({ started: true });
+    this.props.onTestStart();
   }
 
   onTestFinishHandler = () => {
     this.setState({ loading: true });
     setTimeout(() => {
-      this.setState({ loading: false, finished: true });
+      this.setState({ loading: false });
+      this.props.onTestFinish();
     }, 1500);
   }
 
@@ -55,31 +60,12 @@ export class TextExerciseTest extends Component {
         </List.Content>
       </List.Item>
     ));
+
     return (
       <Container style={{ marginTop: '4vh' }}>
-        <Modal open={this.state.finished} size="tiny">
-          <Modal.Header>{this.props.translate('text-exercise-test.modal-heading')}</Modal.Header>
-          <Modal.Content>
-            <Modal.Description>
-              {this.props.translate('text-exercise-test.modal-result')}: 80%
-            </Modal.Description>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              primary
-              onClick={() => this.setState({ finished: false })}
-              content={this.props.translate('text-exercise-test.check-correct-answers')}
-            />
-            <Button
-              positive
-              onClick={() => this.setState({ finished: false })}
-              content={this.props.translate('text-exercise-test.proceed')}
-            />
-          </Modal.Actions>
-        </Modal>
         <Header as="h2" content={this.props.translate('text-exercise-test.title')} />
         <p>{this.props.translate('text-exercise-test.description')}</p>
-        {this.state.started ?
+        {this.props.started ?
           <Grid>
             <Grid.Row centered>
               <Header as="h4" content={this.state.selectedQuestion.questionText} />
@@ -113,12 +99,13 @@ export class TextExerciseTest extends Component {
               />
             </Grid.Row>
           </Grid> : null}
-        {this.state.started ?
+        {this.props.started ?
           <Button
             negative
             onClick={this.onTestFinishHandler}
             loading={this.state.loading}
             floated="right"
+            disabled={this.props.finished}
           >{this.props.translate('text-exercise-test.finish-test')}
           </Button> :
           <Button
@@ -133,11 +120,21 @@ export class TextExerciseTest extends Component {
 }
 
 const mapStateToProps = state => ({
+  started: state.test.started,
+  finished: state.test.finished,
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
+  onTestPrepare: () => {
+    dispatch(actionCreators.prepareTest());
+  },
+  onTestStart: () => {
+    dispatch(actionCreators.startTest());
+  },
+  onTestFinish: () => {
+    dispatch(actionCreators.finishTest());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseTest);

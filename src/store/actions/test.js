@@ -192,3 +192,47 @@ export const removeAnswer = (questionId, answerId) => (dispatch) => {
       dispatch(removeAnswerFailed(error.message));
     });
 };
+
+const timerInit = () => ({
+  type: actionTypes.TIMER_INIT,
+});
+
+const timerStart = () => ({
+  type: actionTypes.TIMER_START,
+});
+
+const timerStop = () => ({
+  type: actionTypes.TIMER_STOP,
+});
+
+const testPrepared = () => ({
+  type: actionTypes.TEST_PREPARE,
+});
+
+const testStarted = () => ({
+  type: actionTypes.TEST_START,
+});
+
+const testFinished = elapsedTime => ({
+  type: actionTypes.TEST_FINISH,
+  payload: {
+    elapsedTime,
+  },
+});
+
+export const prepareTest = () => (dispatch) => {
+  dispatch(timerInit());
+  dispatch(testPrepared());
+};
+
+export const startTest = () => (dispatch) => {
+  dispatch(timerStart());
+  dispatch(testStarted());
+};
+
+export const finishTest = () => (dispatch, getState) => {
+  dispatch(timerStop());
+  const state = getState();
+  const { elapsedTime } = state.timing;
+  dispatch(testFinished(elapsedTime));
+};

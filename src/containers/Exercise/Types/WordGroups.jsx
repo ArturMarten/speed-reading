@@ -89,7 +89,7 @@ export class WordGroups extends Component {
       <canvas
         ref={(ref) => { this.shownCanvas = ref; }}
         width={this.props.textOptions.width}
-        height={450}
+        height={1000}
       />
     );
   }
@@ -104,8 +104,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onExerciseSelect: (type) => {
-    dispatch(actionCreators.exerciseSelected(type));
+  onExerciseFinish: () => {
+    dispatch(actionCreators.finishExercise());
   },
 });
 

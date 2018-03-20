@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
 
 const textSaveStart = () => ({
-  type: actionTypes.TEXT_SAVE_REQUESTED,
+  type: actionTypes.TEXT_SAVE_START,
 });
 
 const textSaveSucceeded = () => ({

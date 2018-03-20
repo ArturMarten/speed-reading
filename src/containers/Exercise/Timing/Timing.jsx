@@ -39,7 +39,7 @@ export class Timing extends Component {
       startTime: Date.now(),
     });
     update = setInterval(() => {
-      this.progress();
+      this.calculateElapsedTime();
     }, 1001);
   }
 
@@ -50,7 +50,7 @@ export class Timing extends Component {
 
   pauseClickHandler = () => {
     clearInterval(update);
-    this.progress();
+    this.calculateElapsedTime();
     this.props.onPause();
   }
 
@@ -70,11 +70,13 @@ export class Timing extends Component {
 
   stopClickHandler = () => {
     clearInterval(update);
-    this.progress();
+    if (!this.props.timerState.paused) {
+      this.calculateElapsedTime();
+    }
     this.props.onStop();
   }
 
-  progress = () => {
+  calculateElapsedTime = () => {
     this.setState({
       elapsedTime: this.state.elapsedTime + (Date.now() - this.state.startTime),
       startTime: Date.now(),
@@ -129,20 +131,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onStart: () => {
-    dispatch(actionCreators.startRequested());
-  },
   onPause: () => {
-    dispatch(actionCreators.pauseRequested());
+    dispatch(actionCreators.pauseTimer());
   },
   onResume: () => {
-    dispatch(actionCreators.resumeRequested());
+    dispatch(actionCreators.resumeTimer());
   },
   onReset: () => {
-    dispatch(actionCreators.resetRequested());
-  },
-  onStop: () => {
-    dispatch(actionCreators.stopRequested());
+    dispatch(actionCreators.resetTimer());
   },
 });
 

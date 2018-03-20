@@ -118,7 +118,7 @@ export class Reading extends Component {
         () => this.update(),
         this.cursorState.newLine ? this.updateInterval + LINE_BREAK_DELAY : this.updateInterval,
       );
-      requestAnimationFrame(() => this.draw());
+      this.draw();
     }
   }
 
@@ -147,13 +147,12 @@ const mapStateToProps = state => ({
   textOptions: state.options.textOptions,
   speedOptions: state.options.speedOptions,
   timerState: state.timing.timer,
-  elapsedTime: state.timing.elapsedTime,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
   onExerciseFinish: () => {
-    dispatch(actionCreators.exerciseFinished());
+    dispatch(actionCreators.finishExercise());
   },
 });
 

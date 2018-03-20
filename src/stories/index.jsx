@@ -1,15 +1,17 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { storiesOf } from '@storybook/react';
+import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { getTranslate } from 'react-localize-redux';
 
-import Provider from './Provider';
+import Provider, { store } from './Provider';
 
 import Home from '../containers/Home/Home';
 import TextEntry from '../containers/TextEntry/TextEntry';
 import TextEditor from '../containers/TextEditor/TextEditor';
 import TextExercisePreparation from '../containers/Exercise/Preparation/TextExercisePreparation';
 import TextSelection from '../containers/TextSelection/TextSelection';
+import TextExerciseResultsContainer, { TextExerciseResults } from '../containers/Exercise/Container/TextExerciseResults';
 import TextTestEditor from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTest from '../containers/Exercise/Test/TextExerciseTest';
 import Statistics from '../containers/Statistics/Statistics';
@@ -17,48 +19,49 @@ import Manage from '../containers/Manage/Manage';
 import Auth from '../containers/Auth/Auth';
 import Feedback from '../containers/Feedback/Feedback';
 
+const translate = getTranslate(store.getState().locale);
+addDecorator(story => <Provider story={story()} />);
+
 storiesOf('Home', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <Home />);
+  .add('Container', () => <Home />);
 
 storiesOf('Text entry', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <TextEntry />);
+  .add('Container', () => <TextEntry />);
 
 storiesOf('Text editor', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <TextEditor />);
+  .add('Container', () => <TextEditor />);
 
 storiesOf('Preparation', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Reading exercise', () => <TextExercisePreparation type="reading" onProceed={action('clicked')} />);
+  .add('Container', () => <TextExercisePreparation type="reading" onProceed={action('clicked')} />);
 
 storiesOf('Text selection', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <TextSelection open />);
+  .add('Container', () => <TextSelection open />);
+
+storiesOf('Text exercise results', module)
+  .add('Container', () => <TextExerciseResultsContainer open />)
+  .add('Component', () => (
+    <TextExerciseResults
+      open
+      translate={translate}
+      results={{ elapsedTime: 224200, wpm: 306, cpm: 2064 }}
+    />));
 
 storiesOf('Text test editor', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <TextTestEditor open readingTextId={9} />);
+  .add('Container', () => <TextTestEditor open readingTextId={9} />);
 
-storiesOf('Test', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Reading test', () => <TextExerciseTest />);
+storiesOf('Text exercise test', module)
+  .add('Container', () => <TextExerciseTest />);
 
 storiesOf('Statistics', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Chart', () => <Statistics />);
+  .add('Container', () => <Statistics />);
 
 storiesOf('Manage', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Default', () => <Manage />);
+  .add('Container', () => <Manage />);
 
 storiesOf('Auth', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Login', () => <Auth open />);
+  .add('Container', () => <Auth open />);
 
 storiesOf('Feedback', module)
-  .addDecorator(story => <Provider story={story()} />)
-  .add('Before submission', () => <Feedback open loading={false} sent={false} />);
+  .add('Container', () => <Feedback open loading={false} sent={false} />);
 //  .add('Submitted', () => <Feedback open loading sent={false} />)
 //  .add('After Submission', () => <Feedback open loading={false} sent />);
