@@ -14,7 +14,7 @@ import WordGroups from '../Types/WordGroups';
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;
 
-class TextExercise extends Component {
+export class TextExercise extends Component {
   state = {};
   render() {
     const exercise = ((type) => {

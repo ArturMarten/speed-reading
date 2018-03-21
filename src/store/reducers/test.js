@@ -10,6 +10,9 @@ const initialState = {
   finished: false,
   results: {
     elapsedTime: 0,
+    total: 1,
+    correct: 0,
+    incorrect: 0,
   },
 };
 
@@ -152,9 +155,9 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.TEST_FINISH: {
       const { elapsedTime } = action.payload;
-      const results = {
+      const results = updateObject(state.results, {
         elapsedTime,
-      };
+      });
       return updateObject(state, {
         finished: true,
         results,

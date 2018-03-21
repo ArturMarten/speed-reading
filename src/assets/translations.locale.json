@@ -125,22 +125,26 @@
     "title-wordGroup": ["Sõnarühmade harjutus", "Word group exercise"],
     "description-wordGroup": ["Sõnarühmade harjutuse kirjeldus", "Word group exercise description"],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
-    "description-disappearing": ["Kustuva teksti harjutuse kirjeldus", "Disappearing text exercise description"],
+    "description-disappearing": ["Kustuva teksti harjutuse kirjeldus", "Disappearing text exercise description"]
+  },
+  "text-exercise-preparation": {
     "proceed": ["Jätka", "Proceed"],
     "text-selection": ["Teksti valik", "Text selection"],
     "text-selected": ["Valitud tekst", "Text selected"],
     "text-not-selected": ["Tekst valimata", "Text not selected"],
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],
-    "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"],
-    "text-preview": ["Teksti eelvaade", "Text preview"]
+    "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"]
+  },
+  "text-preview": {
+    "show": ["Näita teksti eelvaade", "Show text preview"],
+    "hide": ["Peida teksti eelvaade", "Hide text preview"]
   },
   "text-exercise-results": {
     "modal-header": ["Harjutus lõpetatud", "Exercise finished"],
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
-    "reading-speed": ["Lugemiskiirus", "Reading speed"],
     "wpm": ["sõna minutis", "words per minute"],
-    "cpm": ["tähemärki minutis", "characters per minute"],
+    "cps": ["tähemärki sekundis", "characters per second"],
     "proceed": ["Jätka testiga", "Proceed with test"],
     "finish": ["Lõpeta", "Finish"]
   },
@@ -154,7 +158,10 @@
   },
   "test-results": {
     "modal-header": ["Test lõpetatud", "Test finished"],
-    "result": ["Tulemus", "Result"],
+    "elapsed-time": ["Kulunud aeg", "Elapsed time"],
+    "correct": ["Õiget", "Correct"],
+    "incorrect": ["Valet", "Incorrect"],
+    "percentage": ["Tulemus", "Result"],
     "check-correct-answers": ["Vaata vastuseid", "Check answers"],
     "finish": ["Lõpeta", "Finish"]
   },
