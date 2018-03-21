@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { convertFromHTML, ContentState } from 'draft-js';
-import { Grid, Header, Segment } from 'semantic-ui-react';
+import { Grid, Button, Icon, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import { writeText } from '../../../utils/CanvasUtils/CanvasUtils';
@@ -14,6 +14,10 @@ const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p>
 const content = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
 
 export class TextPreview extends Component {
+  state = {
+    show: false,
+  };
+
   componentDidMount() {
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
@@ -23,6 +27,10 @@ export class TextPreview extends Component {
 
   componentDidUpdate() {
     this.init();
+  }
+
+  toggleClickHandler = () => {
+    this.setState({ show: !this.state.show });
   }
 
   init() {
@@ -38,11 +46,19 @@ export class TextPreview extends Component {
 
   render() {
     return (
-      <Grid>
-        <Grid.Row centered>
-          <Header as="h3" content={this.props.translate('exercises.text-preview')} />
+      <Grid container centered>
+        <Grid.Row style={{ paddingBottom: 0 }}>
+          <Button
+            basic
+            fluid
+            compact
+            onClick={this.toggleClickHandler}
+          >
+            <Icon name={this.state.show ? 'chevron up' : 'chevron down'} style={{ opacity: 1 }} />
+            {this.state.show ? this.props.translate('text-preview.hide') : this.props.translate('text-preview.show')}
+          </Button>
         </Grid.Row>
-        <Grid.Row centered>
+        <Grid.Row style={{ visibility: this.state.show ? 'visible' : 'hidden' }}>
           <Segment compact>
             <div
               style={{
@@ -52,7 +68,7 @@ export class TextPreview extends Component {
               <canvas
                 ref={(ref) => { this.shownCanvas = ref; }}
                 width={this.props.textOptions.width}
-                height={400}
+                height={300}
               />
             </div>
           </Segment>

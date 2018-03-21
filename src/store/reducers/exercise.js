@@ -11,7 +11,7 @@ const initialState = {
   results: {
     elapsedTime: 0,
     wpm: 0,
-    cpm: 0,
+    cps: 0,
   },
 };
 
@@ -45,11 +45,11 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.EXERCISE_FINISH: {
       const { elapsedTime, selectedText } = action.payload;
-      const results = {
+      const results = updateObject(state.results, {
         elapsedTime,
         wpm: Math.round(selectedText.wordCount / (elapsedTime / (1000 * 60))),
-        cpm: Math.round(selectedText.characterCount / (elapsedTime / (1000 * 60))),
-      };
+        cps: Math.round(selectedText.characterCount / (elapsedTime / (1000))),
+      });
       return updateObject(state, {
         finished: true,
         results,

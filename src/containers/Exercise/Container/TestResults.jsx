@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, Popup } from 'semantic-ui-react';
+import { Modal, Grid, Transition, Icon, Statistic, Button, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-class TestResults extends Component {
+import { formatMilliseconds } from '../../../shared/utility';
+
+export class TestResults extends Component {
   state = {}
 
   render() {
@@ -11,9 +13,33 @@ class TestResults extends Component {
       <Modal open={this.props.open} size="tiny">
         <Modal.Header>{this.props.translate('test-results.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Modal.Description>
-            {this.props.translate('test-results.result')}: 80%
-          </Modal.Description>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column verticalAlign="middle" width={6}>
+                <Transition animation="shake" duration={2000} transitionOnMount>
+                  <Icon name="graduation" size="massive" color="black" />
+                </Transition>
+              </Grid.Column>
+              <Grid.Column width={10}>
+                <Statistic size="small" color="black">
+                  <Statistic.Value>{formatMilliseconds(this.props.results.elapsedTime)}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
+                </Statistic>
+                <Statistic size="small" color="blue">
+                  <Statistic.Value>{Math.round((this.props.results.correct / this.props.results.total) * 100)}%</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.percentage')}</Statistic.Label>
+                </Statistic>
+                <Statistic size="small" color="green">
+                  <Statistic.Value>{this.props.results.correct}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.correct')}</Statistic.Label>
+                </Statistic>
+                <Statistic size="small" color="red">
+                  <Statistic.Value>{this.props.results.incorrect}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.incorrect')}</Statistic.Label>
+                </Statistic>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Modal.Content>
         <Modal.Actions>
           <Popup
@@ -39,6 +65,7 @@ class TestResults extends Component {
 }
 
 const mapStateToProps = state => ({
+  results: state.test.results,
   translate: getTranslate(state.locale),
 });
 

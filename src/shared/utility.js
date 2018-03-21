@@ -34,3 +34,18 @@ export const stopPropagation = (event) => {
     event.nativeEvent.stopImmediatePropagation();
   }
 };
+
+export const formatMilliseconds = (input) => {
+  const pad = (time, length) => {
+    let result = time;
+    while (result.length < length) {
+      result = `0${result}`;
+    }
+    return result;
+  };
+  const inputTime = new Date(input);
+  const minutes = pad(inputTime.getMinutes().toString(), 2);
+  const seconds = pad(inputTime.getSeconds().toString(), 2);
+  const milliseconds = pad(inputTime.getMilliseconds().toString()[0], 1);
+  return `${minutes}:${seconds}.${milliseconds}`;
+};

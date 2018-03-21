@@ -5,7 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 
-class AnswerEditor extends Component {
+export class AnswerEditor extends Component {
   state = {
     answerText: '',
     correct: false,

@@ -30,7 +30,7 @@ const Manage = Loadable({
   loader: () => import('./containers/Manage/Manage'),
 });
 
-class App extends Component {
+export class App extends Component {
   componentDidMount() {
     this.props.onTryAutoSignup();
   }

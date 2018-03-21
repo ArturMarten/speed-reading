@@ -25,7 +25,7 @@ function leastSquares(xSeries, ySeries) {
   return [slope, intercept, rSquare];
 }
 
-class RegressionChart extends Component {
+export class RegressionChart extends Component {
   componentDidMount() {
     this.init();
   }

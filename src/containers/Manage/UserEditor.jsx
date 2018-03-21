@@ -6,7 +6,7 @@ import { getTranslate } from 'react-localize-redux';
 import * as actionCreators from '../../store/actions';
 import { isEmail } from '../../shared/utility';
 
-class UserEditor extends Component {
+export class UserEditor extends Component {
   state = {
     groupId: null,
     email: '',

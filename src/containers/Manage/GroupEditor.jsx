@@ -5,7 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 
-class GroupEditor extends Component {
+export class GroupEditor extends Component {
   state = {
     name: '',
     touched: false,

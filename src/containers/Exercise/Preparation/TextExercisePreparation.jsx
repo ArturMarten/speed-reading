@@ -31,8 +31,8 @@ export class TextExercisePreparation extends Component {
 
   render() {
     const selectedText = this.props.selectedText ?
-      <span>{this.props.translate('exercises.text-selected')}: <b>{this.props.selectedText.title}</b></span> :
-      <b>{this.props.translate('exercises.text-not-selected')}</b>;
+      <span>{this.props.translate('text-exercise-preparation.text-selected')}: <b>{this.props.selectedText.title}</b></span> :
+      <b>{this.props.translate('text-exercise-preparation.text-not-selected')}</b>;
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
@@ -42,16 +42,16 @@ export class TextExercisePreparation extends Component {
           floated="right"
           disabled={!this.props.selectedText}
           onClick={this.textPreparationHandler}
-          content={this.props.translate('exercises.proceed')}
+          content={this.props.translate('text-exercise-preparation.proceed')}
         />
-        <Header as="h3" content={this.props.translate('exercises.text-selection')} />
+        <Header as="h3" content={this.props.translate('text-exercise-preparation.text-selection')} />
         {selectedText}{' '}
         <Button
           primary
           onClick={this.textSelectionToggleHandler}
           content={this.props.selectedText ?
-            this.props.translate('exercises.change-text') :
-            this.props.translate('exercises.select-text')}
+            this.props.translate('text-exercise-preparation.change-text') :
+            this.props.translate('text-exercise-preparation.select-text')}
         />
         {this.state.textSelectionOpened ?
           <TextSelection
@@ -60,7 +60,7 @@ export class TextExercisePreparation extends Component {
           /> : null}
         <Divider />
         <Message info>
-          <p>{this.props.translate('exercises.info-content')}</p>
+          <p>{this.props.translate('text-exercise-preparation.info-content')}</p>
         </Message>
         <TextOptions />
         <ExerciseOptions />
