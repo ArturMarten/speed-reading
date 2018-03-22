@@ -3,10 +3,6 @@ import { connect } from 'react-redux';
 
 import { writeText, getLineMetadata, WordMetadata, LineMetadata } from '../../../../src/utils/CanvasUtils/CanvasUtils';
 
-// Move to exercise options
-const START_DELAY = 300;
-const LINE_BREAK_DELAY = 100;
-
 let update = null;
 const initialState = {
   word: 0,
@@ -28,7 +24,7 @@ export class Reading extends Component {
     if ((!this.props.timerState.started && nextProps.timerState.started) ||
         (this.props.timerState.paused && !nextProps.timerState.paused)) {
       // Exercise started
-      update = setTimeout(() => this.update(), this.updateInterval + START_DELAY);
+      update = setTimeout(() => this.update(), this.updateInterval + this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
@@ -115,7 +111,7 @@ export class Reading extends Component {
       ];
       update = setTimeout(
         () => this.update(),
-        this.cursorState.newLine ? this.updateInterval + LINE_BREAK_DELAY : this.updateInterval,
+        this.cursorState.newLine ? this.updateInterval + this.props.exerciseOptions.lineBreakDelay : this.updateInterval,
       );
       requestAnimationFrame(() => this.draw());
     }
@@ -143,6 +139,7 @@ export class Reading extends Component {
 
 const mapStateToProps = state => ({
   textOptions: state.options.textOptions,
+  exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
 });
 

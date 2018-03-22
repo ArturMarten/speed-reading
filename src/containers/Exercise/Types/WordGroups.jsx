@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-const START_DELAY = 300;
-const LINE_BREAK_DELAY = 300;
-
 let update = null;
 
 const initialState = {
@@ -25,7 +22,7 @@ export class WordGroups extends Component {
   componentDidUpdate(prevProps) {
     if (!prevProps.timerState.started && this.props.timerState.started) {
       // Exercise started
-      update = setTimeout(() => this.nextGroup(), START_DELAY);
+      update = setTimeout(() => this.nextGroup(), this.props.exerciseOptions.startDelay);
     } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
@@ -61,7 +58,7 @@ export class WordGroups extends Component {
         this.cursorState.line = this.cursorState.line + 1;
         this.cursorState.linePosition = 0;
         this.renderGroup();
-        update = setTimeout(() => this.nextGroup(), LINE_BREAK_DELAY);
+        update = setTimeout(() => this.nextGroup(), this.props.exerciseOptions.lineBreakDelay);
       } else {
         this.renderGroup();
         update = setTimeout(() => this.nextGroup(), this.props.speedOptions.fixation);
@@ -73,7 +70,7 @@ export class WordGroups extends Component {
     const canvas = this.shownCanvas;
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = `${this.props.textOptions.fontSize}pt Calibri`;
+    context.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
     const lineHeight = 30;
     context.fillText(
       this.props.wordGroups[this.cursorState.counter],
@@ -95,6 +92,7 @@ export class WordGroups extends Component {
 
 const mapStateToProps = state => ({
   textOptions: state.options.textOptions,
+  exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
 });
 

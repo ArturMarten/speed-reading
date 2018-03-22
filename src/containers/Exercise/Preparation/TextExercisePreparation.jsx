@@ -83,8 +83,8 @@ export class TextExercisePreparation extends Component {
                 </Header>
                 <table>
                   <tbody>
-                    <ExerciseOptions exerciseType={this.props.type} />
                     <SpeedOptions exerciseType={this.props.type} />
+                    <ExerciseOptions exerciseType={this.props.type} />
                   </tbody>
                 </table>
               </Segment>

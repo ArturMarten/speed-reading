@@ -6,6 +6,8 @@ import { getTranslate } from 'react-localize-redux';
 
 import './TextEditor.css';
 import InlineStyleControls from '../../components/TextEntry/InlineStyleControls';
+import BlockStyleControls from '../../components/TextEntry/BlockStyleControls';
+import TextCounter from '../../components/TextEntry/TextCounter';
 
 export class TextEditor extends Component {
   state = {
@@ -45,6 +47,15 @@ export class TextEditor extends Component {
     this.setState({ editorState: updatedEditorState });
   }
 
+  toggleBlockType = (blockType) => {
+    console.log(blockType);
+    const updatedEditorState = RichUtils.toggleBlockType(
+      this.state.editorState,
+      blockType,
+    );
+    this.setState({ editorState: updatedEditorState });
+  }
+
   render() {
     return (
       <Fragment>
@@ -53,11 +64,22 @@ export class TextEditor extends Component {
           <p>{this.props.translate('text-editor.warning-content')}</p>
         </Message>
         <Segment style={{ margin: 0 }}>
-          <InlineStyleControls
-            editorState={this.state.editorState}
-            onToggle={this.toggleInlineStyle}
-            translate={this.props.translate}
-          />
+          <div className="DraftEditor-controls">
+            <InlineStyleControls
+              editorState={this.state.editorState}
+              onToggle={this.toggleInlineStyle}
+              translate={this.props.translate}
+            />
+            <BlockStyleControls
+              editorState={this.state.editorState}
+              onToggle={this.toggleBlockType}
+              translate={this.props.translate}
+            />
+            <TextCounter
+              editorState={this.state.editorState}
+              translate={this.props.translate}
+            />
+          </div>
           <Editor
             editorState={this.state.editorState}
             onChange={editorState => this.setState({ editorState })}

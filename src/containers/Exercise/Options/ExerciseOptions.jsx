@@ -7,10 +7,36 @@ import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseIn
 
 const MIN_CHARACTER_COUNT = 5;
 const MAX_CHARACTER_COUNT = 30;
+const MIN_START_DELAY = 0;
+const MAX_START_DELAY = 500;
+const MIN_LINE_BREAK_DELAY = 0;
+const MAX_LINE_BREAK_DELAY = 300;
 
 export class ExerciseOptions extends Component {
   state = {};
   render() {
+    const delayOptions = (
+      <Fragment>
+        <ExerciseInputOption
+          name={this.props.translate('exercise-options.start-delay')}
+          unit={this.props.translate('exercise-options.ms')}
+          value={this.props.options.startDelay}
+          min={MIN_START_DELAY}
+          max={MAX_START_DELAY}
+          step={50}
+          updateValue={value => this.props.onSubmit({ startDelay: value })}
+        />
+        <ExerciseInputOption
+          name={this.props.translate('exercise-options.line-break-delay')}
+          unit={this.props.translate('exercise-options.ms')}
+          value={this.props.options.lineBreakDelay}
+          min={MIN_LINE_BREAK_DELAY}
+          max={MAX_LINE_BREAK_DELAY}
+          step={50}
+          updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
+        />
+      </Fragment>
+    );
     if (this.props.exerciseType === 'wordGroup') {
       return (
         <Fragment>
@@ -23,10 +49,11 @@ export class ExerciseOptions extends Component {
             step={1}
             updateValue={value => this.props.onSubmit({ characterCount: value })}
           />
+          {delayOptions}
         </Fragment>
       );
     }
-    return null;
+    return delayOptions;
   }
 }
 
