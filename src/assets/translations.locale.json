@@ -134,7 +134,9 @@
     "text-not-selected": ["Tekst valimata", "Text not selected"],
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],
-    "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"]
+    "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"],
+    "text-options": ["Teksti sätted", "Text options"],
+    "exercise-options": ["Harjutuse sätted", "Exercise options"]
   },
   "text-preview": {
     "show": ["Näita teksti eelvaade", "Show text preview"],
@@ -174,10 +176,12 @@
     "pt": ["pt", "pt"]
   },
   "exercise-options": {
+    "word-group-length": ["Sõnarühma pikkus", "Word group length"],
+    "characters": ["tähemärki", "characters"]
+  },
+  "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
     "wpm": ["sõna minutis", "words per minute"],
-    "character-count": ["Tähemärkide arv", "Character count"],
-    "characters": ["tähemärki", "characters"],
     "fixation-time": ["Fiksatsiooni aeg", "Fixation time"],
     "ms": ["ms", "ms"]
   },

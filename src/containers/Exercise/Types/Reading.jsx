@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getTranslate } from 'react-localize-redux';
 
-import * as actionCreators from '../../../store/actions';
 import { writeText, getLineMetadata, WordMetadata, LineMetadata } from '../../../../src/utils/CanvasUtils/CanvasUtils';
 
 // Move to exercise options
@@ -26,27 +24,28 @@ export class Reading extends Component {
     this.init();
   }
 
-  componentDidUpdate(prevProps) {
-    if ((!prevProps.timerState.started && this.props.timerState.started) ||
-        (prevProps.timerState.paused && !this.props.timerState.paused)) {
+  shouldComponentUpdate(nextProps) {
+    if ((!this.props.timerState.started && nextProps.timerState.started) ||
+        (this.props.timerState.paused && !nextProps.timerState.paused)) {
       // Exercise started
       update = setTimeout(() => this.update(), this.updateInterval + START_DELAY);
-    } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
+    } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(update);
       this.cursorState = { ...initialState };
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
-    } else if (!prevProps.timerState.stopped && this.props.timerState.stopped) {
+    } else if (!this.props.timerState.stopped && nextProps.timerState.stopped) {
       clearTimeout(update);
-    } else if (!prevProps.timerState.paused && this.props.timerState.paused) {
+    } else if (!this.props.timerState.paused && nextProps.timerState.paused) {
       // Exercise paused
       clearTimeout(update);
     } else {
       // Text/exercise options or text changed
-      const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
-      this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
+      const timeInSeconds = (this.textMetadata.wordMetadata.length / nextProps.speedOptions.wpm) * 60;
+      this.updateInterval = (timeInSeconds / nextProps.selectedText.characterCount) * 1000;
     }
+    return false;
   }
 
   componentWillUnmount() {
@@ -118,7 +117,7 @@ export class Reading extends Component {
         () => this.update(),
         this.cursorState.newLine ? this.updateInterval + LINE_BREAK_DELAY : this.updateInterval,
       );
-      this.draw();
+      requestAnimationFrame(() => this.draw());
     }
   }
 
@@ -143,17 +142,12 @@ export class Reading extends Component {
 }
 
 const mapStateToProps = state => ({
-  selectedText: state.text.selectedText,
   textOptions: state.options.textOptions,
   speedOptions: state.options.speedOptions,
-  timerState: state.timing.timer,
-  translate: getTranslate(state.locale),
 });
 
+// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
-  onExerciseFinish: () => {
-    dispatch(actionCreators.finishExercise());
-  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reading);

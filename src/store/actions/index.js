@@ -7,9 +7,9 @@ export {
 } from './timing';
 
 export {
-  textOptionsUpdated,
-  exerciseOptionsUpdated,
-  speedOptionsUpdated,
+  textOptionUpdated,
+  exerciseOptionUpdated,
+  speedOptionUpdated,
 } from './options';
 
 export {

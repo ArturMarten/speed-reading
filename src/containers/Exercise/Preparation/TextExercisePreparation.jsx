@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Divider, Message } from 'semantic-ui-react';
+import { Container, Header, Button, Divider, Message, Grid, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -36,7 +36,7 @@ export class TextExercisePreparation extends Component {
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
-        <p>{this.props.translate(`exercises.description-${this.props.type}`)}</p>
+        {this.props.translate(`exercises.description-${this.props.type}`)}
         <Button
           positive
           floated="right"
@@ -60,11 +60,37 @@ export class TextExercisePreparation extends Component {
           /> : null}
         <Divider />
         <Message info>
-          <p>{this.props.translate('text-exercise-preparation.info-content')}</p>
+          {this.props.translate('text-exercise-preparation.info-content')}
         </Message>
-        <TextOptions />
-        <ExerciseOptions />
-        <SpeedOptions />
+        <Grid stackable>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Segment>
+                <Header as="h4" textAlign="center">
+                  {this.props.translate('text-exercise-preparation.text-options')}
+                </Header>
+                <table>
+                  <tbody>
+                    <TextOptions exerciseType={this.props.type} />
+                  </tbody>
+                </table>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment>
+                <Header as="h4" textAlign="center">
+                  {this.props.translate('text-exercise-preparation.exercise-options')}
+                </Header>
+                <table>
+                  <tbody>
+                    <ExerciseOptions exerciseType={this.props.type} />
+                    <SpeedOptions exerciseType={this.props.type} />
+                  </tbody>
+                </table>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <TextPreview />
       </Container>
     );
