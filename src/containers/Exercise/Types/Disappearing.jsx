@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getTranslate } from 'react-localize-redux';
 
-import * as actionCreators from '../../../store/actions';
 import { writeText, getLineMetadata, WordMetadata, LineMetadata } from '../../../../src/utils/CanvasUtils/CanvasUtils';
 
 // Move to exercise options
@@ -135,17 +133,12 @@ export class Disappearing extends Component {
 }
 
 const mapStateToProps = state => ({
-  selectedText: state.text.selectedText,
   textOptions: state.options.textOptions,
   speedOptions: state.options.speedOptions,
-  timerState: state.timing.timer,
-  translate: getTranslate(state.locale),
 });
 
+// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
-  onExerciseFinish: () => {
-    dispatch(actionCreators.finishExercise());
-  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Disappearing);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Segment, Dimmer } from 'semantic-ui-react';
-import { getTranslate } from 'react-localize-redux';
 
 import './TextExercise.css';
 import * as actionCreators from '../../../store/actions';
@@ -16,15 +15,38 @@ const TEXT_HORIZONTAL_PADDING = 70;
 
 export class TextExercise extends Component {
   state = {};
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.timerState !== nextProps.timerState;
+  }
+
   render() {
     const exercise = ((type) => {
       switch (type) {
         case 'reading':
-          return <Reading />;
+          return (
+            <Reading
+              selectedText={this.props.selectedText}
+              timerState={this.props.timerState}
+              onExerciseFinish={this.props.onExerciseFinish}
+            />
+          );
         case 'disappearing':
-          return <Disappearing />;
+          return (
+            <Disappearing
+              selectedText={this.props.selectedText}
+              timerState={this.props.timerState}
+              onExerciseFinish={this.props.onExerciseFinish}
+            />
+          );
         case 'wordGroup':
-          return <WordGroups />;
+          return (
+            <WordGroups
+              wordGroups={this.props.wordGroups}
+              timerState={this.props.timerState}
+              onExerciseFinish={this.props.onExerciseFinish}
+            />
+          );
         default:
           return null;
       }
@@ -33,12 +55,18 @@ export class TextExercise extends Component {
       <Grid container>
         <Grid.Row verticalAlign="middle">
           <Grid.Column textAlign="center" width={8}>
-            <SpeedOptions />
+            <table>
+              <tbody>
+                <SpeedOptions
+                  exerciseType={this.props.type}
+                />
+              </tbody>
+            </table>
           </Grid.Column>
           <Grid.Column textAlign="center" width={8}>
             <Timing
-              onStart={this.props.onTextExerciseStart}
-              onStop={this.props.onTextExerciseFinish}
+              onStart={this.props.onExerciseStart}
+              onStop={this.props.onExerciseFinish}
             />
           </Grid.Column>
         </Grid.Row>
@@ -63,15 +91,16 @@ export class TextExercise extends Component {
 }
 
 const mapStateToProps = state => ({
+  selectedText: state.text.selectedText,
+  wordGroups: state.exercise.wordGroups,
   timerState: state.timing.timer,
-  translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTextExerciseStart: () => {
+  onExerciseStart: () => {
     dispatch(actionCreators.startExercise());
   },
-  onTextExerciseFinish: () => {
+  onExerciseFinish: () => {
     dispatch(actionCreators.finishExercise());
   },
 });

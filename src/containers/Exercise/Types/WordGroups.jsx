@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as actionCreators from '../../../store/actions';
-
 const START_DELAY = 300;
 const LINE_BREAK_DELAY = 300;
 
@@ -96,17 +94,12 @@ export class WordGroups extends Component {
 }
 
 const mapStateToProps = state => ({
-  wordGroups: state.exercise.wordGroups,
   textOptions: state.options.textOptions,
-  exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
-  timerState: state.timing.timer,
 });
 
+// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
-  onExerciseFinish: () => {
-    dispatch(actionCreators.finishExercise());
-  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WordGroups);

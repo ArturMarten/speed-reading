@@ -12,6 +12,7 @@ import TextEditorContainer from '../containers/TextEditor/TextEditor';
 import TextExercisePreparationContainer from '../containers/Exercise/Preparation/TextExercisePreparation';
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
+import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
 import TextExerciseResultsContainer, { TextExerciseResults } from '../containers/Exercise/Container/TextExerciseResults';
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTestContainer from '../containers/Exercise/Test/TextExerciseTest';
@@ -36,13 +37,25 @@ storiesOf('Text editor', module)
   .add('Container', () => <TextEditorContainer />);
 
 storiesOf('Preparation', module)
-  .add('Container', () => <TextExercisePreparationContainer type="reading" onProceed={action('clicked')} />);
+  .add('Container', () => <TextExercisePreparationContainer type="wordGroup" onProceed={action('clicked')} />);
 
 storiesOf('Text selection', module)
   .add('Container', () => <TextSelectionContainer open />);
 
 storiesOf('Text preview', module)
   .add('Container', () => <TextPreviewContainer />);
+
+storiesOf('Text exercise', module)
+  .add('Container', () => (
+    <TextExercise
+      type="reading"
+      timerState={{
+        started: false,
+        paused: false,
+        stopped: false,
+      }}
+    />
+  ));
 
 storiesOf('Text exercise results', module)
   .add('Container', () => <TextExerciseResultsContainer open />)

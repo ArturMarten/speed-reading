@@ -9,8 +9,6 @@ const initialTextOptions = {
 };
 
 const initialExerciseOptions = {
-  wpm: 300,
-  fixation: 150,
   characterCount: 15,
 };
 
@@ -27,19 +25,19 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.TEXT_OPTIONS_UPDATED: {
+    case actionTypes.TEXT_OPTION_UPDATED: {
       const updatedTextOptions = updateObject(state.textOptions, action.payload);
       return updateObject(state, {
         textOptions: updatedTextOptions,
       });
     }
-    case actionTypes.EXERCISE_OPTIONS_UPDATED: {
+    case actionTypes.EXERCISE_OPTION_UPDATED: {
       const updatedExerciseOptions = updateObject(state.exerciseOptions, action.payload);
       return updateObject(state, {
         exerciseOptions: updatedExerciseOptions,
       });
     }
-    case actionTypes.SPEED_OPTIONS_UPDATED: {
+    case actionTypes.SPEED_OPTION_UPDATED: {
       const updatedSpeedOptions = updateObject(state.speedOptions, action.payload);
       return updateObject(state, {
         speedOptions: updatedSpeedOptions,
