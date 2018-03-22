@@ -17,15 +17,15 @@ const TextCounter = (props) => {
   const sentenceCount = sentenceArray ? sentenceArray.length : 0;
   return (
     <Fragment>
-      <Label as="a">
+      <Label as="a" basic>
         {props.translate('text-editor.characters')}
         <Label.Detail>{characterCount}</Label.Detail>
       </Label>
-      <Label as="a">
+      <Label as="a" basic>
         {props.translate('text-editor.words')}
         <Label.Detail>{wordCount}</Label.Detail>
       </Label>
-      <Label as="a">
+      <Label as="a" basic>
         {props.translate('text-editor.sentences')}
         <Label.Detail>{sentenceCount}</Label.Detail>
       </Label>

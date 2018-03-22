@@ -79,6 +79,9 @@
     "warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
     "bold": ["Rasvane", "Bold"],
     "italic": ["Kaldkirjas", "Italic"],
+    "header-1": ["Pealkiri 1", "Heading 1"],
+    "header-2": ["Pealkiri 2", "Heading 2"],
+    "header-3": ["Pealkiri 3", "Heading 3"],
     "characters": ["Tähemärke", "Characters"],
     "words": ["Sõnu", "Words"],
     "sentences": ["Lauseid", "Sentences"]
@@ -168,6 +171,7 @@
     "finish": ["Lõpeta", "Finish"]
   },
   "text-options": {
+    "font": ["Font", "Font"],
     "text-width": ["Teksti laius", "Text width"],
     "px": ["pikslit", "px"],
     "line-count": ["Ridade arv", "Line count"],
@@ -177,7 +181,10 @@
   },
   "exercise-options": {
     "word-group-length": ["Sõnarühma pikkus", "Word group length"],
-    "characters": ["tähemärki", "characters"]
+    "characters": ["tähemärki", "characters"],
+    "start-delay": ["Alguse viide", "Start delay"],
+    "line-break-delay": ["Reavahetuse viide", "Line break delay"],
+    "ms": ["ms", "ms"]
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],

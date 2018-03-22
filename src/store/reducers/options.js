@@ -3,13 +3,14 @@ import { updateObject } from '../../shared/utility';
 
 const initialTextOptions = {
   font: 'Calibri',
-  width: Math.min(document.body.clientWidth, 700),
-  lineCount: 5,
-  fontSize: 16,
+  width: Math.min(document.body.clientWidth, 800),
+  fontSize: 14,
 };
 
 const initialExerciseOptions = {
   characterCount: 15,
+  startDelay: 300,
+  lineBreakDelay: 100,
 };
 
 const initialSpeedOptions = {

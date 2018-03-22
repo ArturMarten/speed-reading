@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import ExerciseSelectOption from '../../../components/Exercise/Options/ExerciseSelectOption';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 
 const MIN_TEXT_WIDTH = 250;
@@ -13,8 +14,28 @@ const MAX_FONT_SIZE = 18;
 export class TextOptions extends Component {
   state = {};
   render() {
+    const fontOptions = [
+      { text: 'Arial', value: 'Arial' },
+      { text: 'Calibri', value: 'Calibri' },
+      { text: 'Comic Sans MS', value: 'Comic Sans MS' },
+      { text: 'Courier New', value: 'Courier New' },
+      { text: 'Garamond', value: 'Garamond' },
+      { text: 'Georgia', value: 'Georgia' },
+      { text: 'Impact', value: 'Impact' },
+      { text: 'Times New Roman', value: 'Times New Roman' },
+      { text: 'Trebuchet MS', value: 'Trebuchet MS' },
+      { text: 'Verdana', value: 'Verdana' },
+      { text: 'Serif', value: 'serif' },
+      { text: 'Sans-serif', value: 'sans-serif' },
+    ];
     return (
       <Fragment>
+        <ExerciseSelectOption
+          name={this.props.translate('text-options.font')}
+          value={this.props.options.font}
+          options={fontOptions}
+          updateValue={value => this.props.onSubmit({ font: value })}
+        />
         <ExerciseInputOption
           name={this.props.translate('text-options.text-width')}
           unit={this.props.translate('text-options.px')}
