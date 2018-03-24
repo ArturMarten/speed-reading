@@ -4,7 +4,8 @@
     "home": ["Esileht", "Home"],
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
-    "reading-test": ["Lugemise soodustaja", "Reading aid"],
+    "reading-test": ["Lugemistest", "Reading test"],
+    "reading-aid": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "help-exercises": ["Abiharjutused", "Help exercises"],
@@ -45,11 +46,19 @@
     "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."]
   },
   "app-stats": {
-    "exercises": ["Harjutust", "Exercises"],
-    "texts": ["Teksti", "Texts"],
-    "questions": ["Küsimust", "Questions"],
+    "state": ["Rakenduse andmed", "Application stats"],
+    "different": ["Erinevat", "Different"],
+    "exercises": ["harjutust", "exercises"],
+    "exercise": ["Harjutuse", "Exercise"],
+    "attempts": ["katset", "attempts"],
+    "reading": ["Lugemis-", "Reading"],
+    "texts": ["teksti", "texts"],
+    "test": ["Testi", "Test"],
+    "questions": ["küsimust", "questions"],
     "users": ["Kasutajat", "Users"],
-    "feedback": ["Tagasisidet", "Feedback"]
+    "registered": ["registreeritud", "registered"],
+    "feedback": ["Tagasisidet", "Feedback"],
+    "received": ["saadud", "received"]
   },
   "text-entry": {
     "title": ["Tekstide sisestamine", "Text entry"],
@@ -123,8 +132,10 @@
     "change-answer": ["Muuda", "Change"]
   },
   "exercises": {
-    "title-reading": ["Lugemise soodustaja", "Reading aid"],
-    "description-reading": ["Kirjeldus", "Description"],
+    "title-readingTest": ["Lugemistest", "Reading test"],
+    "description-readingTest": ["Kirjeldus", "Description"],
+    "title-readingAid": ["Lugemise soodustaja", "Reading aid"],
+    "description-readingAid": ["Kirjeldus", "Description"],
     "title-wordGroup": ["Sõnarühmade harjutus", "Word group exercise"],
     "description-wordGroup": ["Sõnarühmade harjutuse kirjeldus", "Word group exercise description"],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
@@ -138,8 +149,13 @@
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],
     "info-content": ["Enne harjutusega alustamist saab vajadusel muuta sätteid", "Before starting the exercise you can change the settings when necessary"],
+    "exercise-options": ["Harjutuse sätted", "Exercise options"],
+    "exercise-options-missing": ["Sätteid pole saadaval", "Options not available"],
     "text-options": ["Teksti sätted", "Text options"],
-    "exercise-options": ["Harjutuse sätted", "Exercise options"]
+    "text-options-missing": ["Sätteid pole saadaval", "Options not available"],
+    "keyboard-keys": ["Klaviatuuri klahve", "Keyboard keys"],
+    "and": ["ja", "and"],
+    "can-be-used": ["saab kasutada kiiruse muutmiseks harjutuse ajal", "can be used to change speed during exercise"]
   },
   "text-preview": {
     "show": ["Näita teksti eelvaade", "Show text preview"],
@@ -197,7 +213,7 @@
     "description": ["Siin saab harjutuse valikul näha selle statistikat", "Here you can select an exercise and see your statistics"],
     "warning-title": ["Allolev joonis ei näita tegelikku statistikat", "Chart below does not show actual statistics"],
     "warning-content": ["See on kujutatud genereeritud andmetel", "It is rendered using generated data"],
-    "reading-test": ["Lugemise soodustaja", "Reading aid"],
+    "reading-aid": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "wpm": ["Sõnu minutis", "Words Per Minute"],

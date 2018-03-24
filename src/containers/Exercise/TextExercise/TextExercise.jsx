@@ -6,7 +6,8 @@ import './TextExercise.css';
 import * as actionCreators from '../../../store/actions';
 import SpeedOptions from '../Options/SpeedOptions';
 import Timing from '../Timing/Timing';
-import Reading from '../Types/Reading';
+import ReadingTest from '../Types/ReadingTest';
+import ReadingAid from '../Types/ReadingAid';
 import Disappearing from '../Types/Disappearing';
 import WordGroups from '../Types/WordGroups';
 
@@ -20,15 +21,35 @@ export class TextExercise extends Component {
     return this.props.timerState !== nextProps.timerState;
   }
 
+  onExerciseStart = () => {
+    const attemptData = {
+      userId: this.props.userId,
+      exerciseId: this.props.exerciseId,
+      startTime: new Date(),
+      readingTextId: this.props.selectedText.id,
+    };
+    this.props.onExerciseStart(attemptData, this.props.token);
+  }
+
+  onExerciseFinish = () => {
+    this.props.onExerciseFinish(this.props.attemptId, this.props.token);
+  }
+
   render() {
     const exercise = ((type) => {
       switch (type) {
-        case 'reading':
+        case 'readingTest':
           return (
-            <Reading
+            <ReadingTest
+              selectedText={this.props.selectedText}
+            />
+          );
+        case 'readingAid':
+          return (
+            <ReadingAid
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
-              onExerciseFinish={this.props.onExerciseFinish}
+              onExerciseFinish={this.onExerciseFinish}
             />
           );
         case 'disappearing':
@@ -36,7 +57,7 @@ export class TextExercise extends Component {
             <Disappearing
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
-              onExerciseFinish={this.props.onExerciseFinish}
+              onExerciseFinish={this.onExerciseFinish}
             />
           );
         case 'wordGroup':
@@ -44,7 +65,7 @@ export class TextExercise extends Component {
             <WordGroups
               wordGroups={this.props.wordGroups}
               timerState={this.props.timerState}
-              onExerciseFinish={this.props.onExerciseFinish}
+              onExerciseFinish={this.onExerciseFinish}
             />
           );
         default:
@@ -65,8 +86,8 @@ export class TextExercise extends Component {
           </Grid.Column>
           <Grid.Column textAlign="center" width={8}>
             <Timing
-              onStart={this.props.onExerciseStart}
-              onStop={this.props.onExerciseFinish}
+              onStart={this.onExerciseStart}
+              onStop={this.onExerciseFinish}
             />
           </Grid.Column>
         </Grid.Row>
@@ -91,17 +112,21 @@ export class TextExercise extends Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.auth.token,
+  userId: state.auth.userId,
+  exerciseId: state.exercise.id,
+  attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,
   wordGroups: state.exercise.wordGroups,
   timerState: state.timing.timer,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onExerciseStart: () => {
-    dispatch(actionCreators.startExercise());
+  onExerciseStart: (attemptData, token) => {
+    dispatch(actionCreators.startExercise(attemptData, token));
   },
-  onExerciseFinish: () => {
-    dispatch(actionCreators.finishExercise());
+  onExerciseFinish: (attemptId, token) => {
+    dispatch(actionCreators.finishExercise(attemptId, token));
   },
 });
 

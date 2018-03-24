@@ -12,7 +12,7 @@ const initialState = {
   previousRect: [0, 0, 0, 0],
 };
 
-export class Reading extends Component {
+export class ReadingAid extends Component {
   componentDidMount() {
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
@@ -147,4 +147,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Reading);
+export default connect(mapStateToProps, mapDispatchToProps)(ReadingAid);

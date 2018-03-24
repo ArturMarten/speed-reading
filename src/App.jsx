@@ -39,7 +39,8 @@ export class App extends Component {
       <ResponsiveLayout>
         <Route exact path="/" component={Home} />
         <Route path="/text-entry" component={TextEntry} />
-        <Route path="/exercise/reading-test" render={() => <TextExerciseContainer type="reading" />} />
+        <Route path="/exercise/reading-test" render={() => <TextExerciseContainer type="readingTest" />} />
+        <Route path="/exercise/reading-aid" render={() => <TextExerciseContainer type="readingAid" />} />
         <Route path="/exercise/word-groups" render={() => <TextExerciseContainer type="wordGroup" />} />
         <Route path="/exercise/disappearing-text" render={() => <TextExerciseContainer type="disappearing" />} />
         <Route path="/statistics" component={Statistics} />

@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Input, Button, Table } from 'semantic-ui-react';
 
-class ExerciseInputOption extends Component {
+const UPDATE_DELAY = 300;
+
+class ExerciseInputOption extends PureComponent {
   state = {
     value: '',
   };
@@ -19,7 +21,10 @@ class ExerciseInputOption extends Component {
   onSubmit = (value = this.state.value) => {
     const correctedValue = value === '' || value < this.props.min ? this.props.min : value;
     if (correctedValue !== this.props.value) {
-      this.props.updateValue(correctedValue);
+      clearTimeout(this.update);
+      this.update = setTimeout(() => {
+        this.props.updateValue(correctedValue);
+      }, UPDATE_DELAY);
     }
     this.setValue(correctedValue);
   }

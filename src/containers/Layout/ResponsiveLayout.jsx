@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Dropdown, Icon, Grid, Popup, Button } from 'semantic-ui-react';
 import { environment } from '../../environment';
 
+import './ResponsiveLayout.css';
 import * as actionCreators from '../../store/actions';
 import axios from '../../axios-http';
 import Auth from '../../containers/Auth/Auth';
@@ -90,12 +91,17 @@ export class ResponsiveLayout extends Component {
               {this.props.translate('menu.text-entry')}
             </Menu.Item>
             <Menu.Item
+              as="div"
               name="exercise"
               active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' &&
                      this.state.activeItem !== 'statistics' && this.state.activeItem !== 'manage'}
+              className="Dropdown-Item"
             >
               <Icon name="winner" size="large" />
-              <Dropdown text={this.props.translate('menu.exercise')}>
+              <Dropdown
+                fluid
+                text={this.props.translate('menu.exercise')}
+              >
                 <Dropdown.Menu>
                   <Dropdown.Item
                     name="reading-test"
@@ -105,6 +111,15 @@ export class ResponsiveLayout extends Component {
                     to="/exercise/reading-test"
                   >
                     {this.props.translate('menu.reading-test')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    name="reading-aid"
+                    active={this.state.activeItem === 'reading-aid'}
+                    onClick={this.itemClickHandler}
+                    as={Link}
+                    to="/exercise/reading-aid"
+                  >
+                    {this.props.translate('menu.reading-aid')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     name="word-groups"
@@ -125,7 +140,7 @@ export class ResponsiveLayout extends Component {
                     {this.props.translate('menu.disappearing-text')}
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Dropdown text={this.props.translate('menu.help-exercises')}>
+                    <Dropdown fluid text={this.props.translate('menu.help-exercises')}>
                       <Dropdown.Menu>
                         <Dropdown.Item disabled>{this.props.translate('menu.schulte-tables')}</Dropdown.Item>
                         <Dropdown.Item disabled>{this.props.translate('menu.concentration')}</Dropdown.Item>
@@ -211,12 +226,18 @@ export class ResponsiveLayout extends Component {
                   {this.props.translate('menu.text-entry')}
                 </Menu.Item>
                 <Menu.Item
+                  as="div"
                   name="exercise"
                   active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' &&
                         this.state.activeItem !== 'statistics' && this.state.activeItem !== 'manage'}
+                  onClick={this.dropdownHandler}
+                  className="Dropdown-Item"
                 >
                   <Icon name="winner" size="large" />
-                  <Dropdown text={this.props.translate('menu.exercise')}>
+                  <Dropdown
+                    fluid
+                    text={this.props.translate('menu.exercise')}
+                  >
                     <Dropdown.Menu>
                       <Dropdown.Item
                         name="reading-test"
@@ -226,6 +247,15 @@ export class ResponsiveLayout extends Component {
                         to="/exercise/reading-test"
                       >
                         {this.props.translate('menu.reading-test')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        name="reading-aid"
+                        active={this.state.activeItem === 'reading-aid'}
+                        onClick={this.itemClickHandler}
+                        as={Link}
+                        to="/exercise/reading-aid"
+                      >
+                        {this.props.translate('menu.reading-aid')}
                       </Dropdown.Item>
                       <Dropdown.Item
                         name="word-groups"
@@ -246,7 +276,7 @@ export class ResponsiveLayout extends Component {
                         {this.props.translate('menu.disappearing-text')}
                       </Dropdown.Item>
                       <Dropdown.Item>
-                        <Dropdown text={this.props.translate('menu.help-exercises')}>
+                        <Dropdown fluid text={this.props.translate('menu.help-exercises')}>
                           <Dropdown.Menu>
                             <Dropdown.Item disabled>{this.props.translate('menu.schulte-tables')}</Dropdown.Item>
                             <Dropdown.Item disabled>{this.props.translate('menu.concentration')}</Dropdown.Item>

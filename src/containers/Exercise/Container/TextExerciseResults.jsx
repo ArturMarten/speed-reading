@@ -22,15 +22,15 @@ export class TextExerciseResults extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 <Statistic size="small" color="black">
-                  <Statistic.Value>{formatMilliseconds(this.props.results.elapsedTime)}</Statistic.Value>
+                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('text-exercise-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">
-                  <Statistic.Value>{this.props.results.wpm}</Statistic.Value>
+                  <Statistic.Value>{this.props.result.wpm}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('text-exercise-results.wpm')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>{this.props.results.cps}</Statistic.Value>
+                  <Statistic.Value>{this.props.result.cps}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('text-exercise-results.cps')}</Statistic.Label>
                 </Statistic>
               </Grid.Column>
@@ -55,7 +55,7 @@ export class TextExerciseResults extends Component {
 }
 
 const mapStateToProps = state => ({
-  results: state.exercise.results,
+  result: state.exercise.result,
   translate: getTranslate(state.locale),
 });
 

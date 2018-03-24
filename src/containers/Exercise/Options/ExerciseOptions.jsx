@@ -1,45 +1,25 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 
-const MIN_CHARACTER_COUNT = 5;
-const MAX_CHARACTER_COUNT = 30;
-const MIN_START_DELAY = 0;
-const MAX_START_DELAY = 500;
-const MIN_LINE_BREAK_DELAY = 0;
-const MAX_LINE_BREAK_DELAY = 300;
+import {
+  MIN_CHARACTER_COUNT,
+  MAX_CHARACTER_COUNT,
+  MIN_START_DELAY,
+  MAX_START_DELAY,
+  MIN_LINE_BREAK_DELAY,
+  MAX_LINE_BREAK_DELAY,
+} from '../../../store/reducers/options';
 
-export class ExerciseOptions extends Component {
+export class ExerciseOptions extends PureComponent {
   state = {};
   render() {
-    const delayOptions = (
+    return (
       <Fragment>
-        <ExerciseInputOption
-          name={this.props.translate('exercise-options.start-delay')}
-          unit={this.props.translate('exercise-options.ms')}
-          value={this.props.options.startDelay}
-          min={MIN_START_DELAY}
-          max={MAX_START_DELAY}
-          step={50}
-          updateValue={value => this.props.onSubmit({ startDelay: value })}
-        />
-        <ExerciseInputOption
-          name={this.props.translate('exercise-options.line-break-delay')}
-          unit={this.props.translate('exercise-options.ms')}
-          value={this.props.options.lineBreakDelay}
-          min={MIN_LINE_BREAK_DELAY}
-          max={MAX_LINE_BREAK_DELAY}
-          step={50}
-          updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
-        />
-      </Fragment>
-    );
-    if (this.props.exerciseType === 'wordGroup') {
-      return (
-        <Fragment>
+        {this.props.visibleOptions.indexOf('characterCount') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('exercise-options.word-group-length')}
             unit={this.props.translate('exercise-options.characters')}
@@ -48,17 +28,35 @@ export class ExerciseOptions extends Component {
             max={MAX_CHARACTER_COUNT}
             step={1}
             updateValue={value => this.props.onSubmit({ characterCount: value })}
-          />
-          {delayOptions}
-        </Fragment>
-      );
-    }
-    return delayOptions;
+          /> : null}
+        {this.props.visibleOptions.indexOf('startDelay') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.start-delay')}
+            unit={this.props.translate('exercise-options.ms')}
+            value={this.props.options.startDelay}
+            min={MIN_START_DELAY}
+            max={MAX_START_DELAY}
+            step={50}
+            updateValue={value => this.props.onSubmit({ startDelay: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('lineBreakDelay') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.line-break-delay')}
+            unit={this.props.translate('exercise-options.ms')}
+            value={this.props.options.lineBreakDelay}
+            min={MIN_LINE_BREAK_DELAY}
+            max={MAX_LINE_BREAK_DELAY}
+            step={50}
+            updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
+          /> : null}
+      </Fragment>
+    );
   }
 }
 
 const mapStateToProps = state => ({
   options: state.options.exerciseOptions,
+  visibleOptions: state.options.visibleExerciseOptions,
   translate: getTranslate(state.locale),
 });
 

@@ -26,8 +26,11 @@ export class Timing extends Component {
     elapsedTime: 0,
   };
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.props.timerState.stopped) clearInterval(update);
+    if (!prevProps.timerState.started && this.props.timerState.started) {
+      this.startTimer();
+    }
   }
 
   componentWillUnmount() {
@@ -40,11 +43,10 @@ export class Timing extends Component {
     });
     update = setInterval(() => {
       this.calculateElapsedTime();
-    }, 1001);
+    }, 1000);
   }
 
   startClickHandler = () => {
-    this.startTimer();
     this.props.onStart();
   }
 
