@@ -23,7 +23,6 @@ export class Home extends Component {
           header={this.props.translate('home.browser-warning-title')}
           content={this.props.translate('home.browser-warning-content')}
         />
-        <Divider />
         <AppStats />
         <Divider />
         <Grid verticalAlign="middle">

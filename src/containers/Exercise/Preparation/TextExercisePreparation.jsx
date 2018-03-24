@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Divider, Message, Grid, Segment } from 'semantic-ui-react';
+import { Container, Header, Button, Divider, Message, Grid, Segment, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -59,34 +59,50 @@ export class TextExercisePreparation extends Component {
             onClose={this.textSelectionToggleHandler}
           /> : null}
         <Divider />
-        <Message info>
-          {this.props.translate('text-exercise-preparation.info-content')}
-        </Message>
+        {this.props.info.exerciseSettingsInfo ?
+          <Message info onDismiss={this.props.onExerciseSettingsInfoDismiss}>
+            <Icon name="settings" size="large" />
+            {this.props.translate('text-exercise-preparation.info-content')}
+          </Message> : null}
         <Grid stackable>
           <Grid.Row columns={2}>
             <Grid.Column>
               <Segment>
                 <Header as="h4" textAlign="center">
-                  {this.props.translate('text-exercise-preparation.text-options')}
+                  {this.props.translate('text-exercise-preparation.exercise-options')}
                 </Header>
-                <table>
-                  <tbody>
-                    <TextOptions exerciseType={this.props.type} />
-                  </tbody>
-                </table>
+                {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
+                  this.props.translate('text-exercise-preparation.exercise-options-missing') :
+                  <table>
+                    <tbody>
+                      <SpeedOptions />
+                      <ExerciseOptions />
+                    </tbody>
+                  </table>
+                }
+                {this.props.visibleSpeedOptions.length !== 0 && this.props.info.speedChangeInfo ?
+                  <Message info onDismiss={this.props.onSpeedChangeInfoDismiss}>
+                    {this.props.translate('text-exercise-preparation.keyboard-keys')}
+                    <Icon style={{ marginRight: 0 }} size="large" color="black" name="plus square outline" />
+                    {this.props.translate('text-exercise-preparation.and')}
+                    <Icon style={{ marginRight: 0 }} size="large" color="black" name="minus square outline" />
+                    {this.props.translate('text-exercise-preparation.can-be-used')}
+                  </Message> : null}
               </Segment>
             </Grid.Column>
             <Grid.Column>
               <Segment>
                 <Header as="h4" textAlign="center">
-                  {this.props.translate('text-exercise-preparation.exercise-options')}
+                  {this.props.translate('text-exercise-preparation.text-options')}
                 </Header>
-                <table>
-                  <tbody>
-                    <SpeedOptions exerciseType={this.props.type} />
-                    <ExerciseOptions exerciseType={this.props.type} />
-                  </tbody>
-                </table>
+                {this.props.visibleTextOptions.length === 0 ?
+                  this.props.translate('text-exercise-preparation.text-options-missing') :
+                  <table>
+                    <tbody>
+                      <TextOptions exerciseType={this.props.type} />
+                    </tbody>
+                  </table>
+                }
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -98,13 +114,23 @@ export class TextExercisePreparation extends Component {
 }
 
 const mapStateToProps = state => ({
+  info: state.info,
   selectedText: state.text.selectedText,
   exerciseOptions: state.options.exerciseOptions,
+  visibleTextOptions: state.options.visibleTextOptions,
+  visibleExerciseOptions: state.options.visibleExerciseOptions,
+  visibleSpeedOptions: state.options.visibleSpeedOptions,
   prepared: state.exercise.prepared,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
+  onExerciseSettingsInfoDismiss: () => {
+    dispatch(actionCreators.dismissExerciseSettingsInfo());
+  },
+  onSpeedChangeInfoDismiss: () => {
+    dispatch(actionCreators.dismissSpeedChangeInfo());
+  },
   onExercisePrepare: (text, characterCount) => {
     dispatch(actionCreators.prepareExercise(text, characterCount));
   },

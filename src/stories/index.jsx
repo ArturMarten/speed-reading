@@ -63,7 +63,7 @@ storiesOf('Text preview', module)
 storiesOf('Text exercise', module)
   .add('Container', () => (
     <TextExercise
-      type="reading"
+      type="readingTest"
       timerState={{
         started: false,
         paused: false,
@@ -78,7 +78,7 @@ storiesOf('Text exercise results', module)
     <TextExerciseResults
       open
       translate={translate}
-      results={{
+      result={{
         elapsedTime: 224200,
         wpm: 306,
         cps: 35,
@@ -97,7 +97,7 @@ storiesOf('Test results', module)
     <TestResults
       open
       translate={translate}
-      results={{
+      result={{
         elapsedTime: 124200,
         total: 7,
         correct: 5,

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { localeReducer } from 'react-localize-redux';
 
+import infoReducer from './info';
 import authReducer from './auth';
 import textReducer from './text';
 import timingReducer from './timing';
@@ -11,6 +12,7 @@ import manageReducer from './manage';
 import feedbackReducer from './feedback';
 
 export default combineReducers({
+  info: infoReducer,
   auth: authReducer,
   text: textReducer,
   timing: timingReducer,

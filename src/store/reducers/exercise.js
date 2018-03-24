@@ -2,17 +2,40 @@ import * as actionTypes from '../actions/actionTypes';
 import { splitIntoWordGroups } from '../../utils/TextUtils';
 import { updateObject } from '../../shared/utility';
 
+const READING_TEST_ID = 1;
+const READING_AID_ID = 2;
+const DISAPPEARING_ID = 3;
+const WORD_GROUPS_ID = 4;
+export const EXERCISE_COUNT = 4;
+
 const initialState = {
+  id: null,
+  attemptId: null,
   type: '',
   started: false,
   finished: false,
   prepared: false,
   wordGroups: [],
-  results: {
+  result: {
     elapsedTime: 0,
     wpm: 0,
     cps: 0,
   },
+};
+
+const getExerciseId = (exerciseType) => {
+  switch (exerciseType) {
+    case 'readingTest':
+      return READING_TEST_ID;
+    case 'readingAid':
+      return READING_AID_ID;
+    case 'disappearing':
+      return DISAPPEARING_ID;
+    case 'wordGroups':
+      return WORD_GROUPS_ID;
+    default:
+      return null;
+  }
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,6 +43,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.EXERCISE_SELECT: {
       console.log(`Exercise selected: ${action.payload}`);
       return updateObject(state, {
+        id: getExerciseId(action.payload),
         type: action.payload,
         started: false,
         finished: false,
@@ -43,16 +67,21 @@ const reducer = (state = initialState, action) => {
         started: true,
       });
     }
+    case actionTypes.EXERCISE_ATTEMPT_START: {
+      return updateObject(state, {
+        attemptId: action.payload,
+      });
+    }
     case actionTypes.EXERCISE_FINISH: {
       const { elapsedTime, selectedText } = action.payload;
-      const results = updateObject(state.results, {
+      const result = updateObject(state.result, {
         elapsedTime,
         wpm: Math.round(selectedText.wordCount / (elapsedTime / (1000 * 60))),
         cps: Math.round(selectedText.characterCount / (elapsedTime / (1000))),
       });
       return updateObject(state, {
         finished: true,
-        results,
+        result,
       });
     }
     default:

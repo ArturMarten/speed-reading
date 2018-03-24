@@ -22,19 +22,19 @@ export class TestResults extends Component {
               </Grid.Column>
               <Grid.Column width={10}>
                 <Statistic size="small" color="black">
-                  <Statistic.Value>{formatMilliseconds(this.props.results.elapsedTime)}</Statistic.Value>
+                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>{Math.round((this.props.results.correct / this.props.results.total) * 100)}%</Statistic.Value>
+                  <Statistic.Value>{Math.round((this.props.result.correct / this.props.result.total) * 100)}%</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.percentage')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">
-                  <Statistic.Value>{this.props.results.correct}</Statistic.Value>
+                  <Statistic.Value>{this.props.result.correct}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.correct')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="red">
-                  <Statistic.Value>{this.props.results.incorrect}</Statistic.Value>
+                  <Statistic.Value>{this.props.result.incorrect}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.incorrect')}</Statistic.Label>
                 </Statistic>
               </Grid.Column>
@@ -65,7 +65,7 @@ export class TestResults extends Component {
 }
 
 const mapStateToProps = state => ({
-  results: state.test.results,
+  result: state.test.result,
   translate: getTranslate(state.locale),
 });
 

@@ -62,7 +62,7 @@ export class Statistics extends Component {
 
   render() {
     const exercises = [
-      { text: this.props.translate('statistics.reading-test'), value: 'Reading test' },
+      { text: this.props.translate('statistics.reading-aid'), value: 'Reading test' },
       { text: this.props.translate('statistics.word-groups'), value: 'Word groups' },
       { text: this.props.translate('statistics.disappearing-text'), value: 'Disappearing text' },
     ];

@@ -1,21 +1,50 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 
-const MIN_WPM = 10;
-const MAX_WPM = 500;
-const MIN_FIXATION = 20;
-const MAX_FIXATION = 500;
+import {
+  MIN_WPM,
+  MAX_WPM,
+  MIN_FIXATION,
+  MAX_FIXATION,
+} from '../../../store/reducers/options';
 
-export class SpeedOptions extends Component {
+export class SpeedOptions extends PureComponent {
   state = {};
+
+  componentDidMount() {
+    document.addEventListener('keypress', this.keyPressHandler);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.keyPressHandler);
+  }
+
+  keyPressHandler = (event) => {
+    const { keyCode } = event;
+    const key = String.fromCharCode(keyCode);
+    if (key === '+') {
+      if (this.wpmSpeedRef) {
+        this.wpmSpeedRef.increaseHandler(event);
+      } else if (this.fixationSpeedRef) {
+        this.fixationSpeedRef.increaseHandler(event);
+      }
+    } else if (key === '-') {
+      if (this.wpmSpeedRef) {
+        this.wpmSpeedRef.decreaseHandler(event);
+      } else if (this.fixationSpeedRef) {
+        this.fixationSpeedRef.decreaseHandler(event);
+      }
+    }
+  }
+
   render() {
-    if (this.props.exerciseType === 'reading' || this.props.exerciseType === 'disappearing') {
-      return (
-        <Fragment>
+    return (
+      <Fragment>
+        {this.props.visibleOptions.indexOf('wpm') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('speed-options.reading-speed')}
             unit={this.props.translate('speed-options.wpm')}
@@ -24,12 +53,9 @@ export class SpeedOptions extends Component {
             max={MAX_WPM}
             step={10}
             updateValue={value => this.props.onSubmit(Object.assign({}, { wpm: value }))}
-          />
-        </Fragment>
-      );
-    } else if (this.props.exerciseType === 'wordGroup') {
-      return (
-        <Fragment>
+            ref={(ref) => { this.wpmSpeedRef = ref; }}
+          /> : null}
+        {this.props.visibleOptions.indexOf('fixation') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('speed-options.fixation-time')}
             unit={this.props.translate('speed-options.ms')}
@@ -38,16 +64,16 @@ export class SpeedOptions extends Component {
             max={MAX_FIXATION}
             step={10}
             updateValue={value => this.props.onSubmit({ fixation: value })}
-          />
-        </Fragment>
-      );
-    }
-    return null;
+            ref={(ref) => { this.fixationSpeedRef = ref; }}
+          /> : null}
+      </Fragment>
+    );
   }
 }
 
 const mapStateToProps = state => ({
   options: state.options.speedOptions,
+  visibleOptions: state.options.visibleSpeedOptions,
   translate: getTranslate(state.locale),
 });
 
