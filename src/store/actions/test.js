@@ -205,34 +205,103 @@ const timerStop = () => ({
   type: actionTypes.TIMER_STOP,
 });
 
+const testPreparing = () => ({
+  type: actionTypes.TEST_PREPARING,
+});
+
 const testPrepared = () => ({
-  type: actionTypes.TEST_PREPARE,
+  type: actionTypes.TEST_PREPARED,
+});
+
+const testStarting = () => ({
+  type: actionTypes.TEST_STARTING,
 });
 
 const testStarted = () => ({
-  type: actionTypes.TEST_START,
+  type: actionTypes.TEST_STARTED,
 });
 
-const testFinished = elapsedTime => ({
-  type: actionTypes.TEST_FINISH,
-  payload: {
-    elapsedTime,
-  },
+const testAttemptStarted = attemptId => ({
+  type: actionTypes.TEST_ATTEMPT_START,
+  payload: attemptId,
 });
 
-export const prepareTest = () => (dispatch) => {
-  dispatch(timerInit());
-  dispatch(testPrepared());
+const testFinishing = () => ({
+  type: actionTypes.TEST_FINISHING,
+});
+
+const testFinished = result => ({
+  type: actionTypes.TEST_FINISHED,
+  payload: result,
+});
+
+const testEnd = () => ({
+  type: actionTypes.TEST_END,
+});
+
+export const prepareTest = readingTextId => (dispatch) => {
+  dispatch(testPreparing());
+  dispatch(fetchQuestionsStart());
+  axios.get(`/questions?readingTextId=${readingTextId}`)
+    .then((response) => {
+      const fetchedQuestions = response.data;
+      dispatch(fetchQuestionsSucceeded(fetchedQuestions));
+      dispatch(timerInit());
+      dispatch(testPrepared());
+    })
+    .catch((error) => {
+      dispatch(fetchQuestionsFailed(error.message));
+    });
 };
 
-export const startTest = () => (dispatch) => {
-  dispatch(timerStart());
-  dispatch(testStarted());
+export const startTest = (attemptData, token) => (dispatch) => {
+  dispatch(testStarting());
+  const isAuthenticated = token !== null;
+  if (isAuthenticated) {
+    axios.post('/testAttempts', attemptData, { headers: { 'x-access-token': token } })
+      .then((response) => {
+        dispatch(timerStart());
+        dispatch(testStarted());
+        dispatch(testAttemptStarted(response.data.id));
+      }, (error) => {
+        console.log(error);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    dispatch(timerStart());
+    dispatch(testStarted());
+  }
 };
 
-export const finishTest = () => (dispatch, getState) => {
+export const finishTest = (attemptId, answers, token) => (dispatch, getState) => {
   dispatch(timerStop());
+  dispatch(testFinishing());
   const state = getState();
   const { elapsedTime } = state.timing;
-  dispatch(testFinished(elapsedTime));
+  const isAuthenticated = token !== null;
+  if (isAuthenticated) {
+    axios.post('/testQuestionAnswers', answers, { headers: { 'x-access-token': token } })
+      .then(() => {
+        const result = { elapsedTime };
+        return axios.patch(`/testAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } });
+      }, (error) => {
+        console.log(error);
+      })
+      .then((response) => {
+        dispatch(testFinished(response.data.result));
+      }, (error) => {
+        console.log(error);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    dispatch(testFinished(elapsedTime));
+  }
+};
+
+export const endTest = () => (dispatch) => {
+  dispatch(testEnd());
 };

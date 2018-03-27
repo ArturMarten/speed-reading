@@ -15,12 +15,12 @@ export class TestResults extends Component {
         <Modal.Content>
           <Grid>
             <Grid.Row>
-              <Grid.Column verticalAlign="middle" width={6}>
+              <Grid.Column verticalAlign="middle" width={5}>
                 <Transition animation="shake" duration={2000} transitionOnMount>
                   <Icon name="graduation" size="massive" color="black" />
                 </Transition>
               </Grid.Column>
-              <Grid.Column width={10}>
+              <Grid.Column width={11}>
                 <Statistic size="small" color="black">
                   <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
@@ -29,6 +29,7 @@ export class TestResults extends Component {
                   <Statistic.Value>{Math.round((this.props.result.correct / this.props.result.total) * 100)}%</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.percentage')}</Statistic.Label>
                 </Statistic>
+                <br />
                 <Statistic size="small" color="green">
                   <Statistic.Value>{this.props.result.correct}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.correct')}</Statistic.Label>
@@ -36,6 +37,10 @@ export class TestResults extends Component {
                 <Statistic size="small" color="red">
                   <Statistic.Value>{this.props.result.incorrect}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.incorrect')}</Statistic.Label>
+                </Statistic>
+                <Statistic size="small" color="grey">
+                  <Statistic.Value>{this.props.result.unanswered}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.unanswered')}</Statistic.Label>
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
@@ -55,8 +60,8 @@ export class TestResults extends Component {
           />
           <Button
             negative
-            onClick={this.props.onFinish}
-            content={this.props.translate('test-results.finish')}
+            onClick={this.props.onEnd}
+            content={this.props.translate('test-results.end')}
           />
         </Modal.Actions>
       </Modal>

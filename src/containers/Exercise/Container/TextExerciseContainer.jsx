@@ -19,8 +19,6 @@ export const Status = {
 export class TextExerciseContainer extends Component {
   state = {
     status: Status.Preparation,
-    exerciseResults: false,
-    testResults: false,
     finished: false,
   };
 
@@ -28,18 +26,13 @@ export class TextExerciseContainer extends Component {
     this.props.onExerciseSelect(this.props.type);
   }
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.exerciseFinished && this.props.exerciseFinished) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ exerciseResults: true });
-    }
-    if (!prevProps.testFinished && this.props.testFinished) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ testResults: true });
-    }
+  onExerciseEnd = () => {
+    this.props.onExerciseEnd();
+    this.setState({ finished: true });
   }
 
-  onFinish = () => {
+  onTestEnd = () => {
+    this.props.onTestEnd();
     this.setState({ finished: true });
   }
 
@@ -71,7 +64,7 @@ export class TextExerciseContainer extends Component {
   }
 
   switchViewHandler = (status) => {
-    this.setState({ status, exerciseResults: false });
+    this.setState({ status });
   }
 
   render() {
@@ -82,16 +75,16 @@ export class TextExerciseContainer extends Component {
     return (
       <Fragment>
         {finishRedirect}
-        {this.state.exerciseResults ?
+        {this.state.status === Status.Exercise && this.props.exerciseStatus === 'finished' ?
           <TextExerciseResults
-            open={this.state.exerciseResults}
+            open={this.state.status === Status.Exercise && this.props.exerciseStatus === 'finished'}
             onProceed={() => this.switchViewHandler(Status.Test)}
-            onFinish={this.onFinish}
+            onEnd={this.onExerciseEnd}
           /> : null}
-        {this.state.testResults ?
+        {this.state.status === Status.Test && this.props.testStatus === 'finished' ?
           <TestResults
-            open={this.state.testResults}
-            onFinish={this.onFinish}
+            open={this.state.status === Status.Test && this.props.testStatus === 'finished'}
+            onEnd={this.onTestEnd}
           /> : null}
         {this.getCurrentView()}
       </Fragment>
@@ -100,14 +93,20 @@ export class TextExerciseContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  exerciseFinished: state.exercise.finished,
-  testFinished: state.test.finished,
+  testStatus: state.test.status,
+  exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
   onExerciseSelect: (type) => {
     dispatch(actionCreators.selectExercise(type));
+  },
+  onExerciseEnd: () => {
+    dispatch(actionCreators.endExercise());
+  },
+  onTestEnd: () => {
+    dispatch(actionCreators.endTest());
   },
 });
 

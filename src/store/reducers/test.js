@@ -6,13 +6,13 @@ const initialState = {
   loading: false,
   error: null,
   questions: [],
-  started: false,
-  finished: false,
+  status: 'preparation',
   result: {
     elapsedTime: 0,
     total: 1,
     correct: 0,
     incorrect: 0,
+    unanswered: 0,
   },
 };
 
@@ -142,25 +142,47 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
       });
     }
-    case actionTypes.TEST_PREPARE: {
+    case actionTypes.TEST_PREPARING: {
       return updateObject(state, {
-        started: false,
-        finished: false,
+        status: 'preparing',
       });
     }
-    case actionTypes.TEST_START: {
+    case actionTypes.TEST_PREPARED: {
       return updateObject(state, {
-        started: true,
+        status: 'prepared',
       });
     }
-    case actionTypes.TEST_FINISH: {
-      const { elapsedTime } = action.payload;
-      const result = updateObject(state.result, {
-        elapsedTime,
-      });
+    case actionTypes.TEST_STARTING: {
       return updateObject(state, {
-        finished: true,
+        status: 'starting',
+      });
+    }
+    case actionTypes.TEST_STARTED: {
+      return updateObject(state, {
+        status: 'started',
+      });
+    }
+    case actionTypes.TEST_ATTEMPT_START: {
+      return updateObject(state, {
+        attemptId: action.payload,
+      });
+    }
+    case actionTypes.TEST_FINISHING: {
+      return updateObject(state, {
+        status: 'finishing',
+      });
+    }
+    case actionTypes.TEST_FINISHED: {
+      const result = updateObject(state.result, action.payload);
+      return updateObject(state, {
+        status: 'finished',
         result,
+      });
+    }
+    case actionTypes.TEST_END: {
+      // Cleanup after test end
+      return updateObject(state, {
+        attemptId: null,
       });
     }
     default:

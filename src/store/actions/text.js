@@ -91,31 +91,31 @@ export const fetchTexts = () => (dispatch) => {
 };
 
 
-const getTextStart = () => ({
-  type: actionTypes.GET_TEXT_START,
+const fetchReadingTextStart = () => ({
+  type: actionTypes.FETCH_READING_TEXT_START,
 });
 
-const getTextSucceeded = text => ({
-  type: actionTypes.GET_TEXT_SUCCEEDED,
+const fetchReadingTextSucceeded = text => ({
+  type: actionTypes.FETCH_READING_TEXT_SUCCEEDED,
   payload: text,
 });
 
-const getTextFailed = error => ({
-  type: actionTypes.GET_TEXT_FAILED,
+const fetchReadingTextFailed = error => ({
+  type: actionTypes.FETCH_READING_TEXT_FAILED,
   payload: error,
 });
 
 export const selectText = textId => (dispatch) => {
-  dispatch(getTextStart());
+  dispatch(fetchReadingTextStart());
   axios.get(`/texts/${textId}`)
     .then((response) => {
       const text = response.data;
-      dispatch(getTextSucceeded(text));
+      dispatch(fetchReadingTextSucceeded(text));
     }, (error) => {
       console.log(error);
     })
     .catch((error) => {
-      dispatch(getTextFailed(error.message));
+      dispatch(fetchReadingTextFailed(error.message));
     });
 };
 

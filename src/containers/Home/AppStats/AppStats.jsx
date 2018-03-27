@@ -40,7 +40,7 @@ export class AppStats extends Component {
     return (
       <Fragment>
         <Header as="h3">{this.props.translate('app-stats.state')}</Header>
-        <Statistic.Group widths={6}>
+        <Statistic.Group widths={6} size="small">
           <Statistic>
             <Statistic.Value>
               <Icon name="winner" />

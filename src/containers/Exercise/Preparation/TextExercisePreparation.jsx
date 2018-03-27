@@ -16,7 +16,7 @@ export class TextExercisePreparation extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.prepared && this.props.prepared) {
+    if (prevProps.exerciseStatus !== 'prepared' && this.props.exerciseStatus === 'prepared') {
       this.props.onProceed();
     }
   }
@@ -40,7 +40,8 @@ export class TextExercisePreparation extends Component {
         <Button
           positive
           floated="right"
-          disabled={!this.props.selectedText}
+          loading={this.props.exerciseStatus === 'preparing'}
+          disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
           onClick={this.textPreparationHandler}
           content={this.props.translate('text-exercise-preparation.proceed')}
         />
@@ -120,7 +121,7 @@ const mapStateToProps = state => ({
   visibleTextOptions: state.options.visibleTextOptions,
   visibleExerciseOptions: state.options.visibleExerciseOptions,
   visibleSpeedOptions: state.options.visibleSpeedOptions,
-  prepared: state.exercise.prepared,
+  exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });
 

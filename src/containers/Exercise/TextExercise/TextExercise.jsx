@@ -17,11 +17,7 @@ const TEXT_HORIZONTAL_PADDING = 70;
 export class TextExercise extends Component {
   state = {};
 
-  shouldComponentUpdate(nextProps) {
-    return this.props.timerState !== nextProps.timerState;
-  }
-
-  onExerciseStart = () => {
+  onExerciseStartHandler = () => {
     const attemptData = {
       userId: this.props.userId,
       exerciseId: this.props.exerciseId,
@@ -31,7 +27,7 @@ export class TextExercise extends Component {
     this.props.onExerciseStart(attemptData, this.props.token);
   }
 
-  onExerciseFinish = () => {
+  onExerciseFinishHandler = () => {
     this.props.onExerciseFinish(this.props.attemptId, this.props.token);
   }
 
@@ -49,7 +45,7 @@ export class TextExercise extends Component {
             <ReadingAid
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
-              onExerciseFinish={this.onExerciseFinish}
+              onExerciseFinish={this.onExerciseFinishHandler}
             />
           );
         case 'disappearing':
@@ -57,7 +53,7 @@ export class TextExercise extends Component {
             <Disappearing
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
-              onExerciseFinish={this.onExerciseFinish}
+              onExerciseFinish={this.onExerciseFinishHandler}
             />
           );
         case 'wordGroup':
@@ -65,7 +61,7 @@ export class TextExercise extends Component {
             <WordGroups
               wordGroups={this.props.wordGroups}
               timerState={this.props.timerState}
-              onExerciseFinish={this.onExerciseFinish}
+              onExerciseFinish={this.onExerciseFinishHandler}
             />
           );
         default:
@@ -86,8 +82,9 @@ export class TextExercise extends Component {
           </Grid.Column>
           <Grid.Column textAlign="center" width={8}>
             <Timing
-              onStart={this.onExerciseStart}
-              onStop={this.onExerciseFinish}
+              loading={this.props.exerciseStatus === 'starting' || this.props.exerciseStatus === 'finishing'}
+              onStart={this.onExerciseStartHandler}
+              onStop={this.onExerciseFinishHandler}
             />
           </Grid.Column>
         </Grid.Row>
@@ -115,6 +112,7 @@ const mapStateToProps = state => ({
   token: state.auth.token,
   userId: state.auth.userId,
   exerciseId: state.exercise.id,
+  exerciseStatus: state.exercise.status,
   attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,
   wordGroups: state.exercise.wordGroups,

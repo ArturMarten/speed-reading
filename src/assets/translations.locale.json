@@ -167,7 +167,7 @@
     "wpm": ["sõna minutis", "words per minute"],
     "cps": ["tähemärki sekundis", "characters per second"],
     "proceed": ["Jätka testiga", "Proceed with test"],
-    "finish": ["Lõpeta", "Finish"]
+    "end": ["Lõpeta", "Finish"]
   },
   "text-exercise-test": {
     "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
@@ -182,9 +182,10 @@
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
     "correct": ["Õiget", "Correct"],
     "incorrect": ["Valet", "Incorrect"],
+    "unanswered": ["Vastamata", "Unanswered"],
     "percentage": ["Tulemus", "Result"],
     "check-correct-answers": ["Vaata vastuseid", "Check answers"],
-    "finish": ["Lõpeta", "Finish"]
+    "end": ["Lõpeta", "Finish"]
   },
   "text-options": {
     "font": ["Font", "Font"],
@@ -213,7 +214,7 @@
     "description": ["Siin saab harjutuse valikul näha selle statistikat", "Here you can select an exercise and see your statistics"],
     "warning-title": ["Allolev joonis ei näita tegelikku statistikat", "Chart below does not show actual statistics"],
     "warning-content": ["See on kujutatud genereeritud andmetel", "It is rendered using generated data"],
-    "reading-aid": ["Lugemise soodustaja", "Reading aid"],
+    "reading-test": ["Lugemistest", "Reading test"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "wpm": ["Sõnu minutis", "Words Per Minute"],

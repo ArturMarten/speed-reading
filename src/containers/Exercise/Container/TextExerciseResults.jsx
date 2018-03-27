@@ -40,8 +40,8 @@ export class TextExerciseResults extends Component {
         <Modal.Actions>
           <Button
             negative
-            onClick={this.props.onFinish}
-            content={this.props.translate('text-exercise-results.finish')}
+            onClick={this.props.onEnd}
+            content={this.props.translate('text-exercise-results.end')}
           />
           <Button
             positive

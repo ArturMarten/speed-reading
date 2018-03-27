@@ -1,6 +1,6 @@
 {
   "name": "speed-reading-software",
-  "version": "5.0.15",
+  "version": "5.0.16",
   "private": true,
   "homepage": "http://kodu.ut.ee/~arturmar",
   "devDependencies": {
