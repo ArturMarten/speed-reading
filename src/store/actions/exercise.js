@@ -18,16 +18,24 @@ const exerciseSelected = type => ({
   payload: type,
 });
 
+const exercisePreparing = () => ({
+  type: actionTypes.EXERCISE_PREPARING,
+});
+
 const exercisePrepared = (selectedText, exerciseOptions) => ({
-  type: actionTypes.EXERCISE_PREPARE,
+  type: actionTypes.EXERCISE_PREPARED,
   payload: {
     selectedText,
     exerciseOptions,
   },
 });
 
+const exerciseStarting = () => ({
+  type: actionTypes.EXERCISE_STARTING,
+});
+
 const exerciseStarted = () => ({
-  type: actionTypes.EXERCISE_START,
+  type: actionTypes.EXERCISE_STARTED,
 });
 
 const exerciseAttemptStarted = attemptId => ({
@@ -35,12 +43,20 @@ const exerciseAttemptStarted = attemptId => ({
   payload: attemptId,
 });
 
+const exerciseFinishing = () => ({
+  type: actionTypes.EXERCISE_FINISHING,
+});
+
 const exerciseFinished = (elapsedTime, selectedText) => ({
-  type: actionTypes.EXERCISE_FINISH,
+  type: actionTypes.EXERCISE_FINISHED,
   payload: {
     elapsedTime,
     selectedText,
   },
+});
+
+const exerciseEnd = () => ({
+  type: actionTypes.EXERCISE_END,
 });
 
 export const selectExercise = type => (dispatch) => {
@@ -48,11 +64,13 @@ export const selectExercise = type => (dispatch) => {
 };
 
 export const prepareExercise = (selectedText, exerciseOptions) => (dispatch) => {
+  dispatch(exercisePreparing());
   dispatch(timerInit());
   dispatch(exercisePrepared(selectedText, exerciseOptions));
 };
 
 export const startExercise = (attemptData, token) => (dispatch) => {
+  dispatch(exerciseStarting());
   const isAuthenticated = token !== null;
   if (isAuthenticated) {
     axios.post('/exerciseAttempts', attemptData, { headers: { 'x-access-token': token } })
@@ -74,19 +92,28 @@ export const startExercise = (attemptData, token) => (dispatch) => {
 
 export const finishExercise = (attemptId, token) => (dispatch, getState) => {
   dispatch(timerStop());
+  dispatch(exerciseFinishing());
   let state = getState();
   const { elapsedTime } = state.timing;
   const { selectedText } = state.text;
-  dispatch(exerciseFinished(elapsedTime, selectedText));
-  state = getState();
-  const { result } = state.exercise;
-  axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      console.log(response);
-    }, (error) => {
-      console.log(error);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const isAuthenticated = token !== null;
+  if (isAuthenticated) {
+    state = getState();
+    const { result } = state.exercise;
+    axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
+      .then(() => {
+        dispatch(exerciseFinished(elapsedTime, selectedText));
+      }, (error) => {
+        console.log(error);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    dispatch(exerciseFinished(elapsedTime, selectedText));
+  }
+};
+
+export const endExercise = () => (dispatch) => {
+  dispatch(exerciseEnd());
 };

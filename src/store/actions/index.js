@@ -22,6 +22,7 @@ export {
   prepareExercise,
   startExercise,
   finishExercise,
+  endExercise,
 } from './exercise';
 
 export {
@@ -35,6 +36,7 @@ export {
   prepareTest,
   startTest,
   finishTest,
+  endTest,
 } from './test';
 
 export {

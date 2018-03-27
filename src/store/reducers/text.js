@@ -56,12 +56,12 @@ const reducer = (state = initialState, action) => {
         fetchingTexts: false,
       });
     }
-    case actionTypes.GET_TEXT_START: {
+    case actionTypes.FETCH_READING_TEXT_START: {
       return updateObject(state, {
         selecting: true,
       });
     }
-    case actionTypes.GET_TEXT_SUCCEEDED: {
+    case actionTypes.FETCH_READING_TEXT_SUCCEEDED: {
       const updatedText = updateObject(action.payload, {
         text: convertFromRaw(action.payload.text),
       });
@@ -70,7 +70,7 @@ const reducer = (state = initialState, action) => {
         selecting: false,
       });
     }
-    case actionTypes.GET_TEXT_FAILED: {
+    case actionTypes.FETCH_READING_TEXT_FAILED: {
       return updateObject(state, {
         selecting: false,
       });

@@ -8,19 +8,19 @@ const DISAPPEARING_ID = 3;
 const WORD_GROUPS_ID = 4;
 export const EXERCISE_COUNT = 4;
 
+const initialResult = {
+  elapsedTime: 0,
+  wpm: 0,
+  cps: 0,
+};
+
 const initialState = {
   id: null,
   attemptId: null,
   type: '',
-  started: false,
-  finished: false,
-  prepared: false,
+  status: 'preparation',
   wordGroups: [],
-  result: {
-    elapsedTime: 0,
-    wpm: 0,
-    cps: 0,
-  },
+  result: initialResult,
 };
 
 const getExerciseId = (exerciseType) => {
@@ -45,26 +45,34 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         id: getExerciseId(action.payload),
         type: action.payload,
-        started: false,
-        finished: false,
-        prepared: false,
+        status: 'preparation',
       });
     }
-    case actionTypes.EXERCISE_PREPARE: {
+    case actionTypes.EXERCISE_PREPARING: {
+      return updateObject(state, {
+        status: 'preparing',
+      });
+    }
+    case actionTypes.EXERCISE_PREPARED: {
       if (state.type === 'wordGroup') {
         const wordGroups = splitIntoWordGroups(action.payload.selectedText.plain, action.payload.exerciseOptions.characterCount);
         return updateObject(state, {
           wordGroups,
-          prepared: true,
+          status: 'prepared',
         });
       }
       return updateObject(state, {
-        prepared: true,
+        status: 'prepared',
       });
     }
-    case actionTypes.EXERCISE_START: {
+    case actionTypes.EXERCISE_STARTING: {
       return updateObject(state, {
-        started: true,
+        status: 'starting',
+      });
+    }
+    case actionTypes.EXERCISE_STARTED: {
+      return updateObject(state, {
+        status: 'started',
       });
     }
     case actionTypes.EXERCISE_ATTEMPT_START: {
@@ -72,7 +80,12 @@ const reducer = (state = initialState, action) => {
         attemptId: action.payload,
       });
     }
-    case actionTypes.EXERCISE_FINISH: {
+    case actionTypes.EXERCISE_FINISHING: {
+      return updateObject(state, {
+        status: 'finishing',
+      });
+    }
+    case actionTypes.EXERCISE_FINISHED: {
       const { elapsedTime, selectedText } = action.payload;
       const result = updateObject(state.result, {
         elapsedTime,
@@ -80,8 +93,14 @@ const reducer = (state = initialState, action) => {
         cps: Math.round(selectedText.characterCount / (elapsedTime / (1000))),
       });
       return updateObject(state, {
-        finished: true,
+        status: 'finished',
         result,
+      });
+    }
+    case actionTypes.EXERCISE_END: {
+      // Cleanup after exercise end
+      return updateObject(state, {
+        attemptId: null,
       });
     }
     default:

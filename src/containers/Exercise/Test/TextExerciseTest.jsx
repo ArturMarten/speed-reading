@@ -5,75 +5,68 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 
-const dummyData = [
-  { id: 1, questionText: 'Mehelikku energiat iseloomustavad ego, sõjad, võistlemine ja............ning läbi aastasadade on seda olnud enam kui küllalt.', answers: [{ id: 1, answerText: 'passiivsus' }, { id: 2, answerText: 'vägivaldsus' }, { id: 3, answerText: 'agressiivsus' }, { id: 4, answerText: 'sõjakus' }] },
-  { id: 2, questionText: 'Nende kogukonna organiseeritust on lääne definitsioonide abil keeruline selgitada, kuid kõige enam kasutatakse selle kirjeldamisel sõna........', answers: [{ id: 1, answerText: 'esmaõiguslikkus' }, { id: 2, answerText: 'patriaarhia' }, { id: 3, answerText: 'matriarhaat' }, { id: 4, answerText: 'sugulusjärgus' }] },
-  { id: 3, questionText: 'Mosuode ühiskonnas on oluline erinevus, mis teistes ühiskondades on olemas ning,  mis teeb neid unikaalseks', answers: [{ id: 1, answerText: 'neil on kombeks n-ö visiitabielu, naine otsustab, millise mehe ta ööseks enda juurde lubab' }, { id: 2, answerText: 'nad ei tunne sõdu, vägistamisi ega mõrvu' }, { id: 3, answerText: 'isad on need, kes kasvatavad lapsi, samas kui naised teevad tööd' }, { id: 4, answerText: 'kummalgi partneril pole abikaasa kohustusi, kuid nad jagavad majapidamist ja lapsi' }] },
-  { id: 4, questionText: 'Mis on meeste suurim kohustus mosuode hõmus?', answers: [{ id: 1, answerText: 'toetada naisi majanduslikult' }, { id: 2, answerText: 'hoolitseda laste eest' }, { id: 3, answerText: 'oma öistel "visiitidel" edukalt hakkama saamine' }, { id: 4, answerText: 'pere valitsemine' }] },
-  { id: 5, questionText: 'Millel põhinevad muoso hõimu inimeste vahelised suhted?', answers: [{ id: 1, answerText: 'armastusel' }, { id: 2, answerText: 'poliitikal' }, { id: 3, answerText: 'majanduslikul heaolul' }, { id: 4, answerText: 'sotsiaalsel survel' }] },
-];
-
 export class TextExerciseTest extends Component {
   state = {
-    selectedQuestion: dummyData[0],
+    questionIndex: 0,
     answers: [],
-    loading: false,
   };
 
   componentDidMount() {
-    this.props.onTestPrepare();
+    this.props.onTestPrepare(this.props.selectedText.id);
   }
 
   onQuestionChange = (event, data) => {
-    this.setState({ selectedQuestion: dummyData[data.activePage - 1] });
+    this.setState({ questionIndex: data.activePage - 1 });
   }
 
-  onAnswerChange = (questionId, answerId) => {
+  onAnswerChange = (questionIndex, answerId) => {
     const updatedAnswers = this.state.answers.slice();
-    updatedAnswers[questionId - 1] = answerId;
+    updatedAnswers[questionIndex] = answerId;
     this.setState({ answers: updatedAnswers });
   }
 
   onTestStartHandler = () => {
-    this.props.onTestStart();
+    const attemptData = {
+      exerciseAttemptId: this.props.exerciseAttemptId,
+      startTime: new Date(),
+    };
+    this.props.onTestStart(attemptData, this.props.token);
   }
 
   onTestFinishHandler = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-      this.props.onTestFinish();
-    }, 1500);
+    const answers = this.props.questions.map((question, index) => ({
+      testAttemptId: this.props.attemptId,
+      questionId: question.id,
+      answerId: this.state.answers[index] ? this.state.answers[index] : null,
+    }));
+    this.props.onTestFinish(this.props.attemptId, answers, this.props.token);
   }
 
   render() {
-    const answers = this.state.selectedQuestion.answers.map(answer => (
-      <List.Item
-        key={answer.id}
-        active={this.state.answers[this.state.selectedQuestion.id - 1] === answer.id}
-        onClick={() => this.onAnswerChange(this.state.selectedQuestion.id, answer.id)}
-      >
-        <List.Content>
-          <List.Description>
-            {answer.answerText}
-          </List.Description>
-        </List.Content>
-      </List.Item>
-    ));
-
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2" content={this.props.translate('text-exercise-test.title')} />
-        <p>{this.props.translate('text-exercise-test.description')}</p>
-        {this.props.started ?
+        {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Grid>
             <Grid.Row centered>
-              <Header as="h4" content={this.state.selectedQuestion.questionText} />
+              <Header as="h4" content={this.props.questions[this.state.questionIndex].questionText} />
             </Grid.Row>
             <Grid.Row centered>
               <Grid.Column mobile={16} computer={12}>
-                <List selection ordered animated verticalAlign="middle" color="blue">
-                  {answers}
+                <List selection ordered animated verticalAlign="middle">
+                  {this.props.questions[this.state.questionIndex].answers.map(answer => (
+                    <List.Item
+                      key={answer.id}
+                      active={this.state.answers[this.state.questionIndex] === answer.id}
+                      onClick={() => this.onAnswerChange(this.state.questionIndex, answer.id)}
+                    >
+                      <List.Content>
+                        <List.Description>
+                          {answer.answerText}
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
+                  ))}
                 </List>
               </Grid.Column>
             </Grid.Row>
@@ -95,23 +88,25 @@ export class TextExerciseTest extends Component {
                 siblingRange={1}
                 ellipsisItem="..."
                 onPageChange={this.onQuestionChange}
-                totalPages={dummyData.length}
+                totalPages={this.props.questions.length}
               />
             </Grid.Row>
-          </Grid> : null}
-        {this.props.started ?
+          </Grid> : <p>{this.props.translate('text-exercise-test.description')}</p>}
+        {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Button
             negative
             onClick={this.onTestFinishHandler}
-            loading={this.state.loading}
             floated="right"
-            disabled={this.props.finished}
+            loading={this.props.testStatus === 'finishing'}
+            disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
           >{this.props.translate('text-exercise-test.finish-test')}
           </Button> :
           <Button
             positive
             onClick={this.onTestStartHandler}
             floated="right"
+            loading={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
+            disabled={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
           >{this.props.translate('text-exercise-test.start-test')}
           </Button>}
       </Container>
@@ -120,20 +115,24 @@ export class TextExerciseTest extends Component {
 }
 
 const mapStateToProps = state => ({
-  started: state.test.started,
-  finished: state.test.finished,
+  token: state.auth.token,
+  exerciseAttemptId: state.exercise.attemptId,
+  attemptId: state.test.attemptId,
+  selectedText: state.text.selectedText,
+  questions: state.test.questions,
+  testStatus: state.test.status,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTestPrepare: () => {
-    dispatch(actionCreators.prepareTest());
+  onTestPrepare: (readingTextId) => {
+    dispatch(actionCreators.prepareTest(readingTextId));
   },
-  onTestStart: () => {
-    dispatch(actionCreators.startTest());
+  onTestStart: (attemptData, token) => {
+    dispatch(actionCreators.startTest(attemptData, token));
   },
-  onTestFinish: () => {
-    dispatch(actionCreators.finishTest());
+  onTestFinish: (attemptId, answers, token) => {
+    dispatch(actionCreators.finishTest(attemptId, answers, token));
   },
 });
 

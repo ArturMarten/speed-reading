@@ -98,10 +98,11 @@ export class Timing extends Component {
       <Fragment>
         <Button
           circular
-          disabled={this.props.timerState.stopped}
           positive={!this.props.timerState.started || this.props.timerState.paused}
           negative={this.props.timerState.started && !this.props.timerState.paused}
           icon={!this.props.timerState.started || this.props.timerState.paused ? 'play' : 'pause'}
+          disabled={this.props.timerState.stopped || this.props.loading}
+          loading={this.props.loading}
           onClick={clickHandler}
         />
         <Button
@@ -110,6 +111,7 @@ export class Timing extends Component {
           icon="repeat"
           inverted
           disabled={!this.props.timerState.started}
+          loading={this.props.loading}
           onClick={this.resetClickHandler}
         />
         <Button
@@ -118,6 +120,7 @@ export class Timing extends Component {
           icon="flag checkered"
           inverted
           disabled={!this.props.timerState.started || this.props.timerState.stopped}
+          loading={this.props.loading}
           onClick={this.stopClickHandler}
         />
         <Label basic size="big" style={{ marginTop: '5px' }}>
