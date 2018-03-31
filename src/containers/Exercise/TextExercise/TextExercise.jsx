@@ -56,7 +56,7 @@ export class TextExercise extends Component {
               onExerciseFinish={this.onExerciseFinishHandler}
             />
           );
-        case 'wordGroup':
+        case 'wordGroups':
           return (
             <WordGroups
               wordGroups={this.props.wordGroups}

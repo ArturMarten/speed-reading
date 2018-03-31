@@ -104,8 +104,8 @@ export class QuestionEditor extends Component {
             onChange={this.questionInputChangeHandler}
             onKeyPress={this.keyPressHandler}
             placeholder={this.props.question ?
-              this.props.translate('question-editor.insert-new-placeholder') :
-              this.props.translate('question-editor.insert-changed-placeholder')}
+              this.props.translate('question-editor.insert-changed-placeholder') :
+              this.props.translate('question-editor.insert-new-placeholder')}
           >
             <input />
             <Dropdown

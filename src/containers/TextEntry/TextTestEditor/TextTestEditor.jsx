@@ -187,7 +187,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onFetchQuestions: (readingTextId) => {
-    dispatch(actionCreators.fetchQuestions(readingTextId));
+    dispatch(actionCreators.fetchTestEditorQuestions(readingTextId));
   },
   onRemoveQuestion: (questionId) => {
     dispatch(actionCreators.removeQuestion(questionId));

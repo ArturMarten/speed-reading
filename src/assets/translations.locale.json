@@ -133,16 +133,18 @@
   },
   "exercises": {
     "title-readingTest": ["Lugemistest", "Reading test"],
-    "description-readingTest": ["Kirjeldus", "Description"],
+    "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga.", "This test allows to measure your reading speed with normal text."],
     "title-readingAid": ["Lugemise soodustaja", "Reading aid"],
-    "description-readingAid": ["Kirjeldus", "Description"],
-    "title-wordGroup": ["Sõnarühmade harjutus", "Word group exercise"],
-    "description-wordGroup": ["Sõnarühmade harjutuse kirjeldus", "Word group exercise description"],
+    "description-readingAid": ["Soodustaja vähendab tagasivaatamisi ja kiirendab lugemist.", "Reading aid decreases regressions and increase reading speed."],
+    "title-wordGroups": ["Sõnarühmade harjutus", "Word group exercise"],
+    "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions"],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
-    "description-disappearing": ["Kustuva teksti harjutuse kirjeldus", "Disappearing text exercise description"]
+    "description-disappearing": ["See harjutus välistab tagasivaatamised ehk regressioonid.", "This exercises eliminates regressions."],
+    "modification-default": ["Vaikimisi", "Default"]
   },
   "text-exercise-preparation": {
-    "proceed": ["Jätka", "Proceed"],
+    "proceed": ["Edasi", "Proceed"],
+    "exercise-modification": ["Harjutuse modifikatsioon", "Exercise modification"],
     "text-selection": ["Teksti valik", "Text selection"],
     "text-selected": ["Valitud tekst", "Text selected"],
     "text-not-selected": ["Tekst valimata", "Text not selected"],
@@ -211,18 +213,20 @@
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],
-    "description": ["Siin saab harjutuse valikul näha selle statistikat", "Here you can select an exercise and see your statistics"],
-    "warning-title": ["Allolev joonis ei näita tegelikku statistikat", "Chart below does not show actual statistics"],
-    "warning-content": ["See on kujutatud genereeritud andmetel", "It is rendered using generated data"],
+    "description": ["Siin saab harjutuse valikul näha selle statistikat.", "Here you can select an exercise and see your statistics."],
+    "warning-title": ["Allolev graafik näitab hetkel kõigi kasutajate andmeid (regressiooni joont ei näidata)", "Chart below shows data for all users (regression line is not shown)"],
     "reading-test": ["Lugemistest", "Reading test"],
+    "reading-aid": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
+    "loading": ["Laen andmeid", "Loading data"],
+    "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"],
     "wpm": ["Sõnu minutis", "Words Per Minute"],
     "date": ["Kuupäev", "Date"]
   },
   "manage": {
     "title": ["Halda", "Manage"],
-    "description": ["Siin saab kasutajaid hallata", "Here you can manage users"],
+    "description": ["Siin saab hallata kasutajate nimekirja ja lisada uusi kasutajaid.", "Here you can manage user list and add new users."],
     "fetching-users": ["Laen kasutajaid", "Fetching users"],
     "table-group": ["Grupp", "Group"],
     "table-email": ["E-maili aadress", "E-mail address"],
@@ -256,7 +260,7 @@
   },
   "error-popup" : {
     "modal-header": ["Viga", "Error"],
-    "network-error": ["Probleem ühendusega", "Network problem"],
+    "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],
     "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],
     "authentication-token-missing": ["Autentimise võti puudub", "Authentication token is missing"],
     "authentication-token-invalid": ["Autentimise võti vigane", "Authentication token is invalid"],

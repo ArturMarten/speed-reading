@@ -101,7 +101,7 @@ const reducer = (state = initialState, action) => {
             visibleExerciseOptions: [...defaultVisibleExerciseOptions],
             visibleSpeedOptions: [...defaultVisibleSpeedOptions],
           });
-        case 'wordGroup':
+        case 'wordGroups':
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions],
             visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'characterCount'],

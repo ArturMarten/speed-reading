@@ -97,20 +97,19 @@ export const finishExercise = (attemptId, token) => (dispatch, getState) => {
   const { elapsedTime } = state.timing;
   const { selectedText } = state.text;
   const isAuthenticated = token !== null;
+  dispatch(exerciseFinished(elapsedTime, selectedText));
   if (isAuthenticated) {
     state = getState();
     const { result } = state.exercise;
     axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
       .then(() => {
-        dispatch(exerciseFinished(elapsedTime, selectedText));
+        // Dispatch event
       }, (error) => {
         console.log(error);
       })
       .catch((error) => {
         console.log(error);
       });
-  } else {
-    dispatch(exerciseFinished(elapsedTime, selectedText));
   }
 };
 
