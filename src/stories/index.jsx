@@ -49,8 +49,8 @@ storiesOf('Text entry', module)
 storiesOf('Text editor', module)
   .add('Container', () => <TextEditorContainer />);
 
-storiesOf('Preparation', module)
-  .add('Container', () => <TextExercisePreparationContainer type="wordGroup" onProceed={action('clicked')} />);
+storiesOf('Text exercise preparation', module)
+  .add('Container', () => <TextExercisePreparationContainer type="wordGroups" onProceed={action('clicked')} />);
 
 storiesOf('Text selection', module)
   .add('Container', () => <TextSelectionContainer open />);
@@ -59,14 +59,15 @@ storiesOf('Text preview', module)
   .add('Container', () => <TextPreviewContainer />);
 
 storiesOf('Text exercise', module)
-  .add('Container', () => (
+  .add('Component', () => (
     <TextExercise
       type="readingTest"
       timerState={{
-        started: false,
+        started: true,
         paused: false,
         stopped: false,
       }}
+      selectedText={store.getState().text.selectedText}
     />
   ));
 

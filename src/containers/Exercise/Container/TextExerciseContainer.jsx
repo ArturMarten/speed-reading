@@ -10,15 +10,9 @@ import TextExerciseResults from './TextExerciseResults';
 import TextExerciseTest from '../Test/TextExerciseTest';
 import TestResults from './TestResults';
 
-export const Status = {
-  Preparation: 0,
-  Exercise: 1,
-  Test: 2,
-};
-
 export class TextExerciseContainer extends Component {
   state = {
-    status: Status.Preparation,
+    status: 'preparation',
     finished: false,
   };
 
@@ -38,22 +32,22 @@ export class TextExerciseContainer extends Component {
 
   getCurrentView() {
     switch (this.state.status) {
-      case Status.Preparation: {
+      case 'preparation': {
         return (
           <TextExercisePreparation
             type={this.props.type}
-            onProceed={() => this.switchViewHandler(Status.Exercise)}
+            onProceed={() => this.switchViewHandler('exercise')}
           />
         );
       }
-      case Status.Exercise: {
+      case 'exercise': {
         return (
           <TextExercise
             type={this.props.type}
           />
         );
       }
-      case Status.Test: {
+      case 'test': {
         return (
           <TextExerciseTest />
         );
@@ -75,15 +69,15 @@ export class TextExerciseContainer extends Component {
     return (
       <Fragment>
         {finishRedirect}
-        {this.state.status === Status.Exercise && this.props.exerciseStatus === 'finished' ?
+        {this.state.status === 'exercise' && this.props.exerciseStatus === 'finished' ?
           <TextExerciseResults
-            open={this.state.status === Status.Exercise && this.props.exerciseStatus === 'finished'}
-            onProceed={() => this.switchViewHandler(Status.Test)}
+            open={this.state.status === 'exercise' && this.props.exerciseStatus === 'finished'}
+            onProceed={() => this.switchViewHandler('test')}
             onEnd={this.onExerciseEnd}
           /> : null}
-        {this.state.status === Status.Test && this.props.testStatus === 'finished' ?
+        {this.state.status === 'test' && this.props.testStatus === 'finished' ?
           <TestResults
-            open={this.state.status === Status.Test && this.props.testStatus === 'finished'}
+            open={this.state.status === 'test' && this.props.testStatus === 'finished'}
             onEnd={this.onTestEnd}
           /> : null}
         {this.getCurrentView()}

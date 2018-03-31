@@ -26,7 +26,7 @@ export {
 } from './exercise';
 
 export {
-  fetchQuestions,
+  fetchTestEditorQuestions,
   addQuestion,
   changeQuestion,
   removeQuestion,
@@ -61,5 +61,7 @@ export {
   addGroup,
   changeGroup,
 } from './manage';
+
+export { fetchExerciseStatistics } from './statistics';
 
 export { sendFeedback } from './feedback';

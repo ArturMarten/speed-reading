@@ -30,13 +30,13 @@ export class SpeedOptions extends PureComponent {
       if (this.wpmSpeedRef) {
         this.wpmSpeedRef.increaseHandler(event);
       } else if (this.fixationSpeedRef) {
-        this.fixationSpeedRef.increaseHandler(event);
+        this.fixationSpeedRef.decreaseHandler(event);
       }
     } else if (key === '-') {
       if (this.wpmSpeedRef) {
         this.wpmSpeedRef.decreaseHandler(event);
       } else if (this.fixationSpeedRef) {
-        this.fixationSpeedRef.decreaseHandler(event);
+        this.fixationSpeedRef.increaseHandler(event);
       }
     }
   }

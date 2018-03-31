@@ -15,9 +15,9 @@ const fetchQuestionsFailed = error => ({
   payload: error,
 });
 
-export const fetchQuestions = readingTextId => (dispatch) => {
+export const fetchTestEditorQuestions = readingTextId => (dispatch) => {
   dispatch(fetchQuestionsStart());
-  axios.get(`/questions?readingTextId=${readingTextId}`)
+  axios.get(`/questions?readingTextId=${readingTextId}&embed=answers.correct`)
     .then((response) => {
       const fetchedQuestions = response.data;
       dispatch(fetchQuestionsSucceeded(fetchedQuestions));

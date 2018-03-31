@@ -18,12 +18,13 @@ const initialState = {
   id: null,
   attemptId: null,
   type: '',
+  modification: 'default',
   status: 'preparation',
   wordGroups: [],
   result: initialResult,
 };
 
-const getExerciseId = (exerciseType) => {
+export const getExerciseId = (exerciseType) => {
   switch (exerciseType) {
     case 'readingTest':
       return READING_TEST_ID;
@@ -54,7 +55,7 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.EXERCISE_PREPARED: {
-      if (state.type === 'wordGroup') {
+      if (state.type === 'wordGroups') {
         const wordGroups = splitIntoWordGroups(action.payload.selectedText.plain, action.payload.exerciseOptions.characterCount);
         return updateObject(state, {
           wordGroups,

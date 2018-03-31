@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Divider, Message, Grid, Segment, Icon } from 'semantic-ui-react';
+import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -31,40 +31,77 @@ export class TextExercisePreparation extends Component {
 
   render() {
     const selectedText = this.props.selectedText ?
-      <span>{this.props.translate('text-exercise-preparation.text-selected')}: <b>{this.props.selectedText.title}</b></span> :
+      <span><b>{this.props.selectedText.title}</b></span> :
       <b>{this.props.translate('text-exercise-preparation.text-not-selected')}</b>;
+    const modificationOptions = [
+      { key: 'default', text: this.props.translate('exercises.modification-default'), value: 'default' },
+    ];
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
-        {this.props.translate(`exercises.description-${this.props.type}`)}
-        <Button
-          positive
-          floated="right"
-          loading={this.props.exerciseStatus === 'preparing'}
-          disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
-          onClick={this.textPreparationHandler}
-          content={this.props.translate('text-exercise-preparation.proceed')}
-        />
-        <Header as="h3" content={this.props.translate('text-exercise-preparation.text-selection')} />
-        {selectedText}{' '}
-        <Button
-          primary
-          onClick={this.textSelectionToggleHandler}
-          content={this.props.selectedText ?
-            this.props.translate('text-exercise-preparation.change-text') :
-            this.props.translate('text-exercise-preparation.select-text')}
-        />
-        {this.state.textSelectionOpened ?
-          <TextSelection
-            open={this.state.textSelectionOpened}
-            onClose={this.textSelectionToggleHandler}
-          /> : null}
-        <Divider />
-        {this.props.info.exerciseSettingsInfo ?
-          <Message info onDismiss={this.props.onExerciseSettingsInfoDismiss}>
-            <Icon name="settings" size="large" />
-            {this.props.translate('text-exercise-preparation.info-content')}
-          </Message> : null}
+        <Grid stackable>
+          <Grid.Row>
+            <Grid.Column width={15}>
+              {this.props.translate(`exercises.description-${this.props.type}`)}
+            </Grid.Column>
+            <Grid.Column width={1} verticalAlign="bottom">
+              <Button
+                positive
+                floated="right"
+                loading={this.props.exerciseStatus === 'preparing'}
+                disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
+                onClick={this.textPreparationHandler}
+                content={this.props.translate('text-exercise-preparation.proceed')}
+              />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={10}>
+              <Segment clearing>
+                <Header as="h4" textAlign="center">
+                  {this.props.translate('text-exercise-preparation.text-selection')}
+                </Header>
+                {selectedText}
+                <Button
+                  primary
+                  floated="right"
+                  onClick={this.textSelectionToggleHandler}
+                  content={this.props.selectedText ?
+                    this.props.translate('text-exercise-preparation.change-text') :
+                    this.props.translate('text-exercise-preparation.select-text')}
+                />
+                {this.state.textSelectionOpened ?
+                  <TextSelection
+                    open={this.state.textSelectionOpened}
+                    onClose={this.textSelectionToggleHandler}
+                  /> : null}
+              </Segment>
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Segment>
+                <Header as="h4" textAlign="center">
+                  {this.props.translate('text-exercise-preparation.exercise-modification')}
+                </Header>
+                <Dropdown
+                  fluid
+                  selection
+                  scrolling
+                  value={this.props.exerciseModification}
+                  options={modificationOptions}
+                />
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+          {this.props.info.exerciseSettingsInfo ?
+            <Grid.Row columns={1}>
+              <Grid.Column>
+                <Message info onDismiss={this.props.onExerciseSettingsInfoDismiss}>
+                  <Icon name="settings" size="large" />
+                  {this.props.translate('text-exercise-preparation.info-content')}
+                </Message>
+              </Grid.Column>
+            </Grid.Row> : null}
+        </Grid>
         <Grid stackable>
           <Grid.Row columns={2}>
             <Grid.Column>
@@ -117,6 +154,7 @@ export class TextExercisePreparation extends Component {
 const mapStateToProps = state => ({
   info: state.info,
   selectedText: state.text.selectedText,
+  exerciseModification: state.exercise.modification,
   exerciseOptions: state.options.exerciseOptions,
   visibleTextOptions: state.options.visibleTextOptions,
   visibleExerciseOptions: state.options.visibleExerciseOptions,
