@@ -7,7 +7,7 @@ import { transition } from 'd3-transition';
 import { line } from 'd3-shape';
 import './RegressionChart.css';
 
-function leastSquares(xSeries, ySeries) {
+const leastSquares = (xSeries, ySeries) => {
   const reduceSumFunc = (prev, cur) => prev + cur;
   const xBar = (xSeries.reduce(reduceSumFunc) * 1.0) / xSeries.length;
   const yBar = (ySeries.reduce(reduceSumFunc) * 1.0) / ySeries.length;
@@ -23,7 +23,7 @@ function leastSquares(xSeries, ySeries) {
   const rSquare = (ssXY ** 2) / (ssXX * ssYY);
 
   return [slope, intercept, rSquare];
-}
+};
 
 export class RegressionChart extends Component {
   componentDidMount() {

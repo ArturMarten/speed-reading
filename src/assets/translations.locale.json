@@ -103,6 +103,7 @@
     "sort": ["Sorteeri", "Sort"],
     "sort-by-placeholder": ["Sorteeri kriteeriumi järgi", "Sort by criteria"],
     "author": ["Autor", "Author"],
+    "words": ["sõna", "words"],
     "complexity": ["Keerukus", "Complexity"],
     "choose": ["Vali tekst", "Choose text"]
   },
@@ -144,9 +145,10 @@
   },
   "text-exercise-preparation": {
     "proceed": ["Edasi", "Proceed"],
-    "exercise-modification": ["Harjutuse modifikatsioon", "Exercise modification"],
+    "exercise-modification": ["Modifikatsioon", "Modification"],
     "text-selection": ["Teksti valik", "Text selection"],
     "text-selected": ["Valitud tekst", "Text selected"],
+    "title": ["Pealkiri", "Title"],
     "text-not-selected": ["Tekst valimata", "Text not selected"],
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],

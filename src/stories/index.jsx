@@ -58,7 +58,7 @@ storiesOf('Text selection', module)
 storiesOf('Text preview', module)
   .add('Container', () => <TextPreviewContainer />);
 
-storiesOf('Text exercise', module)
+storiesOf('Reading test exercise', module)
   .add('Component', () => (
     <TextExercise
       type="readingTest"

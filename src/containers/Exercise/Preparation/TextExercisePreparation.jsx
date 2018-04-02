@@ -31,20 +31,34 @@ export class TextExercisePreparation extends Component {
 
   render() {
     const selectedText = this.props.selectedText ?
-      <span><b>{this.props.selectedText.title}</b></span> :
+      <span>{this.props.translate('text-exercise-preparation.title')}: <b>{this.props.selectedText.title}</b></span> :
       <b>{this.props.translate('text-exercise-preparation.text-not-selected')}</b>;
     const modificationOptions = [
       { key: 'default', text: this.props.translate('exercises.modification-default'), value: 'default' },
     ];
     return (
       <Container style={{ marginTop: '4vh' }}>
-        <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
         <Grid stackable>
+          <Grid.Row verticalAlign="bottom">
+            <Grid.Column width={10}>
+              <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              {this.props.translate('text-exercise-preparation.exercise-modification')}
+              <Dropdown
+                fluid
+                selection
+                scrolling
+                value={this.props.exerciseModification}
+                options={modificationOptions}
+              />
+            </Grid.Column>
+          </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={15}>
+            <Grid.Column width={14}>
               {this.props.translate(`exercises.description-${this.props.type}`)}
             </Grid.Column>
-            <Grid.Column width={1} verticalAlign="bottom">
+            <Grid.Column width={2} verticalAlign="bottom">
               <Button
                 positive
                 floated="right"
@@ -56,7 +70,7 @@ export class TextExercisePreparation extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={10}>
+            <Grid.Column width={16}>
               <Segment clearing>
                 <Header as="h4" textAlign="center">
                   {this.props.translate('text-exercise-preparation.text-selection')}
@@ -75,20 +89,6 @@ export class TextExercisePreparation extends Component {
                     open={this.state.textSelectionOpened}
                     onClose={this.textSelectionToggleHandler}
                   /> : null}
-              </Segment>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Segment>
-                <Header as="h4" textAlign="center">
-                  {this.props.translate('text-exercise-preparation.exercise-modification')}
-                </Header>
-                <Dropdown
-                  fluid
-                  selection
-                  scrolling
-                  value={this.props.exerciseModification}
-                  options={modificationOptions}
-                />
               </Segment>
             </Grid.Column>
           </Grid.Row>

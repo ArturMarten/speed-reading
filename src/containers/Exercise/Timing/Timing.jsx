@@ -6,7 +6,7 @@ import * as actionCreators from '../../../store/actions';
 
 let update = null;
 
-function format(input) {
+const format = (input) => {
   const pad = (time, length) => {
     let result = time;
     while (result.length < length) {
@@ -18,7 +18,7 @@ function format(input) {
   const minutes = pad(inputTime.getMinutes().toString(), 2);
   const seconds = pad(inputTime.getSeconds().toString(), 2);
   return `${minutes}:${seconds}`;
-}
+};
 
 export class Timing extends Component {
   state = {
