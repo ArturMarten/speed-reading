@@ -3,13 +3,24 @@ import { connect } from 'react-redux';
 
 import { writeText, getLineMetadata, WordMetadata, LineMetadata } from '../../../../src/utils/CanvasUtils/CanvasUtils';
 
-let update = null;
+let timeout = null;
+let frame = null;
+
 const initialState = {
   word: 0,
   lineCharacter: 0,
   linePosition: 0,
   currentRect: [0, 0, 0, 0],
   previousRect: [0, 0, 0, 0],
+};
+
+const draw = (context, copyCanvas, previousRect, currentRect) => {
+  // Clear previous state
+  context.clearRect(...previousRect);
+  context.drawImage(copyCanvas, ...previousRect, ...previousRect);
+  // Draw new state
+  context.fillRect(...currentRect);
+  context.drawImage(copyCanvas, ...currentRect, ...currentRect);
 };
 
 export class ReadingAid extends Component {
@@ -24,18 +35,21 @@ export class ReadingAid extends Component {
     if ((!this.props.timerState.started && nextProps.timerState.started) ||
         (this.props.timerState.paused && !nextProps.timerState.paused)) {
       // Exercise started
-      update = setTimeout(() => this.update(), this.updateInterval + this.props.exerciseOptions.startDelay);
+      timeout = setTimeout(() => this.update(), this.updateInterval + this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
-      clearTimeout(update);
+      clearTimeout(timeout);
+      cancelAnimationFrame(frame);
       this.cursorState = { ...initialState };
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     } else if (!this.props.timerState.stopped && nextProps.timerState.stopped) {
-      clearTimeout(update);
+      clearTimeout(timeout);
+      cancelAnimationFrame(frame);
     } else if (!this.props.timerState.paused && nextProps.timerState.paused) {
       // Exercise paused
-      clearTimeout(update);
+      clearTimeout(timeout);
+      cancelAnimationFrame(frame);
     } else {
       // Text/exercise options or text changed
       const timeInSeconds = (this.textMetadata.wordMetadata.length / nextProps.speedOptions.wpm) * 60;
@@ -45,7 +59,8 @@ export class ReadingAid extends Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(update);
+    clearTimeout(timeout);
+    cancelAnimationFrame(frame);
   }
 
   cursorState = { ...initialState };
@@ -55,17 +70,14 @@ export class ReadingAid extends Component {
     this.offscreenCanvas.height = this.shownCanvas.height;
     this.offscreenContext.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
     this.offscreenContext.textBaseline = 'bottom';
-    this.shownContext.fillStyle = 'rgba(0, 255, 0, 0.9)';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.text);
-    const characters = this.textMetadata.wordMetadata
-      .map(wordMetadata => wordMetadata[0].length)
-      .reduce((prev, curr) => prev + curr);
     this.lineMetadata = getLineMetadata(this.textMetadata);
     const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
-    this.updateInterval = (timeInSeconds / characters) * 1000;
+    this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
+    this.shownContext.fillStyle = 'rgba(0, 255, 0, 0.9)';
   }
 
   update() {
@@ -109,21 +121,13 @@ export class ReadingAid extends Component {
         this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth],
         this.props.textOptions.fontSize + 2,
       ];
-      update = setTimeout(
-        () => this.update(),
-        this.cursorState.newLine ? this.updateInterval + this.props.exerciseOptions.lineBreakDelay : this.updateInterval,
+      const nextUpdate = this.cursorState.newLine ? this.updateInterval + this.props.exerciseOptions.lineBreakDelay : this.updateInterval;
+      timeout = setTimeout(
+        () => { frame = requestAnimationFrame(() => this.update()); },
+        nextUpdate,
       );
-      requestAnimationFrame(() => this.draw());
+      draw(this.shownContext, this.offscreenCanvas, this.previousRect, this.cursorState.currentRect);
     }
-  }
-
-  draw() {
-    // Clear previous state
-    this.shownContext.clearRect(...this.previousRect);
-    this.shownContext.drawImage(this.offscreenCanvas, ...this.previousRect, ...this.previousRect);
-    // Draw new state
-    this.shownContext.fillRect(...this.cursorState.currentRect);
-    this.shownContext.drawImage(this.offscreenCanvas, ...this.cursorState.currentRect, ...this.cursorState.currentRect);
   }
 
   render() {

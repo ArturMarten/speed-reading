@@ -55,11 +55,4 @@ describe('<Feedback />', () => {
     shallow(<Feedback open translate={translateStub} />);
     expect(translateStub).to.have.been.calledWith('feedback.send');
   });
-
-  it('should submit on click', () => {
-    const submitStub = sinon.stub();
-    const feedback = shallow(<Feedback open translate={sinon.stub()} onSubmit={submitStub} />);
-    feedback.find(Button).simulate('click');
-    expect(submitStub).to.have.been.calledWith({});
-  });
 });

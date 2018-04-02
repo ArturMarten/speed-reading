@@ -167,7 +167,6 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
   onSubmit: (feedback) => {
     dispatch(actionCreators.sendFeedback(feedback));

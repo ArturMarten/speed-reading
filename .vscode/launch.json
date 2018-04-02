@@ -15,7 +15,7 @@
     }
   },
   {
-    "name": "Debug tests",
+    "name": "Debug Jest tests",
     "type": "node",
     "request": "launch",
     "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",      
@@ -29,5 +29,22 @@
     "protocol": "inspector",
     "console": "integratedTerminal",
     "internalConsoleOptions": "neverOpen"
+  },
+  {
+    "type": "node",
+    "request": "launch",
+    "name": "Debug Mocha tests",
+    "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+    "args": [
+        "--timeout",
+        "999999",
+        "--colors",
+        "${file}"
+    ],
+    "console": "integratedTerminal",
+    "internalConsoleOptions": "neverOpen",
+    "env": {
+      "NODE_ENV": "test"
+    }
   }]
 }

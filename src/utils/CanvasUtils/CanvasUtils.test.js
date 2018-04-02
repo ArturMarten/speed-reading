@@ -1,10 +1,10 @@
 /* eslint-disable func-names */
 import pixelmatch from 'pixelmatch';
 import fs from 'fs';
-import { ContentState, convertFromHTML } from 'draft-js';
+import { List } from 'immutable';
+import { ContentState, convertFromHTML, ContentBlock, genKey } from 'draft-js';
 import { writeText } from './CanvasUtils';
 
-// eslint-disable-next-line no-unused-vars
 const imgOutputFolder = `${__dirname}/../../test/output`;
 
 // To get test name in Jasmine
@@ -17,36 +17,48 @@ jasmine.getEnv().addReporter({
 });
 */
 
-function getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight) {
+const log = (json) => {
+  console.log(JSON.stringify(json, null, 2));
+};
+
+const getPixelDifference = (expectedContext, actualContext, diffContext, canvasWidth, canvasHeight) => {
   const expectedImage = expectedContext.getImageData(0, 0, canvasWidth, canvasHeight);
   const actualImage = actualContext.getImageData(0, 0, canvasWidth, canvasHeight);
   const diffImage = diffContext.createImageData(canvasWidth, canvasHeight);
   const pixelDiff = pixelmatch(expectedImage.data, actualImage.data, diffImage.data, canvasWidth, canvasHeight);
   diffContext.putImageData(diffImage, 0, 0);
   return pixelDiff;
-}
+};
 
-// eslint-disable-next-line no-unused-vars
-function outputPNG(canvas, filePath) {
+export const outputPNG = (canvas, filePath) => {
   const data = canvas.toDataURL().replace(/^data:image\/\w+;base64,/, '');
   const buffer = Buffer.from(data, 'base64');
   fs.writeFile(filePath, buffer, (err) => {
     if (err) return console.log(err);
     return 0;
   });
-}
+};
 
-function getDraftJSContentFromHTML(html) {
+const createEmptyBlock = () => new ContentBlock({
+  key: genKey(),
+  type: 'unstyled',
+  text: '',
+  characterList: List(),
+  depth: 0,
+  data: {},
+});
+
+const getDraftJSContentFromHTML = (html) => {
   const blocksFromHTML = convertFromHTML(html);
   return ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
-}
+};
 
 describe('CanvasUtils', () => {
   const expectedCanvas = document.createElement('canvas');
   const actualCanvas = document.createElement('canvas');
   const diffCanvas = document.createElement('canvas');
   const canvasWidth = 250;
-  const canvasHeight = 50;
+  const canvasHeight = 100;
   const fontSize = 16;
   const lineHeight = fontSize + 4;
   const paragraphSpace = 10;
@@ -79,11 +91,10 @@ describe('CanvasUtils', () => {
 
     const testName = `CanvasUtils ${this.currentTest.title}`;
     outputPNG(diffCanvas, `${imgOutputFolder}/diff/${testName}.png`);
-
     /*
     // When required, output actual and expected images
+    outputPNG(actualCanvas, `${imgOutputFolder}/actual/${testName}.png`);
     outputPNG(expectedCanvas, `${imgOutputFolder}/expected/${testName}.png`);
-    outputPNG(actualCanvas,  `${imgOutputFolder}/actual/${testName}.png`);
     */
   });
 
@@ -159,8 +170,74 @@ describe('CanvasUtils', () => {
 
   it('passes multiple paragraph test', () => {
     expectedContext.fillText('paragraph1 text', 0, lineHeight);
-    expectedContext.fillText('paragraph2 text', 0, lineHeight + paragraphSpace + lineHeight);
+    expectedContext.fillText('paragraph2 text', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>paragraph1 text</p><p>paragraph2 text</p>');
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('passes paragraph wrap test', () => {
+    expectedContext.fillText('paragraph text should be', 0, lineHeight);
+    expectedContext.fillText('wrapped', 0, lineHeight + lineHeight);
+    const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('passes two paragraph wrap test', () => {
+    expectedContext.fillText('paragraph text should be', 0, lineHeight);
+    expectedContext.fillText('wrapped', 0, lineHeight + lineHeight);
+    expectedContext.fillText('paragraph', 0, lineHeight + lineHeight + lineHeight + paragraphSpace);
+    const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('passes empty paragraph test', () => {
+    expectedContext.fillText('Second line', 0, lineHeight + paragraphSpace + lineHeight);
+    const emptyBlock = [createEmptyBlock()];
+    const secondBlock = convertFromHTML('<p>Second line</p>').contentBlocks;
+    const mergedBlocks = emptyBlock.concat(secondBlock);
+    const content = ContentState.createFromBlockArray(mergedBlocks, {});
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('passes two empty paragraph test', () => {
+    expectedContext.fillText('Third line', 0, lineHeight + lineHeight + lineHeight + paragraphSpace);
+    const emptyBlocks = [createEmptyBlock(), createEmptyBlock()];
+    const thirdBlock = convertFromHTML('<p>Third line</p>').contentBlocks;
+    const mergedBlocks = emptyBlocks.concat(thirdBlock);
+    const content = ContentState.createFromBlockArray(mergedBlocks, {});
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('passes empty paragraph between test', () => {
+    expectedContext.fillText('First line', 0, lineHeight);
+    expectedContext.fillText('Third line', 0, lineHeight + lineHeight + lineHeight + paragraphSpace);
+    const firstBlock = convertFromHTML('<p>First line</p>').contentBlocks;
+    const emptyBlock = [createEmptyBlock()];
+    const thirdBlock = convertFromHTML('<p>Third line</p>').contentBlocks;
+    const mergedBlocks = (firstBlock.concat(emptyBlock)).concat(thirdBlock);
+    const content = ContentState.createFromBlockArray(mergedBlocks, {});
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('passes paragraph extra spaces test', () => {
+    expectedContext.fillText('Paragraph', 0, lineHeight);
+    expectedContext.fillText('with space', 0, lineHeight + lineHeight + paragraphSpace);
+    const content = getDraftJSContentFromHTML('<p>Paragraph </p><p>with space</p>');
+    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
+  });
+
+  it('resizes canvas to fit text', () => {
+    actualCanvas.height = lineHeight;
+    expectedContext.fillText('Visible', 0, lineHeight);
+    expectedContext.fillText('Overflow', 0, lineHeight + lineHeight + paragraphSpace);
+    const content = getDraftJSContentFromHTML('<p>Visible</p><p>Overflow</p>');
     writeText(actualContext, content, { lineHeight, paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
@@ -172,8 +249,8 @@ describe('CanvasUtils', () => {
       ['metadata', 0, singleWordWidth, lineHeight],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
-    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
     expect(actualTextMetadata.lines.length).to.equal(1);
+    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
   });
 
   it('returns multiple words metadata', () => {
@@ -190,8 +267,8 @@ describe('CanvasUtils', () => {
       ['metadata', thirdWordStart, thirdWordStart + thirdWordWidth, lineHeight],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
-    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
     expect(actualTextMetadata.lines.length).to.equal(1);
+    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
   });
 
   it('returns multiple line metadata', () => {
@@ -208,8 +285,8 @@ describe('CanvasUtils', () => {
       ['wrapped', thirdWordStart, thirdWordStart + thirdWordWidth, lineHeight + lineHeight],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
-    expect(actualTextMetadata.wordMetadata).to.include.deep.members(expectedWordMetadata);
     expect(actualTextMetadata.lines.length).to.equal(2);
+    expect(actualTextMetadata.wordMetadata).to.include.deep.members(expectedWordMetadata);
   });
 
   it('returns multiple paragraph metadata', () => {
@@ -225,7 +302,61 @@ describe('CanvasUtils', () => {
       ['text', secondWordStart, secondWordStart + secondWordWidth, lineHeight + paragraphSpace + lineHeight],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
-    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
     expect(actualTextMetadata.lines.length).to.equal(2);
+    expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
+  });
+
+  it('returns paragraph wrap metadata', () => {
+    const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
+    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const lastWordWidth = expectedContext.measureText('wrapped').width;
+    expect(actualTextMetadata.lines.length).to.equal(2);
+    expect(actualTextMetadata.wordMetadata[4]).to.eql(['wrapped', 0, lastWordWidth, lineHeight + lineHeight]);
+  });
+
+  it('returns empty paragraph metadata', () => {
+    const emptyBlock = [createEmptyBlock()];
+    const secondBlock = convertFromHTML('<p>Second</p>').contentBlocks;
+    const mergedBlocks = emptyBlock.concat(secondBlock);
+    const content = ContentState.createFromBlockArray(mergedBlocks, {});
+    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const firstWordWidth = expectedContext.measureText('Second').width;
+    expect(actualTextMetadata.lines.length).to.equal(1);
+    expect(actualTextMetadata.wordMetadata[0]).to.eql(['Second', 0, firstWordWidth, lineHeight + lineHeight + paragraphSpace]);
+  });
+
+  it('returns two empty paragraph metadata', () => {
+    const emptyBlocks = [createEmptyBlock(), createEmptyBlock()];
+    const thirdBlock = convertFromHTML('<p>Third</p>').contentBlocks;
+    const mergedBlocks = emptyBlocks.concat(thirdBlock);
+    const content = ContentState.createFromBlockArray(mergedBlocks, {});
+    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const firstWordWidth = expectedContext.measureText('Third').width;
+    expect(actualTextMetadata.lines.length).to.equal(1);
+    expect(actualTextMetadata.wordMetadata[0]).to.eql(['Third', 0, firstWordWidth, lineHeight + lineHeight + lineHeight + paragraphSpace]);
+  });
+
+  it('returns empty paragraph between metadata', () => {
+    const firstBlock = convertFromHTML('<p>First</p>').contentBlocks;
+    const emptyBlock = [createEmptyBlock()];
+    const thirdBlock = convertFromHTML('<p>Third</p>').contentBlocks;
+    const mergedBlocks = (firstBlock.concat(emptyBlock)).concat(thirdBlock);
+    const content = ContentState.createFromBlockArray(mergedBlocks, {});
+    // log(content);
+    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const firstWordWidth = expectedContext.measureText('First').width;
+    const thirdWordWidth = expectedContext.measureText('Third').width;
+    // console.log(actualTextMetadata);
+    expect(actualTextMetadata.lines.length).to.equal(2);
+    expect(actualTextMetadata.wordMetadata[0]).to.eql(['First', 0, firstWordWidth, lineHeight]);
+    expect(actualTextMetadata.wordMetadata[1]).to.eql(['Third', 0, thirdWordWidth, lineHeight + lineHeight + lineHeight + paragraphSpace]);
+  });
+
+  it('returns two paragraph wrap metadata', () => {
+    const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
+    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    expect(actualTextMetadata.lines.length).to.equal(3);
   });
 });
+
+export default null;
