@@ -17,23 +17,13 @@ const fetchExerciseStatisticsFailed = error => ({
 
 export const fetchExerciseStatistics = userId => (dispatch) => {
   dispatch(fetchExerciseStatisticsStart());
-  if (userId) {
-    axios.get(`/exerciseAttempts?userId=${userId}`)
-      .then((response) => {
-        dispatch(fetchExerciseStatisticsSucceeded(response.data));
-      })
-      .catch((error) => {
-        dispatch(fetchExerciseStatisticsFailed(error.message));
-      });
-  } else {
-    axios.get('/exerciseAttempts')
-      .then((response) => {
-        dispatch(fetchExerciseStatisticsSucceeded(response.data));
-      })
-      .catch((error) => {
-        dispatch(fetchExerciseStatisticsFailed(error.message));
-      });
-  }
+  axios.get(`/exerciseAttempts?userId=${userId}&embed=test`)
+    .then((response) => {
+      dispatch(fetchExerciseStatisticsSucceeded(response.data));
+    })
+    .catch((error) => {
+      dispatch(fetchExerciseStatisticsFailed(error.message));
+    });
 };
 
 export default fetchExerciseStatistics;

@@ -22,6 +22,7 @@
     "password": ["Parool", "Password"],
     "demo": ["Demo", "Demo"],
     "required": ["Vajalik autentimine", "Authentication required"],
+    "first-time": ["Kasutaja puudumisel vajutage siia", "Click here when you don't have an account"],
     "logout-button": ["Logi välja", "Logout"]
   },
   "change-password": {
@@ -52,7 +53,8 @@
       "To get started, choose an exercise from the menu."
     ],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
-    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."]
+    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
+    "introduction-video": ["Tutvustav video", "Introduction video"]
   },
   "app-stats": {
     "state": ["Rakenduse andmed", "Application stats"],
@@ -225,13 +227,27 @@
   "statistics": {
     "title": ["Statistika", "Statistics"],
     "description": ["Siin saab harjutuse valikul näha selle statistikat.", "Here you can select an exercise and see your statistics."],
-    "warning-title": ["Allolev graafik näitab hetkel kõigi kasutajate andmeid (regressiooni joont ei näidata)", "Chart below shows data for all users (regression line is not shown)"],
+    "table": ["Tabel", "Table"],
+    "regression": ["Regressioon", "Regression"],
+    "warning-title": ["Antud hetkel regressiooni joont ei näidata", "Currently regression line is not shown"],
     "reading-test": ["Lugemistest", "Reading test"],
     "reading-aid": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "loading": ["Laen andmeid", "Loading data"],
-    "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"],
+    "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"]
+  },
+  "statistics-table": {
+    "modification": ["Modifikatsioon" , "Modification"],
+    "date": ["Kuupäev" , "Date"],
+    "reading-attempt": ["Lugemise katse" , "Reading attempt"],
+    "wpm": ["Sõnu minutis" , "Words Per Minute"],
+    "test-result": ["Testi tulemus" , "Test result"],
+    "default": ["Vaikimisi" , "Default"],
+    "test-missing": ["Sooritamata", "No attempt"],
+    "export-csv": ["Expordi CSV", "Export CSV"]
+  },
+  "regression-chart": {
     "wpm": ["Sõnu minutis", "Words Per Minute"],
     "date": ["Kuupäev", "Date"]
   },
@@ -245,9 +261,11 @@
     "table-last-login": ["Viimane sisselogimine", "Last login"],
     "table-role": ["Roll", "Role"],
     "table-change": ["Muuda", "Change"],
+    "group-missing": ["Puudub", "Missing"],
     "last-login-never": ["Mitte kunagi", "Never"],
+    "role-guest": ["Külaline", "Guest"],
     "role-student": ["Õpilane", "Student"],
-    "role-teacher": ["Õpetaja", "Teacher"],
+    "role-teacher": ["Õppejõud", "Teacher"],
     "role-developer": ["Arendaja", "Developer"],
     "role-admin": ["Admin", "Admin"],
     "table-add-user": ["Lisa kasutaja", "Add user"]
