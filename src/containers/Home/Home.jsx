@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Divider, Image, Message, Grid } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
+// import IntroVideo from './IntroVideo/IntroVideo';
 import AppStats from './AppStats/AppStats';
 import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
@@ -11,12 +12,22 @@ import studyEngLogo from '../../assets/img/study_eng.jpg';
 
 export class Home extends Component {
   state = {};
-
   render() {
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2">{this.props.translate('home.welcome')}!</Header>
-        <p>{this.props.translate('home.description')}</p>
+        <Grid stackable>
+          <Grid.Row>
+            <Grid.Column width={6}>
+              <p>{this.props.translate('home.description')}</p>
+            </Grid.Column>
+            <Grid.Column width={10}>
+              {/*
+              <IntroVideo translate={this.props.translate} />
+              */}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Message
           warning
           icon="chrome"

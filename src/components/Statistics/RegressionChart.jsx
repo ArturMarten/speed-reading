@@ -59,7 +59,7 @@ export class RegressionChart extends Component {
       .attr('y', -6)
       .attr('x', '1000')
       .style('text-anchor', 'end')
-      .text(this.props.translate('statistics.date'));
+      .text(this.props.translate('regression-chart.date'));
     this.yAxis = select(svg).append('g');
     this.yAxis.attr('class', 'y axis').attr('transform', `translate(${30}, 0)`).call(yAxis)
       .append('text')
@@ -70,7 +70,7 @@ export class RegressionChart extends Component {
       .attr('x', -20)
       .attr('dy', '.60em')
       .style('text-anchor', 'end')
-      .text(this.props.translate('statistics.wpm'));
+      .text(this.props.translate('regression-chart.wpm'));
 
     const xSeries = this.props.data.map(d => this.xScale(new Date(d.date)));
     const ySeries = this.props.data.map(d => this.yScale(d.wpm));

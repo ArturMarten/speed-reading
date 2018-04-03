@@ -23,6 +23,7 @@ import 'semantic-ui-css/components/checkbox.css';
 import 'semantic-ui-css/components/header.css';
 import 'semantic-ui-css/components/divider.css';
 import 'semantic-ui-css/components/image.css';
+import 'semantic-ui-css/components/embed.css';
 import 'semantic-ui-css/components/message.css';
 import 'semantic-ui-css/components/statistic.css';
 import 'semantic-ui-css/components/icon.css';

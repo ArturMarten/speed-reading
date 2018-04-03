@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Message, Icon } from 'semantic-ui-react';
+import { Modal, Form, Button, Message, Icon, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -98,18 +98,25 @@ export class Auth extends Component {
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button
-              primary
-              icon
-              type="button"
-              labelPosition="right"
-              loading={this.props.loading}
-              disabled={this.props.loading}
-              onClick={this.onDemoLogin}
-            >
-              {this.props.translate('auth.demo')}
-              <Icon name="sign in" style={{ opacity: 1 }} />
-            </Button>
+            <Popup
+              content={this.props.translate('auth.first-time')}
+              position="bottom center"
+              on="hover"
+              trigger={
+                <Button
+                  primary
+                  icon
+                  type="button"
+                  labelPosition="right"
+                  loading={this.props.loading}
+                  disabled={this.props.loading}
+                  onClick={this.onDemoLogin}
+                >
+                  {this.props.translate('auth.demo')}
+                  <Icon name="sign in" style={{ opacity: 1 }} />
+                </Button>
+              }
+            />
             <Button
               positive
               type="submit"

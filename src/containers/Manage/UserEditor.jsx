@@ -105,7 +105,7 @@ export class UserEditor extends Component {
         text: group.name,
         value: group.id,
       }));
-    const roleOptions = ['student', 'teacher', 'developer', 'admin']
+    const roleOptions = ['guest', 'student', 'teacher', 'developer', 'admin']
       .map((role, index) => ({
         key: index,
         text: this.props.translate(`manage.role-${role}`),

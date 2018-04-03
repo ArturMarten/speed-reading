@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Table, Menu, Button, Icon, Segment, Loader } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
+import { sortByColumn } from '../../shared/utility';
 import GroupEditor from './GroupEditor';
 import UserEditor from './UserEditor';
 
@@ -12,6 +13,8 @@ export class Manage extends Component {
     groupEditorOpened: false,
     userEditorOpened: false,
     selectedUser: null,
+    column: null,
+    direction: null,
   };
 
   componentDidMount() {
@@ -27,6 +30,20 @@ export class Manage extends Component {
     return '';
   }
 
+  sortHandler = selectedColumn => () => {
+    const { column, direction } = this.state;
+    if (column !== selectedColumn) {
+      this.setState({
+        column: selectedColumn,
+        direction: 'ascending',
+      });
+    } else {
+      this.setState({
+        direction: direction === 'ascending' ? 'descending' : 'ascending',
+      });
+    }
+  };
+
   groupEditorToggleHandler = () => {
     this.setState({
       groupEditorOpened: !this.state.groupEditorOpened,
@@ -41,6 +58,8 @@ export class Manage extends Component {
   }
 
   render() {
+    const { column, direction } = this.state;
+    const sortedUsers = sortByColumn(this.props.users, column, direction);
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2">{this.props.translate('manage.title')}</Header>
@@ -63,26 +82,37 @@ export class Manage extends Component {
           <Table basic celled selectable compact sortable singleLine>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'groupId' ? direction : null} onClick={this.sortHandler('groupId')}>
                   <Icon.Group onClick={this.groupEditorToggleHandler}>
                     <Icon name="group" />
                     <Icon corner name="add" />
                   </Icon.Group>
                   {this.props.translate('manage.table-group')}
                 </Table.HeaderCell>
-                <Table.HeaderCell>{this.props.translate('manage.table-email')}</Table.HeaderCell>
-                <Table.HeaderCell>{this.props.translate('manage.table-registration')}</Table.HeaderCell>
-                <Table.HeaderCell>{this.props.translate('manage.table-last-login')}</Table.HeaderCell>
-                <Table.HeaderCell>{this.props.translate('manage.table-role')}</Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'email' ? direction : null} onClick={this.sortHandler('email')}>
+                  {this.props.translate('manage.table-email')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'registrationDate' ? direction : null} onClick={this.sortHandler('registrationDate')}>
+                  {this.props.translate('manage.table-registration')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'lastLogin' ? direction : null} onClick={this.sortHandler('lastLogin')}>
+                  {this.props.translate('manage.table-last-login')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'role' ? direction : null} onClick={this.sortHandler('role')}>
+                  {this.props.translate('manage.table-role')}
+                </Table.HeaderCell>
                 <Table.HeaderCell />
               </Table.Row>
             </Table.Header>
-
             <Table.Body>
-              {this.props.users.map(user => (
+              {sortedUsers.map(user => (
                 <Table.Row key={user.publicId}>
-                  <Table.Cell>
-                    {this.getGroupNameById(user.groupId)}
+                  <Table.Cell negative={!user.groupId}>
+                    {user.groupId ? this.getGroupNameById(user.groupId) :
+                    <Fragment>
+                      <Icon name="attention" />
+                      {this.props.translate('manage.group-missing')}
+                    </Fragment>}
                   </Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>{

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Message, Dropdown, Segment, Dimmer, Loader, Icon } from 'semantic-ui-react';
+import { Container, Header, Message, Dropdown, Segment, Dimmer, Loader, Icon, Tab } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 // import RegressionChart from '../../components/Statistics/RegressionChart';
+import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import RegressionChartC3 from '../../components/Statistics/RegressionChartC3';
 
 import { getExerciseId } from '../../store/reducers/exercise';
@@ -43,7 +44,7 @@ export class Statistics extends Component {
   };
 
   componentDidMount() {
-    this.props.onFetchExerciseStatistics();
+    this.props.onFetchExerciseStatistics(this.props.userId);
   }
 
   exerciseSelectionHandler = (event, data) => {
@@ -59,43 +60,77 @@ export class Statistics extends Component {
     ];
     const data = this.props.exerciseStatistics
       .filter(attempt => attempt.exerciseId === getExerciseId(this.state.exercise) && attempt.result !== null)
-      .map(attempt => ({ date: new Date(attempt.startTime), wpm: attempt.result.wpm }));
+      .map(attempt => ({
+        id: attempt.id,
+        modification: attempt.modification,
+        date: new Date(attempt.startTime),
+        readingAttempt: attempt.readingAttempt,
+        wpm: attempt.result.wpm,
+        testResult: attempt.test ? Math.round((attempt.test.result.correct / attempt.test.result.total) * 100) : null,
+      }));
+    const exerciseDropdown = (
+      <Dropdown
+        fluid
+        selection
+        upward
+        value={this.state.exercise}
+        onChange={this.exerciseSelectionHandler}
+        options={exercises}
+      />
+    );
+    const panes = [
+      {
+        menuItem: { key: 'table', icon: 'table', content: this.props.translate('statistics.table') },
+        render: () => (
+          <Tab.Pane>
+            {exerciseDropdown}
+            <StatisticsTable
+              data={data}
+              translate={this.props.translate}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: { key: 'chart', icon: 'line chart', content: this.props.translate('statistics.regression') },
+        render: () => (
+          <Tab.Pane>
+            {exerciseDropdown}
+            <Message warning>
+              <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
+            </Message>
+            <Segment basic>
+              <Dimmer inverted active={this.props.loading}>
+                <Loader>{this.props.translate('statistics.loading')}</Loader>
+              </Dimmer>
+              <Dimmer inverted active={data.length === 0}>
+                <Header as="h5" icon>
+                  <Icon name="search" />
+                  {this.props.translate('statistics.missing-data')}
+                </Header>
+              </Dimmer>
+              <RegressionChartC3
+                data={data}
+                translate={this.props.translate}
+              />
+            </Segment>
+          </Tab.Pane>
+        ),
+      },
+    ];
+
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Header as="h2">{this.props.translate('statistics.title')}</Header>
         <p>{this.props.translate('statistics.description')}</p>
-        <Message warning>
-          <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
-        </Message>
-        <Dropdown
-          fluid
-          selection
-          upward
-          value={this.state.exercise}
-          onChange={this.exerciseSelectionHandler}
-          options={exercises}
-        />
-        <Segment>
-          <Dimmer inverted active={this.props.loading}>
-            <Loader>{this.props.translate('statistics.loading')}</Loader>
-          </Dimmer>
-          <Dimmer inverted active={data.length === 0}>
-            <Header as="h5" icon>
-              <Icon name="search" />
-              {this.props.translate('statistics.missing-data')}
-            </Header>
-          </Dimmer>
-          <RegressionChartC3
-            data={data}
-            translate={this.props.translate}
-          />
-        </Segment>
+        <Tab panes={panes} />
       </Container>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  userId: state.auth.userId,
   loading: state.statistics.loading,
   exerciseStatistics: state.statistics.exercise,
   translate: getTranslate(state.locale),

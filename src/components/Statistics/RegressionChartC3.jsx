@@ -20,14 +20,14 @@ export class RegressionChartC3 extends Component {
       axis: {
         x: {
           type: 'timeseries',
-          label: this.props.translate('statistics.date'),
+          label: this.props.translate('regression-chart.date'),
           tick: {
             format: '%Y-%m-%d %H:%M',
             count: 6,
           },
         },
         y: {
-          label: this.props.translate('statistics.wpm'),
+          label: this.props.translate('regression-chart.wpm'),
         },
       },
       zoom: {

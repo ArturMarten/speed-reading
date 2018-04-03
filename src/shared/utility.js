@@ -71,4 +71,15 @@ export const translateError = (translate, error) => {
     default:
       return error;
   }
-}
+};
+
+export const sortByColumn = (data, column, direction) => {
+  if (column === null) return data;
+  const sorted = data.sort((a, b) => {
+    if (typeof a[column] === 'string') {
+      return a[column].toString().localeCompare(b[column].toString());
+    }
+    return a[column] - b[column];
+  });
+  return direction === 'descending' ? sorted.reverse() : sorted;
+};
