@@ -42,7 +42,6 @@ export const getExerciseId = (exerciseType) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.EXERCISE_SELECT: {
-      console.log(`Exercise selected: ${action.payload}`);
       return updateObject(state, {
         id: getExerciseId(action.payload),
         type: action.payload,

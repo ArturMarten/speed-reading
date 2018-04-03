@@ -1,16 +1,16 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
 
-export const sendFeedbackStart = () => ({
+const sendFeedbackStart = () => ({
   type: actionTypes.SEND_FEEDBACK_START,
 });
 
-export const sendFeedbackSucceeded = message => ({
+const sendFeedbackSucceeded = message => ({
   type: actionTypes.SEND_FEEDBACK_SUCCEEDED,
   payload: message,
 });
 
-export const sendFeedbackFailed = error => ({
+const sendFeedbackFailed = error => ({
   type: actionTypes.SEND_FEEDBACK_FAILED,
   payload: error,
 });
@@ -36,3 +36,5 @@ export const sendFeedback = feedback => (dispatch) => {
       dispatch(sendFeedbackFailed(error.message));
     });
 };
+
+export default sendFeedback;

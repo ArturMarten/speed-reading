@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
 import { Link } from 'react-router-dom';
-import { Responsive, Sidebar, Menu, Dropdown, Icon, Grid, Popup, Button } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Dropdown, Icon, Grid, Popup, Button, Header } from 'semantic-ui-react';
 import { environment } from '../../environment';
 
 import './ResponsiveLayout.css';
-import * as actionCreators from '../../store/actions';
 import axios from '../../axios-http';
 import Auth from '../../containers/Auth/Auth';
+import ChangePassword from '../../containers/Auth/ChangePassword';
 import LanguageSelection from '../LanguageSelection/LanguageSelection';
 import Feedback from '../Feedback/Feedback';
 import withErrorHandler from '../../hoc/ErrorHandler/withErrorHandler';
@@ -16,53 +16,69 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 export class ResponsiveLayout extends Component {
   state = {
-    activeItem: this.props.path.split('/').pop(),
     sidebarOpened: false,
+    profileOpened: false,
     authOpened: false,
+    changePasswordOpened: false,
     feedbackOpened: false,
   };
 
   onLogout = () => {
-    this.props.onLogout();
+    this.setState({ profileOpened: false });
   }
 
   sidebarToggleHandler = () => {
     this.setState({ sidebarOpened: !this.state.sidebarOpened });
   }
 
+  profileToggleHandler = () => {
+    this.setState({ profileOpened: !this.state.profileOpened });
+  }
+
   authToggleHandler = () => {
-    this.setState({ authOpened: !this.state.authOpened });
+    this.setState({ authOpened: !this.state.authOpened, profileOpened: false });
+  }
+
+  changePasswordToggleHandler = () => {
+    this.setState({ changePasswordOpened: !this.state.changePasswordOpened, profileOpened: false });
   }
 
   feedbackToggleHandler = () => {
     this.setState({ feedbackOpened: !this.state.feedbackOpened });
   }
 
-  itemClickHandler = (event, { name }) => {
-    this.setState({
-      sidebarOpened: false,
-      activeItem: name,
-    });
+  itemClickHandler = () => {
+    this.setState({ sidebarOpened: false });
   }
 
   render() {
     const { children } = this.props;
-
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
-          {this.state.authOpened ?
-            <Auth open={this.state.authOpened} onClose={this.authToggleHandler} /> : null
-          }
+          {this.state.authOpened || !this.props.isAuthenticated ? <Auth open={this.state.authOpened} /> : null}
+          {this.state.changePasswordOpened ?
+            <ChangePassword open={this.state.changePasswordOpened} onClose={this.changePasswordToggleHandler} /> : null}
           <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} />
           <Sidebar as={Menu} animation="overlay" vertical visible={this.state.sidebarOpened}>
             <Menu.Menu>
               <Menu.Item>
                 {this.props.isAuthenticated ?
-                  <Button fluid positive icon labelPosition="right" onClick={this.onLogout}>
-                    {this.props.translate('auth.logout-button')}
-                    <Icon name="sign out" style={{ opacity: 1 }} />
-                  </Button> :
+                  <Fragment>
+                    <Header textAlign="center">{this.props.userEmail}</Header>
+                    <Button
+                      fluid
+                      positive
+                      icon
+                      labelPosition="right"
+                      onClick={this.onLogout}
+                      as={Link}
+                      to="/logout"
+                    >
+                      {this.props.translate('auth.logout-button')}
+                      <Icon name="sign out" style={{ opacity: 1 }} />
+                    </Button>
+                  </Fragment> :
                   <Button fluid positive icon labelPosition="right" onClick={this.authToggleHandler}>
                     {this.props.translate('auth.login-button')}
                     <Icon name="sign in" style={{ opacity: 1 }} />
@@ -71,8 +87,7 @@ export class ResponsiveLayout extends Component {
               </Menu.Item>
             </Menu.Menu>
             <Menu.Item
-              name=""
-              active={this.state.activeItem === ''}
+              active={this.props.path === '/'}
               onClick={this.itemClickHandler}
               as={Link}
               to="/"
@@ -81,8 +96,7 @@ export class ResponsiveLayout extends Component {
               {this.props.translate('menu.home')}
             </Menu.Item>
             <Menu.Item
-              name="text-entry"
-              active={this.state.activeItem === 'text-entry'}
+              active={this.props.path === '/text-entry'}
               onClick={this.itemClickHandler}
               as={Link}
               to="/text-entry"
@@ -92,9 +106,7 @@ export class ResponsiveLayout extends Component {
             </Menu.Item>
             <Menu.Item
               as="div"
-              name="exercise"
-              active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' &&
-                     this.state.activeItem !== 'statistics' && this.state.activeItem !== 'manage'}
+              active={this.props.path.indexOf('/exercise') !== -1}
               className="Dropdown-Item"
             >
               <Icon name="winner" size="large" />
@@ -104,8 +116,7 @@ export class ResponsiveLayout extends Component {
               >
                 <Dropdown.Menu>
                   <Dropdown.Item
-                    name="reading-test"
-                    active={this.state.activeItem === 'reading-test'}
+                    active={this.props.path === '/exercise/reading-test'}
                     onClick={this.itemClickHandler}
                     as={Link}
                     to="/exercise/reading-test"
@@ -113,8 +124,7 @@ export class ResponsiveLayout extends Component {
                     {this.props.translate('menu.reading-test')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    name="reading-aid"
-                    active={this.state.activeItem === 'reading-aid'}
+                    active={this.props.path === '/exercise/reading-aid'}
                     onClick={this.itemClickHandler}
                     as={Link}
                     to="/exercise/reading-aid"
@@ -122,8 +132,7 @@ export class ResponsiveLayout extends Component {
                     {this.props.translate('menu.reading-aid')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    name="disappearing-text"
-                    active={this.state.activeItem === 'disappearing-text'}
+                    active={this.props.path === '/exercise/disappearing-text'}
                     onClick={this.itemClickHandler}
                     as={Link}
                     to="/exercise/disappearing-text"
@@ -131,8 +140,7 @@ export class ResponsiveLayout extends Component {
                     {this.props.translate('menu.disappearing-text')}
                   </Dropdown.Item>
                   <Dropdown.Item
-                    name="word-groups"
-                    active={this.state.activeItem === 'word-groups'}
+                    active={this.props.path === '/exercise/word-groups'}
                     onClick={this.itemClickHandler}
                     as={Link}
                     to="/exercise/word-groups"
@@ -151,8 +159,7 @@ export class ResponsiveLayout extends Component {
               </Dropdown>
             </Menu.Item>
             <Menu.Item
-              name="statistics"
-              active={this.state.activeItem === 'statistics'}
+              active={this.props.path === '/statistics'}
               onClick={this.itemClickHandler}
               as={Link}
               to="/statistics"
@@ -162,8 +169,7 @@ export class ResponsiveLayout extends Component {
             </Menu.Item>
             {this.props.isAuthenticated ?
               <Menu.Item
-                name="manage"
-                active={this.state.activeItem === 'manage'}
+                active={this.props.path === '/manage'}
                 onClick={this.itemClickHandler}
                 as={Link}
                 to="/manage"
@@ -206,8 +212,7 @@ export class ResponsiveLayout extends Component {
                   {this.props.translate('menu.title')}&nbsp;{environment.version}
                 </Menu.Item>
                 <Menu.Item
-                  name=""
-                  active={this.state.activeItem === ''}
+                  active={this.props.path === '/'}
                   onClick={this.itemClickHandler}
                   as={Link}
                   to="/"
@@ -216,8 +221,7 @@ export class ResponsiveLayout extends Component {
                   {this.props.translate('menu.home')}
                 </Menu.Item>
                 <Menu.Item
-                  name="text-entry"
-                  active={this.state.activeItem === 'text-entry'}
+                  active={this.props.path === '/text-entry'}
                   onClick={this.itemClickHandler}
                   as={Link}
                   to="/text-entry"
@@ -227,9 +231,7 @@ export class ResponsiveLayout extends Component {
                 </Menu.Item>
                 <Menu.Item
                   as="div"
-                  name="exercise"
-                  active={this.state.activeItem !== '' && this.state.activeItem !== 'text-entry' &&
-                        this.state.activeItem !== 'statistics' && this.state.activeItem !== 'manage'}
+                  active={this.props.path.indexOf('/exercise') !== -1}
                   onClick={this.dropdownHandler}
                   className="Dropdown-Item"
                 >
@@ -240,8 +242,7 @@ export class ResponsiveLayout extends Component {
                   >
                     <Dropdown.Menu>
                       <Dropdown.Item
-                        name="reading-test"
-                        active={this.state.activeItem === 'reading-test'}
+                        active={this.props.path === '/exercise/reading-test'}
                         onClick={this.itemClickHandler}
                         as={Link}
                         to="/exercise/reading-test"
@@ -249,8 +250,7 @@ export class ResponsiveLayout extends Component {
                         {this.props.translate('menu.reading-test')}
                       </Dropdown.Item>
                       <Dropdown.Item
-                        name="reading-aid"
-                        active={this.state.activeItem === 'reading-aid'}
+                        active={this.props.path === '/exercise/reading-aid'}
                         onClick={this.itemClickHandler}
                         as={Link}
                         to="/exercise/reading-aid"
@@ -258,8 +258,7 @@ export class ResponsiveLayout extends Component {
                         {this.props.translate('menu.reading-aid')}
                       </Dropdown.Item>
                       <Dropdown.Item
-                        name="disappearing-text"
-                        active={this.state.activeItem === 'disappearing-text'}
+                        active={this.props.path === '/exercise/disappearing-text'}
                         onClick={this.itemClickHandler}
                         as={Link}
                         to="/exercise/disappearing-text"
@@ -267,8 +266,7 @@ export class ResponsiveLayout extends Component {
                         {this.props.translate('menu.disappearing-text')}
                       </Dropdown.Item>
                       <Dropdown.Item
-                        name="word-groups"
-                        active={this.state.activeItem === 'word-groups'}
+                        active={this.props.path === '/exercise/word-groups'}
                         onClick={this.itemClickHandler}
                         as={Link}
                         to="/exercise/word-groups"
@@ -287,8 +285,7 @@ export class ResponsiveLayout extends Component {
                   </Dropdown>
                 </Menu.Item>
                 <Menu.Item
-                  name="statistics"
-                  active={this.state.activeItem === 'statistics'}
+                  active={this.props.path === '/statistics'}
                   onClick={this.itemClickHandler}
                   as={Link}
                   to="/statistics"
@@ -298,8 +295,7 @@ export class ResponsiveLayout extends Component {
                 </Menu.Item>
                 {this.props.isAuthenticated ?
                   <Menu.Item
-                    name="manage"
-                    active={this.state.activeItem === 'manage'}
+                    active={this.props.path === '/manage'}
                     onClick={this.itemClickHandler}
                     as={Link}
                     to="/manage"
@@ -309,21 +305,44 @@ export class ResponsiveLayout extends Component {
                   </Menu.Item> : null}
                 <Menu.Menu position="right">
                   <Menu.Item fitted>
-                    {this.props.isAuthenticated ?
-                      <Popup
-                        trigger={<Icon fitted name="user" color="red" size="big" />}
-                        content={
-                          <Button positive icon labelPosition="right" onClick={this.onLogout}>
-                            {this.props.translate('auth.logout-button')}
-                            <Icon name="sign out" style={{ opacity: 1 }} />
+                    <Popup
+                      on="click"
+                      open={this.state.profileOpened}
+                      onOpen={this.profileToggleHandler}
+                      onClose={this.profileToggleHandler}
+                      trigger={<Icon fitted name="user" color="red" size="big" />}
+                      position="bottom right"
+                      header={this.props.isAuthenticated ? <Header textAlign="center">{this.props.userEmail}</Header> : null}
+                      content={
+                        this.props.isAuthenticated ?
+                          <Button.Group vertical fluid>
+                            <Button
+                              positive
+                              icon
+                              labelPosition="right"
+                              onClick={this.onLogout}
+                              as={Link}
+                              to="/logout"
+                            >
+                              {this.props.translate('auth.logout-button')}
+                              <Icon name="sign out" style={{ opacity: 1 }} />
+                            </Button>
+                            <Button
+                              primary
+                              icon
+                              labelPosition="right"
+                              onClick={this.changePasswordToggleHandler}
+                              disabled={this.props.userEmail === '***DEMO_EMAIL***'}
+                            >
+                              {this.props.translate('change-password.change-password-button')}
+                              <Icon name="lock" style={{ opacity: 1 }} />
+                            </Button>
+                          </Button.Group> :
+                          <Button positive icon labelPosition="right" onClick={this.authToggleHandler}>
+                            {this.props.translate('auth.login-button')}
+                            <Icon name="sign in" style={{ opacity: 1 }} />
                           </Button>}
-                        on="click"
-                      /> :
-                      <Button positive icon labelPosition="right" onClick={this.authToggleHandler}>
-                        {this.props.translate('auth.login-button')}
-                        <Icon name="sign in" style={{ opacity: 1 }} />
-                      </Button>
-                    }
+                    />
                   </Menu.Item>
                   <Menu.Item fitted>
                     <Popup
@@ -348,14 +367,13 @@ export class ResponsiveLayout extends Component {
 
 const mapStateToProps = state => ({
   path: state.router.location.pathname,
+  userEmail: state.profile.email,
   isAuthenticated: state.auth.token !== null,
   translate: getTranslate(state.locale),
 });
 
+// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
-  onLogout: () => {
-    dispatch(actionCreators.authLogout());
-  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ResponsiveLayout, axios));

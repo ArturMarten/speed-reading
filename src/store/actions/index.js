@@ -43,6 +43,7 @@ export {
   authLogin,
   authLogout,
   authCheckState,
+  changePassword,
 } from './auth';
 
 export {
@@ -61,6 +62,8 @@ export {
   addGroup,
   changeGroup,
 } from './manage';
+
+export { fetchUserProfile } from './profile';
 
 export { fetchExerciseStatistics } from './statistics';
 

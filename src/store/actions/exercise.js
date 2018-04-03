@@ -71,23 +71,17 @@ export const prepareExercise = (selectedText, exerciseOptions) => (dispatch) => 
 
 export const startExercise = (attemptData, token) => (dispatch) => {
   dispatch(exerciseStarting());
-  const isAuthenticated = token !== null;
-  if (isAuthenticated) {
-    axios.post('/exerciseAttempts', attemptData, { headers: { 'x-access-token': token } })
-      .then((response) => {
-        dispatch(timerStart());
-        dispatch(exerciseStarted());
-        dispatch(exerciseAttemptStarted(response.data.id));
-      }, (error) => {
-        console.log(error);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    dispatch(timerStart());
-    dispatch(exerciseStarted());
-  }
+  axios.post('/exerciseAttempts', attemptData, { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(timerStart());
+      dispatch(exerciseStarted());
+      dispatch(exerciseAttemptStarted(response.data.id));
+    }, (error) => {
+      console.log(error);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export const finishExercise = (attemptId, token) => (dispatch, getState) => {
@@ -96,21 +90,18 @@ export const finishExercise = (attemptId, token) => (dispatch, getState) => {
   let state = getState();
   const { elapsedTime } = state.timing;
   const { selectedText } = state.text;
-  const isAuthenticated = token !== null;
   dispatch(exerciseFinished(elapsedTime, selectedText));
-  if (isAuthenticated) {
-    state = getState();
-    const { result } = state.exercise;
-    axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
-      .then(() => {
-        // Dispatch event
-      }, (error) => {
-        console.log(error);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  state = getState();
+  const { result } = state.exercise;
+  axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
+    .then(() => {
+      // Dispatch event
+    }, (error) => {
+      console.log(error);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export const endExercise = () => (dispatch) => {

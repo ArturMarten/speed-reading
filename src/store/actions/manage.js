@@ -1,16 +1,16 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
 
-export const fetchUsersStart = () => ({
+const fetchUsersStart = () => ({
   type: actionTypes.FETCH_USERS_START,
 });
 
-export const fetchUsersSucceeded = users => ({
+const fetchUsersSucceeded = users => ({
   type: actionTypes.FETCH_USERS_SUCCEEDED,
   payload: users,
 });
 
-export const fetchUsersFailed = error => ({
+const fetchUsersFailed = error => ({
   type: actionTypes.FETCH_USERS_FAILED,
   payload: error,
 });
@@ -30,11 +30,11 @@ export const fetchUsers = token => (dispatch) => {
     });
 };
 
-export const addUserStart = () => ({
+const addUserStart = () => ({
   type: actionTypes.ADD_USER_START,
 });
 
-export const addUserSucceeded = (publicId, userData) => ({
+const addUserSucceeded = (publicId, userData) => ({
   type: actionTypes.ADD_USER_SUCCEEDED,
   payload: {
     publicId,
@@ -42,7 +42,7 @@ export const addUserSucceeded = (publicId, userData) => ({
   },
 });
 
-export const addUserFailed = error => ({
+const addUserFailed = error => ({
   type: actionTypes.ADD_USER_FAILED,
   payload: error,
 });
@@ -62,11 +62,11 @@ export const addUser = (userData, token) => (dispatch) => {
     });
 };
 
-export const changeUserStart = () => ({
+const changeUserStart = () => ({
   type: actionTypes.CHANGE_USER_START,
 });
 
-export const changeUserSucceeded = (publicId, userData) => ({
+const changeUserSucceeded = (publicId, userData) => ({
   type: actionTypes.CHANGE_USER_SUCCEEDED,
   payload: {
     publicId,
@@ -74,7 +74,7 @@ export const changeUserSucceeded = (publicId, userData) => ({
   },
 });
 
-export const changeUserFailed = error => ({
+const changeUserFailed = error => ({
   type: actionTypes.CHANGE_USER_FAILED,
   payload: error,
 });
@@ -94,16 +94,16 @@ export const changeUser = (publicId, userData, token) => (dispatch) => {
     });
 };
 
-export const fetchGroupsStart = () => ({
+const fetchGroupsStart = () => ({
   type: actionTypes.FETCH_GROUPS_START,
 });
 
-export const fetchGroupsSucceeded = groups => ({
+const fetchGroupsSucceeded = groups => ({
   type: actionTypes.FETCH_GROUPS_SUCCEEDED,
   payload: groups,
 });
 
-export const fetchGroupsFailed = error => ({
+const fetchGroupsFailed = error => ({
   type: actionTypes.FETCH_GROUPS_FAILED,
   payload: error,
 });
@@ -123,11 +123,11 @@ export const fetchGroups = token => (dispatch) => {
     });
 };
 
-export const addGroupStart = () => ({
+const addGroupStart = () => ({
   type: actionTypes.ADD_GROUP_START,
 });
 
-export const addGroupSucceeded = (groupId, groupData) => ({
+const addGroupSucceeded = (groupId, groupData) => ({
   type: actionTypes.ADD_GROUP_SUCCEEDED,
   payload: {
     groupId,
@@ -135,7 +135,7 @@ export const addGroupSucceeded = (groupId, groupData) => ({
   },
 });
 
-export const addGroupFailed = error => ({
+const addGroupFailed = error => ({
   type: actionTypes.ADD_GROUP_FAILED,
   payload: error,
 });
@@ -155,11 +155,11 @@ export const addGroup = (groupData, token) => (dispatch) => {
     });
 };
 
-export const changeGroupStart = () => ({
+const changeGroupStart = () => ({
   type: actionTypes.CHANGE_GROUP_START,
 });
 
-export const changeGroupSucceeded = (groupId, groupData) => ({
+const changeGroupSucceeded = (groupId, groupData) => ({
   type: actionTypes.CHANGE_GROUP_SUCCEEDED,
   payload: {
     groupId,
@@ -167,7 +167,7 @@ export const changeGroupSucceeded = (groupId, groupData) => ({
   },
 });
 
-export const changeGroupFailed = error => ({
+const changeGroupFailed = error => ({
   type: actionTypes.CHANGE_GROUP_FAILED,
   payload: error,
 });

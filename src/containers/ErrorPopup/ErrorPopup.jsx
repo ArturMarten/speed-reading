@@ -3,29 +3,12 @@ import { connect } from 'react-redux';
 import { Modal, Button, Icon, Header } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
+import { translateError } from '../../shared/utility';
+
 export class ErrorPopup extends Component {
   state = {};
   render() {
-    const errorMessage = (() => {
-      switch (this.props.errorMessage) {
-        case 'Network Error':
-          return this.props.translate('error-popup.network-error');
-        case 'Authentication missing':
-          return this.props.translate('error-popup.authentication-missing');
-        case 'Authentication token is missing':
-          return this.props.translate('error-popup.authentication-token-missing');
-        case 'Authentication token is invalid':
-          return this.props.translate('error-popup.authentication-token-invalid');
-        case 'User cannot be found':
-          return this.props.translate('error-popup.user-not-found');
-        case 'Incorrect password':
-          return this.props.translate('error-popup.incorrect-password');
-        case 'You do not have required permission':
-          return this.props.translate('error-popup.no-permission');
-        default:
-          return this.props.errorMessage;
-      }
-    })();
+    const errorMessage = translateError(this.props.translate, this.props.errorMessage);
     return (
       <Modal
         open={this.props.open}

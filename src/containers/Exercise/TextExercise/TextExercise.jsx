@@ -17,6 +17,10 @@ const TEXT_HORIZONTAL_PADDING = 70;
 export class TextExercise extends Component {
   state = {};
 
+  componentDidMount() {
+    this.onExerciseStartHandler();
+  }
+
   onExerciseStartHandler = () => {
     const attemptData = {
       userId: this.props.userId,

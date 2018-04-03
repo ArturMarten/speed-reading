@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Label, Icon } from 'semantic-ui-react';
+import { Modal, Form, Button, Message, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-import { checkValidity } from '../../shared/utility';
+import { checkValidity, translateError } from '../../shared/utility';
 
 const initialState = {
   loginForm: {
@@ -61,18 +60,14 @@ export class Auth extends Component {
   }
 
   render() {
-    let authRedirect = null;
-    if (this.props.isAuthenticated) {
-      authRedirect = <Redirect to="/" />;
-    }
     return (
       <Fragment>
-        {authRedirect}
-        <Modal size="mini" open={this.props.open && !this.props.isAuthenticated} onClose={this.props.onClose} closeIcon>
+        <Modal size="mini" open={this.props.open || !this.props.isAuthenticated}>
           <Modal.Header>{this.props.translate('auth.modal-header')}</Modal.Header>
           <Modal.Content>
-            <Form>
+            <Form error={this.props.error !== null}>
               <Form.Input
+                autoFocus
                 icon="user"
                 iconPosition="left"
                 name="email"
@@ -96,10 +91,13 @@ export class Auth extends Component {
                 autoComplete="password"
                 required
               />
+              <Message
+                error
+                header={translateError(this.props.translate, this.props.error)}
+              />
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            {this.props.error ? <Label basic color="red">{this.props.error}</Label> : null}
             <Button
               primary
               icon
@@ -129,9 +127,9 @@ export class Auth extends Component {
 }
 
 const mapStateToProps = state => ({
-  loading: state.auth.loading,
+  loading: state.auth.authenticating,
   isAuthenticated: state.auth.token !== null,
-  error: state.auth.error,
+  error: state.auth.authenticationError,
   translate: getTranslate(state.locale),
 });
 
