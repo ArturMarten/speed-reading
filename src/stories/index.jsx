@@ -22,6 +22,7 @@ import TestResultsContainer, { TestResults } from '../containers/Exercise/Contai
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
+import ChangePasswordContainer from '../containers/Auth/ChangePassword';
 import FeedbackContainer, { Feedback } from '../containers/Feedback/Feedback';
 
 /*
@@ -112,7 +113,8 @@ storiesOf('Manage', module)
   .add('Container', () => <ManageContainer />);
 
 storiesOf('Auth', module)
-  .add('Container', () => <AuthContainer open />);
+  .add('Login container', () => <AuthContainer open />)
+  .add('Change password container', () => <ChangePasswordContainer open />);
 
 storiesOf('Feedback', module)
   .add('Container', () => <FeedbackContainer open />)

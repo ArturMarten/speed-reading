@@ -256,23 +256,17 @@ export const prepareTest = readingTextId => (dispatch) => {
 
 export const startTest = (attemptData, token) => (dispatch) => {
   dispatch(testStarting());
-  const isAuthenticated = token !== null;
-  if (isAuthenticated) {
-    axios.post('/testAttempts', attemptData, { headers: { 'x-access-token': token } })
-      .then((response) => {
-        dispatch(timerStart());
-        dispatch(testStarted());
-        dispatch(testAttemptStarted(response.data.id));
-      }, (error) => {
-        console.log(error);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    dispatch(timerStart());
-    dispatch(testStarted());
-  }
+  axios.post('/testAttempts', attemptData, { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(timerStart());
+      dispatch(testStarted());
+      dispatch(testAttemptStarted(response.data.id));
+    }, (error) => {
+      console.log(error);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export const finishTest = (attemptId, answers, token) => (dispatch, getState) => {
@@ -280,26 +274,21 @@ export const finishTest = (attemptId, answers, token) => (dispatch, getState) =>
   dispatch(testFinishing());
   const state = getState();
   const { elapsedTime } = state.timing;
-  const isAuthenticated = token !== null;
-  if (isAuthenticated) {
-    axios.post('/testQuestionAnswers', answers, { headers: { 'x-access-token': token } })
-      .then(() => {
-        const result = { elapsedTime };
-        return axios.patch(`/testAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } });
-      }, (error) => {
-        console.log(error);
-      })
-      .then((response) => {
-        dispatch(testFinished(response.data.result));
-      }, (error) => {
-        console.log(error);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    dispatch(testFinished(elapsedTime));
-  }
+  axios.post('/testQuestionAnswers', answers, { headers: { 'x-access-token': token } })
+    .then(() => {
+      const result = { elapsedTime };
+      return axios.patch(`/testAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } });
+    }, (error) => {
+      console.log(error);
+    })
+    .then((response) => {
+      dispatch(testFinished(response.data.result));
+    }, (error) => {
+      console.log(error);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 export const endTest = () => (dispatch) => {

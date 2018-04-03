@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from './store/actions';
 import Loadable from './hoc/Loadable/Loadable';
 import ResponsiveLayout from './containers/Layout/ResponsiveLayout';
+import Logout from './containers/Auth/Logout';
 
 const Home = Loadable({
   loader: () => import('./containers/Home/Home'),
@@ -41,11 +42,11 @@ export class App extends Component {
         <Route path="/text-entry" component={TextEntry} />
         <Route path="/exercise/reading-test" render={() => <TextExerciseContainer type="readingTest" />} />
         <Route path="/exercise/reading-aid" render={() => <TextExerciseContainer type="readingAid" />} />
-        <Route path="/exercise/word-groups" render={() => <TextExerciseContainer type="wordGroups" />} />
         <Route path="/exercise/disappearing-text" render={() => <TextExerciseContainer type="disappearing" />} />
+        <Route path="/exercise/word-groups" render={() => <TextExerciseContainer type="wordGroups" />} />
         <Route path="/statistics" component={Statistics} />
-        {this.props.isAuthenticated ?
-          <Route path="/manage" component={Manage} /> : null}
+        <Route path="/manage" component={Manage} />
+        <Route path="/logout" component={Logout} />
       </ResponsiveLayout>
     );
   }

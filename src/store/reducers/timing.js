@@ -22,7 +22,7 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, initialState);
     }
     case actionTypes.TIMER_START: {
-      console.log('Started!');
+      // console.log('Started!');
       const updatedTimer = updateObject(state.timer, {
         started: true,
         paused: false,
@@ -36,7 +36,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.TIMER_PAUSE: {
       const updatedElapsedTime = calculateElapsedTime(state);
-      console.log(`Paused! Elapsed: ${updatedElapsedTime}ms`);
+      // console.log(`Paused! Elapsed: ${updatedElapsedTime}ms`);
       const updatedTimer = updateObject(state.timer, {
         paused: true,
       });
@@ -55,7 +55,7 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.TIMER_RESET: {
-      console.log('Resetted!');
+      // console.log('Resetted!');
       const updatedTimer = updateObject(initialState.timer, {
         resetted: true,
         paused: true,
@@ -70,7 +70,7 @@ const reducer = (state = initialState, action) => {
       if (!state.timer.paused) {
         updatedElapsedTime = calculateElapsedTime(state);
       }
-      console.log(`Stopped! Elapsed: ${updatedElapsedTime}ms`);
+      // console.log(`Stopped! Elapsed: ${updatedElapsedTime}ms`);
       const updatedTimer = updateObject(state.timer, {
         stopped: true,
       });

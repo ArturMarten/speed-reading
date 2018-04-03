@@ -24,6 +24,15 @@
     "required": ["Vajalik autentimine", "Authentication required"],
     "logout-button": ["Logi välja", "Logout"]
   },
+  "change-password": {
+    "change-password-button": ["Vaheta parool", "Change password"],
+    "modal-header": ["Parooli vahetamine", "Password change"],
+    "old-password": ["Vana parool", "Old password"],
+    "new-password": ["Uus parool", "New password"],
+    "confirm-new-password": ["Kinnita uus parool", "Confirm new password"],
+    "change": ["Vaheta", "Change"],
+    "password-changed": ["Parool vahetatud", "Password changed"]
+  },
   "feedback": {
     "modal-header": ["Tagasiside", "Feedback"],
     "functionality-rating": ["Funktsionaalsus", "Functionality"],
@@ -260,15 +269,18 @@
     "add-user": ["Lisa", "Add"],
     "change-user": ["Muuda", "Change"]
   },
-  "error-popup" : {
+  "error-popup": {
     "modal-header": ["Viga", "Error"],
+    "ok": ["OK", "OK"]
+  },
+  "error" : {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],
     "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],
     "authentication-token-missing": ["Autentimise võti puudub", "Authentication token is missing"],
     "authentication-token-invalid": ["Autentimise võti vigane", "Authentication token is invalid"],
+    "authentication-expired": ["Autentimise võti on aegunud", "Authentication token has expired"],
     "user-not-found": ["Sellist kasutajat ei eksisteeri", "User does not exist"],
     "incorrect-password": ["Vale parool", "Incorrect password"],
-    "no-permission": ["Puuduvad vajalikud õigused", "You do not have required permission"],
-    "ok": ["OK", "OK"]
+    "no-permission": ["Puuduvad vajalikud õigused", "You do not have required permission"]
   }
 }

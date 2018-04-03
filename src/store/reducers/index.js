@@ -9,6 +9,7 @@ import optionsReducer from './options';
 import exerciseReducer from './exercise';
 import testReducer from './test';
 import manageReducer from './manage';
+import profileReducer from './profile';
 import statisticsReducer from './statistics';
 import feedbackReducer from './feedback';
 
@@ -21,6 +22,7 @@ export default combineReducers({
   exercise: exerciseReducer,
   test: testReducer,
   manage: manageReducer,
+  profile: profileReducer,
   statistics: statisticsReducer,
   feedback: feedbackReducer,
   locale: localeReducer,

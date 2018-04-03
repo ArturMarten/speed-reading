@@ -49,3 +49,26 @@ export const formatMilliseconds = (input) => {
   const milliseconds = pad(inputTime.getMilliseconds().toString()[0], 1);
   return `${minutes}:${seconds}.${milliseconds}`;
 };
+
+export const translateError = (translate, error) => {
+  switch (error) {
+    case 'Network Error':
+      return translate('error.network-error');
+    case 'Authentication missing':
+      return translate('error.authentication-missing');
+    case 'Authentication token is missing':
+      return translate('error.authentication-token-missing');
+    case 'Authentication token is invalid':
+      return translate('error.authentication-token-invalid');
+    case 'Authentication expired':
+      return translate('error.authentication-expired');
+    case 'User cannot be found':
+      return translate('error.user-not-found');
+    case 'Incorrect password':
+      return translate('error.incorrect-password');
+    case 'You do not have required permission':
+      return translate('error.no-permission');
+    default:
+      return error;
+  }
+}
