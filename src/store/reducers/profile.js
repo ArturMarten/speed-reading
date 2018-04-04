@@ -2,6 +2,14 @@ import * as actionTypes from '../actions/actionTypes';
 
 import { updateObject } from '../../shared/utility';
 
+export const rolePermissions = {
+  guest: 0,
+  student: 1,
+  teacher: 2,
+  developer: 3,
+  admin: 4,
+};
+
 const initialState = {
   groupId: null,
   email: null,

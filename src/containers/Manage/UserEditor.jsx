@@ -5,6 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 import { isEmail } from '../../shared/utility';
+import { rolePermissions } from '../../store/reducers/profile';
 
 export class UserEditor extends Component {
   state = {
@@ -105,7 +106,8 @@ export class UserEditor extends Component {
         text: group.name,
         value: group.id,
       }));
-    const roleOptions = ['guest', 'student', 'teacher', 'developer', 'admin']
+    const roleOptions = ['student', 'teacher', 'developer', 'admin']
+      .filter(role => rolePermissions[role] <= rolePermissions[this.props.role])
       .map((role, index) => ({
         key: index,
         text: this.props.translate(`manage.role-${role}`),
@@ -184,6 +186,7 @@ export class UserEditor extends Component {
 
 const mapStateToProps = state => ({
   token: state.auth.token,
+  role: state.profile.role,
   groups: state.manage.groups,
   translate: getTranslate(state.locale),
 });
