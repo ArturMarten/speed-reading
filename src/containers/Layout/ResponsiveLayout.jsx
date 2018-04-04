@@ -13,6 +13,7 @@ import LanguageSelection from '../LanguageSelection/LanguageSelection';
 import Feedback from '../Feedback/Feedback';
 import withErrorHandler from '../../hoc/ErrorHandler/withErrorHandler';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import { rolePermissions } from '../../store/reducers/profile';
 
 export class ResponsiveLayout extends Component {
   state = {
@@ -53,6 +54,7 @@ export class ResponsiveLayout extends Component {
 
   render() {
     const { children } = this.props;
+    const isPermitted = rolePermissions[this.props.role] >= rolePermissions.teacher;
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
@@ -95,15 +97,16 @@ export class ResponsiveLayout extends Component {
               <Icon name="home" size="large" />
               {this.props.translate('menu.home')}
             </Menu.Item>
-            <Menu.Item
-              active={this.props.path === '/text-entry'}
-              onClick={this.itemClickHandler}
-              as={Link}
-              to="/text-entry"
-            >
-              <Icon name="file text outline" size="large" />
-              {this.props.translate('menu.text-entry')}
-            </Menu.Item>
+            {isPermitted ?
+              <Menu.Item
+                active={this.props.path === '/text-entry'}
+                onClick={this.itemClickHandler}
+                as={Link}
+                to="/text-entry"
+              >
+                <Icon name="file text outline" size="large" />
+                {this.props.translate('menu.text-entry')}
+              </Menu.Item> : null}
             <Menu.Item
               as="div"
               active={this.props.path.indexOf('/exercise') !== -1}
@@ -167,7 +170,7 @@ export class ResponsiveLayout extends Component {
               <Icon name="line graph" size="large" />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
-            {this.props.isAuthenticated ?
+            {isPermitted ?
               <Menu.Item
                 active={this.props.path === '/manage'}
                 onClick={this.itemClickHandler}
@@ -220,15 +223,16 @@ export class ResponsiveLayout extends Component {
                   <Icon name="home" size="large" />
                   {this.props.translate('menu.home')}
                 </Menu.Item>
-                <Menu.Item
-                  active={this.props.path === '/text-entry'}
-                  onClick={this.itemClickHandler}
-                  as={Link}
-                  to="/text-entry"
-                >
-                  <Icon name="file text outline" size="large" />
-                  {this.props.translate('menu.text-entry')}
-                </Menu.Item>
+                {isPermitted ?
+                  <Menu.Item
+                    active={this.props.path === '/text-entry'}
+                    onClick={this.itemClickHandler}
+                    as={Link}
+                    to="/text-entry"
+                  >
+                    <Icon name="file text outline" size="large" />
+                    {this.props.translate('menu.text-entry')}
+                  </Menu.Item> : null}
                 <Menu.Item
                   as="div"
                   active={this.props.path.indexOf('/exercise') !== -1}
@@ -293,7 +297,7 @@ export class ResponsiveLayout extends Component {
                   <Icon name="line graph" size="large" />
                   {this.props.translate('menu.statistics')}
                 </Menu.Item>
-                {this.props.isAuthenticated ?
+                {isPermitted ?
                   <Menu.Item
                     active={this.props.path === '/manage'}
                     onClick={this.itemClickHandler}
@@ -367,8 +371,9 @@ export class ResponsiveLayout extends Component {
 
 const mapStateToProps = state => ({
   path: state.router.location.pathname,
-  userEmail: state.profile.email,
+  role: state.profile.role,
   isAuthenticated: state.auth.token !== null,
+  userEmail: state.profile.email,
   translate: getTranslate(state.locale),
 });
 

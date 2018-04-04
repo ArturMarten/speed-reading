@@ -7,6 +7,7 @@ import * as actionCreators from '../../store/actions';
 import { sortByColumn } from '../../shared/utility';
 import GroupEditor from './GroupEditor';
 import UserEditor from './UserEditor';
+import { rolePermissions } from '../../store/reducers/profile';
 
 export class Manage extends Component {
   state = {
@@ -57,6 +58,8 @@ export class Manage extends Component {
     });
   }
 
+  changePermission = role => rolePermissions[this.props.role] >= rolePermissions[role];
+
   render() {
     const { column, direction } = this.state;
     const sortedUsers = sortByColumn(this.props.users, column, direction);
@@ -106,7 +109,7 @@ export class Manage extends Component {
             </Table.Header>
             <Table.Body>
               {sortedUsers.map(user => (
-                <Table.Row key={user.publicId}>
+                <Table.Row key={user.publicId} active={user.publicId === this.props.userId}>
                   <Table.Cell negative={!user.groupId}>
                     {user.groupId ? this.getGroupNameById(user.groupId) :
                     <Fragment>
@@ -139,7 +142,7 @@ export class Manage extends Component {
                       primary
                       compact
                       content={this.props.translate('manage.table-change')}
-                      disabled={user.role === 'admin'}
+                      disabled={!this.changePermission(user.role) || user.publicId === this.props.userId}
                       onClick={event => this.userEditorToggleHandler(event, { user })}
                     />
                   </Table.Cell>
@@ -175,9 +178,11 @@ export class Manage extends Component {
 
 const mapStateToProps = state => ({
   loading: state.manage.loading,
+  role: state.profile.role,
   users: state.manage.users,
   groups: state.manage.groups,
   token: state.auth.token,
+  userId: state.auth.userId,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });
