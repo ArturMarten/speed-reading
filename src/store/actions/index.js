@@ -51,7 +51,7 @@ export {
   fetchTexts,
   selectText,
   unselectText,
-  storeText,
+  saveText,
 } from './text';
 
 export {

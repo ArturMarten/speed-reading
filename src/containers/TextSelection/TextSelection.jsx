@@ -25,7 +25,7 @@ export class TextSelection extends Component {
     if (prevProps.texts.length === 0 && this.props.texts.length !== 0) {
       this.resetSearch();
     }
-    if (prevProps.selecting && !this.props.selecting) {
+    if (prevProps.selectStatus.loading && !this.props.selectStatus.loading) {
       this.props.onClose();
     }
   }
@@ -103,7 +103,7 @@ export class TextSelection extends Component {
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Dimmer active={this.props.fetchingTexts} inverted>
+          <Dimmer active={this.props.textsStatus.loading} inverted>
             <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
           </Dimmer>
           <Grid centered style={{ maxHeight: '6vh' }}>
@@ -159,9 +159,9 @@ export class TextSelection extends Component {
           <Button
             positive
             type="button"
-            loading={this.props.selecting}
+            loading={this.props.selectStatus.loading}
             onClick={this.onSubmit}
-            disabled={this.state.selectedTextId === null || this.props.selecting}
+            disabled={this.state.selectedTextId === null || this.props.selectStatus.loading}
           >
             {this.props.translate('text-selection.choose')}
           </Button>
@@ -173,8 +173,8 @@ export class TextSelection extends Component {
 
 const mapStateToProps = state => ({
   texts: state.text.texts,
-  fetchingTexts: state.text.fetchingTexts,
-  selecting: state.text.selecting,
+  textsStatus: state.text.textsStatus,
+  selectStatus: state.text.selectStatus,
   translate: getTranslate(state.locale),
 });
 

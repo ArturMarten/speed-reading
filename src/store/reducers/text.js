@@ -4,61 +4,112 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
   selectedText: null,
-  savingText: false,
-  fetchingTexts: false,
-  fetchingCollections: false,
-  selecting: false,
   texts: [],
   collections: [],
+  selectStatus: {
+    loading: false,
+    error: null,
+  },
+  textsStatus: {
+    loading: false,
+    error: null,
+  },
+  collectionsStatus: {
+    loading: false,
+    error: null,
+  },
+  textStatus: {
+    loading: false,
+    message: null,
+    error: null,
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.TEXT_SAVE_START: {
+    case actionTypes.SAVE_TEXT_START: {
       return updateObject(state, {
-        savingText: true,
+        textStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
       });
     }
-    case actionTypes.TEXT_SAVE_SUCCEEDED: {
+    case actionTypes.SAVE_TEXT_SUCCEEDED: {
       return updateObject(state, {
-        savingText: false,
+        textStatus: {
+          loading: false,
+          message: action.payload,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.SAVE_TEXT_FAILED: {
+      return updateObject(state, {
+        textStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.FETCH_TEXT_COLLECTIONS_START: {
       return updateObject(state, {
-        fetchingCollections: true,
+        collectionsStatus: {
+          loading: true,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_TEXT_COLLECTIONS_SUCCEEDED: {
       return updateObject(state, {
         collections: action.payload,
-        fetchingCollections: false,
+        collectionsStatus: {
+          loading: false,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_TEXT_COLLECTIONS_FAILED: {
       return updateObject(state, {
-        fetchingCollections: false,
+        collectionsStatus: {
+          loading: false,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.FETCH_TEXTS_START: {
       return updateObject(state, {
-        fetchingTexts: true,
+        textsStatus: {
+          loading: true,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_TEXTS_SUCCEEDED: {
       return updateObject(state, {
         texts: action.payload,
-        fetchingTexts: false,
+        textsStatus: {
+          loading: false,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_TEXTS_FAILED: {
       return updateObject(state, {
-        fetchingTexts: false,
+        textsStatus: {
+          loading: false,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.FETCH_READING_TEXT_START: {
       return updateObject(state, {
-        selecting: true,
+        selectStatus: {
+          loading: true,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_READING_TEXT_SUCCEEDED: {
@@ -67,17 +118,32 @@ const reducer = (state = initialState, action) => {
       });
       return updateObject(state, {
         selectedText: updatedText,
-        selecting: false,
+        selectStatus: {
+          loading: false,
+          error: null,
+        },
+        textStatus: {
+          loading: false,
+          message: null,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_READING_TEXT_FAILED: {
       return updateObject(state, {
-        selecting: false,
+        selectStatus: {
+          loading: true,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.UNSELECT_TEXT: {
       return updateObject(state, {
         selectedText: null,
+        selectStatus: {
+          loading: false,
+          error: null,
+        },
       });
     }
     default:

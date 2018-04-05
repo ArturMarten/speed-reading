@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
+import { serverErrorMessage } from '../../shared/utility';
 
 const fetchUsersStart = () => ({
   type: actionTypes.FETCH_USERS_START,
@@ -21,9 +22,7 @@ export const fetchUsers = token => (dispatch) => {
     .then((response) => {
       dispatch(fetchUsersSucceeded(response.data));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(fetchUsersFailed(errorMessage));
+      dispatch(fetchUsersFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchUsersFailed(error.message));
@@ -53,9 +52,7 @@ export const addUser = (userData, token) => (dispatch) => {
     .then((response) => {
       dispatch(addUserSucceeded(response.data.publicId, userData));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(addUserFailed(errorMessage));
+      dispatch(addUserFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(addUserFailed(error.message));
@@ -85,9 +82,7 @@ export const changeUser = (publicId, userData, token) => (dispatch) => {
     .then(() => {
       dispatch(changeUserSucceeded(publicId, userData));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(changeUserFailed(errorMessage));
+      dispatch(changeUserFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(changeUserFailed(error.message));
@@ -114,9 +109,7 @@ export const fetchGroups = token => (dispatch) => {
     .then((response) => {
       dispatch(fetchGroupsSucceeded(response.data));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(fetchGroupsFailed(errorMessage));
+      dispatch(fetchGroupsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchGroupsFailed(error.message));
@@ -146,9 +139,7 @@ export const addGroup = (groupData, token) => (dispatch) => {
     .then((response) => {
       dispatch(addGroupSucceeded(response.data.id, groupData));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(addGroupFailed(errorMessage));
+      dispatch(addGroupFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(addGroupFailed(error.message));
@@ -178,9 +169,7 @@ export const changeGroup = (groupId, groupData, token) => (dispatch) => {
     .then(() => {
       dispatch(changeGroupSucceeded(groupId, groupData));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(changeGroupFailed(errorMessage));
+      dispatch(changeGroupFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(changeGroupFailed(error.message));

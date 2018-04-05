@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Message } from 'semantic-ui-react';
+import { Modal, Form, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-import { checkValidity, translateError } from '../../shared/utility';
+import { checkValidity } from '../../shared/utility';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 const initialState = {
   passwordChangeForm: {
@@ -40,18 +42,11 @@ const initialState = {
 };
 
 export class ChangePassword extends Component {
-  state = { ...initialState, changed: false };
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.loading && !this.props.loading && this.props.error === null) {
-      this.passwordChanged();
-    }
-  }
+  state = { ...initialState };
 
   onPasswordChange = () => {
     const { oldPassword, newPassword } = this.state.passwordChangeForm;
     this.props.onPasswordChange(oldPassword.value, newPassword.value, this.props.token);
-    this.setState({ changed: false });
   }
 
   inputChangeHandler = (event, { name, value }) => {
@@ -72,17 +67,13 @@ export class ChangePassword extends Component {
     });
   }
 
-  passwordChanged = () => {
-    this.setState({ ...initialState, changed: true });
-  }
-
   render() {
     const matchingPasswords = this.state.passwordChangeForm.newPassword.value === this.state.passwordChangeForm.newPasswordConfirm.value;
     return (
       <Modal size="mini" open={this.props.open} closeOnDimmerClick={false} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('change-password.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Form error={this.props.error !== null} success={this.state.changed}>
+          <Form error={this.props.passwordChangeStatus.error !== null} success={this.props.passwordChangeStatus.message !== null}>
             <Form.Input
               icon="lock"
               autoFocus
@@ -123,13 +114,12 @@ export class ChangePassword extends Component {
               autoComplete="new-password"
               required
             />
-            <Message
-              error
-              header={translateError(this.props.translate, this.props.error)}
+            <SuccessMessage
+              icon="check"
+              message={this.props.passwordChangeStatus.message}
             />
-            <Message
-              success
-              header={this.props.translate('change-password.password-changed')}
+            <ErrorMessage
+              error={this.props.passwordChangeStatus.error}
             />
           </Form>
         </Modal.Content>
@@ -137,8 +127,8 @@ export class ChangePassword extends Component {
           <Button
             primary
             type="submit"
-            loading={this.props.loading}
-            disabled={!this.state.passwordChangeFormValid || !matchingPasswords || this.props.loading}
+            loading={this.props.passwordChangeStatus.loading}
+            disabled={!this.state.passwordChangeFormValid || !matchingPasswords || this.props.passwordChangeStatus.loading}
             onClick={this.onPasswordChange}
           >
             {this.props.translate('change-password.change')}
@@ -151,8 +141,7 @@ export class ChangePassword extends Component {
 
 const mapStateToProps = state => ({
   token: state.auth.token,
-  loading: state.auth.changingPassword,
-  error: state.auth.changePasswordError,
+  passwordChangeStatus: state.auth.passwordChangeStatus,
   translate: getTranslate(state.locale),
 });
 

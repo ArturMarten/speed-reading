@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { stopPropagation } from '../../shared/utility';
+import { stopPropagation, serverErrorMessage } from '../../shared/utility';
 import ErrorPopup from '../../containers/ErrorPopup/ErrorPopup';
 
 const withErrorHandler = (WrappedComponent, axios) =>
@@ -29,10 +29,7 @@ const withErrorHandler = (WrappedComponent, axios) =>
     }
 
     render() {
-      let errorMessage = this.state.error ? this.state.error.message : 'Unknown error';
-      if (this.state.error && this.state.error.response && this.state.error.response.data && this.state.error.response.data.error) {
-        errorMessage = this.state.error.response.data.error;
-      }
+      const errorMessage = this.state.error ? serverErrorMessage(this.state.error) : 'Unknown error';
       return (
         <Fragment>
           <ErrorPopup

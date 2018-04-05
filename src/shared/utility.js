@@ -50,6 +50,21 @@ export const formatMilliseconds = (input) => {
   return `${minutes}:${seconds}.${milliseconds}`;
 };
 
+export const translateSuccess = (translate, message) => {
+  switch (message) {
+    case 'Success':
+      return translate('success.generic');
+    case 'Password changed':
+      return translate('success.password-changed');
+    case 'Feedback added':
+      return translate('success.feedback-added');
+    case 'Reading text added':
+      return translate('success.reading-text-added');
+    default:
+      return message;
+  }
+};
+
 export const translateError = (translate, error) => {
   switch (error) {
     case 'Network Error':
@@ -83,3 +98,13 @@ export const sortByColumn = (data, column, direction) => {
   });
   return direction === 'descending' ? sorted.reverse() : sorted;
 };
+
+export const serverSuccessMessage = response => (
+  response.data && response.data.message ?
+    response.data.message : 'Success'
+);
+
+export const serverErrorMessage = error => (
+  error.response && error.response.data && error.response.data.error ?
+    error.response.data.error : error.message
+);

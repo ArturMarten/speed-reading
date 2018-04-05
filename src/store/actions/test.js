@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
+import { serverErrorMessage } from '../../shared/utility';
 
 const fetchQuestionsStart = () => ({
   type: actionTypes.FETCH_QUESTIONS_START,
@@ -21,6 +22,8 @@ export const fetchTestEditorQuestions = readingTextId => (dispatch) => {
     .then((response) => {
       const fetchedQuestions = response.data;
       dispatch(fetchQuestionsSucceeded(fetchedQuestions));
+    }, (error) => {
+      dispatch(fetchQuestionsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchQuestionsFailed(error.message));
@@ -49,6 +52,8 @@ export const addQuestion = questionData => (dispatch) => {
   axios.post('/questions', questionData)
     .then((response) => {
       dispatch(addQuestionSucceeded(response.data.id, questionData));
+    }, (error) => {
+      dispatch(addQuestionFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(addQuestionFailed(error.message));
@@ -77,6 +82,8 @@ export const changeQuestion = (questionId, questionData) => (dispatch) => {
   axios.put(`/questions/${questionId}`, questionData)
     .then(() => {
       dispatch(changeQuestionSucceeded(questionId, questionData));
+    }, (error) => {
+      dispatch(changeQuestionFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(changeQuestionFailed(error.message));
@@ -102,6 +109,8 @@ export const removeQuestion = questionId => (dispatch) => {
   axios.delete(`/questions/${questionId}`)
     .then(() => {
       dispatch(removeQuestionSucceeded(questionId));
+    }, (error) => {
+      dispatch(removeQuestionFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(removeQuestionFailed(error.message));
@@ -130,6 +139,8 @@ export const addAnswer = answerData => (dispatch) => {
   axios.post('/answers', answerData)
     .then((response) => {
       dispatch(addAnswerSucceeded(response.data.id, answerData));
+    }, (error) => {
+      dispatch(addAnswerFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(addAnswerFailed(error.message));
@@ -159,6 +170,8 @@ export const changeAnswer = (questionId, answerId, answerData) => (dispatch) => 
   axios.put(`/answers/${answerId}`, answerData)
     .then(() => {
       dispatch(changeAnswerSucceeded(questionId, answerId, answerData));
+    }, (error) => {
+      dispatch(changeAnswerFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(changeAnswerFailed(error.message));
@@ -187,6 +200,8 @@ export const removeAnswer = (questionId, answerId) => (dispatch) => {
   axios.delete(`/answers/${answerId}`)
     .then(() => {
       dispatch(removeAnswerSucceeded(questionId, answerId));
+    }, (error) => {
+      dispatch(removeAnswerFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(removeAnswerFailed(error.message));
@@ -221,6 +236,11 @@ const testStarted = () => ({
   type: actionTypes.TEST_STARTED,
 });
 
+const testStartFailed = error => ({
+  type: actionTypes.TEST_START_FAILED,
+  payload: error,
+});
+
 const testAttemptStarted = attemptId => ({
   type: actionTypes.TEST_ATTEMPT_START,
   payload: attemptId,
@@ -233,6 +253,11 @@ const testFinishing = () => ({
 const testFinished = result => ({
   type: actionTypes.TEST_FINISHED,
   payload: result,
+});
+
+const testFinishFailed = error => ({
+  type: actionTypes.TEST_FINISH_FAILED,
+  payload: error,
 });
 
 const testEnd = () => ({
@@ -248,6 +273,8 @@ export const prepareTest = readingTextId => (dispatch) => {
       dispatch(fetchQuestionsSucceeded(fetchedQuestions));
       dispatch(timerInit());
       dispatch(testPrepared());
+    }, (error) => {
+      dispatch(fetchQuestionsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchQuestionsFailed(error.message));
@@ -262,10 +289,10 @@ export const startTest = (attemptData, token) => (dispatch) => {
       dispatch(testStarted());
       dispatch(testAttemptStarted(response.data.id));
     }, (error) => {
-      console.log(error);
+      dispatch(testStartFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
-      console.log(error);
+      dispatch(testStartFailed(error.message));
     });
 };
 
@@ -279,15 +306,15 @@ export const finishTest = (attemptId, answers, token) => (dispatch, getState) =>
       const result = { elapsedTime };
       return axios.patch(`/testAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } });
     }, (error) => {
-      console.log(error);
+      dispatch(testFinishFailed(serverErrorMessage(error)));
     })
     .then((response) => {
       dispatch(testFinished(response.data.result));
     }, (error) => {
-      console.log(error);
+      dispatch(testFinishFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
-      console.log(error);
+      dispatch(testFinishFailed(error.message));
     });
 };
 

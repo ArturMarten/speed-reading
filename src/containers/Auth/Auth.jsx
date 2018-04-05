@@ -1,10 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Message, Icon, Popup } from 'semantic-ui-react';
+import { Modal, Form, Button, Icon, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-import { checkValidity, translateError } from '../../shared/utility';
+import { checkValidity } from '../../shared/utility';
+import ErrorMessage from '../Message/ErrorMessage';
 
 const initialState = {
   loginForm: {
@@ -59,84 +60,89 @@ export class Auth extends Component {
     });
   }
 
+  keyPressHandler = (event) => {
+    if (event.key === 'Enter' && this.state.loginFormValid && !this.props.authenticationStatus.loading) {
+      this.onLogin();
+    }
+  }
+
   render() {
     return (
-      <Fragment>
-        <Modal size="mini" open={this.props.open || !this.props.isAuthenticated}>
-          <Modal.Header>{this.props.translate('auth.modal-header')}</Modal.Header>
-          <Modal.Content>
-            <Form error={this.props.error !== null}>
-              <Form.Input
-                autoFocus
-                icon="user"
-                iconPosition="left"
-                name="email"
-                value={this.state.loginForm.email.value}
-                error={!this.state.loginForm.email.valid && this.state.loginForm.email.touched}
-                onChange={this.inputChangeHandler}
-                placeholder={this.props.translate('auth.username')}
-                type="email"
-                autoComplete="email"
-                required
-              />
-              <Form.Input
-                icon="lock"
-                iconPosition="left"
-                name="password"
-                value={this.state.loginForm.password.value}
-                error={!this.state.loginForm.password.valid && this.state.loginForm.password.touched}
-                onChange={this.inputChangeHandler}
-                placeholder={this.props.translate('auth.password')}
-                type="password"
-                autoComplete="password"
-                required
-              />
-              <Message
-                error
-                header={translateError(this.props.translate, this.props.error)}
-              />
-            </Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Popup
-              content={this.props.translate('auth.first-time')}
-              position="bottom center"
-              on="hover"
-              trigger={
-                <Button
-                  primary
-                  icon
-                  type="button"
-                  labelPosition="right"
-                  loading={this.props.loading}
-                  disabled={this.props.loading}
-                  onClick={this.onDemoLogin}
-                >
-                  {this.props.translate('auth.demo')}
-                  <Icon name="sign in" style={{ opacity: 1 }} />
-                </Button>
-              }
+      <Modal size="mini" open={this.props.open || !this.props.isAuthenticated}>
+        <Modal.Header>{this.props.translate('auth.modal-header')}</Modal.Header>
+        <Modal.Content>
+          <Form error={this.props.authenticationStatus.error !== null || this.props.logoutError !== null}>
+            <Form.Input
+              autoFocus
+              icon="user"
+              iconPosition="left"
+              name="email"
+              value={this.state.loginForm.email.value}
+              error={!this.state.loginForm.email.valid && this.state.loginForm.email.touched}
+              onChange={this.inputChangeHandler}
+              onKeyPress={this.keyPressHandler}
+              placeholder={this.props.translate('auth.username')}
+              type="email"
+              autoComplete="email"
+              required
             />
-            <Button
-              positive
-              type="submit"
-              loading={this.props.loading}
-              disabled={!this.state.loginFormValid || this.props.loading}
-              onClick={this.onLogin}
-            >
-              {this.props.translate('auth.login-button')}
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      </Fragment>
+            <Form.Input
+              icon="lock"
+              iconPosition="left"
+              name="password"
+              value={this.state.loginForm.password.value}
+              error={!this.state.loginForm.password.valid && this.state.loginForm.password.touched}
+              onChange={this.inputChangeHandler}
+              onKeyPress={this.keyPressHandler}
+              placeholder={this.props.translate('auth.password')}
+              type="password"
+              autoComplete="password"
+              required
+            />
+            <ErrorMessage
+              error={this.props.authenticationStatus.error ? this.props.authenticationStatus.error : this.props.logoutError}
+            />
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Popup
+            content={this.props.translate('auth.first-time')}
+            position="bottom center"
+            on="hover"
+            trigger={
+              <Button
+                primary
+                icon
+                type="button"
+                labelPosition="right"
+                loading={this.props.authenticationStatus.loading}
+                disabled={this.props.authenticationStatus.loading}
+                onClick={this.onDemoLogin}
+              >
+                {this.props.translate('auth.demo')}
+                <Icon name="sign in" style={{ opacity: 1 }} />
+              </Button>
+            }
+          />
+          <Button
+            positive
+            type="submit"
+            loading={this.props.authenticationStatus.loading}
+            disabled={!this.state.loginFormValid || this.props.authenticationStatus.loading}
+            onClick={this.onLogin}
+          >
+            {this.props.translate('auth.login-button')}
+          </Button>
+        </Modal.Actions>
+      </Modal>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  loading: state.auth.authenticating,
   isAuthenticated: state.auth.token !== null,
-  error: state.auth.authenticationError,
+  authenticationStatus: state.auth.authenticationStatus,
+  logoutError: state.auth.logoutError,
   translate: getTranslate(state.locale),
 });
 

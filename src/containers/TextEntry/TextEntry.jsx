@@ -7,6 +7,8 @@ import * as actionCreators from '../../store/actions';
 import TextSelection from '../TextSelection/TextSelection';
 import TextEditor from '../TextEditor/TextEditor';
 import TextTestEditor from './TextTestEditor/TextTestEditor';
+import ErrorMessage from '../Message/ErrorMessage';
+import SuccessMessage from '../Message/SuccessMessage';
 import { checkValidity } from '../../shared/utility';
 
 const MAX_RATING = 10;
@@ -68,6 +70,9 @@ export class TextEntry extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.selectedText && prevProps.selectedText !== this.props.selectedText) {
       this.setForm(this.props.selectedText);
+    } else if (prevProps.textStatus.loading && !this.props.textStatus.loading &&
+               this.props.textStatus.error === null && !this.props.selectedText) {
+      this.resetForm();
     }
   }
 
@@ -84,10 +89,9 @@ export class TextEntry extends Component {
     };
     if (this.props.selectedText) {
       const textId = this.props.selectedText.id;
-      this.props.onTextSave(submittedForm, textId);
+      this.props.onTextSave(submittedForm, textId, this.props.token);
     } else {
-      this.props.onTextSave(submittedForm);
-      this.resetForm();
+      this.props.onTextSave(submittedForm, null, this.props.token);
     }
   }
 
@@ -216,7 +220,7 @@ export class TextEntry extends Component {
           /> : null
         }
         <p>{this.props.translate('text-entry.description')}</p>
-        <Form warning>
+        <Form warning error={this.props.textStatus.error !== null} success={this.props.textStatus.message !== null}>
           <Form.Group widths="equal">
             <Form.Input
               type="text"
@@ -238,7 +242,7 @@ export class TextEntry extends Component {
             />
             <Form.Select
               name="collectionId"
-              loading={this.props.fetchingCollections}
+              loading={this.props.collectionsStatus.loading}
               label={this.props.translate('text-entry.text-collection')}
               value={this.state.textEntryForm.collectionId.value}
               options={collectionOptions}
@@ -291,12 +295,19 @@ export class TextEntry extends Component {
               {keywords}
             </Label.Group>
           </Form.Group>
+          <SuccessMessage
+            icon="check"
+            message={this.props.textStatus.message}
+          />
+          <ErrorMessage
+            error={this.props.textStatus.error}
+          />
           <Button
             positive
             type="button"
             floated="right"
-            loading={this.props.savingText}
-            disabled={!this.state.textEntryFormValid || this.props.savingText}
+            loading={this.props.textStatus.loading}
+            disabled={!this.state.textEntryFormValid || this.props.textStatus.loading}
             onClick={this.onSubmit}
           >
             <Icon fitted name="save" style={{ opacity: 1 }} />
@@ -327,10 +338,11 @@ export class TextEntry extends Component {
 }
 
 const mapStateToProps = state => ({
-  fetchingCollections: state.text.fetchingCollections,
+  token: state.auth.token,
   collections: state.text.collections,
   selectedText: state.text.selectedText,
-  savingText: state.text.savingText,
+  collectionsStatus: state.text.collectionsStatus,
+  textStatus: state.text.textStatus,
   translate: getTranslate(state.locale),
 });
 
@@ -338,8 +350,8 @@ const mapDispatchToProps = dispatch => ({
   onFetchTextCollections: () => {
     dispatch(actionCreators.fetchTextCollections());
   },
-  onTextSave: (text, textId) => {
-    dispatch(actionCreators.storeText(text, textId));
+  onTextSave: (text, textId, token) => {
+    dispatch(actionCreators.saveText(text, textId, token));
   },
   onNewText: () => {
     dispatch(actionCreators.unselectText());

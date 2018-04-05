@@ -1,38 +1,42 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
+import { serverErrorMessage, serverSuccessMessage } from '../../shared/utility';
 
-const textSaveStart = () => ({
-  type: actionTypes.TEXT_SAVE_START,
+const saveTextStart = () => ({
+  type: actionTypes.SAVE_TEXT_START,
 });
 
-const textSaveSucceeded = () => ({
-  type: actionTypes.TEXT_SAVE_SUCCEEDED,
+const saveTextSucceeded = message => ({
+  type: actionTypes.SAVE_TEXT_SUCCEEDED,
+  payload: message,
 });
 
-const textSaveFailed = error => ({
-  type: actionTypes.TEXT_SAVE_FAILED,
+const saveTextFailed = error => ({
+  type: actionTypes.SAVE_TEXT_FAILED,
   payload: error,
 });
 
-export const storeText = (text, textId) => (dispatch) => {
-  dispatch(textSaveStart());
+export const saveText = (text, textId, token) => (dispatch) => {
+  dispatch(saveTextStart());
   if (textId) {
-    axios.put(`/texts/${textId}`, text)
+    axios.put(`/texts/${textId}`, text, { headers: { 'x-access-token': token } })
       .then((response) => {
-        console.log(response);
-        dispatch(textSaveSucceeded());
+        dispatch(saveTextSucceeded(serverSuccessMessage(response)));
+      }, (error) => {
+        dispatch(saveTextFailed(serverErrorMessage(error)));
       })
       .catch((error) => {
-        dispatch(textSaveFailed(error.message));
+        dispatch(saveTextFailed(error.message));
       });
   } else {
-    axios.post('/texts', text)
+    axios.post('/texts', text, { headers: { 'x-access-token': token } })
       .then((response) => {
-        console.log(response);
-        dispatch(textSaveSucceeded());
+        dispatch(saveTextSucceeded(serverSuccessMessage(response)));
+      }, (error) => {
+        dispatch(saveTextFailed(serverErrorMessage(error)));
       })
       .catch((error) => {
-        dispatch(textSaveFailed(error.message));
+        dispatch(saveTextFailed(error.message));
       });
   }
 };
@@ -57,6 +61,8 @@ export const fetchTextCollections = () => (dispatch) => {
     .then((response) => {
       const fetchedTextCollections = response.data;
       dispatch(fetchTextCollectionsSucceeded(fetchedTextCollections));
+    }, (error) => {
+      dispatch(fetchTextCollectionsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchTextCollectionsFailed(error.message));
@@ -83,13 +89,13 @@ export const fetchTexts = () => (dispatch) => {
     .then((response) => {
       const fetchedTexts = response.data;
       dispatch(fetchTextsSucceeded(fetchedTexts));
+    }, (error) => {
+      dispatch(fetchTextsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
-      console.log(error);
       dispatch(fetchTextsFailed(error.message));
     });
 };
-
 
 const fetchReadingTextStart = () => ({
   type: actionTypes.FETCH_READING_TEXT_START,
@@ -112,7 +118,7 @@ export const selectText = textId => (dispatch) => {
       const text = response.data;
       dispatch(fetchReadingTextSucceeded(text));
     }, (error) => {
-      console.log(error);
+      dispatch(fetchReadingTextFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchReadingTextFailed(error.message));

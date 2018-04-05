@@ -3,30 +3,40 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
-  loading: false,
-  error: null,
-  sent: false,
+  feedbackStatus: {
+    loading: false,
+    message: null,
+    error: null,
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SEND_FEEDBACK_START: {
       return updateObject(state, {
-        loading: true,
-        error: null,
+        feedbackStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
       });
     }
     case actionTypes.SEND_FEEDBACK_SUCCEEDED: {
       return updateObject(state, {
-        loading: false,
-        error: null,
-        sent: true,
+        feedbackStatus: {
+          loading: false,
+          message: action.payload,
+          error: null,
+        },
       });
     }
     case actionTypes.SEND_FEEDBACK_FAILED: {
       return updateObject(state, {
-        error: action.payload.error,
-        loading: false,
+        feedbackStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     default:

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Rating, TextArea, Message, Checkbox } from 'semantic-ui-react';
+import { Modal, Form, Button, Rating, TextArea, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 import { checkValidity } from '../../shared/utility';
+import ErrorMessage from '../Message/ErrorMessage';
+import SuccessMessage from '../Message/SuccessMessage';
 
 const MAX_RATING = 5;
 
@@ -69,13 +71,18 @@ export class Feedback extends Component {
   }
 
   render() {
+    const sent = this.props.feedbackStatus.message !== null;
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('feedback.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Form loading={this.props.loading} success={this.props.sent}>
+          <Form
+            loading={this.props.feedbackStatus.loading}
+            success={this.props.feedbackStatus.message !== null}
+            error={this.props.feedbackStatus.error !== null}
+          >
             <Form.Group>
-              <Form.Field disabled={this.props.sent}>
+              <Form.Field disabled={sent}>
                 <label htmlFor="functionality-rating">
                   <div>{this.props.translate('feedback.functionality-rating')}</div>
                   <Rating
@@ -90,7 +97,7 @@ export class Feedback extends Component {
                   />
                 </label>
               </Form.Field>
-              <Form.Field disabled={this.props.sent}>
+              <Form.Field disabled={sent}>
                 <label htmlFor="usability-rating">
                   <div>{this.props.translate('feedback.usability-rating')}</div>
                   <Rating
@@ -105,7 +112,7 @@ export class Feedback extends Component {
                   />
                 </label>
               </Form.Field>
-              <Form.Field disabled={this.props.sent}>
+              <Form.Field disabled={sent}>
                 <label htmlFor="design-rating">
                   <div>{this.props.translate('feedback.design-rating')}</div>
                   <Rating
@@ -121,7 +128,7 @@ export class Feedback extends Component {
                 </label>
               </Form.Field>
             </Form.Group>
-            <Form.Field error={!this.state.feedbackForm.message.valid && this.state.feedbackForm.message.touched} disabled={this.props.sent}>
+            <Form.Field error={!this.state.feedbackForm.message.valid && this.state.feedbackForm.message.touched} disabled={sent}>
               <label htmlFor="feedback-message">
                 <div>{this.props.translate('feedback.textarea-message')}</div>
                 <TextArea
@@ -135,14 +142,15 @@ export class Feedback extends Component {
                 />
               </label>
             </Form.Field>
-            <Form.Field disabled={this.props.sent} style={{ margin: 0 }}>
+            <Form.Field disabled={sent} style={{ margin: 0 }}>
               <Checkbox label={this.props.translate('feedback.anonymous')} />
             </Form.Field>
-            <Message
-              success
+            <SuccessMessage
               icon="check"
-              header={this.props.translate('feedback.sent-message-header')}
-              content={this.props.translate('feedback.sent-message-content')}
+              message={this.props.feedbackStatus.message}
+            />
+            <ErrorMessage
+              error={this.props.feedbackStatus.error}
             />
           </Form>
         </Modal.Content>
@@ -150,7 +158,7 @@ export class Feedback extends Component {
           <Button
             positive
             type="button"
-            disabled={!this.state.feedbackFormValid || this.props.loading || this.props.sent}
+            disabled={!this.state.feedbackFormValid || this.props.feedbackStatus.loading || sent}
             onClick={this.onSubmit}
           >
             {this.props.translate('feedback.send')}
@@ -162,8 +170,7 @@ export class Feedback extends Component {
 }
 
 const mapStateToProps = state => ({
-  loading: state.feedback.loading,
-  sent: state.feedback.sent,
+  feedbackStatus: state.feedback.feedbackStatus,
   translate: getTranslate(state.locale),
 });
 
