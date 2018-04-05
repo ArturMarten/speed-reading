@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
-import { serverErrorMessage } from '../../shared/utility';
+import { serverErrorMessage, serverSuccessMessage } from '../../shared/utility';
 
 const fetchQuestionsStart = () => ({
   type: actionTypes.FETCH_QUESTIONS_START,
@@ -34,11 +34,12 @@ const addQuestionStart = () => ({
   type: actionTypes.ADD_QUESTION_START,
 });
 
-const addQuestionSucceeded = (questionId, questionData) => ({
+const addQuestionSucceeded = (questionId, questionData, message) => ({
   type: actionTypes.ADD_QUESTION_SUCCEEDED,
   payload: {
     questionId,
     questionData,
+    message,
   },
 });
 
@@ -47,11 +48,11 @@ const addQuestionFailed = error => ({
   payload: error,
 });
 
-export const addQuestion = questionData => (dispatch) => {
+export const addQuestion = (questionData, token) => (dispatch) => {
   dispatch(addQuestionStart());
-  axios.post('/questions', questionData)
+  axios.post('/questions', questionData, { headers: { 'x-access-token': token } })
     .then((response) => {
-      dispatch(addQuestionSucceeded(response.data.id, questionData));
+      dispatch(addQuestionSucceeded(response.data.id, questionData, serverSuccessMessage(response)));
     }, (error) => {
       dispatch(addQuestionFailed(serverErrorMessage(error)));
     })
@@ -64,11 +65,12 @@ const changeQuestionStart = () => ({
   type: actionTypes.CHANGE_QUESTION_START,
 });
 
-const changeQuestionSucceeded = (questionId, questionData) => ({
+const changeQuestionSucceeded = (questionId, questionData, message) => ({
   type: actionTypes.CHANGE_QUESTION_SUCCEEDED,
   payload: {
     questionId,
     questionData,
+    message,
   },
 });
 
@@ -77,11 +79,11 @@ const changeQuestionFailed = error => ({
   payload: error,
 });
 
-export const changeQuestion = (questionId, questionData) => (dispatch) => {
+export const changeQuestion = (questionId, questionData, token) => (dispatch) => {
   dispatch(changeQuestionStart());
-  axios.put(`/questions/${questionId}`, questionData)
-    .then(() => {
-      dispatch(changeQuestionSucceeded(questionId, questionData));
+  axios.put(`/questions/${questionId}`, questionData, { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(changeQuestionSucceeded(questionId, questionData, serverSuccessMessage(response)));
     }, (error) => {
       dispatch(changeQuestionFailed(serverErrorMessage(error)));
     })
@@ -94,9 +96,12 @@ const removeQuestionStart = () => ({
   type: actionTypes.REMOVE_QUESTION_START,
 });
 
-const removeQuestionSucceeded = questionId => ({
+const removeQuestionSucceeded = (questionId, message) => ({
   type: actionTypes.REMOVE_QUESTION_SUCCEEDED,
-  payload: questionId,
+  payload: {
+    id: questionId,
+    message,
+  },
 });
 
 const removeQuestionFailed = error => ({
@@ -104,11 +109,11 @@ const removeQuestionFailed = error => ({
   payload: error,
 });
 
-export const removeQuestion = questionId => (dispatch) => {
+export const removeQuestion = (questionId, token) => (dispatch) => {
   dispatch(removeQuestionStart());
-  axios.delete(`/questions/${questionId}`)
+  axios.delete(`/questions/${questionId}`, { headers: { 'x-access-token': token } })
     .then(() => {
-      dispatch(removeQuestionSucceeded(questionId));
+      dispatch(removeQuestionSucceeded(questionId, 'Question removed'));
     }, (error) => {
       dispatch(removeQuestionFailed(serverErrorMessage(error)));
     })
@@ -121,11 +126,12 @@ const addAnswerStart = () => ({
   type: actionTypes.ADD_ANSWER_START,
 });
 
-const addAnswerSucceeded = (answerId, answerData) => ({
+const addAnswerSucceeded = (answerId, answerData, message) => ({
   type: actionTypes.ADD_ANSWER_SUCCEEDED,
   payload: {
     answerId,
     answerData,
+    message,
   },
 });
 
@@ -134,11 +140,11 @@ const addAnswerFailed = error => ({
   payload: error,
 });
 
-export const addAnswer = answerData => (dispatch) => {
+export const addAnswer = (answerData, token) => (dispatch) => {
   dispatch(addAnswerStart());
-  axios.post('/answers', answerData)
+  axios.post('/answers', answerData, { headers: { 'x-access-token': token } })
     .then((response) => {
-      dispatch(addAnswerSucceeded(response.data.id, answerData));
+      dispatch(addAnswerSucceeded(response.data.id, answerData, serverSuccessMessage(response)));
     }, (error) => {
       dispatch(addAnswerFailed(serverErrorMessage(error)));
     })
@@ -151,12 +157,13 @@ const changeAnswerStart = () => ({
   type: actionTypes.CHANGE_ANSWER_START,
 });
 
-const changeAnswerSucceeded = (questionId, answerId, answerData) => ({
+const changeAnswerSucceeded = (questionId, answerId, answerData, message) => ({
   type: actionTypes.CHANGE_ANSWER_SUCCEEDED,
   payload: {
     questionId,
     answerId,
     answerData,
+    message,
   },
 });
 
@@ -165,11 +172,11 @@ const changeAnswerFailed = error => ({
   payload: error,
 });
 
-export const changeAnswer = (questionId, answerId, answerData) => (dispatch) => {
+export const changeAnswer = (questionId, answerId, answerData, token) => (dispatch) => {
   dispatch(changeAnswerStart());
-  axios.put(`/answers/${answerId}`, answerData)
-    .then(() => {
-      dispatch(changeAnswerSucceeded(questionId, answerId, answerData));
+  axios.put(`/answers/${answerId}`, answerData, { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(changeAnswerSucceeded(questionId, answerId, answerData, serverSuccessMessage(response)));
     }, (error) => {
       dispatch(changeAnswerFailed(serverErrorMessage(error)));
     })
@@ -182,11 +189,12 @@ const removeAnswerStart = () => ({
   type: actionTypes.REMOVE_ANSWER_START,
 });
 
-const removeAnswerSucceeded = (questionId, answerId) => ({
+const removeAnswerSucceeded = (questionId, answerId, message) => ({
   type: actionTypes.REMOVE_ANSWER_SUCCEEDED,
   payload: {
     questionId,
     answerId,
+    message,
   },
 });
 
@@ -195,11 +203,11 @@ const removeAnswerFailed = error => ({
   payload: error,
 });
 
-export const removeAnswer = (questionId, answerId) => (dispatch) => {
+export const removeAnswer = (questionId, answerId, token) => (dispatch) => {
   dispatch(removeAnswerStart());
-  axios.delete(`/answers/${answerId}`)
+  axios.delete(`/answers/${answerId}`, { headers: { 'x-access-token': token } })
     .then(() => {
-      dispatch(removeAnswerSucceeded(questionId, answerId));
+      dispatch(removeAnswerSucceeded(questionId, answerId, 'Answer removed'));
     }, (error) => {
       dispatch(removeAnswerFailed(serverErrorMessage(error)));
     })

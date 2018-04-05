@@ -50,8 +50,14 @@
       "To get started, choose an exercise from the menu."
     ],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
-    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
-    "introduction-video": ["Tutvustav video", "Introduction video"]
+    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."]
+  },
+  "intro-video": {
+    "header": ["Tutvustav video", "Introduction video"],
+    "title": ["Kiirlugemine 5.0 tutvustav video", "Kiirlugemine 5.0 introduction video"],
+    "no-iframe": ["Kiirlugemine 5.0 tutvustav video", "Kiirlugemine 5.0 introduction video"],
+    "authentication": ["Sisselogimine", "Authentication"],
+    "add-user": ["Kasutaja lisamine", "Adding user"]
   },
   "app-stats": {
     "state": ["Rakenduse andmed", "Application stats"],
@@ -292,7 +298,14 @@
     "generic": ["Õnnestus", "Succeeded"],
     "password-changed": ["Parool vahetatud", "Password changed"],
     "feedback-added": ["Tagasiside saadetud", "Feedback sent"],
-    "reading-text-added": ["Lugemistekst lisatud", "Reading text added"]
+    "reading-text-added": ["Lugemistekst lisatud", "Reading text added"],
+    "reading-text-updated": ["Lugemistekst uuendatud", "Reading text updated"],
+    "question-added": ["Küsimus lisatud", "Question added"],
+    "question-updated": ["Küsimus uuendatud", "Question updated"],
+    "question-removed": ["Küsimus kustutatud", "Question removed"],
+    "answer-added": ["Vastusevariant lisatud", "Answer added"],
+    "answer-updated": ["Vastusevariant uuendatud", "Answer updated"],
+    "answer-removed": ["Vastusevariant kustutatud", "Answer removed"]
   },
   "error" : {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],

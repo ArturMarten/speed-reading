@@ -44,7 +44,7 @@ export class Statistics extends Component {
   };
 
   componentDidMount() {
-    this.props.onFetchExerciseStatistics(this.props.userId);
+    this.props.onFetchExerciseStatistics(this.props.userId, this.props.token);
   }
 
   exerciseSelectionHandler = (event, data) => {
@@ -66,7 +66,7 @@ export class Statistics extends Component {
         date: new Date(attempt.startTime),
         readingAttempt: attempt.readingAttempt,
         wpm: attempt.result.wpm,
-        testResult: attempt.test ? Math.round((attempt.test.result.correct / attempt.test.result.total) * 100) : null,
+        testResult: attempt.test && attempt.test.result ? Math.round((attempt.test.result.correct / attempt.test.result.total) * 100) : null,
       }));
     const exerciseDropdown = (
       <Dropdown
@@ -100,7 +100,7 @@ export class Statistics extends Component {
               <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
             </Message>
             <Segment basic>
-              <Dimmer inverted active={this.props.loading}>
+              <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
                 <Loader>{this.props.translate('statistics.loading')}</Loader>
               </Dimmer>
               <Dimmer inverted active={data.length === 0}>
@@ -130,15 +130,16 @@ export class Statistics extends Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.auth.token,
   userId: state.auth.userId,
-  loading: state.statistics.loading,
-  exerciseStatistics: state.statistics.exercise,
+  exerciseStatisticsStatus: state.statistics.exerciseStatisticsStatus,
+  exerciseStatistics: state.statistics.exerciseStatistics,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchExerciseStatistics: (userId) => {
-    dispatch(actionCreators.fetchExerciseStatistics(userId));
+  onFetchExerciseStatistics: (userId, token) => {
+    dispatch(actionCreators.fetchExerciseStatistics(userId, token));
   },
 });
 

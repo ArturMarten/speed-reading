@@ -4,6 +4,7 @@ import { Modal, Dropdown, Button, Input } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import ErrorMessage from '../../Message/ErrorMessage';
 
 export class QuestionEditor extends Component {
   state = {
@@ -11,6 +12,7 @@ export class QuestionEditor extends Component {
     category: 'question',
     touched: false,
     valid: false,
+    submitted: false,
   }
 
   componentDidMount() {
@@ -25,6 +27,12 @@ export class QuestionEditor extends Component {
     }, 100);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.questionStatus.loading && !this.props.questionStatus.loading && this.props.questionStatus.error === null) {
+      this.props.onClose();
+    }
+  }
+
   setQuestion(question) {
     this.setState({
       questionText: question.questionText,
@@ -33,24 +41,24 @@ export class QuestionEditor extends Component {
     });
   }
 
-  addQuestionHandler = (event, data) => {
+  addQuestionHandler = () => {
     const question = {
       readingTextId: this.props.readingTextId,
       questionText: this.state.questionText,
       category: this.state.category,
     };
-    this.props.onAddQuestion(question);
-    this.props.onClose(event, data);
+    this.props.onAddQuestion(question, this.props.token);
+    this.setState({ submitted: true });
   }
 
-  changeQuestionHandler = (event, data) => {
+  changeQuestionHandler = () => {
     const question = {
       readingTextId: this.props.readingTextId,
       questionText: this.state.questionText,
       category: this.state.category,
     };
-    this.props.onChangeQuestion(this.props.question.id, question);
-    this.props.onClose(event, data);
+    this.props.onChangeQuestion(this.props.question.id, question, this.props.token);
+    this.setState({ submitted: true });
   }
 
   questionInputChangeHandler = (event, data) => {
@@ -115,18 +123,24 @@ export class QuestionEditor extends Component {
               options={questionOptions}
             />
           </Input>
+          {this.props.questionStatus.error && this.state.submitted ?
+            <ErrorMessage
+              error={this.props.questionStatus.error}
+            /> : null}
         </Modal.Content>
         <Modal.Actions>
           {this.props.question ?
             <Button
               primary
-              disabled={!this.state.touched || !this.state.valid}
+              loading={this.props.questionStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.questionStatus.loading}
               content={this.props.translate('question-editor.change-question')}
               onClick={this.changeQuestionHandler}
             /> :
             <Button
               positive
-              disabled={!this.state.touched || !this.state.valid}
+              loading={this.props.questionStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.questionStatus.loading}
               content={this.props.translate('question-editor.add-question')}
               onClick={this.addQuestionHandler}
             />
@@ -138,16 +152,17 @@ export class QuestionEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  questions: state.test.questions,
+  token: state.auth.token,
+  questionStatus: state.test.questionStatus,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddQuestion: (question) => {
-    dispatch(actionCreators.addQuestion(question));
+  onAddQuestion: (question, token) => {
+    dispatch(actionCreators.addQuestion(question, token));
   },
-  onChangeQuestion: (questionId, question) => {
-    dispatch(actionCreators.changeQuestion(questionId, question));
+  onChangeQuestion: (questionId, question, token) => {
+    dispatch(actionCreators.changeQuestion(questionId, question, token));
   },
 });
 

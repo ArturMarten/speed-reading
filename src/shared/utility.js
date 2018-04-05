@@ -30,7 +30,7 @@ export const checkValidity = (value, rules) => {
 };
 
 export const stopPropagation = (event) => {
-  if (event.nativeEvent) {
+  if (event && event.nativeEvent) {
     event.nativeEvent.stopImmediatePropagation();
   }
 };
@@ -60,6 +60,20 @@ export const translateSuccess = (translate, message) => {
       return translate('success.feedback-added');
     case 'Reading text added':
       return translate('success.reading-text-added');
+    case 'Reading text updated':
+      return translate('success.reading-text-updated');
+    case 'Question added':
+      return translate('success.question-added');
+    case 'Question updated':
+      return translate('success.question-updated');
+    case 'Question removed':
+      return translate('success.question-removed');
+    case 'Answer added':
+      return translate('success.answer-added');
+    case 'Answer updated':
+      return translate('success.answer-updated');
+    case 'Answer removed':
+      return translate('success.answer-removed');
     default:
       return message;
   }
