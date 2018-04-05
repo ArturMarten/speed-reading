@@ -31,8 +31,7 @@
     "old-password": ["Vana parool", "Old password"],
     "new-password": ["Uus parool", "New password"],
     "confirm-new-password": ["Kinnita uus parool", "Confirm new password"],
-    "change": ["Vaheta", "Change"],
-    "password-changed": ["Parool vahetatud", "Password changed"]
+    "change": ["Vaheta", "Change"]
   },
   "feedback": {
     "modal-header": ["Tagasiside", "Feedback"],
@@ -42,9 +41,7 @@
     "textarea-message": ["Tagasiside", "Feedback"],
     "textarea-placeholder": ["Sisesta tagasiside siia...", "Insert feedback here..."],
     "anonymous": ["Anonüümne", "Anonymous"],
-    "send": ["Saada", "Send"],
-    "sent-message-header": ["Tagasiside saadetud", "Feedback sent"],
-    "sent-message-content": ["Tänud abistamast!", "Thank you for your contribution!"]
+    "send": ["Saada", "Send"]
   },
   "home": {
     "welcome": ["Tere tulemast", "Welcome"],
@@ -290,6 +287,12 @@
   "error-popup": {
     "modal-header": ["Viga", "Error"],
     "ok": ["OK", "OK"]
+  },
+  "success": {
+    "generic": ["Õnnestus", "Succeeded"],
+    "password-changed": ["Parool vahetatud", "Password changed"],
+    "feedback-added": ["Tagasiside saadetud", "Feedback sent"],
+    "reading-text-added": ["Lugemistekst lisatud", "Reading text added"]
   },
   "error" : {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],

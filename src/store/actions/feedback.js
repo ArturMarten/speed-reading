@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
+import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
 
 const sendFeedbackStart = () => ({
   type: actionTypes.SEND_FEEDBACK_START,
@@ -25,12 +26,9 @@ export const sendFeedback = feedback => (dispatch) => {
   };
   axios.post('/feedback', data)
     .then((response) => {
-      console.log(response);
-      dispatch(sendFeedbackSucceeded(response.data.message));
+      dispatch(sendFeedbackSucceeded(serverSuccessMessage(response)));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(sendFeedbackFailed(errorMessage));
+      dispatch(sendFeedbackFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(sendFeedbackFailed(error.message));

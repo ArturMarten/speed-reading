@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
+import { serverErrorMessage } from '../../shared/utility';
 
 const timerInit = () => ({
   type: actionTypes.TIMER_INIT,
@@ -38,6 +39,11 @@ const exerciseStarted = () => ({
   type: actionTypes.EXERCISE_STARTED,
 });
 
+const exerciseStartFailed = error => ({
+  type: actionTypes.EXERCISE_START_FAILED,
+  payload: error,
+});
+
 const exerciseAttemptStarted = attemptId => ({
   type: actionTypes.EXERCISE_ATTEMPT_START,
   payload: attemptId,
@@ -53,6 +59,11 @@ const exerciseFinished = (elapsedTime, selectedText) => ({
     elapsedTime,
     selectedText,
   },
+});
+
+const exerciseFinishFailed = error => ({
+  type: actionTypes.EXERCISE_FINISH_FAILED,
+  payload: error,
 });
 
 const exerciseEnd = () => ({
@@ -77,10 +88,10 @@ export const startExercise = (attemptData, token) => (dispatch) => {
       dispatch(exerciseStarted());
       dispatch(exerciseAttemptStarted(response.data.id));
     }, (error) => {
-      console.log(error);
+      dispatch(exerciseStartFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
-      console.log(error);
+      dispatch(exerciseStartFailed(error.message));
     });
 };
 
@@ -97,10 +108,10 @@ export const finishExercise = (attemptId, token) => (dispatch, getState) => {
     .then(() => {
       // Dispatch event
     }, (error) => {
-      console.log(error);
+      dispatch(exerciseFinishFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
-      console.log(error);
+      dispatch(exerciseFinishFailed(error.message));
     });
 };
 

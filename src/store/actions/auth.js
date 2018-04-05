@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import * as actionCreators from './index';
 import axios from '../../axios-http';
+import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
 
 const authStart = () => ({
   type: actionTypes.AUTH_START,
@@ -52,9 +53,7 @@ export const authLogin = (email, password) => (dispatch) => {
       dispatch(checkAuthTimeout(response.data.expiresIn));
       dispatch(actionCreators.fetchUserProfile(response.data.userId, response.data.token));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(authFailed(errorMessage));
+      dispatch(authFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(authFailed(error.message));
@@ -64,7 +63,7 @@ export const authLogin = (email, password) => (dispatch) => {
 export const authCheckState = () => (dispatch) => {
   const token = localStorage.getItem('token');
   if (!token) {
-    dispatch(authLogout());
+    dispatch(authLogout(null));
   } else {
     const expirationDate = new Date(localStorage.getItem('expirationDate'));
     if (expirationDate <= new Date()) {
@@ -83,8 +82,9 @@ const changePasswordStart = () => ({
   type: actionTypes.CHANGE_PASSWORD_START,
 });
 
-const changePasswordSucceeded = () => ({
+const changePasswordSucceeded = message => ({
   type: actionTypes.CHANGE_PASSWORD_SUCCEEDED,
+  payload: message,
 });
 
 const changePasswordFailed = error => ({
@@ -98,12 +98,10 @@ export const changePassword = (oldPassword, newPassword, token) => (dispatch) =>
     password: `${oldPassword}_${newPassword}`,
   };
   axios.get('/changePassword', { auth, headers: { 'x-access-token': token } })
-    .then(() => {
-      dispatch(changePasswordSucceeded());
+    .then((response) => {
+      dispatch(changePasswordSucceeded(serverSuccessMessage(response)));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
-      dispatch(changePasswordFailed(errorMessage));
+      dispatch(changePasswordFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(changePasswordFailed(error.message));

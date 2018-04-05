@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import * as actionCreators from './index';
 import axios from '../../axios-http';
+import { serverErrorMessage } from '../../shared/utility';
 
 const fetchUserProfileStart = () => ({
   type: actionTypes.FETCH_USER_PROFILE_START,
@@ -22,8 +23,7 @@ export const fetchUserProfile = (userId, token) => (dispatch) => {
     .then((response) => {
       dispatch(fetchUserProfileSucceeded(response.data));
     }, (error) => {
-      const errorMessage = error.response && error.response.data && error.response.data.error ?
-        error.response.data.error : error.message;
+      const errorMessage = serverErrorMessage(error);
       dispatch(fetchUserProfileFailed(errorMessage));
       dispatch(actionCreators.authLogout(errorMessage));
     })

@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
+import { serverErrorMessage } from '../../shared/utility';
 
 const fetchExerciseStatisticsStart = () => ({
   type: actionTypes.FETCH_EXERCISE_STATISTICS_START,
@@ -20,6 +21,8 @@ export const fetchExerciseStatistics = userId => (dispatch) => {
   axios.get(`/exerciseAttempts?userId=${userId}&embed=test`)
     .then((response) => {
       dispatch(fetchExerciseStatisticsSucceeded(response.data));
+    }, (error) => {
+      dispatch(fetchExerciseStatisticsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchExerciseStatisticsFailed(error.message));

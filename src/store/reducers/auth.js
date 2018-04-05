@@ -5,57 +5,78 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
   token: null,
   userId: null,
-  authenticationError: null,
-  changePasswordError: null,
-  authenticating: false,
-  changingPassword: false,
+  passwordChangeStatus: {
+    loading: false,
+    message: null,
+    error: null,
+  },
+  authenticationStatus: {
+    loading: false,
+    error: null,
+  },
+  logoutError: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTH_START: {
       return updateObject(state, {
-        authenticating: true,
-        authenticationError: null,
+        authenticationStatus: {
+          loading: true,
+          error: null,
+        },
       });
     }
     case actionTypes.AUTH_SUCCEEDED: {
       return updateObject(state, {
         token: action.payload.token,
         userId: action.payload.userId,
-        authenticating: false,
-        authenticationError: null,
+        authenticationStatus: {
+          loading: false,
+          error: null,
+        },
       });
     }
     case actionTypes.AUTH_FAILED: {
       return updateObject(state, {
-        authenticating: false,
-        authenticationError: action.payload,
+        authenticationStatus: {
+          loading: false,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.AUTH_LOGOUT: {
       return updateObject(state, {
         token: null,
         userId: null,
-        authenticationError: action.payload,
+        logoutError: action.payload,
       });
     }
     case actionTypes.CHANGE_PASSWORD_START: {
       return updateObject(state, {
-        changingPassword: true,
-        changePasswordError: null,
+        passwordChangeStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
       });
     }
     case actionTypes.CHANGE_PASSWORD_SUCCEEDED: {
       return updateObject(state, {
-        changingPassword: false,
-        changePasswordError: null,
+        passwordChangeStatus: {
+          loading: false,
+          message: action.payload,
+          error: null,
+        },
       });
     }
     case actionTypes.CHANGE_PASSWORD_FAILED: {
       return updateObject(state, {
-        changingPassword: false,
-        changePasswordError: action.payload,
+        passwordChangeStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     default:
