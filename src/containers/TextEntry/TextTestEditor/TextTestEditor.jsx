@@ -7,6 +7,8 @@ import * as actionCreators from '../../../store/actions';
 import { stopPropagation } from '../../../shared/utility';
 import QuestionEditor from './QuestionEditor';
 import AnswerEditor from './AnswerEditor';
+import SuccessMessage from '../../Message/SuccessMessage';
+import ErrorMessage from '../../Message/ErrorMessage';
 
 export class TextTestEditor extends Component {
   state = {
@@ -14,6 +16,8 @@ export class TextTestEditor extends Component {
     answerEditorOpened: false,
     selectedQuestion: null,
     selectedAnswer: null,
+    removedQuestionId: null,
+    removedAnswerId: null,
   }
 
   componentDidMount() {
@@ -25,18 +29,20 @@ export class TextTestEditor extends Component {
   }
 
   removeQuestionHandler = (questionId) => {
-    this.props.onRemoveQuestion(questionId);
+    this.setState({ removedQuestionId: questionId });
+    this.props.onRemoveQuestion(questionId, this.props.token);
   }
 
   removeAnswerHandler = (questionId, answerId) => {
-    this.props.onRemoveAnswer(questionId, answerId);
+    this.setState({ removedAnswerId: answerId });
+    this.props.onRemoveAnswer(questionId, answerId, this.props.token);
   }
 
   questionEditorToggleHandler = (event, data) => {
     stopPropagation(event);
     this.setState({
       questionEditorOpened: !this.state.questionEditorOpened,
-      selectedQuestion: data.question ? data.question : null,
+      selectedQuestion: data && data.question ? data.question : null,
     });
   }
 
@@ -44,8 +50,8 @@ export class TextTestEditor extends Component {
     stopPropagation(event);
     this.setState({
       answerEditorOpened: !this.state.answerEditorOpened,
-      selectedQuestion: data.question ? data.question : null,
-      selectedAnswer: data.answer ? data.answer : null,
+      selectedQuestion: data && data.question ? data.question : null,
+      selectedAnswer: data && data.answer ? data.answer : null,
     });
   }
 
@@ -89,6 +95,8 @@ export class TextTestEditor extends Component {
                       negative
                       floated="right"
                       icon="close"
+                      loading={question.id === this.state.removedQuestionId && this.props.questionStatus.loading}
+                      disabled={question.id === this.state.removedQuestionId && this.props.questionStatus.loading}
                       onClick={() => this.removeQuestionHandler(question.id)}
                     />
                     <Button
@@ -128,6 +136,8 @@ export class TextTestEditor extends Component {
                         compact
                         icon="close"
                         floated="right"
+                        loading={answer.id === this.state.removedAnswerId && this.props.answerStatus.loading}
+                        disabled={answer.id === this.state.removedAnswerId && this.props.answerStatus.loading}
                         onClick={() => this.removeAnswerHandler(question.id, answer.id)}
                       />
                       <Button
@@ -160,17 +170,24 @@ export class TextTestEditor extends Component {
             ))}
           </Grid>
         </Modal.Content>
+        <SuccessMessage
+          icon="check"
+          style={{ margin: '0 0' }}
+          message={this.props.questionStatus.message !== null ? this.props.questionStatus.message : this.props.answerStatus.message}
+        />
+        <ErrorMessage
+          style={{ margin: '0 0' }}
+          error={this.props.questionStatus.error !== null ? this.props.questionStatus.error : this.props.answerStatus.error}
+        />
         <Modal.Actions>
           <Button
             positive
             content={this.props.translate('text-test-editor.add-question')}
-            disabled={this.props.error !== null}
             onClick={this.questionEditorToggleHandler}
           />
           <Button
             primary
             content={this.props.translate('text-test-editor.ok')}
-            disabled={this.props.error !== null}
             onClick={this.onSubmit}
           />
         </Modal.Actions>
@@ -180,8 +197,10 @@ export class TextTestEditor extends Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.auth.token,
   questions: state.test.questions,
-  error: state.test.error,
+  questionStatus: state.test.questionStatus,
+  answerStatus: state.test.answerStatus,
   translate: getTranslate(state.locale),
 });
 
@@ -189,11 +208,11 @@ const mapDispatchToProps = dispatch => ({
   onFetchQuestions: (readingTextId) => {
     dispatch(actionCreators.fetchTestEditorQuestions(readingTextId));
   },
-  onRemoveQuestion: (questionId) => {
-    dispatch(actionCreators.removeQuestion(questionId));
+  onRemoveQuestion: (questionId, token) => {
+    dispatch(actionCreators.removeQuestion(questionId, token));
   },
-  onRemoveAnswer: (questionId, answerId) => {
-    dispatch(actionCreators.removeAnswer(questionId, answerId));
+  onRemoveAnswer: (questionId, answerId, token) => {
+    dispatch(actionCreators.removeAnswer(questionId, answerId, token));
   },
 });
 

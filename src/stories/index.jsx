@@ -36,7 +36,9 @@ const dummyData = [
 */
 
 store.dispatch(setActiveLanguage('ee'));
-store.dispatch(actionCreators.selectText(9));
+store.dispatch(actionCreators.authLogin('***ADMIN_EMAIL***', '***ADMIN_PASSWORD***'));
+store.dispatch(actionCreators.selectText(18));
+
 // store.dispatch(setActiveLanguage('gb'));
 const translate = getTranslate(store.getState().locale);
 addDecorator(story => <Provider story={story()} />);

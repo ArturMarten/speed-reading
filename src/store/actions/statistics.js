@@ -16,9 +16,9 @@ const fetchExerciseStatisticsFailed = error => ({
   payload: error,
 });
 
-export const fetchExerciseStatistics = userId => (dispatch) => {
+export const fetchExerciseStatistics = (userId, token) => (dispatch) => {
   dispatch(fetchExerciseStatisticsStart());
-  axios.get(`/exerciseAttempts?userId=${userId}&embed=test`)
+  axios.get(`/exerciseAttempts?userId=${userId}&embed=test`, { headers: { 'x-access-token': token } })
     .then((response) => {
       dispatch(fetchExerciseStatisticsSucceeded(response.data));
     }, (error) => {

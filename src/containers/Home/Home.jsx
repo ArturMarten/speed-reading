@@ -18,12 +18,15 @@ export class Home extends Component {
         <Header as="h2">{this.props.translate('home.welcome')}!</Header>
         <Grid stackable>
           <Grid.Row>
-            <Grid.Column width={6}>
+            <Grid.Column width={8}>
               <p>{this.props.translate('home.description')}</p>
             </Grid.Column>
-            <Grid.Column width={10}>
+            <Grid.Column width={8}>
               {/*
-              <IntroVideo translate={this.props.translate} />
+              <IntroVideo
+                language={this.props.currentLanguage}
+                translate={this.props.translate}
+              />
               */}
             </Grid.Column>
           </Grid.Row>

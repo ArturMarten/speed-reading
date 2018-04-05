@@ -36,7 +36,7 @@ class SuccessMessage extends Component {
       ...rest
     } = this.props;
     return (
-      this.state.visible ?
+      this.state.visible && this.props.message !== null ?
         <Message
           success
           icon={icon ? <Icon name={icon} style={{ fontSize: '1.2em' }} /> : null}

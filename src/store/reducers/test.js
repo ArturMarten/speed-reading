@@ -2,11 +2,28 @@ import * as actionTypes from '../actions/actionTypes';
 
 import { updateObject } from '../../shared/utility';
 
-const initialState = {
+const initialQuestionStatus = {
   loading: false,
+  message: null,
   error: null,
+};
+
+const initialAnswerStatus = {
+  loading: false,
+  message: null,
+  error: null,
+}
+
+const initialState = {
   questions: [],
+  questionsStatus: {
+    loading: false,
+    error: null,
+  },
+  questionStatus: initialQuestionStatus,
+  answerStatus: initialAnswerStatus,
   status: 'preparation',
+  attemptId: null,
   result: {
     elapsedTime: 0,
     total: 1,
@@ -20,25 +37,37 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_QUESTIONS_START: {
       return updateObject(state, {
-        loading: true,
-        error: null,
+        questionsStatus: {
+          loading: true,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_QUESTIONS_SUCCEEDED: {
       return updateObject(state, {
-        loading: false,
-        error: null,
         questions: action.payload,
+        questionsStatus: {
+          loading: false,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_QUESTIONS_FAILED: {
       return updateObject(state, {
-        error: action.payload.error,
-        loading: false,
+        questionsStatus: {
+          loading: false,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.ADD_QUESTION_START: {
       return updateObject(state, {
+        questionStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+        answerStatus: initialAnswerStatus,
       });
     }
     case actionTypes.ADD_QUESTION_SUCCEEDED: {
@@ -48,14 +77,30 @@ const reducer = (state = initialState, action) => {
       });
       return updateObject(state, {
         questions: state.questions.concat(newQuestion),
+        questionStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
       });
     }
     case actionTypes.ADD_QUESTION_FAILED: {
       return updateObject(state, {
+        questionStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.CHANGE_QUESTION_START: {
       return updateObject(state, {
+        questionStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+        answerStatus: initialAnswerStatus,
       });
     }
     case actionTypes.CHANGE_QUESTION_SUCCEEDED: {
@@ -64,28 +109,60 @@ const reducer = (state = initialState, action) => {
           updateObject(question, action.payload.questionData) : question));
       return updateObject(state, {
         questions: updatedQuestions,
+        questionStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
       });
     }
     case actionTypes.CHANGE_QUESTION_FAILED: {
       return updateObject(state, {
+        questionStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.REMOVE_QUESTION_START: {
       return updateObject(state, {
+        questionStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+        answerStatus: initialAnswerStatus,
       });
     }
     case actionTypes.REMOVE_QUESTION_SUCCEEDED: {
       return updateObject(state, {
         questions: state.questions
-          .filter(question => question.id !== action.payload),
+          .filter(question => question.id !== action.payload.id),
+        questionStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
       });
     }
     case actionTypes.REMOVE_QUESTION_FAILED: {
       return updateObject(state, {
+        questionStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.ADD_ANSWER_START: {
       return updateObject(state, {
+        answerStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+        questionStatus: initialQuestionStatus,
       });
     }
     case actionTypes.ADD_ANSWER_SUCCEEDED: {
@@ -98,14 +175,30 @@ const reducer = (state = initialState, action) => {
 
       return updateObject(state, {
         questions: updatedQuestions,
+        answerStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
       });
     }
     case actionTypes.ADD_ANSWER_FAILED: {
       return updateObject(state, {
+        answerStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.CHANGE_ANSWER_START: {
       return updateObject(state, {
+        answerStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+        questionStatus: initialQuestionStatus,
       });
     }
     case actionTypes.CHANGE_ANSWER_SUCCEEDED: {
@@ -117,14 +210,30 @@ const reducer = (state = initialState, action) => {
           }) : question));
       return updateObject(state, {
         questions: updatedQuestions,
+        answerStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
       });
     }
     case actionTypes.CHANGE_ANSWER_FAILED: {
       return updateObject(state, {
+        answerStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.REMOVE_ANSWER_START: {
       return updateObject(state, {
+        answerStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+        questionStatus: initialQuestionStatus,
       });
     }
     case actionTypes.REMOVE_ANSWER_SUCCEEDED: {
@@ -136,10 +245,20 @@ const reducer = (state = initialState, action) => {
           }) : question));
       return updateObject(state, {
         questions: updatedQuestions,
+        answerStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
       });
     }
     case actionTypes.REMOVE_ANSWER_FAILED: {
       return updateObject(state, {
+        answerStatus: {
+          loading: false,
+          message: null,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.TEST_PREPARING: {
