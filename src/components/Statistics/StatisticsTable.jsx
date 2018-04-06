@@ -27,7 +27,7 @@ export class StatisticsTable extends Component {
     const { column, direction } = this.state;
     const sortedAttempts = sortByColumn(this.props.data, column, direction);
     return (
-      <Table basic celled selectable compact sortable unstackable>
+      <Table basic celled selectable compact sortable singleLine>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell sorted={column === 'modification' ? direction : null} onClick={this.sortHandler('modification')}>
@@ -94,7 +94,7 @@ export class StatisticsTable extends Component {
               </Menu>
               <Menu floated="right">
                 <Menu.Item as="a" icon disabled>
-                  {this.props.translate('statistics-table.export-csv')}
+                  {this.props.translate('statistics-table.export')}
                   <Icon name="download" />
                 </Menu.Item>
               </Menu>

@@ -10,6 +10,10 @@ const timerStart = () => ({
   type: actionTypes.TIMER_START,
 });
 
+const timerReset = () => ({
+  type: actionTypes.TIMER_RESET,
+});
+
 const timerStop = () => ({
   type: actionTypes.TIMER_STOP,
 });
@@ -17,6 +21,11 @@ const timerStop = () => ({
 const exerciseSelected = type => ({
   type: actionTypes.EXERCISE_SELECT,
   payload: type,
+});
+
+const modificationChanged = modification => ({
+  type: actionTypes.MODIFICATION_CHANGED,
+  payload: modification,
 });
 
 const exercisePreparing = () => ({
@@ -53,11 +62,19 @@ const exerciseFinishing = () => ({
   type: actionTypes.EXERCISE_FINISHING,
 });
 
-const exerciseFinished = (elapsedTime, selectedText) => ({
-  type: actionTypes.EXERCISE_FINISHED,
+const readingExerciseFinished = (elapsedTime, selectedText) => ({
+  type: actionTypes.READING_EXERCISE_FINISHED,
   payload: {
     elapsedTime,
     selectedText,
+  },
+});
+
+const helpExerciseFinished = (elapsedTime, data) => ({
+  type: actionTypes.HELP_EXERCISE_FINISHED,
+  payload: {
+    elapsedTime,
+    ...data,
   },
 });
 
@@ -66,12 +83,20 @@ const exerciseFinishFailed = error => ({
   payload: error,
 });
 
+const exerciseRetry = () => ({
+  type: actionTypes.EXERCISE_RETRY,
+});
+
 const exerciseEnd = () => ({
   type: actionTypes.EXERCISE_END,
 });
 
 export const selectExercise = type => (dispatch) => {
   dispatch(exerciseSelected(type));
+};
+
+export const changeModification = modification => (dispatch) => {
+  dispatch(modificationChanged(modification));
 };
 
 export const prepareExercise = (selectedText, exerciseOptions) => (dispatch) => {
@@ -95,13 +120,13 @@ export const startExercise = (attemptData, token) => (dispatch) => {
     });
 };
 
-export const finishExercise = (attemptId, token) => (dispatch, getState) => {
+export const finishReadingExercise = (attemptId, token) => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(exerciseFinishing());
   let state = getState();
   const { elapsedTime } = state.timing;
   const { selectedText } = state.text;
-  dispatch(exerciseFinished(elapsedTime, selectedText));
+  dispatch(readingExerciseFinished(elapsedTime, selectedText));
   state = getState();
   const { result } = state.exercise;
   axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
@@ -115,6 +140,35 @@ export const finishExercise = (attemptId, token) => (dispatch, getState) => {
     });
 };
 
+export const finishHelpExercise = (attemptId, token) => (dispatch, getState) => {
+  dispatch(timerStop());
+  dispatch(exerciseFinishing());
+  let state = getState();
+  const { elapsedTime } = state.timing;
+  const { type } = state.exercise;
+  if (type === 'schulteTables') {
+    const { tableSize } = state.options.exerciseOptions;
+    dispatch(helpExerciseFinished(elapsedTime, { tableSize }));
+  } else {
+    dispatch(helpExerciseFinished(elapsedTime));
+  }
+  state = getState();
+  const { result } = state.exercise;
+  axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
+    .then(() => {
+      // Dispatch event
+    }, (error) => {
+      dispatch(exerciseFinishFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(exerciseFinishFailed(error.message));
+    });
+};
+
+export const retryExercise = () => (dispatch) => {
+  dispatch(timerReset());
+  dispatch(exerciseRetry());
+};
 export const endExercise = () => (dispatch) => {
   dispatch(exerciseEnd());
 };

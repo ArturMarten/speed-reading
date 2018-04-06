@@ -19,9 +19,12 @@ export {
 
 export {
   selectExercise,
+  changeModification,
   prepareExercise,
   startExercise,
-  finishExercise,
+  finishReadingExercise,
+  finishHelpExercise,
+  retryExercise,
   endExercise,
 } from './exercise';
 

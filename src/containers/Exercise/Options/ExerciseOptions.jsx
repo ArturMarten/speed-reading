@@ -4,8 +4,10 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
+import ExerciseSelectOption from '../../../components/Exercise/Options/ExerciseSelectOption';
 
 import {
+  tableSizeOptions,
   MIN_CHARACTER_COUNT,
   MAX_CHARACTER_COUNT,
   MIN_START_DELAY,
@@ -48,6 +50,13 @@ export class ExerciseOptions extends PureComponent {
             max={MAX_LINE_BREAK_DELAY}
             step={50}
             updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('tableSize') !== -1 ?
+          <ExerciseSelectOption
+            name={this.props.translate('exercise-options.table-size')}
+            value={this.props.options.tableSize}
+            options={tableSizeOptions}
+            updateValue={value => this.props.onSubmit({ tableSize: value })}
           /> : null}
       </Fragment>
     );

@@ -25,6 +25,7 @@ export class TextExercise extends Component {
     const attemptData = {
       userId: this.props.userId,
       exerciseId: this.props.exerciseId,
+      modification: this.props.exerciseModification,
       startTime: new Date(),
       readingTextId: this.props.selectedText.id,
     };
@@ -116,6 +117,7 @@ const mapStateToProps = state => ({
   token: state.auth.token,
   userId: state.auth.userId,
   exerciseId: state.exercise.id,
+  exerciseModification: state.exercise.modfication,
   exerciseStatus: state.exercise.status,
   attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,
@@ -128,7 +130,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actionCreators.startExercise(attemptData, token));
   },
   onExerciseFinish: (attemptId, token) => {
-    dispatch(actionCreators.finishExercise(attemptId, token));
+    dispatch(actionCreators.finishReadingExercise(attemptId, token));
   },
 });
 
