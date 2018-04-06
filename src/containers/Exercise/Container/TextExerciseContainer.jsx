@@ -6,9 +6,9 @@ import { getTranslate } from 'react-localize-redux';
 import * as actionCreators from '../../../store/actions';
 import TextExercisePreparation from '../Preparation/TextExercisePreparation';
 import TextExercise from '../TextExercise/TextExercise';
-import TextExerciseResults from './TextExerciseResults';
+import TextExerciseResults from '../Results/TextExerciseResults';
 import TextExerciseTest from '../Test/TextExerciseTest';
-import TestResults from './TestResults';
+import TestResults from '../Results/TestResults';
 
 export class TextExerciseContainer extends Component {
   state = {

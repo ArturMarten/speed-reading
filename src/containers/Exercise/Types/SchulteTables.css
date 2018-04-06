@@ -1,0 +1,30 @@
+.schulte-table {
+  display: flex;
+  width: 90vmin;
+  height: 90vmin;
+  flex-wrap: wrap;
+  max-width: 90vmin;
+  max-height: 90vmin;
+  box-shadow: 0 0 1px black;
+  user-select: none;
+}
+
+.schulte-cell {
+  width: 18vmin;
+  height: 18vmin;
+  text-align: center;
+  line-height: 18vmin;
+  font-size: 15vmin;
+  overflow: hidden;
+  box-shadow: 0 0 1px black;
+}
+
+.schulte-center {
+  height: 1.5vmin;
+  width: 1.5vmin;
+  border-radius: 100%;
+  background: red;
+  position: absolute;
+  top: calc(50% - 0.75vmin);
+  left: calc(50% - 0.75vmin);
+}

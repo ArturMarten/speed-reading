@@ -4,6 +4,7 @@
     "home": ["Esileht", "Home"],
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
+    "reading-exercises": ["Lugemisharjutused", "Reading exercises"],
     "reading-test": ["Lugemistest", "Reading test"],
     "reading-aid": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
@@ -50,7 +51,10 @@
       "To get started, choose an exercise from the menu."
     ],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
-    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."]
+    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
+    "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
+    "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
+    "license": ["litsents", "license"]
   },
   "intro-video": {
     "header": ["Tutvustav video", "Introduction video"],
@@ -154,8 +158,27 @@
     "title-wordGroups": ["Sõnarühmade harjutus", "Word group exercise"],
     "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions"],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
-    "description-disappearing": ["See harjutus välistab tagasivaatamised ehk regressioonid.", "This exercises eliminates regressions."],
-    "modification-default": ["Vaikimisi", "Default"]
+    "description-disappearing": ["See harjutus välistab tagasivaatamised ehk regressioonid.", "This exercise eliminates regressions."],
+    "title-schulteTables": ["Schulte tabelite harjutus", "Schulte tables exercise"],
+    "description-schulteTables": ["See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.", "This exercise helps to increase perceptual span and develop concentration."],
+    "title-concentration": ["Keskendumise harjutus", "Concentration exercise"],
+    "description-concentration": ["See harjutus aitab arendada keskendumist.", "This exercise helps to develop concentration."]
+  },
+  "modification": {
+    "default": ["Vaikimisi", "Default"],
+    "numbers": ["Numbrid", "Numbers"],
+    "group-highlighted": ["Esiletõstetud", "Highlighted"],
+    "group-single": ["Üksik", "Single"],
+    "group-spacing": ["Muudetav vahe", "Changable spacing"],
+    "group-vertical": ["Vertikaalne lugemine", "Vertical reading"],
+    "group-rsvp": ["Välktehnika", "RSVP"],
+    "letters-lowercase": ["Väiketähed", "Lowercase letters"],
+    "letters-uppercase": ["Suurtähed", "Uppercase letters"],
+    "letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
+    "concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
+    "concentration-letters-only": ["Ainult tähed", "Only letters"],
+    "concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"],
+    "concentration-words": ["Sõnad", "Words"]
   },
   "text-exercise-preparation": {
     "proceed": ["Edasi", "Proceed"],
@@ -179,12 +202,23 @@
     "show": ["Näita teksti eelvaade", "Show text preview"],
     "hide": ["Peida teksti eelvaade", "Hide text preview"]
   },
+  "exercise-preview": {
+    "show": ["Näita harjutuse eelvaade", "Show exercise preview"],
+    "hide": ["Peida harjutuse eelvaade", "Hide exercise preview"]
+  },
   "text-exercise-results": {
     "modal-header": ["Harjutus lõpetatud", "Exercise finished"],
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
     "wpm": ["sõna minutis", "words per minute"],
     "cps": ["tähemärki sekundis", "characters per second"],
     "proceed": ["Jätka testiga", "Proceed with test"],
+    "end": ["Lõpeta", "Finish"]
+  },
+  "help-exercise-results": {
+    "modal-header": ["Harjutus lõpetatud", "Exercise finished"],
+    "elapsed-time": ["Kulunud aeg", "Elapsed time"],
+    "spm": ["sümbolit minutis", "symbols per minute"],
+    "retry": ["Harjuta uuesti", "Exercise again"],
     "end": ["Lõpeta", "Finish"]
   },
   "text-exercise-test": {
@@ -219,7 +253,8 @@
     "characters": ["tähemärki", "characters"],
     "start-delay": ["Alguse viide", "Start delay"],
     "line-break-delay": ["Reavahetuse viide", "Line break delay"],
-    "ms": ["ms", "ms"]
+    "ms": ["ms", "ms"],
+    "table-size": ["Tabeli suurus", "Table size"]
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
@@ -248,7 +283,7 @@
     "test-result": ["Testi tulemus" , "Test result"],
     "default": ["Vaikimisi" , "Default"],
     "test-missing": ["Sooritamata", "No attempt"],
-    "export-csv": ["Expordi CSV", "Export CSV"]
+    "export": ["Expordi", "Export"]
   },
   "regression-chart": {
     "wpm": ["Sõnu minutis", "Words Per Minute"],

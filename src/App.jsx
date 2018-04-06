@@ -24,6 +24,14 @@ const TextExerciseContainer = Loadable({
   },
 });
 
+const HelpExerciseContainer = Loadable({
+  loader: () => import('./containers/Exercise/Container/HelpExerciseContainer'),
+  render(loaded, props) {
+    const ContainerComponent = loaded.default;
+    return <ContainerComponent {...props} />;
+  },
+});
+
 const Statistics = Loadable({
   loader: () => import('./containers/Statistics/Statistics'),
 });
@@ -47,6 +55,8 @@ export class App extends Component {
         <Route path="/exercise/reading-aid" render={() => <TextExerciseContainer type="readingAid" />} />
         <Route path="/exercise/disappearing-text" render={() => <TextExerciseContainer type="disappearing" />} />
         <Route path="/exercise/word-groups" render={() => <TextExerciseContainer type="wordGroups" />} />
+        <Route path="/exercise/schulte-tables" render={() => <HelpExerciseContainer type="schulteTables" />} />
+        <Route path="/exercise/concentration" render={() => <HelpExerciseContainer type="concentration" />} />
         <Route path="/statistics" component={Statistics} />
         {isPermitted ?
           <Route path="/manage" component={Manage} /> : null}

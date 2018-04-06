@@ -15,10 +15,11 @@ import TextExercisePreparationContainer from '../containers/Exercise/Preparation
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
 import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
-import TextExerciseResultsContainer, { TextExerciseResults } from '../containers/Exercise/Container/TextExerciseResults';
+import { HelpExercise } from '../containers/Exercise/HelpExercise/HelpExercise';
+import TextExerciseResultsContainer, { TextExerciseResults } from '../containers/Exercise/Results/TextExerciseResults';
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTestContainer from '../containers/Exercise/Test/TextExerciseTest';
-import TestResultsContainer, { TestResults } from '../containers/Exercise/Container/TestResults';
+import TestResultsContainer, { TestResults } from '../containers/Exercise/Results/TestResults';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
@@ -61,8 +62,8 @@ storiesOf('Text selection', module)
 storiesOf('Text preview', module)
   .add('Container', () => <TextPreviewContainer />);
 
-storiesOf('Reading test exercise', module)
-  .add('Component', () => (
+storiesOf('Reading exercise', module)
+  .add('Reading test component', () => (
     <TextExercise
       type="readingTest"
       timerState={{
@@ -71,6 +72,18 @@ storiesOf('Reading test exercise', module)
         stopped: false,
       }}
       selectedText={store.getState().text.selectedText}
+    />
+  ));
+
+storiesOf('Help exercise', module)
+  .add('Schulte tables component', () => (
+    <HelpExercise
+      type="schulteTables"
+      timerState={{
+        started: true,
+        paused: false,
+        stopped: false,
+      }}
     />
   ));
 

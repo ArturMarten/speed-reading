@@ -29,13 +29,16 @@ export class TextExercisePreparation extends Component {
     this.props.onExercisePrepare(this.props.selectedText, this.props.exerciseOptions);
   }
 
+  modificationChangeHandler = (event, data) => {
+    this.props.onModificationChange(data.value);
+  }
+
   render() {
     const selectedText = this.props.selectedText ?
       <span>{this.props.translate('text-exercise-preparation.title')}: <b>{this.props.selectedText.title}</b></span> :
       <b>{this.props.translate('text-exercise-preparation.text-not-selected')}</b>;
-    const modificationOptions = [
-      { key: 'default', text: this.props.translate('exercises.modification-default'), value: 'default' },
-    ];
+    const modificationOptions = this.props.modificationOptions
+      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`modification.${option.value}`) }));
     return (
       <Container style={{ marginTop: '4vh' }}>
         <Grid stackable>
@@ -49,8 +52,10 @@ export class TextExercisePreparation extends Component {
                 fluid
                 selection
                 scrolling
+                disabled={modificationOptions.length === 1}
                 value={this.props.exerciseModification}
                 options={modificationOptions}
+                onChange={this.modificationChangeHandler}
               />
             </Grid.Column>
           </Grid.Row>
@@ -155,6 +160,7 @@ const mapStateToProps = state => ({
   info: state.info,
   selectedText: state.text.selectedText,
   exerciseModification: state.exercise.modification,
+  modificationOptions: state.exercise.modificationOptions,
   exerciseOptions: state.options.exerciseOptions,
   visibleTextOptions: state.options.visibleTextOptions,
   visibleExerciseOptions: state.options.visibleExerciseOptions,
@@ -169,6 +175,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSpeedChangeInfoDismiss: () => {
     dispatch(actionCreators.dismissSpeedChangeInfo());
+  },
+  onModificationChange: (modification) => {
+    dispatch(actionCreators.changeModification(modification));
   },
   onExercisePrepare: (text, characterCount) => {
     dispatch(actionCreators.prepareExercise(text, characterCount));

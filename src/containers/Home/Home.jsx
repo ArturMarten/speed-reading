@@ -30,13 +30,27 @@ export class Home extends Component {
               */}
             </Grid.Column>
           </Grid.Row>
+          <Divider />
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Message
+                warning
+                icon="chrome"
+                header={this.props.translate('home.browser-warning-title')}
+                content={this.props.translate('home.browser-warning-content')}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Message
+                positive
+                icon="mobile"
+                header={this.props.translate('home.mobile-use-title')}
+                content={this.props.translate('home.mobile-use-content')}
+              />
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
-        <Message
-          warning
-          icon="chrome"
-          header={this.props.translate('home.browser-warning-title')}
-          content={this.props.translate('home.browser-warning-content')}
-        />
+
         <AppStats />
         <Divider />
         <Grid verticalAlign="middle">
@@ -60,7 +74,7 @@ export class Home extends Component {
           </Grid.Row>
           <Grid.Row columns={1}>
             <Grid.Column textAlign="right">
-              MIT license © {(new Date()).getFullYear()} <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
+              MIT {this.props.translate('home.license')} © {(new Date()).getFullYear()} <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
             </Grid.Column>
           </Grid.Row>
         </Grid>

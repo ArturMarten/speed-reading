@@ -89,9 +89,9 @@ export class ResponsiveLayout extends Component {
               </Menu.Item>
             </Menu.Menu>
             <Menu.Item
+              as={Link}
               active={this.props.path === '/'}
               onClick={this.itemClickHandler}
-              as={Link}
               to="/"
             >
               <Icon name="home" size="large" />
@@ -99,9 +99,9 @@ export class ResponsiveLayout extends Component {
             </Menu.Item>
             {isPermitted ?
               <Menu.Item
+                as={Link}
                 active={this.props.path === '/text-entry'}
                 onClick={this.itemClickHandler}
-                as={Link}
                 to="/text-entry"
               >
                 <Icon name="file text outline" size="large" />
@@ -118,53 +118,70 @@ export class ResponsiveLayout extends Component {
                 text={this.props.translate('menu.exercise')}
               >
                 <Dropdown.Menu>
+                  <Dropdown.Header
+                    style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                    content={this.props.translate('menu.reading-exercises')}
+                  />
                   <Dropdown.Item
+                    as={Link}
                     active={this.props.path === '/exercise/reading-test'}
                     onClick={this.itemClickHandler}
-                    as={Link}
                     to="/exercise/reading-test"
                   >
                     {this.props.translate('menu.reading-test')}
                   </Dropdown.Item>
                   <Dropdown.Item
+                    as={Link}
                     active={this.props.path === '/exercise/reading-aid'}
                     onClick={this.itemClickHandler}
-                    as={Link}
                     to="/exercise/reading-aid"
                   >
                     {this.props.translate('menu.reading-aid')}
                   </Dropdown.Item>
                   <Dropdown.Item
+                    as={Link}
                     active={this.props.path === '/exercise/disappearing-text'}
                     onClick={this.itemClickHandler}
-                    as={Link}
                     to="/exercise/disappearing-text"
                   >
                     {this.props.translate('menu.disappearing-text')}
                   </Dropdown.Item>
                   <Dropdown.Item
+                    as={Link}
                     active={this.props.path === '/exercise/word-groups'}
                     onClick={this.itemClickHandler}
-                    as={Link}
                     to="/exercise/word-groups"
                   >
                     {this.props.translate('menu.word-groups')}
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Dropdown fluid text={this.props.translate('menu.help-exercises')}>
-                      <Dropdown.Menu>
-                        <Dropdown.Item disabled>{this.props.translate('menu.schulte-tables')}</Dropdown.Item>
-                        <Dropdown.Item disabled>{this.props.translate('menu.concentration')}</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
+                  <Dropdown.Divider style={{ margin: 0 }} />
+                  <Dropdown.Header
+                    style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                    content={this.props.translate('menu.help-exercises')}
+                  />
+                  <Dropdown.Item
+                    as={Link}
+                    active={this.props.path === '/exercise/schulte-tables'}
+                    onClick={this.itemClickHandler}
+                    to="/exercise/schulte-tables"
+                  >
+                    {this.props.translate('menu.schulte-tables')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    as={Link}
+                    active={this.props.path === '/exercise/concentration'}
+                    onClick={this.itemClickHandler}
+                    to="/exercise/concentration"
+                  >
+                    {this.props.translate('menu.concentration')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
             <Menu.Item
+              as={Link}
               active={this.props.path === '/statistics'}
               onClick={this.itemClickHandler}
-              as={Link}
               to="/statistics"
             >
               <Icon name="line graph" size="large" />
@@ -172,9 +189,9 @@ export class ResponsiveLayout extends Component {
             </Menu.Item>
             {isPermitted ?
               <Menu.Item
+                as={Link}
                 active={this.props.path === '/manage'}
                 onClick={this.itemClickHandler}
-                as={Link}
                 to="/manage"
               >
                 <Icon name="settings" size="large" />
@@ -191,7 +208,6 @@ export class ResponsiveLayout extends Component {
               </Grid.Row>
             </Grid>
           </Sidebar>
-
           <Sidebar.Pusher
             dimmed={this.state.sidebarOpened}
             onClick={this.state.sidebarOpened ? this.sidebarToggleHandler : undefined}
@@ -215,9 +231,9 @@ export class ResponsiveLayout extends Component {
                   {this.props.translate('menu.title')}&nbsp;{environment.version}
                 </Menu.Item>
                 <Menu.Item
+                  as={Link}
                   active={this.props.path === '/'}
                   onClick={this.itemClickHandler}
-                  as={Link}
                   to="/"
                 >
                   <Icon name="home" size="large" />
@@ -225,9 +241,9 @@ export class ResponsiveLayout extends Component {
                 </Menu.Item>
                 {isPermitted ?
                   <Menu.Item
+                    as={Link}
                     active={this.props.path === '/text-entry'}
                     onClick={this.itemClickHandler}
-                    as={Link}
                     to="/text-entry"
                   >
                     <Icon name="file text outline" size="large" />
@@ -245,53 +261,70 @@ export class ResponsiveLayout extends Component {
                     text={this.props.translate('menu.exercise')}
                   >
                     <Dropdown.Menu>
+                      <Dropdown.Header
+                        style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                        content={this.props.translate('menu.reading-exercises')}
+                      />
                       <Dropdown.Item
+                        as={Link}
                         active={this.props.path === '/exercise/reading-test'}
                         onClick={this.itemClickHandler}
-                        as={Link}
                         to="/exercise/reading-test"
                       >
                         {this.props.translate('menu.reading-test')}
                       </Dropdown.Item>
                       <Dropdown.Item
+                        as={Link}
                         active={this.props.path === '/exercise/reading-aid'}
                         onClick={this.itemClickHandler}
-                        as={Link}
                         to="/exercise/reading-aid"
                       >
                         {this.props.translate('menu.reading-aid')}
                       </Dropdown.Item>
                       <Dropdown.Item
+                        as={Link}
                         active={this.props.path === '/exercise/disappearing-text'}
                         onClick={this.itemClickHandler}
-                        as={Link}
                         to="/exercise/disappearing-text"
                       >
                         {this.props.translate('menu.disappearing-text')}
                       </Dropdown.Item>
                       <Dropdown.Item
+                        as={Link}
                         active={this.props.path === '/exercise/word-groups'}
                         onClick={this.itemClickHandler}
-                        as={Link}
                         to="/exercise/word-groups"
                       >
                         {this.props.translate('menu.word-groups')}
                       </Dropdown.Item>
-                      <Dropdown.Item>
-                        <Dropdown fluid text={this.props.translate('menu.help-exercises')}>
-                          <Dropdown.Menu>
-                            <Dropdown.Item disabled>{this.props.translate('menu.schulte-tables')}</Dropdown.Item>
-                            <Dropdown.Item disabled>{this.props.translate('menu.concentration')}</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
+                      <Dropdown.Divider style={{ margin: 0 }} />
+                      <Dropdown.Header
+                        style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                        content={this.props.translate('menu.help-exercises')}
+                      />
+                      <Dropdown.Item
+                        as={Link}
+                        active={this.props.path === '/exercise/schulte-tables'}
+                        onClick={this.itemClickHandler}
+                        to="/exercise/schulte-tables"
+                      >
+                        {this.props.translate('menu.schulte-tables')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as={Link}
+                        active={this.props.path === '/exercise/concentration'}
+                        onClick={this.itemClickHandler}
+                        to="/exercise/concentration"
+                      >
+                        {this.props.translate('menu.concentration')}
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Menu.Item>
                 <Menu.Item
+                  as={Link}
                   active={this.props.path === '/statistics'}
                   onClick={this.itemClickHandler}
-                  as={Link}
                   to="/statistics"
                 >
                   <Icon name="line graph" size="large" />
@@ -299,9 +332,9 @@ export class ResponsiveLayout extends Component {
                 </Menu.Item>
                 {isPermitted ?
                   <Menu.Item
+                    as={Link}
                     active={this.props.path === '/manage'}
                     onClick={this.itemClickHandler}
-                    as={Link}
                     to="/manage"
                   >
                     <Icon name="settings" size="large" />
@@ -321,11 +354,11 @@ export class ResponsiveLayout extends Component {
                         this.props.isAuthenticated ?
                           <Button.Group vertical fluid>
                             <Button
+                              as={Link}
                               positive
                               icon
                               labelPosition="right"
                               onClick={this.onLogout}
-                              as={Link}
                               to="/logout"
                             >
                               {this.props.translate('auth.logout-button')}
