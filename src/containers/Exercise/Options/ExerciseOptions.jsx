@@ -5,6 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 import ExerciseSelectOption from '../../../components/Exercise/Options/ExerciseSelectOption';
+import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
 import {
   tableSizeOptions,
@@ -14,6 +15,10 @@ import {
   MAX_START_DELAY,
   MIN_LINE_BREAK_DELAY,
   MAX_LINE_BREAK_DELAY,
+  MIN_SYMBOL_COUNT,
+  MAX_SYMBOL_COUNT,
+  MIN_COLUMN_SPACING,
+  MAX_COLUMN_SPACING,
 } from '../../../store/reducers/options';
 
 export class ExerciseOptions extends PureComponent {
@@ -57,6 +62,32 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.tableSize}
             options={tableSizeOptions}
             updateValue={value => this.props.onSubmit({ tableSize: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('tableCheck') !== -1 ?
+          <ExerciseCheckOption
+            name={this.props.translate('exercise-options.table-check')}
+            value={this.props.options.tableCheck}
+            updateValue={value => this.props.onSubmit({ tableCheck: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('symbolCount') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.symbol-count')}
+            unit={this.props.translate('exercise-options.symbols')}
+            value={this.props.options.symbolCount}
+            min={MIN_SYMBOL_COUNT}
+            max={MAX_SYMBOL_COUNT}
+            step={1}
+            updateValue={value => this.props.onSubmit({ symbolCount: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('columnSpacing') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.column-spacing')}
+            unit={this.props.translate('exercise-options.px')}
+            value={this.props.options.columnSpacing}
+            min={MIN_COLUMN_SPACING}
+            max={MAX_COLUMN_SPACING}
+            step={10}
+            updateValue={value => this.props.onSubmit({ columnSpacing: value })}
           /> : null}
       </Fragment>
     );

@@ -34,7 +34,9 @@ export class HelpExercise extends Component {
           );
         case 'concentration':
           return (
-            <Concentration />
+            <Concentration
+              timerState={this.props.timerState}
+            />
           );
         default:
           return null;

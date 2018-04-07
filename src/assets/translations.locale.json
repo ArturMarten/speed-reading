@@ -254,7 +254,12 @@
     "start-delay": ["Alguse viide", "Start delay"],
     "line-break-delay": ["Reavahetuse viide", "Line break delay"],
     "ms": ["ms", "ms"],
-    "table-size": ["Tabeli suurus", "Table size"]
+    "table-size": ["Tabeli suurus", "Table size"],
+    "table-check": ["Kontroll", "Check"],
+    "symbol-count": ["Sümbolite arv kuni", "Symbol count"],
+    "symbols": ["sümbolit", "symbols"],
+    "column-spacing": ["Tulpade vahe", "Column spacing"],
+    "px": ["px", "px"]
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
@@ -281,7 +286,6 @@
     "reading-attempt": ["Lugemise katse" , "Reading attempt"],
     "wpm": ["Sõnu minutis" , "Words Per Minute"],
     "test-result": ["Testi tulemus" , "Test result"],
-    "default": ["Vaikimisi" , "Default"],
     "test-missing": ["Sooritamata", "No attempt"],
     "export": ["Expordi", "Export"]
   },

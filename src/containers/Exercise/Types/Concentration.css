@@ -1,0 +1,36 @@
+.concentration-grid {
+  user-select: none;
+  align-content: right;
+  width: min-content;
+}
+
+.concentration-row {
+  display: grid;
+  grid-template-columns: repeat(4, 0fr);
+  border-collapse: collapse;
+  align-items: center;
+  padding: 4px;
+  margin: 1px;
+  font-size: 1.4em;
+}
+
+.concentration-row.selected {
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.concentration-left {
+  text-align: right;
+}
+
+.concentration-spacing {
+  background: red;
+}
+
+.concentration-right {
+  text-align: left;
+}
+
+.concentration-choices {
+  padding-left: 5vmin;
+}

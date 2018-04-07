@@ -3,12 +3,24 @@ import { connect } from 'react-redux';
 import { Grid, Button, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import Concentration from '../Types/Concentration';
+import { Concentration } from '../Types/Concentration';
+import { generateStringPairs } from '../../../store/reducers/exercise';
 
 export class ConcentrationPreview extends Component {
   state = {
     show: false,
+    stringPairs: [],
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.exerciseModification !== this.props.exerciseModification) {
+      this.generateTable();
+    }
+  }
+
+  generateTable = () => {
+    this.setState({ stringPairs: generateStringPairs(10, this.props.exerciseModification) });
+  }
 
   toggleClickHandler = () => {
     this.setState({ show: !this.state.show });
@@ -29,7 +41,12 @@ export class ConcentrationPreview extends Component {
           </Button>
         </Grid.Row>
         <Grid.Row style={{ visibility: this.state.show ? 'visible' : 'hidden' }}>
-          <Concentration />
+          <Concentration
+            exerciseOptions={this.props.exerciseOptions}
+            textOptions={this.props.textOptions}
+            stringPairs={this.state.stringPairs}
+            timerState={{}}
+          />
         </Grid.Row>
       </Grid>
     );
@@ -37,6 +54,7 @@ export class ConcentrationPreview extends Component {
 }
 
 const mapStateToProps = state => ({
+  exerciseModification: state.exercise.modification,
   exerciseOptions: state.options.exerciseOptions,
   textOptions: state.options.textOptions,
   translate: getTranslate(state.locale),

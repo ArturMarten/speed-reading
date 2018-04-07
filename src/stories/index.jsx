@@ -16,6 +16,8 @@ import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
 import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
 import { HelpExercise } from '../containers/Exercise/HelpExercise/HelpExercise';
+import { SchulteTables } from '../containers/Exercise/Types/SchulteTables';
+import { Concentration } from '../containers/Exercise/Types/Concentration';
 import TextExerciseResultsContainer, { TextExerciseResults } from '../containers/Exercise/Results/TextExerciseResults';
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTestContainer from '../containers/Exercise/Test/TextExerciseTest';
@@ -25,6 +27,7 @@ import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
 import ChangePasswordContainer from '../containers/Auth/ChangePassword';
 import FeedbackContainer, { Feedback } from '../containers/Feedback/Feedback';
+import { generateSymbols, generateStringPairs } from '../store/reducers/exercise';
 
 /*
 const dummyData = [
@@ -39,6 +42,8 @@ const dummyData = [
 store.dispatch(setActiveLanguage('ee'));
 store.dispatch(actionCreators.authLogin('***ADMIN_EMAIL***', '***ADMIN_PASSWORD***'));
 store.dispatch(actionCreators.selectText(18));
+
+const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 
 // store.dispatch(setActiveLanguage('gb'));
 const translate = getTranslate(store.getState().locale);
@@ -76,9 +81,18 @@ storiesOf('Reading exercise', module)
   ));
 
 storiesOf('Help exercise', module)
-  .add('Schulte tables component', () => (
-    <HelpExercise
+  .add('Schulte tables component', () =>
+    (<HelpExercise
       type="schulteTables"
+      timerState={{
+        started: true,
+        paused: false,
+        stopped: false,
+      }}
+    />))
+  .add('Concentration component', () => (
+    <HelpExercise
+      type="concentration"
       timerState={{
         started: true,
         paused: false,
@@ -86,6 +100,27 @@ storiesOf('Help exercise', module)
       }}
     />
   ));
+
+const symbols = generateSymbols(25, 'numbers');
+storiesOf('Schulte tables', module)
+  .add('Component', () =>
+    (<SchulteTables
+      symbols={symbols}
+      exerciseOptions={exerciseOptions}
+      textOptions={textOptions}
+      speedOptions={speedOptions}
+    />));
+
+const stringPairs = generateStringPairs(10, 'concentration-numbers-only');
+storiesOf('Concentration', module)
+  .add('Component', () =>
+    (<Concentration
+      stringPairs={stringPairs}
+      exerciseOptions={exerciseOptions}
+      textOptions={textOptions}
+      speedOptions={speedOptions}
+      timerState={{}}
+    />));
 
 storiesOf('Text exercise results', module)
   .add('Container', () => <TextExerciseResultsContainer open />)
