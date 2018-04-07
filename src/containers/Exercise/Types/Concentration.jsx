@@ -14,6 +14,7 @@ export class Concentration extends Component {
 
   componentDidMount() {
     document.addEventListener('keypress', this.keyPressHandler);
+    document.addEventListener('keydown', this.preventDefault);
     document.addEventListener('keyup', this.keyUpHandler);
   }
 
@@ -27,6 +28,7 @@ export class Concentration extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keypress', this.keyPressHandler);
+    document.removeEventListener('keydown', this.preventDefault);
     document.removeEventListener('keyup', this.keyUpHandler);
   }
 
@@ -44,7 +46,15 @@ export class Concentration extends Component {
     }
   }
 
+  preventDefault = (event) => {
+    const { key } = event;
+    if (['Backscape', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
+      event.preventDefault();
+    }
+  }
+
   keyUpHandler = (event) => {
+    event.preventDefault();
     const { key } = event;
     switch (key) {
       case 'Backspace': {
@@ -137,4 +147,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Concentration);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(Concentration);

@@ -67,6 +67,28 @@ const initialSpeedOptions = {
 
 const defaultVisibleSpeedOptions = ['wpm'];
 
+const includesKey = array => (key) => {
+  return array.includes(key);
+};
+
+const reduceObject = obj => (acc, key) => {
+  acc[key] = obj[key];
+  return acc;
+};
+
+export const getCurrentOptions = (state) => {
+  const textOptions = Object.keys(state.textOptions)
+    .filter(includesKey(state.visibleTextOptions))
+    .reduce(reduceObject(state.textOptions), {});
+  const exerciseOptions = Object.keys(state.exerciseOptions)
+    .filter(includesKey(state.visibleExerciseOptions))
+    .reduce(reduceObject(state.exerciseOptions), {});
+  const speedOptions = Object.keys(state.speedOptions)
+    .filter(includesKey(state.visibleSpeedOptions))
+    .reduce(reduceObject(state.speedOptions), {});
+  return { textOptions, exerciseOptions, speedOptions };
+};
+
 const initialState = {
   textOptions: initialTextOptions,
   exerciseOptions: initialExerciseOptions,

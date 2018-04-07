@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
 import { serverErrorMessage } from '../../shared/utility';
+import { getCurrentOptions } from '../reducers/options';
 
 const timerInit = () => ({
   type: actionTypes.TIMER_INIT,
@@ -32,11 +33,11 @@ const exercisePreparing = () => ({
   type: actionTypes.EXERCISE_PREPARING,
 });
 
-const exercisePrepared = (selectedText, exerciseOptions) => ({
+const exercisePrepared = (exerciseOptions, selectedText) => ({
   type: actionTypes.EXERCISE_PREPARED,
   payload: {
-    selectedText,
     exerciseOptions,
+    selectedText,
   },
 });
 
@@ -83,8 +84,9 @@ const exerciseFinishFailed = error => ({
   payload: error,
 });
 
-const exerciseRetry = () => ({
+const exerciseRetry = options => ({
   type: actionTypes.EXERCISE_RETRY,
+  payload: options,
 });
 
 const exerciseEnd = () => ({
@@ -99,15 +101,22 @@ export const changeModification = modification => (dispatch) => {
   dispatch(modificationChanged(modification));
 };
 
-export const prepareExercise = (selectedText, exerciseOptions) => (dispatch) => {
+export const prepareTextExercise = (exerciseOptions, selectedText) => (dispatch) => {
   dispatch(exercisePreparing());
   dispatch(timerInit());
-  dispatch(exercisePrepared(selectedText, exerciseOptions));
+  dispatch(exercisePrepared(exerciseOptions, selectedText));
 };
 
-export const startExercise = (attemptData, token) => (dispatch) => {
+export const prepareHelpExercise = exerciseOptions => (dispatch) => {
+  dispatch(exercisePreparing());
+  dispatch(timerInit());
+  dispatch(exercisePrepared(exerciseOptions));
+};
+
+export const startExercise = (attemptData, token) => (dispatch, getState) => {
   dispatch(exerciseStarting());
-  axios.post('/exerciseAttempts', attemptData, { headers: { 'x-access-token': token } })
+  const settings = getCurrentOptions(getState().options);
+  axios.post('/exerciseAttempts', { ...attemptData, settings }, { headers: { 'x-access-token': token } })
     .then((response) => {
       dispatch(timerStart());
       dispatch(exerciseStarted());
@@ -140,7 +149,7 @@ export const finishReadingExercise = (attemptId, token) => (dispatch, getState) 
     });
 };
 
-export const finishHelpExercise = (attemptId, token) => (dispatch, getState) => {
+export const finishHelpExercise = (attemptId, token, data) => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(exerciseFinishing());
   let state = getState();
@@ -149,6 +158,8 @@ export const finishHelpExercise = (attemptId, token) => (dispatch, getState) => 
   if (type === 'schulteTables') {
     const { tableSize } = state.options.exerciseOptions;
     dispatch(helpExerciseFinished(elapsedTime, { tableSize }));
+  } else if (type === 'concentration') {
+    dispatch(helpExerciseFinished(elapsedTime, data));
   } else {
     dispatch(helpExerciseFinished(elapsedTime));
   }
@@ -165,9 +176,10 @@ export const finishHelpExercise = (attemptId, token) => (dispatch, getState) => 
     });
 };
 
-export const retryExercise = () => (dispatch) => {
+export const retryExercise = () => (dispatch, getState) => {
   dispatch(timerReset());
-  dispatch(exerciseRetry());
+  const { exerciseOptions } = getState().options;
+  dispatch(exerciseRetry({ exerciseOptions }));
 };
 export const endExercise = () => (dispatch) => {
   dispatch(exerciseEnd());

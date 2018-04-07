@@ -177,8 +177,7 @@
     "letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
     "concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
     "concentration-letters-only": ["Ainult tähed", "Only letters"],
-    "concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"],
-    "concentration-words": ["Sõnad", "Words"]
+    "concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"]
   },
   "text-exercise-preparation": {
     "proceed": ["Edasi", "Proceed"],
@@ -348,6 +347,7 @@
   },
   "error" : {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],
+    "internal-server-error": ["Serveris tekkis viga", "An error occurred in the server"],
     "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],
     "authentication-token-missing": ["Autentimise võti puudub", "Authentication token is missing"],
     "authentication-token-invalid": ["Autentimise võti vigane", "Authentication token is invalid"],

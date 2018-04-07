@@ -20,7 +20,8 @@ export {
 export {
   selectExercise,
   changeModification,
-  prepareExercise,
+  prepareTextExercise,
+  prepareHelpExercise,
   startExercise,
   finishReadingExercise,
   finishHelpExercise,

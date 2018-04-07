@@ -12,14 +12,18 @@ export class ConcentrationPreview extends Component {
     stringPairs: [],
   };
 
+  componentDidMount() {
+    this.generateTable();
+  }
+
   componentDidUpdate(prevProps) {
-    if (prevProps.exerciseModification !== this.props.exerciseModification) {
+    if (prevProps.exerciseModification !== this.props.exerciseModification || prevProps.exerciseOptions !== this.props.exerciseOptions) {
       this.generateTable();
     }
   }
 
   generateTable = () => {
-    this.setState({ stringPairs: generateStringPairs(10, this.props.exerciseModification) });
+    this.setState({ stringPairs: generateStringPairs(20, this.props.exerciseOptions.symbolCount, this.props.exerciseModification) });
   }
 
   toggleClickHandler = () => {

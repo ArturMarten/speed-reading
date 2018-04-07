@@ -83,6 +83,8 @@ export const translateError = (translate, error) => {
   switch (error) {
     case 'Network Error':
       return translate('error.network-error');
+    case 'There was a problem processing the requested URL':
+      return translate('error.internal-server-error');
     case 'Authentication missing':
       return translate('error.authentication-missing');
     case 'Authentication token is missing':
@@ -130,4 +132,18 @@ export const shuffle = (array) => {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+};
+
+/* eslint-disable object-property-newline */
+const similarSymbols = {
+  0: ['8'], 1: ['7'], 2: ['5'], 3: ['6'], 4: ['7'], 5: ['2', '6'], 7: ['1'], 8: ['3', '6', '9'], 9: ['3', '6', '8'],
+  a: ['e'], b: ['d'], c: ['o'], d: ['b'], e: ['a'], f: ['t'], g: ['j'], h: ['k'], i: ['l'],
+  j: ['y'], k: ['h'], l: ['i'], m: ['n'], n: ['m'], o: ['c'], p: ['q'], q: ['p'], r: ['f'],
+  s: ['z'], t: ['f'], u: ['v'], v: ['w', 'u'], w: ['v'], x: ['y'], y: ['j', 'x'], z: ['s'],
+};
+
+export const getSimilarSymbol = (symbol) => {
+  const similar = similarSymbols[symbol];
+  if (!similar) return symbol;
+  return similar[Math.floor(Math.random() * similar.length)];
 };
