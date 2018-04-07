@@ -8,7 +8,7 @@ const DISAPPEARING_ID = 3;
 const WORD_GROUPS_ID = 4;
 const SCHULTE_TABLES_ID = 5;
 const CONCENTRATION_ID = 6;
-export const EXERCISE_COUNT = 4;
+export const EXERCISE_COUNT = 6;
 
 export const generateSymbols = (count, modification) => {
   const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -26,6 +26,15 @@ export const generateSymbols = (count, modification) => {
   }
 };
 
+export const generateStringPairs = (count, modification) => {
+  switch (modification) {
+    case 'concentration-numbers-only':
+      return [[1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152]];
+    default:
+      return [[1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152]];
+  }
+};
+
 const initialState = {
   id: null,
   attemptId: null,
@@ -35,6 +44,7 @@ const initialState = {
   status: 'preparation',
   wordGroups: [],
   symbols: [],
+  stringPairs: [],
   result: {},
 };
 
@@ -132,6 +142,12 @@ const reducer = (state = initialState, action) => {
           symbols,
           status: 'prepared',
         });
+      } else if (state.type === 'concentration') {
+        const stringPairs = generateStringPairs(10, state.modification);
+        return updateObject(state, {
+          stringPairs,
+          status: 'prepared',
+        });
       }
       return updateObject(state, {
         status: 'prepared',
@@ -194,14 +210,17 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.EXERCISE_RETRY: {
       if (state.type === 'schulteTables') {
-        const symbols = generateSymbols(25, state.modification);
         return updateObject(state, {
-          symbols,
+          symbols: generateSymbols(25, state.modification),
+          status: 'prepared',
+        });
+      } else if (state.type === 'concentration') {
+        return updateObject(state, {
+          stringPairs: generateStringPairs(10, state.modification),
           status: 'prepared',
         });
       }
-      return updateObject(state, {
-      });
+      return state;
     }
     case actionTypes.EXERCISE_END: {
       // Cleanup after exercise end

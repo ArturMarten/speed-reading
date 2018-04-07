@@ -24,7 +24,6 @@ export class HelpExerciseContainer extends Component {
   }
 
   onExerciseRetryHandler = () => {
-    console.log('Retrying exercise!');
     this.props.onExerciseRetry();
   }
 

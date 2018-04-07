@@ -51,7 +51,7 @@ export class StatisticsTable extends Component {
           {sortedAttempts.map(attempt => (
             <Table.Row key={attempt.id}>
               <Table.Cell collapsing>
-                {this.props.translate('statistics-table.default')}
+                {this.props.translate(`modification.${attempt.modification}`)}
               </Table.Cell>
               <Table.Cell>{
                 new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {

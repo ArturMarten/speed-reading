@@ -117,7 +117,7 @@ const mapStateToProps = state => ({
   token: state.auth.token,
   userId: state.auth.userId,
   exerciseId: state.exercise.id,
-  exerciseModification: state.exercise.modfication,
+  exerciseModification: state.exercise.modification,
   exerciseStatus: state.exercise.status,
   attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,

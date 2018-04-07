@@ -1,5 +1,6 @@
 .schulte-table {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 0fr);
   width: 90vmin;
   height: 90vmin;
   flex-wrap: wrap;

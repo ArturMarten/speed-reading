@@ -39,12 +39,18 @@ export const MIN_START_DELAY = 0;
 export const MAX_START_DELAY = 500;
 export const MIN_LINE_BREAK_DELAY = 0;
 export const MAX_LINE_BREAK_DELAY = 300;
+export const MIN_SYMBOL_COUNT = 5;
+export const MAX_SYMBOL_COUNT = 15;
+export const MIN_COLUMN_SPACING = 5;
+export const MAX_COLUMN_SPACING = 200;
 
 const initialExerciseOptions = {
   startDelay: 300,
   lineBreakDelay: 100,
   characterCount: 15,
   tableSize: 25,
+  symbolCount: 7,
+  columnSpacing: 30,
 };
 
 const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay'];
@@ -115,13 +121,13 @@ const reducer = (state = initialState, action) => {
         case 'schulteTables':
           return updateObject(state, {
             visibleTextOptions: ['font'],
-            visibleExerciseOptions: ['tableSize'],
+            visibleExerciseOptions: ['tableSize', 'tableCheck'],
             visibleSpeedOptions: [],
           });
         case 'concentration':
           return updateObject(state, {
-            visibleTextOptions: [],
-            visibleExerciseOptions: [],
+            visibleTextOptions: ['font', 'fontSize'],
+            visibleExerciseOptions: ['symbolCount', 'columnSpacing'],
             visibleSpeedOptions: [],
           });
         default:
