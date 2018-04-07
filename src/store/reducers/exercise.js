@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import { splitIntoWordGroups } from '../../utils/TextUtils';
-import { updateObject, shuffle } from '../../shared/utility';
+import { updateObject, shuffle, getSimilarSymbol } from '../../shared/utility';
 
 const READING_TEST_ID = 1;
 const READING_AID_ID = 2;
@@ -10,8 +10,11 @@ const SCHULTE_TABLES_ID = 5;
 const CONCENTRATION_ID = 6;
 export const EXERCISE_COUNT = 6;
 
+
+const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const numbers = '0123456789'.split('');
+
 export const generateSymbols = (count, modification) => {
-  const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
   switch (modification) {
     case 'numbers':
       return shuffle([...Array(count)].map((e, index) => index + 1));
@@ -26,13 +29,31 @@ export const generateSymbols = (count, modification) => {
   }
 };
 
-export const generateStringPairs = (count, modification) => {
+const generateRandomString = (array, length) => [...Array(length)].map(() => array[Math.floor(Math.random() * array.length)]).join('');
+
+const swapRandomSymbol = (string) => {
+  const array = string.split('');
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return Object.assign([...array], { [randomIndex]: getSimilarSymbol(array[randomIndex]) }).join('');
+};
+
+export const generateStringPairs = (count, length, modification) => {
+  let first = [];
   switch (modification) {
     case 'concentration-numbers-only':
-      return [[1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152]];
+      first = [...Array(count)].map(() => generateRandomString(numbers, length));
+      break;
+    case 'concentration-letters-only':
+      first = [...Array(count)].map(() => generateRandomString(letters, length));
+      break;
+    case 'concentration-mixed':
+      first = [...Array(count)].map(() => generateRandomString(Math.floor(Math.random() * 2) === 0 ? numbers : letters, length));
+      break;
     default:
-      return [[1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152], [1231263, 1231232], [143123, 123152]];
+      first = [...Array(count)].map(() => generateRandomString(numbers, length));
+      break;
   }
+  return first.map(string => [string, Math.floor(Math.random() * 2) === 0 ? string : swapRandomSymbol(string)]);
 };
 
 const initialState = {
@@ -98,9 +119,8 @@ const reducer = (state = initialState, action) => {
           modification = 'concentration-numbers-only';
           modificationOptions = [
             { value: 'concentration-numbers-only' },
-            { value: 'concentration-letters-only', disabled: true },
-            { value: 'concentration-mixed', disabled: true },
-            { value: 'concentration-words', disabled: true },
+            { value: 'concentration-letters-only' },
+            { value: 'concentration-mixed' },
           ];
           break;
         }
@@ -143,7 +163,7 @@ const reducer = (state = initialState, action) => {
           status: 'prepared',
         });
       } else if (state.type === 'concentration') {
-        const stringPairs = generateStringPairs(10, state.modification);
+        const stringPairs = generateStringPairs(20, action.payload.exerciseOptions.symbolCount, state.modification);
         return updateObject(state, {
           stringPairs,
           status: 'prepared',
@@ -194,7 +214,14 @@ const reducer = (state = initialState, action) => {
       const { elapsedTime } = action.payload;
       let result = {};
       if (state.type === 'schulteTables') {
-        result = { elapsedTime, spm: +(action.payload.tableSize / (elapsedTime / (1000 * 60))).toFixed(2) };
+        const { tableSize } = action.payload;
+        result = { elapsedTime, spm: +(tableSize / (elapsedTime / (1000 * 60))).toFixed(2) };
+      } else if (state.type === 'concentration') {
+        const { answers } = action.payload;
+        console.log(answers);
+        result = {
+          elapsedTime,
+        };
       } else {
         result = { elapsedTime };
       }
@@ -216,7 +243,7 @@ const reducer = (state = initialState, action) => {
         });
       } else if (state.type === 'concentration') {
         return updateObject(state, {
-          stringPairs: generateStringPairs(10, state.modification),
+          stringPairs: generateStringPairs(20, action.payload.exerciseOptions.symbolCount, state.modification),
           status: 'prepared',
         });
       }

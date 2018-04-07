@@ -20,7 +20,7 @@ export class AppStats extends Component {
     },
   };
   componentDidMount() {
-    console.log(navigator.userAgent, navigator.platform);
+    // console.log(navigator.userAgent, navigator.platform);
     axios.get('/appStats')
       .then((response) => {
         const updatedStats = updateObject(this.state.stats, {

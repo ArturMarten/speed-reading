@@ -22,7 +22,12 @@ export class HelpExercise extends Component {
   }
 
   onExerciseFinishHandler = () => {
-    this.props.onExerciseFinish(this.props.attemptId, this.props.token);
+    let data;
+    if (this.props.type === 'concentration') {
+      const { answers } = this.exerciseRef.getWrappedInstance().state;
+      data = { answers };
+    }
+    this.props.onExerciseFinish(this.props.attemptId, this.props.token, data);
   }
 
   render() {
@@ -30,11 +35,14 @@ export class HelpExercise extends Component {
       switch (type) {
         case 'schulteTables':
           return (
-            <SchulteTables />
+            <SchulteTables
+              ref={(ref) => { this.exerciseRef = ref; }}
+            />
           );
         case 'concentration':
           return (
             <Concentration
+              ref={(ref) => { this.exerciseRef = ref; }}
               timerState={this.props.timerState}
             />
           );
@@ -83,8 +91,8 @@ const mapDispatchToProps = dispatch => ({
   onExerciseStart: (attemptData, token) => {
     dispatch(actionCreators.startExercise(attemptData, token));
   },
-  onExerciseFinish: (attemptId, token) => {
-    dispatch(actionCreators.finishHelpExercise(attemptId, token));
+  onExerciseFinish: (attemptId, token, data) => {
+    dispatch(actionCreators.finishHelpExercise(attemptId, token, data));
   },
 });
 

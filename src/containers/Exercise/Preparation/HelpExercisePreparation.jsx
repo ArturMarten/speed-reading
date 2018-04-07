@@ -138,8 +138,8 @@ const mapDispatchToProps = dispatch => ({
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
   },
-  onExercisePrepare: (text, characterCount) => {
-    dispatch(actionCreators.prepareExercise(text, characterCount));
+  onExercisePrepare: (exerciseOptions) => {
+    dispatch(actionCreators.prepareHelpExercise(exerciseOptions));
   },
 });
 

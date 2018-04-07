@@ -26,7 +26,7 @@ export class TextExercisePreparation extends Component {
   }
 
   textPreparationHandler = () => {
-    this.props.onExercisePrepare(this.props.selectedText, this.props.exerciseOptions);
+    this.props.onExercisePrepare(this.props.exerciseOptions, this.props.selectedText);
   }
 
   modificationChangeHandler = (event, data) => {
@@ -179,8 +179,8 @@ const mapDispatchToProps = dispatch => ({
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
   },
-  onExercisePrepare: (text, characterCount) => {
-    dispatch(actionCreators.prepareExercise(text, characterCount));
+  onExercisePrepare: (exerciseOptions, text) => {
+    dispatch(actionCreators.prepareTextExercise(exerciseOptions, text));
   },
 });
 
