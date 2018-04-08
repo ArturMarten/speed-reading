@@ -22,7 +22,7 @@
     "username": ["E-maili aadress", "E-mail address"],
     "password": ["Parool", "Password"],
     "demo": ["Demo", "Demo"],
-    "required": ["Vajalik autentimine", "Authentication required"],
+    "not-implemented": ["Implementeerimata", "Not implemented"],
     "first-time": ["Kasutaja puudumisel vajutage siia", "Click here when you don't have an account"],
     "logout-button": ["Logi välja", "Logout"]
   },
@@ -151,18 +151,26 @@
     "change-answer": ["Muuda", "Change"]
   },
   "exercises": {
+    "goal": ["Eesmärk", "Goal"],
+    "save-statistics": ["Salvesta statistikas", "Save statistics"],
     "title-readingTest": ["Lugemistest", "Reading test"],
     "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga.", "This test allows to measure your reading speed with normal text."],
+    "goal-readingTest": ["Lugeda teksti oma normaalse lugemisekiirusega.", "Read text with normal reading speed."],
     "title-readingAid": ["Lugemise soodustaja", "Reading aid"],
-    "description-readingAid": ["Soodustaja vähendab tagasivaatamisi ja kiirendab lugemist.", "Reading aid decreases regressions and increase reading speed."],
-    "title-wordGroups": ["Sõnarühmade harjutus", "Word group exercise"],
-    "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions"],
+    "description-readingAid": ["See harjutus vähendab tagasivaatamisi ja kiirendab lugemist.", "This exercise decreases regressions and increase reading speed."],
+    "goal-readingAid": ["Lugeda teksti püüdes hoida silmi pilgujuhtijal.", "Read text and try to keep up with moving cursor"],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
     "description-disappearing": ["See harjutus välistab tagasivaatamised ehk regressioonid.", "This exercise eliminates regressions."],
+    "goal-disappearing": ["Lugeda teksti kiiremini kui see ära kaob.", "Read text faster than it disappears."],
+    "title-wordGroups": ["Sõnarühmade harjutus", "Word group exercise"],
+    "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions"],
+    "goal-wordGroups": ["Lugeda teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
     "title-schulteTables": ["Schulte tabelite harjutus", "Schulte tables exercise"],
     "description-schulteTables": ["See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.", "This exercise helps to increase perceptual span and develop concentration."],
+    "goal-schulteTables": ["Jälgides tabeli keskel olevat punast täppi, leida kõik sümbolid kasvavas või kahanevas järjestuses.", "By looking at the red dot in the middle of the table, find all symbols in ascending or descending order."],
     "title-concentration": ["Keskendumise harjutus", "Concentration exercise"],
-    "description-concentration": ["See harjutus aitab arendada keskendumist.", "This exercise helps to develop concentration."]
+    "description-concentration": ["See harjutus aitab arendada keskendumist.", "This exercise helps to develop concentration."],
+    "goal-concentration": ["Vaadata kõrvuti olevaid sümbolite gruppe ja otsustada, kas need on identsed või mitte.", "Look at two symbol groups side-by-side and decide whether they are identical or not."]
   },
   "modification": {
     "default": ["Vaikimisi", "Default"],
@@ -180,11 +188,12 @@
     "concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"]
   },
   "text-exercise-preparation": {
-    "proceed": ["Edasi", "Proceed"],
     "exercise-modification": ["Modifikatsioon", "Modification"],
+    "proceed": ["Edasi", "Proceed"],
     "text-selection": ["Teksti valik", "Text selection"],
     "text-selected": ["Valitud tekst", "Text selected"],
     "title": ["Pealkiri", "Title"],
+    "author": ["Autor", "Author"],
     "text-not-selected": ["Tekst valimata", "Text not selected"],
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],
@@ -249,7 +258,9 @@
     "line-count": ["Ridade arv", "Line count"],
     "lines": ["rida", "lines"],
     "font-size": ["Kirja suurus", "Font size"],
-    "pt": ["pt", "pt"]
+    "pt": ["punkti", "pt"],
+    "symbol-size": ["Sümboli suurus", "Symbol size"],
+    "percentage": ["%", "%"]
   },
   "exercise-options": {
     "word-group-length": ["Sõnarühma pikkus", "Word group length"],
@@ -257,12 +268,14 @@
     "start-delay": ["Alguse viide", "Start delay"],
     "line-break-delay": ["Reavahetuse viide", "Line break delay"],
     "ms": ["ms", "ms"],
+    "table-size": ["Tabeli suurus", "Table size"],
+    "percentage": ["%", "%"],
     "table-dimensions": ["Tabeli mõõtmed", "Table dimensions"],
     "table-check": ["Kontroll", "Check"],
     "symbol-count": ["Sümbolite arv kuni", "Symbol count"],
     "symbols": ["sümbolit", "symbols"],
     "column-spacing": ["Tulpade vahe", "Column spacing"],
-    "px": ["px", "px"]
+    "px": ["pikslit", "px"]
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
@@ -278,8 +291,10 @@
     "warning-title": ["Antud hetkel regressiooni joont ei näidata", "Currently regression line is not shown"],
     "reading-test": ["Lugemistest", "Reading test"],
     "reading-aid": ["Lugemise soodustaja", "Reading aid"],
-    "word-groups": ["Sõnarühmad", "Word groups"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
+    "word-groups": ["Sõnarühmad", "Word groups"],
+    "schulte-tables": ["Schulte tabelid", "Schulte tables"],
+    "concentration": ["Keskendumine", "Concentration"],
     "loading": ["Laen andmeid", "Loading data"],
     "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"]
   },
@@ -289,6 +304,11 @@
     "reading-attempt": ["Lugemise katse" , "Reading attempt"],
     "wpm": ["Sõnu minutis" , "Words Per Minute"],
     "test-result": ["Testi tulemus" , "Test result"],
+    "elapsed-time": ["Kulunud aeg" , "Elapsed time"],
+    "spm": ["Sümbolit minutis" , "Symbols Per Minute"],
+    "exercise-result": ["Harjutuse tulemus" , "Exercise result"],
+    "not-finished": ["Lõpetamata", "Unfinished"],
+    "not-recorded": ["Salvestamata", "Unsaved"],
     "test-missing": ["Sooritamata", "No attempt"],
     "export": ["Expordi", "Export"]
   },

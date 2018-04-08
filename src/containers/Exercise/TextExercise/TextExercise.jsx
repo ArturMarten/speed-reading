@@ -24,6 +24,7 @@ export class TextExercise extends Component {
   onExerciseStartHandler = () => {
     const attemptData = {
       userId: this.props.userId,
+      save: this.props.saveExercise,
       exerciseId: this.props.exerciseId,
       modification: this.props.exerciseModification,
       startTime: new Date(),
@@ -116,6 +117,7 @@ export class TextExercise extends Component {
 const mapStateToProps = state => ({
   token: state.auth.token,
   userId: state.auth.userId,
+  saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
   exerciseModification: state.exercise.modification,
   exerciseStatus: state.exercise.status,

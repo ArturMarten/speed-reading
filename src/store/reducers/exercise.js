@@ -10,7 +10,6 @@ const SCHULTE_TABLES_ID = 5;
 const CONCENTRATION_ID = 6;
 export const EXERCISE_COUNT = 6;
 
-
 const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const numbers = '0123456789'.split('');
 
@@ -58,6 +57,7 @@ export const generateStringPairs = (count, length, modification) => {
 
 const initialState = {
   id: null,
+  save: true,
   attemptId: null,
   type: '',
   modification: '',
@@ -150,27 +150,21 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.EXERCISE_PREPARED: {
+      let preparation = {};
       if (state.type === 'wordGroups') {
         const wordGroups = splitIntoWordGroups(action.payload.selectedText.plain, action.payload.exerciseOptions.characterCount);
-        return updateObject(state, {
-          wordGroups,
-          status: 'prepared',
-        });
+        preparation = { wordGroups };
       } else if (state.type === 'schulteTables') {
         const symbols = generateSymbols(25, state.modification);
-        return updateObject(state, {
-          symbols,
-          status: 'prepared',
-        });
+        preparation = { symbols };
       } else if (state.type === 'concentration') {
         const stringPairs = generateStringPairs(20, action.payload.exerciseOptions.symbolCount, state.modification);
-        return updateObject(state, {
-          stringPairs,
-          status: 'prepared',
-        });
+        preparation = { stringPairs };
       }
       return updateObject(state, {
+        save: action.payload.save,
         status: 'prepared',
+        ...preparation,
       });
     }
     case actionTypes.EXERCISE_STARTING: {

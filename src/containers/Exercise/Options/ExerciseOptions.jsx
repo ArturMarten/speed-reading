@@ -11,14 +11,22 @@ import {
   tableDimensionOptions,
   MIN_CHARACTER_COUNT,
   MAX_CHARACTER_COUNT,
+  STEP_CHARACTER_COUNT,
   MIN_START_DELAY,
   MAX_START_DELAY,
+  STEP_START_DELAY,
   MIN_LINE_BREAK_DELAY,
   MAX_LINE_BREAK_DELAY,
+  STEP_LINE_BREAK_DELAY,
+  MIN_TABLE_SIZE,
+  MAX_TABLE_SIZE,
+  STEP_TABLE_SIZE,
   MIN_SYMBOL_COUNT,
   MAX_SYMBOL_COUNT,
+  STEP_SYMBOL_COUNT,
   MIN_COLUMN_SPACING,
   MAX_COLUMN_SPACING,
+  STEP_COLUMN_SPACING,
 } from '../../../store/reducers/options';
 
 export class ExerciseOptions extends PureComponent {
@@ -33,7 +41,7 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.characterCount}
             min={MIN_CHARACTER_COUNT}
             max={MAX_CHARACTER_COUNT}
-            step={1}
+            step={STEP_CHARACTER_COUNT}
             updateValue={value => this.props.onSubmit({ characterCount: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('startDelay') !== -1 ?
@@ -43,7 +51,7 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.startDelay}
             min={MIN_START_DELAY}
             max={MAX_START_DELAY}
-            step={50}
+            step={STEP_START_DELAY}
             updateValue={value => this.props.onSubmit({ startDelay: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('lineBreakDelay') !== -1 ?
@@ -53,7 +61,7 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.lineBreakDelay}
             min={MIN_LINE_BREAK_DELAY}
             max={MAX_LINE_BREAK_DELAY}
-            step={50}
+            step={STEP_LINE_BREAK_DELAY}
             updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ?
@@ -62,6 +70,16 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.tableDimensions}
             options={tableDimensionOptions}
             updateValue={value => this.props.onSubmit({ tableDimensions: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('tableSize') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.table-size')}
+            unit={this.props.translate('exercise-options.percentage')}
+            value={this.props.options.tableSize}
+            min={MIN_TABLE_SIZE}
+            max={MAX_TABLE_SIZE}
+            step={STEP_TABLE_SIZE}
+            updateValue={value => this.props.onSubmit({ tableSize: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('tableCheck') !== -1 ?
           <ExerciseCheckOption
@@ -76,7 +94,7 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.symbolCount}
             min={MIN_SYMBOL_COUNT}
             max={MAX_SYMBOL_COUNT}
-            step={1}
+            step={STEP_SYMBOL_COUNT}
             updateValue={value => this.props.onSubmit({ symbolCount: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('columnSpacing') !== -1 ?
@@ -86,7 +104,7 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.columnSpacing}
             min={MIN_COLUMN_SPACING}
             max={MAX_COLUMN_SPACING}
-            step={10}
+            step={STEP_COLUMN_SPACING}
             updateValue={value => this.props.onSubmit({ columnSpacing: value })}
           /> : null}
       </Fragment>

@@ -44,11 +44,17 @@ export class RegressionChartC3 extends Component {
   }
 
   componentDidUpdate() {
+    const data = this.props.data.map((row) => {
+      if (row.date && row.wpm) {
+        return [row.date, row.wpm];
+      }
+      return undefined;
+    }).filter(row => row !== undefined);
     this.chart.load({
       unload: true,
       rows: [
         ['date', 'wpm'],
-        ...this.props.data.map(row => [row.date, row.wpm]),
+        ...data,
       ],
     });
   }

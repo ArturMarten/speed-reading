@@ -1,8 +1,8 @@
 {
   "name": "kiirlugemine-5",
-  "version": "5.0.17",
+  "version": "5.0.18",
   "private": true,
-  "homepage": "http://kodu.ut.ee/~arturmar",
+  "homepage": "http://prog.keeleressursid.ee/speedreading",
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.0",
     "@storybook/addon-links": "^3.4.0",

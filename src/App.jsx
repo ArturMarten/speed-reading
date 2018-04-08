@@ -42,7 +42,7 @@ const Manage = Loadable({
 
 export class App extends Component {
   componentDidMount() {
-    this.props.onTryAutoSignup();
+    this.props.onTryAutoLogin();
   }
   render() {
     const isPermitted = rolePermissions[this.props.role] >= rolePermissions.teacher;
@@ -72,7 +72,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTryAutoSignup: () => {
+  onTryAutoLogin: () => {
     dispatch(actionCreators.authCheckState());
   },
 });

@@ -105,34 +105,36 @@ export class Concentration extends Component {
 
   render() {
     return (
-      <div className="concentration-grid" style={{ fontFamily: this.props.textOptions.font, fontSize: this.props.textOptions.fontSize }}>
-        {this.props.stringPairs.map((row, index) => (
-          <div
-            key={Math.random()}
-            className={`concentration-row ${index === this.state.selectedIndex ? 'selected' : ''}`}
-          >
-            <div className="concentration-left">{row[0]}</div>
-            <div className="concentration-spacing" style={{ width: `${this.props.exerciseOptions.columnSpacing}px` }} />
-            <div className="concentration-right">{row[1]}</div>
-            <div className="concentration-choices">
-              <Button.Group size="tiny">
-                <Button
-                  compact
-                  icon="minus"
-                  color={this.state.answers[index] === false ? 'red' : null}
-                  onClick={this.answerSelectHandler(false, index)}
-                />
-                <Button
-                  compact
-                  icon="plus"
-                  color={this.state.answers[index] === true ? 'green' : null}
-                  onClick={this.answerSelectHandler(true, index)}
-                />
-              </Button.Group>
-            </div>
-          </div>
-        ))}
-      </div>
+      <table className="concentration-grid" style={{ fontFamily: this.props.textOptions.font, fontSize: this.props.textOptions.fontSize }}>
+        <tbody>
+          {this.props.stringPairs.map((row, index) => (
+            <tr
+              key={row[0] + row[1]}
+              className={`concentration-row ${index === this.state.selectedIndex ? 'selected' : ''}`}
+            >
+              <td className="concentration-cell concentration-left">{row[0]}</td>
+              <td className="concentration-cell concentration-spacing" style={{ minWidth: `${this.props.exerciseOptions.columnSpacing}px` }} />
+              <td className="concentration-cell concentration-right">{row[1]}</td>
+              <td className="concentration-cell concentration-choices">
+                <Button.Group size="tiny">
+                  <Button
+                    compact
+                    icon="minus"
+                    color={this.state.answers[index] === false ? 'red' : null}
+                    onClick={this.answerSelectHandler(false, index)}
+                  />
+                  <Button
+                    compact
+                    icon="plus"
+                    color={this.state.answers[index] === true ? 'green' : null}
+                    onClick={this.answerSelectHandler(true, index)}
+                  />
+                </Button.Group>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
   }
 }

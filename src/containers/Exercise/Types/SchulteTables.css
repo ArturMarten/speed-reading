@@ -1,11 +1,11 @@
 .schulte-table {
-  display: grid;
-  grid-template-columns: repeat(5, 0fr);
+  display: flex;
   width: 90vmin;
   height: 90vmin;
   flex-wrap: wrap;
   max-width: 90vmin;
   max-height: 90vmin;
+  font-size: 15vmin;
   box-shadow: 0 0 1px black;
   user-select: none;
 }
@@ -13,9 +13,8 @@
 .schulte-cell {
   width: 18vmin;
   height: 18vmin;
-  text-align: center;
   line-height: 18vmin;
-  font-size: 15vmin;
+  text-align: center;
   overflow: hidden;
   box-shadow: 0 0 1px black;
 }

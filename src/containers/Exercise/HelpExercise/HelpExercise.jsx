@@ -11,9 +11,14 @@ import Concentration from '../Types/Concentration';
 export class HelpExercise extends Component {
   state = {};
 
+  componentDidMount() {
+    this.onExerciseStartHandler();
+  }
+
   onExerciseStartHandler = () => {
     const attemptData = {
       userId: this.props.userId,
+      save: this.props.saveExercise,
       exerciseId: this.props.exerciseId,
       modification: this.props.exerciseModification,
       startTime: new Date(),
@@ -64,6 +69,10 @@ export class HelpExercise extends Component {
         </Grid.Row>
         <Grid.Row centered>
           <Dimmer.Dimmable
+            style={{
+              filter: !this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped ?
+                      'blur(20px) grayscale(0.7)' : null,
+            }}
             blurring
             dimmed={!this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped}
           >
@@ -78,6 +87,7 @@ export class HelpExercise extends Component {
 const mapStateToProps = state => ({
   token: state.auth.token,
   userId: state.auth.userId,
+  saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
   exerciseModification: state.exercise.modification,
   exerciseStatus: state.exercise.status,
