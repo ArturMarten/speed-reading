@@ -111,7 +111,7 @@ storiesOf('Schulte tables', module)
       speedOptions={speedOptions}
     />));
 
-const stringPairs = generateStringPairs(20, 7, 'concentration-numbers-only');
+const stringPairs = generateStringPairs(20, 8, 'concentration-mixed');
 storiesOf('Concentration', module)
   .add('Component', () =>
     (<Concentration

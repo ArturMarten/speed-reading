@@ -156,8 +156,8 @@ export const finishHelpExercise = (attemptId, token, data) => (dispatch, getStat
   const { elapsedTime } = state.timing;
   const { type } = state.exercise;
   if (type === 'schulteTables') {
-    const { tableSize } = state.options.exerciseOptions;
-    dispatch(helpExerciseFinished(elapsedTime, { tableSize }));
+    const { tableDimensions } = state.options.exerciseOptions;
+    dispatch(helpExerciseFinished(elapsedTime, { tableDimensions }));
   } else if (type === 'concentration') {
     dispatch(helpExerciseFinished(elapsedTime, data));
   } else {

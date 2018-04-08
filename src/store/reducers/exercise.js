@@ -214,13 +214,30 @@ const reducer = (state = initialState, action) => {
       const { elapsedTime } = action.payload;
       let result = {};
       if (state.type === 'schulteTables') {
-        const { tableSize } = action.payload;
-        result = { elapsedTime, spm: +(tableSize / (elapsedTime / (1000 * 60))).toFixed(2) };
+        const { tableDimensions } = action.payload;
+        result = { elapsedTime, spm: +(tableDimensions / (elapsedTime / (1000 * 60))).toFixed(2) };
       } else if (state.type === 'concentration') {
         const { answers } = action.payload;
-        console.log(answers);
+        let total = 0; let correct = 0; let incorrect = 0; let unanswered = 0;
+        state.stringPairs.forEach((pair, index) => {
+          if (answers[index] !== undefined) {
+            const match = pair[0] === pair[1];
+            if (answers[index] === match) {
+              correct += 1;
+            } else {
+              incorrect += 1;
+            }
+          } else {
+            unanswered += 1;
+          }
+          total += 1;
+        });
         result = {
           elapsedTime,
+          total,
+          correct,
+          incorrect,
+          unanswered,
         };
       } else {
         result = { elapsedTime };

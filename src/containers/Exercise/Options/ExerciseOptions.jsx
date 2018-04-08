@@ -8,7 +8,7 @@ import ExerciseSelectOption from '../../../components/Exercise/Options/ExerciseS
 import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
 import {
-  tableSizeOptions,
+  tableDimensionOptions,
   MIN_CHARACTER_COUNT,
   MAX_CHARACTER_COUNT,
   MIN_START_DELAY,
@@ -56,12 +56,12 @@ export class ExerciseOptions extends PureComponent {
             step={50}
             updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
           /> : null}
-        {this.props.visibleOptions.indexOf('tableSize') !== -1 ?
+        {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ?
           <ExerciseSelectOption
-            name={this.props.translate('exercise-options.table-size')}
-            value={this.props.options.tableSize}
-            options={tableSizeOptions}
-            updateValue={value => this.props.onSubmit({ tableSize: value })}
+            name={this.props.translate('exercise-options.table-dimensions')}
+            value={this.props.options.tableDimensions}
+            options={tableDimensionOptions}
+            updateValue={value => this.props.onSubmit({ tableDimensions: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('tableCheck') !== -1 ?
           <ExerciseCheckOption

@@ -16,7 +16,7 @@ export const fontOptions = [
   { text: 'Sans-serif', value: 'sans-serif' },
 ];
 
-export const tableSizeOptions = [
+export const tableDimensionOptions = [
   { text: '5 x 5', value: 25 },
 ];
 
@@ -48,7 +48,7 @@ const initialExerciseOptions = {
   startDelay: 300,
   lineBreakDelay: 100,
   characterCount: 15,
-  tableSize: 25,
+  tableDimensions: 25,
   symbolCount: 7,
   columnSpacing: 30,
 };
@@ -143,7 +143,7 @@ const reducer = (state = initialState, action) => {
         case 'schulteTables':
           return updateObject(state, {
             visibleTextOptions: ['font'],
-            visibleExerciseOptions: ['tableSize', 'tableCheck'],
+            visibleExerciseOptions: ['tableDimensions', 'tableCheck'],
             visibleSpeedOptions: [],
           });
         case 'concentration':
