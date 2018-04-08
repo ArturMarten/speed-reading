@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Grid, Statistic, Transition, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
@@ -25,11 +25,32 @@ export class HelpExerciseResults extends Component {
                   <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('help-exercise-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
-                {this.props.result.spm ?
+                {this.props.result.spm !== undefined ?
                   <Statistic size="small" color="green">
                     <Statistic.Value>{this.props.result.spm}</Statistic.Value>
                     <Statistic.Label>{this.props.translate('help-exercise-results.spm')}</Statistic.Label>
                   </Statistic> : null}
+                {this.props.result.total !== undefined && this.props.result.correct !== undefined &&
+                this.props.result.incorrect !== undefined && this.props.result.unanswered !== undefined ?
+                  <Fragment>
+                    <Statistic size="small" color="blue">
+                      <Statistic.Value>{Math.round((this.props.result.correct / this.props.result.total) * 100)}%</Statistic.Value>
+                      <Statistic.Label>{this.props.translate('help-exercise-results.percentage')}</Statistic.Label>
+                    </Statistic>
+                    <br />
+                    <Statistic size="small" color="green">
+                      <Statistic.Value>{this.props.result.correct}</Statistic.Value>
+                      <Statistic.Label>{this.props.translate('help-exercise-results.correct')}</Statistic.Label>
+                    </Statistic>
+                    <Statistic size="small" color="red">
+                      <Statistic.Value>{this.props.result.incorrect}</Statistic.Value>
+                      <Statistic.Label>{this.props.translate('help-exercise-results.incorrect')}</Statistic.Label>
+                    </Statistic>
+                    <Statistic size="small" color="grey">
+                      <Statistic.Value>{this.props.result.unanswered}</Statistic.Value>
+                      <Statistic.Label>{this.props.translate('help-exercise-results.unanswered')}</Statistic.Label>
+                    </Statistic>
+                  </Fragment> : null}
               </Grid.Column>
             </Grid.Row>
           </Grid>

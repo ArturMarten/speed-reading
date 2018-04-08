@@ -34,7 +34,7 @@ export class StatisticsTable extends Component {
               {this.props.translate('statistics-table.modification')}
             </Table.HeaderCell>
             <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
-              {this.props.translate('statistics-table.date')}
+              {this.props.translate('statistics-table.attempt-date')}
             </Table.HeaderCell>
             <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
               {this.props.translate('statistics-table.reading-attempt')}
