@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown } from 'semantic-ui-react';
+import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -10,7 +10,9 @@ import SchulteTablesPreview from '../Preview/SchulteTablesPreview';
 import ConcentrationPreview from '../Preview/ConcentrationPreview';
 
 export class HelpExercisePreparation extends Component {
-  state = {};
+  state = {
+    saveStatistics: true,
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.exerciseStatus !== 'prepared' && this.props.exerciseStatus === 'prepared') {
@@ -18,8 +20,12 @@ export class HelpExercisePreparation extends Component {
     }
   }
 
+  saveChangeHandler = (event, data) => {
+    this.setState({ saveStatistics: data.checked });
+  }
+
   exercisePreparationHandler = () => {
-    this.props.onExercisePrepare(this.props.exerciseOptions);
+    this.props.onExercisePrepare(this.state.saveStatistics, this.props.exerciseOptions);
   }
 
   modificationChangeHandler = (event, data) => {
@@ -51,10 +57,18 @@ export class HelpExercisePreparation extends Component {
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Grid.Column width={14}>
-                {this.props.translate(`exercises.description-${this.props.type}`)}
+              <Grid.Column width={13}>
+                <div style={{ fontSize: '1.1em' }}>
+                  <div>
+                    {this.props.translate(`exercises.description-${this.props.type}`)}
+                  </div>
+                  <div>
+                    <b>{this.props.translate('exercises.goal')}: </b>
+                    {this.props.translate(`exercises.goal-${this.props.type}`)}
+                  </div>
+                </div>
               </Grid.Column>
-              <Grid.Column width={2} verticalAlign="bottom">
+              <Grid.Column width={3} verticalAlign="bottom">
                 <Button
                   positive
                   floated="right"
@@ -62,6 +76,12 @@ export class HelpExercisePreparation extends Component {
                   disabled={this.props.exerciseStatus === 'preparing'}
                   onClick={this.exercisePreparationHandler}
                   content={this.props.translate('text-exercise-preparation.proceed')}
+                />
+                <Checkbox
+                  checked={this.state.saveStatistics}
+                  onChange={this.saveChangeHandler}
+                  style={{ float: 'right', marginTop: '5px' }}
+                  label={{ children: this.props.translate('exercises.save-statistics') }}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -138,8 +158,8 @@ const mapDispatchToProps = dispatch => ({
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
   },
-  onExercisePrepare: (exerciseOptions) => {
-    dispatch(actionCreators.prepareHelpExercise(exerciseOptions));
+  onExercisePrepare: (save, exerciseOptions) => {
+    dispatch(actionCreators.prepareHelpExercise(save, exerciseOptions));
   },
 });
 

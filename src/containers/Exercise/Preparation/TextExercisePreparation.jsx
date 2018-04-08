@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown } from 'semantic-ui-react';
+import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -12,6 +12,7 @@ import TextPreview from '../Preview/TextPreview';
 
 export class TextExercisePreparation extends Component {
   state = {
+    saveStatistics: true,
     textSelectionOpened: false,
   };
 
@@ -21,12 +22,16 @@ export class TextExercisePreparation extends Component {
     }
   }
 
+  saveChangeHandler = (event, data) => {
+    this.setState({ saveStatistics: data.checked });
+  }
+
   textSelectionToggleHandler = () => {
     this.setState({ textSelectionOpened: !this.state.textSelectionOpened });
   }
 
   textPreparationHandler = () => {
-    this.props.onExercisePrepare(this.props.exerciseOptions, this.props.selectedText);
+    this.props.onExercisePrepare(this.state.saveStatistics, this.props.exerciseOptions, this.props.selectedText);
   }
 
   modificationChangeHandler = (event, data) => {
@@ -34,9 +39,16 @@ export class TextExercisePreparation extends Component {
   }
 
   render() {
-    const selectedText = this.props.selectedText ?
-      <span>{this.props.translate('text-exercise-preparation.title')}: <b>{this.props.selectedText.title}</b></span> :
-      <b>{this.props.translate('text-exercise-preparation.text-not-selected')}</b>;
+    const selectedText = this.props.selectedText ? (
+      <div>
+        <div>
+          {this.props.translate('text-exercise-preparation.title')}: <b>{this.props.selectedText.title}</b>
+        </div>
+        <div>
+          {this.props.translate('text-exercise-preparation.author')}: <b>{this.props.selectedText.author}</b>
+        </div>
+      </div>
+    ) : <b style={{ color: 'red' }}>{this.props.translate('text-exercise-preparation.text-not-selected')}</b>;
     const modificationOptions = this.props.modificationOptions
       .map((option, index) => ({ ...option, key: index, text: this.props.translate(`modification.${option.value}`) }));
     return (
@@ -60,10 +72,18 @@ export class TextExercisePreparation extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={14}>
-              {this.props.translate(`exercises.description-${this.props.type}`)}
+            <Grid.Column width={13}>
+              <div style={{ fontSize: '1.1em' }}>
+                <div>
+                  {this.props.translate(`exercises.description-${this.props.type}`)}
+                </div>
+                <div>
+                  <b>{this.props.translate('exercises.goal')}: </b>
+                  {this.props.translate(`exercises.goal-${this.props.type}`)}
+                </div>
+              </div>
             </Grid.Column>
-            <Grid.Column width={2} verticalAlign="bottom">
+            <Grid.Column width={3} verticalAlign="bottom">
               <Button
                 positive
                 floated="right"
@@ -71,6 +91,12 @@ export class TextExercisePreparation extends Component {
                 disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
                 onClick={this.textPreparationHandler}
                 content={this.props.translate('text-exercise-preparation.proceed')}
+              />
+              <Checkbox
+                checked={this.state.saveStatistics}
+                onChange={this.saveChangeHandler}
+                style={{ float: 'right', marginTop: '5px' }}
+                label={{ children: this.props.translate('exercises.save-statistics') }}
               />
             </Grid.Column>
           </Grid.Row>
@@ -179,8 +205,8 @@ const mapDispatchToProps = dispatch => ({
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
   },
-  onExercisePrepare: (exerciseOptions, text) => {
-    dispatch(actionCreators.prepareTextExercise(exerciseOptions, text));
+  onExercisePrepare: (save, exerciseOptions, text) => {
+    dispatch(actionCreators.prepareTextExercise(save, exerciseOptions, text));
   },
 });
 

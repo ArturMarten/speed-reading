@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Table, Menu, Icon } from 'semantic-ui-react';
 
-import { sortByColumn } from '../../shared/utility';
+import { sortByColumn, formatMilliseconds } from '../../shared/utility';
 
 export class StatisticsTable extends Component {
   state = {
@@ -36,15 +36,36 @@ export class StatisticsTable extends Component {
             <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
               {this.props.translate('statistics-table.attempt-date')}
             </Table.HeaderCell>
-            <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
-              {this.props.translate('statistics-table.reading-attempt')}
-            </Table.HeaderCell>
-            <Table.HeaderCell sorted={column === 'wpm' ? direction : null} onClick={this.sortHandler('wpm')}>
-              {this.props.translate('statistics-table.wpm')}
-            </Table.HeaderCell>
-            <Table.HeaderCell sorted={column === 'testResult' ? direction : null} onClick={this.sortHandler('testResult')}>
-              {this.props.translate('statistics-table.test-result')}
-            </Table.HeaderCell>
+            {['readingTest', 'readingAid', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+              <Fragment>
+                <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
+                  {this.props.translate('statistics-table.reading-attempt')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'wpm' ? direction : null} onClick={this.sortHandler('wpm')}>
+                  {this.props.translate('statistics-table.wpm')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'testResult' ? direction : null} onClick={this.sortHandler('testResult')}>
+                  {this.props.translate('statistics-table.test-result')}
+                </Table.HeaderCell>
+              </Fragment> : null}
+            {this.props.exercise === 'schulteTables' ?
+              <Fragment>
+                <Table.HeaderCell sorted={column === 'elapsedTime' ? direction : null} onClick={this.sortHandler('elapsedTime')}>
+                  {this.props.translate('statistics-table.elapsed-time')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'spm' ? direction : null} onClick={this.sortHandler('spm')}>
+                  {this.props.translate('statistics-table.spm')}
+                </Table.HeaderCell>
+              </Fragment> : null}
+            {this.props.exercise === 'concentration' ?
+              <Fragment>
+                <Table.HeaderCell sorted={column === 'elapsedTime' ? direction : null} onClick={this.sortHandler('elapsedTime')}>
+                  {this.props.translate('statistics-table.elapsed-time')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'exerciseResult' ? direction : null} onClick={this.sortHandler('exerciseResult')}>
+                  {this.props.translate('statistics-table.exercise-result')}
+                </Table.HeaderCell>
+              </Fragment> : null}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -63,26 +84,61 @@ export class StatisticsTable extends Component {
                   minute: 'numeric',
                 }).format(attempt.date)}
               </Table.Cell>
-              <Table.Cell collapsing textAlign="center">
-                {attempt.readingAttempt}
-              </Table.Cell>
-              <Table.Cell>
-                {attempt.wpm}
-              </Table.Cell>
-              <Table.Cell
-                negative={!attempt.testResult || attempt.testResult === 0}
-                warning={attempt.testResult > 0 && attempt.testResult < 70}
-                positive={attempt.testResult >= 70}
-              >
-                {attempt.testResult ? `${attempt.testResult}%` :
-                  this.props.translate('statistics-table.test-missing')}
-              </Table.Cell>
+              {['readingTest', 'readingAid', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+                <Fragment>
+                  <Table.Cell collapsing textAlign="center">
+                    {attempt.readingAttempt}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {attempt.wpm}
+                  </Table.Cell>
+                  <Table.Cell
+                    negative={!attempt.testResult || attempt.testResult === 0}
+                    warning={attempt.testResult > 0 && attempt.testResult < 70}
+                    positive={attempt.testResult >= 70}
+                  >
+                    {attempt.testResult ? `${attempt.testResult}%` :
+                      this.props.translate('statistics-table.test-missing')}
+                  </Table.Cell>
+                </Fragment> : null}
+              {this.props.exercise === 'schulteTables' ?
+                <Fragment>
+                  <Table.Cell
+                    negative={!attempt.elapsedTime}
+                  >
+                    {attempt.elapsedTime ? formatMilliseconds(attempt.elapsedTime) :
+                      this.props.translate('statistics-table.not-recorded')}
+                  </Table.Cell>
+                  <Table.Cell
+                    negative={!attempt.spm}
+                  >
+                    {attempt.spm ? attempt.spm :
+                      this.props.translate('statistics-table.not-recorded')}
+                  </Table.Cell>
+                </Fragment> : null}
+              {this.props.exercise === 'concentration' ?
+                <Fragment>
+                  <Table.Cell
+                    negative={!attempt.elapsedTime}
+                  >
+                    {attempt.elapsedTime ? formatMilliseconds(attempt.elapsedTime) :
+                      this.props.translate('statistics-table.not-recorded')}
+                  </Table.Cell>
+                  <Table.Cell
+                    negative={!attempt.exerciseResult || attempt.exerciseResult < 50}
+                    warning={attempt.exerciseResult >= 50 && attempt.exerciseResult < 90}
+                    positive={attempt.testResult >= 90}
+                  >
+                    {attempt.exerciseResult !== null ? `${attempt.exerciseResult}%` :
+                      this.props.translate('statistics-table.not-recorded')}
+                  </Table.Cell>
+                </Fragment> : null}
             </Table.Row>
           ))}
         </Table.Body>
         <Table.Footer>
           <Table.Row>
-            <Table.HeaderCell colSpan="5">
+            <Table.HeaderCell colSpan="10">
               <Menu floated="right" pagination>
                 <Menu.Item as="a" icon>
                   <Icon name="chevron left" />

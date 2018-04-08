@@ -33,9 +33,10 @@ const exercisePreparing = () => ({
   type: actionTypes.EXERCISE_PREPARING,
 });
 
-const exercisePrepared = (exerciseOptions, selectedText) => ({
+const exercisePrepared = (save, exerciseOptions, selectedText) => ({
   type: actionTypes.EXERCISE_PREPARED,
   payload: {
+    save,
     exerciseOptions,
     selectedText,
   },
@@ -101,16 +102,16 @@ export const changeModification = modification => (dispatch) => {
   dispatch(modificationChanged(modification));
 };
 
-export const prepareTextExercise = (exerciseOptions, selectedText) => (dispatch) => {
+export const prepareTextExercise = (save, exerciseOptions, selectedText) => (dispatch) => {
   dispatch(exercisePreparing());
   dispatch(timerInit());
-  dispatch(exercisePrepared(exerciseOptions, selectedText));
+  dispatch(exercisePrepared(save, exerciseOptions, selectedText));
 };
 
-export const prepareHelpExercise = exerciseOptions => (dispatch) => {
+export const prepareHelpExercise = (save, exerciseOptions) => (dispatch) => {
   dispatch(exercisePreparing());
   dispatch(timerInit());
-  dispatch(exercisePrepared(exerciseOptions));
+  dispatch(exercisePrepared(save, exerciseOptions));
 };
 
 export const startExercise = (attemptData, token) => (dispatch, getState) => {

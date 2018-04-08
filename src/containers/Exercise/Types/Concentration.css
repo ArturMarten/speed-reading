@@ -1,22 +1,21 @@
 .concentration-grid {
-  user-select: none;
-  align-content: right;
   width: min-content;
+  border-collapse: collapse;
+  user-select: none;
 }
 
 .concentration-row {
-  display: grid;
-  grid-template-columns: repeat(4, 0fr);
-  border-collapse: collapse;
-  align-items: center;
-  padding: 4px;
-  margin: 1px;
   font-size: 1.4em;
 }
 
 .concentration-row.selected {
-  border: 1px solid black;
+  border: 2px solid red;
   border-radius: 5px;
+}
+
+.concentration-cell {
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .concentration-left {
@@ -24,7 +23,7 @@
 }
 
 .concentration-spacing {
-  background: red;
+  min-width: 10px;
 }
 
 .concentration-right {

@@ -55,7 +55,7 @@ export class TestResults extends Component {
                 content={this.props.translate('test-results.check-correct-answers')}
               />
             }
-            content={this.props.translate('auth.required')}
+            content={this.props.translate('auth.not-implemented')}
             on="hover"
           />
           <Button

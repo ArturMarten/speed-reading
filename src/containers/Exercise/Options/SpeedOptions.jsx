@@ -8,8 +8,10 @@ import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseIn
 import {
   MIN_WPM,
   MAX_WPM,
+  STEP_WPM,
   MIN_FIXATION,
   MAX_FIXATION,
+  STEP_FIXATION,
 } from '../../../store/reducers/options';
 
 export class SpeedOptions extends PureComponent {
@@ -51,7 +53,7 @@ export class SpeedOptions extends PureComponent {
             value={this.props.options.wpm}
             min={MIN_WPM}
             max={MAX_WPM}
-            step={10}
+            step={STEP_WPM}
             updateValue={value => this.props.onSubmit(Object.assign({}, { wpm: value }))}
             ref={(ref) => { this.wpmSpeedRef = ref; }}
           /> : null}
@@ -62,7 +64,7 @@ export class SpeedOptions extends PureComponent {
             value={this.props.options.fixation}
             min={MIN_FIXATION}
             max={MAX_FIXATION}
-            step={10}
+            step={STEP_FIXATION}
             updateValue={value => this.props.onSubmit({ fixation: value })}
             ref={(ref) => { this.fixationSpeedRef = ref; }}
           /> : null}
