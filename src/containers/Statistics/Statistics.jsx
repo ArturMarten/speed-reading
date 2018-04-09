@@ -32,19 +32,7 @@ export class Statistics extends Component {
       { text: this.props.translate('statistics.concentration'), value: 'concentration' },
     ];
     const data = this.props.exerciseStatistics
-      .filter(attempt => attempt.exerciseId === getExerciseId(this.state.exercise) && attempt.result !== null)
-      .map(attempt => ({
-        id: attempt.id,
-        modification: attempt.modification,
-        date: new Date(attempt.startTime),
-        readingAttempt: attempt.readingAttempt,
-        wpm: attempt.result.wpm,
-        spm: attempt.result.spm,
-        exerciseResult: attempt.result.correct !== undefined && attempt.result.total !== undefined ?
-          Math.round((attempt.result.correct / attempt.result.total) * 100) : null,
-        elapsedTime: attempt.result.elapsedTime,
-        testResult: attempt.test && attempt.test.result ? Math.round((attempt.test.result.correct / attempt.test.result.total) * 100) : null,
-      }));
+      .filter(attempt => attempt.exerciseId === getExerciseId(this.state.exercise));
     const exerciseDropdown = (
       <Dropdown
         fluid

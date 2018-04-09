@@ -12,13 +12,17 @@ export class SchulteTablesPreview extends Component {
     symbols: [],
   };
 
+  componentDidMount() {
+    this.refreshPreview();
+  }
+
   componentDidUpdate(prevProps) {
-    if (prevProps.exerciseModification !== this.props.exerciseModification) {
-      this.generateTable();
+    if (prevProps.exerciseModification !== this.props.exerciseModification || prevProps.exerciseOptions !== this.props.exerciseOptions) {
+      this.refreshPreview();
     }
   }
 
-  generateTable = () => {
+  refreshPreview = () => {
     this.setState({ symbols: generateSymbols(25, this.props.exerciseModification) });
   }
 

@@ -127,7 +127,7 @@ export class StatisticsTable extends Component {
                   <Table.Cell
                     negative={!attempt.exerciseResult || attempt.exerciseResult < 50}
                     warning={attempt.exerciseResult >= 50 && attempt.exerciseResult < 90}
-                    positive={attempt.testResult >= 90}
+                    positive={attempt.exerciseResult >= 90}
                   >
                     {attempt.exerciseResult !== null ? `${attempt.exerciseResult}%` :
                       this.props.translate('statistics-table.not-recorded')}

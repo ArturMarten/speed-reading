@@ -21,7 +21,7 @@ export const tableDimensionOptions = [
 ];
 
 export const MIN_TEXT_WIDTH = 250;
-export const MAX_TEXT_WIDTH = 1200;
+export const MAX_TEXT_WIDTH = 1600;
 export const STEP_TEXT_WIDTH = 50;
 export const MIN_FONT_SIZE = 12;
 export const MAX_FONT_SIZE = 18;
@@ -78,8 +78,8 @@ export const MAX_FIXATION = 750;
 export const STEP_FIXATION = 10;
 
 const initialSpeedOptions = {
-  wpm: 300,
-  fixation: 300,
+  wpm: 250,
+  fixation: 400,
 };
 
 const defaultVisibleSpeedOptions = ['wpm'];
