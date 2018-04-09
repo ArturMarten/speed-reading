@@ -13,16 +13,16 @@ export class ConcentrationPreview extends Component {
   };
 
   componentDidMount() {
-    this.generateTable();
+    this.refreshPreview();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.exerciseModification !== this.props.exerciseModification || prevProps.exerciseOptions !== this.props.exerciseOptions) {
-      this.generateTable();
+      this.refreshPreview();
     }
   }
 
-  generateTable = () => {
+  refreshPreview = () => {
     this.setState({ stringPairs: generateStringPairs(20, this.props.exerciseOptions.symbolCount, this.props.exerciseModification) });
   }
 

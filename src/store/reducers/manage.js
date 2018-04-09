@@ -20,11 +20,15 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_USERS_SUCCEEDED: {
+      const users = action.payload.map(user => updateObject(user, {
+        registrationDate: user.registrationDate ? new Date(user.registrationDate) : null,
+        lastLogin: user.lastLogin ? new Date(user.lastLogin) : null,
+      }));
       return updateObject(state, {
         loading: !state.fetchedGroups,
         fetchedUsers: true,
         error: null,
-        users: action.payload,
+        users,
       });
     }
     case actionTypes.FETCH_USERS_FAILED: {

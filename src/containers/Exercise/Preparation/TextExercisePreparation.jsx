@@ -4,6 +4,7 @@ import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Chec
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import ExerciseDescription from '../Description/ExerciseDescription';
 import TextSelection from '../../TextSelection/TextSelection';
 import TextOptions from '../Options/TextOptions';
 import ExerciseOptions from '../Options/ExerciseOptions';
@@ -73,15 +74,9 @@ export class TextExercisePreparation extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={13}>
-              <div style={{ fontSize: '1.1em' }}>
-                <div>
-                  {this.props.translate(`exercises.description-${this.props.type}`)}
-                </div>
-                <div>
-                  <b>{this.props.translate('exercises.goal')}: </b>
-                  {this.props.translate(`exercises.goal-${this.props.type}`)}
-                </div>
-              </div>
+              <ExerciseDescription
+                type={this.props.type}
+              />
             </Grid.Column>
             <Grid.Column width={3} verticalAlign="bottom">
               <Button

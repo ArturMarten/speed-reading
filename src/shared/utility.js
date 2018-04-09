@@ -97,6 +97,8 @@ export const translateError = (translate, error) => {
       return translate('error.user-not-found');
     case 'Incorrect password':
       return translate('error.incorrect-password');
+    case 'Incorrect old password':
+      return translate('error.incorrect-old-password');
     case 'You do not have required permission':
       return translate('error.no-permission');
     default:

@@ -123,7 +123,7 @@ export class Manage extends Component {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
-                    }).format(new Date(user.registrationDate))}
+                    }).format(user.registrationDate)}
                   </Table.Cell>
                   <Table.Cell negative={!user.lastLogin}>{
                     user.lastLogin ?
@@ -134,7 +134,7 @@ export class Manage extends Component {
                       hour12: false,
                       hour: 'numeric',
                       minute: 'numeric',
-                    }).format(new Date(user.lastLogin)) : this.props.translate('manage.last-login-never')}
+                    }).format(user.lastLogin) : this.props.translate('manage.last-login-never')}
                   </Table.Cell>
                   <Table.Cell>{this.props.translate(`manage.role-${user.role}`)}</Table.Cell>
                   <Table.Cell collapsing>

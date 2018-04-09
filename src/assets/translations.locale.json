@@ -47,8 +47,8 @@
   "home": {
     "welcome": ["Tere tulemast", "Welcome"],
     "description": [
-      "Alustamiseks vali harjutus menüüst.", 
-      "To get started, choose an exercise from the menu."
+      "Tegemist on veebipõhise kiirlugemise programmiga. Alustamiseks vali endale sobiv harjutus menüüst. Esmasel kasutamisel on soovitav alustada lugemistestiga, et teha kindlaks hetke lugemiskiirus.", 
+      "This is web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
     "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
@@ -152,6 +152,7 @@
   },
   "exercises": {
     "goal": ["Eesmärk", "Goal"],
+    "shortkeys": ["Kiirklahvid", "Shortkeys"],
     "save-statistics": ["Salvesta statistikas", "Save statistics"],
     "title-readingTest": ["Lugemistest", "Reading test"],
     "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga.", "This test allows to measure your reading speed with normal text."],
@@ -170,7 +171,8 @@
     "goal-schulteTables": ["Jälgides tabeli keskel olevat punast täppi, leida kõik sümbolid kasvavas või kahanevas järjestuses.", "By looking at the red dot in the middle of the table, find all symbols in ascending or descending order."],
     "title-concentration": ["Keskendumise harjutus", "Concentration exercise"],
     "description-concentration": ["See harjutus aitab arendada keskendumist.", "This exercise helps to develop concentration."],
-    "goal-concentration": ["Vaadata kõrvuti olevaid sümbolite gruppe ja otsustada, kas need on identsed või mitte.", "Look at two symbol groups side-by-side and decide whether they are identical or not."]
+    "goal-concentration": ["Vaadata kõrvuti olevaid sümbolite gruppe ja otsustada, kas need on identsed või mitte.", "Look at two symbol groups side-by-side and decide whether they are identical or not."],
+    "shortkeys-concentration": ["Klahvidega + ja - ning vasaku ja parema nooreklahviga saab vastata. Backspace'iga saab kustutada eelmise vastuse. Üles ja alla nooleklahvidega saab liigutada valitud gruppi.", "Keyboard keys + and -, left and right arrow keys can be used to answer. Backspace allows to remove last answer. Up and down arrow can be used to move currently selected group."]
   },
   "modification": {
     "default": ["Vaikimisi", "Default"],
@@ -235,7 +237,7 @@
   },
   "text-exercise-test": {
     "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
-    "description": ["Siin kontrollitakse teksti mõistmist.", "Text comprehension is tested here."],
+    "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned küsimused või lünkülesanded. Ainult üks vastusevariant on õige.", "Text comprehension is tested here. Some questions and blank exercises about read text are asked. There is only one correct answer."],
     "start-test": ["Alusta testiga", "Start test"],
     "previous-question": ["Eelmine küsimus", "Previous question"],
     "next-question": ["Järgmine küsimus", "Next question"],
@@ -285,7 +287,7 @@
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],
-    "description": ["Siin saab harjutuse valikul näha selle statistikat.", "Here you can select an exercise and see your statistics."],
+    "description": ["Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul (viimane on pooleli).", "Here you can select an exercise and see your statistics. Data is shown as a table or on a graph (not implemented yet)."],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
     "warning-title": ["Antud hetkel regressiooni joont ei näidata", "Currently regression line is not shown"],
@@ -378,6 +380,7 @@
     "authentication-expired": ["Autentimise võti on aegunud", "Authentication token has expired"],
     "user-not-found": ["Sellist kasutajat ei eksisteeri", "User does not exist"],
     "incorrect-password": ["Vale parool", "Incorrect password"],
+    "incorrect-old-password": ["Vale vana parool", "Incorrect old password"],
     "no-permission": ["Puuduvad vajalikud õigused", "You do not have required permission"]
   }
 }
