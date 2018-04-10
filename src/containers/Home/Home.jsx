@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Divider, Image, Message, Grid } from 'semantic-ui-react';
+import { Container, Header, Divider, Image, Message, Grid, Button } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
+import About from './About/About';
 // import IntroVideo from './IntroVideo/IntroVideo';
 import AppStats from './AppStats/AppStats';
 import utEstLogo from '../../assets/img/ut_est.png';
@@ -11,7 +12,14 @@ import studyEstLogo from '../../assets/img/study_est.jpg';
 import studyEngLogo from '../../assets/img/study_eng.jpg';
 
 export class Home extends Component {
-  state = {};
+  state = {
+    aboutOpened: false,
+  };
+
+  aboutToggleHandler = () => {
+    this.setState({ aboutOpened: !this.state.aboutOpened });
+  }
+
   render() {
     return (
       <Container style={{ marginTop: '4vh' }}>
@@ -20,6 +28,13 @@ export class Home extends Component {
           <Grid.Row>
             <Grid.Column width={8}>
               <p>{this.props.translate('home.description')}</p>
+              <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
+              <Button
+                positive
+                floated="right"
+                content={this.props.translate('home.about')}
+                onClick={this.aboutToggleHandler}
+              />
             </Grid.Column>
             <Grid.Column width={8}>
               {/*
