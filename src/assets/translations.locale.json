@@ -50,11 +50,24 @@
       "Tegemist on veebipõhise kiirlugemise programmiga. Alustamiseks vali endale sobiv harjutus menüüst. Esmasel kasutamisel on soovitav alustada lugemistestiga, et teha kindlaks hetke lugemiskiirus.", 
       "This is web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
+    "about": ["Rakenduse kohta", "About application"],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
     "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
     "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
     "license": ["litsents", "license"]
+  },
+  "about": {
+    "modal-header": ["Rakenduse kohta", "About application"],
+    "title": ["Kiirlugemine 5.0", "Kiirlugemine 5.0"],
+    "project-manager": ["Projekti juhtis"],
+    "project-manager-name": ["prof. Jaan Mikk (jaan.mikk@ut.ee)", "prof. Jaan Mikk (jaan.mikk@ut.ee)"],
+    "developer": ["Arendaja", "Developer"],
+    "developer-name": ["Marten Siiber", "Marten Siiber"],
+    "helper": ["Aitasid kaasa", "Helped with"],
+    "helper-names": ["Sven Aller ja Ilona Võik (tekstid)", "Sven Aller ja Ilona Võik (texts)"],
+    "place": ["Tartu Ülikool", "University of Tartu"],
+    "copyright": ["Autoriõigustega kaitstud.", "Copyright."]
   },
   "intro-video": {
     "header": ["Tutvustav video", "Introduction video"],
