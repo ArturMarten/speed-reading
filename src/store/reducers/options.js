@@ -51,6 +51,9 @@ export const STEP_LINE_BREAK_DELAY = 50;
 export const MIN_TABLE_SIZE = 30;
 export const MAX_TABLE_SIZE = 100;
 export const STEP_TABLE_SIZE = 10;
+export const MIN_SYMBOL_GROUP_COUNT = 20;
+export const MAX_SYMBOL_GROUP_COUNT = 40;
+export const STEP_SYMBOL_GROUP_COUNT = 1;
 export const MIN_SYMBOL_COUNT = 5;
 export const MAX_SYMBOL_COUNT = 15;
 export const STEP_SYMBOL_COUNT = 1;
@@ -65,6 +68,7 @@ const initialExerciseOptions = {
   tableDimensions: 25,
   tableSize: 100,
   symbolCount: 7,
+  symbolGroupCount: 20,
   columnSpacing: 30,
 };
 
@@ -164,7 +168,7 @@ const reducer = (state = initialState, action) => {
         case 'concentration':
           return updateObject(state, {
             visibleTextOptions: ['font', 'fontSize'],
-            visibleExerciseOptions: ['symbolCount', 'columnSpacing'],
+            visibleExerciseOptions: ['symbolGroupCount', 'symbolCount', 'columnSpacing'],
             visibleSpeedOptions: [],
           });
         default:

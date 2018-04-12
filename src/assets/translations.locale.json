@@ -26,8 +26,15 @@
     "first-time": ["Kasutaja puudumisel vajutage siia", "Click here when you don't have an account"],
     "logout-button": ["Logi välja", "Logout"]
   },
-  "change-password": {
+  "profile": {
+    "logout-button": ["Logi välja", "Logout"],
     "change-password-button": ["Vaheta parool", "Change password"],
+    "user-settings": ["Kasutaja seaded", "User settings"]
+  },
+  "profile-settings": {
+    "modal-header": ["Kasutaja seaded", "User settings"]
+  },
+  "change-password": {
     "modal-header": ["Parooli vahetamine", "Password change"],
     "old-password": ["Vana parool", "Old password"],
     "new-password": ["Uus parool", "New password"],
@@ -60,17 +67,18 @@
   "about": {
     "modal-header": ["Rakenduse kohta", "About application"],
     "title": ["Kiirlugemine 5.0", "Kiirlugemine 5.0"],
-    "project-manager": ["Projekti juhtis"],
+    "project-manager": ["Projekti juhtis", "Project Manager"],
     "project-manager-name": ["prof. Jaan Mikk (jaan.mikk@ut.ee)", "prof. Jaan Mikk (jaan.mikk@ut.ee)"],
     "developer": ["Arendaja", "Developer"],
     "developer-name": ["Marten Siiber", "Marten Siiber"],
-    "helper": ["Aitasid kaasa", "Helped with"],
+    "helper": ["Aitasid kaasa", "Helped"],
     "helper-names": ["Sven Aller ja Ilona Võik (tekstid)", "Sven Aller ja Ilona Võik (texts)"],
     "place": ["Tartu Ülikool", "University of Tartu"],
     "copyright": ["Autoriõigustega kaitstud.", "Copyright."]
   },
   "intro-video": {
     "header": ["Tutvustav video", "Introduction video"],
+    "being-made": ["Valmimisel..", "Being made.."],
     "title": ["Kiirlugemine 5.0 tutvustav video", "Kiirlugemine 5.0 introduction video"],
     "no-iframe": ["Kiirlugemine 5.0 tutvustav video", "Kiirlugemine 5.0 introduction video"],
     "authentication": ["Sisselogimine", "Authentication"],
@@ -166,6 +174,7 @@
   "exercises": {
     "goal": ["Eesmärk", "Goal"],
     "shortkeys": ["Kiirklahvid", "Shortkeys"],
+    "start-automatically": ["Alusta automaatselt", "Start automatically"],
     "save-statistics": ["Salvesta statistikas", "Save statistics"],
     "title-readingTest": ["Lugemistest", "Reading test"],
     "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga.", "This test allows to measure your reading speed with normal text."],
@@ -287,7 +296,9 @@
     "percentage": ["%", "%"],
     "table-dimensions": ["Tabeli mõõtmed", "Table dimensions"],
     "table-check": ["Kontroll", "Check"],
-    "symbol-count": ["Sümbolite arv kuni", "Symbol count"],
+    "symbol-group-count": ["Gruppide arv", "Group count"],
+    "groups": ["gruppi", "groups"],
+    "symbol-count": ["Sümbolite arv", "Symbol count"],
     "symbols": ["sümbolit", "symbols"],
     "column-spacing": ["Tulpade vahe", "Column spacing"],
     "px": ["pikslit", "px"]

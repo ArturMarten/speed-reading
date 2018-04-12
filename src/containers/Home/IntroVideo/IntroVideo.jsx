@@ -29,12 +29,14 @@ class IntroVideo extends Component {
   }
 
   render() {
-    const videoHeight = this.videoRef ? `${this.videoRef.offsetWidth * 0.5625}px` : '200px';
+    // const videoHeight = this.videoRef ? `${this.videoRef.offsetWidth * 0.5625}px` : '200px';
     return (
       <Fragment>
         <Header as="h3">
           {this.props.translate('intro-video.header')}
         </Header>
+        {this.props.translate('intro-video.being-made')}
+        {/*
         <Label.Group size="large">
           <Label as="a" color="green" onClick={this.timestampHandler(2)}>
             {this.props.translate('intro-video.authentication')} (0:02)
@@ -54,6 +56,7 @@ class IntroVideo extends Component {
         >
           {this.props.translate('intro-video.no-iframe')}
         </iframe>
+        */}
       </Fragment>
     );
   }

@@ -73,6 +73,10 @@ export class HelpExercisePreparation extends Component {
                   content={this.props.translate('text-exercise-preparation.proceed')}
                 />
                 <Checkbox
+                  style={{ float: 'right', margin: '2px' }}
+                  label={{ children: this.props.translate('exercises.start-automatically') }}
+                />
+                <Checkbox
                   checked={this.state.saveStatistics}
                   onChange={this.saveChangeHandler}
                   style={{ float: 'right', marginTop: '5px' }}

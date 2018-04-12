@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Button, Grid, Pagination, List } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
+import './TextExerciseTest.css';
 import * as actionCreators from '../../../store/actions';
 
 export class TextExerciseTest extends Component {
@@ -56,6 +57,7 @@ export class TextExerciseTest extends Component {
                 <List selection ordered animated verticalAlign="middle">
                   {this.props.questions[this.state.questionIndex].answers.map(answer => (
                     <List.Item
+                      id="question-answer"
                       key={answer.id}
                       active={this.state.answers[this.state.questionIndex] === answer.id}
                       onClick={() => this.onAnswerChange(this.state.questionIndex, answer.id)}
@@ -97,6 +99,7 @@ export class TextExerciseTest extends Component {
             negative
             onClick={this.onTestFinishHandler}
             floated="right"
+            style={{ marginTop: '15px' }}
             loading={this.props.testStatus === 'finishing'}
             disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
           >{this.props.translate('text-exercise-test.finish-test')}
