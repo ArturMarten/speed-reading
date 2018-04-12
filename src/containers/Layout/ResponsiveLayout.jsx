@@ -8,6 +8,7 @@ import { environment } from '../../environment';
 import './ResponsiveLayout.css';
 import axios from '../../axios-http';
 import Auth from '../../containers/Auth/Auth';
+import ProfileSettings from '../Profile/ProfileSettings';
 import ChangePassword from '../../containers/Auth/ChangePassword';
 import LanguageSelection from '../LanguageSelection/LanguageSelection';
 import Feedback from '../Feedback/Feedback';
@@ -20,6 +21,7 @@ export class ResponsiveLayout extends Component {
     sidebarOpened: false,
     profileOpened: false,
     authOpened: false,
+    profileSettingsOpened: false,
     changePasswordOpened: false,
     feedbackOpened: false,
   };
@@ -34,6 +36,10 @@ export class ResponsiveLayout extends Component {
 
   profileToggleHandler = () => {
     this.setState({ profileOpened: !this.state.profileOpened });
+  }
+
+  profileSettingsToggleHandler = () => {
+    this.setState({ profileSettingsOpened: !this.state.profileSettingsOpened, profileOpened: false });
   }
 
   authToggleHandler = () => {
@@ -59,6 +65,8 @@ export class ResponsiveLayout extends Component {
       <ErrorBoundary>
         <Sidebar.Pushable>
           {this.state.authOpened || !this.props.isAuthenticated ? <Auth open={this.state.authOpened} /> : null}
+          {this.state.profileSettingsOpened ?
+            <ProfileSettings open={this.state.profileSettingsOpened} onClose={this.profileSettingsToggleHandler} /> : null}
           {this.state.changePasswordOpened ?
             <ChangePassword open={this.state.changePasswordOpened} onClose={this.changePasswordToggleHandler} /> : null}
           <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} />
@@ -68,18 +76,40 @@ export class ResponsiveLayout extends Component {
                 {this.props.isAuthenticated ?
                   <Fragment>
                     <Header textAlign="center">{this.props.userEmail}</Header>
-                    <Button
-                      fluid
-                      positive
-                      icon
-                      labelPosition="right"
-                      onClick={this.onLogout}
-                      as={Link}
-                      to="/logout"
-                    >
-                      {this.props.translate('auth.logout-button')}
-                      <Icon name="sign out" style={{ opacity: 1 }} />
-                    </Button>
+                    <Grid>
+                      <Grid.Row columns={3} textAlign="center">
+                        <Grid.Column>
+                          <Button
+                            fluid
+                            circular
+                            primary
+                            icon="lock"
+                            onClick={this.changePasswordToggleHandler}
+                            disabled={this.props.userEmail === '***DEMO_EMAIL***'}
+                          />
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Button
+                            fluid
+                            circular
+                            as={Link}
+                            positive
+                            icon="sign out"
+                            onClick={this.onLogout}
+                            to="/logout"
+                          />
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Button
+                            fluid
+                            circular
+                            color="black"
+                            icon="setting"
+                            onClick={this.profileSettingsToggleHandler}
+                          />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Fragment> :
                   <Button fluid positive icon labelPosition="right" onClick={this.authToggleHandler}>
                     {this.props.translate('auth.login-button')}
@@ -218,7 +248,12 @@ export class ResponsiveLayout extends Component {
                 <Menu.Item onClick={this.sidebarToggleHandler}>
                   <Icon name="sidebar" size="large" />
                 </Menu.Item>
-                <Menu.Item header>
+                <Menu.Item
+                  as={Link}
+                  header
+                  onClick={this.itemClickHandler}
+                  to="/"
+                >
                   <Icon color="blue" name="book" size="big" />
                   {this.props.translate('menu.title')}&nbsp;{environment.version}
                 </Menu.Item>
@@ -226,7 +261,12 @@ export class ResponsiveLayout extends Component {
             </Responsive>
             <Responsive minWidth={992}>
               <Menu compact attached="top" secondary>
-                <Menu.Item header>
+                <Menu.Item
+                  as={Link}
+                  header
+                  onClick={this.itemClickHandler}
+                  to="/"
+                >
                   <Icon color="blue" name="book" size="big" />
                   {this.props.translate('menu.title')}&nbsp;{environment.version}
                 </Menu.Item>
@@ -354,6 +394,15 @@ export class ResponsiveLayout extends Component {
                         this.props.isAuthenticated ?
                           <Button.Group vertical fluid>
                             <Button
+                              color="black"
+                              icon
+                              labelPosition="right"
+                              onClick={this.profileSettingsToggleHandler}
+                            >
+                              {this.props.translate('profile.user-settings')}
+                              <Icon name="setting" style={{ opacity: 1 }} />
+                            </Button>
+                            <Button
                               as={Link}
                               positive
                               icon
@@ -361,7 +410,7 @@ export class ResponsiveLayout extends Component {
                               onClick={this.onLogout}
                               to="/logout"
                             >
-                              {this.props.translate('auth.logout-button')}
+                              {this.props.translate('profile.logout-button')}
                               <Icon name="sign out" style={{ opacity: 1 }} />
                             </Button>
                             <Button
@@ -371,7 +420,7 @@ export class ResponsiveLayout extends Component {
                               onClick={this.changePasswordToggleHandler}
                               disabled={this.props.userEmail === '***DEMO_EMAIL***'}
                             >
-                              {this.props.translate('change-password.change-password-button')}
+                              {this.props.translate('profile.change-password-button')}
                               <Icon name="lock" style={{ opacity: 1 }} />
                             </Button>
                           </Button.Group> :

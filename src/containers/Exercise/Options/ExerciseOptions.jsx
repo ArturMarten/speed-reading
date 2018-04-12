@@ -21,6 +21,9 @@ import {
   MIN_TABLE_SIZE,
   MAX_TABLE_SIZE,
   STEP_TABLE_SIZE,
+  MIN_SYMBOL_GROUP_COUNT,
+  MAX_SYMBOL_GROUP_COUNT,
+  STEP_SYMBOL_GROUP_COUNT,
   MIN_SYMBOL_COUNT,
   MAX_SYMBOL_COUNT,
   STEP_SYMBOL_COUNT,
@@ -86,6 +89,16 @@ export class ExerciseOptions extends PureComponent {
             name={this.props.translate('exercise-options.table-check')}
             value={this.props.options.tableCheck}
             updateValue={value => this.props.onSubmit({ tableCheck: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('symbolGroupCount') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.symbol-group-count')}
+            unit={this.props.translate('exercise-options.groups')}
+            value={this.props.options.symbolGroupCount}
+            min={MIN_SYMBOL_GROUP_COUNT}
+            max={MAX_SYMBOL_GROUP_COUNT}
+            step={STEP_SYMBOL_GROUP_COUNT}
+            updateValue={value => this.props.onSubmit({ symbolGroupCount: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('symbolCount') !== -1 ?
           <ExerciseInputOption

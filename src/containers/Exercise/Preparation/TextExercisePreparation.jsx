@@ -78,25 +78,9 @@ export class TextExercisePreparation extends Component {
                 type={this.props.type}
               />
             </Grid.Column>
-            <Grid.Column width={3} verticalAlign="bottom">
-              <Button
-                positive
-                floated="right"
-                loading={this.props.exerciseStatus === 'preparing'}
-                disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
-                onClick={this.textPreparationHandler}
-                content={this.props.translate('text-exercise-preparation.proceed')}
-              />
-              <Checkbox
-                checked={this.state.saveStatistics}
-                onChange={this.saveChangeHandler}
-                style={{ float: 'right', marginTop: '5px' }}
-                label={{ children: this.props.translate('exercises.save-statistics') }}
-              />
-            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16}>
+            <Grid.Column width={13}>
               <Segment clearing>
                 <Header as="h4" textAlign="center">
                   {this.props.translate('text-exercise-preparation.text-selection')}
@@ -116,6 +100,27 @@ export class TextExercisePreparation extends Component {
                     onClose={this.textSelectionToggleHandler}
                   /> : null}
               </Segment>
+            </Grid.Column>
+            <Grid.Column floated="right" width={3} verticalAlign="bottom">
+              <Button
+                positive
+                floated="right"
+                style={{ margin: '2px' }}
+                loading={this.props.exerciseStatus === 'preparing'}
+                disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
+                onClick={this.textPreparationHandler}
+                content={this.props.translate('text-exercise-preparation.proceed')}
+              />
+              <Checkbox
+                style={{ float: 'right', margin: '2px' }}
+                label={{ children: this.props.translate('exercises.start-automatically') }}
+              />
+              <Checkbox
+                checked={this.state.saveStatistics}
+                onChange={this.saveChangeHandler}
+                style={{ float: 'right', margin: '2px' }}
+                label={{ children: this.props.translate('exercises.save-statistics') }}
+              />
             </Grid.Column>
           </Grid.Row>
           {this.props.info.exerciseSettingsInfo ?

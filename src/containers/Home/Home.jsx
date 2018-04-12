@@ -4,7 +4,7 @@ import { Container, Header, Divider, Image, Message, Grid, Button } from 'semant
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import About from './About/About';
-// import IntroVideo from './IntroVideo/IntroVideo';
+import IntroVideo from './IntroVideo/IntroVideo';
 import AppStats from './AppStats/AppStats';
 import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
@@ -37,12 +37,10 @@ export class Home extends Component {
               />
             </Grid.Column>
             <Grid.Column width={8}>
-              {/*
               <IntroVideo
                 language={this.props.currentLanguage}
                 translate={this.props.translate}
               />
-              */}
             </Grid.Column>
           </Grid.Row>
           <Divider />

@@ -23,7 +23,13 @@ export class ConcentrationPreview extends Component {
   }
 
   refreshPreview = () => {
-    this.setState({ stringPairs: generateStringPairs(20, this.props.exerciseOptions.symbolCount, this.props.exerciseModification) });
+    this.setState({
+      stringPairs: generateStringPairs(
+        this.props.exerciseOptions.symbolGroupCount,
+        this.props.exerciseOptions.symbolCount,
+        this.props.exerciseModification,
+      ),
+    });
   }
 
   toggleClickHandler = () => {

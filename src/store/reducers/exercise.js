@@ -158,7 +158,11 @@ const reducer = (state = initialState, action) => {
         const symbols = generateSymbols(25, state.modification);
         preparation = { symbols };
       } else if (state.type === 'concentration') {
-        const stringPairs = generateStringPairs(20, action.payload.exerciseOptions.symbolCount, state.modification);
+        const stringPairs = generateStringPairs(
+          action.payload.exerciseOptions.symbolGroupCount,
+          action.payload.exerciseOptions.symbolCount,
+          state.modification,
+        );
         preparation = { stringPairs };
       }
       return updateObject(state, {
@@ -254,7 +258,11 @@ const reducer = (state = initialState, action) => {
         });
       } else if (state.type === 'concentration') {
         return updateObject(state, {
-          stringPairs: generateStringPairs(20, action.payload.exerciseOptions.symbolCount, state.modification),
+          stringPairs: generateStringPairs(
+            action.payload.execiseOptions.symbolGroupCount,
+            action.payload.exerciseOptions.symbolCount,
+            state.modification,
+          ),
           status: 'prepared',
         });
       }
