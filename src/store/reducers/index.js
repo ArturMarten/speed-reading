@@ -12,6 +12,7 @@ import manageReducer from './manage';
 import profileReducer from './profile';
 import statisticsReducer from './statistics';
 import feedbackReducer from './feedback';
+import bugReportReducer from './bugReport';
 
 export default combineReducers({
   info: infoReducer,
@@ -25,5 +26,6 @@ export default combineReducers({
   profile: profileReducer,
   statistics: statisticsReducer,
   feedback: feedbackReducer,
+  bugReport: bugReportReducer,
   locale: localeReducer,
 });

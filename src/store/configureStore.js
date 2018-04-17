@@ -6,6 +6,7 @@ import { initialize, addTranslation } from 'react-localize-redux';
 
 import rootReducer from './reducers';
 import errorHandler from '../utils/errorHandler';
+import actionsReporter from '../utils/actionsReporter';
 // import logger from '../utils/logger';
 import * as translations from '../assets/translations.locale.json';
 
@@ -20,6 +21,7 @@ export default function configureStore(history) {
     composeEnhancers(applyMiddleware(
       errorHandler,
       routerMiddleware(history),
+      actionsReporter,
       // logger,
       thunk,
     )),

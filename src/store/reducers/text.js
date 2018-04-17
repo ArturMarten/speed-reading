@@ -114,7 +114,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.FETCH_READING_TEXT_SUCCEEDED: {
       const updatedText = updateObject(action.payload, {
-        text: convertFromRaw(action.payload.text),
+        contentState: convertFromRaw(action.payload.contentState),
       });
       return updateObject(state, {
         selectedText: updatedText,

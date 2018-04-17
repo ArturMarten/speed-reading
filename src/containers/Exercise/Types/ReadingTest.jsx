@@ -20,7 +20,7 @@ export class ReadingTest extends Component {
     this.offscreenContext.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
     this.offscreenContext.textBaseline = 'bottom';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
-    writeText(this.offscreenContext, this.props.selectedText.text);
+    writeText(this.offscreenContext, this.props.selectedText.contentState);
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
   }

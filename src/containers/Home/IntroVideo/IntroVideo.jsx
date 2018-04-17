@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { Header, Label } from 'semantic-ui-react';
+import {
+  Header,
+//   Label,
+} from 'semantic-ui-react';
 
 const RESIZE_DELAY = 100;
 
 class IntroVideo extends Component {
   state = {
+    // eslint-disable-next-line
     src: '//youtube.com/embed/99jLM5ICbVQ?cc_load_policy=1&hl=et',
   };
 
@@ -23,7 +27,7 @@ class IntroVideo extends Component {
 
   timestampHandler = timestamp => () => {
     this.setState({
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line
       src: `//youtube.com/embed/99jLM5ICbVQ?start=${timestamp}&cc_load_policy=1&hl=${this.props.language === 'ee' ? 'et' : 'en'}&autoplay=1&time=${Date.now()}`,
     });
   }

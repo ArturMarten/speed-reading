@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Dropdown } from 'semantic-ui-react';
+import { Table, Dropdown, Popup, Icon } from 'semantic-ui-react';
 
 class ExerciseSelectOption extends Component {
   state = {
@@ -31,6 +31,12 @@ class ExerciseSelectOption extends Component {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
+          {this.props.description ?
+            <Popup
+              trigger={<Icon name="question circle outline" />}
+              position="right center"
+              content={this.props.description}
+            /> : null}
         </Table.Cell>
         <Table.Cell colSpan={3}>
           <Dropdown

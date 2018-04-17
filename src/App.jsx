@@ -3,6 +3,7 @@ import { withRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import * as actionCreators from './store/actions';
+import { listenToErrors } from './utils/errorReporter';
 import Loadable from './hoc/Loadable/Loadable';
 import ResponsiveLayout from './containers/Layout/ResponsiveLayout';
 import Logout from './containers/Auth/Logout';
@@ -42,6 +43,7 @@ const Manage = Loadable({
 
 export class App extends Component {
   componentDidMount() {
+    listenToErrors();
     this.props.onTryAutoLogin();
   }
   render() {

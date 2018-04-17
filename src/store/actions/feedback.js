@@ -16,15 +16,9 @@ const sendFeedbackFailed = error => ({
   payload: error,
 });
 
-export const sendFeedback = feedback => (dispatch) => {
+export const sendFeedback = feedbackData => (dispatch) => {
   dispatch(sendFeedbackStart());
-  const data = {
-    message: feedback.message,
-    functionalityRating: feedback.functionalityRating,
-    usabilityRating: feedback.usabilityRating,
-    designRating: feedback.designRating,
-  };
-  axios.post('/feedback', data)
+  axios.post('/feedback', feedbackData)
     .then((response) => {
       dispatch(sendFeedbackSucceeded(serverSuccessMessage(response)));
     }, (error) => {

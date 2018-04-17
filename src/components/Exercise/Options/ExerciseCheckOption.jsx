@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Checkbox } from 'semantic-ui-react';
+import { Table, Checkbox, Popup, Icon } from 'semantic-ui-react';
 
 class ExerciseCheckOption extends Component {
   state = {
@@ -31,6 +31,12 @@ class ExerciseCheckOption extends Component {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
+          {this.props.description ?
+            <Popup
+              trigger={<Icon name="question circle outline" />}
+              position="right center"
+              content={this.props.description}
+            /> : null}
         </Table.Cell>
         <Table.Cell colSpan={3}>
           <Checkbox

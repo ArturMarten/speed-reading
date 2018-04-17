@@ -35,8 +35,10 @@ export class RegressionChart extends Component {
   }
 
   init() {
-    this.xScale = scaleTime().domain([new Date(2017, 8, 1), new Date(2018, 5, 5)]).range([30, 1000]);
-    this.yScale = scaleLinear().domain([500, 0]).range([20, 380]);
+    const today = new Date();
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    this.xScale = scaleTime().domain([new Date(2018, 2, 1), tomorrow]).range([50, 1000]);
+    this.yScale = scaleLinear().domain([10000, 0]).range([20, 380]);
     const xAxis = axisBottom().scale(this.xScale);
     const yAxis = axisLeft().scale(this.yScale).ticks(5);
 
@@ -61,7 +63,7 @@ export class RegressionChart extends Component {
       .style('text-anchor', 'end')
       .text(this.props.translate('regression-chart.date'));
     this.yAxis = select(svg).append('g');
-    this.yAxis.attr('class', 'y axis').attr('transform', `translate(${30}, 0)`).call(yAxis)
+    this.yAxis.attr('class', 'y axis').attr('transform', `translate(${50}, 0)`).call(yAxis)
       .append('text')
       .attr('class', 'label')
       .style('fill', 'black')

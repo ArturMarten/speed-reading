@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Message, Dropdown, Segment, Dimmer, Loader, Tab } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Segment, Tab } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-// import RegressionChart from '../../components/Statistics/RegressionChart';
+import RegressionChart from '../../components/Statistics/RegressionChart';
 import StatisticsTable from '../../components/Statistics/StatisticsTable';
-import RegressionChartC3 from '../../components/Statistics/RegressionChartC3';
 import { getExerciseId } from '../../store/reducers/exercise';
 
 export class Statistics extends Component {
@@ -44,9 +43,13 @@ export class Statistics extends Component {
     );
     const panes = [
       {
-        menuItem: { key: 'table', icon: 'table', content: this.props.translate('statistics.table') },
+        menuItem: {
+          key: 'table',
+          icon: 'table',
+          content: this.props.translate('statistics.table'),
+        },
         render: () => (
-          <Tab.Pane>
+          <Tab.Pane loading={this.props.exerciseStatisticsStatus.loading}>
             {exerciseDropdown}
             <StatisticsTable
               exercise={this.state.exercise}
@@ -57,18 +60,22 @@ export class Statistics extends Component {
         ),
       },
       {
-        menuItem: { key: 'chart', icon: 'line chart', content: this.props.translate('statistics.regression') },
+        menuItem: {
+          key: 'chart',
+          icon: 'line chart',
+          content: this.props.translate('statistics.regression'),
+          disabled: this.props.exerciseStatisticsStatus.loading,
+        },
         render: () => (
-          <Tab.Pane>
+          <Tab.Pane loading={this.props.exerciseStatisticsStatus.loading}>
             {exerciseDropdown}
+            {/*
             <Message warning>
               <Message.Header>{this.props.translate('statistics.warning-title')}</Message.Header>
             </Message>
+            */}
             <Segment basic>
-              <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
-                <Loader>{this.props.translate('statistics.loading')}</Loader>
-              </Dimmer>
-              <RegressionChartC3
+              <RegressionChart
                 exercise={this.state.exercise}
                 data={data}
                 translate={this.props.translate}

@@ -15,6 +15,11 @@ import Feedback from '../Feedback/Feedback';
 import withErrorHandler from '../../hoc/ErrorHandler/withErrorHandler';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import { rolePermissions } from '../../store/reducers/profile';
+import Loadable from '../../hoc/Loadable/Loadable';
+
+const BugReport = Loadable({
+  loader: () => import('../BugReport/BugReport'),
+});
 
 export class ResponsiveLayout extends Component {
   state = {
@@ -24,6 +29,7 @@ export class ResponsiveLayout extends Component {
     profileSettingsOpened: false,
     changePasswordOpened: false,
     feedbackOpened: false,
+    bugReportOpened: false,
   };
 
   onLogout = () => {
@@ -54,6 +60,10 @@ export class ResponsiveLayout extends Component {
     this.setState({ feedbackOpened: !this.state.feedbackOpened });
   }
 
+  bugReportToggleHandler = () => {
+    this.setState({ bugReportOpened: !this.state.bugReportOpened });
+  }
+
   itemClickHandler = () => {
     this.setState({ sidebarOpened: false });
   }
@@ -69,7 +79,10 @@ export class ResponsiveLayout extends Component {
             <ProfileSettings open={this.state.profileSettingsOpened} onClose={this.profileSettingsToggleHandler} /> : null}
           {this.state.changePasswordOpened ?
             <ChangePassword open={this.state.changePasswordOpened} onClose={this.changePasswordToggleHandler} /> : null}
-          <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} />
+          {this.state.feedbackOpened ?
+            <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} /> : null}
+          {this.state.bugReportOpened ?
+            <BugReport open={this.state.bugReportOpened} onClose={this.bugReportToggleHandler} /> : null}
           <Sidebar as={Menu} animation="overlay" vertical visible={this.state.sidebarOpened}>
             <Menu.Menu>
               <Menu.Item>
@@ -234,6 +247,9 @@ export class ResponsiveLayout extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Icon name="talk" color="black" size="big" onClick={this.feedbackToggleHandler} />
+                </Grid.Column>
+                <Grid.Column>
+                  <Icon name="bug" color="olive" size="big" onClick={this.bugReportToggleHandler} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -434,6 +450,13 @@ export class ResponsiveLayout extends Component {
                     <Popup
                       trigger={<Icon fitted name="talk" color="black" size="big" onClick={this.feedbackToggleHandler} />}
                       content={this.props.translate('menu.feedback-popup')}
+                      on="hover"
+                    />
+                  </Menu.Item>
+                  <Menu.Item fitted>
+                    <Popup
+                      trigger={<Icon fitted name="bug" color="olive" size="big" onClick={this.bugReportToggleHandler} />}
+                      content={this.props.translate('menu.bug-report-popup')}
                       on="hover"
                     />
                   </Menu.Item>
