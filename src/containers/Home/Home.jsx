@@ -63,7 +63,6 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-
         <AppStats />
         <Divider />
         <Grid verticalAlign="middle">

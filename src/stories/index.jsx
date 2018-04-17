@@ -15,13 +15,14 @@ import TextExercisePreparationContainer from '../containers/Exercise/Preparation
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
 import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
+import HelpExercisePreparationContainer from '../containers/Exercise/Preparation/HelpExercisePreparation';
 import { HelpExercise } from '../containers/Exercise/HelpExercise/HelpExercise';
 import { SchulteTables } from '../containers/Exercise/Types/SchulteTables';
 import { Concentration } from '../containers/Exercise/Types/Concentration';
-import TextExerciseResultsContainer, { TextExerciseResults } from '../containers/Exercise/Results/TextExerciseResults';
+import { TextExerciseResults } from '../containers/Exercise/Results/TextExerciseResults';
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTestContainer from '../containers/Exercise/Test/TextExerciseTest';
-import TestResultsContainer, { TestResults } from '../containers/Exercise/Results/TestResults';
+import { TestResults } from '../containers/Exercise/Results/TestResults';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
@@ -41,7 +42,7 @@ const dummyData = [
 
 store.dispatch(setActiveLanguage('ee'));
 store.dispatch(actionCreators.authLogin('martensiiber@gmail.com', '123456'));
-store.dispatch(actionCreators.selectText(18));
+store.dispatch(actionCreators.selectText(2));
 
 const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 
@@ -59,7 +60,14 @@ storiesOf('Text editor', module)
   .add('Container', () => <TextEditorContainer />);
 
 storiesOf('Text exercise preparation', module)
-  .add('Container', () => <TextExercisePreparationContainer type="wordGroups" onProceed={action('clicked')} />);
+  .add('Container', () => {
+    store.dispatch(actionCreators.selectExercise('wordGroups'));
+    return (
+      <TextExercisePreparationContainer
+        type="wordGroups"
+        onProceed={action('clicked')}
+      />);
+  });
 
 storiesOf('Text selection', module)
   .add('Container', () => <TextSelectionContainer open />);
@@ -80,9 +88,19 @@ storiesOf('Reading exercise', module)
     />
   ));
 
+storiesOf('Help exercise preparation', module)
+  .add('Container', () => {
+    store.dispatch(actionCreators.selectExercise('concentration'));
+    return (
+      <HelpExercisePreparationContainer
+        type="concentration"
+        onProceed={action('clicked')}
+      />);
+  });
+
 storiesOf('Help exercise', module)
-  .add('Schulte tables component', () =>
-    (<HelpExercise
+  .add('Schulte tables component', () => (
+    <HelpExercise
       type="schulteTables"
       timerState={{
         started: true,
@@ -123,7 +141,6 @@ storiesOf('Concentration', module)
     />));
 
 storiesOf('Text exercise results', module)
-  .add('Container', () => <TextExerciseResultsContainer open />)
   .add('Component', () => (
     <TextExerciseResults
       open
@@ -142,7 +159,6 @@ storiesOf('Text exercise test', module)
   .add('Container', () => <TextExerciseTestContainer />);
 
 storiesOf('Test results', module)
-  .add('Container', () => <TestResultsContainer open />)
   .add('Component', () => (
     <TestResults
       open

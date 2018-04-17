@@ -40,6 +40,7 @@ export class ExerciseOptions extends PureComponent {
         {this.props.visibleOptions.indexOf('characterCount') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('exercise-options.word-group-length')}
+            description={this.props.translate('exercise-options.word-group-length-description')}
             unit={this.props.translate('exercise-options.characters')}
             value={this.props.options.characterCount}
             min={MIN_CHARACTER_COUNT}
@@ -50,6 +51,7 @@ export class ExerciseOptions extends PureComponent {
         {this.props.visibleOptions.indexOf('startDelay') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('exercise-options.start-delay')}
+            description={this.props.translate('exercise-options.start-delay-description')}
             unit={this.props.translate('exercise-options.ms')}
             value={this.props.options.startDelay}
             min={MIN_START_DELAY}
@@ -60,6 +62,7 @@ export class ExerciseOptions extends PureComponent {
         {this.props.visibleOptions.indexOf('lineBreakDelay') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('exercise-options.line-break-delay')}
+            description={this.props.translate('exercise-options.line-break-delay-description')}
             unit={this.props.translate('exercise-options.ms')}
             value={this.props.options.lineBreakDelay}
             min={MIN_LINE_BREAK_DELAY}

@@ -1,12 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Grid, Transition, Icon, Statistic, Button, Popup } from 'semantic-ui-react';
+import { Modal, Grid, Transition, Icon, Statistic, Button, Popup, Rating } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import { formatMilliseconds } from '../../../shared/utility';
 
 export class TestResults extends Component {
-  state = {}
+  state = {
+    difficultyRating: 0,
+  };
+
+  onRateHandler = (event, data) => {
+    this.setState({
+      difficultyRating: data.rating,
+    });
+  }
+
+  onEndHandler = () => {
+    if (this.state.difficultyRating) {
+      this.props.onRate(this.state.difficultyRating);
+    }
+    this.props.onEnd();
+  }
 
   render() {
     return (
@@ -44,6 +59,25 @@ export class TestResults extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
+            <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
+              <Grid.Column width={5} textAlign="right">
+                <b>{this.props.translate('test-results.rate-test-difficulty')}</b>
+              </Grid.Column>
+              <Grid.Column width={11}>
+                <Popup
+                  trigger={
+                    <Rating
+                      icon="star"
+                      clearable
+                      maxRating={10}
+                      rating={this.state.difficultyRating}
+                      onRate={this.onRateHandler}
+                    />}
+                  position="top center"
+                  content={this.props.translate('test-results.rate-test-difficulty-description')}
+                />
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Modal.Content>
         <Modal.Actions>
@@ -60,7 +94,7 @@ export class TestResults extends Component {
           />
           <Button
             negative
-            onClick={this.props.onEnd}
+            onClick={this.onEndHandler}
             content={this.props.translate('test-results.end')}
           />
         </Modal.Actions>

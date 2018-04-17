@@ -71,7 +71,7 @@ export class ReadingAid extends Component {
     this.offscreenContext.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
     this.offscreenContext.textBaseline = 'bottom';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
-    this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.text);
+    this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
     this.lineMetadata = getLineMetadata(this.textMetadata);
     const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
     this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;

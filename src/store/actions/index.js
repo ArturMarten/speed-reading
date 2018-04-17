@@ -72,3 +72,5 @@ export { fetchUserProfile } from './profile';
 export { fetchExerciseStatistics } from './statistics';
 
 export { sendFeedback } from './feedback';
+
+export { sendBugReport } from './bugReport';

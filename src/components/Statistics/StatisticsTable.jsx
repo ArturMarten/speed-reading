@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Menu, Icon } from 'semantic-ui-react';
+import { Table, Menu, Icon, Popup } from 'semantic-ui-react';
 
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';
 
@@ -40,6 +40,11 @@ export class StatisticsTable extends Component {
               <Fragment>
                 <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
                   {this.props.translate('statistics-table.reading-attempt')}
+                  <Popup
+                    trigger={<Icon name="question circle outline" />}
+                    position="top center"
+                    content={this.props.translate('statistics-table.reading-attempt-description')}
+                  />
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'wpm' ? direction : null} onClick={this.sortHandler('wpm')}>
                   {this.props.translate('statistics-table.wpm')}

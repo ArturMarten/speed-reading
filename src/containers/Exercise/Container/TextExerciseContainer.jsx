@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
+import axios from '../../../axios-http';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
 
@@ -57,6 +58,34 @@ export class TextExerciseContainer extends Component {
     }
   }
 
+  textComplexityRating = (complexityRating) => {
+    axios.post(
+      '/textRatings',
+      { readingTextId: this.props.selectedText.id, complexityRating }, { headers: { 'x-access-token': this.props.token } },
+    )
+      .then(() => {
+      }, (error) => {
+        console.log(error);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  testDifficultyRating = (difficultyRating) => {
+    axios.post(
+      '/testRatings',
+      { readingTextId: this.props.selectedText.id, difficultyRating }, { headers: { 'x-access-token': this.props.token } },
+    )
+      .then(() => {
+      }, (error) => {
+        console.log(error);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   switchViewHandler = (status) => {
     this.setState({ status });
   }
@@ -73,11 +102,13 @@ export class TextExerciseContainer extends Component {
           <TextExerciseResults
             open={this.state.status === 'exercise' && this.props.exerciseStatus === 'finished'}
             onProceed={() => this.switchViewHandler('test')}
+            onRate={this.textComplexityRating}
             onEnd={this.onExerciseEnd}
           /> : null}
         {this.state.status === 'test' && this.props.testStatus === 'finished' ?
           <TestResults
             open={this.state.status === 'test' && this.props.testStatus === 'finished'}
+            onRate={this.testDifficultyRating}
             onEnd={this.onTestEnd}
           /> : null}
         {this.getCurrentView()}
@@ -87,6 +118,8 @@ export class TextExerciseContainer extends Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.auth.token,
+  selectedText: state.text.selectedText,
   testStatus: state.test.status,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),

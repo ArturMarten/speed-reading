@@ -37,6 +37,7 @@ const initialState = {
     },
   },
   feedbackFormValid: false,
+  anonymous: false,
 };
 
 export class Feedback extends Component {
@@ -44,12 +45,17 @@ export class Feedback extends Component {
 
   onSubmit = () => {
     const submittedForm = {
+      userId: !this.state.anonymous ? this.props.userId : null,
       message: this.state.feedbackForm.message.value,
       functionalityRating: this.state.feedbackForm.functionalityRating.value,
       usabilityRating: this.state.feedbackForm.usabilityRating.value,
       designRating: this.state.feedbackForm.designRating.value,
     };
     this.props.onSubmit(submittedForm);
+  }
+
+  changeAnonymity = () => {
+    this.setState({ anonymous: !this.state.anonymous });
   }
 
   inputChangeHandler = (event, { name, value }) => {
@@ -143,7 +149,11 @@ export class Feedback extends Component {
               </label>
             </Form.Field>
             <Form.Field disabled={sent} style={{ margin: 0 }}>
-              <Checkbox label={this.props.translate('feedback.anonymous')} />
+              <Checkbox
+                label={this.props.translate('feedback.anonymous')}
+                checked={this.state.anonymous}
+                onChange={this.changeAnonymity}
+              />
             </Form.Field>
             <SuccessMessage
               icon="check"
@@ -170,6 +180,7 @@ export class Feedback extends Component {
 }
 
 const mapStateToProps = state => ({
+  userId: state.auth.userId,
   feedbackStatus: state.feedback.feedbackStatus,
   translate: getTranslate(state.locale),
 });

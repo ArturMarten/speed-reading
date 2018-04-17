@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Input, Button, Table } from 'semantic-ui-react';
+import { Input, Button, Table, Popup, Icon } from 'semantic-ui-react';
 
 const UPDATE_DELAY = 300;
 
@@ -81,6 +81,12 @@ class ExerciseInputOption extends PureComponent {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
+          {this.props.description ?
+            <Popup
+              trigger={<Icon name="question circle outline" />}
+              position="right center"
+              content={this.props.description}
+            /> : null}
         </Table.Cell>
         <Table.Cell>
           <Button.Group size="mini" fluid basic>

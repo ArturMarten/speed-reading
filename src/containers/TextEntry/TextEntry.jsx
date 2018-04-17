@@ -21,6 +21,7 @@ const initialState = {
       value: '',
       validation: {
         required: true,
+        maxLength: 100,
       },
       valid: false,
       touched: false,
@@ -29,6 +30,7 @@ const initialState = {
       value: '',
       validation: {
         required: true,
+        maxLength: 50,
       },
       valid: false,
       touched: false,
@@ -39,6 +41,33 @@ const initialState = {
         required: true,
       },
       valid: false,
+      touched: false,
+    },
+    editor: {
+      value: '',
+      validation: {
+        required: false,
+        maxLength: 50,
+      },
+      valid: true,
+      touched: false,
+    },
+    questionsAuthor: {
+      value: '',
+      validation: {
+        required: false,
+        maxLength: 50,
+      },
+      valid: true,
+      touched: false,
+    },
+    reference: {
+      value: '',
+      validation: {
+        required: false,
+        maxLength: 200,
+      },
+      valid: true,
       touched: false,
     },
     complexity: {
@@ -82,8 +111,11 @@ export class TextEntry extends Component {
       title: this.state.textEntryForm.title.value,
       author: this.state.textEntryForm.author.value,
       collectionId: +this.state.textEntryForm.collectionId.value,
+      editor: this.state.textEntryForm.editor.value,
+      questionsAuthor: this.state.textEntryForm.questionsAuthor.value,
+      reference: this.state.textEntryForm.reference.value,
       plain: textEditorComponent.getPlainText(),
-      text: textEditorComponent.getRawContent(),
+      contentState: textEditorComponent.getRawContent(),
       complexity: this.state.textEntryForm.complexity.value,
       keywords: this.state.textEntryForm.keywords.value,
     };
@@ -100,13 +132,20 @@ export class TextEntry extends Component {
     // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedTextEntryForm) {
       const updatedFormElement = { ...updatedTextEntryForm[inputName] };
-      updatedFormElement.value = typeof updatedFormElement.value === 'string' ?
-        selectedText[inputName].toString() : selectedText[inputName];
+      if (typeof updatedFormElement.value === 'string') {
+        if (selectedText[inputName]) {
+          updatedFormElement.value = selectedText[inputName].toString();
+        } else {
+          updatedFormElement.value = '';
+        }
+      } else {
+        updatedFormElement.value = selectedText[inputName];
+      }
       updatedFormElement.valid = true;
       updatedFormElement.touched = false;
       updatedTextEntryForm[inputName] = updatedFormElement;
     }
-    this.textEditorRef.getWrappedInstance().setContent(selectedText.text);
+    this.textEditorRef.getWrappedInstance().setContent(selectedText.contentState);
     this.setState({
       textEntryForm: updatedTextEntryForm,
       textEntryFormValid: true,
@@ -197,7 +236,6 @@ export class TextEntry extends Component {
 
     return (
       <Container style={{ marginTop: '4vh' }}>
-        <Header as="h2">{this.props.translate('text-entry.title')}</Header>
         {this.state.textSelectionOpened ?
           <TextSelection
             open={this.state.textSelectionOpened}
@@ -219,6 +257,7 @@ export class TextEntry extends Component {
             content={this.props.translate('text-entry.new-text')}
           /> : null
         }
+        <Header as="h2">{this.props.translate('text-entry.title')}</Header>
         <p>{this.props.translate('text-entry.description')}</p>
         <Form warning error={this.props.textStatus.error !== null} success={this.props.textStatus.message !== null}>
           <Form.Group widths="equal">
@@ -251,12 +290,41 @@ export class TextEntry extends Component {
               placeholder={this.props.translate('text-entry.text-collection-placeholder')}
             />
           </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Input
+              type="text"
+              name="editor"
+              label={this.props.translate('text-entry.text-editor')}
+              value={this.state.textEntryForm.editor.value}
+              error={!this.state.textEntryForm.editor.valid && this.state.textEntryForm.editor.touched}
+              onChange={this.inputChangeHandler}
+              placeholder={this.props.translate('text-entry.text-editor-placeholder')}
+            />
+            <Form.Input
+              type="text"
+              name="questionsAuthor"
+              label={this.props.translate('text-entry.text-questions-author')}
+              value={this.state.textEntryForm.questionsAuthor.value}
+              error={!this.state.textEntryForm.questionsAuthor.valid && this.state.textEntryForm.questionsAuthor.touched}
+              onChange={this.inputChangeHandler}
+              placeholder={this.props.translate('text-entry.text-questions-author-placeholder')}
+            />
+            <Form.Input
+              type="text"
+              name="reference"
+              label={this.props.translate('text-entry.text-reference')}
+              value={this.state.textEntryForm.reference.value}
+              error={!this.state.textEntryForm.reference.valid && this.state.textEntryForm.reference.touched}
+              onChange={this.inputChangeHandler}
+              placeholder={this.props.translate('text-entry.text-reference-placeholder')}
+            />
+          </Form.Group>
           <Form.Field>
-            <label htmlFor="text-editor">
-              <div>{this.props.translate('text-entry.text-editor')}</div>
+            <label htmlFor="text-input">
+              <div>{this.props.translate('text-entry.text-input')}</div>
             </label>
             <TextEditor
-              id="text-editor"
+              id="text-input"
               ref={(ref) => { this.textEditorRef = ref; }}
             />
           </Form.Field>
