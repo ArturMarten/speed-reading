@@ -87,7 +87,7 @@ export class Statistics extends Component {
     ];
 
     return (
-      <Container style={{ marginTop: '4vh' }}>
+      <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('statistics.title')}</Header>
         <p>{this.props.translate('statistics.description')}</p>
         <Tab panes={panes} />

@@ -3,6 +3,11 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
+  feedbackList: [],
+  feedbackListStatus: {
+    loading: false,
+    error: null,
+  },
   feedbackStatus: {
     loading: false,
     message: null,
@@ -35,6 +40,35 @@ const reducer = (state = initialState, action) => {
         feedbackStatus: {
           loading: false,
           message: null,
+          error: action.payload,
+        },
+      });
+    }
+    case actionTypes.FETCH_FEEDBACK_START: {
+      return updateObject(state, {
+        feedbackListStatus: {
+          loading: true,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.FETCH_FEEDBACK_SUCCEEDED: {
+      const feedbackList = action.payload.map(feedback => updateObject(feedback, {
+        date: feedback.date ? new Date(feedback.date) : null,
+        userId: (feedback.userId === null ? '' : feedback.userId),
+      }));
+      return updateObject(state, {
+        feedbackListStatus: {
+          loading: false,
+          error: null,
+        },
+        feedbackList,
+      });
+    }
+    case actionTypes.FETCH_FEEDBACK_FAILED: {
+      return updateObject(state, {
+        feedbackListStatus: {
+          loading: false,
           error: action.payload,
         },
       });

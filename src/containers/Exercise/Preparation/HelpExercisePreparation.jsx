@@ -56,7 +56,7 @@ export class HelpExercisePreparation extends Component {
       </Fragment>);
     return (
       <Fragment>
-        <Container style={{ marginTop: '4vh' }}>
+        <Container style={{ marginTop: '3vh' }}>
           <Grid stackable>
             <Grid.Row verticalAlign="bottom">
               <Grid.Column width={10}>

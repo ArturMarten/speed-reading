@@ -8,7 +8,7 @@ import { environment } from '../../environment';
 import * as actionCreators from '../../store/actions';
 import { errorData } from '../../utils/errorReporter';
 import { actionData } from '../../utils/actionsReporter';
-import { updateObject, checkValidity } from '../../shared/utility';
+import { updateObject, checkValidity, stopPropagation } from '../../shared/utility';
 import ErrorMessage from '../Message/ErrorMessage';
 import SuccessMessage from '../Message/SuccessMessage';
 
@@ -26,6 +26,7 @@ const initialState = {
   bugReportFormValid: false,
   sendScreenshot: true,
   screenshotImage: null,
+  screenshotOpen: false,
 };
 
 export class BugReport extends Component {
@@ -40,7 +41,6 @@ export class BugReport extends Component {
   }
 
   onSubmit = () => {
-    // this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '')
     const submittedForm = {
       userId: this.props.userId,
       description: this.state.bugReportForm.description.value,
@@ -49,11 +49,16 @@ export class BugReport extends Component {
       platform: window && window.navigator ? window.navigator.platform : 'Unknown',
       windowDimensions: window ? [window.innerWidth, window.innerHeight] : [],
       consoleErrors: errorData.getErrors(),
-      state: updateObject(this.props.state, { locale: undefined }),
+      state: updateObject(this.props.state, { locale: undefined, bugReport: undefined }),
       actions: actionData.getActions(30),
       screenshot: this.state.sendScreenshot ? this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '') : null,
     };
     this.props.onSubmit(submittedForm);
+  }
+
+  openScreenshotToggle = (event) => {
+    stopPropagation(event);
+    this.setState({ screenshotOpen: !this.state.screenshotOpen });
   }
 
   inputChangeHandler = (event, { name, value }) => {
@@ -79,10 +84,22 @@ export class BugReport extends Component {
   }
 
   render() {
+    const screenshotModal = (
+      <Modal open={this.state.screenshotOpen} closeOnDimmerClick={false} onClose={this.openScreenshotToggle} closeIcon>
+        <Image
+          bordered
+          centered
+          size="huge"
+          src={this.state.screenshotImage}
+          alt={this.props.translate('bug-report.screenshot-alt')}
+        />
+      </Modal>
+    );
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('bug-report.modal-header')}</Modal.Header>
         <Modal.Content>
+          {screenshotModal}
           <Form
             loading={this.props.bugReportStatus.loading}
             success={this.props.bugReportStatus.message !== null}
@@ -108,6 +125,7 @@ export class BugReport extends Component {
                 bordered
                 src={this.state.screenshotImage}
                 size="small"
+                onClick={this.openScreenshotToggle}
                 alt={this.props.translate('bug-report.screenshot-alt')}
               />
               <Checkbox

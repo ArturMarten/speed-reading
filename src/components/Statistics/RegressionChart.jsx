@@ -88,34 +88,36 @@ export class RegressionChart extends Component {
   }
 
   update() {
-    const { svg } = this;
-    // Update existing datapoints
-    select(svg).selectAll('circle').data(this.props.data).transition()
-      .duration(1000)
-      .attr('cx', d => this.xScale(new Date(d.date)))
-      .attr('cy', d => this.yScale(d.wpm));
+    if (this.props.data.length > 0) {
+      const { svg } = this;
+      // Update existing datapoints
+      select(svg).selectAll('circle').data(this.props.data).transition()
+        .duration(1000)
+        .attr('cx', d => this.xScale(new Date(d.date)))
+        .attr('cy', d => this.yScale(d.wpm));
 
-    // Update existing regression line
-    const xSeries = this.props.data.map(d => this.xScale(new Date(d.date)));
-    const ySeries = this.props.data.map(d => this.yScale(d.wpm));
-    // Calculate new coefficients
-    const leastSquaresCoeff = leastSquares(xSeries, ySeries);
-    const newLine = line()
-      .x(d => this.xScale(new Date(d.date)))
-      .y(d => leastSquaresCoeff[1] + (this.xScale(new Date(d.date)) * leastSquaresCoeff[0]));
-    this.regressionLine.attr('class', 'regression-line').datum(this.props.data).transition().duration(1000)
-      .attr('d', newLine);
+      // Update existing regression line
+      const xSeries = this.props.data.map(d => this.xScale(new Date(d.date)));
+      const ySeries = this.props.data.map(d => this.yScale(d.wpm));
+      // Calculate new coefficients
+      const leastSquaresCoeff = leastSquares(xSeries, ySeries);
+      const newLine = line()
+        .x(d => this.xScale(new Date(d.date)))
+        .y(d => leastSquaresCoeff[1] + (this.xScale(new Date(d.date)) * leastSquaresCoeff[0]));
+      this.regressionLine.attr('class', 'regression-line').datum(this.props.data).transition().duration(1000)
+        .attr('d', newLine);
 
-    // Remove old
-    select(svg).selectAll('circle').data(this.props.data).exit()
-      .remove();
-    // Add new ones
-    select(svg).selectAll('circle').data(this.props.data).enter()
-      .append('circle')
-      .attr('class', 'dot')
-      .attr('cx', d => this.xScale(new Date(d.date)))
-      .attr('cy', d => this.yScale(d.wpm))
-      .attr('r', 5);
+      // Remove old
+      select(svg).selectAll('circle').data(this.props.data).exit()
+        .remove();
+      // Add new ones
+      select(svg).selectAll('circle').data(this.props.data).enter()
+        .append('circle')
+        .attr('class', 'dot')
+        .attr('cx', d => this.xScale(new Date(d.date)))
+        .attr('cy', d => this.yScale(d.wpm))
+        .attr('r', 5);
+    }
   }
 
 

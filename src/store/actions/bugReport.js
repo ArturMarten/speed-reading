@@ -29,4 +29,29 @@ export const sendBugReport = bugReportData => (dispatch) => {
     });
 };
 
-export default sendBugReport;
+const fetchBugReportsStart = () => ({
+  type: actionTypes.FETCH_BUG_REPORTS_START,
+});
+
+const fetchBugReportsSucceeded = bugReports => ({
+  type: actionTypes.FETCH_BUG_REPORTS_SUCCEEDED,
+  payload: bugReports,
+});
+
+const fetchBugReportsFailed = error => ({
+  type: actionTypes.FETCH_BUG_REPORTS_FAILED,
+  payload: error,
+});
+
+export const fetchBugReports = token => (dispatch) => {
+  dispatch(fetchBugReportsStart());
+  axios.get('/bugReports', { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(fetchBugReportsSucceeded(response.data));
+    }, (error) => {
+      dispatch(fetchBugReportsFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(fetchBugReportsFailed(error.message));
+    });
+};

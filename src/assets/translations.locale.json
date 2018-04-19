@@ -67,6 +67,8 @@
       "This is web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
     "about": ["Rakenduse kohta", "About application"],
+    "bug-report-title": ["Vigade esinemisel", "Encountering bugs"],
+    "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
     "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
@@ -377,21 +379,28 @@
   "manage": {
     "title": ["Halda", "Manage"],
     "description": ["Siin saab hallata kasutajate nimekirja ja lisada uusi kasutajaid.", "Here you can manage user list and add new users."],
+    "users": ["Kasutajad", "Users"],
+    "feedback": ["Tagasiside", "Feedback"],
+    "bug-reports": ["Veateated", "Bug reports"]
+  },
+  "manage-users": {
+    "refresh": ["Värskenda", "Refresh"],
     "fetching-users": ["Laen kasutajaid", "Fetching users"],
-    "table-group": ["Grupp", "Group"],
-    "table-email": ["E-maili aadress", "E-mail address"],
-    "table-registration": ["Registreerimise kuupäev", "Registration date"],
-    "table-last-login": ["Viimane sisselogimine", "Last login"],
-    "table-role": ["Roll", "Role"],
-    "table-change": ["Muuda", "Change"],
+    "group": ["Grupp", "Group"],
+    "email": ["E-maili aadress", "E-mail address"],
+    "registration": ["Registreerimise kuupäev", "Registration date"],
+    "last-login": ["Viimane sisselogimine", "Last login"],
+    "role": ["Roll", "Role"],
+    "change": ["Muuda", "Change"],
     "group-missing": ["Puudub", "Missing"],
     "last-login-never": ["Mitte kunagi", "Never"],
     "role-guest": ["Külaline", "Guest"],
     "role-student": ["Õpilane", "Student"],
+    "role-editor": ["Toimetaja", "Editor"],
     "role-teacher": ["Õppejõud", "Teacher"],
     "role-developer": ["Arendaja", "Developer"],
     "role-admin": ["Admin", "Admin"],
-    "table-add-user": ["Lisa kasutaja", "Add user"]
+    "add-user": ["Lisa kasutaja", "Add user"]
   },
   "group-editor": {
     "modal-header-new": ["Uus grupp", "New group"],
@@ -409,6 +418,31 @@
     "notify-user-password": ["Teavita kasutajat paroolist", "Notify user about password"],
     "add-user": ["Lisa", "Add"],
     "change-user": ["Muuda", "Change"]
+  },
+  "manage-feedback": {
+    "refresh": ["Värskenda", "Refresh"],
+    "fetching-feedback": ["Laen tagasiside", "Fetching feedback"],
+    "date": ["Kuupäev", "Date"],
+    "user": ["Kasutaja", "User"],
+    "message": ["Sõnum", "Message"],
+    "rating": ["Hinnang", "Rating"],
+    "functionality-rating": ["Funktsionaalsus", "Functionality"],
+    "usability-rating": ["Kasutusmugavus", "Usability"],
+    "design-rating": ["Disain", "Design"],
+    "user-anonymous": ["Anonüümne", "Anonymous"]
+  },
+  "manage-bug-reports": {
+    "refresh": ["Värskenda", "Refresh"],
+    "fetching-bug-reports": ["Laen veateateid", "Fetching bug reports"],
+    "date": ["Kuupäev", "Date"],
+    "user": ["Kasutaja", "User"],
+    "resolved": ["Staatus", "Status"],
+    "description": ["Vea kirjeldus", "Bug description"],
+    "bug-resolved": ["Parandatud", "Fixed"],
+    "bug-not-resolved": ["Parandamata", "Not fixed"],
+    "log-info": ["Logi info", "Log info"],
+    "screenshot": ["Ekraanipilt", "Screenshot"],
+    "screenshot-alt": ["Ekraanipilt", "Screenshot"]
   },
   "error-popup": {
     "modal-header": ["Viga", "Error"],
@@ -436,6 +470,8 @@
     "authentication-token-invalid": ["Autentimise võti vigane", "Authentication token is invalid"],
     "authentication-expired": ["Autentimise võti on aegunud", "Authentication token has expired"],
     "user-not-found": ["Sellist kasutajat ei eksisteeri", "User does not exist"],
+    "group-already-exists": ["Selline grupp on juba olemas", "This group already exists"],
+    "user-already-exists": ["Selline kasutaja on juba olemas", "This user already exists"],
     "incorrect-password": ["Vale parool", "Incorrect password"],
     "incorrect-old-password": ["Vale vana parool", "Incorrect old password"],
     "no-permission": ["Puuduvad vajalikud õigused", "You do not have required permission"]

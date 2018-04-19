@@ -235,7 +235,7 @@ export class TextEntry extends Component {
       }));
 
     return (
-      <Container style={{ marginTop: '4vh' }}>
+      <Container style={{ marginTop: '3vh', marginBottom: '7vh' }}>
         {this.state.textSelectionOpened ?
           <TextSelection
             open={this.state.textSelectionOpened}

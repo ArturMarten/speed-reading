@@ -7,6 +7,7 @@ import { environment } from '../../environment';
 
 import './ResponsiveLayout.css';
 import axios from '../../axios-http';
+import credentials from '../../credentials';
 import Auth from '../../containers/Auth/Auth';
 import ProfileSettings from '../Profile/ProfileSettings';
 import ChangePassword from '../../containers/Auth/ChangePassword';
@@ -70,7 +71,8 @@ export class ResponsiveLayout extends Component {
 
   render() {
     const { children } = this.props;
-    const isPermitted = rolePermissions[this.props.role] >= rolePermissions.teacher;
+    const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;
+    const isPermittedToManageUsers = rolePermissions[this.props.role] >= rolePermissions.teacher;
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
@@ -98,7 +100,7 @@ export class ResponsiveLayout extends Component {
                             primary
                             icon="lock"
                             onClick={this.changePasswordToggleHandler}
-                            disabled={this.props.userEmail === '***DEMO_EMAIL***'}
+                            disabled={this.props.userEmail === credentials.demo.username}
                           />
                         </Grid.Column>
                         <Grid.Column>
@@ -140,7 +142,7 @@ export class ResponsiveLayout extends Component {
               <Icon name="home" size="large" />
               {this.props.translate('menu.home')}
             </Menu.Item>
-            {isPermitted ?
+            {isPermittedToModifyTexts ?
               <Menu.Item
                 as={Link}
                 active={this.props.path === '/text-entry'}
@@ -230,7 +232,7 @@ export class ResponsiveLayout extends Component {
               <Icon name="line graph" size="large" />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
-            {isPermitted ?
+            {isPermittedToManageUsers ?
               <Menu.Item
                 as={Link}
                 active={this.props.path === '/manage'}
@@ -295,7 +297,7 @@ export class ResponsiveLayout extends Component {
                   <Icon name="home" size="large" />
                   {this.props.translate('menu.home')}
                 </Menu.Item>
-                {isPermitted ?
+                {isPermittedToModifyTexts ?
                   <Menu.Item
                     as={Link}
                     active={this.props.path === '/text-entry'}
@@ -386,7 +388,7 @@ export class ResponsiveLayout extends Component {
                   <Icon name="line graph" size="large" />
                   {this.props.translate('menu.statistics')}
                 </Menu.Item>
-                {isPermitted ?
+                {isPermittedToManageUsers ?
                   <Menu.Item
                     as={Link}
                     active={this.props.path === '/manage'}
@@ -434,7 +436,7 @@ export class ResponsiveLayout extends Component {
                               icon
                               labelPosition="right"
                               onClick={this.changePasswordToggleHandler}
-                              disabled={this.props.userEmail === '***DEMO_EMAIL***'}
+                              disabled={this.props.userEmail === credentials.demo.username}
                             >
                               {this.props.translate('profile.change-password-button')}
                               <Icon name="lock" style={{ opacity: 1 }} />

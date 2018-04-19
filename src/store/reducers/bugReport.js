@@ -3,6 +3,11 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
+  bugReports: [],
+  bugReportsStatus: {
+    loading: false,
+    error: null,
+  },
   bugReportStatus: {
     loading: false,
     message: null,
@@ -35,6 +40,34 @@ const reducer = (state = initialState, action) => {
         bugReportStatus: {
           loading: false,
           message: null,
+          error: action.payload,
+        },
+      });
+    }
+    case actionTypes.FETCH_BUG_REPORTS_START: {
+      return updateObject(state, {
+        bugReportsStatus: {
+          loading: true,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.FETCH_BUG_REPORTS_SUCCEEDED: {
+      const bugReports = action.payload.map(bugReport => updateObject(bugReport, {
+        date: bugReport.date ? new Date(bugReport.date) : null,
+      }));
+      return updateObject(state, {
+        bugReportsStatus: {
+          loading: false,
+          error: null,
+        },
+        bugReports,
+      });
+    }
+    case actionTypes.FETCH_BUG_REPORTS_FAILED: {
+      return updateObject(state, {
+        bugReportsStatus: {
+          loading: false,
           error: action.payload,
         },
       });

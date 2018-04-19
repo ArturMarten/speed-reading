@@ -1,4 +1,7 @@
 #question-answer.active {
-  color: white !important;
   background: rgba(0, 76, 255, 0.6);
+}
+
+#question-answer.item.active .description {
+  color: white !important;
 }

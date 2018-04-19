@@ -5,37 +5,47 @@ import { updateObject } from '../../shared/utility';
 export const rolePermissions = {
   guest: 0,
   student: 1,
-  teacher: 2,
-  developer: 3,
-  admin: 4,
+  editor: 2,
+  teacher: 3,
+  developer: 4,
+  admin: 5,
 };
 
 const initialState = {
   groupId: null,
   email: null,
   role: null,
-  fetching: false,
-  error: null,
+  profileStatus: {
+    loading: false,
+    error: null,
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_USER_PROFILE_START: {
       return updateObject(state, {
-        fetching: true,
-        error: null,
+        profileStatus: {
+          loading: true,
+          error: null,
+        },
       });
     }
     case actionTypes.FETCH_USER_PROFILE_SUCCEEDED: {
       return updateObject(state, {
-        fetching: false,
+        profileStatus: {
+          loading: false,
+          error: null,
+        },
         ...action.payload,
       });
     }
     case actionTypes.FETCH_USER_PROFILE_FAILED: {
       return updateObject(state, {
-        fetching: false,
-        error: action.payload,
+        profileStatus: {
+          loading: false,
+          error: action.payload,
+        },
       });
     }
     case actionTypes.AUTH_LOGOUT: {

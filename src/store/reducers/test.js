@@ -12,7 +12,7 @@ const initialAnswerStatus = {
   loading: false,
   message: null,
   error: null,
-}
+};
 
 const initialState = {
   questions: [],
@@ -279,6 +279,11 @@ const reducer = (state = initialState, action) => {
     case actionTypes.TEST_STARTED: {
       return updateObject(state, {
         status: 'started',
+      });
+    }
+    case actionTypes.TEST_START_FAILED: {
+      return updateObject(state, {
+        status: 'prepared',
       });
     }
     case actionTypes.TEST_ATTEMPT_START: {

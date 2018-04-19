@@ -45,17 +45,19 @@ export class TextExerciseTest extends Component {
 
   render() {
     return (
-      <Container style={{ marginTop: '4vh' }}>
+      <Container style={{ marginTop: '3vh' }}>
         <Header as="h2" content={this.props.translate('text-exercise-test.title')} />
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
-          <Grid>
-            <Grid.Row centered>
-              <Header as="h4" content={this.props.questions[this.state.questionIndex].questionText} />
+          <Grid container style={{ paddingTop: '10px' }}>
+            <Grid.Row columns={1} style={{ paddingBottom: '2px' }} >
+              <Grid.Column>
+                <Header as="h4" content={`${this.state.questionIndex + 1}. ${this.props.questions[this.state.questionIndex].questionText}`} />
+              </Grid.Column>
             </Grid.Row>
-            <Grid.Row centered>
-              <Grid.Column mobile={16} computer={12}>
-                <List selection ordered animated verticalAlign="middle">
-                  {this.props.questions[this.state.questionIndex].answers.map(answer => (
+            <Grid.Row style={{ paddingTop: '2px' }} >
+              <Grid.Column>
+                <List selection animated verticalAlign="middle">
+                  {this.props.questions[this.state.questionIndex].answers.map((answer, answerIndex) => (
                     <List.Item
                       id="question-answer"
                       key={answer.id}
@@ -63,8 +65,8 @@ export class TextExerciseTest extends Component {
                       onClick={() => this.onAnswerChange(this.state.questionIndex, answer.id)}
                     >
                       <List.Content>
-                        <List.Description>
-                          {answer.answerText}
+                        <List.Description id="question-answer-text">
+                          {`${String.fromCharCode(65 + answerIndex)} ) ${answer.answerText}`}
                         </List.Description>
                       </List.Content>
                     </List.Item>

@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
-import axios from '../../../axios-http';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
+import axios from '../../../axios-http';
 
 import * as actionCreators from '../../../store/actions';
 import TextExercisePreparation from '../Preparation/TextExercisePreparation';

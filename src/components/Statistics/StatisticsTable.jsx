@@ -27,7 +27,7 @@ export class StatisticsTable extends Component {
     const { column, direction } = this.state;
     const sortedAttempts = sortByColumn(this.props.data, column, direction);
     return (
-      <Table basic celled selectable compact sortable singleLine>
+      <Table basic celled selectable compact="very" sortable singleLine>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell sorted={column === 'modification' ? direction : null} onClick={this.sortHandler('modification')}>
