@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Modal, Button, Input, Dropdown, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import * as actionCreators from '../../store/actions';
-import { isEmail } from '../../shared/utility';
-import { rolePermissions } from '../../store/reducers/profile';
+import * as actionCreators from '../../../store/actions';
+import { isEmail } from '../../../shared/utility';
+import { rolePermissions } from '../../../store/reducers/profile';
+import ErrorMessage from '../../Message/ErrorMessage';
 
 export class UserEditor extends Component {
   state = {
@@ -15,6 +16,7 @@ export class UserEditor extends Component {
     notify: false,
     touched: false,
     valid: false,
+    submitted: false,
   }
 
   componentDidMount() {
@@ -29,6 +31,12 @@ export class UserEditor extends Component {
     }, 100);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.userStatus.loading && !this.props.userStatus.loading && this.props.userStatus.error === null) {
+      this.props.onClose();
+    }
+  }
+
   setUser(user) {
     this.setState({
       groupId: user.groupId,
@@ -38,7 +46,7 @@ export class UserEditor extends Component {
     });
   }
 
-  addUserHandler = (event, data) => {
+  addUserHandler = () => {
     const user = {
       groupId: this.state.groupId,
       email: this.state.email,
@@ -46,10 +54,10 @@ export class UserEditor extends Component {
       notify: this.state.notify,
     };
     this.props.onAddUser(user, this.props.token);
-    this.props.onClose(event, data);
+    this.setState({ submitted: true });
   }
 
-  changeUserHandler = (event, data) => {
+  changeUserHandler = () => {
     const user = {
       groupId: this.state.groupId,
       email: this.state.email,
@@ -57,7 +65,7 @@ export class UserEditor extends Component {
       notify: this.state.notify,
     };
     this.props.onChangeUser(this.props.user.publicId, user, this.props.token);
-    this.props.onClose(event, data);
+    this.setState({ submitted: true });
   }
 
   userGroupChangeHandler = (event, data) => {
@@ -106,11 +114,11 @@ export class UserEditor extends Component {
         text: group.name,
         value: group.id,
       }));
-    const roleOptions = ['student', 'teacher', 'developer', 'admin']
+    const roleOptions = ['student', 'editor', 'teacher', 'developer', 'admin']
       .filter(role => rolePermissions[role] <= rolePermissions[this.props.role])
       .map((role, index) => ({
         key: index,
-        text: this.props.translate(`manage.role-${role}`),
+        text: this.props.translate(`manage-users.role-${role}`),
         value: role,
       }));
     return (
@@ -162,18 +170,24 @@ export class UserEditor extends Component {
             onChange={this.notifyChangeHandler}
             label={this.props.translate('user-editor.notify-user-password')}
           />
+          {this.props.userStatus.error && this.state.submitted ?
+            <ErrorMessage
+              error={this.props.userStatus.error}
+            /> : null}
         </Modal.Content>
         <Modal.Actions>
           {this.props.user ?
             <Button
               primary
-              disabled={!this.state.touched || !this.state.valid}
+              loading={this.props.userStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
               content={this.props.translate('user-editor.change-user')}
               onClick={this.changeUserHandler}
             /> :
             <Button
               positive
-              disabled={!this.state.touched || !this.state.valid}
+              loading={this.props.userStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
               content={this.props.translate('user-editor.add-user')}
               onClick={this.addUserHandler}
             />
@@ -186,8 +200,9 @@ export class UserEditor extends Component {
 
 const mapStateToProps = state => ({
   token: state.auth.token,
+  userStatus: state.user.userStatus,
   role: state.profile.role,
-  groups: state.manage.groups,
+  groups: state.group.groups,
   translate: getTranslate(state.locale),
 });
 

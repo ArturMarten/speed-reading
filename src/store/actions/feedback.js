@@ -29,4 +29,29 @@ export const sendFeedback = feedbackData => (dispatch) => {
     });
 };
 
-export default sendFeedback;
+const fetchFeedbackStart = () => ({
+  type: actionTypes.FETCH_FEEDBACK_START,
+});
+
+const fetchFeedbackSucceeded = feedbackList => ({
+  type: actionTypes.FETCH_FEEDBACK_SUCCEEDED,
+  payload: feedbackList,
+});
+
+const fetchFeedbackFailed = error => ({
+  type: actionTypes.FETCH_FEEDBACK_FAILED,
+  payload: error,
+});
+
+export const fetchFeedback = token => (dispatch) => {
+  dispatch(fetchFeedbackStart());
+  axios.get('/feedback', { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(fetchFeedbackSucceeded(response.data));
+    }, (error) => {
+      dispatch(fetchFeedbackFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(fetchFeedbackFailed(error.message));
+    });
+};

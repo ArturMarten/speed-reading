@@ -6,9 +6,12 @@ const saveTextStart = () => ({
   type: actionTypes.SAVE_TEXT_START,
 });
 
-const saveTextSucceeded = message => ({
+const saveTextSucceeded = (text, message) => ({
   type: actionTypes.SAVE_TEXT_SUCCEEDED,
-  payload: message,
+  payload: {
+    text,
+    message,
+  },
 });
 
 const saveTextFailed = error => ({
@@ -21,7 +24,7 @@ export const saveText = (text, textId, token) => (dispatch) => {
   if (textId) {
     axios.put(`/texts/${textId}`, text, { headers: { 'x-access-token': token } })
       .then((response) => {
-        dispatch(saveTextSucceeded(serverSuccessMessage(response)));
+        dispatch(saveTextSucceeded(text, serverSuccessMessage(response)));
       }, (error) => {
         dispatch(saveTextFailed(serverErrorMessage(error)));
       })
@@ -31,7 +34,7 @@ export const saveText = (text, textId, token) => (dispatch) => {
   } else {
     axios.post('/texts', text, { headers: { 'x-access-token': token } })
       .then((response) => {
-        dispatch(saveTextSucceeded(serverSuccessMessage(response)));
+        dispatch(saveTextSucceeded(text, serverSuccessMessage(response)));
       }, (error) => {
         dispatch(saveTextFailed(serverErrorMessage(error)));
       })

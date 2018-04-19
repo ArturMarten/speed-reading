@@ -59,18 +59,27 @@ export {
 } from './text';
 
 export {
-  fetchUsers,
-  addUser,
-  changeUser,
   fetchGroups,
   addGroup,
   changeGroup,
-} from './manage';
+} from './group';
+
+export {
+  fetchUsers,
+  addUser,
+  changeUser,
+} from './user';
 
 export { fetchUserProfile } from './profile';
 
 export { fetchExerciseStatistics } from './statistics';
 
-export { sendFeedback } from './feedback';
+export {
+  sendFeedback,
+  fetchFeedback,
+} from './feedback';
 
-export { sendBugReport } from './bugReport';
+export {
+  sendBugReport,
+  fetchBugReports,
+} from './bugReport';

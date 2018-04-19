@@ -47,11 +47,12 @@ export class App extends Component {
     this.props.onTryAutoLogin();
   }
   render() {
-    const isPermitted = rolePermissions[this.props.role] >= rolePermissions.teacher;
+    const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;
+    const isPermittedToManageUsers = rolePermissions[this.props.role] >= rolePermissions.teacher;
     return (
       <ResponsiveLayout>
         <Route exact path="/" component={Home} />
-        {isPermitted ?
+        {isPermittedToModifyTexts ?
           <Route path="/text-entry" component={TextEntry} /> : null}
         <Route path="/exercise/reading-test" render={() => <TextExerciseContainer type="readingTest" />} />
         <Route path="/exercise/reading-aid" render={() => <TextExerciseContainer type="readingAid" />} />
@@ -60,7 +61,7 @@ export class App extends Component {
         <Route path="/exercise/schulte-tables" render={() => <HelpExerciseContainer type="schulteTables" />} />
         <Route path="/exercise/concentration" render={() => <HelpExerciseContainer type="concentration" />} />
         <Route path="/statistics" component={Statistics} />
-        {isPermitted ?
+        {isPermittedToManageUsers ?
           <Route path="/manage" component={Manage} /> : null}
         <Route path="/logout" component={Logout} />
       </ResponsiveLayout>

@@ -22,7 +22,7 @@ export class Home extends Component {
 
   render() {
     return (
-      <Container style={{ marginTop: '4vh' }}>
+      <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('home.welcome')}!</Header>
         <Grid stackable>
           <Grid.Row>
@@ -44,7 +44,15 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
           <Divider />
-          <Grid.Row columns={2}>
+          <Grid.Row columns={3}>
+            <Grid.Column>
+              <Message
+                negative
+                icon="bug"
+                header={this.props.translate('home.bug-report-title')}
+                content={this.props.translate('home.bug-report-content')}
+              />
+            </Grid.Column>
             <Grid.Column>
               <Message
                 warning

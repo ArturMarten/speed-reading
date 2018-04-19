@@ -91,7 +91,7 @@ export class TextExercisePreparation extends Component {
         />
       </Fragment>);
     return (
-      <Container style={{ marginTop: '4vh' }}>
+      <Container style={{ marginTop: '3vh' }}>
         <Grid stackable>
           <Grid.Row verticalAlign="bottom">
             <Grid.Column width={10}>

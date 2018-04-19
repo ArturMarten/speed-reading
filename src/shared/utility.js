@@ -97,6 +97,10 @@ export const translateError = (translate, error) => {
       return translate('error.authentication-expired');
     case 'User cannot be found':
       return translate('error.user-not-found');
+    case 'Group already exists':
+      return translate('error.group-already-exists');
+    case 'User already exists':
+      return translate('error.user-already-exists');
     case 'Incorrect password':
       return translate('error.incorrect-password');
     case 'Incorrect old password':

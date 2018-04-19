@@ -37,10 +37,16 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.SAVE_TEXT_SUCCEEDED: {
+      const updatedText = updateObject(action.payload.text, {
+        contentState: convertFromRaw(action.payload.text.contentState),
+      });
       return updateObject(state, {
+        selectedText: updateObject(state.selectedText, {
+          ...updatedText,
+        }),
         textStatus: {
           loading: false,
-          message: action.payload,
+          message: action.payload.message,
           error: null,
         },
       });

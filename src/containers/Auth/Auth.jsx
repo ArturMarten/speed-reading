@@ -4,6 +4,7 @@ import { Modal, Form, Button, Icon, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
+import credentials from '../../credentials';
 import { checkValidity } from '../../shared/utility';
 import ErrorMessage from '../Message/ErrorMessage';
 
@@ -39,7 +40,7 @@ export class Auth extends Component {
   }
 
   onDemoLogin = () => {
-    this.props.onLogin('kiirlugemine5@gmail.com', '1Q6ZEvYK');
+    this.props.onLogin(credentials.demo.username, credentials.demo.password);
   }
 
   inputChangeHandler = (event, { name, value }) => {

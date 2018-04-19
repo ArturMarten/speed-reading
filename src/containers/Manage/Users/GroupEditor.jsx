@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { Modal, Button, Input } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import * as actionCreators from '../../store/actions';
+import * as actionCreators from '../../../store/actions';
+import ErrorMessage from '../../Message/ErrorMessage';
 
 export class GroupEditor extends Component {
   state = {
     name: '',
     touched: false,
     valid: false,
+    submitted: false,
   }
 
   componentDidMount() {
@@ -24,6 +26,12 @@ export class GroupEditor extends Component {
     }, 100);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.groupStatus.loading && !this.props.groupStatus.loading && this.props.groupStatus.error === null) {
+      this.props.onClose();
+    }
+  }
+
   setGroup(group) {
     this.setState({
       name: group.name,
@@ -31,20 +39,20 @@ export class GroupEditor extends Component {
     });
   }
 
-  addGroupHandler = (event, data) => {
+  addGroupHandler = () => {
     const group = {
       name: this.state.name,
     };
     this.props.onAddGroup(group, this.props.token);
-    this.props.onClose(event, data);
+    this.setState({ submitted: true });
   }
 
-  changeGroupHandler = (event, data) => {
+  changeGroupHandler = () => {
     const group = {
       name: this.state.name,
     };
     this.props.onChangeGroup(this.props.group.id, group, this.props.token);
-    this.props.onClose(event, data);
+    this.setState({ submitted: true });
   }
 
   groupInputChangeHandler = (event, data) => {
@@ -90,18 +98,24 @@ export class GroupEditor extends Component {
               this.props.translate('group-editor.insert-changed-placeholder') :
               this.props.translate('group-editor.insert-new-placeholder')}
           />
+          {this.props.groupStatus.error && this.state.submitted ?
+            <ErrorMessage
+              error={this.props.groupStatus.error}
+            /> : null}
         </Modal.Content>
         <Modal.Actions>
           {this.props.group ?
             <Button
               primary
-              disabled={!this.state.touched || !this.state.valid}
+              loading={this.props.groupStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.groupStatus.loading}
               content={this.props.translate('group-editor.change-group')}
               onClick={this.changeGroupHandler}
             /> :
             <Button
               positive
-              disabled={!this.state.touched || !this.state.valid}
+              loading={this.props.groupStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.groupStatus.loading}
               content={this.props.translate('group-editor.add-group')}
               onClick={this.addGroupHandler}
             />
@@ -114,6 +128,7 @@ export class GroupEditor extends Component {
 
 const mapStateToProps = state => ({
   token: state.auth.token,
+  groupStatus: state.group.groupStatus,
   translate: getTranslate(state.locale),
 });
 

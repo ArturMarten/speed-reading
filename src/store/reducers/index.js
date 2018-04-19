@@ -8,7 +8,8 @@ import timingReducer from './timing';
 import optionsReducer from './options';
 import exerciseReducer from './exercise';
 import testReducer from './test';
-import manageReducer from './manage';
+import groupReducer from './group';
+import userReducer from './user';
 import profileReducer from './profile';
 import statisticsReducer from './statistics';
 import feedbackReducer from './feedback';
@@ -22,7 +23,8 @@ export default combineReducers({
   options: optionsReducer,
   exercise: exerciseReducer,
   test: testReducer,
-  manage: manageReducer,
+  group: groupReducer,
+  user: userReducer,
   profile: profileReducer,
   statistics: statisticsReducer,
   feedback: feedbackReducer,
