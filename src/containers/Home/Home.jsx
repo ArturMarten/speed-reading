@@ -10,6 +10,7 @@ import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
 import studyEstLogo from '../../assets/img/study_est.jpg';
 import studyEngLogo from '../../assets/img/study_eng.jpg';
+import userManual from '../../assets/doc/kasutusjuhend_est.pdf';
 
 export class Home extends Component {
   state = {
@@ -35,6 +36,12 @@ export class Home extends Component {
                 content={this.props.translate('home.about')}
                 onClick={this.aboutToggleHandler}
               />
+              <a
+                target="_blank"
+                href={userManual}
+              >
+                {this.props.translate('home.user-manual')}
+              </a>
             </Grid.Column>
             <Grid.Column width={8}>
               <IntroVideo
