@@ -99,9 +99,10 @@ export class TextEntry extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.selectedText && prevProps.selectedText !== this.props.selectedText) {
       this.setForm(this.props.selectedText);
-    } else if (prevProps.textStatus.loading && !this.props.textStatus.loading &&
-               this.props.textStatus.error === null && !this.props.selectedText) {
-      this.resetForm();
+    }
+    if (prevProps.textStatus.loading && !this.props.textStatus.loading &&
+               this.props.textStatus.error === null && this.props.selectedText && !this.props.selectedText.id) {
+      this.newTextHandler();
     }
   }
 

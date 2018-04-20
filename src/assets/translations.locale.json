@@ -67,6 +67,7 @@
       "This is web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
     "about": ["Rakenduse kohta", "About application"],
+    "user-manual": ["Kasutusjuhend - tekstide sisestamine", "User manual - text entry (only in Estonian)"],
     "bug-report-title": ["Vigade esinemisel", "Encountering bugs"],
     "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
@@ -118,7 +119,7 @@
     ],
     "new-text": ["Uus tekst", "New text"],
     "change-text": ["Vali muu tekst", "Choose other text"],
-    "change-questions": ["Muuda testi küsimusi", "Change test questions"],
+    "change-questions": ["Muuda teksti küsimusi", "Change text questions"],
     "select-text": ["Vali salvestatud tekst", "Choose saved text"],
     "text-title": ["Pealkiri", "Title"],
     "text-title-placeholder": ["Teksti pealkiri", "Text title"],
