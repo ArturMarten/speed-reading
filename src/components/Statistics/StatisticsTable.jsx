@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Menu, Icon, Popup } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Table, Menu, Icon } from 'semantic-ui-react';
 
+import HelpPopup from '../HelpPopup/HelpPopup';
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';
 
 export class StatisticsTable extends Component {
@@ -40,8 +42,7 @@ export class StatisticsTable extends Component {
               <Fragment>
                 <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
                   {this.props.translate('statistics-table.reading-attempt')}
-                  <Popup
-                    trigger={<Icon name="question circle outline" />}
+                  <HelpPopup
                     position="top center"
                     content={this.props.translate('statistics-table.reading-attempt-description')}
                   />
@@ -166,5 +167,15 @@ export class StatisticsTable extends Component {
     );
   }
 }
+
+StatisticsTable.propTypes = {
+  exercise: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.instanceOf(Date).isRequired,
+    wpm: PropTypes.number,
+    spm: PropTypes.number,
+  })).isRequired,
+  translate: PropTypes.func.isRequired,
+};
 
 export default StatisticsTable;

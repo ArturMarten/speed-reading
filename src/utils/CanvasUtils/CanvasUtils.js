@@ -30,8 +30,43 @@ export const drawText = (canvasContext, textMetadata) => {
   });
 };
 
-export const measureHeight = (text) => {
+export const measureText = (text, style) => {
+  const span = document.createElement('span');
+  let div = document.createElement('div');
+  const block = document.createElement('div');
 
+  block.style.display = 'inline-block';
+  block.style.width = '1px';
+  block.style.height = '0';
+
+  div.style.visibility = 'hidden';
+  div.style.position = 'absolute';
+  div.style.top = '0';
+  div.style.left = '0';
+  div.style.width = '500px';
+  div.style.height = '200px';
+
+  div.appendChild(span);
+  div.appendChild(block);
+  document.body.appendChild(div);
+  const result = {};
+  try {
+    span.setAttribute('style', style);
+
+    span.innerHTML = '';
+    span.appendChild(document.createTextNode(text.replace(/\s/g, String.fromCharCode(160))));
+
+    block.style.verticalAlign = 'baseline';
+    result.ascent = (block.offsetTop - span.offsetTop);
+    block.style.verticalAlign = 'bottom';
+    result.height = (block.offsetTop - span.offsetTop);
+    result.descent = result.height - result.ascent;
+    result.width = span.offsetWidth;
+  } finally {
+    div.parentNode.removeChild(div);
+    div = null;
+  }
+  return result;
 };
 
 const setCanvasHeight = (oldContext, newHeight) => {

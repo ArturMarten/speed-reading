@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as actionCreators from './store/actions';
@@ -8,6 +9,8 @@ import Loadable from './hoc/Loadable/Loadable';
 import ResponsiveLayout from './containers/Layout/ResponsiveLayout';
 import Logout from './containers/Auth/Logout';
 import { rolePermissions } from './store/reducers/profile';
+
+// import { measureText } from './utils/CanvasUtils/CanvasUtils';
 
 const Home = Loadable({
   loader: () => import('./containers/Home/Home'),
@@ -45,6 +48,7 @@ export class App extends Component {
   componentDidMount() {
     listenToErrors();
     this.props.onTryAutoLogin();
+    // console.log(measureText('M', 'font: 12pt Calibri'));
   }
   render() {
     const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;
@@ -69,8 +73,12 @@ export class App extends Component {
   }
 }
 
+App.propTypes = {
+  role: PropTypes.string.isRequired,
+  onTryAutoLogin: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.token !== null,
   role: state.profile.role,
 });
 

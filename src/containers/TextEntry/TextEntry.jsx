@@ -4,6 +4,7 @@ import { Container, Header, Button, Icon, Form, Input, Label, Popup, Rating } fr
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
+import HelpPopup from '../../components/HelpPopup/HelpPopup';
 import TextSelection from '../TextSelection/TextSelection';
 import TextEditor from '../TextEditor/TextEditor';
 import TextTestEditor from './TextTestEditor/TextTestEditor';
@@ -218,6 +219,24 @@ export class TextEntry extends Component {
   }
 
   render() {
+    const textEditorLabel = (
+      <label htmlFor="editor-input">
+        {this.props.translate('text-entry.text-editor')}
+        <HelpPopup
+          position="top center"
+          content={this.props.translate('text-entry.text-editor-description')}
+        />
+      </label>
+    );
+    const textReferenceLabel = (
+      <label htmlFor="reference-input">
+        {this.props.translate('text-entry.text-reference')}
+        <HelpPopup
+          position="top center"
+          content={this.props.translate('text-entry.text-reference-description')}
+        />
+      </label>
+    );
     const keywords = this.state.textEntryForm.keywords.value.map((keyword, index) => (
       <Label key={keyword} as="a">
         {keyword}
@@ -263,6 +282,7 @@ export class TextEntry extends Component {
         <Form warning error={this.props.textStatus.error !== null} success={this.props.textStatus.message !== null}>
           <Form.Group widths="equal">
             <Form.Input
+              id="title-input"
               type="text"
               name="title"
               label={this.props.translate('text-entry.text-title')}
@@ -272,6 +292,7 @@ export class TextEntry extends Component {
               placeholder={this.props.translate('text-entry.text-title-placeholder')}
             />
             <Form.Input
+              id="author-input"
               type="text"
               name="author"
               label={this.props.translate('text-entry.text-author')}
@@ -281,6 +302,7 @@ export class TextEntry extends Component {
               placeholder={this.props.translate('text-entry.text-author-placeholder')}
             />
             <Form.Select
+              id="collection-select"
               name="collectionId"
               loading={this.props.collectionsStatus.loading}
               label={this.props.translate('text-entry.text-collection')}
@@ -293,15 +315,17 @@ export class TextEntry extends Component {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Input
+              id="editor-input"
               type="text"
               name="editor"
-              label={this.props.translate('text-entry.text-editor')}
+              label={textEditorLabel}
               value={this.state.textEntryForm.editor.value}
               error={!this.state.textEntryForm.editor.valid && this.state.textEntryForm.editor.touched}
               onChange={this.inputChangeHandler}
               placeholder={this.props.translate('text-entry.text-editor-placeholder')}
             />
             <Form.Input
+              id="question-author-input"
               type="text"
               name="questionsAuthor"
               label={this.props.translate('text-entry.text-questions-author')}
@@ -311,9 +335,10 @@ export class TextEntry extends Component {
               placeholder={this.props.translate('text-entry.text-questions-author-placeholder')}
             />
             <Form.Input
+              id="reference-input"
               type="text"
               name="reference"
-              label={this.props.translate('text-entry.text-reference')}
+              label={textReferenceLabel}
               value={this.state.textEntryForm.reference.value}
               error={!this.state.textEntryForm.reference.valid && this.state.textEntryForm.reference.touched}
               onChange={this.inputChangeHandler}
@@ -330,9 +355,9 @@ export class TextEntry extends Component {
             />
           </Form.Field>
           <Form.Field
+            id="complexity-rating"
             control={Rating}
             label={this.props.translate('text-entry.text-complexity')}
-            id="complexity-rating"
             icon="star"
             size="huge"
             maxRating={MAX_RATING}

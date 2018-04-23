@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal, Form, Button, Icon, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
@@ -72,7 +73,7 @@ export class Auth extends Component {
       <Modal size="mini" open={this.props.open || !this.props.isAuthenticated}>
         <Modal.Header>{this.props.translate('auth.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Form error={this.props.authenticationStatus.error !== null || this.props.logoutError !== null}>
+          <Form error={this.props.authenticationStatus.error !== null || this.props.logoutStatus.error !== null}>
             <Form.Input
               autoFocus
               icon="user"
@@ -101,7 +102,7 @@ export class Auth extends Component {
               required
             />
             <ErrorMessage
-              error={this.props.authenticationStatus.error ? this.props.authenticationStatus.error : this.props.logoutError}
+              error={this.props.authenticationStatus.error ? this.props.authenticationStatus.error : this.props.logoutStatus.error}
             />
           </Form>
         </Modal.Content>
@@ -140,10 +141,23 @@ export class Auth extends Component {
   }
 }
 
+Auth.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  authenticationStatus: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
+  }).isRequired,
+  logoutStatus: PropTypes.shape({
+    error: PropTypes.string,
+  }).isRequired,
+  translate: PropTypes.func.isRequired,
+  onLogin: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.token !== null,
   authenticationStatus: state.auth.authenticationStatus,
-  logoutError: state.auth.logoutError,
+  logoutStatus: state.auth.logoutStatus,
   translate: getTranslate(state.locale),
 });
 

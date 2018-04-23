@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox, Popup } from 'semantic-ui-react';
+import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import HelpPopup from '../../../components/HelpPopup/HelpPopup';
 import ExerciseDescription from '../Description/ExerciseDescription';
 import TextSelection from '../../TextSelection/TextSelection';
 import TextOptions from '../Options/TextOptions';
@@ -72,20 +73,18 @@ export class TextExercisePreparation extends Component {
     ) : <b style={{ color: 'red' }}>{this.props.translate('exercise-preparation.text-not-selected')}</b>;
     const modificationOptions = this.props.modificationOptions
       .map((option, index) => ({ ...option, key: index, text: this.props.translate(`modification.${option.value}`) }));
-    const startCheckbox = (
+    const startCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.start-automatically')}
-        <Popup
-          trigger={<Icon name="question circle outline" />}
+        <HelpPopup
           position="left center"
           content={this.props.translate('exercise-preparation.start-automatically-description')}
         />
       </Fragment>);
-    const saveCheckbox = (
+    const saveCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.save-statistics')}
-        <Popup
-          trigger={<Icon name="question circle outline" />}
+        <HelpPopup
           position="left center"
           content={this.props.translate('exercise-preparation.save-statistics-description')}
         />
@@ -99,8 +98,7 @@ export class TextExercisePreparation extends Component {
             </Grid.Column>
             <Grid.Column width={6}>
               {this.props.translate('exercise-preparation.exercise-modification')}
-              <Popup
-                trigger={<Icon name="question circle outline" />}
+              <HelpPopup
                 position="bottom left"
                 content={this.props.translate('exercise-preparation.exercise-modification-description')}
               />
@@ -156,13 +154,13 @@ export class TextExercisePreparation extends Component {
               />
               <Checkbox
                 style={{ float: 'right', margin: '2px' }}
-                label={{ children: startCheckbox }}
+                label={{ children: startCheckboxLabel }}
               />
               <Checkbox
                 checked={this.state.saveStatistics}
                 onChange={this.saveChangeHandler}
                 style={{ float: 'right', margin: '2px' }}
-                label={{ children: saveCheckbox }}
+                label={{ children: saveCheckboxLabel }}
               />
             </Grid.Column>
           </Grid.Row>

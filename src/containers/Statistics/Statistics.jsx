@@ -76,7 +76,6 @@ export class Statistics extends Component {
             */}
             <Segment basic>
               <RegressionChart
-                exercise={this.state.exercise}
                 data={data}
                 translate={this.props.translate}
               />

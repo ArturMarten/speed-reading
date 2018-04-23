@@ -8,7 +8,7 @@
     "name": "Marten Siiber",
     "email": "martensiiber@gmail.com"
   },
-  "homepage": "http://kodu.ut.ee/~arturmar",
+  "homepage": "http://prog.keeleressursid.ee/speedreading",
   "license": "MIT",
   "keywords": [],
   "devDependencies": {
@@ -34,6 +34,7 @@
     "mocha": "^5.1.1",
     "nyc": "^11.7.1",
     "pixelmatch": "^4.0.2",
+    "prop-types": "^15.6.1",
     "react-scripts": "^1.1.4",
     "react-test-renderer": "^16.3.2",
     "replace-in-file": "^3.4.0",
@@ -44,7 +45,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "c3": "^0.5.3",
     "connected-react-router": "^4.3.0",
     "d3-axis": "^1.0.8",
     "d3-scale": "^2.0.0",
@@ -54,7 +54,6 @@
     "draft-js": "^0.10.5",
     "history": "^4.7.2",
     "html2canvas": "^1.0.0-alpha.12",
-    "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-loadable": "^5.3.1",

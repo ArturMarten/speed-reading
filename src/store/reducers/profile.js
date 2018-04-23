@@ -13,8 +13,8 @@ export const rolePermissions = {
 
 const initialState = {
   groupId: null,
-  email: null,
-  role: null,
+  email: '',
+  role: '',
   profileStatus: {
     loading: false,
     error: null,
