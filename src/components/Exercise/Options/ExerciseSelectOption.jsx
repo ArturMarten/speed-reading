@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Dropdown, Popup, Icon } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Table, Dropdown } from 'semantic-ui-react';
+
+import HelpPopup from '../../HelpPopup/HelpPopup';
 
 class ExerciseSelectOption extends Component {
   state = {
@@ -31,12 +34,10 @@ class ExerciseSelectOption extends Component {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
-          {this.props.description ?
-            <Popup
-              trigger={<Icon name="question circle outline" />}
-              position="right center"
-              content={this.props.description}
-            /> : null}
+          <HelpPopup
+            position="right center"
+            content={this.props.description}
+          />
         </Table.Cell>
         <Table.Cell colSpan={3}>
           <Dropdown
@@ -52,5 +53,27 @@ class ExerciseSelectOption extends Component {
     );
   }
 }
+
+ExerciseSelectOption.defaultProps = {
+  description: null,
+};
+
+ExerciseSelectOption.propTypes = {
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.any,
+    text: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
+  })).isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
+  updateValue: PropTypes.func.isRequired,
+};
 
 export default ExerciseSelectOption;

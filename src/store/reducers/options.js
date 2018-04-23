@@ -67,6 +67,7 @@ const initialExerciseOptions = {
   characterCount: 15,
   tableDimensions: 25,
   tableSize: 100,
+  tableCheck: false,
   symbolCount: 7,
   symbolGroupCount: 20,
   columnSpacing: 30,

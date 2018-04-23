@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Input, Button, Table, Popup, Icon } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Input, Button, Table } from 'semantic-ui-react';
+
+import HelpPopup from '../../HelpPopup/HelpPopup';
 
 const UPDATE_DELAY = 300;
 
@@ -81,12 +84,10 @@ class ExerciseInputOption extends PureComponent {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
-          {this.props.description ?
-            <Popup
-              trigger={<Icon name="question circle outline" />}
-              position="right center"
-              content={this.props.description}
-            /> : null}
+          <HelpPopup
+            position="right center"
+            content={this.props.description}
+          />
         </Table.Cell>
         <Table.Cell>
           <Button.Group size="mini" fluid basic>
@@ -121,5 +122,20 @@ class ExerciseInputOption extends PureComponent {
     );
   }
 }
+
+ExerciseInputOption.defaultProps = {
+  description: null,
+};
+
+ExerciseInputOption.propTypes = {
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  unit: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  step: PropTypes.number.isRequired,
+  updateValue: PropTypes.func.isRequired,
+};
 
 export default ExerciseInputOption;

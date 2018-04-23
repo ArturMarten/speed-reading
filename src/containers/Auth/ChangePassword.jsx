@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
@@ -138,6 +139,17 @@ export class ChangePassword extends Component {
     );
   }
 }
+
+ChangePassword.propTypes = {
+  token: PropTypes.string.isRequired,
+  passwordChangeStatus: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    message: PropTypes.string,
+    error: PropTypes.string,
+  }).isRequired,
+  translate: PropTypes.func.isRequired,
+  onPasswordChange: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => ({
   token: state.auth.token,

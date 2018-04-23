@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
 import { Link } from 'react-router-dom';
@@ -475,6 +476,14 @@ export class ResponsiveLayout extends Component {
     );
   }
 }
+
+ResponsiveLayout.propTypes = {
+  path: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  userEmail: PropTypes.string.isRequired,
+  translate: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => ({
   path: state.router.location.pathname,

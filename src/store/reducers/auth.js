@@ -14,7 +14,9 @@ const initialState = {
     loading: false,
     error: null,
   },
-  logoutError: null,
+  logoutStatus: {
+    error: null,
+  },
 };
 
 const reducer = (state = initialState, action) => {
@@ -49,7 +51,9 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         token: null,
         userId: null,
-        logoutError: action.payload,
+        logoutStatus: {
+          error: action.payload,
+        },
       });
     }
     case actionTypes.CHANGE_PASSWORD_START: {

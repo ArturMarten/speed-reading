@@ -17,7 +17,7 @@ jasmine.getEnv().addReporter({
 });
 */
 
-const log = (json) => {
+export const log = (json) => {
   console.log(JSON.stringify(json, null, 2));
 };
 

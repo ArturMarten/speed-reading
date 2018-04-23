@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
@@ -131,5 +132,13 @@ export class RegressionChart extends Component {
     );
   }
 }
+
+RegressionChart.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.instanceOf(Date).isRequired,
+    wpm: PropTypes.number.isRequired,
+  })).isRequired,
+  translate: PropTypes.func.isRequired,
+};
 
 export default RegressionChart;

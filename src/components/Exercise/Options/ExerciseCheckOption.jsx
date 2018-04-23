@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Checkbox, Popup, Icon } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Table, Checkbox } from 'semantic-ui-react';
+
+import HelpPopup from '../../HelpPopup/HelpPopup';
 
 class ExerciseCheckOption extends Component {
   state = {
@@ -31,12 +34,10 @@ class ExerciseCheckOption extends Component {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
-          {this.props.description ?
-            <Popup
-              trigger={<Icon name="question circle outline" />}
-              position="right center"
-              content={this.props.description}
-            /> : null}
+          <HelpPopup
+            position="right center"
+            content={this.props.description}
+          />
         </Table.Cell>
         <Table.Cell colSpan={3}>
           <Checkbox
@@ -49,5 +50,16 @@ class ExerciseCheckOption extends Component {
     );
   }
 }
+
+ExerciseCheckOption.defaultProps = {
+  description: null,
+};
+
+ExerciseCheckOption.propTypes = {
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  value: PropTypes.bool.isRequired,
+  updateValue: PropTypes.func.isRequired,
+};
 
 export default ExerciseCheckOption;
