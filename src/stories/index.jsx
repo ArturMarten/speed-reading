@@ -9,7 +9,7 @@ import * as actionCreators from '../store/actions';
 import credentials from '../credentials';
 import Provider, { store } from './Provider';
 
-import HomeContainer from '../containers/Home/Home';
+// import HomeContainer from '../containers/Home/Home';
 import TextEntryContainer from '../containers/TextEntry/TextEntry';
 import TextEditorContainer from '../containers/TextEditor/TextEditor';
 import TextExercisePreparationContainer from '../containers/Exercise/Preparation/TextExercisePreparation';
@@ -50,8 +50,11 @@ const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 const translate = getTranslate(store.getState().locale);
 addDecorator(story => <Provider story={story()} />);
 
+/*
+// Breaks with .pdf file import
 storiesOf('Home', module)
   .add('Container', () => <HomeContainer />);
+*/
 
 storiesOf('Text entry', module)
   .add('Container', () => <TextEntryContainer />);
@@ -60,7 +63,31 @@ storiesOf('Text editor', module)
   .add('Container', () => <TextEditorContainer />);
 
 storiesOf('Text exercise preparation', module)
-  .add('Container', () => {
+  .add('Reading test container', () => {
+    store.dispatch(actionCreators.selectExercise('readingTest'));
+    return (
+      <TextExercisePreparationContainer
+        type="readingTest"
+        onProceed={action('clicked')}
+      />);
+  })
+  .add('Reading aid container', () => {
+    store.dispatch(actionCreators.selectExercise('readingAid'));
+    return (
+      <TextExercisePreparationContainer
+        type="readingAid"
+        onProceed={action('clicked')}
+      />);
+  })
+  .add('Disappearing container', () => {
+    store.dispatch(actionCreators.selectExercise('disappearing'));
+    return (
+      <TextExercisePreparationContainer
+        type="disappearing"
+        onProceed={action('clicked')}
+      />);
+  })
+  .add('Word groups container', () => {
     store.dispatch(actionCreators.selectExercise('wordGroups'));
     return (
       <TextExercisePreparationContainer

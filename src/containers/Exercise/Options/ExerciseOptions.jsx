@@ -18,6 +18,9 @@ import {
   MIN_LINE_BREAK_DELAY,
   MAX_LINE_BREAK_DELAY,
   STEP_LINE_BREAK_DELAY,
+  MIN_PAGE_BREAK_DELAY,
+  MAX_PAGE_BREAK_DELAY,
+  STEP_PAGE_BREAK_DELAY,
   MIN_TABLE_SIZE,
   MAX_TABLE_SIZE,
   STEP_TABLE_SIZE,
@@ -69,6 +72,17 @@ export class ExerciseOptions extends PureComponent {
             max={MAX_LINE_BREAK_DELAY}
             step={STEP_LINE_BREAK_DELAY}
             updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('pageBreakDelay') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.page-break-delay')}
+            description={this.props.translate('exercise-options.page-break-delay-description')}
+            unit={this.props.translate('exercise-options.ms')}
+            value={this.props.options.pageBreakDelay}
+            min={MIN_PAGE_BREAK_DELAY}
+            max={MAX_PAGE_BREAK_DELAY}
+            step={STEP_PAGE_BREAK_DELAY}
+            updateValue={value => this.props.onSubmit({ pageBreakDelay: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ?
           <ExerciseSelectOption
