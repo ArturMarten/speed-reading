@@ -23,9 +23,12 @@ export const tableDimensionOptions = [
 export const MIN_TEXT_WIDTH = 250;
 export const MAX_TEXT_WIDTH = 1600;
 export const STEP_TEXT_WIDTH = 50;
-export const MIN_FONT_SIZE = 12;
-export const MAX_FONT_SIZE = 18;
+export const MIN_FONT_SIZE = 10;
+export const MAX_FONT_SIZE = 30;
 export const STEP_FONT_SIZE = 1;
+export const MIN_LINE_SPACING = 1.0;
+export const MAX_LINE_SPACING = 1.5;
+export const STEP_LINE_SPACING = 0.1;
 export const MIN_SYMBOL_SIZE = 40;
 export const MAX_SYMBOL_SIZE = 100;
 export const STEP_SYMBOL_SIZE = 5;
@@ -34,6 +37,7 @@ const initialTextOptions = {
   font: 'Calibri',
   width: Math.min(document.body.clientWidth, 1000),
   fontSize: 14,
+  lineSpacing: 1.0,
   symbolSize: 80,
 };
 
@@ -46,8 +50,11 @@ export const MIN_START_DELAY = 0;
 export const MAX_START_DELAY = 500;
 export const STEP_START_DELAY = 50;
 export const MIN_LINE_BREAK_DELAY = 0;
-export const MAX_LINE_BREAK_DELAY = 300;
-export const STEP_LINE_BREAK_DELAY = 50;
+export const MAX_LINE_BREAK_DELAY = 500;
+export const STEP_LINE_BREAK_DELAY = 10;
+export const MIN_PAGE_BREAK_DELAY = 0;
+export const MAX_PAGE_BREAK_DELAY = 500;
+export const STEP_PAGE_BREAK_DELAY = 10;
 export const MIN_TABLE_SIZE = 30;
 export const MAX_TABLE_SIZE = 100;
 export const STEP_TABLE_SIZE = 10;
@@ -64,6 +71,7 @@ export const STEP_COLUMN_SPACING = 10;
 const initialExerciseOptions = {
   startDelay: 300,
   lineBreakDelay: 100,
+  pageBreakDelay: 200,
   characterCount: 15,
   tableDimensions: 25,
   tableSize: 100,

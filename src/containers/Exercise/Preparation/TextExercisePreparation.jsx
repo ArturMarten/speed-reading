@@ -11,6 +11,7 @@ import TextOptions from '../Options/TextOptions';
 import ExerciseOptions from '../Options/ExerciseOptions';
 import SpeedOptions from '../Options/SpeedOptions';
 import TextPreview from '../Preview/TextPreview';
+import TextExercisePreview from '../Preview/TextExercisePreview';
 
 export class TextExercisePreparation extends Component {
   state = {
@@ -217,6 +218,9 @@ export class TextExercisePreparation extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <TextExercisePreview
+          exerciseType={this.props.type}
+        />
         <TextPreview />
       </Container>
     );

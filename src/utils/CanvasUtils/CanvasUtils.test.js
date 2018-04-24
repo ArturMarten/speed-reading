@@ -17,7 +17,7 @@ jasmine.getEnv().addReporter({
 });
 */
 
-export const log = (json) => {
+export const logJSON = (json) => {
   console.log(JSON.stringify(json, null, 2));
 };
 
@@ -59,9 +59,9 @@ describe('CanvasUtils', () => {
   const diffCanvas = document.createElement('canvas');
   const canvasWidth = 250;
   const canvasHeight = 100;
-  const fontSize = 16;
-  const lineHeight = fontSize + 4;
-  const paragraphSpace = 10;
+  const fontSize = 20;
+  const lineHeight = fontSize;
+  const paragraphSpace = 5;
   const font = 'Calibri';
   const textBaseline = 'bottom';
   const expectedContext = expectedCanvas.getContext('2d');
@@ -72,9 +72,9 @@ describe('CanvasUtils', () => {
     expectedCanvas.width = canvasWidth; expectedCanvas.height = canvasHeight;
     actualCanvas.width = canvasWidth; actualCanvas.height = canvasHeight;
     diffCanvas.width = canvasWidth; diffCanvas.height = canvasHeight;
-    expectedContext.font = `${fontSize}pt ${font}`; expectedContext.textBaseline = textBaseline;
-    actualContext.font = `${fontSize}pt ${font}`; actualContext.textBaseline = textBaseline;
-    diffContext.font = `${fontSize}pt ${font}`; diffContext.textBaseline = textBaseline;
+    expectedContext.font = `${fontSize}px ${font}`; expectedContext.textBaseline = textBaseline;
+    actualContext.font = `${fontSize}px ${font}`; actualContext.textBaseline = textBaseline;
+    diffContext.font = `${fontSize}px ${font}`; diffContext.textBaseline = textBaseline;
   });
 
   beforeEach(() => {
@@ -85,9 +85,9 @@ describe('CanvasUtils', () => {
 
   afterEach(function () {
     // Reset any applied styling
-    expectedContext.font = `${fontSize}pt ${font}`; expectedContext.textBaseline = textBaseline;
-    actualContext.font = `${fontSize}pt ${font}`; actualContext.textBaseline = textBaseline;
-    diffContext.font = `${fontSize}pt ${font}`; diffContext.textBaseline = textBaseline;
+    expectedContext.font = `${fontSize}px ${font}`; expectedContext.textBaseline = textBaseline;
+    actualContext.font = `${fontSize}px ${font}`; actualContext.textBaseline = textBaseline;
+    diffContext.font = `${fontSize}px ${font}`; diffContext.textBaseline = textBaseline;
 
     const testName = `CanvasUtils ${this.currentTest.title}`;
     outputPNG(diffCanvas, `${imgOutputFolder}/diff/${testName}.png`);
@@ -172,7 +172,7 @@ describe('CanvasUtils', () => {
     expectedContext.fillText('paragraph1 text', 0, lineHeight);
     expectedContext.fillText('paragraph2 text', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>paragraph1 text</p><p>paragraph2 text</p>');
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -180,7 +180,7 @@ describe('CanvasUtils', () => {
     expectedContext.fillText('paragraph text should be', 0, lineHeight);
     expectedContext.fillText('wrapped', 0, lineHeight + lineHeight);
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -189,7 +189,7 @@ describe('CanvasUtils', () => {
     expectedContext.fillText('wrapped', 0, lineHeight + lineHeight);
     expectedContext.fillText('paragraph', 0, lineHeight + lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -199,7 +199,7 @@ describe('CanvasUtils', () => {
     const secondBlock = convertFromHTML('<p>Second line</p>').contentBlocks;
     const mergedBlocks = emptyBlock.concat(secondBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -209,7 +209,7 @@ describe('CanvasUtils', () => {
     const thirdBlock = convertFromHTML('<p>Third line</p>').contentBlocks;
     const mergedBlocks = emptyBlocks.concat(thirdBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -221,7 +221,7 @@ describe('CanvasUtils', () => {
     const thirdBlock = convertFromHTML('<p>Third line</p>').contentBlocks;
     const mergedBlocks = (firstBlock.concat(emptyBlock)).concat(thirdBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -229,7 +229,7 @@ describe('CanvasUtils', () => {
     expectedContext.fillText('Paragraph', 0, lineHeight);
     expectedContext.fillText('with space', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>Paragraph </p><p>with space</p>');
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -238,7 +238,7 @@ describe('CanvasUtils', () => {
     expectedContext.fillText('Visible', 0, lineHeight);
     expectedContext.fillText('Overflow', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>Visible</p><p>Overflow</p>');
-    writeText(actualContext, content, { lineHeight, paragraphSpace });
+    writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
@@ -246,7 +246,7 @@ describe('CanvasUtils', () => {
     const content = getDraftJSContentFromHTML('metadata');
     const singleWordWidth = expectedContext.measureText('metadata').width;
     const expectedWordMetadata = [
-      ['metadata', 0, singleWordWidth, lineHeight],
+      ['metadata', 0, lineHeight, singleWordWidth, 0],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
     expect(actualTextMetadata.lines.length).to.equal(1);
@@ -262,9 +262,9 @@ describe('CanvasUtils', () => {
     const secondWordStart = firstWordWidth + spaceWidth;
     const thirdWordStart = secondWordStart + secondWordWidth + spaceWidth;
     const expectedWordMetadata = [
-      ['multiple', 0, firstWordWidth, lineHeight],
-      ['word', secondWordStart, secondWordStart + secondWordWidth, lineHeight],
-      ['metadata', thirdWordStart, thirdWordStart + thirdWordWidth, lineHeight],
+      ['multiple', 0, lineHeight, firstWordWidth, 0],
+      ['word', secondWordStart, lineHeight, secondWordStart + secondWordWidth, 0],
+      ['metadata', thirdWordStart, lineHeight, thirdWordStart + thirdWordWidth, 0],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
     expect(actualTextMetadata.lines.length).to.equal(1);
@@ -280,9 +280,9 @@ describe('CanvasUtils', () => {
     const secondWordStart = firstWordWidth + spaceWidth;
     const thirdWordStart = secondWordStart + secondWordWidth + spaceWidth;
     const expectedWordMetadata = [
-      ['should', 0, firstWordWidth, lineHeight + lineHeight],
-      ['be', secondWordStart, secondWordStart + secondWordWidth, lineHeight + lineHeight],
-      ['wrapped', thirdWordStart, thirdWordStart + thirdWordWidth, lineHeight + lineHeight],
+      ['should', 0, lineHeight + lineHeight, firstWordWidth, lineHeight],
+      ['be', secondWordStart, lineHeight + lineHeight, secondWordStart + secondWordWidth, lineHeight],
+      ['wrapped', thirdWordStart, lineHeight + lineHeight, thirdWordStart + thirdWordWidth, lineHeight],
     ];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
     expect(actualTextMetadata.lines.length).to.equal(2);
@@ -296,22 +296,22 @@ describe('CanvasUtils', () => {
     const spaceWidth = expectedContext.measureText(' ').width;
     const secondWordStart = firstWordWidth + spaceWidth;
     const expectedWordMetadata = [
-      ['paragraph1', 0, firstWordWidth, lineHeight],
-      ['text', secondWordStart, secondWordStart + secondWordWidth, lineHeight],
-      ['paragraph2', 0, firstWordWidth, lineHeight + paragraphSpace + lineHeight],
-      ['text', secondWordStart, secondWordStart + secondWordWidth, lineHeight + paragraphSpace + lineHeight],
+      ['paragraph1', 0, lineHeight, firstWordWidth, 0],
+      ['text', secondWordStart, lineHeight, secondWordStart + secondWordWidth, 0],
+      ['paragraph2', 0, lineHeight + paragraphSpace + lineHeight, firstWordWidth, lineHeight + paragraphSpace],
+      ['text', secondWordStart, lineHeight + paragraphSpace + lineHeight, secondWordStart + secondWordWidth, lineHeight + paragraphSpace],
     ];
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     expect(actualTextMetadata.lines.length).to.equal(2);
     expect(actualTextMetadata.wordMetadata).to.eql(expectedWordMetadata);
   });
 
   it('returns paragraph wrap metadata', () => {
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     const lastWordWidth = expectedContext.measureText('wrapped').width;
     expect(actualTextMetadata.lines.length).to.equal(2);
-    expect(actualTextMetadata.wordMetadata[4]).to.eql(['wrapped', 0, lastWordWidth, lineHeight + lineHeight]);
+    expect(actualTextMetadata.wordMetadata[4]).to.eql(['wrapped', 0, lineHeight + lineHeight, lastWordWidth, lineHeight]);
   });
 
   it('returns empty paragraph metadata', () => {
@@ -319,10 +319,12 @@ describe('CanvasUtils', () => {
     const secondBlock = convertFromHTML('<p>Second</p>').contentBlocks;
     const mergedBlocks = emptyBlock.concat(secondBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     const firstWordWidth = expectedContext.measureText('Second').width;
     expect(actualTextMetadata.lines.length).to.equal(1);
-    expect(actualTextMetadata.wordMetadata[0]).to.eql(['Second', 0, firstWordWidth, lineHeight + lineHeight + paragraphSpace]);
+    expect(actualTextMetadata.wordMetadata[0]).to.eql([
+      'Second', 0, lineHeight + paragraphSpace + lineHeight, firstWordWidth, lineHeight + paragraphSpace,
+    ]);
   });
 
   it('returns two empty paragraph metadata', () => {
@@ -330,10 +332,12 @@ describe('CanvasUtils', () => {
     const thirdBlock = convertFromHTML('<p>Third</p>').contentBlocks;
     const mergedBlocks = emptyBlocks.concat(thirdBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     const firstWordWidth = expectedContext.measureText('Third').width;
     expect(actualTextMetadata.lines.length).to.equal(1);
-    expect(actualTextMetadata.wordMetadata[0]).to.eql(['Third', 0, firstWordWidth, lineHeight + lineHeight + lineHeight + paragraphSpace]);
+    expect(actualTextMetadata.wordMetadata[0]).to.eql([
+      'Third', 0, lineHeight + lineHeight + lineHeight + paragraphSpace, firstWordWidth, lineHeight + lineHeight + paragraphSpace,
+    ]);
   });
 
   it('returns empty paragraph between metadata', () => {
@@ -343,18 +347,20 @@ describe('CanvasUtils', () => {
     const mergedBlocks = (firstBlock.concat(emptyBlock)).concat(thirdBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
     // log(content);
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     const firstWordWidth = expectedContext.measureText('First').width;
     const thirdWordWidth = expectedContext.measureText('Third').width;
     // console.log(actualTextMetadata);
     expect(actualTextMetadata.lines.length).to.equal(2);
-    expect(actualTextMetadata.wordMetadata[0]).to.eql(['First', 0, firstWordWidth, lineHeight]);
-    expect(actualTextMetadata.wordMetadata[1]).to.eql(['Third', 0, thirdWordWidth, lineHeight + lineHeight + lineHeight + paragraphSpace]);
+    expect(actualTextMetadata.wordMetadata[0]).to.eql(['First', 0, lineHeight, firstWordWidth, 0]);
+    expect(actualTextMetadata.wordMetadata[1]).to.eql([
+      'Third', 0, lineHeight + lineHeight + lineHeight + paragraphSpace, thirdWordWidth, lineHeight + lineHeight + paragraphSpace,
+    ]);
   });
 
   it('returns two paragraph wrap metadata', () => {
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight, paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     expect(actualTextMetadata.lines.length).to.equal(3);
   });
 });

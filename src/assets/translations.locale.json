@@ -260,11 +260,15 @@
     "can-be-used": ["saab kasutada kiiruse muutmiseks harjutuse ajal", "can be used to change speed during exercise"]
   },
   "text-preview": {
-    "show": ["Näita teksti eelvaade", "Show text preview"],
+    "show": ["Näita teksti eelvaadet", "Show text preview"],
     "hide": ["Peida teksti eelvaade", "Hide text preview"]
   },
+  "text-exercise-preview": {
+    "show": ["Näita tekstiharjutuse eelvaadet", "Show text exercise preview"],
+    "hide": ["Peida tekstiharjutuse eelvaade", "Hide text exercise preview"]
+  },
   "exercise-preview": {
-    "show": ["Näita harjutuse eelvaade", "Show exercise preview"],
+    "show": ["Näita harjutuse eelvaadet", "Show exercise preview"],
     "hide": ["Peida harjutuse eelvaade", "Hide exercise preview"]
   },
   "text-exercise-results": {
@@ -316,6 +320,8 @@
     "lines": ["rida", "lines"],
     "font-size": ["Kirja suurus", "Font size"],
     "pt": ["punkti", "pt"],
+    "line-spacing": ["Reasamm", "Line spacing"],
+    "times": ["kordne", "times"],
     "symbol-size": ["Sümboli suurus", "Symbol size"],
     "percentage": ["%", "%"]
   },
@@ -323,10 +329,12 @@
     "word-group-length": ["Sõnarühma pikkus", "Word group length"],
     "word-group-length-description": ["Maksimaalne lubatud sõnarühma pikkus", "Maximum allowed word group length"],
     "characters": ["tähemärki", "characters"],
-    "start-delay": ["Alguse viide", "Start delay"],
-    "start-delay-description": ["Ooteaeg harjutuse alustamise ja tegeliku alguse vahel", "Delay between exercise start and actual beginning"],
+    "start-delay": ["Alustamise viide", "Starting delay"],
+    "start-delay-description": ["Ooteaeg harjutuse alustamise ja harjutuse käivitamise vahel", "Delay between starting exercise and exercise start"],
     "line-break-delay": ["Reavahetuse viide", "Line break delay"],
     "line-break-delay-description": ["Ooteaeg uue tekstirea alguses", "New line delay at the start of the line"],
+    "page-break-delay": ["Lehevahetuse viide", "Page break delay"],
+    "page-break-delay-description": ["Ooteaeg uue lehekülje alguses", "New page delay at the start of the page"],
     "ms": ["ms", "ms"],
     "table-size": ["Tabeli suurus", "Table size"],
     "percentage": ["%", "%"],

@@ -10,8 +10,6 @@ import ResponsiveLayout from './containers/Layout/ResponsiveLayout';
 import Logout from './containers/Auth/Logout';
 import { rolePermissions } from './store/reducers/profile';
 
-// import { measureText } from './utils/CanvasUtils/CanvasUtils';
-
 const Home = Loadable({
   loader: () => import('./containers/Home/Home'),
 });
@@ -48,7 +46,6 @@ export class App extends Component {
   componentDidMount() {
     listenToErrors();
     this.props.onTryAutoLogin();
-    // console.log(measureText('M', 'font: 12pt Calibri'));
   }
   render() {
     const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;

@@ -14,6 +14,9 @@ import {
   MIN_FONT_SIZE,
   MAX_FONT_SIZE,
   STEP_FONT_SIZE,
+  MIN_LINE_SPACING,
+  MAX_LINE_SPACING,
+  STEP_LINE_SPACING,
   MIN_SYMBOL_SIZE,
   MAX_SYMBOL_SIZE,
   STEP_SYMBOL_SIZE,
@@ -50,6 +53,16 @@ export class TextOptions extends PureComponent {
             max={MAX_FONT_SIZE}
             step={STEP_FONT_SIZE}
             updateValue={value => this.props.onSubmit({ fontSize: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('lineSpacing') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('text-options.line-spacing')}
+            unit={this.props.translate('text-options.times')}
+            value={this.props.options.lineSpacing}
+            min={MIN_LINE_SPACING}
+            max={MAX_LINE_SPACING}
+            step={STEP_LINE_SPACING}
+            updateValue={value => this.props.onSubmit({ lineSpacing: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('symbolSize') !== -1 ?
           <ExerciseInputOption
