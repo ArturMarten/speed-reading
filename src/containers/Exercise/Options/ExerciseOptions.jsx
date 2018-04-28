@@ -8,6 +8,8 @@ import ExerciseSelectOption from '../../../components/Exercise/Options/ExerciseS
 import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
 import {
+  cursorTypeOptions,
+  cursorColorOptions,
   tableDimensionOptions,
   MIN_CHARACTER_COUNT,
   MAX_CHARACTER_COUNT,
@@ -38,6 +40,10 @@ import {
 export class ExerciseOptions extends PureComponent {
   state = {};
   render() {
+    const cursorTypeOptionsTranslated = cursorTypeOptions
+      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`exercise-options.cursor-${option.value}`) }));
+    const cursorColorOptionsTranslated = cursorColorOptions
+      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`colors.${option.value}`) }));
     return (
       <Fragment>
         {this.props.visibleOptions.indexOf('characterCount') !== -1 ?
@@ -83,6 +89,20 @@ export class ExerciseOptions extends PureComponent {
             max={MAX_PAGE_BREAK_DELAY}
             step={STEP_PAGE_BREAK_DELAY}
             updateValue={value => this.props.onSubmit({ pageBreakDelay: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('cursorType') !== -1 ?
+          <ExerciseSelectOption
+            name={this.props.translate('exercise-options.cursor-type')}
+            value={this.props.options.cursorType}
+            options={cursorTypeOptionsTranslated}
+            updateValue={value => this.props.onSubmit({ cursorType: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('cursorColor') !== -1 ?
+          <ExerciseSelectOption
+            name={this.props.translate('exercise-options.cursor-color')}
+            value={this.props.options.cursorColor}
+            options={cursorColorOptionsTranslated}
+            updateValue={value => this.props.onSubmit({ cursorColor: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ?
           <ExerciseSelectOption

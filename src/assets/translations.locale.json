@@ -337,6 +337,10 @@
     "page-break-delay": ["Lehevahetuse viide", "Page break delay"],
     "page-break-delay-description": ["Ooteaeg uue lehekülje alguses", "New page delay at the start of the page"],
     "ms": ["ms", "ms"],
+    "cursor-type": ["Pilgujuhtija", "Moving cursor"],
+    "cursor-background": ["Taust", "Background"],
+    "cursor-underline": ["Alajoon", "Underline"],
+    "cursor-color": ["Pilgujuhtija värv", "Moving cursor color"],
     "table-size": ["Tabeli suurus", "Table size"],
     "percentage": ["%", "%"],
     "table-dimensions": ["Tabeli mõõtmed", "Table dimensions"],
@@ -474,7 +478,7 @@
     "answer-updated": ["Vastusevariant uuendatud", "Answer updated"],
     "answer-removed": ["Vastusevariant kustutatud", "Answer removed"]
   },
-  "error" : {
+  "error": {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],
     "internal-server-error": ["Serveris tekkis viga", "An error occurred in the server"],
     "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],
@@ -487,5 +491,12 @@
     "incorrect-password": ["Vale parool", "Incorrect password"],
     "incorrect-old-password": ["Vale vana parool", "Incorrect old password"],
     "no-permission": ["Puuduvad vajalikud õigused", "You do not have required permission"]
+  },
+  "colors": {
+    "bright-green": ["Erkroheline", "Bright green"],
+    "bright-orange": ["Erkoranž", "Bright orange"],
+    "bright-blue": ["Erksinine", "Bright blue"],
+    "dark-gray": ["Tumehall", "Dark gray"],
+    "light-gray": ["Helehall", "Light gray"]
   }
 }

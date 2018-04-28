@@ -16,6 +16,36 @@ export const fontOptions = [
   { text: 'Sans-serif', value: 'sans-serif' },
 ];
 
+export const cursorTypeOptions = [
+  { value: 'background' },
+  { value: 'underline' },
+];
+
+export const cursorColorOptions = [
+  { value: 'bright-green' },
+  { value: 'bright-orange' },
+  { value: 'bright-blue' },
+  { value: 'dark-gray' },
+  { value: 'light-gray' },
+];
+
+export const getColorRGBA = (color) => {
+  switch (color) {
+    case 'bright-green':
+      return 'rgba(57, 255, 20, 0.9)';
+    case 'bright-orange':
+      return 'rgba(255, 102, 0, 0.9)';
+    case 'bright-blue':
+      return 'rgba(125, 249, 255, 0.9)';
+    case 'dark-gray':
+      return 'rgba(160, 160, 160, 0.9)';
+    case 'light-gray':
+      return 'rgba(220, 220, 220, 0.9)';
+    default:
+      return 'rgba(57, 255, 20, 0.9)';
+  }
+};
+
 export const tableDimensionOptions = [
   { text: '5 x 5', value: 25 },
 ];
@@ -53,7 +83,7 @@ export const MIN_LINE_BREAK_DELAY = 0;
 export const MAX_LINE_BREAK_DELAY = 500;
 export const STEP_LINE_BREAK_DELAY = 10;
 export const MIN_PAGE_BREAK_DELAY = 0;
-export const MAX_PAGE_BREAK_DELAY = 500;
+export const MAX_PAGE_BREAK_DELAY = 1000;
 export const STEP_PAGE_BREAK_DELAY = 10;
 export const MIN_TABLE_SIZE = 30;
 export const MAX_TABLE_SIZE = 100;
@@ -71,7 +101,9 @@ export const STEP_COLUMN_SPACING = 10;
 const initialExerciseOptions = {
   startDelay: 300,
   lineBreakDelay: 100,
-  pageBreakDelay: 200,
+  pageBreakDelay: 400,
+  cursorType: 'background',
+  cursorColor: 'bright-green',
   characterCount: 15,
   tableDimensions: 25,
   tableSize: 100,
@@ -156,6 +188,11 @@ const reducer = (state = initialState, action) => {
             visibleSpeedOptions: [],
           });
         case 'readingAid':
+          return updateObject(state, {
+            visibleTextOptions: [...defaultVisibleTextOptions],
+            visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'cursorType', 'cursorColor'],
+            visibleSpeedOptions: [...defaultVisibleSpeedOptions],
+          });
         case 'disappearing':
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions],

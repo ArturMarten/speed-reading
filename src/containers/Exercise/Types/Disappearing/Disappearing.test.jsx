@@ -124,7 +124,6 @@ describe.only('Disappearing updateState', () => {
     expect(newState.lineCharacterIndex).to.equal(0);
   });
 
-
   it('outputs second line clear rect', () => {
     const currentState = {
       wordIndex: 4,

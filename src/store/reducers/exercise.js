@@ -55,20 +55,6 @@ export const generateStringPairs = (count, length, modification) => {
   return first.map(string => [string, Math.floor(Math.random() * 2) === 0 ? string : swapRandomSymbol(string)]);
 };
 
-const initialState = {
-  id: null,
-  save: true,
-  attemptId: null,
-  type: '',
-  modification: '',
-  modificationOptions: [],
-  status: 'preparation',
-  wordGroups: [],
-  symbols: [],
-  stringPairs: [],
-  result: {},
-};
-
 export const getExerciseId = (exerciseType) => {
   switch (exerciseType) {
     case 'readingTest':
@@ -86,6 +72,20 @@ export const getExerciseId = (exerciseType) => {
     default:
       return null;
   }
+};
+
+const initialState = {
+  id: null,
+  save: true,
+  attemptId: null,
+  type: '',
+  modification: '',
+  modificationOptions: [],
+  status: 'preparation',
+  wordGroups: [],
+  symbols: [],
+  stringPairs: [],
+  result: {},
 };
 
 const reducer = (state = initialState, action) => {

@@ -4,15 +4,6 @@ import { connect } from 'react-redux';
 import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
-let timeout = null;
-let frame = null;
-
-const initialState = {
-  wordIndex: 0,
-  lineCharacterIndex: -1,
-  marginTop: 0,
-};
-
 export const drawState = (currentState, context) => {
   const { clearRect } = currentState;
   context.clearRect(clearRect.x, clearRect.y, clearRect.width, clearRect.height);
@@ -75,6 +66,15 @@ export const updateState = (currentState, textMetadata) => {
     newPage,
     finished,
   });
+};
+
+let timeout = null;
+let frame = null;
+
+const initialState = {
+  wordIndex: 0,
+  lineCharacterIndex: -1,
+  marginTop: 0,
 };
 
 export class Disappearing extends Component {

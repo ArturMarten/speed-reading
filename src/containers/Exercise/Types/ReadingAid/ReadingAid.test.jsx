@@ -94,7 +94,6 @@ describe.only('Reading aid updateState', () => {
       width: 10,
       height: 19,
     };
-    console.log(newState.drawRect);
     expect(newState.restoreRect).to.eql(expectedRect);
   });
 
@@ -159,6 +158,22 @@ describe.only('Reading aid updateState', () => {
     expect(newState.lineCharacterIndex).to.equal(0);
   });
 
+  it('outputs second line restore rect', () => {
+    const currentState = {
+      wordIndex: 4,
+      lineCharacterIndex: 21,
+      canvasHeight: CANVAS_HEIGHT,
+      marginTop: 0,
+    };
+    const newState = updateState(currentState, textMetadata);
+    const expectedRect = {
+      x: 208,
+      y: 0,
+      width: 10,
+      height: 19,
+    };
+    expect(newState.restoreRect).to.eql(expectedRect);
+  });
 
   it('outputs second line draw rect', () => {
     const currentState = {
@@ -175,6 +190,23 @@ describe.only('Reading aid updateState', () => {
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
+  });
+
+  it('outputs third line restore rect', () => {
+    const currentState = {
+      wordIndex: 8,
+      lineCharacterIndex: 28,
+      canvasHeight: CANVAS_HEIGHT,
+      marginTop: 0,
+    };
+    const newState = updateState(currentState, textMetadata);
+    const expectedRect = {
+      x: 226,
+      y: 24,
+      width: 9,
+      height: 19,
+    };
+    expect(newState.restoreRect).to.eql(expectedRect);
   });
 
   it('outputs third line draw rect', () => {
@@ -258,6 +290,23 @@ describe.only('Reading aid updateState', () => {
     };
     const newState = updateState(currentState, textMetadata);
     expect(newState.marginTop).to.equal(390);
+  });
+
+  it('outputs new page restore rect', () => {
+    const currentState = {
+      wordIndex: 86,
+      lineCharacterIndex: 27,
+      canvasHeight: CANVAS_HEIGHT,
+      marginTop: 0,
+    };
+    const newState = updateState(currentState, textMetadata);
+    const expectedRect = {
+      x: 216,
+      y: 371,
+      width: 8,
+      height: 19,
+    };
+    expect(newState.restoreRect).to.eql(expectedRect);
   });
 
   it('outputs new page draw rect', () => {

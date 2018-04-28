@@ -27,7 +27,7 @@ export class ReadingTest extends Component {
       <canvas
         ref={(ref) => { this.shownCanvas = ref; }}
         width={this.props.textOptions.width}
-        height={1000}
+        height={this.props.canvasHeight}
       />
     );
   }

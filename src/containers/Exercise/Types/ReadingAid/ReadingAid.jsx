@@ -3,15 +3,7 @@ import { connect } from 'react-redux';
 
 import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
-
-let timeout = null;
-let frame = null;
-
-const initialState = {
-  wordIndex: 0,
-  lineCharacterIndex: -1,
-  marginTop: 0,
-};
+import { getColorRGBA } from '../../../../store/reducers/options';
 
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRect, drawRect } = currentState;
@@ -21,12 +13,17 @@ export const drawState = (currentState, context, restoreCanvas) => {
     restoreRect.x, restoreRect.y + currentState.marginTop, restoreRect.width, restoreRect.height,
     restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height,
   );
-  context.fillRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
-  context.drawImage(
-    restoreCanvas,
-    drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
-    drawRect.x, drawRect.y, drawRect.width, drawRect.height,
-  );
+  if (currentState.cursorType === 'underline') {
+    const height = drawRect.height * 0.2;
+    context.fillRect(drawRect.x, drawRect.y + (drawRect.height - height), drawRect.width, height);
+  } else {
+    context.fillRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
+    context.drawImage(
+      restoreCanvas,
+      drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
+      drawRect.x, drawRect.y, drawRect.width, drawRect.height,
+    );
+  }
 };
 
 export const updateState = (currentState, textMetadata) => {
@@ -103,16 +100,14 @@ export const updateState = (currentState, textMetadata) => {
   });
 };
 
-/*
-const draw = (context, copyCanvas, previousRect, currentRect) => {
-  // Clear previous state
-  context.clearRect(...previousRect);
-  context.drawImage(copyCanvas, ...previousRect, ...previousRect);
-  // Draw new state
-  context.fillRect(...currentRect);
-  context.drawImage(copyCanvas, ...currentRect, ...currentRect);
+let timeout = null;
+let frame = null;
+
+const initialState = {
+  wordIndex: 0,
+  lineCharacterIndex: -1,
+  marginTop: 0,
 };
-*/
 
 export class ReadingAid extends Component {
   componentDidMount() {
@@ -156,6 +151,7 @@ export class ReadingAid extends Component {
   currentState = { ...initialState };
 
   init() {
+    this.currentState.cursorType = this.props.exerciseOptions.cursorType;
     this.currentState.canvasHeight = this.props.canvasHeight;
     // Create and prepare off-screen canvas
     this.offscreenCanvas = document.createElement('canvas');
@@ -184,7 +180,7 @@ export class ReadingAid extends Component {
     } else {
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     }
-    this.shownContext.fillStyle = 'rgba(0, 255, 0, 0.9)';
+    this.shownContext.fillStyle = getColorRGBA(this.props.exerciseOptions.cursorColor);
     // Calculate update interval
     this.calculateUpdateInterval();
     // Initial draw
@@ -239,56 +235,6 @@ export class ReadingAid extends Component {
       this.updateInterval,
     );
   }
-
-  /*
-  update() {
-    console.log(this.cursorState);
-    // Create previous rect
-    this.cursorState.previousRect = [
-      Math.max(this.cursorState.currentRect[0] - 2, 0),
-      this.cursorState.currentRect[1],
-      this.cursorState.currentRect[2] + 2,
-      this.cursorState.currentRect[3],
-    ];
-    // Get current position
-    let currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
-    let { lineNumber } = currentWordMetadata;
-    // Calculate next position
-    this.cursorState.lineCharacter += 1;
-    this.cursorState.newLine = false;
-    if (this.cursorState.linePosition >= this.textMetadata.wordsMetadata[this.cursorState.word].rect.right) {
-      // New word
-      this.cursorState.word += 1;
-      currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
-    } else if (this.cursorState.lineCharacter >= this.textMetadata.linesMetadata[lineNumber].characterCount) {
-      // New line
-      this.cursorState.lineCharacter = 0;
-      this.cursorState.word += 1;
-      currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
-      this.cursorState.newLine = true;
-      lineNumber += 1;
-    }
-    if (this.cursorState.word === this.textMetadata.wordsMetadata.length) {
-      this.props.onExerciseFinish();
-    } else {
-      this.cursorState.linePosition = this.textMetadata.linesMetadata[lineNumber].rect.left +
-        (this.cursorState.lineCharacter * this.textMetadata.linesMetadata[lineNumber].averageCharacterWidth);
-
-      this.cursorState.currentRect = [
-        Math.ceil(this.cursorState.linePosition),
-        currentWordMetadata.rect.top,
-        Math.ceil(this.textMetadata.linesMetadata[lineNumber].averageCharacterWidth),
-        currentWordMetadata.rect.bottom - currentWordMetadata.rect.top,
-      ];
-      const nextUpdate = this.cursorState.newLine ? this.updateInterval + this.props.exerciseOptions.lineBreakDelay : this.updateInterval;
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.update()); },
-        nextUpdate,
-      );
-      draw(this.shownContext, this.offscreenCanvas, this.cursorState.previousRect, this.cursorState.currentRect);
-    }
-  }
-  */
 
   render() {
     return (
