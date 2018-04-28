@@ -182,15 +182,6 @@ export class TextExercisePreparation extends Component {
                 <Header as="h4" textAlign="center">
                   {this.props.translate('exercise-preparation.exercise-options')}
                 </Header>
-                {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
-                  this.props.translate('exercise-preparation.exercise-options-missing') :
-                  <table>
-                    <tbody>
-                      <SpeedOptions />
-                      <ExerciseOptions />
-                    </tbody>
-                  </table>
-                }
                 {this.props.visibleSpeedOptions.length !== 0 && this.props.info.speedChangeInfo ?
                   <Message info onDismiss={this.props.onSpeedChangeInfoDismiss}>
                     {this.props.translate('exercise-preparation.keyboard-keys')}
@@ -199,6 +190,15 @@ export class TextExercisePreparation extends Component {
                     <Icon style={{ marginRight: 0 }} size="large" color="black" name="minus square outline" />
                     {this.props.translate('exercise-preparation.can-be-used')}
                   </Message> : null}
+                {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
+                  <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p> :
+                  <table>
+                    <tbody>
+                      <SpeedOptions />
+                      <ExerciseOptions />
+                    </tbody>
+                  </table>
+                }
               </Segment>
             </Grid.Column>
             <Grid.Column>
@@ -207,7 +207,7 @@ export class TextExercisePreparation extends Component {
                   {this.props.translate('exercise-preparation.text-options')}
                 </Header>
                 {this.props.visibleTextOptions.length === 0 ?
-                  this.props.translate('exercise-preparation.text-options-missing') :
+                  <p>{this.props.translate('exercise-preparation.text-options-missing')}</p> :
                   <table>
                     <tbody>
                       <TextOptions exerciseType={this.props.type} />

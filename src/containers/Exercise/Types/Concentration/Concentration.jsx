@@ -23,6 +23,12 @@ export class Concentration extends Component {
       this.resetExercise();
     } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
       this.resetExercise();
+    } else {
+      const { answers } = this.state;
+      const allAnswered = answers.filter(answer => answer === undefined).length === 0;
+      if (this.props.stringPairs.length === answers.length && allAnswered && this.props.timerState.stopped === false) {
+        this.props.onExerciseFinish();
+      }
     }
   }
 

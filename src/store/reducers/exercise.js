@@ -259,7 +259,7 @@ const reducer = (state = initialState, action) => {
       } else if (state.type === 'concentration') {
         return updateObject(state, {
           stringPairs: generateStringPairs(
-            action.payload.execiseOptions.symbolGroupCount,
+            action.payload.exerciseOptions.symbolGroupCount,
             action.payload.exerciseOptions.symbolCount,
             state.modification,
           ),

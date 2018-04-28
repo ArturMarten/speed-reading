@@ -48,6 +48,7 @@ export class HelpExercise extends Component {
           return (
             <Concentration
               ref={(ref) => { this.exerciseRef = ref; }}
+              onExerciseFinish={this.onExerciseFinishHandler}
               timerState={this.props.timerState}
             />
           );

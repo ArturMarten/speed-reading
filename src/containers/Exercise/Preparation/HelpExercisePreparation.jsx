@@ -123,7 +123,7 @@ export class HelpExercisePreparation extends Component {
                     {this.props.translate('exercise-preparation.exercise-options')}
                   </Header>
                   {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
-                    this.props.translate('exercise-preparation.exercise-options-missing') :
+                    <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p> :
                     <table>
                       <tbody>
                         <ExerciseOptions />
@@ -138,7 +138,7 @@ export class HelpExercisePreparation extends Component {
                     {this.props.translate('exercise-preparation.text-options')}
                   </Header>
                   {this.props.visibleTextOptions.length === 0 ?
-                    this.props.translate('exercise-preparation.text-options-missing') :
+                    <p>{this.props.translate('exercise-preparation.text-options-missing')}</p> :
                     <table>
                       <tbody>
                         <TextOptions exerciseType={this.props.type} />

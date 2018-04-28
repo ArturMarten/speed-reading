@@ -65,7 +65,7 @@ export const STEP_SYMBOL_SIZE = 5;
 
 const initialTextOptions = {
   font: 'Calibri',
-  width: Math.min(document.body.clientWidth, 1000),
+  width: Math.min(document.body.clientWidth - 6, 1000),
   fontSize: 14,
   lineSpacing: 1.0,
   symbolSize: 80,
