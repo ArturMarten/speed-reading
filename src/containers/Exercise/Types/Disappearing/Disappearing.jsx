@@ -9,7 +9,7 @@ let frame = null;
 
 const initialState = {
   wordIndex: 0,
-  lineCharacterIndex: 0,
+  lineCharacterIndex: -1,
   marginTop: 0,
 };
 
@@ -19,57 +19,58 @@ export const drawState = (currentState, context) => {
 };
 
 export const updateState = (currentState, textMetadata) => {
-  let { wordIndex: currentWordIndex, lineCharacterIndex: currentLineCharacterIndex, marginTop } = currentState;
   const { canvasHeight } = currentState;
   const { wordsMetadata, linesMetadata } = textMetadata;
-  let currentWordMetadata = wordsMetadata[currentWordIndex];
-  let { lineNumber } = currentWordMetadata;
-  let currentLine = linesMetadata[lineNumber];
-  let characterWidth = currentLine.averageCharacterWidth;
-  let currentLinePosition = currentLine.rect.left + (currentLineCharacterIndex * characterWidth);
+
+  // Calculate next state
   let newLine = false;
   let newPage = false;
   let finished = false;
-  const wordEndPosition = currentWordMetadata.rect.right;
-  const lineEndCharacterIndex = linesMetadata[lineNumber].characterCount;
-  if (Math.ceil(currentLinePosition) >= wordEndPosition) {
+  let { wordIndex: nextWordIndex, lineCharacterIndex: nextLineCharacterIndex, marginTop: nextMarginTop } = currentState;
+  nextLineCharacterIndex += 1;
+  let nextWordMetadata = wordsMetadata[nextWordIndex];
+  let { lineNumber } = nextWordMetadata;
+  let nextLine = linesMetadata[lineNumber];
+  let nextCharacterWidth = nextLine.averageCharacterWidth;
+  let nextLinePosition = nextLine.rect.left + (nextLineCharacterIndex * nextCharacterWidth);
+  const wordEndPosition = nextWordMetadata.rect.right;
+  const currentLineCharacterCount = linesMetadata[lineNumber].characterCount;
+  if (Math.ceil(nextLinePosition) >= wordEndPosition) {
     // New word
-    currentWordIndex += 1;
-    currentWordMetadata = wordsMetadata[currentWordIndex];
+    nextWordIndex += 1;
+    nextWordMetadata = wordsMetadata[nextWordIndex];
   }
-  if (currentLineCharacterIndex >= lineEndCharacterIndex) {
+  if (nextLineCharacterIndex >= currentLineCharacterCount) {
     // New line
-    currentLineCharacterIndex = 0;
+    nextLineCharacterIndex = 0;
     newLine = true;
     lineNumber += 1;
-    currentLine = linesMetadata[lineNumber];
-    characterWidth = currentLine.averageCharacterWidth;
-    currentLinePosition = currentLine.rect.left + (currentLineCharacterIndex * characterWidth);
-    if (currentLine.rect.bottom - marginTop > canvasHeight) {
+    nextLine = linesMetadata[lineNumber];
+    nextCharacterWidth = nextLine.averageCharacterWidth;
+    nextLinePosition = nextLine.rect.left + (nextLineCharacterIndex * nextCharacterWidth);
+    if (nextLine.rect.bottom - nextMarginTop > canvasHeight) {
       // New page
       newPage = true;
-      marginTop = currentLine.rect.top;
+      nextMarginTop = nextLine.rect.top;
     }
-  } else {
-    currentLineCharacterIndex += 1;
   }
 
   const clearRect = {
-    x: Math.ceil(currentLinePosition),
-    y: currentWordMetadata.rect.top - marginTop,
-    width: Math.ceil(characterWidth),
-    height: currentWordMetadata.rect.bottom - currentWordMetadata.rect.top,
+    x: Math.ceil(nextLinePosition),
+    y: nextWordMetadata.rect.top - nextMarginTop,
+    width: Math.ceil(nextCharacterWidth),
+    height: nextWordMetadata.rect.bottom - nextWordMetadata.rect.top,
   };
 
-  if (currentWordIndex === textMetadata.wordsMetadata.length - 1 && currentLineCharacterIndex === lineEndCharacterIndex) {
+  if (nextWordIndex === textMetadata.wordsMetadata.length - 1 && nextLineCharacterIndex === currentLineCharacterCount - 1) {
     finished = true;
   }
 
   return updateObject(currentState, {
-    wordIndex: currentWordIndex,
-    lineCharacterIndex: currentLineCharacterIndex,
+    wordIndex: nextWordIndex,
+    lineCharacterIndex: nextLineCharacterIndex,
+    marginTop: nextMarginTop,
     clearRect,
-    marginTop,
     newLine,
     newPage,
     finished,

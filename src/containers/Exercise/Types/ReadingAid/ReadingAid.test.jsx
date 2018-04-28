@@ -1,10 +1,10 @@
 /* eslint-disable func-names */
-import { updateState } from './Disappearing';
+import { updateState } from './ReadingAid';
 import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 const CANVAS_HEIGHT = 400;
 
-describe.only('Disappearing updateState', () => {
+describe.only('Reading aid updateState', () => {
   const textOptions = {
     font: 'Calibri',
     width: 250,
@@ -35,7 +35,7 @@ describe.only('Disappearing updateState', () => {
     expect(newState.lineCharacterIndex).to.equal(0);
   });
 
-  it('outputs first clear rect', () => {
+  it('outputs first restore rect', () => {
     const currentState = {
       wordIndex: 0,
       lineCharacterIndex: -1,
@@ -49,7 +49,24 @@ describe.only('Disappearing updateState', () => {
       width: 10,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.restoreRect).to.eql(expectedRect);
+  });
+
+  it('outputs first draw rect', () => {
+    const currentState = {
+      wordIndex: 0,
+      lineCharacterIndex: -1,
+      canvasHeight: CANVAS_HEIGHT,
+      marginTop: 0,
+    };
+    const newState = updateState(currentState, textMetadata);
+    const expectedRect = {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 19,
+    };
+    expect(newState.drawRect).to.eql(expectedRect);
   });
 
   it('increases first update line character index', () => {
@@ -63,7 +80,25 @@ describe.only('Disappearing updateState', () => {
     expect(newState.lineCharacterIndex).to.equal(1);
   });
 
-  it('outputs second clear rect', () => {
+  it('outputs second restore rect', () => {
+    const currentState = {
+      wordIndex: 0,
+      lineCharacterIndex: 0,
+      canvasHeight: CANVAS_HEIGHT,
+      marginTop: 0,
+    };
+    const newState = updateState(currentState, textMetadata);
+    const expectedRect = {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 19,
+    };
+    console.log(newState.drawRect);
+    expect(newState.restoreRect).to.eql(expectedRect);
+  });
+
+  it('outputs second draw rect', () => {
     const currentState = {
       wordIndex: 0,
       lineCharacterIndex: 0,
@@ -77,7 +112,7 @@ describe.only('Disappearing updateState', () => {
       width: 10,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.drawRect).to.eql(expectedRect);
   });
 
   it('increases word index on new word', () => {
@@ -125,7 +160,7 @@ describe.only('Disappearing updateState', () => {
   });
 
 
-  it('outputs second line clear rect', () => {
+  it('outputs second line draw rect', () => {
     const currentState = {
       wordIndex: 4,
       lineCharacterIndex: 21,
@@ -139,10 +174,10 @@ describe.only('Disappearing updateState', () => {
       width: 9,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.drawRect).to.eql(expectedRect);
   });
 
-  it('outputs third line clear rect', () => {
+  it('outputs third line draw rect', () => {
     const currentState = {
       wordIndex: 8,
       lineCharacterIndex: 28,
@@ -156,7 +191,7 @@ describe.only('Disappearing updateState', () => {
       width: 10,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.drawRect).to.eql(expectedRect);
   });
 
   it('increases word index on new line', () => {
@@ -225,7 +260,7 @@ describe.only('Disappearing updateState', () => {
     expect(newState.marginTop).to.equal(390);
   });
 
-  it('outputs new page clear rect', () => {
+  it('outputs new page draw rect', () => {
     const currentState = {
       wordIndex: 86,
       lineCharacterIndex: 27,
@@ -239,6 +274,6 @@ describe.only('Disappearing updateState', () => {
       width: 9,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.drawRect).to.eql(expectedRect);
   });
 });
