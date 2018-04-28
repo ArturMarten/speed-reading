@@ -1,23 +1,10 @@
+import { convertFromHTML, ContentState } from 'draft-js';
 
 /*
+  Word coordinates
   (x1, y1) - Bottom left corner
   (x2, y2) - Top right corner
 */
-
-export const WordMetadata = {
-  Word: 0,
-  x1: 1,
-  y1: 2,
-  x2: 3,
-  y2: 4,
-};
-
-export const LineMetadata = {
-  CharacterCount: 0,
-  AverageCharacterWidth: 1,
-  x1: 2,
-  x2: 3,
-};
 
 const getCanvasFont = (defaultStyle, nextStyle) => {
   let result = defaultStyle;
@@ -33,7 +20,7 @@ const getCanvasFont = (defaultStyle, nextStyle) => {
 export const drawText = (canvasContext, textMetadata) => {
   const { wordsMetadata } = textMetadata;
   wordsMetadata.forEach((wordMetadata) => {
-    canvasContext.fillText(wordMetadata[WordMetadata.Word], wordMetadata[WordMetadata.x1], wordMetadata[WordMetadata.y1]);
+    canvasContext.fillText(wordMetadata.word, wordMetadata.x1, wordMetadata.y1);
   });
 };
 
@@ -51,36 +38,77 @@ const setCanvasHeight = (oldContext, newHeight) => {
   newContext.drawImage(tempCanvas, 0, 0);
 };
 
-export const writeText = (canvasContext, content, textOptions = { lineSpacing: 1, paragraphSpace: 5 }) => {
+const addLineMetadata = (linesMetadata, characterCount, rect) => {
+  linesMetadata.push({
+    characterCount,
+    averageCharacterWidth: (rect.right - rect.left) / characterCount,
+    rect,
+  });
+};
+
+const getLinesMetadata = (wordsMetadata) => {
+  const linesMetadata = [];
+  let characterCount = 0;
+  let rect = { ...wordsMetadata[0].rect };
+  wordsMetadata.forEach((wordMetadata) => {
+    if (rect.bottom === wordMetadata.rect.bottom) {
+      // Same line
+      characterCount += wordMetadata.word.length;
+      rect.right = wordMetadata.rect.right;
+    } else {
+      // New line
+      addLineMetadata(linesMetadata, characterCount, rect);
+      rect = { ...wordMetadata.rect };
+      characterCount = wordMetadata.word.length;
+    }
+  });
+  addLineMetadata(linesMetadata, characterCount, rect);
+  return linesMetadata;
+};
+
+const addWordMetadata = (wordsMetadata, word, context, lineNumber, wordStartPosition, fillYStart, lineHeight) => {
+  const wordWidth = context.measureText(word).width;
+  wordsMetadata.push({
+    word,
+    lineNumber,
+    rect: {
+      top: fillYStart - lineHeight,
+      right: Math.ceil(wordStartPosition + wordWidth),
+      bottom: fillYStart,
+      left: Math.floor(wordStartPosition),
+    },
+  });
+};
+
+export const writeText = (canvasContext, contentState, textOptions = { lineSpacing: 1, paragraphSpace: 5 }) => {
+  // Canvas data
   const canvasWidth = canvasContext.canvas.width;
   const canvasHeight = canvasContext.canvas.height;
-  const text = content.getPlainText('\n').replace(/\n/g, '');
-  let currentBlock = content.getFirstBlock();
+  const defaultStyle = canvasContext.font;
+  let currentStyle = defaultStyle;
+  const lineHeight = parseInt(defaultStyle.match(/\d+(\.\d+)?(?=px)/)[0], 10);
+  let spaceWidth = canvasContext.measureText(' ').width;
+  // Text data
+  const text = contentState.getPlainText('\n').replace(/\n/g, '');
+  let currentBlock = contentState.getFirstBlock();
   let currentBlockKey = currentBlock.getKey();
   let characterMetadata = currentBlock.getCharacterList();
   let currentBlockLength = currentBlock.getText().length;
   let previousBlocksLength = 0;
-  const defaultStyle = canvasContext.font;
-  /*
-    WordMetadata: [word, startPosition, endPosition, lineNumber][]
-  */
-  const wordMetadata = [];
-  const lines = [];
   const letters = text.split('');
   const textLength = letters.length;
-  let currentStyle = defaultStyle;
-  let spaceWidth = canvasContext.measureText(' ').width;
+  // Initializing
+  const wordsMetadata = [];
   let currentWord = '';
+  let lineNumber = 0;
   let wordStartPosition = 0;
   let fillXStart = 0;
-  const regex = /\d+(\.\d+)?(?=px)/;
-  const lineHeight = parseInt(defaultStyle.match(regex)[0], 10);
   let fillYStart = lineHeight;
   let fillText = '';
 
   const nextBlock = () => {
     previousBlocksLength += currentBlockLength;
-    currentBlock = content.getBlockAfter(currentBlockKey);
+    currentBlock = contentState.getBlockAfter(currentBlockKey);
     currentBlockKey = currentBlock.getKey();
     characterMetadata = currentBlock.getCharacterList();
     currentBlockLength = currentBlock.getText().length;
@@ -102,17 +130,7 @@ export const writeText = (canvasContext, content, textOptions = { lineSpacing: 1
     canvasContext.fillText(fillText, fillXStart, fillYStart);
   };
 
-  const addWordMetadata = () => {
-    const wordWidth = canvasContext.measureText(currentWord).width;
-    wordMetadata.push([
-      currentWord,
-      wordStartPosition,
-      fillYStart,
-      wordStartPosition + wordWidth,
-      fillYStart - lineHeight,
-    ]);
-    currentWord = '';
-  };
+
   // console.log(content.getBlockMap().toArray()[0].getCharacterList());
 
   letters.forEach((currentLetter, letterIndex) => {
@@ -124,12 +142,13 @@ export const writeText = (canvasContext, content, textOptions = { lineSpacing: 1
           const word = fillText.substring(fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1, fillText.length);
           fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
           draw();
-          lines.push(fillYStart);
           newLine({ overflowText: word });
+          lineNumber += 1;
         }
         draw();
-        lines.push(fillYStart);
-        addWordMetadata();
+        addWordMetadata(wordsMetadata, currentWord, canvasContext, lineNumber, wordStartPosition, fillYStart, lineHeight);
+        currentWord = '';
+        lineNumber += 1;
       }
       nextBlock();
       newLine({ additionalSpacing: textOptions.paragraphSpace });
@@ -161,10 +180,11 @@ export const writeText = (canvasContext, content, textOptions = { lineSpacing: 1
       if (wordStartPosition + wordWidth > canvasWidth) {
         fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
         draw();
-        lines.push(fillYStart);
+        lineNumber += 1;
         newLine({ overflowText: `${currentWord} ` });
       }
-      addWordMetadata();
+      addWordMetadata(wordsMetadata, currentWord, canvasContext, lineNumber, wordStartPosition, fillYStart, lineHeight);
+      currentWord = '';
       wordStartPosition = wordStartPosition + spaceWidth + wordWidth;
     } else {
       currentWord += currentLetter;
@@ -176,45 +196,31 @@ export const writeText = (canvasContext, content, textOptions = { lineSpacing: 1
           const word = fillText.substring(fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1, fillText.length);
           fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
           draw();
-          lines.push(fillYStart);
+          lineNumber += 1;
           newLine({ overflowText: word });
-          draw();
-        } else {
-          draw();
         }
+        draw();
         // Add remaining word metadata
-        addWordMetadata();
+        addWordMetadata(wordsMetadata, currentWord, canvasContext, lineNumber, wordStartPosition, fillYStart, lineHeight);
+        currentWord = '';
       }
     }
   });
-  const textHeight = wordMetadata[wordMetadata.length - 1][WordMetadata.y1];
+  const textHeight = wordsMetadata[wordsMetadata.length - 1].y1;
   if (textHeight > canvasHeight) {
     setCanvasHeight(canvasContext, textHeight);
   }
-  lines.push(fillYStart);
-  return { wordMetadata, lines };
+  const linesMetadata = getLinesMetadata(wordsMetadata);
+  return { wordsMetadata, linesMetadata };
 };
 
-export const getLineMetadata = (textMetadata) => {
-  const lineMetadata = [];
-  let line = textMetadata.wordMetadata[0][WordMetadata.y1];
-  let lineLength = 0;
-  let lineStartX = textMetadata.wordMetadata[0][WordMetadata.x1];
-  let lineEndX = textMetadata.wordMetadata[0][WordMetadata.x2];
-  textMetadata.wordMetadata.forEach((wordMetadata) => {
-    if (line === wordMetadata[WordMetadata.y1]) {
-      // Same line
-      lineLength += wordMetadata[WordMetadata.Word].length;
-      lineEndX = Math.round(wordMetadata[WordMetadata.x2]);
-    } else {
-      // New line
-      lineMetadata.push([lineLength, (lineEndX - lineStartX) / lineLength, lineStartX, lineEndX]);
-      lineStartX = wordMetadata[WordMetadata.x1];
-      lineEndX = wordMetadata[WordMetadata.x2];
-      lineLength = wordMetadata[WordMetadata.Word].length;
-      line = wordMetadata[WordMetadata.y1];
-    }
-  });
-  lineMetadata.push([lineLength, (lineEndX - lineStartX) / lineLength, lineStartX, lineEndX]);
-  return lineMetadata;
+// eslint-disable-next-line
+const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p><p>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc pulvinar sapien et ligula ullamcorper malesuada. Mauris cursus mattis molestie a iaculis at erat. Purus gravida quis blandit turpis cursus in hac. Placerat orci nulla pellentesque dignissim enim. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Lacus luctus accumsan tortor posuere. Ut sem nulla pharetra diam. Quisque egestas diam in arcu cursus euismod. Vitae semper quis lectus nulla at volutpat diam.</p><p>Lacus vel facilisis volutpat est velit egestas dui id ornare. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Nunc id cursus metus aliquam eleifend mi. A diam maecenas sed enim ut. Est lorem ipsum dolor sit amet consectetur.</p>');
+const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+
+export const exampleText = {
+  characterCount: 801,
+  wordCount: 122,
+  sentenceCount: 15,
+  contentState,
 };

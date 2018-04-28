@@ -5,8 +5,8 @@ import { Grid, Dimmer } from 'semantic-ui-react';
 import './HelpExercise.css';
 import * as actionCreators from '../../../store/actions';
 import Timing from '../Timing/Timing';
-import SchulteTables from '../Types/SchulteTables';
-import Concentration from '../Types/Concentration';
+import SchulteTables from '../Types/SchulteTables/SchulteTables';
+import Concentration from '../Types/Concentration/Concentration';
 
 export class HelpExercise extends Component {
   state = {};

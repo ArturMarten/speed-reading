@@ -6,18 +6,22 @@ import './TextExercise.css';
 import * as actionCreators from '../../../store/actions';
 import SpeedOptions from '../Options/SpeedOptions';
 import Timing from '../Timing/Timing';
-import ReadingTest from '../Types/ReadingTest';
-import ReadingAid from '../Types/ReadingAid';
-import Disappearing from '../Types/Disappearing';
-import WordGroups from '../Types/WordGroups';
+import ReadingTest from '../Types/ReadingTest/ReadingTest';
+import ReadingAid from '../Types/ReadingAid/ReadingAid';
+import Disappearing from '../Types/Disappearing/Disappearing';
+import WordGroups from '../Types/WordGroups/WordGroups';
 
-const TEXT_VERTICAL_PADDING = 15;
+const TEXT_VERTICAL_PADDING = 0;
 const TEXT_HORIZONTAL_PADDING = 70;
 
 export class TextExercise extends Component {
-  state = {};
+  state = {
+    canvasHeight: 250,
+    heightCalculated: false,
+  };
 
   componentDidMount() {
+    this.calculateCanvasHeight();
     this.onExerciseStartHandler();
   }
 
@@ -37,18 +41,27 @@ export class TextExercise extends Component {
     this.props.onExerciseFinish(this.props.attemptId, this.props.token);
   }
 
+  calculateCanvasHeight = () => {
+    const canvasTop = document.querySelector('#canvasTop');
+    const availableHeight = document.body.clientHeight - canvasTop.getBoundingClientRect().bottom - 20;
+    const canvasHeight = Math.max(this.state.canvasHeight, availableHeight);
+    this.setState({ heightCalculated: true, canvasHeight });
+  }
+
   render() {
     const exercise = ((type) => {
       switch (type) {
         case 'readingTest':
           return (
             <ReadingTest
+              canvasHeight={this.state.canvasHeight}
               selectedText={this.props.selectedText}
             />
           );
         case 'readingAid':
           return (
             <ReadingAid
+              canvasHeight={this.state.canvasHeight}
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
@@ -57,6 +70,7 @@ export class TextExercise extends Component {
         case 'disappearing':
           return (
             <Disappearing
+              canvasHeight={this.state.canvasHeight}
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
@@ -65,6 +79,7 @@ export class TextExercise extends Component {
         case 'wordGroups':
           return (
             <WordGroups
+              canvasHeight={this.state.canvasHeight}
               wordGroups={this.props.wordGroups}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
@@ -104,7 +119,8 @@ export class TextExercise extends Component {
                   padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
                 }}
               >
-                {exercise}
+                <div id="canvasTop" />
+                {this.state.heightCalculated ? exercise : null}
               </div>
             </Dimmer.Dimmable>
           </Segment>

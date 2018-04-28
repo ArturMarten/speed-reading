@@ -10,7 +10,7 @@ import TextSelection from '../../TextSelection/TextSelection';
 import TextOptions from '../Options/TextOptions';
 import ExerciseOptions from '../Options/ExerciseOptions';
 import SpeedOptions from '../Options/SpeedOptions';
-import TextPreview from '../Preview/TextPreview';
+// import TextPreview from '../Preview/TextPreview';
 import TextExercisePreview from '../Preview/TextExercisePreview';
 
 export class TextExercisePreparation extends Component {
@@ -221,7 +221,9 @@ export class TextExercisePreparation extends Component {
         <TextExercisePreview
           exerciseType={this.props.type}
         />
+        {/*
         <TextPreview />
+        */}
       </Container>
     );
   }

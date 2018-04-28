@@ -4,12 +4,14 @@ import { convertFromHTML, ContentState } from 'draft-js';
 import { Grid, Button, Icon, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import { ReadingTest } from '../Types/ReadingTest';
-import { ReadingAid } from '../Types/ReadingAid';
-import { Disappearing } from '../Types/Disappearing';
+import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
+import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
+import { Disappearing } from '../Types/Disappearing/Disappearing';
 
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;
+
+const CANVAS_HEIGHT = 400;
 
 // eslint-disable-next-line
 const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p><p>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc pulvinar sapien et ligula ullamcorper malesuada. Mauris cursus mattis molestie a iaculis at erat. Purus gravida quis blandit turpis cursus in hac. Placerat orci nulla pellentesque dignissim enim. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Lacus luctus accumsan tortor posuere. Ut sem nulla pharetra diam. Quisque egestas diam in arcu cursus euismod. Vitae semper quis lectus nulla at volutpat diam.</p><p>Lacus vel facilisis volutpat est velit egestas dui id ornare. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Nunc id cursus metus aliquam eleifend mi. A diam maecenas sed enim ut. Est lorem ipsum dolor sit amet consectetur.</p>');
@@ -72,6 +74,7 @@ export class TextExercisePreview extends Component {
         case 'readingTest':
           return (
             <ReadingTest
+              canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               textOptions={this.props.textOptions}
             />
@@ -79,6 +82,7 @@ export class TextExercisePreview extends Component {
         case 'readingAid':
           return (
             <ReadingAid
+              canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}
@@ -90,6 +94,7 @@ export class TextExercisePreview extends Component {
         case 'disappearing':
           return (
             <Disappearing
+              canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}
@@ -101,6 +106,7 @@ export class TextExercisePreview extends Component {
         default:
           return (
             <ReadingTest
+              canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               textOptions={this.props.textOptions}
             />

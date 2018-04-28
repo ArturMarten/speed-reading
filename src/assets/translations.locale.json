@@ -74,7 +74,8 @@
     "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
     "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
-    "license": ["litsents", "license"]
+    "project": ["Projekt", "Project"],
+    "mit-license": ["MIT litsents", "MIT license"]
   },
   "about": {
     "modal-header": ["Rakenduse kohta", "About application"],

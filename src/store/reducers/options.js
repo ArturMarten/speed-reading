@@ -81,7 +81,7 @@ const initialExerciseOptions = {
   columnSpacing: 30,
 };
 
-const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay'];
+const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay', 'pageBreakDelay'];
 
 export const MIN_WPM = 10;
 export const MAX_WPM = 500;

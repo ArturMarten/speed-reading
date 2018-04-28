@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Grid, Button, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import { Concentration } from '../Types/Concentration';
+import { Concentration } from '../Types/Concentration/Concentration';
 import { generateStringPairs } from '../../../store/reducers/exercise';
 
 export class ConcentrationPreview extends Component {

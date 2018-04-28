@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText, getLineMetadata, WordMetadata, LineMetadata } from '../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 
 let timeout = null;
 let frame = null;
@@ -49,7 +49,7 @@ export class ReadingAid extends Component {
       cancelAnimationFrame(frame);
     } else {
       // Text/exercise options or text changed
-      const timeInSeconds = (this.textMetadata.wordMetadata.length / nextProps.speedOptions.wpm) * 60;
+      const timeInSeconds = (this.textMetadata.wordsMetadata.length / nextProps.speedOptions.wpm) * 60;
       this.updateInterval = (timeInSeconds / nextProps.selectedText.characterCount) * 1000;
     }
     return false;
@@ -73,29 +73,29 @@ export class ReadingAid extends Component {
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     // Prerender off-screen-canvas
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
-    this.lineMetadata = getLineMetadata(this.textMetadata);
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     this.shownContext.fillStyle = 'rgba(0, 255, 0, 0.9)';
     // Initial draw
-    const currentWordMetadata = this.textMetadata.wordMetadata[this.cursorState.word];
-    const lineNumber = this.textMetadata.lines.indexOf(currentWordMetadata[WordMetadata.y1]);
+    const currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
+    const { lineNumber } = currentWordMetadata;
     this.cursorState.currentRect = [
       this.cursorState.linePosition,
-      currentWordMetadata[WordMetadata.y2],
-      this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth],
-      currentWordMetadata[WordMetadata.y1] - currentWordMetadata[WordMetadata.y2],
+      currentWordMetadata.rect.top,
+      this.textMetadata.linesMetadata[lineNumber].averageCharacterWidth,
+      currentWordMetadata.rect.bottom - currentWordMetadata.rect.top,
     ];
     this.shownContext.fillRect(...this.cursorState.currentRect);
     this.shownContext.drawImage(this.offscreenCanvas, ...this.cursorState.currentRect, ...this.cursorState.currentRect);
     // Calculate update interval
-    const timeInSeconds = (this.textMetadata.wordMetadata.length / this.props.speedOptions.wpm) * 60;
+    const timeInSeconds = (this.textMetadata.wordsMetadata.length / this.props.speedOptions.wpm) * 60;
     this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
   }
 
   update() {
+    console.log(this.cursorState);
     // Create previous rect
     this.cursorState.previousRect = [
       Math.max(this.cursorState.currentRect[0] - 2, 0),
@@ -104,34 +104,34 @@ export class ReadingAid extends Component {
       this.cursorState.currentRect[3],
     ];
     // Get current position
-    let currentWordMetadata = this.textMetadata.wordMetadata[this.cursorState.word];
-    let lineNumber = this.textMetadata.lines.indexOf(currentWordMetadata[WordMetadata.y1]);
+    let currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
+    let { lineNumber } = currentWordMetadata;
     // Calculate next position
     this.cursorState.lineCharacter += 1;
     this.cursorState.newLine = false;
-    if (this.cursorState.linePosition >= this.textMetadata.wordMetadata[this.cursorState.word][WordMetadata.x2]) {
+    if (this.cursorState.linePosition >= this.textMetadata.wordsMetadata[this.cursorState.word].rect.right) {
       // New word
       this.cursorState.word += 1;
-      currentWordMetadata = this.textMetadata.wordMetadata[this.cursorState.word];
-    } else if (this.cursorState.lineCharacter >= this.lineMetadata[lineNumber][LineMetadata.CharacterCount]) {
+      currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
+    } else if (this.cursorState.lineCharacter >= this.textMetadata.linesMetadata[lineNumber].characterCount) {
       // New line
       this.cursorState.lineCharacter = 0;
       this.cursorState.word += 1;
-      currentWordMetadata = this.textMetadata.wordMetadata[this.cursorState.word];
+      currentWordMetadata = this.textMetadata.wordsMetadata[this.cursorState.word];
       this.cursorState.newLine = true;
       lineNumber += 1;
     }
-    if (this.cursorState.word === this.textMetadata.wordMetadata.length) {
+    if (this.cursorState.word === this.textMetadata.wordsMetadata.length) {
       this.props.onExerciseFinish();
     } else {
-      this.cursorState.linePosition = this.lineMetadata[lineNumber][LineMetadata.x1] +
-        (this.cursorState.lineCharacter * this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth]);
+      this.cursorState.linePosition = this.textMetadata.linesMetadata[lineNumber].rect.left +
+        (this.cursorState.lineCharacter * this.textMetadata.linesMetadata[lineNumber].averageCharacterWidth);
 
       this.cursorState.currentRect = [
-        this.cursorState.linePosition,
-        currentWordMetadata[WordMetadata.y2],
-        this.lineMetadata[lineNumber][LineMetadata.AverageCharacterWidth],
-        currentWordMetadata[WordMetadata.y1] - currentWordMetadata[WordMetadata.y2],
+        Math.ceil(this.cursorState.linePosition),
+        currentWordMetadata.rect.top,
+        Math.ceil(this.textMetadata.linesMetadata[lineNumber].averageCharacterWidth),
+        currentWordMetadata.rect.bottom - currentWordMetadata.rect.top,
       ];
       const nextUpdate = this.cursorState.newLine ? this.updateInterval + this.props.exerciseOptions.lineBreakDelay : this.updateInterval;
       timeout = setTimeout(
@@ -142,12 +142,23 @@ export class ReadingAid extends Component {
     }
   }
 
+  currentState = {
+    canvasHeight: 500,
+    wordIndex: 0,
+    linePosition: 0,
+    lineCharacterIndex: 0,
+    drawRect: [0, 0, 0, 0],
+    copyRect: [0, 0, 0, 0],
+    newLine: false,
+    newPage: false,
+  };
+
   render() {
     return (
       <canvas
         ref={(ref) => { this.shownCanvas = ref; }}
         width={this.props.textOptions.width}
-        height={1000}
+        height={this.props.canvasHeight}
       />
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 
 export class ReadingTest extends Component {
   componentDidMount() {

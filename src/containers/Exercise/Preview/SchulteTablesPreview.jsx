@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Grid, Button, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
+import { SchulteTables } from '../Types/SchulteTables/SchulteTables';
 import { generateSymbols } from '../../../store/reducers/exercise';
-import { SchulteTables } from '../Types/SchulteTables';
 
 export class SchulteTablesPreview extends Component {
   state = {

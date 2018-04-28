@@ -37,7 +37,7 @@ export class Home extends Component {
                 onClick={this.aboutToggleHandler}
               />
               <a
-                target="_blank"
+                download
                 href={userManual}
               >
                 {this.props.translate('home.user-manual')}
@@ -101,7 +101,9 @@ export class Home extends Component {
           </Grid.Row>
           <Grid.Row columns={1}>
             <Grid.Column textAlign="right">
-              MIT {this.props.translate('home.license')} © {(new Date()).getFullYear()} <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
+              <a href="https://gitlab.com/martensiiber/speed-reading">{this.props.translate('home.project')}</a>
+              {` ${this.props.translate('home.mit-license')} © ${(new Date()).getFullYear()} `}
+              <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
             </Grid.Column>
           </Grid.Row>
         </Grid>
