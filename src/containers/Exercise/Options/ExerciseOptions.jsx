@@ -11,9 +11,9 @@ import {
   cursorTypeOptions,
   cursorColorOptions,
   tableDimensionOptions,
-  MIN_CHARACTER_COUNT,
-  MAX_CHARACTER_COUNT,
-  STEP_CHARACTER_COUNT,
+  MIN_GROUP_CHARACTER_COUNT,
+  MAX_GROUP_CHARACTER_COUNT,
+  STEP_GROUP_CHARACTER_COUNT,
   MIN_START_DELAY,
   MAX_START_DELAY,
   STEP_START_DELAY,
@@ -46,16 +46,16 @@ export class ExerciseOptions extends PureComponent {
       .map((option, index) => ({ ...option, key: index, text: this.props.translate(`colors.${option.value}`) }));
     return (
       <Fragment>
-        {this.props.visibleOptions.indexOf('characterCount') !== -1 ?
+        {this.props.visibleOptions.indexOf('groupCharacterCount') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('exercise-options.word-group-length')}
             description={this.props.translate('exercise-options.word-group-length-description')}
             unit={this.props.translate('exercise-options.characters')}
-            value={this.props.options.characterCount}
-            min={MIN_CHARACTER_COUNT}
-            max={MAX_CHARACTER_COUNT}
-            step={STEP_CHARACTER_COUNT}
-            updateValue={value => this.props.onSubmit({ characterCount: value })}
+            value={this.props.options.groupCharacterCount}
+            min={MIN_GROUP_CHARACTER_COUNT}
+            max={MAX_GROUP_CHARACTER_COUNT}
+            step={STEP_GROUP_CHARACTER_COUNT}
+            updateValue={value => this.props.onSubmit({ groupCharacterCount: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('startDelay') !== -1 ?
           <ExerciseInputOption

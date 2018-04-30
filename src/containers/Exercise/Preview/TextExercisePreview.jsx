@@ -4,9 +4,11 @@ import { convertFromHTML, ContentState } from 'draft-js';
 import { Grid, Button, Icon, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
+import { splitIntoWordGroups } from '../../../utils/TextUtils';
 import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
 import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
 import { Disappearing } from '../Types/Disappearing/Disappearing';
+import { WordGroups } from '../Types/WordGroups/WordGroups';
 
 const TEXT_VERTICAL_PADDING = 15;
 const TEXT_HORIZONTAL_PADDING = 70;
@@ -24,6 +26,8 @@ const selectedText = {
   contentState,
 };
 
+let wordGroups = splitIntoWordGroups(contentState.getPlainText(''), 15);
+
 const initialTimerState = {
   started: false,
   paused: false,
@@ -39,11 +43,16 @@ export class TextExercisePreview extends Component {
   };
 
   componentDidMount() {
+    wordGroups = splitIntoWordGroups(contentState.getPlainText(''), this.props.exerciseOptions.groupCharacterCount);
     this.startExercise();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.textOptions !== this.props.textOptions || prevProps.exerciseOptions !== this.props.exerciseOptions) {
+      if (prevProps.exerciseOptions.groupCharacterCount !== this.props.groupCharacterCount) {
+        wordGroups = splitIntoWordGroups(contentState.getPlainText(''), this.props.exerciseOptions.groupCharacterCount);
+        console.log(wordGroups);
+      }
       this.restart();
     } else if (!prevState.restarting && this.state.restarting) {
       this.resetExercise();
@@ -96,6 +105,19 @@ export class TextExercisePreview extends Component {
             <Disappearing
               canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
+              timerState={this.state.timerState}
+              onExerciseFinish={this.restart}
+              textOptions={this.props.textOptions}
+              exerciseOptions={this.props.exerciseOptions}
+              speedOptions={this.props.speedOptions}
+            />
+          );
+        case 'wordGroups':
+          return (
+            <WordGroups
+              canvasHeight={CANVAS_HEIGHT}
+              selectedText={selectedText}
+              wordGroups={wordGroups}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}
               textOptions={this.props.textOptions}

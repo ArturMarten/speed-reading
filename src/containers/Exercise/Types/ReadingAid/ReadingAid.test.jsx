@@ -1,10 +1,9 @@
-/* eslint-disable func-names */
 import { updateState } from './ReadingAid';
 import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 const CANVAS_HEIGHT = 400;
 
-describe.only('Reading aid updateState', () => {
+describe('Reading aid updateState', () => {
   const textOptions = {
     font: 'Calibri',
     width: 250,

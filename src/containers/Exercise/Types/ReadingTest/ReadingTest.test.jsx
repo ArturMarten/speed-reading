@@ -1,10 +1,9 @@
-/* eslint-disable func-names */
 import { nextPage, previousPage } from './ReadingTest';
 import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 const CANVAS_HEIGHT = 400;
 
-describe.only('Reading test', () => {
+describe('Reading test', () => {
   const textOptions = {
     font: 'Calibri',
     width: 250,

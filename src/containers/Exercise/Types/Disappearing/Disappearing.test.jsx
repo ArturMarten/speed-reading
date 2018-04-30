@@ -1,10 +1,9 @@
-/* eslint-disable func-names */
 import { updateState } from './Disappearing';
 import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 const CANVAS_HEIGHT = 400;
 
-describe.only('Disappearing updateState', () => {
+describe('Disappearing updateState', () => {
   const textOptions = {
     font: 'Calibri',
     width: 250,

@@ -73,9 +73,9 @@ const initialTextOptions = {
 
 const defaultVisibleTextOptions = ['font', 'width', 'fontSize'];
 
-export const MIN_CHARACTER_COUNT = 5;
-export const MAX_CHARACTER_COUNT = 30;
-export const STEP_CHARACTER_COUNT = 1;
+export const MIN_GROUP_CHARACTER_COUNT = 5;
+export const MAX_GROUP_CHARACTER_COUNT = 30;
+export const STEP_GROUP_CHARACTER_COUNT = 1;
 export const MIN_START_DELAY = 0;
 export const MAX_START_DELAY = 500;
 export const STEP_START_DELAY = 50;
@@ -104,7 +104,7 @@ const initialExerciseOptions = {
   pageBreakDelay: 400,
   cursorType: 'background',
   cursorColor: 'bright-green',
-  characterCount: 15,
+  groupCharacterCount: 15,
   tableDimensions: 25,
   tableSize: 100,
   tableCheck: false,
@@ -202,7 +202,7 @@ const reducer = (state = initialState, action) => {
         case 'wordGroups':
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions],
-            visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'characterCount'],
+            visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'groupCharacterCount'],
             visibleSpeedOptions: ['fixation'],
           });
         case 'schulteTables':

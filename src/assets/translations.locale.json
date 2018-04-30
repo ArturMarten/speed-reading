@@ -128,6 +128,7 @@
     "text-author-placeholder": ["Teksti autor", "Text author"],
     "text-collection": ["Kogumik", "Collection"],
     "text-collection-placeholder": ["Teksti kogumik", "Text collection"],
+    "text-collection-not-set": ["Määramata", "Not set"],
     "text-editor": ["Toimetaja", "Editor"],
     "text-editor-description": ["Isik, kes kohandas ja sisestas lugemisteksti ning küsimused", "Person, who customized and entered reading text and questions"],
     "text-editor-placeholder": ["Teksti toimetaja", "Text editor"],

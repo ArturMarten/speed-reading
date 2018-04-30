@@ -1,81 +1,220 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-let update = null;
+import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
+import { updateObject } from '../../../../shared/utility';
+
+export const drawState = (currentState, context, restoreCanvas) => {
+  const { drawRects } = currentState;
+  // context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  drawRects.forEach((drawRect) => {
+    context.drawImage(
+      restoreCanvas,
+      drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
+      drawRect.x, drawRect.y, drawRect.width, drawRect.height,
+    );
+    const height = drawRect.height * 0.1;
+    context.fillRect(drawRect.x, drawRect.y + (drawRect.height - height), drawRect.width, height);
+  });
+
+  /*
+  const { restoreRect, drawRect } = currentState;
+  context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
+  context.drawImage(
+    restoreCanvas,
+    restoreRect.x, restoreRect.y + currentState.marginTop, restoreRect.width, restoreRect.height,
+    restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height,
+  );
+  context.fillRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
+  context.drawImage(
+    restoreCanvas,
+    drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
+    drawRect.x, drawRect.y, drawRect.width, drawRect.height,
+  );
+  */
+};
+
+export const updateState = (currentState, textMetadata, wordGroups) => {
+  const { canvasHeight } = currentState;
+  const { wordsMetadata } = textMetadata;
+
+  // Calculate current state
+  const currentWordMetadata = wordsMetadata[Math.max(currentState.wordIndex, 0)];
+
+  // Calculate next state
+  let newLine = false;
+  let newPage = false;
+  let finished = false;
+  let { wordIndex: nextWordIndex, groupIndex: nextGroupIndex, marginTop: nextMarginTop } = currentState;
+  nextGroupIndex += 1;
+  nextWordIndex += 1;
+  const nextWordGroup = wordGroups[nextGroupIndex].slice(1);
+  let nextWordMetadata = wordsMetadata[nextWordIndex];
+  let groupLeft = nextWordMetadata.rect.left;
+  let groupRight = nextWordMetadata.rect.right;
+  let groupBottom = nextWordMetadata.rect.bottom;
+  let groupTop = nextWordMetadata.rect.top;
+  const drawRects = [];
+  nextWordGroup.forEach(() => {
+    nextWordIndex += 1;
+    nextWordMetadata = wordsMetadata[nextWordIndex];
+    if (groupBottom - nextMarginTop > canvasHeight) {
+      // New page
+      newPage = true;
+      nextMarginTop = groupTop;
+    }
+    if (groupRight > nextWordMetadata.rect.left) {
+      const drawRect = {
+        x: groupLeft,
+        y: groupTop - nextMarginTop,
+        width: groupRight - groupLeft,
+        height: groupBottom - groupTop,
+      };
+      drawRects.push(drawRect);
+      groupLeft = nextWordMetadata.rect.left;
+      newLine = true;
+    }
+    groupRight = nextWordMetadata.rect.right;
+    groupBottom = nextWordMetadata.rect.bottom;
+    groupTop = nextWordMetadata.rect.top;
+  });
+
+  if (currentWordMetadata.lineNumber !== nextWordMetadata.lineNumber) {
+    newLine = true;
+  }
+
+  const drawRect = {
+    x: groupLeft,
+    y: groupTop - nextMarginTop,
+    width: groupRight - groupLeft,
+    height: groupBottom - groupTop,
+  };
+  drawRects.push(drawRect);
+
+  if (nextGroupIndex === wordGroups.length - 1) {
+    finished = true;
+  }
+
+  return updateObject(currentState, {
+    wordIndex: nextWordIndex,
+    groupIndex: nextGroupIndex,
+    marginTop: nextMarginTop,
+    drawRects,
+    newLine,
+    newPage,
+    finished,
+  });
+};
+
+let timeout = null;
+let frame = null;
 
 const initialState = {
-  counter: 0,
-  line: 0,
-  lines: [],
-  linePosition: 0,
-  characterWidth: 0,
-  lineLength: 0,
-  lineBreak: false,
-  end: false,
+  wordIndex: -1,
+  groupIndex: -1,
+  marginTop: 0,
 };
 
 export class WordGroups extends Component {
   componentDidMount() {
-    this.renderGroup();
+    this.init();
   }
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.timerState.started && this.props.timerState.started) {
+  shouldComponentUpdate(nextProps) {
+    if ((!this.props.timerState.started && nextProps.timerState.started) ||
+        (this.props.timerState.paused && !nextProps.timerState.paused)) {
       // Exercise started
-      update = setTimeout(() => this.nextGroup(), this.props.exerciseOptions.startDelay);
-    } else if (!prevProps.timerState.resetted && this.props.timerState.resetted) {
+      timeout = setTimeout(
+        () => { frame = requestAnimationFrame(() => this.loop()); },
+        this.updateInterval + this.props.exerciseOptions.startDelay,
+      );
+    } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
-      clearTimeout(update);
-      this.cursorState = { ...initialState };
-      this.renderGroup();
-    } else if (!prevProps.timerState.paused && this.props.timerState.paused) {
+      clearTimeout(timeout);
+      cancelAnimationFrame(frame);
+      this.currentState = { ...initialState };
+      this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+      this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
+    } else if (!this.props.timerState.stopped && nextProps.timerState.stopped) {
+      clearTimeout(timeout);
+      cancelAnimationFrame(frame);
+    } else if (!this.props.timerState.paused && nextProps.timerState.paused) {
       // Exercise paused
-      clearTimeout(update);
+      clearTimeout(timeout);
+      cancelAnimationFrame(frame);
     } else {
-      // Text/exercise options or text changed
-      this.renderGroup();
+      // Speed options changed
+      this.calculateUpdateInterval();
     }
+    return false;
   }
 
   componentWillUnmount() {
-    clearTimeout(update);
+    clearTimeout(timeout);
+    cancelAnimationFrame(frame);
   }
 
-  cursorState = { ...initialState };
+  currentState = { ...initialState };
 
-  nextGroup() {
-    // Calculate next word group new line position
-    const canvas = this.shownCanvas;
-    const context = canvas.getContext('2d');
-    const maxWidth = canvas.width;
-    const previousWordGroupWidth = context.measureText(this.wordGroup).width;
-    this.cursorState.linePosition = this.cursorState.linePosition + previousWordGroupWidth;
-    if (this.props.wordGroups[this.cursorState.counter + 1]) {
-      this.cursorState.counter = this.cursorState.counter + 1;
-      this.wordGroup = this.props.wordGroups[this.cursorState.counter];
-      const nextWordGroupWidth = context.measureText(this.wordGroup).width;
-      if ((this.cursorState.linePosition + nextWordGroupWidth) > maxWidth) {
-        this.cursorState.line = this.cursorState.line + 1;
-        this.cursorState.linePosition = 0;
-        this.renderGroup();
-        update = setTimeout(() => this.nextGroup(), this.props.exerciseOptions.lineBreakDelay);
-      } else {
-        this.renderGroup();
-        update = setTimeout(() => this.nextGroup(), this.props.speedOptions.fixation);
-      }
+  init() {
+    this.currentState.canvasHeight = this.props.canvasHeight;
+    // Create and prepare off-screen canvas
+    this.offscreenCanvas = document.createElement('canvas');
+    this.offscreenCanvas.width = this.shownCanvas.width;
+    this.offscreenCanvas.height = this.shownCanvas.height;
+    this.offscreenContext = this.offscreenCanvas.getContext('2d');
+    this.offscreenContext.font = `${Math.ceil(this.props.textOptions.fontSize / 0.75)}px ${this.props.textOptions.font}`;
+    this.offscreenContext.textBaseline = 'bottom';
+    this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
+    // Prerender off-screen-canvas
+    this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
+    // Prepare visible canvas
+    this.shownContext = this.shownCanvas.getContext('2d');
+    this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+    // Calculate update interval
+    this.calculateUpdateInterval();
+    // Initial draw
+    console.log(this.textMetadata);
+    console.log(this.props.wordGroups);
+    const newState = updateState(this.currentState, this.textMetadata, this.props.wordGroups);
+    this.currentState = newState;
+    drawState(newState, this.shownContext, this.offscreenCanvas);
+  }
+
+  calculateUpdateInterval() {
+    this.updateInterval = this.props.speedOptions.fixation;
+  }
+
+  loop() {
+    // console.log('Current state: ', this.currentState);
+    const newState = updateState(this.currentState, this.textMetadata, this.props.wordGroups);
+    // console.log('New state: ', newState);
+    this.currentState = newState;
+    if (newState.newPage) {
+      this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+    }
+    drawState(newState, this.shownContext, this.offscreenCanvas);
+    if (newState.finished) {
+      this.props.onExerciseFinish();
+    } else if (newState.newPage) {
+      timeout = setTimeout(
+        () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
+        this.updateInterval + this.props.exerciseOptions.pageBreakDelay,
+      );
+    } else if (newState.newLine) {
+      timeout = setTimeout(
+        () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
+        this.updateInterval + this.props.exerciseOptions.lineBreakDelay,
+      );
+    } else {
+      this.scheduleNext();
     }
   }
 
-  renderGroup() {
-    const canvas = this.shownCanvas;
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = `${this.props.textOptions.fontSize}pt ${this.props.textOptions.font}`;
-    const lineHeight = 30;
-    context.fillText(
-      this.props.wordGroups[this.cursorState.counter],
-      this.cursorState.linePosition,
-      (lineHeight * this.cursorState.line) + 20,
+  scheduleNext() {
+    timeout = setTimeout(
+      () => { frame = requestAnimationFrame(() => this.loop()); },
+      this.updateInterval,
     );
   }
 
@@ -84,7 +223,7 @@ export class WordGroups extends Component {
       <canvas
         ref={(ref) => { this.shownCanvas = ref; }}
         width={this.props.textOptions.width}
-        height={1000}
+        height={this.props.canvasHeight}
       />
     );
   }

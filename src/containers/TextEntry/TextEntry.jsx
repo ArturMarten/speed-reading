@@ -37,11 +37,11 @@ const initialState = {
       touched: false,
     },
     collectionId: {
-      value: '',
+      value: 'not-set',
       validation: {
-        required: true,
+        required: false,
       },
-      valid: false,
+      valid: true,
       touched: false,
     },
     editor: {
@@ -112,7 +112,7 @@ export class TextEntry extends Component {
     const submittedForm = {
       title: this.state.textEntryForm.title.value,
       author: this.state.textEntryForm.author.value,
-      collectionId: +this.state.textEntryForm.collectionId.value,
+      collectionId: this.state.textEntryForm.collectionId.value !== 'not-set' ? +this.state.textEntryForm.collectionId.value : null,
       editor: this.state.textEntryForm.editor.value,
       questionsAuthor: this.state.textEntryForm.questionsAuthor.value,
       reference: this.state.textEntryForm.reference.value,
@@ -138,7 +138,7 @@ export class TextEntry extends Component {
         if (selectedText[inputName]) {
           updatedFormElement.value = selectedText[inputName].toString();
         } else {
-          updatedFormElement.value = '';
+          updatedFormElement.value = initialState.textEntryForm[inputName].value;
         }
       } else {
         updatedFormElement.value = selectedText[inputName];
@@ -247,12 +247,15 @@ export class TextEntry extends Component {
       </Label>
     ));
 
-    const collectionOptions = this.props.collections
-      .map((collection, index) => ({
-        key: index,
-        text: collection.title,
-        value: collection.id.toString(),
-      }));
+    const collectionOptions = [{
+      key: 0,
+      text: this.props.translate('text-entry.text-collection-not-set'),
+      value: 'not-set',
+    }].concat(this.props.collections.map((collection, index) => ({
+      key: index + 1,
+      text: collection.title,
+      value: collection.id.toString(),
+    })));
 
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '7vh' }}>
