@@ -106,7 +106,7 @@ export class Disappearing extends Component {
       cancelAnimationFrame(frame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval();
+      this.calculateUpdateInterval(nextProps.speedOptions.wpm);
     }
     return false;
   }
@@ -148,11 +148,11 @@ export class Disappearing extends Component {
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     }
     // Calculate update interval
-    this.calculateUpdateInterval();
+    this.calculateUpdateInterval(this.props.speedOptions.wpm);
   }
 
-  calculateUpdateInterval() {
-    const timeInSeconds = (this.textMetadata.wordsMetadata.length / this.props.speedOptions.wpm) * 60;
+  calculateUpdateInterval(newWPM) {
+    const timeInSeconds = (this.textMetadata.wordsMetadata.length / newWPM) * 60;
     this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
   }
 
@@ -175,7 +175,10 @@ export class Disappearing extends Component {
     }
     if (newState.finished) {
       drawState(newState, this.shownContext);
-      this.props.onExerciseFinish();
+      timeout = setTimeout(
+        () => { this.props.onExerciseFinish(); },
+        this.updateInterval,
+      );
     } else if (newState.newPage) {
       timeout = setTimeout(
         () => { frame = requestAnimationFrame(() => this.drawAndScheduleNext()); },

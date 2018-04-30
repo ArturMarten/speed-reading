@@ -15,6 +15,8 @@ export {
   textOptionUpdated,
   exerciseOptionUpdated,
   speedOptionUpdated,
+  resetTextOptions,
+  resetExerciseOptions,
 } from './options';
 
 export {

@@ -138,7 +138,7 @@ export class ReadingAid extends Component {
       cancelAnimationFrame(frame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval();
+      this.calculateUpdateInterval(nextProps.speedOptions.wpm);
     }
     return false;
   }
@@ -181,15 +181,15 @@ export class ReadingAid extends Component {
     }
     this.shownContext.fillStyle = getColorRGBA(this.props.exerciseOptions.cursorColor);
     // Calculate update interval
-    this.calculateUpdateInterval();
+    this.calculateUpdateInterval(this.props.speedOptions.wpm);
     // Initial draw
     const newState = updateState(this.currentState, this.textMetadata);
     this.currentState = newState;
     drawState(newState, this.shownContext, this.offscreenCanvas);
   }
 
-  calculateUpdateInterval() {
-    const timeInSeconds = (this.textMetadata.wordsMetadata.length / this.props.speedOptions.wpm) * 60;
+  calculateUpdateInterval(newWPM) {
+    const timeInSeconds = (this.textMetadata.wordsMetadata.length / newWPM) * 60;
     this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
   }
 
@@ -212,7 +212,10 @@ export class ReadingAid extends Component {
     }
     drawState(newState, this.shownContext, this.offscreenCanvas);
     if (newState.finished) {
-      this.props.onExerciseFinish();
+      timeout = setTimeout(
+        () => { this.props.onExerciseFinish(); },
+        this.updateInterval,
+      );
     } else if (newState.newPage) {
       timeout = setTimeout(
         () => { frame = requestAnimationFrame(() => this.scheduleNext()); },

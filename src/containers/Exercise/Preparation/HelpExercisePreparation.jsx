@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox } from 'semantic-ui-react';
+import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -32,6 +32,14 @@ export class HelpExercisePreparation extends Component {
 
   modificationChangeHandler = (event, data) => {
     this.props.onModificationChange(data.value);
+  }
+
+  exerciseOptionsResetHandler = () => {
+    this.props.onExerciseOptionsReset();
+  }
+
+  textOptionsResetHandler = () => {
+    this.props.onTextOptionsReset();
   }
 
   render() {
@@ -121,6 +129,18 @@ export class HelpExercisePreparation extends Component {
                 <Segment>
                   <Header as="h4" textAlign="center">
                     {this.props.translate('exercise-preparation.exercise-options')}
+                    <Popup
+                      trigger={
+                        <Icon
+                          size="small"
+                          name="repeat"
+                          color="grey"
+                          onClick={this.exerciseOptionsResetHandler}
+                        />
+                      }
+                      content={this.props.translate('exercise-preparation.reset-exercise-options')}
+                      position="bottom center"
+                    />
                   </Header>
                   {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
                     <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p> :
@@ -136,6 +156,18 @@ export class HelpExercisePreparation extends Component {
                 <Segment>
                   <Header as="h4" textAlign="center">
                     {this.props.translate('exercise-preparation.text-options')}
+                    <Popup
+                      trigger={
+                        <Icon
+                          size="small"
+                          name="repeat"
+                          color="grey"
+                          onClick={this.textOptionsResetHandler}
+                        />
+                      }
+                      content={this.props.translate('exercise-preparation.reset-text-options')}
+                      position="bottom center"
+                    />
                   </Header>
                   {this.props.visibleTextOptions.length === 0 ?
                     <p>{this.props.translate('exercise-preparation.text-options-missing')}</p> :
@@ -177,6 +209,12 @@ const mapDispatchToProps = dispatch => ({
   },
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
+  },
+  onExerciseOptionsReset: () => {
+    dispatch(actionCreators.resetExerciseOptions());
+  },
+  onTextOptionsReset: () => {
+    dispatch(actionCreators.resetTextOptions());
   },
   onExercisePrepare: (save, exerciseOptions) => {
     dispatch(actionCreators.prepareHelpExercise(save, exerciseOptions));

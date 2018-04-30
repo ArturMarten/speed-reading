@@ -5,33 +5,34 @@ import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
-  const { drawRects } = currentState;
-  // context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  const { restoreRects, drawRects } = currentState;
+  if (restoreRects !== null) {
+    restoreRects.forEach((restoreRect) => {
+      context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
+      if (currentState.modification === 'group-highlighted' ||
+          currentState.modification === 'group-spacing' ||
+          currentState.modification === 'group-vertical'
+      ) {
+        context.drawImage(
+          restoreCanvas,
+          restoreRect.x, restoreRect.y + currentState.marginTop, restoreRect.width, restoreRect.height,
+          restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height,
+        );
+      }
+    });
+  }
   drawRects.forEach((drawRect) => {
-    context.drawImage(
-      restoreCanvas,
-      drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
-      drawRect.x, drawRect.y, drawRect.width, drawRect.height,
-    );
-    const height = drawRect.height * 0.1;
-    context.fillRect(drawRect.x, drawRect.y + (drawRect.height - height), drawRect.width, height);
+    if (currentState.modification === 'group-single') {
+      context.drawImage(
+        restoreCanvas,
+        drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
+        drawRect.x, drawRect.y, drawRect.width, drawRect.height,
+      );
+    } else {
+      const height = drawRect.height * 0.1;
+      context.fillRect(drawRect.x, drawRect.y + (drawRect.height - height), drawRect.width, height);
+    }
   });
-
-  /*
-  const { restoreRect, drawRect } = currentState;
-  context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
-  context.drawImage(
-    restoreCanvas,
-    restoreRect.x, restoreRect.y + currentState.marginTop, restoreRect.width, restoreRect.height,
-    restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height,
-  );
-  context.fillRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
-  context.drawImage(
-    restoreCanvas,
-    drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
-    drawRect.x, drawRect.y, drawRect.width, drawRect.height,
-  );
-  */
 };
 
 export const updateState = (currentState, textMetadata, wordGroups) => {
@@ -144,7 +145,7 @@ export class WordGroups extends Component {
       cancelAnimationFrame(frame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval();
+      this.updateInterval = nextProps.speedOptions.fixation;
     }
     return false;
   }
@@ -158,6 +159,7 @@ export class WordGroups extends Component {
 
   init() {
     this.currentState.canvasHeight = this.props.canvasHeight;
+    this.currentState.modification = this.props.modification;
     // Create and prepare off-screen canvas
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenCanvas.width = this.shownCanvas.width;
@@ -167,35 +169,70 @@ export class WordGroups extends Component {
     this.offscreenContext.textBaseline = 'bottom';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     // Prerender off-screen-canvas
-    this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
+    if (this.currentState.modification === 'group-spacing') {
+      this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
+    } else {
+      this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
+    }
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+    if (this.currentState.modification === 'group-highlighted' ||
+        this.currentState.modification === 'group-spacing' ||
+        this.currentState.modification === 'group-vertical'
+    ) {
+      // Draw text
+      if (this.offscreenCanvas.height > this.shownCanvas.height) {
+        // Multi page
+        const copyHeight = Math.max(...this.textMetadata.linesMetadata
+          .map(lineMetadata => lineMetadata.rect.bottom)
+          .filter(lineBottom => lineBottom < this.shownCanvas.height));
+        this.shownContext.drawImage(
+          this.offscreenCanvas,
+          0, 0, this.shownCanvas.width, copyHeight,
+          0, 0, this.shownCanvas.width, copyHeight,
+        );
+      } else {
+        this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
+      }
+    }
     // Calculate update interval
-    this.calculateUpdateInterval();
+    this.updateInterval = this.props.speedOptions.fixation;
     // Initial draw
-    console.log(this.textMetadata);
-    console.log(this.props.wordGroups);
+    this.currentState.restoreRects = null;
     const newState = updateState(this.currentState, this.textMetadata, this.props.wordGroups);
     this.currentState = newState;
     drawState(newState, this.shownContext, this.offscreenCanvas);
   }
 
-  calculateUpdateInterval() {
-    this.updateInterval = this.props.speedOptions.fixation;
-  }
-
   loop() {
+    this.currentState.restoreRects = this.currentState.drawRects ? this.currentState.drawRects.slice() : null;
     // console.log('Current state: ', this.currentState);
     const newState = updateState(this.currentState, this.textMetadata, this.props.wordGroups);
     // console.log('New state: ', newState);
     this.currentState = newState;
     if (newState.newPage) {
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+      if (this.currentState.modification === 'group-highlighted' ||
+          this.currentState.modification === 'group-spacing' ||
+          this.currentState.modification === 'group-vertical'
+      ) {
+        const copyHeight = Math.max(...this.textMetadata.linesMetadata
+          .map(lineMetadata => lineMetadata.rect.bottom - newState.marginTop)
+          .filter(lineBottom => lineBottom < this.shownCanvas.height));
+        this.shownContext.drawImage(
+          this.offscreenCanvas,
+          0, newState.marginTop, this.shownCanvas.width, copyHeight,
+          0, 0, this.shownCanvas.width, copyHeight,
+        );
+      }
     }
     drawState(newState, this.shownContext, this.offscreenCanvas);
     if (newState.finished) {
-      this.props.onExerciseFinish();
+      timeout = setTimeout(
+        () => { this.props.onExerciseFinish(); },
+        this.updateInterval,
+      );
     } else if (newState.newPage) {
       timeout = setTimeout(
         () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
@@ -230,6 +267,7 @@ export class WordGroups extends Component {
 }
 
 const mapStateToProps = state => ({
+  modification: state.exercise.modification,
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,

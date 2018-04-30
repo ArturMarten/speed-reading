@@ -53,6 +53,9 @@ export const tableDimensionOptions = [
 export const MIN_TEXT_WIDTH = 250;
 export const MAX_TEXT_WIDTH = 1600;
 export const STEP_TEXT_WIDTH = 50;
+export const MIN_TEXT_HEIGHT = 100;
+export const MAX_TEXT_HEIGHT = 1200;
+export const STEP_TEXT_HEIGHT = 50;
 export const MIN_FONT_SIZE = 10;
 export const MAX_FONT_SIZE = 30;
 export const STEP_FONT_SIZE = 1;
@@ -66,6 +69,7 @@ export const STEP_SYMBOL_SIZE = 5;
 const initialTextOptions = {
   font: 'Calibri',
   width: Math.min(document.body.clientWidth - 6, 1000),
+  height: 400,
   fontSize: 14,
   lineSpacing: 1.0,
   symbolSize: 80,
@@ -73,9 +77,6 @@ const initialTextOptions = {
 
 const defaultVisibleTextOptions = ['font', 'width', 'fontSize'];
 
-export const MIN_GROUP_CHARACTER_COUNT = 5;
-export const MAX_GROUP_CHARACTER_COUNT = 30;
-export const STEP_GROUP_CHARACTER_COUNT = 1;
 export const MIN_START_DELAY = 0;
 export const MAX_START_DELAY = 500;
 export const STEP_START_DELAY = 50;
@@ -85,6 +86,12 @@ export const STEP_LINE_BREAK_DELAY = 10;
 export const MIN_PAGE_BREAK_DELAY = 0;
 export const MAX_PAGE_BREAK_DELAY = 1000;
 export const STEP_PAGE_BREAK_DELAY = 10;
+export const MIN_GROUP_CHARACTER_COUNT = 5;
+export const MAX_GROUP_CHARACTER_COUNT = 30;
+export const STEP_GROUP_CHARACTER_COUNT = 1;
+export const MIN_GROUP_SPACING = 5;
+export const MAX_GROUP_SPACING = 100;
+export const STEP_GROUP_SPACING = 5;
 export const MIN_TABLE_SIZE = 30;
 export const MAX_TABLE_SIZE = 100;
 export const STEP_TABLE_SIZE = 10;
@@ -105,6 +112,7 @@ const initialExerciseOptions = {
   cursorType: 'background',
   cursorColor: 'bright-green',
   groupCharacterCount: 15,
+  groupSpacing: 30,
   tableDimensions: 25,
   tableSize: 100,
   tableCheck: false,
@@ -176,6 +184,24 @@ const reducer = (state = initialState, action) => {
       const updatedSpeedOptions = updateObject(state.speedOptions, action.payload);
       return updateObject(state, {
         speedOptions: updatedSpeedOptions,
+      });
+    }
+    case actionTypes.RESET_TEXT_OPTIONS: {
+      const resettedTextOptions = updateObject(state.textOptions, {});
+      state.visibleTextOptions.forEach((textOption) => {
+        resettedTextOptions[textOption] = initialTextOptions[textOption];
+      });
+      return updateObject(state, {
+        textOptions: resettedTextOptions,
+      });
+    }
+    case actionTypes.RESET_EXERCISE_OPTIONS: {
+      const resettedExerciseOptions = updateObject(state.exerciseOptions, {});
+      state.visibleExerciseOptions.forEach((exerciseOption) => {
+        resettedExerciseOptions[exerciseOption] = initialExerciseOptions[exerciseOption];
+      });
+      return updateObject(state, {
+        exerciseOptions: resettedExerciseOptions,
       });
     }
     case actionTypes.EXERCISE_SELECT: {

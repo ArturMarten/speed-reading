@@ -254,8 +254,10 @@
     "change-text": ["Muuda teksti", "Change text"],
     "info-content": ["Enne harjutusega alustamist saab muuta sätteid, et muuta harjutus endale sobivamaks", "Before starting the exercise you can change the settings to make exercise more comfortable"],
     "exercise-options": ["Harjutuse sätted", "Exercise options"],
+    "reset-exercise-options": ["Algväärtusta harjutuse sätted", "Reset exercise options"],
     "exercise-options-missing": ["Sätteid pole saadaval", "Options not available"],
     "text-options": ["Teksti sätted", "Text options"],
+    "reset-text-options": ["Algväärtusta teksti sätted", "Reset text options"],
     "text-options-missing": ["Sätteid pole saadaval", "Options not available"],
     "keyboard-keys": ["Klaviatuuri klahve", "Keyboard keys"],
     "and": ["ja", "and"],
@@ -317,6 +319,7 @@
   "text-options": {
     "font": ["Font", "Font"],
     "text-width": ["Teksti laius", "Text width"],
+    "text-height": ["Teksti kõrgus", "Text height"],
     "px": ["pikslit", "px"],
     "line-count": ["Ridade arv", "Line count"],
     "lines": ["rida", "lines"],
@@ -328,8 +331,6 @@
     "percentage": ["%", "%"]
   },
   "exercise-options": {
-    "word-group-length": ["Sõnarühma pikkus", "Word group length"],
-    "word-group-length-description": ["Maksimaalne lubatud sõnarühma pikkus", "Maximum allowed word group length"],
     "characters": ["tähemärki", "characters"],
     "start-delay": ["Alustamise viide", "Starting delay"],
     "start-delay-description": ["Ooteaeg harjutuse alustamise ja harjutuse käivitamise vahel", "Delay between starting exercise and exercise start"],
@@ -338,6 +339,10 @@
     "page-break-delay": ["Lehevahetuse viide", "Page break delay"],
     "page-break-delay-description": ["Ooteaeg uue lehekülje alguses", "New page delay at the start of the page"],
     "ms": ["ms", "ms"],
+    "word-group-length": ["Sõnarühma pikkus", "Word group length"],
+    "word-group-length-description": ["Maksimaalne lubatud sõnarühma pikkus", "Maximum allowed word group length"],
+    "word-group-spacing": ["Sõnarühmade vahe", "Word groups spacing"],
+    "word-group-spacing-description": ["Vahe kahe sõnarühma vahel", "Spacing between two word groups"],
     "cursor-type": ["Pilgujuhtija", "Moving cursor"],
     "cursor-background": ["Taust", "Background"],
     "cursor-underline": ["Alajoon", "Underline"],

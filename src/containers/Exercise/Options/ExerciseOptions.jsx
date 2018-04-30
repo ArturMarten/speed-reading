@@ -11,9 +11,6 @@ import {
   cursorTypeOptions,
   cursorColorOptions,
   tableDimensionOptions,
-  MIN_GROUP_CHARACTER_COUNT,
-  MAX_GROUP_CHARACTER_COUNT,
-  STEP_GROUP_CHARACTER_COUNT,
   MIN_START_DELAY,
   MAX_START_DELAY,
   STEP_START_DELAY,
@@ -23,6 +20,12 @@ import {
   MIN_PAGE_BREAK_DELAY,
   MAX_PAGE_BREAK_DELAY,
   STEP_PAGE_BREAK_DELAY,
+  MIN_GROUP_CHARACTER_COUNT,
+  MAX_GROUP_CHARACTER_COUNT,
+  STEP_GROUP_CHARACTER_COUNT,
+  MIN_GROUP_SPACING,
+  MAX_GROUP_SPACING,
+  STEP_GROUP_SPACING,
   MIN_TABLE_SIZE,
   MAX_TABLE_SIZE,
   STEP_TABLE_SIZE,
@@ -46,17 +49,6 @@ export class ExerciseOptions extends PureComponent {
       .map((option, index) => ({ ...option, key: index, text: this.props.translate(`colors.${option.value}`) }));
     return (
       <Fragment>
-        {this.props.visibleOptions.indexOf('groupCharacterCount') !== -1 ?
-          <ExerciseInputOption
-            name={this.props.translate('exercise-options.word-group-length')}
-            description={this.props.translate('exercise-options.word-group-length-description')}
-            unit={this.props.translate('exercise-options.characters')}
-            value={this.props.options.groupCharacterCount}
-            min={MIN_GROUP_CHARACTER_COUNT}
-            max={MAX_GROUP_CHARACTER_COUNT}
-            step={STEP_GROUP_CHARACTER_COUNT}
-            updateValue={value => this.props.onSubmit({ groupCharacterCount: value })}
-          /> : null}
         {this.props.visibleOptions.indexOf('startDelay') !== -1 ?
           <ExerciseInputOption
             name={this.props.translate('exercise-options.start-delay')}
@@ -103,6 +95,28 @@ export class ExerciseOptions extends PureComponent {
             value={this.props.options.cursorColor}
             options={cursorColorOptionsTranslated}
             updateValue={value => this.props.onSubmit({ cursorColor: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('groupCharacterCount') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.word-group-length')}
+            description={this.props.translate('exercise-options.word-group-length-description')}
+            unit={this.props.translate('exercise-options.characters')}
+            value={this.props.options.groupCharacterCount}
+            min={MIN_GROUP_CHARACTER_COUNT}
+            max={MAX_GROUP_CHARACTER_COUNT}
+            step={STEP_GROUP_CHARACTER_COUNT}
+            updateValue={value => this.props.onSubmit({ groupCharacterCount: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('groupSpacing') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.word-group-spacing')}
+            description={this.props.translate('exercise-options.word-group-spacing-description')}
+            unit={this.props.translate('exercise-options.px')}
+            value={this.props.options.groupSpacing}
+            min={MIN_GROUP_SPACING}
+            max={MAX_GROUP_SPACING}
+            step={STEP_GROUP_SPACING}
+            updateValue={value => this.props.onSubmit({ groupSpacing: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ?
           <ExerciseSelectOption

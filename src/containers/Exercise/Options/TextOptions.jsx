@@ -11,6 +11,9 @@ import {
   MIN_TEXT_WIDTH,
   MAX_TEXT_WIDTH,
   STEP_TEXT_WIDTH,
+  MIN_TEXT_HEIGHT,
+  MAX_TEXT_HEIGHT,
+  STEP_TEXT_HEIGHT,
   MIN_FONT_SIZE,
   MAX_FONT_SIZE,
   STEP_FONT_SIZE,
@@ -43,6 +46,16 @@ export class TextOptions extends PureComponent {
             max={MAX_TEXT_WIDTH}
             step={STEP_TEXT_WIDTH}
             updateValue={value => this.props.onSubmit({ width: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('height') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('text-options.text-height')}
+            unit={this.props.translate('text-options.px')}
+            value={this.props.options.height}
+            min={MIN_TEXT_HEIGHT}
+            max={MAX_TEXT_HEIGHT}
+            step={STEP_TEXT_HEIGHT}
+            updateValue={value => this.props.onSubmit({ height: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('fontSize') !== -1 ?
           <ExerciseInputOption

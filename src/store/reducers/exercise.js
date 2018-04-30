@@ -91,13 +91,14 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.EXERCISE_SELECT: {
+      const exerciseType = action.payload;
       let modificationOptions = [];
       let modification = '';
-      switch (action.payload) {
+      switch (exerciseType) {
         case 'wordGroups': {
-          modification = 'group-single';
+          modification = 'group-highlighted';
           modificationOptions = [
-            { value: 'group-highlighted', disabled: true },
+            { value: 'group-highlighted' },
             { value: 'group-single' },
             { value: 'group-spacing', disabled: true },
             { value: 'group-vertical', disabled: true },

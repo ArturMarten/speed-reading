@@ -48,10 +48,12 @@ export class TextExercisePreview extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.textOptions !== this.props.textOptions || prevProps.exerciseOptions !== this.props.exerciseOptions) {
+    if (prevProps.textOptions !== this.props.textOptions ||
+        prevProps.exerciseOptions !== this.props.exerciseOptions ||
+        prevProps.modification !== this.props.modification
+    ) {
       if (prevProps.exerciseOptions.groupCharacterCount !== this.props.groupCharacterCount) {
         wordGroups = splitIntoWordGroups(contentState.getPlainText(''), this.props.exerciseOptions.groupCharacterCount);
-        console.log(wordGroups);
       }
       this.restart();
     } else if (!prevState.restarting && this.state.restarting) {
@@ -115,6 +117,7 @@ export class TextExercisePreview extends Component {
         case 'wordGroups':
           return (
             <WordGroups
+              modification={this.props.modification}
               canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               wordGroups={wordGroups}
@@ -167,6 +170,7 @@ export class TextExercisePreview extends Component {
 }
 
 const mapStateToProps = state => ({
+  modification: state.exercise.modification,
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
