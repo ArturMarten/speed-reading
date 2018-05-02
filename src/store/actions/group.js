@@ -16,9 +16,9 @@ const fetchGroupsFailed = error => ({
   payload: error,
 });
 
-export const fetchGroups = token => (dispatch) => {
+export const fetchGroups = () => (dispatch) => {
   dispatch(fetchGroupsStart());
-  axios.get('/groups', { headers: { 'x-access-token': token } })
+  axios.get('/groups')
     .then((response) => {
       dispatch(fetchGroupsSucceeded(response.data));
     }, (error) => {

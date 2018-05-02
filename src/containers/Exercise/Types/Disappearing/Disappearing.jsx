@@ -130,7 +130,6 @@ export class Disappearing extends Component {
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     // Prerender off-screen canvas
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
-    console.log(this.textMetadata);
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);

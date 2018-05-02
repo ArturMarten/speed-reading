@@ -8,6 +8,7 @@ import { splitIntoWordGroups } from '../../../utils/TextUtils';
 import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
 import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
 import { Disappearing } from '../Types/Disappearing/Disappearing';
+import { Scrolling } from '../Types/Scrolling/Scrolling';
 import { WordGroups } from '../Types/WordGroups/WordGroups';
 
 const TEXT_VERTICAL_PADDING = 15;
@@ -94,6 +95,17 @@ export class TextExercisePreview extends Component {
           return (
             <ReadingAid
               canvasHeight={CANVAS_HEIGHT}
+              selectedText={selectedText}
+              timerState={this.state.timerState}
+              onExerciseFinish={this.restart}
+              textOptions={this.props.textOptions}
+              exerciseOptions={this.props.exerciseOptions}
+              speedOptions={this.props.speedOptions}
+            />
+          );
+        case 'scrolling':
+          return (
+            <Scrolling
               selectedText={selectedText}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}

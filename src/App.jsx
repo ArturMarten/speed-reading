@@ -57,6 +57,7 @@ export class App extends Component {
           <Route path="/text-entry" component={TextEntry} /> : null}
         <Route path="/exercise/reading-test" render={() => <TextExerciseContainer type="readingTest" />} />
         <Route path="/exercise/reading-aid" render={() => <TextExerciseContainer type="readingAid" />} />
+        <Route path="/exercise/scrolling-text" render={() => <TextExerciseContainer type="scrolling" />} />
         <Route path="/exercise/disappearing-text" render={() => <TextExerciseContainer type="disappearing" />} />
         <Route path="/exercise/word-groups" render={() => <TextExerciseContainer type="wordGroups" />} />
         <Route path="/exercise/schulte-tables" render={() => <HelpExerciseContainer type="schulteTables" />} />

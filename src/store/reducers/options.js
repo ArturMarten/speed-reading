@@ -62,6 +62,9 @@ export const STEP_FONT_SIZE = 1;
 export const MIN_LINE_SPACING = 1.0;
 export const MAX_LINE_SPACING = 1.5;
 export const STEP_LINE_SPACING = 0.1;
+export const MIN_LINE_COUNT = 2;
+export const MAX_LINE_COUNT = 10;
+export const STEP_LINE_COUNT = 1;
 export const MIN_SYMBOL_SIZE = 40;
 export const MAX_SYMBOL_SIZE = 100;
 export const STEP_SYMBOL_SIZE = 5;
@@ -72,6 +75,7 @@ const initialTextOptions = {
   height: 400,
   fontSize: 14,
   lineSpacing: 1.0,
+  lineCount: 5,
   symbolSize: 80,
 };
 
@@ -217,6 +221,12 @@ const reducer = (state = initialState, action) => {
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions],
             visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'cursorType', 'cursorColor'],
+            visibleSpeedOptions: [...defaultVisibleSpeedOptions],
+          });
+        case 'scrolling':
+          return updateObject(state, {
+            visibleTextOptions: [...defaultVisibleTextOptions, 'lineCount'],
+            visibleExerciseOptions: [...defaultVisibleExerciseOptions],
             visibleSpeedOptions: [...defaultVisibleSpeedOptions],
           });
         case 'disappearing':

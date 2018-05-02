@@ -4,11 +4,12 @@ import { updateObject, shuffle, getSimilarSymbol } from '../../shared/utility';
 
 const READING_TEST_ID = 1;
 const READING_AID_ID = 2;
-const DISAPPEARING_ID = 3;
-const WORD_GROUPS_ID = 4;
-const SCHULTE_TABLES_ID = 5;
-const CONCENTRATION_ID = 6;
-export const EXERCISE_COUNT = 6;
+const SCROLLING_ID = 3;
+const DISAPPEARING_ID = 4;
+const WORD_GROUPS_ID = 5;
+const SCHULTE_TABLES_ID = 6;
+const CONCENTRATION_ID = 7;
+export const EXERCISE_COUNT = 7;
 
 const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const numbers = '0123456789'.split('');
@@ -61,6 +62,8 @@ export const getExerciseId = (exerciseType) => {
       return READING_TEST_ID;
     case 'readingAid':
       return READING_AID_ID;
+    case 'scrolling':
+      return SCROLLING_ID;
     case 'disappearing':
       return DISAPPEARING_ID;
     case 'wordGroups':

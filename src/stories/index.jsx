@@ -41,7 +41,7 @@ const dummyData = [
 ];
 
 store.dispatch(setActiveLanguage('ee'));
-store.dispatch(actionCreators.authLogin(credentials.admin.username, credentials.admin.password));
+store.dispatch(actionCreators.login(credentials.admin.username, credentials.admin.password));
 store.dispatch(actionCreators.selectText(2));
 
 const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
@@ -76,6 +76,14 @@ storiesOf('Text exercise preparation', module)
     return (
       <TextExercisePreparationContainer
         type="readingAid"
+        onProceed={action('clicked')}
+      />);
+  })
+  .add('Scrolling container', () => {
+    store.dispatch(actionCreators.selectExercise('scrolling'));
+    return (
+      <TextExercisePreparationContainer
+        type="scrolling"
         onProceed={action('clicked')}
       />);
   })

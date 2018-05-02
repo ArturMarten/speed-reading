@@ -25,6 +25,7 @@ export class Statistics extends Component {
     const exercises = [
       { text: this.props.translate('statistics.reading-test'), value: 'readingTest' },
       { text: this.props.translate('statistics.reading-aid'), value: 'readingAid' },
+      { text: this.props.translate('statistics.scrolling-text'), value: 'scrolling' },
       { text: this.props.translate('statistics.disappearing-text'), value: 'disappearing' },
       { text: this.props.translate('statistics.word-groups'), value: 'wordGroups' },
       { text: this.props.translate('statistics.schulte-tables'), value: 'schulteTables' },

@@ -8,6 +8,7 @@
     "reading-test": ["Lugemistest", "Reading test"],
     "reading-aid": ["Lugemise soodustaja", "Reading aid"],
     "word-groups": ["Sõnarühmad", "Word groups"],
+    "scrolling-text": ["Keriv tekst", "Scrolling text"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "help-exercises": ["Abiharjutused", "Help exercises"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
@@ -18,22 +19,31 @@
     "bug-report-popup": ["Teata veast", "Report a bug"]
   },
   "auth": {
-    "login-button": ["Logi sisse", "Login"],
-    "modal-header": ["Kasutaja autentimine", "Account authentication"],
+    "register-modal-header": ["Kasutaja registreerimine", "Account registration"],
+    "login-modal-header": ["Kasutaja autentimine", "Account authentication"],
+    "email": ["E-maili aadress", "E-mail address"],
+    "confirm-email": ["Kinnita e-maili aadress", "Confirm e-mail address"],
+    "group": ["Grupp", "Group"],
+    "group-not-set": ["Määramata", "Not specified"],
     "username": ["E-maili aadress", "E-mail address"],
     "password": ["Parool", "Password"],
-    "demo": ["Demo", "Demo"],
+    "register-user": ["Registreeri uus kasutaja", "Register new user"],
+    "demo": ["Proovikasutaja", "Sample account"],
     "not-implemented": ["Implementeerimata", "Not implemented"],
     "first-time": ["Kasutaja puudumisel vajutage siia", "Click here when you don't have an account"],
+    "login-button": ["Logi sisse", "Login"],
+    "no-user-question": ["Puudub kasutaja? ", "Don't have an account? "],
+    "back-to-auth": ["Tagasi sisselogimise juurde", "Back to login"],
+    "create-button": ["Loo uus kasutaja", "Create new user"],
     "logout-button": ["Logi välja", "Logout"]
   },
   "profile": {
     "logout-button": ["Logi välja", "Logout"],
     "change-password-button": ["Vaheta parool", "Change password"],
-    "user-settings": ["Kasutaja seaded", "User settings"]
+    "user-settings": ["Kasutaja seaded", "Account settings"]
   },
   "profile-settings": {
-    "modal-header": ["Kasutaja seaded", "User settings"]
+    "modal-header": ["Kasutaja seaded", "Account settings"]
   },
   "change-password": {
     "modal-header": ["Parooli vahetamine", "Password change"],
@@ -156,6 +166,12 @@
     "words": ["Sõnu", "Words"],
     "sentences": ["Lauseid", "Sentences"]
   },
+  "own-text-editor": {
+    "modal-header": ["Oma teksti kasutamine", "Using own text"],
+    "analyze-complexity": ["Analüüsi keerukust", "Analyze complexity"],
+    "use": ["Kasuta teksti", "Use text"],
+    "not-implemented": ["Pole implementeeritud", "Not implemented"]
+  },
   "text-selection": {
     "modal-header": ["Teksti valimine", "Text selection"],
     "fetching": ["Laen tekste...", "Loading texts..."],
@@ -197,16 +213,19 @@
     "goal": ["Eesmärk", "Goal"],
     "shortkeys": ["Kiirklahvid", "Shortkeys"],
     "title-readingTest": ["Lugemistest", "Reading test"],
-    "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga.", "This test allows to measure your reading speed with normal text."],
+    "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga. Parema ja vasaku nooleklahviga saab liikuda lehtede vahel.", "This test allows to measure your reading speed with normal text. Left and right arrow keys can be used to change pages."],
     "goal-readingTest": ["Lugeda teksti oma normaalse lugemisekiirusega.", "Read text with normal reading speed."],
     "title-readingAid": ["Lugemise soodustaja", "Reading aid"],
     "description-readingAid": ["See harjutus vähendab tagasivaatamisi ja kiirendab lugemist.", "This exercise decreases regressions and increase reading speed."],
     "goal-readingAid": ["Lugeda teksti püüdes hoida silmi pilgujuhtijal.", "Read text and try to keep up with moving cursor"],
+    "title-scrolling": ["Keriva teksti harjutus", "Scrolling text exercise"],
+    "description-scrolling": ["See harjutus vähendab tagasivaatamiseid ehk regressioone.", "This exercise decreases regressions."],
+    "goal-scrolling": ["Lugeda teksti kerimise kiirusel.", "Read text at scrolling speed."],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
     "description-disappearing": ["See harjutus välistab tagasivaatamised ehk regressioonid.", "This exercise eliminates regressions."],
     "goal-disappearing": ["Lugeda teksti kiiremini kui see ära kaob.", "Read text faster than it disappears."],
     "title-wordGroups": ["Sõnarühmade harjutus", "Word group exercise"],
-    "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions"],
+    "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions."],
     "goal-wordGroups": ["Lugeda teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
     "title-schulteTables": ["Schulte tabelite harjutus", "Schulte tables exercise"],
     "description-schulteTables": ["See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.", "This exercise helps to increase perceptual span and develop concentration."],
@@ -250,6 +269,8 @@
     "reference": ["Ilmumisandmed", "Reference"],
     "reference-missing": ["Puudub", "Missing"],
     "text-not-selected": ["Tekst valimata", "Text not selected"],
+    "use-own-text": ["Oma tekst", "Own text"],
+    "or": ["või", "or"],
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Muuda teksti", "Change text"],
     "info-content": ["Enne harjutusega alustamist saab muuta sätteid, et muuta harjutus endale sobivamaks", "Before starting the exercise you can change the settings to make exercise more comfortable"],
@@ -321,12 +342,12 @@
     "text-width": ["Teksti laius", "Text width"],
     "text-height": ["Teksti kõrgus", "Text height"],
     "px": ["pikslit", "px"],
-    "line-count": ["Ridade arv", "Line count"],
-    "lines": ["rida", "lines"],
     "font-size": ["Kirja suurus", "Font size"],
     "pt": ["punkti", "pt"],
     "line-spacing": ["Reasamm", "Line spacing"],
     "times": ["kordne", "times"],
+    "line-count": ["Ridade arv", "Line count"],
+    "lines": ["rida", "lines"],
     "symbol-size": ["Sümboli suurus", "Symbol size"],
     "percentage": ["%", "%"]
   },
@@ -372,6 +393,7 @@
     "warning-title": ["Antud hetkel regressiooni joont ei näidata", "Currently regression line is not shown"],
     "reading-test": ["Lugemistest", "Reading test"],
     "reading-aid": ["Lugemise soodustaja", "Reading aid"],
+    "scrolling-text": ["Keriv tekst", "Scrolling text"],
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
@@ -482,7 +504,8 @@
     "question-removed": ["Küsimus kustutatud", "Question removed"],
     "answer-added": ["Vastusevariant lisatud", "Answer added"],
     "answer-updated": ["Vastusevariant uuendatud", "Answer updated"],
-    "answer-removed": ["Vastusevariant kustutatud", "Answer removed"]
+    "answer-removed": ["Vastusevariant kustutatud", "Answer removed"],
+    "account-registered-password-sent": ["Kasutaja registreeritud, parool saadeti meiliga", "Account registered, password sent with e-mail"]
   },
   "error": {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],

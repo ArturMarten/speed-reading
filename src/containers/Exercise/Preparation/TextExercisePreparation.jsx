@@ -6,6 +6,7 @@ import { getTranslate } from 'react-localize-redux';
 import * as actionCreators from '../../../store/actions';
 import HelpPopup from '../../../components/HelpPopup/HelpPopup';
 import ExerciseDescription from '../Description/ExerciseDescription';
+import OwnTextEditor from '../../OwnTextEditor/OwnTextEditor';
 import TextSelection from '../../TextSelection/TextSelection';
 import TextOptions from '../Options/TextOptions';
 import ExerciseOptions from '../Options/ExerciseOptions';
@@ -16,6 +17,7 @@ import TextExercisePreview from '../Preview/TextExercisePreview';
 export class TextExercisePreparation extends Component {
   state = {
     saveStatistics: true,
+    ownTextEditorOpened: false,
     textSelectionOpened: false,
   };
 
@@ -27,6 +29,10 @@ export class TextExercisePreparation extends Component {
 
   saveChangeHandler = (event, data) => {
     this.setState({ saveStatistics: data.checked });
+  }
+
+  ownTextEditorToggleHandler = () => {
+    this.setState({ ownTextEditorOpened: !this.state.ownTextEditorOpened });
   }
 
   textSelectionToggleHandler = () => {
@@ -138,14 +144,26 @@ export class TextExercisePreparation extends Component {
                   {this.props.translate('exercise-preparation.text-selection')}
                 </Header>
                 {selectedText}
-                <Button
-                  primary
-                  floated="right"
-                  onClick={this.textSelectionToggleHandler}
-                  content={this.props.selectedText ?
-                    this.props.translate('exercise-preparation.change-text') :
-                    this.props.translate('exercise-preparation.select-text')}
-                />
+                <Button.Group floated="right">
+                  <Button
+                    secondary
+                    onClick={this.ownTextEditorToggleHandler}
+                    content={this.props.translate('exercise-preparation.use-own-text')}
+                  />
+                  <Button.Or text={this.props.translate('exercise-preparation.or')} />
+                  <Button
+                    primary
+                    onClick={this.textSelectionToggleHandler}
+                    content={this.props.selectedText ?
+                      this.props.translate('exercise-preparation.change-text') :
+                      this.props.translate('exercise-preparation.select-text')}
+                  />
+                </Button.Group>
+                {this.state.ownTextEditorOpened ?
+                  <OwnTextEditor
+                    open={this.state.ownTextEditorOpened}
+                    onClose={this.ownTextEditorToggleHandler}
+                  /> : null}
                 {this.state.textSelectionOpened ?
                   <TextSelection
                     open={this.state.textSelectionOpened}
@@ -161,8 +179,10 @@ export class TextExercisePreparation extends Component {
                 loading={this.props.exerciseStatus === 'preparing'}
                 disabled={!this.props.selectedText || this.props.exerciseStatus === 'preparing'}
                 onClick={this.textPreparationHandler}
-                content={this.props.translate('exercise-preparation.proceed')}
-              />
+              >
+                {this.props.translate('exercise-preparation.proceed')}
+                <Icon name="right chevron" />
+              </Button>
               <Checkbox
                 style={{ float: 'right', margin: '2px' }}
                 label={{ children: startCheckboxLabel }}

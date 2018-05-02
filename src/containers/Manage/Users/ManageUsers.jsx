@@ -23,13 +23,13 @@ export class ManageUsers extends Component {
       this.props.onFetchUsers(this.props.token);
     }
     if (this.props.groups.length === 0) {
-      this.props.onFetchGroups(this.props.token);
+      this.props.onFetchGroups();
     }
   }
 
   onRefresh = () => {
     this.props.onFetchUsers(this.props.token);
-    this.props.onFetchGroups(this.props.token);
+    this.props.onFetchGroups();
   }
 
   getGroupNameById = (groupId) => {
@@ -215,8 +215,8 @@ const mapDispatchToProps = dispatch => ({
   onFetchUsers: (token) => {
     dispatch(actionCreators.fetchUsers(token));
   },
-  onFetchGroups: (token) => {
-    dispatch(actionCreators.fetchGroups(token));
+  onFetchGroups: () => {
+    dispatch(actionCreators.fetchGroups());
   },
 });
 

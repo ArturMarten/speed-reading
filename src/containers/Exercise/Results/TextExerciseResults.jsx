@@ -87,8 +87,10 @@ export class TextExerciseResults extends Component {
           <Button
             positive
             onClick={this.onProceedHandler}
-            content={this.props.translate('text-exercise-results.proceed')}
-          />
+          >
+            {this.props.translate('text-exercise-results.proceed')}
+            <Icon name="right chevron" />
+          </Button>
         </Modal.Actions>
       </Modal>
     );

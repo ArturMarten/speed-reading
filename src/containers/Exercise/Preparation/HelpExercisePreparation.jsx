@@ -99,8 +99,10 @@ export class HelpExercisePreparation extends Component {
                   loading={this.props.exerciseStatus === 'preparing'}
                   disabled={this.props.exerciseStatus === 'preparing'}
                   onClick={this.exercisePreparationHandler}
-                  content={this.props.translate('exercise-preparation.proceed')}
-                />
+                >
+                  {this.props.translate('exercise-preparation.proceed')}
+                  <Icon name="right chevron" />
+                </Button>
                 <Checkbox
                   style={{ float: 'right', margin: '2px' }}
                   label={{ children: startCheckboxLabel }}

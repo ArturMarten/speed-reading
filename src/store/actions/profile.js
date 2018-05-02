@@ -25,11 +25,11 @@ export const fetchUserProfile = (userId, token) => (dispatch) => {
     }, (error) => {
       const errorMessage = serverErrorMessage(error);
       dispatch(fetchUserProfileFailed(errorMessage));
-      dispatch(actionCreators.authLogout(errorMessage));
+      dispatch(actionCreators.logout(errorMessage));
     })
     .catch((error) => {
       dispatch(fetchUserProfileFailed(error.message));
-      dispatch(actionCreators.authLogout(error.message));
+      dispatch(actionCreators.logout(error.message));
     });
 };
 

@@ -20,6 +20,9 @@ import {
   MIN_LINE_SPACING,
   MAX_LINE_SPACING,
   STEP_LINE_SPACING,
+  MIN_LINE_COUNT,
+  MAX_LINE_COUNT,
+  STEP_LINE_COUNT,
   MIN_SYMBOL_SIZE,
   MAX_SYMBOL_SIZE,
   STEP_SYMBOL_SIZE,
@@ -76,6 +79,16 @@ export class TextOptions extends PureComponent {
             max={MAX_LINE_SPACING}
             step={STEP_LINE_SPACING}
             updateValue={value => this.props.onSubmit({ lineSpacing: value })}
+          /> : null}
+        {this.props.visibleOptions.indexOf('lineCount') !== -1 ?
+          <ExerciseInputOption
+            name={this.props.translate('text-options.line-count')}
+            unit={this.props.translate('text-options.lines')}
+            value={this.props.options.lineCount}
+            min={MIN_LINE_COUNT}
+            max={MAX_LINE_COUNT}
+            step={STEP_LINE_COUNT}
+            updateValue={value => this.props.onSubmit({ lineCount: value })}
           /> : null}
         {this.props.visibleOptions.indexOf('symbolSize') !== -1 ?
           <ExerciseInputOption

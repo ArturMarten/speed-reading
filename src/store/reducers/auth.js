@@ -14,6 +14,11 @@ const initialState = {
     loading: false,
     error: null,
   },
+  registrationStatus: {
+    loading: false,
+    message: null,
+    error: null,
+  },
   logoutStatus: {
     error: null,
   },
@@ -52,6 +57,33 @@ const reducer = (state = initialState, action) => {
         token: null,
         userId: null,
         logoutStatus: {
+          error: action.payload,
+        },
+      });
+    }
+    case actionTypes.REGISTER_START: {
+      return updateObject(state, {
+        registrationStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.REGISTER_SUCCEEDED: {
+      return updateObject(state, {
+        registrationStatus: {
+          loading: false,
+          message: action.payload,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.REGISTER_FAILED: {
+      return updateObject(state, {
+        registrationStatus: {
+          loading: false,
+          message: null,
           error: action.payload,
         },
       });

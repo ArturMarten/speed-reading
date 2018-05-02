@@ -21,7 +21,7 @@ Logout.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   onLogout: () => {
-    dispatch(actionCreators.authLogout(null));
+    dispatch(actionCreators.logout(null));
   },
 });
 

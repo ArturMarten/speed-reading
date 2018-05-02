@@ -6,7 +6,7 @@ import { splitIntoWordGroups } from '../../../../utils/TextUtils';
 const CANVAS_HEIGHT = 400;
 const GROUP_CHARACTER_COUNT = 15;
 
-describe.only('Wordgroups updateState', () => {
+describe('Wordgroups updateState', () => {
   const textOptions = {
     font: 'Calibri',
     width: 250,

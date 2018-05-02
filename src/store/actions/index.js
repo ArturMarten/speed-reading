@@ -46,8 +46,9 @@ export {
 } from './test';
 
 export {
-  authLogin,
-  authLogout,
+  register,
+  login,
+  logout,
   authCheckState,
   changePassword,
 } from './auth';

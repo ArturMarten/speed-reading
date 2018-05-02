@@ -8,6 +8,7 @@ import SpeedOptions from '../Options/SpeedOptions';
 import Timing from '../Timing/Timing';
 import ReadingTest from '../Types/ReadingTest/ReadingTest';
 import ReadingAid from '../Types/ReadingAid/ReadingAid';
+import Scrolling from '../Types/Scrolling/Scrolling';
 import Disappearing from '../Types/Disappearing/Disappearing';
 import WordGroups from '../Types/WordGroups/WordGroups';
 
@@ -67,6 +68,15 @@ export class TextExercise extends Component {
               onExerciseFinish={this.onExerciseFinishHandler}
             />
           );
+        case 'scrolling':
+          return (
+            <Scrolling
+              canvasHeight={this.state.canvasHeight}
+              selectedText={this.props.selectedText}
+              timerState={this.props.timerState}
+              onExerciseFinish={this.onExerciseFinishHandler}
+            />
+          );
         case 'disappearing':
           return (
             <Disappearing
@@ -80,6 +90,7 @@ export class TextExercise extends Component {
           return (
             <WordGroups
               canvasHeight={this.state.canvasHeight}
+              selectedText={this.props.selectedText}
               wordGroups={this.props.wordGroups}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}

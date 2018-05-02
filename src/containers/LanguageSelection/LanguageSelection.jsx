@@ -21,7 +21,7 @@ export class LanguageSelection extends Component {
 
   render() {
     return (
-      <Dropdown icon={<Flag name={this.props.currentLanguage} />}>
+      <Dropdown style={{ ...this.props.style }} icon={<Flag name={this.props.currentLanguage} />}>
         <Dropdown.Menu>
           {this.languageList()}
         </Dropdown.Menu>

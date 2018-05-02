@@ -219,12 +219,12 @@ export class ReadingAid extends Component {
     } else if (newState.newPage) {
       timeout = setTimeout(
         () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
-        this.updateInterval + this.props.exerciseOptions.pageBreakDelay,
+        this.props.exerciseOptions.pageBreakDelay,
       );
     } else if (newState.newLine) {
       timeout = setTimeout(
         () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
-        this.updateInterval + this.props.exerciseOptions.lineBreakDelay,
+        this.props.exerciseOptions.lineBreakDelay,
       );
     } else {
       this.scheduleNext();

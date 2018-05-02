@@ -38,7 +38,7 @@ export class StatisticsTable extends Component {
             <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
               {this.props.translate('statistics-table.attempt-date')}
             </Table.HeaderCell>
-            {['readingTest', 'readingAid', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+            {['readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
               <Fragment>
                 <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
                   {this.props.translate('statistics-table.reading-attempt')}
@@ -90,7 +90,7 @@ export class StatisticsTable extends Component {
                   minute: 'numeric',
                 }).format(attempt.date)}
               </Table.Cell>
-              {['readingTest', 'readingAid', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+              {['readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
                 <Fragment>
                   <Table.Cell collapsing textAlign="center">
                     {attempt.readingAttempt}
@@ -103,7 +103,7 @@ export class StatisticsTable extends Component {
                     warning={attempt.testResult > 0 && attempt.testResult < 70}
                     positive={attempt.testResult >= 70}
                   >
-                    {attempt.testResult ? `${attempt.testResult}%` :
+                    {attempt.testResult !== null ? `${attempt.testResult}%` :
                       this.props.translate('statistics-table.test-missing')}
                   </Table.Cell>
                 </Fragment> : null}
@@ -112,13 +112,13 @@ export class StatisticsTable extends Component {
                   <Table.Cell
                     negative={!attempt.elapsedTime}
                   >
-                    {attempt.elapsedTime ? formatMilliseconds(attempt.elapsedTime) :
+                    {attempt.elapsedTime !== null ? formatMilliseconds(attempt.elapsedTime) :
                       this.props.translate('statistics-table.not-recorded')}
                   </Table.Cell>
                   <Table.Cell
                     negative={!attempt.spm}
                   >
-                    {attempt.spm ? attempt.spm :
+                    {attempt.spm !== null ? attempt.spm :
                       this.props.translate('statistics-table.not-recorded')}
                   </Table.Cell>
                 </Fragment> : null}
@@ -127,7 +127,7 @@ export class StatisticsTable extends Component {
                   <Table.Cell
                     negative={!attempt.elapsedTime}
                   >
-                    {attempt.elapsedTime ? formatMilliseconds(attempt.elapsedTime) :
+                    {attempt.elapsedTime !== null ? formatMilliseconds(attempt.elapsedTime) :
                       this.props.translate('statistics-table.not-recorded')}
                   </Table.Cell>
                   <Table.Cell

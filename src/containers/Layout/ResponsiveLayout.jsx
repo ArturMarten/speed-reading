@@ -186,6 +186,14 @@ export class ResponsiveLayout extends Component {
                   </Dropdown.Item>
                   <Dropdown.Item
                     as={Link}
+                    active={this.props.path === '/exercise/scrolling-text'}
+                    onClick={this.itemClickHandler}
+                    to="/exercise/scrolling-text"
+                  >
+                    {this.props.translate('menu.scrolling-text')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    as={Link}
                     active={this.props.path === '/exercise/disappearing-text'}
                     onClick={this.itemClickHandler}
                     to="/exercise/disappearing-text"
@@ -339,6 +347,14 @@ export class ResponsiveLayout extends Component {
                         to="/exercise/reading-aid"
                       >
                         {this.props.translate('menu.reading-aid')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as={Link}
+                        active={this.props.path === '/exercise/scrolling-text'}
+                        onClick={this.itemClickHandler}
+                        to="/exercise/scrolling-text"
+                      >
+                        {this.props.translate('menu.scrolling-text')}
                       </Dropdown.Item>
                       <Dropdown.Item
                         as={Link}

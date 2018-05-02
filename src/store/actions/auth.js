@@ -20,7 +20,7 @@ const authFailed = error => ({
   payload: error,
 });
 
-export const authLogout = (error) => {
+export const logout = (error) => {
   localStorage.removeItem('token');
   localStorage.removeItem('userId');
   localStorage.removeItem('expirationDate');
@@ -33,11 +33,11 @@ export const authLogout = (error) => {
 const checkAuthTimeout = expirationTime => (dispatch) => {
   // console.log(`Logging out in ${expirationTime}s`);
   setTimeout(() => {
-    dispatch(authLogout('Authentication expired'));
+    dispatch(logout('Authentication expired'));
   }, expirationTime * 1000);
 };
 
-export const authLogin = (email, password) => (dispatch) => {
+export const login = (email, password) => (dispatch) => {
   dispatch(authStart());
   const auth = {
     username: email,
@@ -63,11 +63,11 @@ export const authLogin = (email, password) => (dispatch) => {
 export const authCheckState = () => (dispatch) => {
   const token = localStorage.getItem('token');
   if (!token) {
-    dispatch(authLogout(null));
+    dispatch(logout(null));
   } else {
     const expirationDate = new Date(localStorage.getItem('expirationDate'));
     if (expirationDate <= new Date()) {
-      dispatch(authLogout('Authentication expired'));
+      dispatch(logout('Authentication expired'));
     } else {
       dispatch(authStart());
       const userId = localStorage.getItem('userId');
@@ -76,6 +76,33 @@ export const authCheckState = () => (dispatch) => {
       dispatch(actionCreators.fetchUserProfile(userId, token));
     }
   }
+};
+
+const registerStart = () => ({
+  type: actionTypes.REGISTER_START,
+});
+
+const registerSucceeded = message => ({
+  type: actionTypes.REGISTER_SUCCEEDED,
+  payload: message,
+});
+
+const registerFailed = error => ({
+  type: actionTypes.REGISTER_FAILED,
+  payload: error,
+});
+
+export const register = registerData => (dispatch) => {
+  dispatch(registerStart());
+  axios.post('/register', registerData)
+    .then((response) => {
+      dispatch(registerSucceeded(serverSuccessMessage(response)));
+    }, (error) => {
+      dispatch(registerFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(registerFailed(error.message));
+    });
 };
 
 const changePasswordStart = () => ({
