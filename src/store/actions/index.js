@@ -59,6 +59,7 @@ export {
   selectText,
   unselectText,
   saveText,
+  analyzeText,
 } from './text';
 
 export {

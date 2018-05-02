@@ -152,7 +152,8 @@
     "text-keyword-placeholder": ["Lisa märksõna", "Add keyword"],
     "text-keyword-popup": ["Lisamiseks vajuta Enterit", "Press Enter to add"],
     "add-text": ["Lisa tekst", "Add tekst"],
-    "modify-text": ["Muuda tekst", "Modify text"]
+    "modify-text": ["Muuda tekst", "Modify text"],
+    "analyze-text": ["Analüüsi teksti", "Analyze text"]
   },
   "text-editor": {
     "warning-title": ["Tekstile stiili lisamine", "Text styling"],
@@ -168,7 +169,7 @@
   },
   "own-text-editor": {
     "modal-header": ["Oma teksti kasutamine", "Using own text"],
-    "analyze-complexity": ["Analüüsi keerukust", "Analyze complexity"],
+    "analyze-text": ["Analüüsi teksti", "Analyze text"],
     "use": ["Kasuta teksti", "Use text"],
     "not-implemented": ["Pole implementeeritud", "Not implemented"]
   },
@@ -384,6 +385,11 @@
     "wpm": ["sõna minutis", "words per minute"],
     "fixation-time": ["Fiksatsiooni aeg", "Fixation time"],
     "ms": ["ms", "ms"]
+  },
+  "text-analysis": {
+    "modal-header": ["Lugemisteksti keerukuse hindamine", "Reading text complexity estimation"],
+    "length": ["tähemärki", "characters"],
+    "refresh": ["Värskenda", "Refresh"]
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],

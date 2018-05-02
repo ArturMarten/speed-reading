@@ -3,10 +3,14 @@ import { connect } from 'react-redux';
 import { Modal, Button, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-// import * as actionCreators from '../../store/actions';
+import * as actionCreators from '../../store/actions';
+import { stopPropagation } from '../../shared/utility';
 import TextEditor from '../TextEditor/TextEditor';
+import TextAnalysis from '../TextAnalysis/TextAnalysis';
 
-const initialState = {};
+const initialState = {
+  textAnalysisOpened: false,
+};
 
 export class OwnTextEditor extends Component {
   state = { ...initialState };
@@ -18,6 +22,21 @@ export class OwnTextEditor extends Component {
       contentState: textEditorComponent.getRawContent(),
     };
     console.log(selectedText);
+  }
+
+  textAnalysisToggleHandler = (event) => {
+    stopPropagation(event);
+    if (!this.state.textAnalysisOpened) {
+      const textEditorComponent = this.textEditorRef.getWrappedInstance();
+      const text = textEditorComponent.getPlainText();
+      const textData = {
+        text,
+      };
+      this.props.onAnalyzeText(textData);
+      const textAnalysisComponent = this.textAnalysisRef.getWrappedInstance();
+      textAnalysisComponent.setText(text);
+    }
+    this.setState({ textAnalysisOpened: !this.state.textAnalysisOpened });
   }
 
   render() {
@@ -32,11 +51,16 @@ export class OwnTextEditor extends Component {
         <Modal.Actions>
           <Button
             primary
-            disabled
             type="button"
+            onClick={this.textAnalysisToggleHandler}
           >
-            {this.props.translate('own-text-editor.analyze-complexity')}
+            {this.props.translate('own-text-editor.analyze-text')}
           </Button>
+          <TextAnalysis
+            ref={(ref) => { this.textAnalysisRef = ref; }}
+            open={this.state.textAnalysisOpened}
+            onClose={this.textAnalysisToggleHandler}
+          />
           <Popup
             trigger={
               <Button
@@ -61,8 +85,10 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
+  onAnalyzeText: (textData) => {
+    dispatch(actionCreators.analyzeText(textData));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OwnTextEditor);

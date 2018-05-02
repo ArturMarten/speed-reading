@@ -8,6 +8,7 @@ import HelpPopup from '../../components/HelpPopup/HelpPopup';
 import TextSelection from '../TextSelection/TextSelection';
 import TextEditor from '../TextEditor/TextEditor';
 import TextTestEditor from './TextTestEditor/TextTestEditor';
+import TextAnalysis from '../TextAnalysis/TextAnalysis';
 import ErrorMessage from '../Message/ErrorMessage';
 import SuccessMessage from '../Message/SuccessMessage';
 import { checkValidity } from '../../shared/utility';
@@ -85,6 +86,7 @@ const initialState = {
   textEntryFormValid: false,
   textSelectionOpened: false,
   textTestOpened: false,
+  textAnalysisOpened: false,
 };
 
 export class TextEntry extends Component {
@@ -216,6 +218,20 @@ export class TextEntry extends Component {
 
   textTestToggleHandler = () => {
     this.setState({ textTestOpened: !this.state.textTestOpened });
+  }
+
+  textAnalysisToggleHandler = () => {
+    if (!this.state.textAnalysisOpened) {
+      const textEditorComponent = this.textEditorRef.getWrappedInstance();
+      const text = textEditorComponent.getPlainText();
+      const textData = {
+        text,
+      };
+      this.props.onAnalyzeText(textData);
+      const textAnalysisComponent = this.textAnalysisRef.getWrappedInstance();
+      textAnalysisComponent.setText(text);
+    }
+    this.setState({ textAnalysisOpened: !this.state.textAnalysisOpened });
   }
 
   render() {
@@ -419,6 +435,11 @@ export class TextEntry extends Component {
               onClose={this.textTestToggleHandler}
               readingTextId={this.props.selectedText.id}
             /> : null}
+          <TextAnalysis
+            ref={(ref) => { this.textAnalysisRef = ref; }}
+            open={this.state.textAnalysisOpened}
+            onClose={this.textAnalysisToggleHandler}
+          />
           {this.props.selectedText ?
             <Button
               primary
@@ -428,6 +449,14 @@ export class TextEntry extends Component {
             >
               {this.props.translate('text-entry.change-questions')}
             </Button> : null}
+          <Button
+            positive
+            type="button"
+            floated="right"
+            onClick={this.textAnalysisToggleHandler}
+          >
+            {this.props.translate('text-entry.analyze-text')}
+          </Button>
         </Form>
       </Container>
     );
@@ -452,6 +481,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onNewText: () => {
     dispatch(actionCreators.unselectText());
+  },
+  onAnalyzeText: (textData) => {
+    dispatch(actionCreators.analyzeText(textData));
   },
 });
 

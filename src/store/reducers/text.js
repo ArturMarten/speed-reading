@@ -6,6 +6,7 @@ const initialState = {
   selectedText: null,
   texts: [],
   collections: [],
+  analysis: null,
   selectStatus: {
     loading: false,
     error: null,
@@ -21,6 +22,10 @@ const initialState = {
   textStatus: {
     loading: false,
     message: null,
+    error: null,
+  },
+  analyzeStatus: {
+    loading: false,
     error: null,
   },
 };
@@ -133,6 +138,7 @@ const reducer = (state = initialState, action) => {
           message: null,
           error: null,
         },
+        analysis: null,
       });
     }
     case actionTypes.FETCH_READING_TEXT_FAILED: {
@@ -149,6 +155,34 @@ const reducer = (state = initialState, action) => {
         selectStatus: {
           loading: false,
           error: null,
+        },
+        analysis: null,
+      });
+    }
+    case actionTypes.ANALYZE_TEXT_START: {
+      return updateObject(state, {
+        analysis: null,
+        analyzeStatus: {
+          loading: true,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.ANALYZE_TEXT_SUCCEEDED: {
+      return updateObject(state, {
+        analysis: action.payload,
+        analyzeStatus: {
+          loading: false,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.ANALYZE_TEXT_FAILED: {
+      return updateObject(state, {
+        analysis: null,
+        analyzeStatus: {
+          loading: false,
+          error: action.payload,
         },
       });
     }

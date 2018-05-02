@@ -12,6 +12,7 @@ import Provider, { store } from './Provider';
 // import HomeContainer from '../containers/Home/Home';
 import TextEntryContainer from '../containers/TextEntry/TextEntry';
 import TextEditorContainer from '../containers/TextEditor/TextEditor';
+import TextAnalysisContainer, { TextAnalysis } from '../containers/TextAnalysis/TextAnalysis';
 import TextExercisePreparationContainer from '../containers/Exercise/Preparation/TextExercisePreparation';
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
@@ -61,6 +62,16 @@ storiesOf('Text entry', module)
 
 storiesOf('Text editor', module)
   .add('Container', () => <TextEditorContainer />);
+
+storiesOf('Text analysis', module)
+  .add('Container', () => <TextAnalysisContainer open />)
+  .add('Component', () => (
+    <TextAnalysis
+      open
+      analysis={{}}
+      translate={translate}
+    />
+  ));
 
 storiesOf('Text exercise preparation', module)
   .add('Reading test container', () => {

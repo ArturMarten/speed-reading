@@ -131,3 +131,31 @@ export const selectText = textId => (dispatch) => {
 export const unselectText = () => ({
   type: actionTypes.UNSELECT_TEXT,
 });
+
+const analyzeTextStart = () => ({
+  type: actionTypes.ANALYZE_TEXT_START,
+});
+
+const analyzeTextSucceeded = analysis => ({
+  type: actionTypes.ANALYZE_TEXT_SUCCEEDED,
+  payload: analysis,
+});
+
+const analyzeTextFailed = error => ({
+  type: actionTypes.ANALYZE_TEXT_FAILED,
+  payload: error,
+});
+
+export const analyzeText = textData => (dispatch) => {
+  dispatch(analyzeTextStart());
+  axios.post('/analyze', textData)
+    .then((response) => {
+      const analysis = response.data;
+      dispatch(analyzeTextSucceeded(analysis));
+    }, (error) => {
+      dispatch(analyzeTextFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(analyzeTextFailed(error.message));
+    });
+};
