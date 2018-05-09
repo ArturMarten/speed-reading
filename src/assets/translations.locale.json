@@ -171,7 +171,8 @@
     "modal-header": ["Oma teksti kasutamine", "Using own text"],
     "analyze-text": ["Analüüsi teksti", "Analyze text"],
     "use": ["Kasuta teksti", "Use text"],
-    "not-implemented": ["Pole implementeeritud", "Not implemented"]
+    "not-implemented": ["Pole implementeeritud", "Not implemented"],
+    "issues": ["Probleemid sõnarühmade harjutusega", "Known issues with word groups exercise"]
   },
   "text-selection": {
     "modal-header": ["Teksti valimine", "Text selection"],
@@ -269,6 +270,7 @@
     "questions-author-missing": ["Puudub", "Missing"],
     "reference": ["Ilmumisandmed", "Reference"],
     "reference-missing": ["Puudub", "Missing"],
+    "own-text": ["Valitud oma tekst", "Own text selected"],
     "text-not-selected": ["Tekst valimata", "Text not selected"],
     "use-own-text": ["Oma tekst", "Own text"],
     "or": ["või", "or"],
@@ -388,7 +390,14 @@
   },
   "text-analysis": {
     "modal-header": ["Lugemisteksti keerukuse hindamine", "Reading text complexity estimation"],
-    "length": ["tähemärki", "characters"],
+    "character-count": ["tähemärki", "characters"],
+    "word-count": ["sõna", "words"],
+    "sentence-count": ["lauset", "sentences"],
+    "average-word-length": ["keskmine sõna pikkus", "average word length"],
+    "average-sentence-length": ["keskmine lause pikkus", "average sentence length"],
+    "in-words": ["sõnades", "in words"],
+    "in-characters": ["tähemärkides", "in characters"],
+    "word-lengths": ["Sõna pikkused", "Word lengths"],
     "refresh": ["Värskenda", "Refresh"]
   },
   "statistics": {

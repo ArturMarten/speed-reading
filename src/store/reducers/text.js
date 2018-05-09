@@ -149,6 +149,35 @@ const reducer = (state = initialState, action) => {
         },
       });
     }
+    case actionTypes.SELECT_OWN_TEXT_START: {
+      return updateObject(state, {
+        selectStatus: {
+          loading: true,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.SELECT_OWN_TEXT_SUCCEEDED: {
+      const updatedText = updateObject(action.payload, {
+        contentState: convertFromRaw(action.payload.contentState),
+        keywords: [],
+      });
+      return updateObject(state, {
+        selectedText: updatedText,
+        selectStatus: {
+          loading: false,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.SELECT_OWN_TEXT_FAILED: {
+      return updateObject(state, {
+        selectStatus: {
+          loading: true,
+          error: action.payload,
+        },
+      });
+    }
     case actionTypes.UNSELECT_TEXT: {
       return updateObject(state, {
         selectedText: null,
@@ -169,8 +198,44 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.ANALYZE_TEXT_SUCCEEDED: {
+      const analysis = action.payload;
+      const { wordLengths, sentenceLengthsInWords, wordTypeCounts } = analysis;
+
+      const updatedWordLengths = [];
+      Object.keys(wordLengths).sort((a, b) => a - b).forEach((wordLength, index) => {
+        updatedWordLengths.push({
+          id: index,
+          x: +wordLength,
+          y: wordLengths[wordLength],
+        });
+      });
+
+      const updatedSentenceLengthsInWords = [];
+      Object.keys(sentenceLengthsInWords).sort((a, b) => a - b).forEach((sentenceLength, index) => {
+        updatedSentenceLengthsInWords.push({
+          id: index,
+          x: +sentenceLength,
+          y: sentenceLengthsInWords[sentenceLength],
+        });
+      });
+
+      const updatedWordTypeCounts = [];
+      Object.keys(wordTypeCounts).forEach((wordType, index) => {
+        updatedWordTypeCounts.push({
+          id: index,
+          x: wordType,
+          y: wordTypeCounts[wordType],
+        });
+      });
+
+      const updatedAnalysis = updateObject(analysis, {
+        wordLengths: updatedWordLengths,
+        sentenceLengthsInWords: updatedSentenceLengthsInWords,
+        wordTypeCounts: updatedWordTypeCounts,
+      });
+
       return updateObject(state, {
-        analysis: action.payload,
+        analysis: updatedAnalysis,
         analyzeStatus: {
           loading: false,
           error: null,

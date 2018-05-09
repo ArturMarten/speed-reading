@@ -10,7 +10,7 @@ const InlineStyleControls = (props) => {
   const { editorState } = props;
   const currentStyle = editorState.getCurrentInlineStyle();
   return (
-    <Button.Group basic compact style={{ margin: '0 2px 0 2px' }}>
+    <Button.Group basic compact style={{ margin: '2px 2px' }}>
       {INLINE_STYLES.map(type => (
         <Button
           key={type.style}

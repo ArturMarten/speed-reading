@@ -82,7 +82,7 @@ const initialTextOptions = {
 const defaultVisibleTextOptions = ['font', 'width', 'fontSize'];
 
 export const MIN_START_DELAY = 0;
-export const MAX_START_DELAY = 500;
+export const MAX_START_DELAY = 1000;
 export const STEP_START_DELAY = 50;
 export const MIN_LINE_BREAK_DELAY = 0;
 export const MAX_LINE_BREAK_DELAY = 500;
@@ -226,7 +226,7 @@ const reducer = (state = initialState, action) => {
         case 'scrolling':
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions, 'lineCount'],
-            visibleExerciseOptions: [...defaultVisibleExerciseOptions],
+            visibleExerciseOptions: ['startDelay'],
             visibleSpeedOptions: [...defaultVisibleSpeedOptions],
           });
         case 'disappearing':

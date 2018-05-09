@@ -49,6 +49,7 @@ const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 
 // store.dispatch(setActiveLanguage('gb'));
 const translate = getTranslate(store.getState().locale);
+
 addDecorator(story => <Provider story={story()} />);
 
 /*
@@ -64,11 +65,28 @@ storiesOf('Text editor', module)
   .add('Container', () => <TextEditorContainer />);
 
 storiesOf('Text analysis', module)
-  .add('Container', () => <TextAnalysisContainer open />)
+  .add('Container', () => {
+    const text = store.getState().text.selectedText.plain;
+    store.dispatch(actionCreators.analyzeText({ text }));
+    return <TextAnalysisContainer open />;
+  })
   .add('Component', () => (
     <TextAnalysis
       open
-      analysis={{}}
+      analyzeStatus={{
+        loading: false,
+      }}
+      analysis={{
+        characterCount: 2695,
+        wordCount: 516,
+        sentenceCount: 31,
+        averageWordLength: 5.22,
+        averageSentenceLengthInWords: 16.65,
+        averageSentenceLengthInCharacters: 86.94,
+        wordLengths: [],
+        sentenceLengthsInWords: [],
+        wordTypeCounts: [],
+      }}
       translate={translate}
     />
   ));

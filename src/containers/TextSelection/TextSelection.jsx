@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader, Dropdown, Label } from 'semantic-ui-react';
-import { getTranslate } from 'react-localize-redux';
+import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 
@@ -67,38 +67,44 @@ export class TextSelection extends Component {
   }
 
   render() {
-    const texts = this.state.searchResults.map((text) => {
-      const { wordCount } = text;
-      const color = 100 - Math.round(((wordCount - 250) / 750) * 100);
-      return (
-        <List.Item
-          key={text.id}
-          active={text.id === this.state.selectedTextId}
-          onClick={() => this.textSelectionHandler(text.id)}
-        >
-          <List.Content floated="right">
-            <Label
-              basic
-              circular
-              style={{ color: 'black', background: `hsl(${color}, 100%, 50%)` }}
-            >
-              {`${wordCount} ${this.props.translate('text-selection.words')}`}
-            </Label>
-            {this.props.translate('text-selection.complexity')}
-            <Rating
-              disabled
-              maxRating={10}
-              icon="star"
-              defaultRating={text.complexity}
-            />
-          </List.Content>
-          <List.Content>
-            <List.Header>{text.title}</List.Header>
-            <List.Description>{this.props.translate('text-selection.author')}: {text.author}</List.Description>
-          </List.Content>
-        </List.Item>
-      );
-    });
+    const texts = this.state.searchResults
+      .filter((text) => {
+        if (this.props.currentLanguage === 'gb') {
+          return text.language === 'english';
+        }
+        return text.language === 'estonian';
+      }).map((text) => {
+        const { wordCount } = text;
+        const color = 100 - Math.round(((wordCount - 250) / 750) * 100);
+        return (
+          <List.Item
+            key={text.id}
+            active={text.id === this.state.selectedTextId}
+            onClick={() => this.textSelectionHandler(text.id)}
+          >
+            <List.Content floated="right">
+              <Label
+                basic
+                circular
+                style={{ color: 'black', background: `hsl(${color}, 100%, 50%)` }}
+              >
+                {`${wordCount} ${this.props.translate('text-selection.words')}`}
+              </Label>
+              {this.props.translate('text-selection.complexity')}
+              <Rating
+                disabled
+                maxRating={10}
+                icon="star"
+                defaultRating={text.complexity}
+              />
+            </List.Content>
+            <List.Content>
+              <List.Header>{text.title}</List.Header>
+              <List.Description>{this.props.translate('text-selection.author')}: {text.author}</List.Description>
+            </List.Content>
+          </List.Item>
+        );
+      });
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
@@ -175,6 +181,7 @@ const mapStateToProps = state => ({
   texts: state.text.texts,
   textsStatus: state.text.textsStatus,
   selectStatus: state.text.selectStatus,
+  currentLanguage: getActiveLanguage(state.locale).code,
   translate: getTranslate(state.locale),
 });
 

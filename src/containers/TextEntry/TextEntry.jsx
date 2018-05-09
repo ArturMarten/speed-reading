@@ -145,14 +145,19 @@ export class TextEntry extends Component {
       } else {
         updatedFormElement.value = selectedText[inputName];
       }
-      updatedFormElement.valid = true;
+      updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation);
       updatedFormElement.touched = false;
       updatedTextEntryForm[inputName] = updatedFormElement;
     }
     this.textEditorRef.getWrappedInstance().setContent(selectedText.contentState);
+    let formIsValid = true;
+    // eslint-disable-next-line guard-for-in, no-restricted-syntax
+    for (const inputName in updatedTextEntryForm) {
+      formIsValid = updatedTextEntryForm[inputName].valid && formIsValid;
+    }
     this.setState({
       textEntryForm: updatedTextEntryForm,
-      textEntryFormValid: true,
+      textEntryFormValid: formIsValid,
     });
   }
 
@@ -424,7 +429,7 @@ export class TextEntry extends Component {
             onClick={this.onSubmit}
           >
             <Icon fitted name="save" style={{ opacity: 1 }} />
-            {this.props.selectedText ?
+            {this.props.selectedText && this.props.selectedText.id ?
               this.props.translate('text-entry.modify-text') :
               this.props.translate('text-entry.add-text')
             }
@@ -440,7 +445,7 @@ export class TextEntry extends Component {
             open={this.state.textAnalysisOpened}
             onClose={this.textAnalysisToggleHandler}
           />
-          {this.props.selectedText ?
+          {this.props.selectedText && this.props.selectedText.id ?
             <Button
               primary
               type="button"

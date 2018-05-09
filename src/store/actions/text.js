@@ -128,6 +128,34 @@ export const selectText = textId => (dispatch) => {
     });
 };
 
+const selectOwnTextStart = () => ({
+  type: actionTypes.SELECT_OWN_TEXT_START,
+});
+
+const selectOwnTextSucceeded = text => ({
+  type: actionTypes.SELECT_OWN_TEXT_SUCCEEDED,
+  payload: text,
+});
+
+const selectOwnTextFailed = error => ({
+  type: actionTypes.SELECT_OWN_TEXT_FAILED,
+  payload: error,
+});
+
+export const selectOwnText = textData => (dispatch) => {
+  dispatch(selectOwnTextStart());
+  axios.post('/analyze', { text: textData.plain })
+    .then((response) => {
+      const analysis = response.data;
+      dispatch(selectOwnTextSucceeded({ ...textData, ...analysis }));
+    }, (error) => {
+      dispatch(selectOwnTextFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(selectOwnTextFailed(error.message));
+    });
+};
+
 export const unselectText = () => ({
   type: actionTypes.UNSELECT_TEXT,
 });

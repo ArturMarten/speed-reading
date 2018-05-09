@@ -57,25 +57,26 @@ export class TextExerciseResults extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
-              <Grid.Column width={6} textAlign="right">
-                <b>{this.props.translate('text-exercise-results.rate-text-complexity')}</b>
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <Popup
-                  trigger={
-                    <Rating
-                      icon="star"
-                      clearable
-                      maxRating={10}
-                      rating={this.state.complexityRating}
-                      onRate={this.onRateHandler}
-                    />}
-                  position="top center"
-                  content={this.props.translate('text-exercise-results.rate-text-complexity-description')}
-                />
-              </Grid.Column>
-            </Grid.Row>
+            {this.props.selectedText.id ?
+              <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
+                <Grid.Column width={6} textAlign="right">
+                  <b>{this.props.translate('text-exercise-results.rate-text-complexity')}</b>
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  <Popup
+                    trigger={
+                      <Rating
+                        icon="star"
+                        clearable
+                        maxRating={10}
+                        rating={this.state.complexityRating}
+                        onRate={this.onRateHandler}
+                      />}
+                    position="top center"
+                    content={this.props.translate('text-exercise-results.rate-text-complexity-description')}
+                  />
+                </Grid.Column>
+              </Grid.Row> : null}
           </Grid>
         </Modal.Content>
         <Modal.Actions>
@@ -86,6 +87,7 @@ export class TextExerciseResults extends Component {
           />
           <Button
             positive
+            disabled={!this.props.selectedText.id}
             onClick={this.onProceedHandler}
           >
             {this.props.translate('text-exercise-results.proceed')}
@@ -99,6 +101,7 @@ export class TextExerciseResults extends Component {
 
 const mapStateToProps = state => ({
   result: state.exercise.result,
+  selectedText: state.text.selectedText,
   translate: getTranslate(state.locale),
 });
 

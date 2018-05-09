@@ -57,6 +57,7 @@ export {
   fetchTextCollections,
   fetchTexts,
   selectText,
+  selectOwnText,
   unselectText,
   saveText,
   analyzeText,
