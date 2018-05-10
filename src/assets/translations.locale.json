@@ -299,6 +299,10 @@
     "show": ["Näita harjutuse eelvaadet", "Show exercise preview"],
     "hide": ["Peida harjutuse eelvaade", "Hide exercise preview"]
   },
+  "text-exercise": {
+    "next-page": ["Järgmine leht", "Next page"],
+    "previous-page": ["Eelmine leht", "Previous page"]
+  },
   "text-exercise-results": {
     "modal-header": ["Harjutus lõpetatud", "Exercise finished"],
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
@@ -339,6 +343,10 @@
     "rate-test-difficulty-description": ["1 tärn - lihtsad küsimused, 10 tärni - väga keerulised küsimused", "1 stars - easy questions, 10 stars - very difficult questions"],
     "check-correct-answers": ["Vaata vastuseid", "Check answers"],
     "end": ["Lõpeta", "Finish"]
+  },
+  "test-answers": {
+    "header": ["Testi vastused", "Test answers"],
+    "loading": ["Laen vastuseid", "Loading answers"]
   },
   "text-options": {
     "font": ["Font", "Font"],
@@ -397,7 +405,8 @@
     "average-sentence-length": ["keskmine lause pikkus", "average sentence length"],
     "in-words": ["sõnades", "in words"],
     "in-characters": ["tähemärkides", "in characters"],
-    "word-lengths": ["Sõna pikkused", "Word lengths"],
+    "word-lengths-distribution": ["Sõna pikkuste jaotus", "Word lengths distribution"],
+    "sentence-lengths-distribution": ["Lausete pikkuste jaotus", "Sentence lengths distribution"],
     "refresh": ["Värskenda", "Refresh"]
   },
   "statistics": {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, Statistic, Icon, Segment, Header } from 'semantic-ui-react';
+import { Modal, Button, Statistic, Icon, Segment, Grid } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -30,7 +30,7 @@ export class TextAnalysis extends Component {
         <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
           <Modal.Header>{this.props.translate('text-analysis.modal-header')}</Modal.Header>
           <Modal.Content>
-            <Statistic.Group widths={6} size="small">
+            <Statistic.Group widths={3} size="small">
               <Statistic>
                 <Statistic.Value>
                   {this.props.analyzeStatus.loading ? <Icon loading name="spinner" /> : this.props.analysis.characterCount}
@@ -55,68 +55,81 @@ export class TextAnalysis extends Component {
                   {this.props.translate('text-analysis.sentence-count')}
                 </Statistic.Label>
               </Statistic>
-              {/* Average word length */}
-              <Statistic size="small">
-                <Statistic.Value>
-                  {this.props.analyzeStatus.loading ? <Icon loading name="spinner" /> : this.props.analysis.averageWordLength.toFixed(2)}
-                </Statistic.Value>
-                <Statistic.Label>
-                  {this.props.translate('text-analysis.average-word-length')}
-                </Statistic.Label>
-              </Statistic>
-              {/* Average sentence length in words */}
-              <Statistic size="small">
-                <Statistic.Value>
-                  {this.props.analyzeStatus.loading ? <Icon loading name="spinner" /> : this.props.analysis.averageSentenceLengthInWords.toFixed(2)}
-                </Statistic.Value>
-                <Statistic.Label>
-                  {this.props.translate('text-analysis.average-sentence-length')}<br />
-                  {this.props.translate('text-analysis.in-words')}<br />
-                </Statistic.Label>
-              </Statistic>
-              {/* Average sentence length in characters */}
-              <Statistic size="small">
-                <Statistic.Value>
-                  {this.props.analyzeStatus.loading ?
-                    <Icon loading name="spinner" /> :
-                    this.props.analysis.averageSentenceLengthInCharacters.toFixed(2)
-                  }
-                </Statistic.Value>
-                <Statistic.Label>
-                  {this.props.translate('text-analysis.average-sentence-length')}<br />
-                  {this.props.translate('text-analysis.in-characters')}<br />
-                </Statistic.Label>
-              </Statistic>
             </Statistic.Group>
-            <Header as="h4">
-              {this.props.translate('text-analysis.word-lengths')}
-            </Header>
-            {this.props.analyzeStatus.loading ?
-              null :
-              <Segment>
-                <BarChart
-                  x={0}
-                  y={0}
-                  width={500}
-                  height={200}
-                  data={this.props.analysis.wordLengths}
-                />
-              </Segment>
-            }
-            {/*
-            {this.props.analyzeStatus.loading ?
-              null :
-              <Segment>
-                <BarChart
-                  x={0}
-                  y={0}
-                  width={500}
-                  height={200}
-                  data={this.props.analysis.sentenceLengthsInWords}
-                />
-              </Segment>
-            }
-            */}
+            <Grid verticalAlign="middle">
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <Statistic.Group size="small" widths={1}>
+                    {/* Average word length */}
+                    <Statistic size="small">
+                      <Statistic.Value>
+                        {this.props.analyzeStatus.loading ? <Icon loading name="spinner" /> : this.props.analysis.averageWordLength.toFixed(2)}
+                      </Statistic.Value>
+                      <Statistic.Label>
+                        {this.props.translate('text-analysis.average-word-length')}
+                      </Statistic.Label>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+                <Grid.Column>
+                  {this.props.analyzeStatus.loading ?
+                    null :
+                    <Segment compact floated="right" clearing>
+                      <BarChart
+                        title={this.props.translate('text-analysis.word-lengths-distribution')}
+                        width={500}
+                        height={200}
+                        data={this.props.analysis.wordLengths}
+                      />
+                    </Segment>
+                  }
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <Statistic.Group widths={2} size="small">
+                    {/* Average sentence length in words */}
+                    <Statistic size="small">
+                      <Statistic.Value>
+                        {this.props.analyzeStatus.loading ?
+                          <Icon loading name="spinner" /> :
+                          this.props.analysis.averageSentenceLengthInWords.toFixed(2)}
+                      </Statistic.Value>
+                      <Statistic.Label>
+                        {this.props.translate('text-analysis.average-sentence-length')}<br />
+                        {this.props.translate('text-analysis.in-words')}<br />
+                      </Statistic.Label>
+                    </Statistic>
+                    {/* Average sentence length in characters */}
+                    <Statistic size="small">
+                      <Statistic.Value>
+                        {this.props.analyzeStatus.loading ?
+                          <Icon loading name="spinner" /> :
+                          this.props.analysis.averageSentenceLengthInCharacters.toFixed(2)
+                        }
+                      </Statistic.Value>
+                      <Statistic.Label>
+                        {this.props.translate('text-analysis.average-sentence-length')}<br />
+                        {this.props.translate('text-analysis.in-characters')}<br />
+                      </Statistic.Label>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+                <Grid.Column>
+                  {this.props.analyzeStatus.loading ?
+                    null :
+                    <Segment compact floated="right" clearing>
+                      <BarChart
+                        title={this.props.translate('text-analysis.sentence-lengths-distribution')}
+                        width={500}
+                        height={200}
+                        data={this.props.analysis.sentenceLengthsInWords}
+                      />
+                    </Segment>
+                  }
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Modal.Content>
           <Modal.Actions>
             <Button

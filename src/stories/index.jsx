@@ -25,6 +25,7 @@ import { TextExerciseResults } from '../containers/Exercise/Results/TextExercise
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseTestContainer, { TextExerciseTest } from '../containers/Exercise/Test/TextExerciseTest';
 import { TestResults } from '../containers/Exercise/Results/TestResults';
+import TestAnswersContainer from '../containers/Exercise/TestAnswers/TestAnswers';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
@@ -242,6 +243,13 @@ storiesOf('Test results', module)
         incorrect: 2,
         unanswered: 1,
       }}
+    />));
+
+storiesOf('Test answers', module)
+  .add('Container', () => (
+    <TestAnswersContainer
+      testAttemptId={92}
+      translate={translate}
     />));
 
 storiesOf('Statistics', module)

@@ -89,6 +89,7 @@ export class TextExercisePreview extends Component {
               canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               textOptions={this.props.textOptions}
+              translate={this.props.translate}
             />
           );
         case 'readingAid':
@@ -146,6 +147,7 @@ export class TextExercisePreview extends Component {
               canvasHeight={CANVAS_HEIGHT}
               selectedText={selectedText}
               textOptions={this.props.textOptions}
+              translate={this.props.translate}
             />
           );
       }

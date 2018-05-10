@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ?
-    'http://prog.keeleressursid.ee:5000/' :
+    'https://kiirlugemine.keeleressursid.ee/' :
     'http://localhost:5000/',
 });
 

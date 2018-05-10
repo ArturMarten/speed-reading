@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Segment, Dimmer } from 'semantic-ui-react';
+import { getTranslate } from 'react-localize-redux';
 
 import './TextExercise.css';
 import * as actionCreators from '../../../store/actions';
@@ -57,6 +58,7 @@ export class TextExercise extends Component {
             <ReadingTest
               canvasHeight={this.state.canvasHeight}
               selectedText={this.props.selectedText}
+              translate={this.props.translate}
             />
           );
         case 'readingAid':
@@ -152,6 +154,7 @@ const mapStateToProps = state => ({
   selectedText: state.text.selectedText,
   wordGroups: state.exercise.wordGroups,
   timerState: state.timing.timer,
+  translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({

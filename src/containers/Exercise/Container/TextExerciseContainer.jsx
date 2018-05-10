@@ -10,6 +10,7 @@ import TextExercise from '../TextExercise/TextExercise';
 import TextExerciseResults from '../Results/TextExerciseResults';
 import TextExerciseTest from '../Test/TextExerciseTest';
 import TestResults from '../Results/TestResults';
+import TestAnswers from '../TestAnswers/TestAnswers';
 
 export class TextExerciseContainer extends Component {
   state = {
@@ -51,6 +52,13 @@ export class TextExerciseContainer extends Component {
       case 'test': {
         return (
           <TextExerciseTest />
+        );
+      }
+      case 'testAnswers': {
+        return (
+          <TestAnswers
+            testAttemptId={this.props.testAttemptId}
+          />
         );
       }
       default:
@@ -109,6 +117,7 @@ export class TextExerciseContainer extends Component {
           <TestResults
             open={this.state.status === 'test' && this.props.testStatus === 'finished'}
             onRate={this.testDifficultyRating}
+            onCheckAnswers={() => this.switchViewHandler('testAnswers')}
             onEnd={this.onTestEnd}
           /> : null}
         {this.getCurrentView()}
@@ -121,6 +130,7 @@ const mapStateToProps = state => ({
   token: state.auth.token,
   selectedText: state.text.selectedText,
   testStatus: state.test.status,
+  testAttemptId: state.test.attemptId,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });

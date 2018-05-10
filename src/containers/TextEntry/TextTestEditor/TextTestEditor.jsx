@@ -116,19 +116,21 @@ export class TextTestEditor extends Component {
                       paddingBottom: '0',
                       marginTop: '0.2rem',
                       marginBottom: '0.2rem',
+                      minHeight: '2rem',
                       background: 'whitesmoke',
                     }}
                   >
                     <Grid.Column mobile={1} tablet={1} computer={1} textAlign="center">
-                      <Icon
-                        fitted
-                        name="check"
-                        size="large"
-                        color={answer.correct ? 'green' : 'grey'}
-                      />
+                      {answer.correct ?
+                        <Icon
+                          fitted
+                          name="check"
+                          size="large"
+                          color={answer.correct ? 'green' : 'grey'}
+                        /> : null}
                     </Grid.Column>
                     <Grid.Column mobile={14} tablet={10} computer={11}>
-                      {`${answerIndex + 1}. ${answer.answerText}`}
+                      {`${String.fromCharCode(65 + answerIndex)} ) ${answer.answerText}`}
                     </Grid.Column>
                     <Grid.Column floated="right" mobile={16} tablet={5} computer={3}>
                       <Button

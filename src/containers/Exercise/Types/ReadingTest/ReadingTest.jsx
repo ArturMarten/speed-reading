@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'semantic-ui-react';
 
 import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
@@ -69,14 +70,22 @@ export class ReadingTest extends Component {
     document.removeEventListener('keyup', this.keyPressHandler);
   }
 
+  onNextPage = () => {
+    this.currentState = nextPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+  }
+
+  onPreviousPage = () => {
+    this.currentState = previousPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+  }
+
   currentState = { ...initialState };
 
   keyPressHandler = (event) => {
     const { key } = event;
     if (key === 'ArrowRight') {
-      this.currentState = nextPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+      this.onNextPage();
     } else if (key === 'ArrowLeft') {
-      this.currentState = previousPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+      this.onPreviousPage();
     }
   }
 
@@ -118,11 +127,21 @@ export class ReadingTest extends Component {
 
   render() {
     return (
-      <canvas
-        ref={(ref) => { this.shownCanvas = ref; }}
-        width={this.props.textOptions.width}
-        height={this.props.canvasHeight}
-      />
+      <Fragment>
+        <canvas
+          ref={(ref) => { this.shownCanvas = ref; }}
+          width={this.props.textOptions.width}
+          height={this.props.canvasHeight}
+        />
+        <Button.Group fluid basic>
+          <Button onClick={this.onPreviousPage}>
+            {this.props.translate('text-exercise.previous-page')}
+          </Button>
+          <Button onClick={this.onNextPage}>
+            {this.props.translate('text-exercise.next-page')}
+          </Button>
+        </Button.Group>
+      </Fragment>
     );
   }
 }

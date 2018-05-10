@@ -1,50 +1,84 @@
 import React, { Component } from 'react';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { range, max } from 'd3-array';
-import { axisBottom } from 'd3-axis';
+import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
+import { format } from 'd3-format';
+
+const margin = {
+  top: 30,
+  right: 10,
+  bottom: 30,
+  left: 30,
+};
 
 export class BarChart extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { widthScale, heightScale } = prevState;
 
-    widthScale.domain(range(Math.min(...nextProps.data.map(d => d.x)), Math.max(...nextProps.data.map(d => d.x))));
-    heightScale.domain([0, max(nextProps.data.map(d => d.y))]);
+    const width = nextProps.width - margin.left - margin.right;
+    const height = nextProps.height - margin.top - margin.bottom;
 
-    const derivedState = { ...prevState, widthScale, heightScale };
-    return derivedState;
+    const xValues = nextProps.data.map(d => d.x);
+    const yValues = nextProps.data.map(d => d.y);
+
+    widthScale
+      .domain(range(Math.min(...xValues), Math.max(...xValues) + 1))
+      .range([0, width]);
+
+    heightScale
+      .domain([max(yValues), 0])
+      .range([0, height]);
+
+    return {
+      ...prevState,
+      width,
+      height,
+      widthScale,
+      heightScale,
+    };
   }
 
   state = {
+    width: this.props.width - margin.left - margin.right,
+
+    height: this.props.height - margin.top - margin.bottom,
+
     widthScale: scaleBand()
-      .domain(range(Math.min(...this.props.data.map(d => d.x)), Math.max(...this.props.data.map(d => d.x))))
-      .range([0, this.props.width]),
+      .range([0, this.props.width - margin.left - margin.right]),
 
     heightScale: scaleLinear()
-      .domain([0, max(this.props.data.map(d => d.y))])
-      .range([0, this.props.height]),
+      .range([0, this.props.height - margin.top - margin.bottom]),
   }
 
   render() {
-    const { x, y, data, height } = this.props;
-    const { widthScale, heightScale } = this.state;
+    const { data } = this.props;
+    const { widthScale, heightScale, height } = this.state;
 
     return (
-      <svg width="100%" height={this.props.height}>
+      <svg width={this.props.width} height={this.props.height}>
+        <text
+          transform="translate(0, 10)"
+        >
+          {this.props.title}
+        </text>
         <g
-          transform={`translate(${x}, ${y})`}
+          transform={`translate(${margin.left}, ${margin.top})`}
         >
           <g
             transform={`translate(0, ${height})`}
             ref={node => select(node).call(axisBottom(widthScale))}
           />
+          <g
+            ref={node => select(node).call(axisLeft(heightScale).tickFormat(format('.0f')))}
+          />
           {data.map(d => (
             <rect
               key={d.id}
-              x={widthScale(d.x)}
-              y={height - heightScale(d.y)}
-              width={widthScale.bandwidth()}
-              height={heightScale(d.y)}
+              x={widthScale(d.x) + 1}
+              y={heightScale(d.y)}
+              width={widthScale.bandwidth() - 2}
+              height={height - heightScale(d.y)}
             />
           ))}
         </g>

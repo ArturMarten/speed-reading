@@ -23,6 +23,13 @@ export class TestResults extends Component {
     this.props.onEnd();
   }
 
+  onCheckTestAnswersHandler = () => {
+    if (this.state.difficultyRating) {
+      this.props.onRate(this.state.difficultyRating);
+    }
+    this.props.onCheckAnswers();
+  }
+
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
@@ -81,16 +88,11 @@ export class TestResults extends Component {
           </Grid>
         </Modal.Content>
         <Modal.Actions>
-          <Popup
-            trigger={
-              <Button
-                primary
-                icon="lock"
-                content={this.props.translate('test-results.check-correct-answers')}
-              />
-            }
-            content={this.props.translate('auth.not-implemented')}
-            on="hover"
+          <Button
+            primary
+            icon="tasks"
+            onClick={this.onCheckTestAnswersHandler}
+            content={this.props.translate('test-results.check-correct-answers')}
           />
           <Button
             negative
