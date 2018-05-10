@@ -120,7 +120,7 @@ export const sortByColumn = (data, column, direction) => {
     if (typeof a[column] === 'string') {
       return a[column].toString().localeCompare(b[column].toString());
     }
-    return a[column] - b[column];
+    return (a[column] !== null) - (b[column] !== null) || a[column] - b[column];
   });
   return direction === 'descending' ? sorted.reverse() : sorted;
 };

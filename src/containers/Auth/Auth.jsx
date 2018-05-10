@@ -79,7 +79,7 @@ export class Auth extends Component {
   onRegister = () => {
     const registerData = {
       email: this.state.registerForm.email.value,
-      groupId: this.state.registerForm.groupId.value !== '' ? +this.state.registerForm.groupId.value : null,
+      groupId: this.state.registerForm.groupId.value !== '' ? parseInt(this.state.registerForm.groupId.value, 10) : null,
     };
     this.props.onRegister(registerData);
   }

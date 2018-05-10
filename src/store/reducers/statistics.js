@@ -35,7 +35,9 @@ const reducer = (state = initialState, action) => {
           exerciseResult: attempt.result.correct !== undefined && attempt.result.total !== undefined ?
             Math.round((attempt.result.correct / attempt.result.total) * 100) : null,
           elapsedTime: attempt.result.elapsedTime,
-          testResult: attempt.test && attempt.test.result ? Math.round((attempt.test.result.correct / attempt.test.result.total) * 100) : null,
+          testResult: attempt.test && attempt.test.result ? Math.round(attempt.test.result.testResult * 100) : null,
+          comprehensionResult: attempt.test && attempt.test.result ? Math.round(attempt.test.result.comprehensionResult * 100) : null,
+          cpm: attempt.test && attempt.test.result ? Math.round(attempt.test.result.cpm) : null,
         }));
       return updateObject(state, {
         exerciseStatistics,

@@ -10,19 +10,20 @@ import { getExerciseId } from '../../store/reducers/exercise';
 
 export class Statistics extends Component {
   state = {
-    exercise: 'readingTest',
+    exercise: 'readingExercises',
   };
 
   componentDidMount() {
     this.props.onFetchExerciseStatistics(this.props.userId, this.props.token);
   }
 
-  exerciseSelectionHandler = (event, data) => {
-    this.setState({ exercise: data.value });
+  exerciseSelectionHandler = (event, { value }) => {
+    this.setState({ exercise: value });
   }
 
   render() {
     const exercises = [
+      { text: this.props.translate('statistics.reading-exercises'), value: 'readingExercises' },
       { text: this.props.translate('statistics.reading-test'), value: 'readingTest' },
       { text: this.props.translate('statistics.reading-aid'), value: 'readingAid' },
       { text: this.props.translate('statistics.scrolling-text'), value: 'scrolling' },
@@ -32,7 +33,7 @@ export class Statistics extends Component {
       { text: this.props.translate('statistics.concentration'), value: 'concentration' },
     ];
     const data = this.props.exerciseStatistics
-      .filter(attempt => attempt.exerciseId === getExerciseId(this.state.exercise));
+      .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1);
     const exerciseDropdown = (
       <Dropdown
         fluid
@@ -52,11 +53,13 @@ export class Statistics extends Component {
         render: () => (
           <Tab.Pane loading={this.props.exerciseStatisticsStatus.loading}>
             {exerciseDropdown}
-            <StatisticsTable
-              exercise={this.state.exercise}
-              data={data}
-              translate={this.props.translate}
-            />
+            <div style={{ margin: '1em 0em', overflowX: 'auto' }}>
+              <StatisticsTable
+                exercise={this.state.exercise}
+                data={data}
+                translate={this.props.translate}
+              />
+            </div>
           </Tab.Pane>
         ),
       },

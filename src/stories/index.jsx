@@ -215,6 +215,7 @@ storiesOf('Text exercise results', module)
         wpm: 306,
         cps: 35,
       }}
+      selectedText={store.getState().text.selectedText}
     />));
 
 storiesOf('Text test editor', module)
@@ -242,6 +243,9 @@ storiesOf('Test results', module)
         correct: 4,
         incorrect: 2,
         unanswered: 1,
+        testResult: 4 / 7,
+        comprehensionResult: 3 / 7,
+        cpm: 231,
       }}
     />));
 

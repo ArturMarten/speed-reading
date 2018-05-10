@@ -11,10 +11,8 @@ export class TestAnswers extends Component {
     testQuestionAnswers: [],
   };
   componentDidMount() {
-    // console.log(navigator.userAgent, navigator.platform);
     axios.get(`/testQuestionAnswers?testAttemptId=${this.props.testAttemptId}`)
       .then((response) => {
-        console.log(response);
         this.setState({
           loading: false,
           testQuestionAnswers: response.data,

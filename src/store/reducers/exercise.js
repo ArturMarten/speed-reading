@@ -58,20 +58,43 @@ export const generateStringPairs = (count, length, modification) => {
 
 export const getExerciseId = (exerciseType) => {
   switch (exerciseType) {
+    case 'readingExercises':
+      return [READING_TEST_ID, READING_AID_ID, SCROLLING_ID, DISAPPEARING_ID, WORD_GROUPS_ID];
     case 'readingTest':
-      return READING_TEST_ID;
+      return [READING_TEST_ID];
     case 'readingAid':
-      return READING_AID_ID;
+      return [READING_AID_ID];
     case 'scrolling':
-      return SCROLLING_ID;
+      return [SCROLLING_ID];
     case 'disappearing':
-      return DISAPPEARING_ID;
+      return [DISAPPEARING_ID];
     case 'wordGroups':
-      return WORD_GROUPS_ID;
+      return [WORD_GROUPS_ID];
     case 'schulteTables':
-      return SCHULTE_TABLES_ID;
+      return [SCHULTE_TABLES_ID];
     case 'concentration':
-      return CONCENTRATION_ID;
+      return [CONCENTRATION_ID];
+    default:
+      return null;
+  }
+};
+
+export const getExerciseById = (exerciseId) => {
+  switch (exerciseId) {
+    case READING_TEST_ID:
+      return 'readingTest';
+    case READING_AID_ID:
+      return 'readingAid';
+    case SCROLLING_ID:
+      return 'scrolling';
+    case DISAPPEARING_ID:
+      return 'disappearing';
+    case WORD_GROUPS_ID:
+      return 'wordGroups';
+    case SCHULTE_TABLES_ID:
+      return 'schulteTables';
+    case CONCENTRATION_ID:
+      return 'concentration';
     default:
       return null;
   }
@@ -136,7 +159,7 @@ const reducer = (state = initialState, action) => {
       }
 
       return updateObject(state, {
-        id: getExerciseId(action.payload),
+        id: getExerciseId(action.payload)[0],
         type: action.payload,
         status: 'preparation',
         modification,

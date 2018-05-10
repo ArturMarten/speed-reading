@@ -48,8 +48,8 @@ export class TestResults extends Component {
                   <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>{Math.round((this.props.result.correct / this.props.result.total) * 100)}%</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.percentage')}</Statistic.Label>
+                  <Statistic.Value>{Math.round(this.props.result.testResult * 100)}%</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.test-result')}</Statistic.Label>
                 </Statistic>
                 <br />
                 <Statistic size="small" color="green">
@@ -63,6 +63,15 @@ export class TestResults extends Component {
                 <Statistic size="small" color="grey">
                   <Statistic.Value>{this.props.result.unanswered}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.unanswered')}</Statistic.Label>
+                </Statistic>
+                <br />
+                <Statistic size="small" color="blue">
+                  <Statistic.Value>{Math.round(this.props.result.comprehensionResult * 100)}%</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.comprehension-result')}</Statistic.Label>
+                </Statistic>
+                <Statistic size="small" color="green">
+                  <Statistic.Value>{Math.round(this.props.result.cpm)}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.comprehension-speed')}</Statistic.Label>
                 </Statistic>
               </Grid.Column>
             </Grid.Row>

@@ -4,11 +4,12 @@ import { Table, Menu, Icon } from 'semantic-ui-react';
 
 import HelpPopup from '../HelpPopup/HelpPopup';
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';
+import { getExerciseById } from '../../store/reducers/exercise';
 
 export class StatisticsTable extends Component {
   state = {
-    column: null,
-    direction: null,
+    column: 'date',
+    direction: 'descending',
   };
 
   sortHandler = selectedColumn => () => {
@@ -32,13 +33,17 @@ export class StatisticsTable extends Component {
       <Table basic celled selectable compact="very" sortable singleLine>
         <Table.Header>
           <Table.Row>
+            {this.props.exercise === 'readingExercises' ?
+              <Table.HeaderCell sorted={column === 'exerciseId' ? direction : null} onClick={this.sortHandler('exerciseId')}>
+                {this.props.translate('statistics-table.exercise')}
+              </Table.HeaderCell> : null}
             <Table.HeaderCell sorted={column === 'modification' ? direction : null} onClick={this.sortHandler('modification')}>
               {this.props.translate('statistics-table.modification')}
             </Table.HeaderCell>
             <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
               {this.props.translate('statistics-table.attempt-date')}
             </Table.HeaderCell>
-            {['readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+            {['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
               <Fragment>
                 <Table.HeaderCell sorted={column === 'readingAttempt' ? direction : null} onClick={this.sortHandler('readingAttempt')}>
                   {this.props.translate('statistics-table.reading-attempt')}
@@ -48,10 +53,18 @@ export class StatisticsTable extends Component {
                   />
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'wpm' ? direction : null} onClick={this.sortHandler('wpm')}>
-                  {this.props.translate('statistics-table.wpm')}
+                  {this.props.translate('statistics-table.reading-speed')}<br />
+                  ({this.props.translate('statistics-table.wpm')})
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'testResult' ? direction : null} onClick={this.sortHandler('testResult')}>
                   {this.props.translate('statistics-table.test-result')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'comprehensionResult' ? direction : null} onClick={this.sortHandler('comprehensionResult')}>
+                  {this.props.translate('statistics-table.comprehension-result')}
+                </Table.HeaderCell>
+                <Table.HeaderCell sorted={column === 'cpm' ? direction : null} onClick={this.sortHandler('cpm')}>
+                  {this.props.translate('statistics-table.comprehension-speed')}<br />
+                  ({this.props.translate('statistics-table.wpm')})
                 </Table.HeaderCell>
               </Fragment> : null}
             {this.props.exercise === 'schulteTables' ?
@@ -77,6 +90,10 @@ export class StatisticsTable extends Component {
         <Table.Body>
           {sortedAttempts.map(attempt => (
             <Table.Row key={attempt.id}>
+              {this.props.exercise === 'readingExercises' ?
+                <Table.Cell>
+                  {this.props.translate(`exercises.title-${getExerciseById(attempt.exerciseId)}`)}
+                </Table.Cell> : null}
               <Table.Cell collapsing>
                 {this.props.translate(`modification.${attempt.modification}`)}
               </Table.Cell>
@@ -90,9 +107,9 @@ export class StatisticsTable extends Component {
                   minute: 'numeric',
                 }).format(attempt.date)}
               </Table.Cell>
-              {['readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+              {['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
                 <Fragment>
-                  <Table.Cell collapsing textAlign="center">
+                  <Table.Cell collapsing>
                     {attempt.readingAttempt}
                   </Table.Cell>
                   <Table.Cell>
@@ -105,6 +122,19 @@ export class StatisticsTable extends Component {
                   >
                     {attempt.testResult !== null ? `${attempt.testResult}%` :
                       this.props.translate('statistics-table.test-missing')}
+                  </Table.Cell>
+                  <Table.Cell
+                    negative={!attempt.comprehensionResult || attempt.comprehensionResult === 0}
+                    warning={attempt.comprehensionResult > 0 && attempt.comprehensionResult < 70}
+                    positive={attempt.comprehensionResult >= 70}
+                  >
+                    {attempt.comprehensionResult !== null ? `${attempt.comprehensionResult}%` :
+                      null}
+                  </Table.Cell>
+                  <Table.Cell
+                    negative={attempt.cpm === null}
+                  >
+                    {attempt.cpm}
                   </Table.Cell>
                 </Fragment> : null}
               {this.props.exercise === 'schulteTables' ?
