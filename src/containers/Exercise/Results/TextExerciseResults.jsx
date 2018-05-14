@@ -60,9 +60,12 @@ export class TextExerciseResults extends Component {
             {this.props.selectedText.id ?
               <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
                 <Grid.Column width={6} textAlign="right">
-                  <b>{this.props.translate('text-exercise-results.rate-text-complexity')}</b>
+                  <span>
+                    <b>{this.props.translate('text-exercise-results.rate-text-complexity')} </b>
+                    ({this.props.translate('text-exercise-results.optional')})
+                  </span>
                 </Grid.Column>
-                <Grid.Column width={10}>
+                <Grid.Column width={10} verticalAlign="middle">
                   <Popup
                     trigger={
                       <Rating

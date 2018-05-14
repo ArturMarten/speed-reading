@@ -86,7 +86,7 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
   const canvasHeight = canvasContext.canvas.height;
   const defaultStyle = canvasContext.font;
   let currentStyle = defaultStyle;
-  const lineHeight = parseInt(defaultStyle.match(/\d+(\.\d+)?(?=px)/)[0], 10);
+  const lineHeight = +defaultStyle.match(/\d+(\.\d+)?(?=px)/)[0];
   let spaceWidth = canvasContext.measureText(' ').width;
   // Text data
   const text = contentState.getPlainText('\n').replace(/\n/g, '');

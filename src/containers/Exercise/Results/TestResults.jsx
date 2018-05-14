@@ -77,9 +77,12 @@ export class TestResults extends Component {
             </Grid.Row>
             <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
               <Grid.Column width={5} textAlign="right">
-                <b>{this.props.translate('test-results.rate-test-difficulty')}</b>
+                <span>
+                  <b>{this.props.translate('test-results.rate-test-difficulty')} </b>
+                  ({this.props.translate('test-results.optional')})
+                </span>
               </Grid.Column>
-              <Grid.Column width={11}>
+              <Grid.Column width={11} verticalAlign="middle">
                 <Popup
                   trigger={
                     <Rating

@@ -6,10 +6,10 @@ import { select } from 'd3-selection';
 // eslint-disable-next-line no-unused-vars
 import { transition } from 'd3-transition';
 import { line } from 'd3-shape';
+import { reduceSumFunc } from '../../shared/utility';
 import './RegressionChart.css';
 
 const leastSquares = (xSeries, ySeries) => {
-  const reduceSumFunc = (prev, cur) => prev + cur;
   const xBar = (xSeries.reduce(reduceSumFunc) * 1.0) / xSeries.length;
   const yBar = (ySeries.reduce(reduceSumFunc) * 1.0) / ySeries.length;
 

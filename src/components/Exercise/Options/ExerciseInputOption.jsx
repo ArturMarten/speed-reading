@@ -38,7 +38,7 @@ class ExerciseInputOption extends PureComponent {
 
   changeHandler = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
-      let updatedValue = parseInt(event.target.value, 10);
+      let updatedValue = +event.target.value;
       if (updatedValue > this.props.max) {
         updatedValue = this.props.max;
       }

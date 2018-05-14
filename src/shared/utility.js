@@ -174,3 +174,5 @@ export const convertDataURIToBinary = (dataURI) => {
   console.log(array);
   return array;
 };
+
+export const reduceSumFunc = (prev, cur) => prev + cur;

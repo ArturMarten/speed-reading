@@ -7,9 +7,9 @@ import { format } from 'd3-format';
 
 const margin = {
   top: 30,
-  right: 10,
-  bottom: 30,
-  left: 30,
+  right: 5,
+  bottom: 35,
+  left: 40,
 };
 
 export class BarChart extends Component {
@@ -53,13 +53,11 @@ export class BarChart extends Component {
 
   render() {
     const { data } = this.props;
-    const { widthScale, heightScale, height } = this.state;
+    const { widthScale, heightScale, height, width } = this.state;
 
     return (
       <svg width={this.props.width} height={this.props.height}>
-        <text
-          transform="translate(0, 10)"
-        >
+        <text transform="translate(0, 10)" fontWeight="bold">
           {this.props.title}
         </text>
         <g
@@ -72,15 +70,22 @@ export class BarChart extends Component {
           <g
             ref={node => select(node).call(axisLeft(heightScale).tickFormat(format('.0f')))}
           />
+          <text transform="rotate(-90)" y="-30" x={-height / 2} textAnchor="middle">
+            {this.props.yLabel}
+          </text>
           {data.map(d => (
             <rect
               key={d.id}
+              fill={this.props.fill || 'black'}
               x={widthScale(d.x) + 1}
               y={heightScale(d.y)}
               width={widthScale.bandwidth() - 2}
               height={height - heightScale(d.y)}
             />
           ))}
+          <text y={height + 30} x={width / 2}textAnchor="middle">
+            {this.props.xLabel}
+          </text>
         </g>
       </svg>
     );

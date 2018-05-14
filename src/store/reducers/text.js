@@ -199,7 +199,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.ANALYZE_TEXT_SUCCEEDED: {
       const analysis = action.payload;
-      const { wordLengths, sentenceLengthsInWords, wordTypeCounts } = analysis;
+      const { wordLengths, sentenceLengths, wordTypeCounts } = analysis;
 
       const updatedWordLengths = [];
       Object.keys(wordLengths).sort((a, b) => a - b).forEach((wordLength, index) => {
@@ -210,12 +210,12 @@ const reducer = (state = initialState, action) => {
         });
       });
 
-      const updatedSentenceLengthsInWords = [];
-      Object.keys(sentenceLengthsInWords).sort((a, b) => a - b).forEach((sentenceLength, index) => {
-        updatedSentenceLengthsInWords.push({
+      const updatedSentenceLengths = [];
+      Object.keys(sentenceLengths).sort((a, b) => a - b).forEach((sentenceLength, index) => {
+        updatedSentenceLengths.push({
           id: index,
           x: +sentenceLength,
-          y: sentenceLengthsInWords[sentenceLength],
+          y: sentenceLengths[sentenceLength],
         });
       });
 
@@ -230,7 +230,7 @@ const reducer = (state = initialState, action) => {
 
       const updatedAnalysis = updateObject(analysis, {
         wordLengths: updatedWordLengths,
-        sentenceLengthsInWords: updatedSentenceLengthsInWords,
+        sentenceLengths: updatedSentenceLengths,
         wordTypeCounts: updatedWordTypeCounts,
       });
 

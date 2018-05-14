@@ -82,10 +82,12 @@ storiesOf('Text analysis', module)
         wordCount: 516,
         sentenceCount: 31,
         averageWordLength: 5.22,
+        wordLengthClassRating: 3,
         averageSentenceLengthInWords: 16.65,
         averageSentenceLengthInCharacters: 86.94,
+        sentenceLengthClassRating: 12,
         wordLengths: [],
-        sentenceLengthsInWords: [],
+        sentenceLengths: [],
         wordTypeCounts: [],
       }}
       translate={translate}
