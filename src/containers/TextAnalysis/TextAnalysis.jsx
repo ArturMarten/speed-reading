@@ -5,10 +5,13 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 import BarChart from '../../components/Statistics/BarChart';
+import PieChart from '../../components/Statistics/PieChart';
 import LabeledSlider from '../../components/LabeledSlider/LabeledSlider';
+import LabeledMultipleSlider from '../../components/LabeledSlider/LabeledMultipleSlider';
 import { reduceSumFunc } from '../../shared/utility';
 
 const WORD_LENGTH_COLOR = 'rgb(47, 141, 255)';
+const WORD_FREQ_COLOR = 'rgb(247, 94, 37)';
 const SENTENCE_LENGTH_COLOR = 'rgb(23, 219, 36)';
 
 const initialState = {
@@ -18,6 +21,7 @@ const initialState = {
   sentenceMinLength: 1,
   sentenceMaxLength: 30,
   currentSentenceLengths: [1, 30],
+  currentWordFrequency: [100],
 };
 
 export class TextAnalysis extends Component {
@@ -49,6 +53,10 @@ export class TextAnalysis extends Component {
     this.setState({ currentSentenceLengths });
   }
 
+  onWordFrequencyChangeHandler = (data) => {
+    const currentWordFrequency = data.values;
+    this.setState({ currentWordFrequency });
+  }
 
   setInitialLengths = (analysis) => {
     const { wordLengths, sentenceLengths } = analysis;
@@ -108,6 +116,19 @@ export class TextAnalysis extends Component {
     </div>
   );
 
+  formatWordFrequencyValue = wordFrequencyPercentage => wordFrequency => (
+    <div style={{ textAlign: 'center' }}>
+      <span style={{ fontSize: '1.5em' }}>
+        {`${wordFrequencyPercentage.toFixed(1)}% `}
+      </span>
+      {this.props.translate('text-analysis.of-text-words-are-in')}
+      <span style={{ fontSize: '1.5em' }}>
+        {`TOP ${wordFrequency[0]}% `}
+      </span>
+      {this.props.translate('text-analysis.of-most-frequent-words')}
+    </div>
+  );
+
   formatSentenceLengthValues = sentencePercentage => sentenceLengths => (
     <div style={{ textAlign: 'center' }}>
       {this.props.translate('text-analysis.sentences-with-length-from')}
@@ -127,13 +148,18 @@ export class TextAnalysis extends Component {
   );
 
   render() {
-    const { currentWordLengths, currentSentenceLengths } = this.state;
+    const { currentWordLengths, currentSentenceLengths, currentWordFrequency } = this.state;
     const { analysis } = this.props;
     const wordPercentage = analysis !== null ?
       (analysis.wordLengths
         .filter(data => data.x >= currentWordLengths[0] && data.x <= currentWordLengths[1])
         .map(data => data.y)
         .reduce(reduceSumFunc, 0) / analysis.wordCount) * 100 : 0;
+
+    const wordFrequencyPercentage = analysis !== null ?
+      (Math.max(...analysis.wordFrequencyCounts
+        .filter(data => data.x <= currentWordFrequency[0])
+        .map(data => data.y)) / analysis.wordCount) * 100 : 0;
 
     const sentencePercentage = analysis !== null ?
       (analysis.sentenceLengths
@@ -205,7 +231,7 @@ export class TextAnalysis extends Component {
                 </Statistic>
               </Statistic.Group>
               <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
-                <LabeledSlider
+                <LabeledMultipleSlider
                   snap
                   color={WORD_LENGTH_COLOR}
                   min={this.state.wordMinLength}
@@ -216,15 +242,52 @@ export class TextAnalysis extends Component {
               </div>
               {this.props.analyzeStatus.loading || this.props.analysis === null ?
                 null :
-                <BarChart
-                  title={this.props.translate('text-analysis.word-lengths-distribution')}
-                  xLabel={this.props.translate('text-analysis.word-lengths')}
-                  yLabel={this.props.translate('text-analysis.word-count')}
-                  fill={WORD_LENGTH_COLOR}
-                  width={700}
-                  height={250}
-                  data={this.props.analysis.wordLengths}
+                <div style={{ overflowX: 'auto', textAlign: 'center' }}>
+                  <BarChart
+                    title={this.props.translate('text-analysis.word-lengths-distribution')}
+                    xLabel={this.props.translate('text-analysis.word-lengths')}
+                    yLabel={this.props.translate('text-analysis.word-count')}
+                    fill={WORD_LENGTH_COLOR}
+                    width={700}
+                    height={250}
+                    data={this.props.analysis.wordLengths}
+                  />
+                </div>
+              }
+              <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
+                <LabeledSlider
+                  snap
+                  color={WORD_FREQ_COLOR}
+                  min={1}
+                  max={100}
+                  onChange={this.onWordFrequencyChangeHandler}
+                  formatValues={this.formatWordFrequencyValue(wordFrequencyPercentage)}
                 />
+              </div>
+              {this.props.analyzeStatus.loading || this.props.analysis === null ?
+                null :
+                <div style={{ overflowX: 'auto', textAlign: 'center' }}>
+                  <BarChart
+                    title={this.props.translate('text-analysis.word-frequency-distribution')}
+                    xLabel={this.props.translate('text-analysis.word-frequency-top')}
+                    yLabel={this.props.translate('text-analysis.word-count')}
+                    fill={WORD_FREQ_COLOR}
+                    width={700}
+                    height={250}
+                    data={this.props.analysis.wordFrequencyCounts}
+                  />
+                </div>
+              }
+              {this.props.analyzeStatus.loading || this.props.analysis === null ?
+                null :
+                <div style={{ overflowX: 'auto', textAlign: 'center' }}>
+                  <PieChart
+                    title={this.props.translate('text-analysis.word-type-distribution')}
+                    width={500}
+                    height={400}
+                    data={this.props.analysis.wordTypeCounts}
+                  />
+                </div>
               }
             </Segment>
             <Segment>
@@ -276,7 +339,7 @@ export class TextAnalysis extends Component {
                 </Statistic>
               </Statistic.Group>
               <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
-                <LabeledSlider
+                <LabeledMultipleSlider
                   snap
                   color={SENTENCE_LENGTH_COLOR}
                   min={this.state.sentenceMinLength}
@@ -287,15 +350,17 @@ export class TextAnalysis extends Component {
               </div>
               {this.props.analyzeStatus.loading || this.props.analysis === null ?
                 null :
-                <BarChart
-                  title={this.props.translate('text-analysis.sentence-lengths-distribution')}
-                  xLabel={this.props.translate('text-analysis.sentence-lengths')}
-                  yLabel={this.props.translate('text-analysis.sentence-count')}
-                  fill={SENTENCE_LENGTH_COLOR}
-                  width={700}
-                  height={250}
-                  data={this.props.analysis.sentenceLengths}
-                />
+                <div style={{ overflowX: 'auto', textAlign: 'center' }}>
+                  <BarChart
+                    title={this.props.translate('text-analysis.sentence-lengths-distribution')}
+                    xLabel={this.props.translate('text-analysis.sentence-lengths')}
+                    yLabel={this.props.translate('text-analysis.sentence-count')}
+                    fill={SENTENCE_LENGTH_COLOR}
+                    width={700}
+                    height={250}
+                    data={this.props.analysis.sentenceLengths}
+                  />
+                </div>
               }
             </Segment>
           </Modal.Content>

@@ -5,12 +5,14 @@ import './LabeledSlider.css';
 
 export class LabeledSlider extends Component {
   state = {
-    values: this.props.values || [1, this.props.max],
+    values: this.props.values || [this.props.max],
   };
 
   componentDidUpdate() {
-    if (this.props.min > this.state.values[0] || this.props.max < this.state.values[1]) {
-      this.updateValues({ values: [this.props.min, this.props.max] });
+    if (this.props.min > this.state.values[0]) {
+      this.updateValues({ values: [this.props.min] });
+    } else if (this.props.max < this.state.values[0]) {
+      this.updateValues({ values: [this.props.max] });
     }
   }
 

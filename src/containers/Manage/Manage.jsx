@@ -21,7 +21,9 @@ export class Manage extends Component {
         },
         render: () => (
           <Tab.Pane>
-            <ManageUsers />
+            <div style={{ overflowX: 'auto' }}>
+              <ManageUsers />
+            </div>
           </Tab.Pane>
         ),
       },
@@ -33,7 +35,9 @@ export class Manage extends Component {
         },
         render: () => (
           <Tab.Pane>
-            <ManageFeedback />
+            <div style={{ overflowX: 'auto' }}>
+              <ManageFeedback />
+            </div>
           </Tab.Pane>
         ),
       },
@@ -45,7 +49,9 @@ export class Manage extends Component {
         },
         render: () => (
           <Tab.Pane>
-            <ManageBugReports />
+            <div style={{ overflowX: 'auto' }}>
+              <ManageBugReports />
+            </div>
           </Tab.Pane>
         ),
       },

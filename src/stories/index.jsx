@@ -89,6 +89,7 @@ storiesOf('Text analysis', module)
         wordLengths: [],
         sentenceLengths: [],
         wordTypeCounts: [],
+        wordFrequencyCounts: [],
       }}
       translate={translate}
     />

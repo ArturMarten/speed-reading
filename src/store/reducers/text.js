@@ -199,7 +199,12 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.ANALYZE_TEXT_SUCCEEDED: {
       const analysis = action.payload;
-      const { wordLengths, sentenceLengths, wordTypeCounts } = analysis;
+      const {
+        wordLengths,
+        sentenceLengths,
+        wordTypeCounts,
+        wordFrequencyCounts,
+      } = analysis;
 
       const updatedWordLengths = [];
       Object.keys(wordLengths).sort((a, b) => a - b).forEach((wordLength, index) => {
@@ -228,10 +233,22 @@ const reducer = (state = initialState, action) => {
         });
       });
 
+      const updatedWordFrequencyCounts = [];
+      let total = 0;
+      Object.keys(wordFrequencyCounts).sort((a, b) => a - b).forEach((wordFrequencyCount, index) => {
+        total += wordFrequencyCounts[wordFrequencyCount];
+        updatedWordFrequencyCounts.push({
+          id: index,
+          x: wordFrequencyCount,
+          y: total,
+        });
+      });
+
       const updatedAnalysis = updateObject(analysis, {
         wordLengths: updatedWordLengths,
         sentenceLengths: updatedSentenceLengths,
         wordTypeCounts: updatedWordTypeCounts,
+        wordFrequencyCounts: updatedWordFrequencyCounts,
       });
 
       return updateObject(state, {

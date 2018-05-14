@@ -53,7 +53,12 @@ export class BarChart extends Component {
 
   render() {
     const { data } = this.props;
-    const { widthScale, heightScale, height, width } = this.state;
+    const {
+      widthScale,
+      heightScale,
+      height,
+      width,
+    } = this.state;
 
     return (
       <svg width={this.props.width} height={this.props.height}>
