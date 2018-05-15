@@ -20,10 +20,16 @@ const initialState = {
     loading: false,
     error: null,
   },
+  blankExercises: [],
+  blankExercisesStatus: {
+    loading: false,
+    error: null,
+  },
   questionStatus: initialQuestionStatus,
   answerStatus: initialAnswerStatus,
   status: 'preparation',
   attemptId: null,
+  answers: [],
   result: {
     elapsedTime: 0,
     total: 1,
@@ -261,6 +267,32 @@ const reducer = (state = initialState, action) => {
         },
       });
     }
+    case actionTypes.GENERATE_BLANK_EXERCISES_START: {
+      return updateObject(state, {
+        blankExercisesStatus: {
+          loading: true,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.GENERATE_BLANK_EXERCISES_SUCCEEDED: {
+      return updateObject(state, {
+        blankExercisesStatus: {
+          loading: false,
+          error: null,
+        },
+        blankExercises: action.payload
+          .map((blankExercise, index) => ({ id: index, ...blankExercise })),
+      });
+    }
+    case actionTypes.GENERATE_BLANK_EXERCISES_FAILED: {
+      return updateObject(state, {
+        blankExercisesStatus: {
+          loading: false,
+          error: action.payload,
+        },
+      });
+    }
     case actionTypes.TEST_PREPARING: {
       return updateObject(state, {
         status: 'preparing',
@@ -269,6 +301,11 @@ const reducer = (state = initialState, action) => {
     case actionTypes.TEST_PREPARED: {
       return updateObject(state, {
         status: 'prepared',
+      });
+    }
+    case actionTypes.TEST_PREPARE_FAILED: {
+      return updateObject(state, {
+        status: 'preparation',
       });
     }
     case actionTypes.TEST_STARTING: {
@@ -297,9 +334,11 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.TEST_FINISHED: {
-      const result = updateObject(state.result, action.payload);
+      const result = updateObject(state.result, action.payload.result);
+      const answers = action.payload.answers ? action.payload.answers : [];
       return updateObject(state, {
         status: 'finished',
+        answers,
         result,
       });
     }

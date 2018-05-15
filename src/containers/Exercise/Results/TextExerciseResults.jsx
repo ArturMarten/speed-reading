@@ -90,7 +90,6 @@ export class TextExerciseResults extends Component {
           />
           <Button
             positive
-            disabled={!this.props.selectedText.id}
             onClick={this.onProceedHandler}
           >
             {this.props.translate('text-exercise-results.proceed')}

@@ -325,12 +325,21 @@
     "retry": ["Harjuta uuesti", "Exercise again"],
     "end": ["Lõpeta", "Finish"]
   },
-  "text-exercise-test": {
+  "text-exercise-question-test": {
     "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
     "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned küsimused või lünkülesanded. Ainult üks vastusevariant on õige.", "Text comprehension is tested here. Some questions and blank exercises about read text are asked. There is only one correct answer."],
     "start-test": ["Alusta testiga", "Start test"],
     "previous-question": ["Eelmine küsimus", "Previous question"],
     "next-question": ["Järgmine küsimus", "Next question"],
+    "finish-test": ["Lõpeta test", "Finish test"]
+  },
+  "text-exercise-blank-test": {
+    "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
+    "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned lünkülesanded. Lünka oodatakse ühte nimisõna.", "Text comprehension is tested here. Blank exercises about read text are asked. A single noun is expected in the blank."],
+    "start-test": ["Alusta testiga", "Start test"],
+    "blank-placeholder": ["Lünk", "Blank"],
+    "previous-blank": ["Eelmine lünkülesanne", "Previous blank exercise"],
+    "next-blank": ["Järgmine lünkülesanne", "Next blank exercise"],
     "finish-test": ["Lõpeta test", "Finish test"]
   },
   "test-results": {
@@ -348,9 +357,12 @@
     "check-correct-answers": ["Vaata vastuseid", "Check answers"],
     "end": ["Lõpeta", "Finish"]
   },
-  "test-answers": {
+  "question-test-answers": {
     "header": ["Testi vastused", "Test answers"],
     "loading": ["Laen vastuseid", "Loading answers"]
+  },
+  "blank-test-answers": {
+    "header": ["Testi vastused", "Test answers"]
   },
   "text-options": {
     "font": ["Font", "Font"],

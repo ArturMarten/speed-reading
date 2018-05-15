@@ -23,9 +23,11 @@ import { SchulteTables } from '../containers/Exercise/Types/SchulteTables/Schult
 import { Concentration } from '../containers/Exercise/Types/Concentration/Concentration';
 import { TextExerciseResults } from '../containers/Exercise/Results/TextExerciseResults';
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
-import TextExerciseTestContainer, { TextExerciseTest } from '../containers/Exercise/Test/TextExerciseTest';
+import TextExerciseQuestionTestContainer, { TextExerciseQuestionTest } from '../containers/Exercise/Test/TextExerciseQuestionTest';
+import TextExerciseBlankTestContainer, { TextExerciseBlankTest } from '../containers/Exercise/Test/TextExerciseBlankTest';
 import { TestResults } from '../containers/Exercise/Results/TestResults';
-import TestAnswersContainer from '../containers/Exercise/TestAnswers/TestAnswers';
+import { QuestionTestAnswers } from '../containers/Exercise/TestAnswers/QuestionTestAnswers';
+import { BlankTestAnswers } from '../containers/Exercise/TestAnswers/BlankTestAnswers';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
@@ -34,12 +36,23 @@ import FeedbackContainer, { Feedback } from '../containers/Feedback/Feedback';
 import BugReportContainer, { BugReport } from '../containers/BugReport/BugReport';
 import { generateSymbols, generateStringPairs } from '../store/reducers/exercise';
 
-const dummyData = [
-  { id: 1, questionText: 'Mehelikku energiat iseloomustavad ego, sõjad, võistlemine ja ... ning läbi aastasadade on seda olnud enam kui küllalt.', answers: [{ id: 1, answerText: 'passiivsus' }, { id: 2, answerText: 'vägivaldsus' }, { id: 3, answerText: 'agressiivsus' }, { id: 4, answerText: 'sõjakus' }] },
-  { id: 2, questionText: 'Nende kogukonna organiseeritust on lääne definitsioonide abil keeruline selgitada, kuid kõige enam kasutatakse selle kirjeldamisel sõna ... .', answers: [{ id: 1, answerText: 'esmaõiguslikkus' }, { id: 2, answerText: 'patriaarhia' }, { id: 3, answerText: 'matriarhaat' }, { id: 4, answerText: 'sugulusjärgus' }] },
-  { id: 3, questionText: 'Mosuode ühiskonnas on oluline erinevus, mis teistes ühiskondades on olemas ning, mis teeb neid unikaalseks', answers: [{ id: 1, answerText: 'neil on kombeks n-ö visiitabielu, naine otsustab, millise mehe ta ööseks enda juurde lubab' }, { id: 2, answerText: 'nad ei tunne sõdu, vägistamisi ega mõrvu' }, { id: 3, answerText: 'isad on need, kes kasvatavad lapsi, samas kui naised teevad tööd' }, { id: 4, answerText: 'kummalgi partneril pole abikaasa kohustusi, kuid nad jagavad majapidamist ja lapsi' }] },
-  { id: 4, questionText: 'Mis on meeste suurim kohustus mosuode hõmus?', answers: [{ id: 1, answerText: 'toetada naisi majanduslikult' }, { id: 2, answerText: 'hoolitseda laste eest' }, { id: 3, answerText: 'oma öistel "visiitidel" edukalt hakkama saamine' }, { id: 4, answerText: 'pere valitsemine' }] },
-  { id: 5, questionText: 'Millel põhinevad muoso hõimu inimeste vahelised suhted?', answers: [{ id: 1, answerText: 'armastusel' }, { id: 2, answerText: 'poliitikal' }, { id: 3, answerText: 'majanduslikul heaolul' }, { id: 4, answerText: 'sotsiaalsel survel' }] },
+const questions = [
+  { id: 0, questionText: 'Mehelikku energiat iseloomustavad ego, sõjad, võistlemine ja ... ning läbi aastasadade on seda olnud enam kui küllalt.', answers: [{ id: 1, answerText: 'passiivsus' }, { id: 2, answerText: 'vägivaldsus' }, { id: 3, answerText: 'agressiivsus' }, { id: 4, answerText: 'sõjakus' }] },
+  { id: 1, questionText: 'Nende kogukonna organiseeritust on lääne definitsioonide abil keeruline selgitada, kuid kõige enam kasutatakse selle kirjeldamisel sõna ... .', answers: [{ id: 1, answerText: 'esmaõiguslikkus' }, { id: 2, answerText: 'patriaarhia' }, { id: 3, answerText: 'matriarhaat' }, { id: 4, answerText: 'sugulusjärgus' }] },
+  { id: 2, questionText: 'Mosuode ühiskonnas on oluline erinevus, mis teistes ühiskondades on olemas ning, mis teeb neid unikaalseks', answers: [{ id: 1, answerText: 'neil on kombeks n-ö visiitabielu, naine otsustab, millise mehe ta ööseks enda juurde lubab' }, { id: 2, answerText: 'nad ei tunne sõdu, vägistamisi ega mõrvu' }, { id: 3, answerText: 'isad on need, kes kasvatavad lapsi, samas kui naised teevad tööd' }, { id: 4, answerText: 'kummalgi partneril pole abikaasa kohustusi, kuid nad jagavad majapidamist ja lapsi' }] },
+  { id: 3, questionText: 'Mis on meeste suurim kohustus mosuode hõmus?', answers: [{ id: 1, answerText: 'toetada naisi majanduslikult' }, { id: 2, answerText: 'hoolitseda laste eest' }, { id: 3, answerText: 'oma öistel "visiitidel" edukalt hakkama saamine' }, { id: 4, answerText: 'pere valitsemine' }] },
+  { id: 4, questionText: 'Millel põhinevad muoso hõimu inimeste vahelised suhted?', answers: [{ id: 1, answerText: 'armastusel' }, { id: 2, answerText: 'poliitikal' }, { id: 3, answerText: 'majanduslikul heaolul' }, { id: 4, answerText: 'sotsiaalsel survel' }] },
+];
+
+const blankExercises = [
+  { id: 0, text: ['Üks selline on ', 'BLANK', ', mis loodi 1960-ndatel täiskasvanute keeleõppeks.'], answer: 'TPR-meetod' },
+  { id: 1, text: ['Lapsed õpivad', 'BLANK', ' üldjuhul linnulennult, samas kui täiskasvanu võibki jääda oma emakeele vangiks,” tõdeb Petar Hodulov, kes õpetab Eesti massaaži- ja teraapiakoolis\nmuuhulgas ka inglise keelt.'], answer: 'võõrkeelt' },
+  { id: 2, text: ['', 'BLANK', ' õppimine sõltub tema meelest paljuski sellest, kuidas inimene​ ​saab​ ​hakkama​ ​häbitundega​ ​–​ ​eksida​ ​tuleb​ ​ju​ ​omajagu.'], answer: 'Võõrkeele' },
+  { id: 3, text: ['Liigutused saavad täiskasvanud õppijad suuresti​ ​ise​ ​välja​ ​mõelda.​ ​Kui​ ​üldse​ ', 'BLANK', ' ​ei​ ​ole,​ ​siis​ ​õpetaja​ ​aitab.'], answer: 'inspiratsiooni' },
+  { id: 4, text: ['Nii tekib ', 'BLANK', ' lause „Stomach breaks down food” juures.'], answer: 'tõrge' },
+  { id: 5, text: ['Kidneys get ', 'BLANK', ' of waste products?'], answer: 'rid' },
+  { id: 6, text: ['„Mul oli väga lõbus,” võtab ', 'BLANK', ' vaos hoidev Liis Metusala (44) tunni hiljem kokku.'], answer: 'emotsioone' },
+  { id: 7, text: ['„Hea ', 'BLANK', ' on, hästi praktiline ja käed küljes.'], answer: 'energia' },
 ];
 
 store.dispatch(setActiveLanguage('ee'));
@@ -224,12 +237,23 @@ storiesOf('Text exercise results', module)
 storiesOf('Text test editor', module)
   .add('Container', () => <TextTestEditorContainer open readingTextId={9} />);
 
-storiesOf('Text exercise test', module)
-  .add('Container', () => <TextExerciseTestContainer />)
+storiesOf('Text exercise question test', module)
+  .add('Container', () => <TextExerciseQuestionTestContainer />)
   .add('Component', () => (
-    <TextExerciseTest
+    <TextExerciseQuestionTest
       translate={translate}
-      questions={dummyData}
+      questions={questions}
+      selectedText={{}}
+      onTestPrepare={action('preparation')}
+      testStatus="started"
+    />));
+
+storiesOf('Text exercise blank test', module)
+  .add('Container', () => <TextExerciseBlankTestContainer />)
+  .add('Component', () => (
+    <TextExerciseBlankTest
+      translate={translate}
+      blankExercises={blankExercises}
       selectedText={{}}
       onTestPrepare={action('preparation')}
       testStatus="started"
@@ -250,12 +274,21 @@ storiesOf('Test results', module)
         comprehensionResult: 3 / 7,
         cpm: 231,
       }}
+      selectedText={store.getState().text.selectedText}
     />));
 
-storiesOf('Test answers', module)
-  .add('Container', () => (
-    <TestAnswersContainer
+storiesOf('Question test answers', module)
+  .add('Component', () => (
+    <QuestionTestAnswers
       testAttemptId={92}
+      translate={translate}
+    />));
+
+storiesOf('Blank test answers', module)
+  .add('Component', () => (
+    <BlankTestAnswers
+      blankExercises={blankExercises}
+      answers={['tpr-meetod', 'keelt', 'Keele', 'inspiratsiooni', '', 'rid', 'tundeid']}
       translate={translate}
     />));
 

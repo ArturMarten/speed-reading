@@ -8,9 +8,11 @@ import * as actionCreators from '../../../store/actions';
 import TextExercisePreparation from '../Preparation/TextExercisePreparation';
 import TextExercise from '../TextExercise/TextExercise';
 import TextExerciseResults from '../Results/TextExerciseResults';
-import TextExerciseTest from '../Test/TextExerciseTest';
+import TextExerciseQuestionTest from '../Test/TextExerciseQuestionTest';
+import TextExerciseBlankTest from '../Test/TextExerciseBlankTest';
 import TestResults from '../Results/TestResults';
-import TestAnswers from '../TestAnswers/TestAnswers';
+import QuestionTestAnswers from '../TestAnswers/QuestionTestAnswers';
+import BlankTestAnswers from '../TestAnswers/BlankTestAnswers';
 
 export class TextExerciseContainer extends Component {
   state = {
@@ -51,14 +53,12 @@ export class TextExerciseContainer extends Component {
       }
       case 'test': {
         return (
-          <TextExerciseTest />
+          this.props.selectedText.id ? <TextExerciseQuestionTest /> : <TextExerciseBlankTest />
         );
       }
       case 'testAnswers': {
         return (
-          <TestAnswers
-            testAttemptId={this.props.testAttemptId}
-          />
+          this.props.selectedText.id ? <QuestionTestAnswers /> : <BlankTestAnswers />
         );
       }
       default:
@@ -130,7 +130,6 @@ const mapStateToProps = state => ({
   token: state.auth.token,
   selectedText: state.text.selectedText,
   testStatus: state.test.status,
-  testAttemptId: state.test.attemptId,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });

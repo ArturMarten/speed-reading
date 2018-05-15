@@ -75,28 +75,29 @@ export class TestResults extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
-              <Grid.Column width={5} textAlign="right">
-                <span>
-                  <b>{this.props.translate('test-results.rate-test-difficulty')} </b>
-                  ({this.props.translate('test-results.optional')})
-                </span>
-              </Grid.Column>
-              <Grid.Column width={11} verticalAlign="middle">
-                <Popup
-                  trigger={
-                    <Rating
-                      icon="star"
-                      clearable
-                      maxRating={10}
-                      rating={this.state.difficultyRating}
-                      onRate={this.onRateHandler}
-                    />}
-                  position="top center"
-                  content={this.props.translate('test-results.rate-test-difficulty-description')}
-                />
-              </Grid.Column>
-            </Grid.Row>
+            {this.props.selectedText.id ?
+              <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
+                <Grid.Column width={5} textAlign="right">
+                  <span>
+                    <b>{this.props.translate('test-results.rate-test-difficulty')} </b>
+                    ({this.props.translate('test-results.optional')})
+                  </span>
+                </Grid.Column>
+                <Grid.Column width={11} verticalAlign="middle">
+                  <Popup
+                    trigger={
+                      <Rating
+                        icon="star"
+                        clearable
+                        maxRating={10}
+                        rating={this.state.difficultyRating}
+                        onRate={this.onRateHandler}
+                      />}
+                    position="top center"
+                    content={this.props.translate('test-results.rate-test-difficulty-description')}
+                  />
+                </Grid.Column>
+              </Grid.Row> : null}
           </Grid>
         </Modal.Content>
         <Modal.Actions>
@@ -119,6 +120,7 @@ export class TestResults extends Component {
 
 const mapStateToProps = state => ({
   result: state.test.result,
+  selectedText: state.text.selectedText,
   translate: getTranslate(state.locale),
 });
 

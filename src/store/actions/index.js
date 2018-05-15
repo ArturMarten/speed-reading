@@ -39,9 +39,11 @@ export {
   addAnswer,
   changeAnswer,
   removeAnswer,
-  prepareTest,
+  prepareQuestionTest,
+  prepareBlankTest,
   startTest,
-  finishTest,
+  finishQuestionTest,
+  finishBlankTest,
   endTest,
 } from './test';
 

@@ -5,7 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 import axios from '../../../axios-http';
 
-export class TestAnswers extends Component {
+export class QuestionTestAnswers extends Component {
   state = {
     loading: true,
     testQuestionAnswers: [],
@@ -29,11 +29,11 @@ export class TestAnswers extends Component {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>
         <Header as="h2">
-          {this.props.translate('test-answers.header')}
+          {this.props.translate('question-test-answers.header')}
         </Header>
         {this.state.loading ?
           <Segment basic style={{ minHeight: '15vh' }}>
-            <Loader active indeterminate content={this.props.translate('test-answers.loading')} />
+            <Loader active indeterminate content={this.props.translate('question-test-answers.loading')} />
           </Segment> :
           <Grid verticalAlign="middle">
             {this.state.testQuestionAnswers.map((testQuestionAnswer, testQuestionAnswerIndex) => (
@@ -94,6 +94,7 @@ export class TestAnswers extends Component {
 }
 
 const mapStateToProps = state => ({
+  testAttemptId: state.test.attemptId,
   translate: getTranslate(state.locale),
 });
 
@@ -101,4 +102,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TestAnswers);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionTestAnswers);

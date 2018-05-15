@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Container, Header, Button, Grid, Pagination, List } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import './TextExerciseTest.css';
+import './TextExerciseQuestionTest.css';
 import * as actionCreators from '../../../store/actions';
 
-export class TextExerciseTest extends Component {
+export class TextExerciseQuestionTest extends Component {
   state = {
     questionIndex: 0,
     answers: [],
@@ -46,12 +46,14 @@ export class TextExerciseTest extends Component {
   render() {
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2" content={this.props.translate('text-exercise-test.title')} />
+        <Header as="h2" content={this.props.translate('text-exercise-question-test.title')} />
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Grid container style={{ paddingTop: '10px' }}>
             <Grid.Row columns={1} style={{ paddingBottom: '2px' }} >
               <Grid.Column>
-                <Header as="h4" content={`${this.state.questionIndex + 1}. ${this.props.questions[this.state.questionIndex].questionText}`} />
+                <Header as="h4">
+                  {`${this.state.questionIndex + 1}. ${this.props.questions[this.state.questionIndex].questionText}`}
+                </Header>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row style={{ paddingTop: '2px' }} >
@@ -81,12 +83,12 @@ export class TextExerciseTest extends Component {
                 firstItem={null}
                 lastItem={null}
                 nextItem={{
-                  ariaLabel: this.props.translate('text-exercise-test.next-question'),
-                  content: this.props.translate('text-exercise-test.next-question'),
+                  ariaLabel: this.props.translate('text-exercise-question-test.next-question'),
+                  content: this.props.translate('text-exercise-question-test.next-question'),
                 }}
                 prevItem={{
-                  ariaLabel: this.props.translate('text-exercise-test.previous-question'),
-                  content: this.props.translate('text-exercise-test.previous-question'),
+                  ariaLabel: this.props.translate('text-exercise-question-test.previous-question'),
+                  content: this.props.translate('text-exercise-question-test.previous-question'),
                 }}
                 boundaryRange={1}
                 siblingRange={1}
@@ -95,7 +97,7 @@ export class TextExerciseTest extends Component {
                 totalPages={this.props.questions.length}
               />
             </Grid.Row>
-          </Grid> : <p>{this.props.translate('text-exercise-test.description')}</p>}
+          </Grid> : <p>{this.props.translate('text-exercise-question-test.description')}</p>}
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Button
             negative
@@ -104,7 +106,7 @@ export class TextExerciseTest extends Component {
             style={{ marginTop: '15px' }}
             loading={this.props.testStatus === 'finishing'}
             disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
-          >{this.props.translate('text-exercise-test.finish-test')}
+          >{this.props.translate('text-exercise-question-test.finish-test')}
           </Button> :
           <Button
             positive
@@ -112,7 +114,7 @@ export class TextExerciseTest extends Component {
             floated="right"
             loading={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
             disabled={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
-          >{this.props.translate('text-exercise-test.start-test')}
+          >{this.props.translate('text-exercise-question-test.start-test')}
           </Button>}
       </Container>
     );
@@ -131,14 +133,14 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onTestPrepare: (readingTextId) => {
-    dispatch(actionCreators.prepareTest(readingTextId));
+    dispatch(actionCreators.prepareQuestionTest(readingTextId));
   },
   onTestStart: (attemptData, token) => {
     dispatch(actionCreators.startTest(attemptData, token));
   },
   onTestFinish: (attemptId, answers, token) => {
-    dispatch(actionCreators.finishTest(attemptId, answers, token));
+    dispatch(actionCreators.finishQuestionTest(attemptId, answers, token));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseTest);
+export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseQuestionTest);

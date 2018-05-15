@@ -216,6 +216,20 @@ export const removeAnswer = (questionId, answerId, token) => (dispatch) => {
     });
 };
 
+const generateBlankExercisesStart = () => ({
+  type: actionTypes.GENERATE_BLANK_EXERCISES_START,
+});
+
+const generateBlankExercisesSucceeded = blankExercises => ({
+  type: actionTypes.GENERATE_BLANK_EXERCISES_SUCCEEDED,
+  payload: blankExercises,
+});
+
+const generateBlankExercisesFailed = error => ({
+  type: actionTypes.GENERATE_BLANK_EXERCISES_FAILED,
+  payload: error,
+});
+
 const timerInit = () => ({
   type: actionTypes.TIMER_INIT,
 });
@@ -234,6 +248,11 @@ const testPreparing = () => ({
 
 const testPrepared = () => ({
   type: actionTypes.TEST_PREPARED,
+});
+
+const testPrepareFailed = error => ({
+  type: actionTypes.TEST_PREPARE_FAILED,
+  payload: error,
 });
 
 const testStarting = () => ({
@@ -258,9 +277,12 @@ const testFinishing = () => ({
   type: actionTypes.TEST_FINISHING,
 });
 
-const testFinished = result => ({
+const testFinished = (result, answers) => ({
   type: actionTypes.TEST_FINISHED,
-  payload: result,
+  payload: {
+    result,
+    answers,
+  },
 });
 
 const testFinishFailed = error => ({
@@ -272,7 +294,7 @@ const testEnd = () => ({
   type: actionTypes.TEST_END,
 });
 
-export const prepareTest = readingTextId => (dispatch) => {
+export const prepareQuestionTest = readingTextId => (dispatch) => {
   dispatch(testPreparing());
   dispatch(fetchQuestionsStart());
   axios.get(`/questions?readingTextId=${readingTextId}`)
@@ -283,9 +305,30 @@ export const prepareTest = readingTextId => (dispatch) => {
       dispatch(testPrepared());
     }, (error) => {
       dispatch(fetchQuestionsFailed(serverErrorMessage(error)));
+      dispatch(testPrepareFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
       dispatch(fetchQuestionsFailed(error.message));
+      dispatch(testPrepareFailed(error.message));
+    });
+};
+
+export const prepareBlankTest = text => (dispatch) => {
+  dispatch(testPreparing());
+  dispatch(generateBlankExercisesStart());
+  axios.post('/generateBlankExercises', { text })
+    .then((response) => {
+      const blankExercises = response.data;
+      dispatch(generateBlankExercisesSucceeded(blankExercises));
+      dispatch(timerInit());
+      dispatch(testPrepared());
+    }, (error) => {
+      dispatch(generateBlankExercisesFailed(serverErrorMessage(error)));
+      dispatch(testPrepareFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(generateBlankExercisesFailed(error.message));
+      dispatch(testPrepareFailed(error.message));
     });
 };
 
@@ -304,7 +347,7 @@ export const startTest = (attemptData, token) => (dispatch) => {
     });
 };
 
-export const finishTest = (attemptId, answers, token) => (dispatch, getState) => {
+export const finishQuestionTest = (attemptId, answers, token) => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(testFinishing());
   const state = getState();
@@ -325,6 +368,29 @@ export const finishTest = (attemptId, answers, token) => (dispatch, getState) =>
       dispatch(testFinishFailed(error.message));
     });
 };
+
+export const finishBlankTest = (attemptId, blankExercises, answers, token) => (dispatch, getState) => {
+  dispatch(timerStop());
+  dispatch(testFinishing());
+  const state = getState();
+  const { elapsedTime } = state.timing;
+  axios.post('/checkBlankAnswers', { blankExercises, answers }, { headers: { 'x-access-token': token } })
+    .then((response) => {
+      const result = { elapsedTime, ...response.data.result };
+      return axios.patch(`/testAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } });
+    }, (error) => {
+      dispatch(testFinishFailed(serverErrorMessage(error)));
+    })
+    .then((response) => {
+      dispatch(testFinished(response.data.result, answers));
+    }, (error) => {
+      dispatch(testFinishFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(testFinishFailed(error.message));
+    });
+};
+
 
 export const endTest = () => (dispatch) => {
   dispatch(testEnd());
