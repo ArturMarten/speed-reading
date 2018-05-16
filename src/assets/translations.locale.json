@@ -186,6 +186,22 @@
     "complexity": ["Keerukus", "Complexity"],
     "choose": ["Vali tekst", "Choose text"]
   },
+  "text-selection-filter": {
+    "modal-header": ["Filtreeri tekste", "Filter texts"],
+    "collection": ["Kogumik", "Collection"],
+    "keywords": ["Märksõnad", "Keywords"],
+    "complexity": ["Teksti keerukus", "Text complexity"],
+    "from": ["Alates", "From"],
+    "up-to": ["Kuni", "Up to"],
+    "author": ["Teksti autor", "Text author"],
+    "question-author": ["Teksti küsimuste autor", "Text question author"],
+    "language": ["Teksti keel", "Text language"],
+    "estonian": ["Eesti", "Estonian"],
+    "english": ["Inglise", "English"],
+    "text-count": ["Tekstide arv", "Text count"],
+    "clear-filter": ["Tühjenda filter", "Clear filter"],
+    "close": ["Sulge", "Close"]
+  },
   "text-test-editor": {
     "modal-header": ["Testi küsimused", "Test questions"],
     "change": ["Muuda", "Change"],
@@ -326,7 +342,7 @@
     "end": ["Lõpeta", "Finish"]
   },
   "text-exercise-question-test": {
-    "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
+    "title": ["Teksti omandamistaseme kontroll", "Text comprehension test"],
     "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned küsimused või lünkülesanded. Ainult üks vastusevariant on õige.", "Text comprehension is tested here. Some questions and blank exercises about read text are asked. There is only one correct answer."],
     "start-test": ["Alusta testiga", "Start test"],
     "previous-question": ["Eelmine küsimus", "Previous question"],
@@ -334,7 +350,7 @@
     "finish-test": ["Lõpeta test", "Finish test"]
   },
   "text-exercise-blank-test": {
-    "title": ["Teksti omandamisetaseme kontroll", "Text comprehension test"],
+    "title": ["Teksti omandamistaseme kontroll", "Text comprehension test"],
     "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned lünkülesanded. Lünka oodatakse ühte nimisõna.", "Text comprehension is tested here. Blank exercises about read text are asked. A single noun is expected in the blank."],
     "start-test": ["Alusta testiga", "Start test"],
     "blank-placeholder": ["Lünk", "Blank"],

@@ -15,6 +15,7 @@ import TextEditorContainer from '../containers/TextEditor/TextEditor';
 import TextAnalysisContainer, { TextAnalysis } from '../containers/TextAnalysis/TextAnalysis';
 import TextExercisePreparationContainer from '../containers/Exercise/Preparation/TextExercisePreparation';
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
+import TextSelectionFilterContainer from '../containers/TextSelection/TextSelectionFilter';
 import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
 import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
 import HelpExercisePreparationContainer from '../containers/Exercise/Preparation/HelpExercisePreparation';
@@ -152,6 +153,20 @@ storiesOf('Text exercise preparation', module)
 
 storiesOf('Text selection', module)
   .add('Container', () => <TextSelectionContainer open />);
+
+storiesOf('Text selection filter', module)
+  .add('Container', () => {
+    store.dispatch(actionCreators.fetchTexts());
+    store.dispatch(actionCreators.fetchTextCollections());
+    return (
+      <TextSelectionFilterContainer
+        open
+        filter={{}}
+        textCount={0}
+        onFilterChange={action('filter changed')}
+        onFilterClear={action('filter cleared')}
+      />);
+  });
 
 storiesOf('Text preview', module)
   .add('Container', () => <TextPreviewContainer />);

@@ -4,21 +4,41 @@ import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader,
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
+import { stopPropagation } from '../../shared/utility';
+import TextSelectionFilter from './TextSelectionFilter';
 
 const initialState = {
   selectedTextId: null,
   searchLoading: false,
   searchValue: '',
+  textSelectionFilterOpened: false,
+  filter: {
+    collectionIds: [],
+    keywords: [],
+    complexityEquality: 'from',
+    complexityRating: 0,
+    authors: [],
+    questionsAuthors: [],
+    language: 'estonian',
+  },
+  filterApplied: false,
 };
 
 export class TextSelection extends Component {
   state = {
     ...initialState,
     searchResults: this.props.texts,
+    filter: {
+      ...initialState.filter,
+      language: this.props.currentLanguage === 'gb' ? 'english' : 'estonian',
+    },
   };
 
   componentDidMount() {
     this.props.onFetchTexts();
+    if (this.props.collections === []) {
+      this.props.onFetchTextCollections();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -32,6 +52,21 @@ export class TextSelection extends Component {
 
   onSubmit = () => {
     this.props.onTextSelect(this.state.selectedTextId);
+  }
+
+  onFilterChange = (name, value) => {
+    const updatedFilter = { ...this.state.filter };
+    updatedFilter[name] = value;
+    this.setState({ filter: updatedFilter, filterApplied: true });
+  }
+
+  onFilterClear = () => {
+    this.setState({ filter: { ...initialState.filter }, filterApplied: false });
+  }
+
+  textSelectionFilterToggleHandler = (event) => {
+    stopPropagation(event);
+    this.setState({ textSelectionFilterOpened: !this.state.textSelectionFilterOpened });
   }
 
   resetSearch = () => {
@@ -68,12 +103,16 @@ export class TextSelection extends Component {
 
   render() {
     const texts = this.state.searchResults
-      .filter((text) => {
-        if (this.props.currentLanguage === 'gb') {
-          return text.language === 'english';
-        }
-        return text.language === 'estonian';
-      }).map((text) => {
+      .filter(text => (
+        (this.state.filter.collectionIds.length === 0 || this.state.filter.collectionIds.indexOf((+text.collectionId).toString()) !== -1) &&
+        (this.state.filter.keywords.length === 0 || this.state.filter.keywords.some(keyword => text.keywords.includes(keyword))) &&
+        (this.state.filter.complexityEquality === 'from' ?
+          this.state.filter.complexityRating <= text.complexity :
+          this.state.filter.complexityRating >= text.complexity) &&
+        (this.state.filter.authors.length === 0 || this.state.filter.authors.indexOf(text.author) !== -1) &&
+        (this.state.filter.questionsAuthors.length === 0 || this.state.filter.questionsAuthors.indexOf(text.questionsAuthor) !== -1) &&
+        (text.language === this.state.filter.language)
+      )).map((text) => {
         const { wordCount } = text;
         const color = 100 - Math.round(((wordCount - 250) / 750) * 100);
         return (
@@ -127,10 +166,18 @@ export class TextSelection extends Component {
               </Grid.Column>
               <Grid.Column mobile={6} computer={3}>
                 <Button.Group>
-                  <Button basic disabled>
-                    <Icon fitted size="large" name="filter" />
+                  <Button basic onClick={this.textSelectionFilterToggleHandler}>
+                    <Icon fitted color={this.state.filterApplied ? 'red' : null} size="large" name="filter" />
                     {this.props.translate('text-selection.filter')}
                   </Button>
+                  <TextSelectionFilter
+                    open={this.state.textSelectionFilterOpened}
+                    onClose={this.textSelectionFilterToggleHandler}
+                    filter={this.state.filter}
+                    textCount={texts.length}
+                    onFilterChange={this.onFilterChange}
+                    onFilterClear={this.onFilterClear}
+                  />
                   {' '}
                   <Popup
                     trigger={
@@ -179,6 +226,7 @@ export class TextSelection extends Component {
 
 const mapStateToProps = state => ({
   texts: state.text.texts,
+  collections: state.text.collections,
   textsStatus: state.text.textsStatus,
   selectStatus: state.text.selectStatus,
   currentLanguage: getActiveLanguage(state.locale).code,
@@ -188,6 +236,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onFetchTexts: () => {
     dispatch(actionCreators.fetchTexts());
+  },
+  onFetchTextCollections: () => {
+    dispatch(actionCreators.fetchTextCollections());
   },
   onTextSelect: (textId) => {
     dispatch(actionCreators.selectText(textId));
