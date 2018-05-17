@@ -1,4 +1,4 @@
-# Speed Reading Software
+# Kiirlugemine 5.0 front-end
 
 ## Running the application
 
@@ -10,3 +10,5 @@ open http://localhost:3000
 ```
 npm test
 ```
+
+## [Back-end application](https://gitlab.com/martensiiber/speed-reading-backend)

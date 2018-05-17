@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Menu, Icon } from 'semantic-ui-react';
+import { Table, Menu, Icon, Popup } from 'semantic-ui-react';
 
 import HelpPopup from '../HelpPopup/HelpPopup';
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';
@@ -175,21 +175,19 @@ export class StatisticsTable extends Component {
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan="10">
-              <Menu floated="right" pagination>
-                <Menu.Item as="a" icon>
-                  <Icon name="chevron left" />
-                </Menu.Item>
-                <Menu.Item as="a">1</Menu.Item>
-                <Menu.Item as="a" icon>
-                  <Icon name="chevron right" />
-                </Menu.Item>
-              </Menu>
-              <Menu floated="right">
-                <Menu.Item as="a" icon disabled>
-                  {this.props.translate('statistics-table.export')}
-                  <Icon name="download" />
-                </Menu.Item>
-              </Menu>
+              <Popup
+                content={this.props.translate('statistics.not-implemented')}
+                position="left center"
+                on="hover"
+                trigger={
+                  <Menu floated="right">
+                    <Menu.Item as="a" icon>
+                      {this.props.translate('statistics-table.export')}
+                      <Icon name="download" />
+                    </Menu.Item>
+                  </Menu>
+                }
+              />
             </Table.HeaderCell>
           </Table.Row>
         </Table.Footer>

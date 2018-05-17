@@ -150,7 +150,7 @@ export class ResponsiveLayout extends Component {
                 onClick={this.itemClickHandler}
                 to="/text-entry"
               >
-                <Icon name="file text outline" size="large" />
+                <Icon name="file text outline" color="blue" size="large" />
                 {this.props.translate('menu.text-entry')}
               </Menu.Item> : null}
             <Menu.Item
@@ -158,7 +158,7 @@ export class ResponsiveLayout extends Component {
               active={this.props.path.indexOf('/exercise') !== -1}
               className="Dropdown-Item"
             >
-              <Icon name="winner" size="large" />
+              <Icon name="winner" color="yellow" size="large" />
               <Dropdown
                 fluid
                 text={this.props.translate('menu.exercise')}
@@ -238,7 +238,7 @@ export class ResponsiveLayout extends Component {
               onClick={this.itemClickHandler}
               to="/statistics"
             >
-              <Icon name="line graph" size="large" />
+              <Icon name="line graph" color="red" size="large" />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
             {isPermittedToManageUsers ?
@@ -313,7 +313,7 @@ export class ResponsiveLayout extends Component {
                     onClick={this.itemClickHandler}
                     to="/text-entry"
                   >
-                    <Icon name="file text outline" size="large" />
+                    <Icon name="file text outline" color="blue" size="large" />
                     {this.props.translate('menu.text-entry')}
                   </Menu.Item> : null}
                 <Menu.Item
@@ -322,7 +322,7 @@ export class ResponsiveLayout extends Component {
                   onClick={this.dropdownHandler}
                   className="Dropdown-Item"
                 >
-                  <Icon name="winner" size="large" />
+                  <Icon name="winner" color="yellow" size="large" />
                   <Dropdown
                     fluid
                     text={this.props.translate('menu.exercise')}
@@ -402,7 +402,7 @@ export class ResponsiveLayout extends Component {
                   onClick={this.itemClickHandler}
                   to="/statistics"
                 >
-                  <Icon name="line graph" size="large" />
+                  <Icon name="line graph" color="red" size="large" />
                   {this.props.translate('menu.statistics')}
                 </Menu.Item>
                 {isPermittedToManageUsers ?

@@ -26,7 +26,7 @@ export class Home extends Component {
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('home.welcome')}!</Header>
         <Grid stackable>
-          <Grid.Row>
+          <Grid.Row style={{ paddingBottom: '5em' }}>
             <Grid.Column width={8}>
               <p>{this.props.translate('home.description')}</p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
@@ -51,15 +51,16 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
           <Divider />
-          <Grid.Row columns={3}>
+          <Grid.Row columns={2}>
             <Grid.Column>
               <Message
-                negative
-                icon="bug"
-                header={this.props.translate('home.bug-report-title')}
-                content={this.props.translate('home.bug-report-content')}
+                positive
+                icon="mobile"
+                header={this.props.translate('home.mobile-use-title')}
+                content={this.props.translate('home.mobile-use-content')}
               />
             </Grid.Column>
+            {/*
             <Grid.Column>
               <Message
                 warning
@@ -68,12 +69,13 @@ export class Home extends Component {
                 content={this.props.translate('home.browser-warning-content')}
               />
             </Grid.Column>
+            */}
             <Grid.Column>
               <Message
-                positive
-                icon="mobile"
-                header={this.props.translate('home.mobile-use-title')}
-                content={this.props.translate('home.mobile-use-content')}
+                negative
+                icon="bug"
+                header={this.props.translate('home.bug-report-title')}
+                content={this.props.translate('home.bug-report-content')}
               />
             </Grid.Column>
           </Grid.Row>

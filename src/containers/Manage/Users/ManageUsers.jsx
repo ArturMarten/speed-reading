@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Table, Menu, Button, Icon, Segment, Loader, Form, Dropdown } from 'semantic-ui-react';
+import { Table, Button, Icon, Segment, Loader, Form, Dropdown } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -190,22 +190,13 @@ export class ManageUsers extends Component {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell colSpan="6">
+                  <Table.HeaderCell colSpan="7">
                     <Button
                       positive
                       floated="right"
                       content={this.props.translate('manage-users.add-user')}
                       onClick={this.userEditorToggleHandler}
                     />
-                    <Menu floated="right" pagination compact>
-                      <Menu.Item as="a" icon>
-                        <Icon name="chevron left" />
-                      </Menu.Item>
-                      <Menu.Item as="a">1</Menu.Item>
-                      <Menu.Item as="a" icon>
-                        <Icon name="chevron right" />
-                      </Menu.Item>
-                    </Menu>
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Footer>

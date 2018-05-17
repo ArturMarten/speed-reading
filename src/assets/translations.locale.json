@@ -29,7 +29,7 @@
     "password": ["Parool", "Password"],
     "register-user": ["Registreeri uus kasutaja", "Register new user"],
     "demo": ["Proovikasutaja", "Sample account"],
-    "not-implemented": ["Implementeerimata", "Not implemented"],
+    "not-implemented": ["Pole implementeeritud", "Not implemented"],
     "first-time": ["Kasutaja puudumisel vajutage siia", "Click here when you don't have an account"],
     "login-button": ["Logi sisse", "Login"],
     "no-user-question": ["Puudub kasutaja? ", "Don't have an account? "],
@@ -43,7 +43,11 @@
     "user-settings": ["Kasutaja seaded", "Account settings"]
   },
   "profile-settings": {
-    "modal-header": ["Kasutaja seaded", "Account settings"]
+    "modal-header": ["Kasutaja seaded", "Account settings"],
+    "name": ["Nimi", "Name"],
+    "please-enter-name": ["Palun sisesta oma nimi...", "Please enter your name..."],
+    "save": ["Salvesta", "Save"],
+    "not-implemented": ["Pole implementeeritud", "Not implemented"]
   },
   "change-password": {
     "modal-header": ["Parooli vahetamine", "Password change"],
@@ -77,7 +81,7 @@
       "This is web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
     "about": ["Rakenduse kohta", "About application"],
-    "user-manual": ["Kasutusjuhend - tekstide sisestamine", "User manual - text entry (only in Estonian)"],
+    "user-manual": ["Rakenduse kasutusjuhend", "Application user manual (only in Estonian)"],
     "bug-report-title": ["Vigade esinemisel", "Encountering bugs"],
     "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
@@ -489,7 +493,8 @@
     "concentration": ["Keskendumine", "Concentration"],
     "fetching-data": ["Laen andmeid", "Loading data"],
     "own-text": ["Oma tekst", "Own text"],
-    "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"]
+    "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"],
+    "not-implemented": ["Pole implementeeritud", "Not implemented"]
   },
   "statistics-table": {
     "exercise": ["Harjutus", "Exercise"],
