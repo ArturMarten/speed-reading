@@ -10,7 +10,9 @@ import ManageFeedback from './Feedback/ManageFeedback';
 import ManageBugReports from './BugReports/ManageBugReports';
 
 export class Manage extends Component {
-  state = {};
+  state = {
+    isDeveloper: rolePermissions[this.props.role] >= rolePermissions.developer,
+  };
 
   render() {
     const teacherPanes = [
@@ -74,11 +76,10 @@ export class Manage extends Component {
         ),
       },
     ];
-    const isDeveloper = rolePermissions[this.props.role] >= rolePermissions.developer;
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('manage.title')}</Header>
-        {isDeveloper ?
+        {this.state.isDeveloper ?
           <Tab
             defaultActiveIndex={1}
             panes={developerPanes}

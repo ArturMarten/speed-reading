@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
@@ -135,10 +135,12 @@ export class ReadingTest extends Component {
         />
         <Button.Group fluid basic>
           <Button onClick={this.onPreviousPage}>
+            <Icon name="left chevron" />
             {this.props.translate('text-exercise.previous-page')}
           </Button>
           <Button onClick={this.onNextPage}>
             {this.props.translate('text-exercise.next-page')}
+            <Icon name="right chevron" />
           </Button>
         </Button.Group>
       </Fragment>

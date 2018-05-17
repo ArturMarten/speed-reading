@@ -465,7 +465,10 @@
     "description": ["Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul (viimane on pooleli).", "Here you can select an exercise and see your statistics. Data is shown as a table or on a graph (not implemented yet)."],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
-    "warning-title": ["Antud hetkel regressiooni joont ei näidata", "Currently regression line is not shown"],
+    "group": ["Grupp", "Group"],
+    "user": ["Kasutaja", "User"],
+    "exercise": ["Harjutus", "Exercise"],
+    "all-groups": ["Kõik grupid", "All groups"],
     "reading-exercises": ["Lugemisharjutused", "Reading exercises"],
     "reading-test": ["Lugemistest", "Reading test"],
     "reading-aid": ["Lugemise soodustaja", "Reading aid"],
@@ -474,7 +477,7 @@
     "word-groups": ["Sõnarühmad", "Word groups"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
-    "loading": ["Laen andmeid", "Loading data"],
+    "fetching-data": ["Laen andmeid", "Loading data"],
     "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"]
   },
   "statistics-table": {
