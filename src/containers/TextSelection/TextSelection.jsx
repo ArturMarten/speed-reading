@@ -4,7 +4,7 @@ import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader,
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
-import { stopPropagation } from '../../shared/utility';
+import { sortByColumn, stopPropagation } from '../../shared/utility';
 import TextSelectionFilter from './TextSelectionFilter';
 
 const initialState = {
@@ -22,6 +22,8 @@ const initialState = {
     language: 'estonian',
   },
   filterApplied: false,
+  column: null,
+  direction: 'descending',
 };
 
 export class TextSelection extends Component {
@@ -32,10 +34,17 @@ export class TextSelection extends Component {
       ...initialState.filter,
       language: this.props.currentLanguage === 'gb' ? 'english' : 'estonian',
     },
+    sortOptions: [
+      { key: 0, value: 'complexity', text: this.props.translate('text-selection.by-complexity') },
+      { key: 1, value: 'wordCount', text: this.props.translate('text-selection.by-word-count') },
+      { key: 2, value: 'readingAttempt', text: this.props.translate('text-selection.by-reading-attempt') },
+      { key: 3, value: 'title', text: this.props.translate('text-selection.by-title') },
+      { key: 4, value: 'author', text: this.props.translate('text-selection.by-author') },
+    ],
   };
 
   componentDidMount() {
-    this.props.onFetchTexts();
+    this.props.onFetchTexts(this.props.token);
     if (this.props.collections === []) {
       this.props.onFetchTextCollections();
     }
@@ -51,7 +60,7 @@ export class TextSelection extends Component {
   }
 
   onSubmit = () => {
-    this.props.onTextSelect(this.state.selectedTextId);
+    this.props.onTextSelect(this.state.selectedTextId, this.props.token);
   }
 
   onFilterChange = (name, value) => {
@@ -97,12 +106,25 @@ export class TextSelection extends Component {
     }, 500);
   }
 
+  sortDirectionHandler = () => {
+    this.setState({
+      direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
+    });
+  }
+
+  sortColumnHandler = (event, { value }) => {
+    this.setState({
+      column: value,
+    });
+  }
+
   textSelectionHandler = (textId) => {
     this.setState({ selectedTextId: textId });
   }
 
   render() {
-    const texts = this.state.searchResults
+    const { column, direction } = this.state;
+    const filteredTexts = this.state.searchResults
       .filter(text => (
         (this.state.filter.collectionIds.length === 0 || this.state.filter.collectionIds.indexOf((+text.collectionId).toString()) !== -1) &&
         (this.state.filter.keywords.length === 0 || this.state.filter.keywords.some(keyword => text.keywords.includes(keyword))) &&
@@ -112,38 +134,47 @@ export class TextSelection extends Component {
         (this.state.filter.authors.length === 0 || this.state.filter.authors.indexOf(text.author) !== -1) &&
         (this.state.filter.questionsAuthors.length === 0 || this.state.filter.questionsAuthors.indexOf(text.questionsAuthor) !== -1) &&
         (text.language === this.state.filter.language)
-      )).map((text) => {
-        const { wordCount } = text;
-        const color = 100 - Math.round(((wordCount - 250) / 750) * 100);
-        return (
-          <List.Item
-            key={text.id}
-            active={text.id === this.state.selectedTextId}
-            onClick={() => this.textSelectionHandler(text.id)}
-          >
-            <List.Content floated="right">
-              <Label
-                basic
-                circular
-                style={{ color: 'black', background: `hsl(${color}, 100%, 50%)` }}
-              >
-                {`${wordCount} ${this.props.translate('text-selection.words')}`}
-              </Label>
-              {this.props.translate('text-selection.complexity')}
-              <Rating
-                disabled
-                maxRating={10}
-                icon="star"
-                defaultRating={text.complexity}
-              />
-            </List.Content>
-            <List.Content>
-              <List.Header>{text.title}</List.Header>
-              <List.Description>{this.props.translate('text-selection.author')}: {text.author}</List.Description>
-            </List.Content>
-          </List.Item>
-        );
-      });
+      ));
+    const sortedTexts = sortByColumn(filteredTexts, column, direction);
+    const texts = sortedTexts.map((text) => {
+      const { wordCount } = text;
+      const color = 100 - Math.round(((wordCount - 250) / 750) * 100);
+      return (
+        <List.Item
+          key={text.id}
+          active={text.id === this.state.selectedTextId}
+          onClick={() => this.textSelectionHandler(text.id)}
+        >
+          <List.Content floated="right">
+            {text.readingAttempt ?
+              `${this.props.translate('text-selection.reading-count')}: ${text.readingAttempt} ` :
+              `${this.props.translate('text-selection.not-read')} `}
+            <Label
+              basic
+              circular
+              style={{ color: 'black', background: `hsl(${color}, 100%, 50%)` }}
+            >
+              {`${wordCount} ${this.props.translate('text-selection.words')}`}
+            </Label>
+            {` ${this.props.translate('text-selection.complexity')}`}
+            <Rating
+              disabled
+              maxRating={10}
+              icon="star"
+              defaultRating={text.complexity}
+            />
+          </List.Content>
+          <List.Content>
+            <List.Header>
+              {text.title}
+            </List.Header>
+            <List.Description>
+              {this.props.translate('text-selection.author')}: {text.author}
+            </List.Description>
+          </List.Content>
+        </List.Item>
+      );
+    });
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
@@ -190,14 +221,23 @@ export class TextSelection extends Component {
                     position="bottom right"
                     on="click"
                   >
-                    <Button icon disabled>
-                      <Icon name="down arrow" />
-                    </Button>
+                    <Popup
+                      content={direction === 'descending' ?
+                        this.props.translate('text-selection.descending') : this.props.translate('text-selection.ascending')}
+                      trigger={
+                        <Button icon onClick={this.sortDirectionHandler}>
+                          <Icon name={direction === 'descending' ? 'down arrow' : 'up arrow'} />
+                        </Button>
+                      }
+                      position="bottom right"
+                      on="hover"
+                    />
                     <Dropdown
-                      disabled
-                      options={null}
-                      placeholder={this.props.translate('text-selection.sort-by-placeholder')}
                       selection
+                      value={column}
+                      options={this.state.sortOptions}
+                      onChange={this.sortColumnHandler}
+                      placeholder={this.props.translate('text-selection.sort-by-placeholder')}
                     />
                   </Popup>
                 </Button.Group>
@@ -225,6 +265,7 @@ export class TextSelection extends Component {
 }
 
 const mapStateToProps = state => ({
+  token: state.auth.token,
   texts: state.text.texts,
   collections: state.text.collections,
   textsStatus: state.text.textsStatus,
@@ -234,14 +275,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchTexts: () => {
-    dispatch(actionCreators.fetchTexts());
+  onFetchTexts: (token) => {
+    dispatch(actionCreators.fetchTexts(token));
   },
   onFetchTextCollections: () => {
     dispatch(actionCreators.fetchTextCollections());
   },
-  onTextSelect: (textId) => {
-    dispatch(actionCreators.selectText(textId));
+  onTextSelect: (textId, token) => {
+    dispatch(actionCreators.selectText(textId, token));
   },
 });
 

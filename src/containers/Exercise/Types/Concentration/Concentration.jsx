@@ -122,7 +122,7 @@ export class Concentration extends Component {
               <td className="concentration-cell concentration-spacing" style={{ minWidth: `${this.props.exerciseOptions.columnSpacing}px` }} />
               <td className="concentration-cell concentration-right">{row[1]}</td>
               <td className="concentration-cell concentration-choices">
-                <Button.Group size="tiny">
+                <Button.Group size="tiny" style={{ verticalAlign: 'middle' }}>
                   <Button
                     compact
                     icon="minus"

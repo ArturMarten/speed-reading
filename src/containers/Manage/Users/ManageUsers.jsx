@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Table, Menu, Button, Icon, Segment, Loader } from 'semantic-ui-react';
+import { Table, Menu, Button, Icon, Segment, Loader, Form, Dropdown } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -12,8 +12,9 @@ export class ManageUsers extends Component {
   state = {
     userEditorOpened: false,
     selectedUser: null,
-    column: null,
-    direction: null,
+    column: 'lastLogin',
+    direction: 'descending',
+    groupId: 'all-groups',
   };
 
   componentDidMount() {
@@ -36,6 +37,10 @@ export class ManageUsers extends Component {
       return foundGroup[0].name;
     }
     return '';
+  }
+
+  groupChangeHandler = (event, { value }) => {
+    this.setState({ groupId: value });
   }
 
   sortHandler = selectedColumn => () => {
@@ -63,7 +68,15 @@ export class ManageUsers extends Component {
 
   render() {
     const { column, direction } = this.state;
-    const sortedUsers = sortByColumn(this.props.users, column, direction);
+    const groupOptions = [{
+      key: -1,
+      text: this.props.translate('manage-users.all-groups'),
+      value: 'all-groups',
+    }].concat(this.props.groups
+      .map((group, index) => ({ key: index, value: group.id, text: group.name })));
+    const users = this.props.users
+      .filter(user => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId);
+    const sortedUsers = sortByColumn(users, column, direction);
     return (
       <Fragment>
         {this.state.userEditorOpened ?
@@ -84,6 +97,21 @@ export class ManageUsers extends Component {
           <Icon name="refresh" />
           {this.props.translate('manage-users.refresh')}
         </Button>
+        <Form>
+          <Form.Field
+            id="group-dropdown"
+            fluid
+            inline
+            search
+            selection
+            value={this.state.groupId}
+            onChange={this.groupChangeHandler}
+            options={groupOptions}
+            loading={this.props.groupsStatus.loading}
+            label={this.props.translate('manage-users.group')}
+            control={Dropdown}
+          />
+        </Form>
         {this.props.usersStatus.loading || this.props.groupsStatus.loading ?
           <Segment basic style={{ minHeight: '15vh' }}>
             <Loader active indeterminate content={this.props.translate('manage-users.fetching-users')} />

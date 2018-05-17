@@ -29,6 +29,7 @@ const reducer = (state = initialState, action) => {
           exerciseId: attempt.exerciseId,
           modification: attempt.modification,
           date: new Date(attempt.startTime),
+          readingTextTitle: attempt.readingTextTitle,
           readingAttempt: attempt.readingAttempt,
           wpm: attempt.result.wpm,
           spm: attempt.result.spm,

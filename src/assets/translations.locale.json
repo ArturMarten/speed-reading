@@ -177,11 +177,20 @@
   "text-selection": {
     "modal-header": ["Teksti valimine", "Text selection"],
     "fetching": ["Laen tekste...", "Loading texts..."],
-    "search-placeholder": ["Otsi tekste pealkirja, autori või märksõnade kaudu", "You can search text by title, author or keywords"],
+    "search-placeholder": ["Otsi tekste pealkirja või autori järgi", "You can search text by title or author"],
     "filter": ["Filtreeri", "Filter"],
     "sort": ["Sorteeri", "Sort"],
     "sort-by-placeholder": ["Sorteeri kriteeriumi järgi", "Sort by criteria"],
+    "descending": ["Kahanevalt", "Descending"],
+    "ascending": ["Kasvavalt", "Ascending"],
+    "by-complexity": ["Teksti keerukuse järgi", "By text complexity"],
+    "by-word-count": ["Sõnade arvu järgi", "By word count"],
+    "by-reading-attempt": ["Lugemise arvu järgi", "By reading attempt"],
+    "by-title": ["Pealkirja järgi", "By title"],
+    "by-author": ["Autori järgi", "By author"],
     "author": ["Autor", "Author"],
+    "reading-count": ["Lugemiste arv", "Reading count"],
+    "not-read": ["Lugemata", "Not read"],
     "words": ["sõna", "words"],
     "complexity": ["Keerukus", "Complexity"],
     "choose": ["Vali tekst", "Choose text"]
@@ -436,6 +445,7 @@
     "sentences": ["lauset", "sentences"],
     "complexity-rating": ["Keerukuse näitaja", "Complexity rating"],
     "class-rating": ["klass", "class"],
+    "class-rating-description": ["Väärtus on tuletatud prof. Jaan Miku kirjeldatud gümnaasiumiõpilastele sobivate keerukuse näitajate tabeli ekstrapoleerimisel. Antud väärtus võib olla ebatäpne.", "Value is derived by prof. Jaan Mikk's students appropriate text complexity table extrapolation. The value may be inaccurate."],
     "text-word-data": ["Teksti sõnade andmed", "Text word data"],
     "average-word-length": ["keskmine sõna pikkus", "average word length"],
     "words-with-length-from": ["Sõnad pikkusega", "Words with length from"],
@@ -462,7 +472,7 @@
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],
-    "description": ["Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul (viimane on pooleli).", "Here you can select an exercise and see your statistics. Data is shown as a table or on a graph (not implemented yet)."],
+    "description": ["Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul.", "Here you can select an exercise and see your statistics. Data is shown as a table or on a chart."],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
     "group": ["Grupp", "Group"],
@@ -478,6 +488,7 @@
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
     "fetching-data": ["Laen andmeid", "Loading data"],
+    "own-text": ["Oma tekst", "Own text"],
     "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"]
   },
   "statistics-table": {
@@ -522,6 +533,7 @@
   "manage-users": {
     "refresh": ["Värskenda", "Refresh"],
     "fetching-users": ["Laen kasutajaid", "Fetching users"],
+    "all-groups": ["Kõik grupid", "All groups"],
     "group": ["Grupp", "Group"],
     "name": ["Nimi", "Name"],
     "email": ["E-posti aadress", "E-mail address"],

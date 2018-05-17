@@ -86,9 +86,9 @@ const fetchTextsFailed = error => ({
   payload: error,
 });
 
-export const fetchTexts = () => (dispatch) => {
+export const fetchTexts = token => (dispatch) => {
   dispatch(fetchTextsStart());
-  axios.get('/texts')
+  axios.get('/texts', { headers: { 'x-access-token': token } })
     .then((response) => {
       const fetchedTexts = response.data;
       dispatch(fetchTextsSucceeded(fetchedTexts));
@@ -114,9 +114,9 @@ const fetchReadingTextFailed = error => ({
   payload: error,
 });
 
-export const selectText = textId => (dispatch) => {
+export const selectText = (textId, token) => (dispatch) => {
   dispatch(fetchReadingTextStart());
-  axios.get(`/texts/${textId}`)
+  axios.get(`/texts/${textId}`, { headers: { 'x-access-token': token } })
     .then((response) => {
       const text = response.data;
       dispatch(fetchReadingTextSucceeded(text));

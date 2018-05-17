@@ -4,6 +4,7 @@ import { Modal, Button, Statistic, Icon, Segment, Header } from 'semantic-ui-rea
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
+import HelpPopup from '../../components/HelpPopup/HelpPopup';
 import BarChart from '../../components/Statistics/BarChart';
 import PieChart from '../../components/Statistics/PieChart';
 import LabeledSlider from '../../components/LabeledSlider/LabeledSlider';
@@ -218,6 +219,10 @@ export class TextAnalysis extends Component {
                 <Statistic size="small">
                   <Statistic.Label>
                     {this.props.translate('text-analysis.complexity-rating')}
+                    <HelpPopup
+                      position="bottom center"
+                      content={this.props.translate('text-analysis.class-rating-description')}
+                    />
                   </Statistic.Label>
                   <Statistic.Value>
                     {this.props.analyzeStatus.loading ?
@@ -326,6 +331,10 @@ export class TextAnalysis extends Component {
                 <Statistic size="small">
                   <Statistic.Label>
                     {this.props.translate('text-analysis.complexity-rating')}
+                    <HelpPopup
+                      position="bottom center"
+                      content={this.props.translate('text-analysis.class-rating-description')}
+                    />
                   </Statistic.Label>
                   <Statistic.Value>
                     {this.props.analyzeStatus.loading ?

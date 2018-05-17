@@ -8,8 +8,8 @@ import { sortByColumn } from '../../../shared/utility';
 
 export class ManageFeedback extends Component {
   state = {
-    column: null,
-    direction: null,
+    column: 'date',
+    direction: 'descending',
   };
 
   componentDidMount() {

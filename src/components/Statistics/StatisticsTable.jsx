@@ -89,7 +89,7 @@ export class StatisticsTable extends Component {
         </Table.Header>
         <Table.Body>
           {sortedAttempts.map(attempt => (
-            <Table.Row key={attempt.id}>
+            <Table.Row key={attempt.id} title={attempt.readingTextTitle ? attempt.readingTextTitle : null}>
               {this.props.exercise === 'readingExercises' ?
                 <Table.Cell>
                   {this.props.translate(`exercises.title-${getExerciseById(attempt.exerciseId)}`)}
@@ -110,7 +110,7 @@ export class StatisticsTable extends Component {
               {['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
                 <Fragment>
                   <Table.Cell collapsing>
-                    {attempt.readingAttempt}
+                    {attempt.readingAttempt ? attempt.readingAttempt : this.props.translate('statistics.own-text')}
                   </Table.Cell>
                   <Table.Cell>
                     {attempt.wpm}

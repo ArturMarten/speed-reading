@@ -10,8 +10,8 @@ import GroupEditor from './GroupEditor';
 export class ManageGroups extends Component {
   state = {
     groupEditorOpened: false,
-    column: null,
-    direction: null,
+    column: 'creationDate',
+    direction: 'descending',
   };
 
   componentDidMount() {

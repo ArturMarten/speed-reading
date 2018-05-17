@@ -9,8 +9,8 @@ import { sortByColumn } from '../../../shared/utility';
 
 export class ManageBugReports extends Component {
   state = {
-    column: null,
-    direction: null,
+    column: 'date',
+    direction: 'descending',
     screenshotSrc: null,
     screenshotOpen: false,
   };

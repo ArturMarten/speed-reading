@@ -58,7 +58,8 @@ const blankExercises = [
 
 store.dispatch(setActiveLanguage('ee'));
 store.dispatch(actionCreators.login(credentials.admin.username, credentials.admin.password));
-store.dispatch(actionCreators.selectText(2));
+const { token } = store.getState().auth;
+store.dispatch(actionCreators.selectText(2, token));
 
 const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 
@@ -156,7 +157,7 @@ storiesOf('Text selection', module)
 
 storiesOf('Text selection filter', module)
   .add('Container', () => {
-    store.dispatch(actionCreators.fetchTexts());
+    store.dispatch(actionCreators.fetchTexts(token));
     store.dispatch(actionCreators.fetchTextCollections());
     return (
       <TextSelectionFilterContainer
