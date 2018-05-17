@@ -25,12 +25,15 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_GROUPS_SUCCEEDED: {
+      const groups = action.payload.map(group => updateObject(group, {
+        creationDate: group.creationDate ? new Date(group.creationDate) : null,
+      }));
       return updateObject(state, {
         groupsStatus: {
           loading: false,
           error: null,
         },
-        groups: action.payload,
+        groups,
       });
     }
     case actionTypes.FETCH_GROUPS_FAILED: {

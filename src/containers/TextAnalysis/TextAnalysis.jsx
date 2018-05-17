@@ -68,13 +68,13 @@ export class TextAnalysis extends Component {
       sentenceMaxLength,
       currentSentenceLengths,
     } = this.state;
-    if (wordLengths) {
+    if (wordLengths && wordLengths.length !== 0) {
       const lengths = wordLengths.map(data => data.x);
       wordMinLength = Math.min(...lengths);
       wordMaxLength = Math.max(...lengths);
       currentWordLengths = [wordMinLength, wordMaxLength];
     }
-    if (sentenceLengths) {
+    if (sentenceLengths && sentenceLengths.length !== 0) {
       const lengths = sentenceLengths.map(data => data.x);
       sentenceMinLength = Math.min(...lengths);
       sentenceMaxLength = Math.max(...lengths);
@@ -381,7 +381,6 @@ export class TextAnalysis extends Component {
 }
 
 const mapStateToProps = state => ({
-  selectedText: state.text.selectedText,
   analyzeStatus: state.text.analyzeStatus,
   analysis: state.text.analysis,
   translate: getTranslate(state.locale),

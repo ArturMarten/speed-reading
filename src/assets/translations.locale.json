@@ -503,14 +503,24 @@
   "manage": {
     "title": ["Halda", "Manage"],
     "description": ["Siin saab hallata kasutajate nimekirja ja lisada uusi kasutajaid.", "Here you can manage user list and add new users."],
+    "groups": ["Grupid", "Groups"],
     "users": ["Kasutajad", "Users"],
     "feedback": ["Tagasiside", "Feedback"],
     "bug-reports": ["Veateated", "Bug reports"]
+  },
+  "manage-groups": {
+    "refresh": ["Värskenda", "Refresh"],
+    "fetching-groups": ["Laen gruppe", "Fetching groups"],
+    "group": ["Grupp", "Group"],
+    "creation-date": ["Loomise kuupäev", "Creation date"],
+    "user-count": ["Kasutajate arv", "User count"],
+    "add-group": ["Lisa grupp", "Add group"]
   },
   "manage-users": {
     "refresh": ["Värskenda", "Refresh"],
     "fetching-users": ["Laen kasutajaid", "Fetching users"],
     "group": ["Grupp", "Group"],
+    "name": ["Nimi", "Name"],
     "email": ["E-posti aadress", "E-mail address"],
     "registration": ["Registreerimise kuupäev", "Registration date"],
     "last-login": ["Viimane sisselogimine", "Last login"],

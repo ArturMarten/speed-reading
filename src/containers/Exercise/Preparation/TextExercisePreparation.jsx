@@ -68,12 +68,6 @@ export class TextExercisePreparation extends Component {
               {`${this.props.translate('exercise-preparation.author')}: `}<b>{this.props.selectedText.author}</b>
             </span>
             <span>
-              {` ${this.props.translate('exercise-preparation.editor')}: `}
-              <b>{this.props.selectedText.editor ?
-                this.props.selectedText.editor : this.props.translate('exercise-preparation.editor-missing')}
-              </b>
-            </span>
-            <span>
               {` ${this.props.translate('exercise-preparation.questions-author')}: `}
               <b>{this.props.selectedText.questionsAuthor ?
                 this.props.selectedText.questionsAuthor : this.props.translate('exercise-preparation.questions-author-missing')}

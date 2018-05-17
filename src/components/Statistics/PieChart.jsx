@@ -26,11 +26,11 @@ export class PieChart extends Component {
     width: this.props.width - margin.left - margin.right,
     height: this.props.height - margin.top - margin.bottom,
     radius: Math.min(this.props.width - margin.left - margin.right, this.props.height - margin.top - margin.bottom) / 2,
-    totalCount: 1,
+    totalCount: -1,
   }
 
   componentDidUpdate(prevProps) {
-    if ((prevProps.data !== this.props.data || this.state.totalCount === 1) && this.props.data !== null) {
+    if ((prevProps.data !== this.props.data || this.state.totalCount === -1) && this.props.data !== null) {
       const totalCount = this.props.data.map(data => data.y).reduce(reduceSumFunc, 0);
       this.setTotalCount(totalCount);
     }
@@ -67,7 +67,7 @@ export class PieChart extends Component {
             <g className="arc" key={d.data.id}>
               <path d={arc(d)} fill={color(d.data.id)} />
               <text transform={`translate(${arc.centroid(d)})`} textAnchor="middle" fontWeight="bold">
-                {d.data.y >= 40 ? `${d.data.x} (${Math.round((d.data.y / this.state.totalCount) * 100)}%)` : null}
+                {d.data.y >= this.state.totalCount * 0.08 ? `${d.data.x} (${Math.round((d.data.y / this.state.totalCount) * 100)}%)` : null}
               </text>
             </g>
           ))}

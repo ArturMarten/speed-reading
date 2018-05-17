@@ -117,7 +117,7 @@ export const translateError = (translate, error) => {
 export const sortByColumn = (data, column, direction) => {
   if (column === null) return data;
   const sorted = data.sort((a, b) => {
-    if (typeof a[column] === 'string') {
+    if (typeof a[column] === 'string' && a[column] !== null) {
       return a[column].toString().localeCompare(b[column].toString());
     }
     return (a[column] !== null) - (b[column] !== null) || a[column] - b[column];

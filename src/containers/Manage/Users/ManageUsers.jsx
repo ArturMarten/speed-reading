@@ -6,12 +6,10 @@ import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 import * as actionCreators from '../../../store/actions';
 import { sortByColumn } from '../../../shared/utility';
 import { rolePermissions } from '../../../store/reducers/profile';
-import GroupEditor from './GroupEditor';
 import UserEditor from './UserEditor';
 
 export class ManageUsers extends Component {
   state = {
-    groupEditorOpened: false,
     userEditorOpened: false,
     selectedUser: null,
     column: null,
@@ -54,12 +52,6 @@ export class ManageUsers extends Component {
     }
   };
 
-  groupEditorToggleHandler = () => {
-    this.setState({
-      groupEditorOpened: !this.state.groupEditorOpened,
-    });
-  }
-
   userEditorToggleHandler = (event, data) => {
     this.setState({
       userEditorOpened: !this.state.userEditorOpened,
@@ -74,11 +66,6 @@ export class ManageUsers extends Component {
     const sortedUsers = sortByColumn(this.props.users, column, direction);
     return (
       <Fragment>
-        {this.state.groupEditorOpened ?
-          <GroupEditor
-            open={this.state.groupEditorOpened}
-            onClose={this.groupEditorToggleHandler}
-          /> : null}
         {this.state.userEditorOpened ?
           <UserEditor
             open={this.state.userEditorOpened}
@@ -106,11 +93,10 @@ export class ManageUsers extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell sorted={column === 'groupId' ? direction : null} onClick={this.sortHandler('groupId')}>
-                    <Icon.Group onClick={this.groupEditorToggleHandler}>
-                      <Icon name="group" />
-                      <Icon corner name="add" />
-                    </Icon.Group>
                     {this.props.translate('manage-users.group')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.sortHandler('name')}>
+                    {this.props.translate('manage-users.name')}
                   </Table.HeaderCell>
                   <Table.HeaderCell sorted={column === 'email' ? direction : null} onClick={this.sortHandler('email')}>
                     {this.props.translate('manage-users.email')}
@@ -136,6 +122,9 @@ export class ManageUsers extends Component {
                         <Icon name="attention" />
                         {this.props.translate('manage-users.group-missing')}
                       </Fragment>}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {user.name}
                     </Table.Cell>
                     <Table.Cell>
                       {user.email}
