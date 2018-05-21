@@ -241,7 +241,7 @@
     "change-answer": ["Muuda", "Change"]
   },
   "exercises": {
-    "goal": ["Eesmärk", "Goal"],
+    "goal": ["Ülesanne", "Goal"],
     "shortkeys": ["Kiirklahvid", "Shortkeys"],
     "title-readingTest": ["Lugemistest", "Reading test"],
     "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga. Parema ja vasaku nooleklahviga saab liikuda lehtede vahel.", "This test allows to measure your reading speed with normal text. Left and right arrow keys can be used to change pages."],
@@ -449,7 +449,7 @@
     "sentences": ["lauset", "sentences"],
     "complexity-rating": ["Keerukuse näitaja", "Complexity rating"],
     "class-rating": ["klass", "class"],
-    "class-rating-description": ["Väärtus on tuletatud prof. Jaan Miku kirjeldatud gümnaasiumiõpilastele sobivate keerukuse näitajate tabeli ekstrapoleerimisel. Antud väärtus võib olla ebatäpne.", "Value is derived by prof. Jaan Mikk's students appropriate text complexity table extrapolation. The value may be inaccurate."],
+    "class-rating-description": ["Väärtus on tuletatud prof. Jaan Miku kirjeldatud gümnaasiumiõpilastele sobivate tekstide keerukuse näitajate tabeli ekstrapoleerimisel. Antud väärtus võib olla ebatäpne.", "Value is derived by prof. Jaan Mikk's students appropriate text complexity table extrapolation. The value may be inaccurate."],
     "text-word-data": ["Teksti sõnade andmed", "Text word data"],
     "average-word-length": ["keskmine sõna pikkus", "average word length"],
     "words-with-length-from": ["Sõnad pikkusega", "Words with length from"],

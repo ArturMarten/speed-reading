@@ -1,7 +1,7 @@
 {
   "name": "kiirlugemine",
   "description": "Software for improving reading speed",
-  "version": "5.0.24",
+  "version": "5.0.25",
   "main": "index.js",
   "private": true,
   "author": {

@@ -3,7 +3,7 @@ import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtil
 
 const CANVAS_HEIGHT = 400;
 
-describe.only('Scrolling updateState', () => {
+describe('Scrolling updateState', () => {
   const textOptions = {
     font: 'Calibri',
     width: 250,
