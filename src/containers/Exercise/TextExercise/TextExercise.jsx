@@ -104,7 +104,7 @@ export class TextExercise extends Component {
     })(this.props.type);
     return (
       <Grid container>
-        <Grid.Row verticalAlign="middle">
+        <Grid.Row verticalAlign="middle" style={{ paddingBottom: 0 }}>
           <Grid.Column textAlign="center" width={8}>
             <table>
               <tbody>
@@ -122,7 +122,7 @@ export class TextExercise extends Component {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row centered>
+        <Grid.Row centered style={{ paddingTop: '0.4em' }}>
           <Segment compact>
             <Dimmer.Dimmable
               blurring

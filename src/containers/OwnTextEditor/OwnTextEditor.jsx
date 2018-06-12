@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, Message } from 'semantic-ui-react';
+import { Modal, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -49,11 +49,13 @@ export class OwnTextEditor extends Component {
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('own-text-editor.modal-header')}</Modal.Header>
+        {/*
         <Message
           warning
           icon="warning sign"
           header={this.props.translate('own-text-editor.issues')}
         />
+        */}
         <Modal.Content>
           <TextEditor
             ref={(ref) => { this.textEditorRef = ref; }}

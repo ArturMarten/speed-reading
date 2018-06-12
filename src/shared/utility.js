@@ -35,19 +35,27 @@ export const stopPropagation = (event) => {
   }
 };
 
+const pad = (time, length) => {
+  let result = time;
+  while (result.length < length) {
+    result = `0${result}`;
+  }
+  return result;
+};
+
 export const formatMilliseconds = (input) => {
-  const pad = (time, length) => {
-    let result = time;
-    while (result.length < length) {
-      result = `0${result}`;
-    }
-    return result;
-  };
   const inputTime = new Date(input);
   const minutes = pad(inputTime.getMinutes().toString(), 2);
   const seconds = pad(inputTime.getSeconds().toString(), 2);
   const milliseconds = pad(inputTime.getMilliseconds().toString()[0], 1);
   return `${minutes}:${seconds}.${milliseconds}`;
+};
+
+export const formatMillisecondsInHours = (input) => {
+  const inputTime = new Date(input);
+  const hours = pad(inputTime.getUTCHours().toString(), 1);
+  const minutes = pad(inputTime.getMinutes().toString(), 2);
+  return `${hours}h ${minutes}m`;
 };
 
 export const translateSuccess = (translate, message) => {
@@ -176,3 +184,39 @@ export const convertDataURIToBinary = (dataURI) => {
 };
 
 export const reduceSumFunc = (prev, cur) => prev + cur;
+
+export const leastSquares = (xSeries, ySeries) => {
+  if (xSeries.length === 0 || ySeries.length === 0) {
+    return [0, 0, 0];
+  } else if (xSeries.length === 1 || ySeries.length === 1) {
+    return [0, ySeries[0], 0];
+  }
+  const xBar = (xSeries.reduce(reduceSumFunc, 0) * 1.0) / xSeries.length;
+  const yBar = (ySeries.reduce(reduceSumFunc, 0) * 1.0) / ySeries.length;
+
+  const ssXX = xSeries.map(d => (d - xBar) ** 2).reduce(reduceSumFunc, 0);
+
+  const ssYY = ySeries.map(d => (d - yBar) ** 2).reduce(reduceSumFunc, 0);
+
+  const ssXY = xSeries.map((d, i) => (d - xBar) * (ySeries[i] - yBar)).reduce(reduceSumFunc, 0);
+
+  const slope = ssXY / ssXX;
+  const intercept = yBar - (xBar * slope);
+  const rSquare = (ssXY ** 2) / (ssXX * ssYY);
+
+  return [slope, intercept, rSquare];
+};
+
+export const getAverage = (values) => {
+  const sum = values.reduce(reduceSumFunc, 0);
+  return sum / values.length;
+};
+
+export const getStandardDeviation = (values, average = getAverage(values)) => {
+  const squareDiffs = values.map((value) => {
+    const difference = value - average;
+    return difference * difference;
+  });
+  const avgSquareDiff = getAverage(squareDiffs);
+  return Math.sqrt(avgSquareDiff);
+};

@@ -10,21 +10,21 @@ export class About extends Component {
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('about.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column verticalAlign="middle" width={4}>
+          <Grid stackable>
+            <Grid.Row verticalAlign="middle" textAlign="center">
+              <Grid.Column width={4}>
                 <Icon name="book" size="massive" color="blue" />
               </Grid.Column>
               <Grid.Column width={12}>
-                <Header textAlign="center" as="h3">{this.props.translate('about.title')}</Header>
-                <div>
-                  <b>{this.props.translate('about.project-manager')}: </b>{this.props.translate('about.project-manager-name')}
-                </div>
+                <Header as="h2">{this.props.translate('about.title')}</Header>
                 <div>
                   <b>{this.props.translate('about.developer')}: </b>{this.props.translate('about.developer-name')}
                 </div>
                 <div>
-                  <b>{this.props.translate('about.helper')}: </b>{this.props.translate('about.helper-names')}
+                  <b>{this.props.translate('about.contributed-creatively')}: </b>{this.props.translate('about.contributed-creatively-names')}
+                </div>
+                <div>
+                  <b>{this.props.translate('about.contributed-texts')}: </b>{this.props.translate('about.contributed-texts-names')}
                 </div>
                 <br />
                 <div>

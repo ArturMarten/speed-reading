@@ -41,12 +41,9 @@ export class BarChart extends Component {
 
   state = {
     width: this.props.width - margin.left - margin.right,
-
     height: this.props.height - margin.top - margin.bottom,
-
     widthScale: scaleBand()
       .range([0, this.props.width - margin.left - margin.right]),
-
     heightScale: scaleLinear()
       .range([0, this.props.height - margin.top - margin.bottom]),
   }
@@ -69,14 +66,17 @@ export class BarChart extends Component {
           transform={`translate(${margin.left}, ${margin.top})`}
         >
           <g
-            transform={`translate(0, ${height})`}
-            ref={node => select(node).call(axisBottom(widthScale))}
-          />
-          <g
             ref={node => select(node).call(axisLeft(heightScale).tickFormat(format('.0f')))}
           />
           <text transform="rotate(-90)" y="-30" x={-height / 2} textAnchor="middle">
             {this.props.yLabel}
+          </text>
+          <g
+            transform={`translate(0, ${height})`}
+            ref={node => select(node).call(axisBottom(widthScale))}
+          />
+          <text y={height + 30} x={width / 2} textAnchor="middle">
+            {this.props.xLabel}
           </text>
           {data.map(d => (
             <rect
@@ -88,9 +88,6 @@ export class BarChart extends Component {
               height={height - heightScale(d.y)}
             />
           ))}
-          <text y={height + 30} x={width / 2}textAnchor="middle">
-            {this.props.xLabel}
-          </text>
         </g>
       </svg>
     );

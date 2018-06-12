@@ -30,6 +30,7 @@ import { TestResults } from '../containers/Exercise/Results/TestResults';
 import { QuestionTestAnswers } from '../containers/Exercise/TestAnswers/QuestionTestAnswers';
 import { BlankTestAnswers } from '../containers/Exercise/TestAnswers/BlankTestAnswers';
 import StatisticsContainer from '../containers/Statistics/Statistics';
+import RegressionChart from '../components/Statistics/RegressionChart';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
 import ChangePasswordContainer from '../containers/Auth/ChangePassword';
@@ -59,7 +60,8 @@ const blankExercises = [
 store.dispatch(setActiveLanguage('ee'));
 store.dispatch(actionCreators.login(credentials.admin.username, credentials.admin.password));
 const { token } = store.getState().auth;
-store.dispatch(actionCreators.selectText(2, token));
+setTimeout(() => store.dispatch(actionCreators.selectText(2, token)), 2000);
+
 
 const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 
@@ -82,7 +84,8 @@ storiesOf('Text editor', module)
 
 storiesOf('Text analysis', module)
   .add('Container', () => {
-    const text = store.getState().text.selectedText.plain;
+    const { selectedText } = store.getState().text;
+    const text = selectedText ? selectedText.plain : '';
     store.dispatch(actionCreators.analyzeText({ text }));
     return <TextAnalysisContainer open />;
   })
@@ -162,7 +165,15 @@ storiesOf('Text selection filter', module)
     return (
       <TextSelectionFilterContainer
         open
-        filter={{}}
+        filter={{
+          collectionIds: [],
+          keywords: [],
+          complexityEquality: 'from',
+          complexityRating: 0,
+          authors: [],
+          questionsAuthors: [],
+          language: 'estonian',
+        }}
         textCount={0}
         onFilterChange={action('filter changed')}
         onFilterClear={action('filter cleared')}
@@ -182,6 +193,8 @@ storiesOf('Reading exercise', module)
         stopped: false,
       }}
       selectedText={store.getState().text.selectedText}
+      onExerciseStart={action('exercise started')}
+      translate={translate}
     />
   ));
 
@@ -204,6 +217,7 @@ storiesOf('Help exercise', module)
         paused: false,
         stopped: false,
       }}
+      onExerciseStart={action('exercise started')}
     />))
   .add('Concentration component', () => (
     <HelpExercise
@@ -213,6 +227,7 @@ storiesOf('Help exercise', module)
         paused: false,
         stopped: false,
       }}
+      onExerciseStart={action('exercise started')}
     />
   ));
 
@@ -310,6 +325,64 @@ storiesOf('Blank test answers', module)
 
 storiesOf('Statistics', module)
   .add('Container', () => <StatisticsContainer />);
+
+storiesOf('RegressionChart', module)
+  .add('Time scale with no data', () => (
+    <RegressionChart
+      title={translate('regression-chart.reading-speed-trend')}
+      xLabel={translate('regression-chart.date')}
+      yLabel={translate('regression-chart.speed-wpm')}
+      legendTitles={[translate('regression-chart.reading-speed')]}
+      width={1000}
+      height={400}
+      data={[]}
+      xField="date"
+      yFields={['wpm']}
+      dataStrokeColor={['#4C4CFF']}
+      dataFillColor={['#9999FF']}
+      dataLineColor={['#0000FF']}
+      translate={translate}
+    />
+  ))
+  .add('Time scale with one value', () => (
+    <RegressionChart
+      title={translate('regression-chart.reading-speed-trend')}
+      xLabel={translate('regression-chart.date')}
+      yLabel={translate('regression-chart.speed-wpm')}
+      legendTitles={[translate('regression-chart.reading-speed')]}
+      width={1000}
+      height={400}
+      data={[
+        { date: new Date(new Date() - (6 ** 11)), wpm: 185 },
+      ]}
+      xField="date"
+      yFields={['wpm']}
+      dataStrokeColor={['#4C4CFF']}
+      dataFillColor={['#9999FF']}
+      dataLineColor={['#0000FF']}
+      translate={translate}
+    />
+  ))
+  .add('Time scale with two values', () => (
+    <RegressionChart
+      title={translate('regression-chart.reading-speed-trend')}
+      xLabel={translate('regression-chart.date')}
+      yLabel={translate('regression-chart.speed-wpm')}
+      legendTitles={[translate('regression-chart.reading-speed')]}
+      width={1000}
+      height={400}
+      data={[
+        { date: new Date(new Date() - (6 ** 11)), wpm: 185 },
+        { date: new Date(new Date() - (4 ** 10)), wpm: 192 },
+      ]}
+      xField="date"
+      yFields={['wpm']}
+      dataStrokeColor={['#4C4CFF']}
+      dataFillColor={['#9999FF']}
+      dataLineColor={['#0000FF']}
+      translate={translate}
+    />
+  ));
 
 storiesOf('Manage', module)
   .add('Container', () => <ManageContainer />);

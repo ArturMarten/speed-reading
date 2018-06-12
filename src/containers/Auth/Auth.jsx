@@ -204,6 +204,7 @@ export class Auth extends Component {
             </Form> :
             <Form error={this.props.authenticationStatus.error !== null || this.props.logoutStatus.error !== null}>
               <Form.Input
+                aria-label={this.props.translate('auth.username')}
                 autoFocus
                 icon="user"
                 iconPosition="left"
@@ -218,6 +219,7 @@ export class Auth extends Component {
                 required
               />
               <Form.Input
+                aria-label={this.props.translate('auth.password')}
                 icon="lock"
                 iconPosition="left"
                 name="password"

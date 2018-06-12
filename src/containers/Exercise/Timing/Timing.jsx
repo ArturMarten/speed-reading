@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Button, Label, Icon } from 'semantic-ui-react';
+import { Button, Label, Icon, Responsive } from 'semantic-ui-react';
+import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 
@@ -101,38 +102,84 @@ export class Timing extends Component {
         clickHandler = this.pauseClickHandler;
       }
     }
+    const startButtonContent = () => {
+      if (!this.props.timerState.started) {
+        return this.props.translate('timing.start');
+      } else if (this.props.timerState.paused) {
+        return this.props.translate('timing.resume');
+      }
+      return this.props.translate('timing.pause');
+    };
+
     return (
       <Fragment>
-        <Button
-          circular
-          positive={!this.props.timerState.started || this.props.timerState.paused}
-          negative={this.props.timerState.started && !this.props.timerState.paused}
-          icon={!this.props.timerState.started || this.props.timerState.paused ? 'play' : 'pause'}
-          disabled={this.props.timerState.stopped || this.props.loading}
-          loading={this.props.loading}
-          onClick={clickHandler}
-        />
-        <Button
-          circular
-          color="orange"
-          icon="repeat"
-          inverted
-          disabled={!this.props.timerState.started}
-          loading={this.props.loading}
-          onClick={this.resetClickHandler}
-        />
-        <Button
-          circular
-          color="blue"
-          icon="flag checkered"
-          inverted
-          disabled={!this.props.timerState.started || this.props.timerState.stopped}
-          loading={this.props.loading}
-          onClick={this.stopClickHandler}
-        />
-        <Label basic size="big" style={{ marginTop: '5px' }}>
-          <Icon name="clock" />{format(this.state.elapsedTime)}
-        </Label>
+        <Responsive maxWidth={991}>
+          <Button
+            circular
+            positive={!this.props.timerState.started || this.props.timerState.paused}
+            negative={this.props.timerState.started && !this.props.timerState.paused}
+            icon={!this.props.timerState.started || this.props.timerState.paused ? 'play' : 'pause'}
+            disabled={this.props.timerState.stopped || this.props.loading}
+            loading={this.props.loading}
+            onClick={clickHandler}
+          />
+          <Button
+            circular
+            color="orange"
+            icon="repeat"
+            inverted
+            disabled={!this.props.timerState.started}
+            loading={this.props.loading}
+            onClick={this.resetClickHandler}
+          />
+          <Button
+            circular
+            color="blue"
+            icon="flag checkered"
+            inverted
+            disabled={!this.props.timerState.started || this.props.timerState.stopped}
+            loading={this.props.loading}
+            onClick={this.stopClickHandler}
+          />
+          <Label basic size="big" style={{ marginTop: '5px' }}>
+            <Icon name="clock" />{format(this.state.elapsedTime)}
+          </Label>
+        </Responsive>
+        <Responsive minWidth={992}>
+          <Button
+            circular
+            positive={!this.props.timerState.started || this.props.timerState.paused}
+            negative={this.props.timerState.started && !this.props.timerState.paused}
+            icon={!this.props.timerState.started || this.props.timerState.paused ? 'play' : 'pause'}
+            content={startButtonContent()}
+            disabled={this.props.timerState.stopped || this.props.loading}
+            loading={this.props.loading}
+            onClick={clickHandler}
+          />
+          <Button
+            circular
+            color="orange"
+            icon="repeat"
+            inverted
+            content={this.props.translate('timing.reset')}
+            disabled={!this.props.timerState.started}
+            loading={this.props.loading}
+            onClick={this.resetClickHandler}
+          />
+          <Button
+            circular
+            color="blue"
+            icon="flag checkered"
+            inverted
+            content={this.props.translate('timing.stop')}
+            disabled={!this.props.timerState.started || this.props.timerState.stopped}
+            loading={this.props.loading}
+            onClick={this.stopClickHandler}
+          />
+          <Label basic size="big" style={{ marginTop: '5px' }}>
+            <Icon name="clock" />{format(this.state.elapsedTime)}
+          </Label>
+        </Responsive>
       </Fragment>
     );
   }
@@ -140,6 +187,7 @@ export class Timing extends Component {
 
 const mapStateToProps = state => ({
   timerState: state.timing.timer,
+  translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({

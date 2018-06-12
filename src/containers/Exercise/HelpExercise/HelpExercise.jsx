@@ -58,7 +58,7 @@ export class HelpExercise extends Component {
     })(this.props.type);
     return (
       <Grid container>
-        <Grid.Row verticalAlign="middle">
+        <Grid.Row verticalAlign="middle" style={{ paddingBottom: 0 }}>
           <Grid.Column textAlign="center" width={8} />
           <Grid.Column textAlign="center" width={8}>
             <Timing
@@ -68,7 +68,7 @@ export class HelpExercise extends Component {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row centered>
+        <Grid.Row centered style={{ paddingTop: '0.4em' }}>
           <Dimmer.Dimmable
             style={{
               filter: !this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped ?

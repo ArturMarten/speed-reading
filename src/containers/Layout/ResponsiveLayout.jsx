@@ -96,9 +96,9 @@ export class ResponsiveLayout extends Component {
                       <Grid.Row columns={3} textAlign="center">
                         <Grid.Column>
                           <Button
-                            fluid
                             circular
                             primary
+                            size="large"
                             icon="lock"
                             onClick={this.changePasswordToggleHandler}
                             disabled={this.props.userEmail === credentials.demo.username}
@@ -106,10 +106,10 @@ export class ResponsiveLayout extends Component {
                         </Grid.Column>
                         <Grid.Column>
                           <Button
-                            fluid
                             circular
                             as={Link}
                             positive
+                            size="large"
                             icon="sign out"
                             onClick={this.onLogout}
                             to="/logout"
@@ -117,9 +117,9 @@ export class ResponsiveLayout extends Component {
                         </Grid.Column>
                         <Grid.Column>
                           <Button
-                            fluid
                             circular
                             color="black"
+                            size="large"
                             icon="setting"
                             onClick={this.profileSettingsToggleHandler}
                           />

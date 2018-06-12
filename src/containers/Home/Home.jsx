@@ -5,7 +5,7 @@ import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import About from './About/About';
 import IntroVideo from './IntroVideo/IntroVideo';
-import AppStats from './AppStats/AppStats';
+import ApplicationStatistics from './ApplicationStatistics/ApplicationStatistics';
 import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
 import studyEstLogo from '../../assets/img/study_est.jpg';
@@ -80,7 +80,7 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <AppStats />
+        <ApplicationStatistics />
         <Divider />
         <Grid verticalAlign="middle">
           <Grid.Row columns={2} style={{ paddingTop: 0, paddingBottom: 0 }}>

@@ -54,8 +54,12 @@ export class Statistics extends Component {
   }
 
   exerciseSelectionHandler = (event, { value }) => {
-    this.setState({ exercise: value });
+    if (this.state.exercise !== value) {
+      this.setState({ exercise: value });
+    }
   }
+
+  filterOutliers = attempt => true || attempt.wpm <= 500;
 
   exerciseOptions = [
     { text: this.props.translate('statistics.reading-exercises'), value: 'readingExercises' },
@@ -79,7 +83,9 @@ export class Statistics extends Component {
       .filter(user => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId)
       .map((user, index) => ({ key: index, value: user.publicId, text: `${user.name ? user.name : ''} <${user.email}>` }));
     const data = this.props.exerciseStatistics
-      .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1);
+      .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
+      .filter(this.filterOutliers)
+      .map((attempt, index) => ({ ...attempt, index }));
     const filter = (
       <Form>
         {this.state.isTeacher ?
@@ -161,12 +167,63 @@ export class Statistics extends Component {
           <Tab.Pane>
             {filter}
             <div style={{ margin: '1em 0em', overflowX: 'auto' }}>
-              <Segment basic>
+              <Segment>
                 <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
                   <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                 </Dimmer>
                 <RegressionChart
+                  title={this.props.translate('regression-chart.reading-speed-trend')}
+                  xLabel={this.props.translate('regression-chart.date')}
+                  yLabel={this.props.translate('regression-chart.speed-wpm')}
+                  legendTitles={[this.props.translate('regression-chart.reading-speed')]}
+                  width={1000}
+                  height={400}
                   data={data}
+                  xField="date"
+                  yFields={['wpm']}
+                  dataStrokeColor={['#FF4C4C']}
+                  dataFillColor={['#FF9999']}
+                  dataLineColor={['#FF0000']}
+                  translate={this.props.translate}
+                />
+              </Segment>
+              <Segment>
+                <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
+                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                </Dimmer>
+                <RegressionChart
+                  title={this.props.translate('regression-chart.comprehension-speed-trend')}
+                  xLabel={this.props.translate('regression-chart.date')}
+                  yLabel={this.props.translate('regression-chart.speed-wpm')}
+                  legendTitles={[this.props.translate('regression-chart.comprehension-speed')]}
+                  width={1000}
+                  height={400}
+                  data={data}
+                  xField="date"
+                  yFields={['cpm']}
+                  dataStrokeColor={['#009900']}
+                  dataFillColor={['#00FF00']}
+                  dataLineColor={['#007F00']}
+                  translate={this.props.translate}
+                />
+              </Segment>
+              <Segment>
+                <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
+                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                </Dimmer>
+                <RegressionChart
+                  title={this.props.translate('regression-chart.comprehension-level-trend')}
+                  xLabel={this.props.translate('regression-chart.date')}
+                  yLabel={this.props.translate('regression-chart.comprehension-level-percentage')}
+                  legendTitles={[this.props.translate('regression-chart.comprehension-level')]}
+                  width={1000}
+                  height={400}
+                  data={data}
+                  xField="date"
+                  yFields={['comprehensionResult']}
+                  dataStrokeColor={['#4C4CFF']}
+                  dataFillColor={['#9999FF']}
+                  dataLineColor={['#0000FF']}
                   translate={this.props.translate}
                 />
               </Segment>

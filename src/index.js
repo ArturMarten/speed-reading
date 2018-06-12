@@ -39,6 +39,9 @@ import 'semantic-ui-css/components/loader.css';
 import 'semantic-ui-css/components/dropdown.css';
 import 'semantic-ui-css/components/segment.css';
 
+// Override global styling
+import './index.css';
+
 // Polyfills
 import './polyfill';
 

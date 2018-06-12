@@ -76,6 +76,7 @@ export class ChangePassword extends Component {
         <Modal.Content>
           <Form error={this.props.passwordChangeStatus.error !== null} success={this.props.passwordChangeStatus.message !== null}>
             <Form.Input
+              aria-label={this.props.translate('change-password.old-password')}
               icon="lock"
               autoFocus
               iconPosition="left"
@@ -89,6 +90,7 @@ export class ChangePassword extends Component {
               required
             />
             <Form.Input
+              aria-label={this.props.translate('change-password.new-password')}
               icon="refresh"
               iconPosition="left"
               name="newPassword"
@@ -101,6 +103,7 @@ export class ChangePassword extends Component {
               required
             />
             <Form.Input
+              aria-label={this.props.translate('change-password.confirm-new-password')}
               icon="refresh"
               iconPosition="left"
               name="newPasswordConfirm"

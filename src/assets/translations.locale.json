@@ -94,12 +94,12 @@
   "about": {
     "modal-header": ["Rakenduse kohta", "About application"],
     "title": ["Kiirlugemine 5.0", "Kiirlugemine 5.0"],
-    "project-manager": ["Projekti juhtis", "Project Manager"],
-    "project-manager-name": ["prof. Jaan Mikk (jaan.mikk@ut.ee)", "prof. Jaan Mikk (jaan.mikk@ut.ee)"],
     "developer": ["Arendaja", "Developer"],
     "developer-name": ["Marten Siiber", "Marten Siiber"],
-    "helper": ["Aitasid kaasa", "Helped"],
-    "helper-names": ["Sven Aller ja Ilona Võik (tekstid)", "Sven Aller ja Ilona Võik (texts)"],
+    "contributed-creatively": ["Loovalt panustasid", "Contribute creatively"],
+    "contributed-creatively-names": ["prof. Jaan Mikk ja Sven Aller", "prof. Jaan Mikk and Sven Aller"],
+    "contributed-texts": ["Aitasid lugemistekstidega", "Helped with reading texts"],
+    "contributed-texts-names": ["Enel Tubin, Kirsika-Marian Bazilenko ja Ilona Võik", "Enel Tubin, Kirsika-Marian Bazilenko and Ilona Võik"],
     "place": ["Tartu Ülikool", "University of Tartu"],
     "copyright": ["Autoriõigustega kaitstud.", "Copyright."]
   },
@@ -111,7 +111,7 @@
     "authentication": ["Sisselogimine", "Authentication"],
     "add-user": ["Kasutaja lisamine", "Adding user"]
   },
-  "app-stats": {
+  "application-statistics": {
     "state": ["Rakenduse andmed", "Application stats"],
     "different": ["Erinevat", "Different"],
     "exercises": ["harjutust", "exercises"],
@@ -124,7 +124,12 @@
     "users": ["Kasutajat", "Users"],
     "registered": ["registreeritud", "registered"],
     "feedback": ["Tagasisidet", "Feedback"],
-    "received": ["saadud", "received"]
+    "received": ["saadud", "received"],
+    "elapsed-time-for": ["Kulunud aeg", "Elapsed time for"],
+    "reading-exercises": ["lugemisharjutustele", "reading exercises"],
+    "help-exercises": ["abiharjutustele", "help exercises"],
+    "tests": ["testidele", "tests"],
+    "all": ["kõigele kokku", "everything"]
   },
   "text-entry": {
     "title": ["Tekstide sisestamine", "Text entry"],
@@ -328,6 +333,13 @@
     "show": ["Näita harjutuse eelvaadet", "Show exercise preview"],
     "hide": ["Peida harjutuse eelvaade", "Hide exercise preview"]
   },
+  "timing": {
+    "start": ["Alusta", "Start"],
+    "pause": ["Peata", "Pause"],
+    "resume": ["Jätka", "Resume"],
+    "reset": ["Lähtesta", "Reset"],
+    "stop": ["Lõpeta", "Finish"]
+  },
   "text-exercise": {
     "next-page": ["Järgmine leht", "Next page"],
     "previous-page": ["Eelmine leht", "Previous page"]
@@ -516,8 +528,18 @@
     "export": ["Expordi", "Export"]
   },
   "regression-chart": {
-    "wpm": ["Sõnu minutis", "Words Per Minute"],
-    "date": ["Kuupäev", "Date"]
+    "change": ["muutus", "change"],
+    "average": ["keskmine", "average"],
+    "standard-deviation": ["standardhälve", "standard deviation"],
+    "date": ["Kuupäev", "Date"],
+    "reading-speed-trend": ["Lugemiskiiruse arengujoon", "Reading speed trend"],
+    "speed-wpm": ["Kiirus (sõnu minutis)", "Speed (Words Per Minute)"],
+    "reading-speed": ["Lugemiskiirus", "Reading speed"],
+    "comprehension-speed-trend": ["Omandamiskiiruse arengujoon", "Comrehension speed trend"],
+    "comprehension-speed": ["Omandamiskiirus", "Comprehension speed"],
+    "comprehension-level-trend": ["Omandamistaseme arengujoon", "Comprehension level trend"],
+    "comprehension-level-percentage": ["Omandamistase (%)", "Comprehension level (%)"],
+    "comprehension-level": ["Omandamistase", "Comprehension level"]
   },
   "manage": {
     "title": ["Halda", "Manage"],
@@ -615,7 +637,7 @@
     "answer-added": ["Vastusevariant lisatud", "Answer added"],
     "answer-updated": ["Vastusevariant uuendatud", "Answer updated"],
     "answer-removed": ["Vastusevariant kustutatud", "Answer removed"],
-    "account-registered-password-sent": ["Kasutaja registreeritud, parool saadeti e-postiga", "Account registered, password sent with e-mail"]
+    "account-registered-password-sent": ["Kasutajakonto registreeritud, parool saadeti e-postiga", "Account registered, password sent with an e-mail"]
   },
   "error": {
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],
