@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -15,6 +15,9 @@ export class Statistics extends Component {
     groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
     userId: this.props.userId,
     exercise: 'readingExercises',
+    chartIndex: 0,
+    scale: 'date',
+    filterOutliers: false,
   };
 
   componentDidMount() {
@@ -28,6 +31,66 @@ export class Statistics extends Component {
     }
     this.props.onFetchExerciseStatistics(this.props.userId, this.props.token);
   }
+
+  exerciseCharts = [
+    [
+      {
+        id: 0,
+        title: this.props.translate('regression-chart.reading-speed-trend'),
+        xLabel: this.props.translate('regression-chart.date'),
+        yLabel: this.props.translate('regression-chart.speed-wpm'),
+        legendTitles: [this.props.translate('regression-chart.reading-speed')],
+        yFields: ['wpm'],
+        dataStrokeColor: ['#FF4C4C'],
+        dataFillColor: ['#FF9999'],
+        dataLineColor: ['#FF0000'],
+      }, {
+        id: 1,
+        title: this.props.translate('regression-chart.comprehension-speed-trend'),
+        xLabel: this.props.translate('regression-chart.date'),
+        yLabel: this.props.translate('regression-chart.speed-wpm'),
+        legendTitles: [this.props.translate('regression-chart.comprehension-speed')],
+        yFields: ['cpm'],
+        dataStrokeColor: ['#009900'],
+        dataFillColor: ['#00FF00'],
+        dataLineColor: ['#007F00'],
+      }, {
+        id: 2,
+        title: this.props.translate('regression-chart.comprehension-level-trend'),
+        xLabel: this.props.translate('regression-chart.date'),
+        yLabel: this.props.translate('regression-chart.comprehension-level-percentage'),
+        legendTitles: [this.props.translate('regression-chart.comprehension-level')],
+        yFields: ['comprehensionResult'],
+        dataStrokeColor: ['#4C4CFF'],
+        dataFillColor: ['#9999FF'],
+        dataLineColor: ['#0000FF'],
+      },
+    ], [
+      {
+        id: 0,
+        title: this.props.translate('regression-chart.finding-speed-trend'),
+        xLabel: this.props.translate('regression-chart.date'),
+        yLabel: this.props.translate('regression-chart.speed-spm'),
+        legendTitles: [this.props.translate('regression-chart.finding-speed')],
+        yFields: ['spm'],
+        dataStrokeColor: ['#009900'],
+        dataFillColor: ['#00FF00'],
+        dataLineColor: ['#007F00'],
+      },
+    ], [
+      {
+        id: 0,
+        title: this.props.translate('regression-chart.exercise-result-trend'),
+        xLabel: this.props.translate('regression-chart.date'),
+        yLabel: this.props.translate('regression-chart.result-percentage'),
+        legendTitles: [this.props.translate('regression-chart.exercise-result')],
+        yFields: ['exerciseResult'],
+        dataStrokeColor: ['#4C4CFF'],
+        dataFillColor: ['#9999FF'],
+        dataLineColor: ['#0000FF'],
+      },
+    ],
+  ];
 
   groupChangeHandler = (event, { value }) => {
     let { userId } = this.state;
@@ -55,11 +118,31 @@ export class Statistics extends Component {
 
   exerciseSelectionHandler = (event, { value }) => {
     if (this.state.exercise !== value) {
-      this.setState({ exercise: value });
+      let { chartIndex } = this.state;
+      if (value === 'schulteTables') {
+        chartIndex = 1;
+      } else if (value === 'concentration') {
+        chartIndex = 2;
+      } else {
+        chartIndex = 0;
+      }
+      this.setState({ exercise: value, chartIndex });
     }
   }
 
-  filterOutliers = attempt => true || attempt.wpm <= 500;
+  scaleSelectionHandler = (event, { value }) => {
+    if (this.state.scale !== value) {
+      this.setState({ scale: value });
+    }
+  }
+
+  filterOutliers = attempt => !this.state.filterOutliers || attempt.wpm <= 500;
+
+  filterOutliersHandler = () => {
+    this.setState({
+      filterOutliers: !this.state.filterOutliers,
+    });
+  }
 
   exerciseOptions = [
     { text: this.props.translate('statistics.reading-exercises'), value: 'readingExercises' },
@@ -70,6 +153,12 @@ export class Statistics extends Component {
     { text: this.props.translate('statistics.word-groups'), value: 'wordGroups' },
     { text: this.props.translate('statistics.schulte-tables'), value: 'schulteTables' },
     { text: this.props.translate('statistics.concentration'), value: 'concentration' },
+  ];
+
+  scaleOptions = [
+    { text: this.props.translate('statistics.exercise-index'), value: 'index' },
+    { text: this.props.translate('statistics.exercise-date'), value: 'date' },
+    { text: this.props.translate('statistics.exercise-time-spent'), value: 'time', disabled: true },
   ];
 
   render() {
@@ -85,9 +174,10 @@ export class Statistics extends Component {
     const data = this.props.exerciseStatistics
       .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
       .filter(this.filterOutliers)
-      .map((attempt, index) => ({ ...attempt, index }));
-    const filter = (
-      <Form>
+      .map((attempt, index) => ({ ...attempt, index: index + 1 }));
+    const xField = this.state.scale === 'index' ? 'index' : 'date';
+    const userFilter = (
+      <Fragment>
         {this.state.isTeacher ?
           <Form.Group widths="equal">
             <Form.Field
@@ -117,19 +207,7 @@ export class Statistics extends Component {
               control={Dropdown}
             />
           </Form.Group> : null}
-        <Form.Field
-          id="exercise-dropdown"
-          fluid
-          inline
-          selection
-          value={this.state.exercise}
-          onChange={this.exerciseSelectionHandler}
-          options={this.exerciseOptions}
-          loading={this.props.exerciseStatisticsStatus.loading}
-          label={this.props.translate('statistics.exercise')}
-          control={Dropdown}
-        />
-      </Form>
+      </Fragment>
     );
     const panes = [
       {
@@ -140,9 +218,32 @@ export class Statistics extends Component {
         },
         render: () => (
           <Tab.Pane>
-            {filter}
-            <div style={{ margin: '1em 0em', overflowX: 'auto' }}>
-              <Segment basic>
+            <Form>
+              {userFilter}
+              <Form.Group widths="equal">
+                <Form.Field
+                  id="exercise-dropdown"
+                  fluid
+                  inline
+                  selection
+                  value={this.state.exercise}
+                  onChange={this.exerciseSelectionHandler}
+                  options={this.exerciseOptions}
+                  loading={this.props.exerciseStatisticsStatus.loading}
+                  label={this.props.translate('statistics.exercise')}
+                  control={Dropdown}
+                />
+              </Form.Group>
+              <Form.Field
+                id="filter-checkbox"
+                checked={this.state.filterOutliers}
+                onChange={this.filterOutliersHandler}
+                label={this.props.translate('statistics.filter-outliers')}
+                control={Checkbox}
+              />
+            </Form>
+            <div style={{ overflowX: 'auto' }}>
+              <Segment basic style={{ padding: 0 }}>
                 <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
                   <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                 </Dimmer>
@@ -165,74 +266,65 @@ export class Statistics extends Component {
         },
         render: () => (
           <Tab.Pane>
-            {filter}
-            <div style={{ margin: '1em 0em', overflowX: 'auto' }}>
-              <Segment>
-                <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
-                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
-                </Dimmer>
-                <RegressionChart
-                  title={this.props.translate('regression-chart.reading-speed-trend')}
-                  xLabel={this.props.translate('regression-chart.date')}
-                  yLabel={this.props.translate('regression-chart.speed-wpm')}
-                  legendTitles={[this.props.translate('regression-chart.reading-speed')]}
-                  width={1000}
-                  height={400}
-                  data={data}
-                  xField="date"
-                  yFields={['wpm']}
-                  dataStrokeColor={['#FF4C4C']}
-                  dataFillColor={['#FF9999']}
-                  dataLineColor={['#FF0000']}
-                  translate={this.props.translate}
+            <Form>
+              {userFilter}
+              <Form.Group widths="equal">
+                <Form.Field
+                  id="exercise-dropdown"
+                  fluid
+                  inline
+                  selection
+                  value={this.state.exercise}
+                  onChange={this.exerciseSelectionHandler}
+                  options={this.exerciseOptions}
+                  loading={this.props.exerciseStatisticsStatus.loading}
+                  label={this.props.translate('statistics.exercise')}
+                  control={Dropdown}
                 />
-              </Segment>
-              <Segment>
-                <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
-                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
-                </Dimmer>
-                <RegressionChart
-                  title={this.props.translate('regression-chart.comprehension-speed-trend')}
-                  xLabel={this.props.translate('regression-chart.date')}
-                  yLabel={this.props.translate('regression-chart.speed-wpm')}
-                  legendTitles={[this.props.translate('regression-chart.comprehension-speed')]}
-                  width={1000}
-                  height={400}
-                  data={data}
-                  xField="date"
-                  yFields={['cpm']}
-                  dataStrokeColor={['#009900']}
-                  dataFillColor={['#00FF00']}
-                  dataLineColor={['#007F00']}
-                  translate={this.props.translate}
+                <Form.Field
+                  id="scale-dropdown"
+                  fluid
+                  inline
+                  selection
+                  value={this.state.scale}
+                  onChange={this.scaleSelectionHandler}
+                  options={this.scaleOptions}
+                  loading={this.props.exerciseStatisticsStatus.loading}
+                  label={this.props.translate('statistics.scale')}
+                  control={Dropdown}
                 />
-              </Segment>
-              <Segment>
-                <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
-                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
-                </Dimmer>
-                <RegressionChart
-                  title={this.props.translate('regression-chart.comprehension-level-trend')}
-                  xLabel={this.props.translate('regression-chart.date')}
-                  yLabel={this.props.translate('regression-chart.comprehension-level-percentage')}
-                  legendTitles={[this.props.translate('regression-chart.comprehension-level')]}
-                  width={1000}
-                  height={400}
-                  data={data}
-                  xField="date"
-                  yFields={['comprehensionResult']}
-                  dataStrokeColor={['#4C4CFF']}
-                  dataFillColor={['#9999FF']}
-                  dataLineColor={['#0000FF']}
-                  translate={this.props.translate}
-                />
-              </Segment>
+              </Form.Group>
+              <Form.Field
+                id="filter-checkbox"
+                checked={this.state.filterOutliers}
+                onChange={this.filterOutliersHandler}
+                label={this.props.translate('statistics.filter-outliers')}
+                control={Checkbox}
+              />
+            </Form>
+            <div style={{ margin: '1em 0em' }}>
+              {this.exerciseCharts[this.state.chartIndex].map(({ id, ...chartProps }) => (
+                <Segment key={id}>
+                  <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
+                    <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                  </Dimmer>
+                  <div style={{ textAlign: 'center', overflowX: 'auto' }}>
+                    <RegressionChart
+                      width={1000}
+                      height={400}
+                      data={data}
+                      xField={xField}
+                      translate={this.props.translate}
+                      {...chartProps}
+                    />
+                  </div>
+                </Segment>
+              ))}
             </div>
           </Tab.Pane>
         ),
       },
     ];
-
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('statistics.title')}</Header>

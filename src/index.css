@@ -7,3 +7,18 @@
   box-shadow: none !important;
   pointer-events: initial !important;
 }
+
+/* Override disabled checkbox styling */
+.ui.disabled.checkbox .box:after, .ui.disabled.checkbox label, .ui.checkbox input[disabled] ~ .box:after, .ui.checkbox input[disabled] ~ label {
+  cursor: not-allowed !important;
+  opacity: 0.45 !important;
+  pointer-events: initial !important;
+  color: #000000
+}
+
+/* Override disabled dropdown styling */
+.ui.disabled.dropdown, .ui.dropdown .menu > .disabled.item {
+  cursor: not-allowed !important;
+  opacity: 0.45 !important;
+  pointer-events: initial !important;
+}

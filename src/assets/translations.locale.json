@@ -494,6 +494,8 @@
     "group": ["Grupp", "Group"],
     "user": ["Kasutaja", "User"],
     "exercise": ["Harjutus", "Exercise"],
+    "scale": ["Skaala", "Scale"],
+    "filter-outliers": ["Eemalda ebarealistlikud väärtused", "Remove unrealistic values"],
     "all-groups": ["Kõik grupid", "All groups"],
     "reading-exercises": ["Lugemisharjutused", "Reading exercises"],
     "reading-test": ["Lugemistest", "Reading test"],
@@ -503,6 +505,9 @@
     "word-groups": ["Sõnarühmad", "Word groups"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
+    "exercise-index": ["Harjutuse järjekorranumber", "Exercise index"],
+    "exercise-date": ["Harjutuse kuupäev", "Exercise date"],
+    "exercise-time-spent": ["Harjutamisele kulunud aeg", "Spent time on exercises"],
     "fetching-data": ["Laen andmeid", "Loading data"],
     "own-text": ["Oma tekst", "Own text"],
     "missing-data": ["Antud harjutuse kohta puuduvad andmed", "Missing data for selected exercise"],
@@ -539,7 +544,13 @@
     "comprehension-speed": ["Omandamiskiirus", "Comprehension speed"],
     "comprehension-level-trend": ["Omandamistaseme arengujoon", "Comprehension level trend"],
     "comprehension-level-percentage": ["Omandamistase (%)", "Comprehension level (%)"],
-    "comprehension-level": ["Omandamistase", "Comprehension level"]
+    "comprehension-level": ["Omandamistase", "Comprehension level"],
+    "finding-speed-trend": ["Leidmiskiiruse arengujoon", "Finding speed trend"],
+    "speed-spm": ["Kiirus (sümbolit minutis)", "Speed (Symbols Per Minute)"],
+    "finding-speed": ["Leidmiskiirus", "Finding speed"],
+    "exercise-result-trend": ["Harjutuse tulemuse arengujoon", "Exercise result trend"],
+    "result-percentage": ["Tulemus (%)", "Result (%)"],
+    "exercise-result": ["Harjutuse tulemus", "Exercise result"]
   },
   "manage": {
     "title": ["Halda", "Manage"],

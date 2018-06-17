@@ -19,19 +19,37 @@ const margin = {
 };
 
 const DATA_POINT_RADIUS = 4;
-const TRANSITION_DURATION = 1000;
+const TRANSITION_DURATION = 5000;
 const FONT_SIZE = 12;
-const HORIZONTAL_SPACING = 0.1;
-const VERTICAL_SPACING = 0.1;
+const HORIZONTAL_SPACING = 0.05;
+const VERTICAL_SPACING = 0.05;
 
 export class RegressionChart extends Component {
   state = {
     width: this.props.width - margin.left - margin.right,
     height: this.props.height - margin.top - margin.bottom,
+    widthScaleType: 'time',
     widthScale: scaleTime()
       .range([0, this.props.width - margin.left - margin.right]),
     heightScale: scaleLinear()
       .range([0, this.props.height - margin.top - margin.bottom]),
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let { widthScale } = prevState;
+    const { data } = nextProps;
+
+    const width = nextProps.width - margin.left - margin.right;
+    if (data[0][nextProps.xField] instanceof Date) {
+      widthScale = scaleTime().range([0, width]);
+    } else {
+      widthScale = scaleLinear().range([0, width]);
+    }
+
+    return {
+      ...prevState,
+      widthScale,
+    };
   }
 
   componentDidMount() {
@@ -41,7 +59,7 @@ export class RegressionChart extends Component {
       widthScale,
       heightScale,
     } = this.state;
-    const { data } = this.props;
+    const { data, xField, yFields } = this.props;
     if (data.length === 0) {
       return;
     }
@@ -49,25 +67,19 @@ export class RegressionChart extends Component {
     const chart = svg.append('g')
       .attr('class', 'chart')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
-    /*
-    if (data[0][this.props.xField] instanceof Date) {
-      console.log('Date field passed');
-    } else {
-      console.log('Number field passed');
-    }
-    console.log(data);
-    */
-    const xValues = data.map(d => d.date);
-    const yValues = data.map(d => d[this.props.yFields[0]]);
+
+    // console.log(data);
+    const xValues = data.map(d => d[xField]);
+    const yValues = data.map(d => d[yFields[0]]);
     const minDate = Math.min(...xValues);
     const maxDate = Math.max(...xValues);
     const maxValue = Math.max(...yValues);
-    const difference = maxDate - minDate;
-    const spacing = difference * HORIZONTAL_SPACING;
-    this.xScale = widthScale.domain([new Date(minDate - spacing), new Date(maxDate + spacing)]);
-    this.yScale = heightScale.domain([maxValue + (maxValue * VERTICAL_SPACING), 0]);
-    const xSeries = data.map(d => this.xScale(d.date));
-    const ySeries = data.map(d => this.yScale(d[this.props.yFields[0]]));
+    const horizontalSpacing = (maxDate - minDate) * HORIZONTAL_SPACING;
+    const verticalSpacing = maxValue * VERTICAL_SPACING;
+    this.xScale = widthScale.domain([new Date(minDate - horizontalSpacing), new Date(maxDate + horizontalSpacing)]);
+    this.yScale = heightScale.domain([maxValue + verticalSpacing, -verticalSpacing]);
+    const xSeries = data.map(d => this.xScale(d[xField]));
+    const ySeries = data.map(d => this.yScale(d[yFields[0]]));
     const [slope, intercept] = leastSquares(xSeries, ySeries);
     const change = slope * -100;
     const average = getAverage(yValues);
@@ -134,19 +146,34 @@ export class RegressionChart extends Component {
     legendText.append('tspan')
       .text(')');
 
+    // Append tooltip
+    const tooltip = svg.append('g')
+      .attr('id', 'tooltip')
+      .style('visibility', 'hidden');
+
+    const tooltipLabel = tooltip.append('text');
+
     // Append datapoints
     this.props.yFields.forEach((yField, index) => {
       chart.append('g')
         .selectAll(`.data-point-${yField}`)
-        .data(data)
+        .data(data, d => d.id)
         .enter()
         .append('circle')
         .attr('class', `data-point-${yField}`)
         .style('stroke', this.props.dataStrokeColor[index])
         .style('fill', this.props.dataFillColor[index])
-        .attr('cx', d => this.xScale(d.date))
+        .attr('cx', d => this.xScale(d[xField]))
         .attr('cy', d => this.yScale(d[yField]))
-        .attr('r', DATA_POINT_RADIUS);
+        .attr('r', DATA_POINT_RADIUS)
+        .on('mouseover', function showTooltip(d, e) {
+          tooltip.style('visibility', 'visible').attr('transform', 'translate(115, 90)');
+          console.log(this, d, e);
+          tooltipLabel.text(`ID: ${d.id}`);
+        })
+        .on('mouseout', () => {
+          tooltip.style('visibility', 'hidden');
+        });
     });
 
     // Append regression line
@@ -162,34 +189,54 @@ export class RegressionChart extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { data } = this.props;
+    const {
+      data,
+      translate,
+      xField,
+      yFields,
+    } = this.props;
+    if (prevProps.xField !== xField) {
+      console.log('Scale changed!');
+    }
+    if (prevProps.translate !== translate) {
+      console.log('Translate changed');
+    }
+    console.log('Regression chart update');
     // Move data from render method to parent state
     if (prevProps.data !== data && data.length > 0) {
       const { widthScale, heightScale } = this.state;
       const svg = select(this.svgRef);
       const chart = svg.select('g');
       // Update scales
-      const xValues = data.map(d => d.date);
-      const yValues = data.map(d => d[this.props.yFields[0]]);
+      const xValues = data.map(d => d[xField]);
+      const yValues = data.map(d => d[yFields[0]]);
       const minDate = Math.min(...xValues);
       const maxDate = Math.max(...xValues);
       const maxValue = Math.max(...yValues);
-      const difference = maxDate - minDate;
-      const spacing = difference * HORIZONTAL_SPACING;
-      this.xScale = widthScale.domain([new Date(minDate - spacing), new Date(maxDate + spacing)]);
-      this.yScale = heightScale.domain([maxValue + (maxValue * VERTICAL_SPACING), 0]);
-      const xSeries = data.map(d => this.xScale(d.date));
-      const ySeries = data.map(d => this.yScale(d[this.props.yFields[0]]));
+      const horizontalSpacing = (maxDate - minDate) * HORIZONTAL_SPACING;
+      const verticalSpacing = maxValue * VERTICAL_SPACING;
+      this.xScale = widthScale.domain([new Date(minDate - horizontalSpacing), new Date(maxDate + horizontalSpacing)]);
+      this.yScale = heightScale.domain([maxValue + verticalSpacing, -verticalSpacing]);
+      const xSeries = data.map(d => this.xScale(d[xField]));
+      const ySeries = data.map(d => this.yScale(d[yFields[0]]));
       const [slope, intercept] = leastSquares(xSeries, ySeries);
       const change = slope * -100;
       const average = getAverage(yValues);
       const standardDeviation = getStandardDeviation(yValues, average);
 
       // Update axis
-      chart.select('.x-axis')
-        .transition()
-        .duration(TRANSITION_DURATION)
-        .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')));
+      if (data[0][this.props.xField] instanceof Date) {
+        chart.select('.x-axis')
+          .transition()
+          .duration(TRANSITION_DURATION)
+          .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')));
+      } else {
+        chart.select('.x-axis')
+          .transition()
+          .duration(TRANSITION_DURATION)
+          .call(axisBottom(this.xScale));
+      }
+
       chart.select('.y-axis')
         .transition()
         .duration(TRANSITION_DURATION)
@@ -210,30 +257,38 @@ export class RegressionChart extends Component {
         .duration(TRANSITION_DURATION)
         .text(`${standardDeviation.toFixed(2)}`);
 
-      this.props.yFields.forEach((yField, index) => {
+      yFields.forEach((yField, index) => {
+        const dataPoints = chart.selectAll(`.data-point-${yField}`);
         // Remove old datapoints
-        chart.selectAll(`.data-point-${yField}`)
+        dataPoints
           .data(data)
           .exit()
-          .remove();
-        // Update existing datapoints
-        chart.selectAll(`.data-point-${yField}`)
-          .data(data)
           .transition()
           .duration(TRANSITION_DURATION)
-          .attr('cx', d => this.xScale(d.date))
+          .style('opacity', 0)
+          .remove();
+        // Update existing datapoints
+        dataPoints
+          .data(data, d => d.id)
+          .transition()
+          .duration(TRANSITION_DURATION)
+          .attr('cx', d => this.xScale(d[xField]))
           .attr('cy', d => this.yScale(d[yField]));
         // Add new datapoints
-        chart.selectAll(`.data-point-${yField}`)
-          .data(data)
+        dataPoints
+          .data(data, d => d.id)
           .enter()
           .append('circle')
           .attr('class', `data-point-${yField}`)
+          .style('opacity', 0)
           .style('stroke', this.props.dataStrokeColor[index])
           .style('fill', this.props.dataFillColor[index])
-          .attr('cx', d => this.xScale(d.date))
+          .attr('cx', d => this.xScale(d[xField]))
           .attr('cy', d => this.yScale(d[yField]))
-          .attr('r', DATA_POINT_RADIUS);
+          .attr('r', DATA_POINT_RADIUS)
+          .transition()
+          .duration(TRANSITION_DURATION)
+          .style('opacity', 1);
       });
 
       // Update regression line
@@ -249,27 +304,6 @@ export class RegressionChart extends Component {
       console.log('Props changed');
     }
   }
-
-  /**
-   *legend.append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', 12)
-      .attr('height', 12)
-      .style('fill', this.props.dataLineColor[0]);
-    const legendText = legend.append('text')
-      .attr('x', 20)
-      .attr('y', 10)
-      .style('font-size', FONT_SIZE);
-    legendText.append('tspan')
-      .text('Lugemiskiirus (');
-    legendText.append('tspan')
-      .attr('class', 'percentage')
-      .style('fill', change >= 0 ? 'green' : 'red')
-      .text(`${change > 0 ? '+' : ''}${change.toFixed(2)}%`);
-    legendText.append('tspan')
-      .text(')');
-   */
 
   render() {
     return (
@@ -287,6 +321,7 @@ RegressionChart.propTypes = {
   height: PropTypes.number.isRequired,
   xLabel: PropTypes.string.isRequired,
   yLabel: PropTypes.string.isRequired,
+  xField: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.instanceOf(Date).isRequired,
   })).isRequired,
