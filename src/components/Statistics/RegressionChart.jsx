@@ -147,7 +147,7 @@ export class RegressionChart extends Component {
       .text(')');
 
     // Append tooltip
-    const tooltip = svg.append('g')
+    const tooltip = chart.append('g')
       .attr('id', 'tooltip')
       .style('visibility', 'hidden');
 
@@ -161,14 +161,16 @@ export class RegressionChart extends Component {
         .enter()
         .append('circle')
         .attr('class', `data-point-${yField}`)
-        .style('stroke', this.props.dataStrokeColor[index])
-        .style('fill', this.props.dataFillColor[index])
         .attr('cx', d => this.xScale(d[xField]))
         .attr('cy', d => this.yScale(d[yField]))
         .attr('r', DATA_POINT_RADIUS)
-        .on('mouseover', function showTooltip(d, e) {
-          tooltip.style('visibility', 'visible').attr('transform', 'translate(115, 90)');
-          console.log(this, d, e);
+        .style('fill', this.props.dataFillColor[index])
+        .style('stroke', this.props.dataStrokeColor[index])
+        .on('mouseover', (d) => {
+          const x = this.xScale(d[xField]);
+          const y = this.yScale(d[yField]);
+          tooltip.style('visibility', 'visible')
+            .attr('transform', `translate(${x}, ${y})`);
           tooltipLabel.text(`ID: ${d.id}`);
         })
         .on('mouseout', () => {
