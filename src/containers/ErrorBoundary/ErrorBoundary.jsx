@@ -6,12 +6,12 @@ import ErrorPopup from '../ErrorPopup/ErrorPopup';
 export class ErrorBoundary extends Component {
   state = { error: null };
 
-  componentDidCatch(error) {
-    this.setState({ error });
-  }
-
   errorConfirmedHandler = () => {
     this.setState({ error: null });
+  }
+
+  componentDidCatch(error) {
+    this.setState({ error });
   }
 
   render() {

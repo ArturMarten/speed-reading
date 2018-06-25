@@ -170,10 +170,14 @@ export class TextAnalysis extends Component {
     return (
       this.props.open ?
         <Modal open={this.props.open} onClose={this.props.onClose} closeIcon>
-          <Modal.Header>{this.props.translate('text-analysis.modal-header')}</Modal.Header>
+          <Modal.Header>
+            {this.props.translate('text-analysis.modal-header')}
+          </Modal.Header>
           <Modal.Content>
             <Segment>
-              <Header as="h5">{this.props.translate('text-analysis.text-general-data')}</Header>
+              <Header as="h5">
+                {this.props.translate('text-analysis.text-general-data')}
+              </Header>
               <Statistic.Group widths={3} size="small">
                 <Statistic>
                   <Statistic.Value>
@@ -202,7 +206,9 @@ export class TextAnalysis extends Component {
               </Statistic.Group>
             </Segment>
             <Segment>
-              <Header as="h5">{this.props.translate('text-analysis.text-word-data')}</Header>
+              <Header as="h5">
+                {this.props.translate('text-analysis.text-word-data')}
+              </Header>
               <Statistic.Group size="small" widths={2}>
                 {/* Average word length */}
                 <Statistic size="small">
@@ -296,7 +302,9 @@ export class TextAnalysis extends Component {
               }
             </Segment>
             <Segment>
-              <Header as="h5">{this.props.translate('text-analysis.text-sentence-data')}</Header>
+              <Header as="h5">
+                {this.props.translate('text-analysis.text-sentence-data')}
+              </Header>
               <Statistic.Group widths={3} size="small">
                 {/* Average sentence length in words */}
                 <Statistic size="small">

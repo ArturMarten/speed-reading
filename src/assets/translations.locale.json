@@ -89,7 +89,7 @@
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
     "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
     "project": ["Projekt", "Project"],
-    "mit-license": ["MIT litsents", "MIT license"]
+    "gpl-3-license": ["GPL-3 litsents", "GPL-3 license"]
   },
   "about": {
     "modal-header": ["Rakenduse kohta", "About application"],

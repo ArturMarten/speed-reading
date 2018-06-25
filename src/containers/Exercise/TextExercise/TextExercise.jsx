@@ -129,8 +129,8 @@ export class TextExercise extends Component {
               dimmed={!this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped}
             >
               <div style={{
-                  padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
-                }}
+                padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
+              }}
               >
                 <div id="canvasTop" />
                 {this.state.heightCalculated ? exercise : null}

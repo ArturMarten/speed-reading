@@ -9,6 +9,7 @@ class SuccessMessage extends Component {
   state = {
     visible: true,
   };
+
   componentDidUpdate(prevProps) {
     if (prevProps.message === null && this.props.message !== null) {
       this.onVisibleToggle(true);

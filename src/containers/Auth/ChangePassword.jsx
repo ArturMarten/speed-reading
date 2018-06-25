@@ -72,7 +72,9 @@ export class ChangePassword extends Component {
     const matchingPasswords = this.state.passwordChangeForm.newPassword.value === this.state.passwordChangeForm.newPasswordConfirm.value;
     return (
       <Modal size="mini" open={this.props.open} closeOnDimmerClick={false} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('change-password.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('change-password.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Form error={this.props.passwordChangeStatus.error !== null} success={this.props.passwordChangeStatus.message !== null}>
             <Form.Input

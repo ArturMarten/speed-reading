@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
@@ -37,6 +37,8 @@ let frame = null;
 const initialState = {};
 
 export class Scrolling extends Component {
+  currentState = { ...initialState };
+
   componentDidMount() {
     this.init();
   }
@@ -73,8 +75,6 @@ export class Scrolling extends Component {
     clearTimeout(timeout);
     cancelAnimationFrame(frame);
   }
-
-  currentState = { ...initialState };
 
   init() {
     const fontSizeInPixels = Math.ceil(this.props.textOptions.fontSize / 0.75);

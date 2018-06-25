@@ -5,10 +5,13 @@ import { getTranslate } from 'react-localize-redux';
 
 export class ProfileSettings extends Component {
   state = {};
+
   render() {
     return (
       <Modal size="small" open={this.props.open} closeOnDimmerClick={false} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('profile-settings.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('profile-settings.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Input

@@ -105,7 +105,8 @@ export class Timing extends Component {
     const startButtonContent = () => {
       if (!this.props.timerState.started) {
         return this.props.translate('timing.start');
-      } else if (this.props.timerState.paused) {
+      }
+      if (this.props.timerState.paused) {
         return this.props.translate('timing.resume');
       }
       return this.props.translate('timing.pause');
@@ -142,7 +143,8 @@ export class Timing extends Component {
             onClick={this.stopClickHandler}
           />
           <Label basic size="big" style={{ marginTop: '5px' }}>
-            <Icon name="clock" />{format(this.state.elapsedTime)}
+            <Icon name="clock" />
+            {format(this.state.elapsedTime)}
           </Label>
         </Responsive>
         <Responsive minWidth={992}>
@@ -177,7 +179,8 @@ export class Timing extends Component {
             onClick={this.stopClickHandler}
           />
           <Label basic size="big" style={{ marginTop: '5px' }}>
-            <Icon name="clock" />{format(this.state.elapsedTime)}
+            <Icon name="clock" />
+            {format(this.state.elapsedTime)}
           </Label>
         </Responsive>
       </Fragment>

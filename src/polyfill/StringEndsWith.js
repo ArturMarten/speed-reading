@@ -1,5 +1,5 @@
 /* eslint no-extend-native: "off" */
-String.prototype.endsWith = function(search, this_len) {
+String.prototype.endsWith = function (search, this_len) {
   if (this_len === undefined || this_len > this.length) {
     this_len = this.length;
   }

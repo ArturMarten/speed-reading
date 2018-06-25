@@ -78,7 +78,9 @@ export class Manage extends Component {
     ];
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2">{this.props.translate('manage.title')}</Header>
+        <Header as="h2">
+          {this.props.translate('manage.title')}
+        </Header>
         {this.state.isDeveloper ?
           <Tab
             defaultActiveIndex={1}

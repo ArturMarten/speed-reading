@@ -283,7 +283,8 @@ const reducer = (state = initialState, action) => {
           symbols: generateSymbols(25, state.modification),
           status: 'prepared',
         });
-      } else if (state.type === 'concentration') {
+      }
+      if (state.type === 'concentration') {
         return updateObject(state, {
           stringPairs: generateStringPairs(
             action.payload.exerciseOptions.symbolGroupCount,

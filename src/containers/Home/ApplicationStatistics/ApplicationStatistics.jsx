@@ -23,6 +23,7 @@ export class ApplicationStatistics extends Component {
       totalTime: 0,
     },
   };
+
   componentDidMount() {
     // console.log(navigator.userAgent, navigator.platform);
     axios.get('/applicationStatistics')
@@ -41,10 +42,13 @@ export class ApplicationStatistics extends Component {
         });
       });
   }
+
   render() {
     return (
       <Fragment>
-        <Header as="h3">{this.props.translate('application-statistics.state')}</Header>
+        <Header as="h3">
+          {this.props.translate('application-statistics.state')}
+        </Header>
         <Statistic.Group widths={6} size="small">
           <Statistic>
             <Statistic.Value>
@@ -52,7 +56,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.exerciseCount}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.different')}<br />
+              {this.props.translate('application-statistics.different')}
+              <br />
               {this.props.translate('application-statistics.exercises')}
             </Statistic.Label>
           </Statistic>
@@ -62,7 +67,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.exerciseAttemptCount}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.exercise')}<br />
+              {this.props.translate('application-statistics.exercise')}
+              <br />
               {this.props.translate('application-statistics.attempts')}
             </Statistic.Label>
           </Statistic>
@@ -72,7 +78,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.textCount}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.reading')}<br />
+              {this.props.translate('application-statistics.reading')}
+              <br />
               {this.props.translate('application-statistics.texts')}
             </Statistic.Label>
           </Statistic>
@@ -82,7 +89,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.questionCount}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.test')}<br />
+              {this.props.translate('application-statistics.test')}
+              <br />
               {this.props.translate('application-statistics.questions')}
             </Statistic.Label>
           </Statistic>
@@ -92,7 +100,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.feedbackCount}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.feedback')}<br />
+              {this.props.translate('application-statistics.feedback')}
+              <br />
               {this.props.translate('application-statistics.received')}
             </Statistic.Label>
           </Statistic>
@@ -102,7 +111,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.userCount}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.users')}<br />
+              {this.props.translate('application-statistics.users')}
+              <br />
               {this.props.translate('application-statistics.registered')}
             </Statistic.Label>
           </Statistic>
@@ -113,7 +123,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.readingExerciseTime)}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.elapsed-time-for')}<br />
+              {this.props.translate('application-statistics.elapsed-time-for')}
+              <br />
               {this.props.translate('application-statistics.reading-exercises')}
             </Statistic.Label>
           </Statistic>
@@ -122,7 +133,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.helpExerciseTime)}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.elapsed-time-for')}<br />
+              {this.props.translate('application-statistics.elapsed-time-for')}
+              <br />
               {this.props.translate('application-statistics.help-exercises')}
             </Statistic.Label>
           </Statistic>
@@ -131,7 +143,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.testTime)}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.elapsed-time-for')}<br />
+              {this.props.translate('application-statistics.elapsed-time-for')}
+              <br />
               {this.props.translate('application-statistics.tests')}
             </Statistic.Label>
           </Statistic>
@@ -141,7 +154,8 @@ export class ApplicationStatistics extends Component {
               {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.totalTime)}
             </Statistic.Value>
             <Statistic.Label>
-              {this.props.translate('application-statistics.elapsed-time-for')}<br />
+              {this.props.translate('application-statistics.elapsed-time-for')}
+              <br />
               {this.props.translate('application-statistics.all')}
             </Statistic.Label>
           </Statistic>

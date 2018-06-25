@@ -188,7 +188,8 @@ export const reduceSumFunc = (prev, cur) => prev + cur;
 export const leastSquares = (xSeries, ySeries) => {
   if (xSeries.length === 0 || ySeries.length === 0) {
     return [0, 0, 0];
-  } else if (xSeries.length === 1 || ySeries.length === 1) {
+  }
+  if (xSeries.length === 1 || ySeries.length === 1) {
     return [0, ySeries[0], 0];
   }
   const xBar = (xSeries.reduce(reduceSumFunc, 0) * 1.0) / xSeries.length;

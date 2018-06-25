@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
@@ -117,6 +117,8 @@ const initialState = {
 };
 
 export class WordGroups extends Component {
+  currentState = { ...initialState };
+
   componentDidMount() {
     this.init();
   }
@@ -154,8 +156,6 @@ export class WordGroups extends Component {
     clearTimeout(timeout);
     cancelAnimationFrame(frame);
   }
-
-  currentState = { ...initialState };
 
   init() {
     this.currentState.canvasHeight = this.props.canvasHeight;

@@ -56,34 +56,48 @@ export class TextExercisePreparation extends Component {
   }
 
   render() {
-    let selectedText = <b style={{ color: 'red' }}>{this.props.translate('exercise-preparation.text-not-selected')}</b>;
+    let selectedText = (
+      <b style={{ color: 'red' }}>
+        {this.props.translate('exercise-preparation.text-not-selected')}
+      </b>);
     if (this.props.selectedText && this.props.selectedText.id) {
       selectedText = (
         <div>
           <div>
-            {`${this.props.translate('exercise-preparation.title')}: `}<b>{this.props.selectedText.title}</b>
+            {`${this.props.translate('exercise-preparation.title')}: `}
+            <b>
+              {this.props.selectedText.title}
+            </b>
           </div>
           <div>
             <span>
-              {`${this.props.translate('exercise-preparation.author')}: `}<b>{this.props.selectedText.author}</b>
+              {`${this.props.translate('exercise-preparation.author')}: `}
+              <b>
+                {this.props.selectedText.author}
+              </b>
             </span>
             <span>
               {` ${this.props.translate('exercise-preparation.questions-author')}: `}
-              <b>{this.props.selectedText.questionsAuthor ?
-                this.props.selectedText.questionsAuthor : this.props.translate('exercise-preparation.questions-author-missing')}
+              <b>
+                {this.props.selectedText.questionsAuthor ?
+                  this.props.selectedText.questionsAuthor : this.props.translate('exercise-preparation.questions-author-missing')}
               </b>
             </span>
           </div>
           <div>
             {`${this.props.translate('exercise-preparation.reference')}: `}
-            <b>{this.props.selectedText.reference ?
-              this.props.selectedText.reference : this.props.translate('exercise-preparation.reference-missing')}
+            <b>
+              {this.props.selectedText.reference ?
+                this.props.selectedText.reference : this.props.translate('exercise-preparation.reference-missing')}
             </b>
           </div>
         </div>
       );
     } else if (this.props.selectedText) {
-      selectedText = <b>{this.props.translate('exercise-preparation.own-text')}</b>;
+      selectedText = (
+        <b>
+          {this.props.translate('exercise-preparation.own-text')}
+        </b>);
     }
     const modificationOptions = this.props.modificationOptions
       .map((option, index) => ({ ...option, key: index, text: this.props.translate(`modification.${option.value}`) }));
@@ -232,7 +246,9 @@ export class TextExercisePreparation extends Component {
                     {this.props.translate('exercise-preparation.can-be-used')}
                   </Message> : null}
                 {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
-                  <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p> :
+                  <p>
+                    {this.props.translate('exercise-preparation.exercise-options-missing')}
+                  </p> :
                   <table>
                     <tbody>
                       <SpeedOptions />
@@ -260,7 +276,9 @@ export class TextExercisePreparation extends Component {
                   />
                 </Header>
                 {this.props.visibleTextOptions.length === 0 ?
-                  <p>{this.props.translate('exercise-preparation.text-options-missing')}</p> :
+                  <p>
+                    {this.props.translate('exercise-preparation.text-options-missing')}
+                  </p> :
                   <table>
                     <tbody>
                       <TextOptions exerciseType={this.props.type} />

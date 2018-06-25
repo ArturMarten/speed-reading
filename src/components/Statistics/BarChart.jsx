@@ -13,6 +13,15 @@ const margin = {
 };
 
 export class BarChart extends Component {
+  state = {
+    width: this.props.width - margin.left - margin.right,
+    height: this.props.height - margin.top - margin.bottom,
+    widthScale: scaleBand()
+      .range([0, this.props.width - margin.left - margin.right]),
+    heightScale: scaleLinear()
+      .range([0, this.props.height - margin.top - margin.bottom]),
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const { widthScale, heightScale } = prevState;
 
@@ -37,15 +46,6 @@ export class BarChart extends Component {
       widthScale,
       heightScale,
     };
-  }
-
-  state = {
-    width: this.props.width - margin.left - margin.right,
-    height: this.props.height - margin.top - margin.bottom,
-    widthScale: scaleBand()
-      .range([0, this.props.width - margin.left - margin.right]),
-    heightScale: scaleLinear()
-      .range([0, this.props.height - margin.top - margin.bottom]),
   }
 
   render() {

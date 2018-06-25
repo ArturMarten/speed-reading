@@ -111,7 +111,9 @@ export class ManageFeedback extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <div>
-                        <b>{this.props.translate('manage-feedback.functionality-rating')}</b>
+                        <b>
+                          {this.props.translate('manage-feedback.functionality-rating')}
+                        </b>
                       </div>
                       <Rating
                         disabled
@@ -120,7 +122,9 @@ export class ManageFeedback extends Component {
                         maxRating={5}
                       />
                       <div>
-                        <b>{this.props.translate('manage-feedback.usability-rating')}</b>
+                        <b>
+                          {this.props.translate('manage-feedback.usability-rating')}
+                        </b>
                       </div>
                       <Rating
                         disabled
@@ -129,7 +133,9 @@ export class ManageFeedback extends Component {
                         maxRating={5}
                       />
                       <div>
-                        <b>{this.props.translate('manage-feedback.design-rating')}</b>
+                        <b>
+                          {this.props.translate('manage-feedback.design-rating')}
+                        </b>
                       </div>
                       <Rating
                         disabled

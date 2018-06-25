@@ -42,6 +42,7 @@ import {
 
 export class ExerciseOptions extends PureComponent {
   state = {};
+
   render() {
     const cursorTypeOptionsTranslated = cursorTypeOptions
       .map((option, index) => ({ ...option, key: index, text: this.props.translate(`exercise-options.cursor-${option.value}`) }));

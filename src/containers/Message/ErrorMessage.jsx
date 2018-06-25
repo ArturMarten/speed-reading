@@ -9,6 +9,7 @@ class ErrorMessage extends Component {
   state = {
     visible: true,
   };
+
   componentDidUpdate(prevProps) {
     if (prevProps.error === null && this.props.error !== null) {
       this.onVisibleToggle(true);
@@ -25,6 +26,7 @@ class ErrorMessage extends Component {
   dismissHandler = () => {
     this.onVisibleToggle(false);
   }
+
   render() {
     const {
       translate,

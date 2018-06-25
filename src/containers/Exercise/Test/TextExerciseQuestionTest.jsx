@@ -49,14 +49,14 @@ export class TextExerciseQuestionTest extends Component {
         <Header as="h2" content={this.props.translate('text-exercise-question-test.title')} />
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Grid container style={{ paddingTop: '10px' }}>
-            <Grid.Row columns={1} style={{ paddingBottom: '2px' }} >
+            <Grid.Row columns={1} style={{ paddingBottom: '2px' }}>
               <Grid.Column>
                 <Header as="h4">
                   {`${this.state.questionIndex + 1}. ${this.props.questions[this.state.questionIndex].questionText}`}
                 </Header>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row style={{ paddingTop: '2px' }} >
+            <Grid.Row style={{ paddingTop: '2px' }}>
               <Grid.Column>
                 <List selection animated verticalAlign="middle">
                   {this.props.questions[this.state.questionIndex].answers.map((answer, answerIndex) => (
@@ -97,7 +97,10 @@ export class TextExerciseQuestionTest extends Component {
                 totalPages={this.props.questions.length}
               />
             </Grid.Row>
-          </Grid> : <p>{this.props.translate('text-exercise-question-test.description')}</p>}
+          </Grid> :
+          <p>
+            {this.props.translate('text-exercise-question-test.description')}
+          </p>}
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Button
             negative
@@ -106,7 +109,8 @@ export class TextExerciseQuestionTest extends Component {
             style={{ marginTop: '15px' }}
             loading={this.props.testStatus === 'finishing'}
             disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
-          >{this.props.translate('text-exercise-question-test.finish-test')}
+          >
+            {this.props.translate('text-exercise-question-test.finish-test')}
           </Button> :
           <Button
             positive
@@ -114,7 +118,8 @@ export class TextExerciseQuestionTest extends Component {
             floated="right"
             loading={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
             disabled={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
-          >{this.props.translate('text-exercise-question-test.start-test')}
+          >
+            {this.props.translate('text-exercise-question-test.start-test')}
           </Button>}
       </Container>
     );

@@ -95,7 +95,9 @@ export class TextSelectionFilter extends Component {
   render() {
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('text-selection-filter.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('text-selection-filter.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Field
@@ -202,7 +204,7 @@ export class TextSelectionFilter extends Component {
             basic
             color="blue"
           >
-            {this.props.translate('text-selection-filter.text-count')}: {this.props.textCount}
+            {`${this.props.translate('text-selection-filter.text-count')}: ${this.props.textCount}`}
           </Label>
           <Button
             negative

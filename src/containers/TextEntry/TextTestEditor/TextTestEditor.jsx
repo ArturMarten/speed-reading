@@ -58,7 +58,9 @@ export class TextTestEditor extends Component {
   render() {
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('text-test-editor.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('text-test-editor.modal-header')}
+        </Modal.Header>
         <Modal.Content scrolling style={{ height: '65vh', maxHeight: '65vh' }}>
           {this.state.questionEditorOpened ?
             <QuestionEditor

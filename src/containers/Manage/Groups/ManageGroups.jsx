@@ -91,8 +91,8 @@ export class ManageGroups extends Component {
                     <Table.Cell>
                       {group.name}
                     </Table.Cell>
-                    <Table.Cell>{
-                      new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+                    <Table.Cell>
+                      {new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric',

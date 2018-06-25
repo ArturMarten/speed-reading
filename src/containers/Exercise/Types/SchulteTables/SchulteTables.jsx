@@ -5,6 +5,7 @@ import './SchulteTables.css';
 
 export class SchulteTables extends Component {
   state = {};
+
   render() {
     const { tableSize } = this.props.exerciseOptions;
     const { symbolSize } = this.props.textOptions;

@@ -24,7 +24,9 @@ const BlockStyleControls = (props) => {
           active={type.style === blockType}
           onClick={() => props.onToggle(type.style)}
         >
-          <b>H{index + 1}</b>
+          <b>
+            {`H${index + 1}`}
+          </b>
         </Button>))}
     </Button.Group>
   );

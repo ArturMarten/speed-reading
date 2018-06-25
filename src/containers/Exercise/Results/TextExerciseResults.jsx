@@ -33,7 +33,9 @@ export class TextExerciseResults extends Component {
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
-        <Modal.Header>{this.props.translate('text-exercise-results.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('text-exercise-results.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Grid>
             <Grid.Row>
@@ -44,16 +46,28 @@ export class TextExerciseResults extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 <Statistic size="small" color="black">
-                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('text-exercise-results.elapsed-time')}</Statistic.Label>
+                  <Statistic.Value>
+                    {formatMilliseconds(this.props.result.elapsedTime)}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('text-exercise-results.elapsed-time')}
+                  </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">
-                  <Statistic.Value>{this.props.result.wpm}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('text-exercise-results.wpm')}</Statistic.Label>
+                  <Statistic.Value>
+                    {this.props.result.wpm}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('text-exercise-results.wpm')}
+                  </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>{this.props.result.cps}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('text-exercise-results.cps')}</Statistic.Label>
+                  <Statistic.Value>
+                    {this.props.result.cps}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('text-exercise-results.cps')}
+                  </Statistic.Label>
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
@@ -61,8 +75,10 @@ export class TextExerciseResults extends Component {
               <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
                 <Grid.Column width={6} textAlign="right">
                   <span>
-                    <b>{this.props.translate('text-exercise-results.rate-text-complexity')} </b>
-                    ({this.props.translate('text-exercise-results.optional')})
+                    <b>
+                      {this.props.translate('text-exercise-results.rate-text-complexity')}
+                    </b>
+                    {` (${this.props.translate('text-exercise-results.optional')})`}
                   </span>
                 </Grid.Column>
                 <Grid.Column width={10} verticalAlign="middle">

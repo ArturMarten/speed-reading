@@ -7,6 +7,7 @@ import { translateError } from '../../shared/utility';
 
 export class ErrorPopup extends Component {
   state = {};
+
   render() {
     const errorMessage = translateError(this.props.translate, this.props.errorMessage);
     return (

@@ -233,8 +233,8 @@ storiesOf('Help exercise', module)
 
 const symbols = generateSymbols(25, 'numbers');
 storiesOf('Schulte tables', module)
-  .add('Component', () =>
-    (<SchulteTables
+  .add('Component', () => (
+    <SchulteTables
       symbols={symbols}
       exerciseOptions={exerciseOptions}
       textOptions={textOptions}
@@ -243,8 +243,8 @@ storiesOf('Schulte tables', module)
 
 const stringPairs = generateStringPairs(20, 8, 'concentration-mixed');
 storiesOf('Concentration', module)
-  .add('Component', () =>
-    (<Concentration
+  .add('Component', () => (
+    <Concentration
       stringPairs={stringPairs}
       exerciseOptions={exerciseOptions}
       textOptions={textOptions}

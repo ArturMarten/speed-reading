@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context) => {
@@ -78,6 +78,8 @@ const initialState = {
 };
 
 export class Disappearing extends Component {
+  currentState = { ...initialState };
+
   componentDidMount() {
     this.init();
   }
@@ -115,8 +117,6 @@ export class Disappearing extends Component {
     clearTimeout(timeout);
     cancelAnimationFrame(frame);
   }
-
-  currentState = { ...initialState };
 
   init() {
     this.currentState.canvasHeight = this.props.canvasHeight;

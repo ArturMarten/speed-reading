@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
 
-import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const previousPage = (currentState, textMetadata, context, offscreenCanvas) => {
@@ -59,6 +59,8 @@ const initialState = {
 };
 
 export class ReadingTest extends Component {
+  currentState = { ...initialState };
+
   componentDidMount() {
     this.init();
     document.addEventListener('keydown', this.preventDefault);
@@ -77,8 +79,6 @@ export class ReadingTest extends Component {
   onPreviousPage = () => {
     this.currentState = previousPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
   }
-
-  currentState = { ...initialState };
 
   keyPressHandler = (event) => {
     const { key } = event;

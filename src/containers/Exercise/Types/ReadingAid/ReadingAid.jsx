@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../../src/utils/CanvasUtils/CanvasUtils';
+import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 import { getColorRGBA } from '../../../../store/reducers/options';
 
@@ -110,6 +110,8 @@ const initialState = {
 };
 
 export class ReadingAid extends Component {
+  currentState = { ...initialState };
+
   componentDidMount() {
     this.init();
   }
@@ -147,8 +149,6 @@ export class ReadingAid extends Component {
     clearTimeout(timeout);
     cancelAnimationFrame(frame);
   }
-
-  currentState = { ...initialState };
 
   init() {
     this.currentState.cursorType = this.props.exerciseOptions.cursorType;

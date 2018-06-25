@@ -47,6 +47,7 @@ export class App extends Component {
     listenToErrors();
     this.props.onTryAutoLogin();
   }
+
   render() {
     const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;
     const isPermittedToManageUsers = rolePermissions[this.props.role] >= rolePermissions.teacher;

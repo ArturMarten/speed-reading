@@ -72,7 +72,7 @@ export class HelpExercise extends Component {
           <Dimmer.Dimmable
             style={{
               filter: !this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped ?
-                      'blur(20px) grayscale(0.7)' : null,
+                'blur(20px) grayscale(0.7)' : null,
             }}
             blurring
             dimmed={!this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped}

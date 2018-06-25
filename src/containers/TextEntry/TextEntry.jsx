@@ -301,8 +301,12 @@ export class TextEntry extends Component {
             content={this.props.translate('text-entry.new-text')}
           /> : null
         }
-        <Header as="h2">{this.props.translate('text-entry.title')}</Header>
-        <p>{this.props.translate('text-entry.description')}</p>
+        <Header as="h2">
+          {this.props.translate('text-entry.title')}
+        </Header>
+        <p>
+          {this.props.translate('text-entry.description')}
+        </p>
         <Form warning error={this.props.textStatus.error !== null} success={this.props.textStatus.message !== null}>
           <Form.Group widths="equal">
             <Form.Input
@@ -371,7 +375,9 @@ export class TextEntry extends Component {
           </Form.Group>
           <Form.Field>
             <label htmlFor="text-input">
-              <div>{this.props.translate('text-entry.text-input')}</div>
+              <div>
+                {this.props.translate('text-entry.text-input')}
+              </div>
             </label>
             <TextEditor
               id="text-input"

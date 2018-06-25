@@ -60,8 +60,12 @@ export class TextEditor extends Component {
     return (
       <Fragment>
         <Message warning attached style={{ margin: 0 }}>
-          <Message.Header>{this.props.translate('text-editor.warning-title')}</Message.Header>
-          <p>{this.props.translate('text-editor.warning-content')}</p>
+          <Message.Header>
+            {this.props.translate('text-editor.warning-title')}
+          </Message.Header>
+          <p>
+            {this.props.translate('text-editor.warning-content')}
+          </p>
         </Message>
         <Segment style={{ margin: 0 }}>
           <div className="DraftEditor-controls">

@@ -53,7 +53,7 @@ export class TextExerciseBlankTest extends Component {
         <Header as="h2" content={this.props.translate('text-exercise-blank-test.title')} />
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Grid container style={{ paddingTop: '10px' }}>
-            <Grid.Row columns={1} style={{ paddingTop: '5em', paddingBottom: '10em' }} >
+            <Grid.Row columns={1} style={{ paddingTop: '5em', paddingBottom: '10em' }}>
               <Grid.Column textAlign="center">
                 <Header as="h3">
                   {`${this.state.blankExerciseIndex + 1}. ${this.props.blankExercises[this.state.blankExerciseIndex].text[0]}`}
@@ -97,7 +97,10 @@ export class TextExerciseBlankTest extends Component {
                 totalPages={this.props.blankExercises.length}
               />
             </Grid.Row>
-          </Grid> : <p>{this.props.translate('text-exercise-blank-test.description')}</p>}
+          </Grid> :
+          <p>
+            {this.props.translate('text-exercise-blank-test.description')}
+          </p>}
         {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
           <Button
             negative
@@ -106,7 +109,8 @@ export class TextExerciseBlankTest extends Component {
             style={{ marginTop: '15px' }}
             loading={this.props.testStatus === 'finishing'}
             disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
-          >{this.props.translate('text-exercise-blank-test.finish-test')}
+          >
+            {this.props.translate('text-exercise-blank-test.finish-test')}
           </Button> :
           <Button
             positive
@@ -114,7 +118,8 @@ export class TextExerciseBlankTest extends Component {
             floated="right"
             loading={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
             disabled={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
-          >{this.props.translate('text-exercise-blank-test.start-test')}
+          >
+            {this.props.translate('text-exercise-blank-test.start-test')}
           </Button>}
       </Container>
     );

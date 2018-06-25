@@ -27,6 +27,8 @@ const initialState = {
 };
 
 export class TextSelection extends Component {
+  searchTimeout = null;
+
   state = {
     ...initialState,
     searchResults: this.props.texts,
@@ -84,8 +86,6 @@ export class TextSelection extends Component {
       searchResults: this.props.texts,
     });
   }
-
-  searchTimeout = null;
 
   searchHandler = (event, { value }) => {
     this.setState({ searchValue: value, searchLoading: true, selectedTextId: null });
@@ -169,7 +169,7 @@ export class TextSelection extends Component {
               {text.title}
             </List.Header>
             <List.Description>
-              {this.props.translate('text-selection.author')}: {text.author}
+              {`${this.props.translate('text-selection.author')}: ${text.author}`}
             </List.Description>
           </List.Content>
         </List.Item>
@@ -177,7 +177,9 @@ export class TextSelection extends Component {
     });
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('text-selection.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Dimmer active={this.props.textsStatus.loading} inverted>
             <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />

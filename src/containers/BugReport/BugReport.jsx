@@ -97,7 +97,9 @@ export class BugReport extends Component {
     );
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('bug-report.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('bug-report.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           {screenshotModal}
           <Form
@@ -107,7 +109,9 @@ export class BugReport extends Component {
           >
             <Form.Field error={!this.state.bugReportForm.description.valid && this.state.bugReportForm.description.touched}>
               <label htmlFor="bug-report-description">
-                <div>{this.props.translate('bug-report.textarea-description')}</div>
+                <div>
+                  {this.props.translate('bug-report.textarea-description')}
+                </div>
                 <TextArea
                   id="bug-report-description"
                   name="description"

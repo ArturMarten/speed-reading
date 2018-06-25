@@ -9,9 +9,9 @@ import { environment } from '../../environment';
 import './ResponsiveLayout.css';
 import axios from '../../axios-http';
 import credentials from '../../credentials';
-import Auth from '../../containers/Auth/Auth';
+import Auth from '../Auth/Auth';
 import ProfileSettings from '../Profile/ProfileSettings';
-import ChangePassword from '../../containers/Auth/ChangePassword';
+import ChangePassword from '../Auth/ChangePassword';
 import LanguageSelection from '../LanguageSelection/LanguageSelection';
 import Feedback from '../Feedback/Feedback';
 import withErrorHandler from '../../hoc/ErrorHandler/withErrorHandler';
@@ -91,7 +91,9 @@ export class ResponsiveLayout extends Component {
               <Menu.Item>
                 {this.props.isAuthenticated ?
                   <Fragment>
-                    <Header textAlign="center">{this.props.userEmail}</Header>
+                    <Header textAlign="center">
+                      {this.props.userEmail}
+                    </Header>
                     <Grid>
                       <Grid.Row columns={3} textAlign="center">
                         <Grid.Column>
@@ -282,7 +284,8 @@ export class ResponsiveLayout extends Component {
                   to="/"
                 >
                   <Icon color="blue" name="book" size="big" />
-                  {this.props.translate('menu.title')}&nbsp;{environment.version}
+                  {this.props.translate('menu.title')}&nbsp;
+                  {environment.version}
                 </Menu.Item>
               </Menu>
             </Responsive>
@@ -295,7 +298,8 @@ export class ResponsiveLayout extends Component {
                   to="/"
                 >
                   <Icon color="blue" name="book" size="big" />
-                  {this.props.translate('menu.title')}&nbsp;{environment.version}
+                  {this.props.translate('menu.title')}&nbsp;
+                  {environment.version}
                 </Menu.Item>
                 <Menu.Item
                   as={Link}
@@ -424,7 +428,10 @@ export class ResponsiveLayout extends Component {
                       onClose={this.profileToggleHandler}
                       trigger={<Icon fitted name="user" color="red" size="big" />}
                       position="bottom right"
-                      header={this.props.isAuthenticated ? <Header textAlign="center">{this.props.userEmail}</Header> : null}
+                      header={this.props.isAuthenticated ?
+                        <Header textAlign="center">
+                          {this.props.userEmail}
+                        </Header> : null}
                       content={
                         this.props.isAuthenticated ?
                           <Button.Group vertical fluid>

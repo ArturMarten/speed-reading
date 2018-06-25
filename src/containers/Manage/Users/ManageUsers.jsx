@@ -157,25 +157,27 @@ export class ManageUsers extends Component {
                     <Table.Cell>
                       {user.email}
                     </Table.Cell>
-                    <Table.Cell>{
-                      new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+                    <Table.Cell>
+                      {new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric',
                       }).format(user.registrationDate)}
                     </Table.Cell>
-                    <Table.Cell negative={!user.lastLogin}>{
-                      user.lastLogin ?
-                      new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour12: false,
-                        hour: 'numeric',
-                        minute: 'numeric',
-                      }).format(user.lastLogin) : this.props.translate('manage-users.last-login-never')}
+                    <Table.Cell negative={!user.lastLogin}>
+                      {user.lastLogin ?
+                        new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour12: false,
+                          hour: 'numeric',
+                          minute: 'numeric',
+                        }).format(user.lastLogin) : this.props.translate('manage-users.last-login-never')}
                     </Table.Cell>
-                    <Table.Cell>{this.props.translate(`manage-users.role-${user.role}`)}</Table.Cell>
+                    <Table.Cell>
+                      {this.props.translate(`manage-users.role-${user.role}`)}
+                    </Table.Cell>
                     <Table.Cell>
                       <Button
                         primary

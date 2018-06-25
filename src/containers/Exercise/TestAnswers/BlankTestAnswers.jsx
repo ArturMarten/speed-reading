@@ -5,6 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 export class BlankTestAnswers extends Component {
   state = {};
+
   render() {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>

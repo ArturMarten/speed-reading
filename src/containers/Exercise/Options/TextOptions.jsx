@@ -30,6 +30,7 @@ import {
 
 export class TextOptions extends PureComponent {
   state = {};
+
   render() {
     return (
       <Fragment>

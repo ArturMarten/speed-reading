@@ -118,9 +118,13 @@ export class Concentration extends Component {
               key={row[0] + row[1]}
               className={`concentration-row ${index === this.state.selectedIndex ? 'selected' : ''}`}
             >
-              <td className="concentration-cell concentration-left">{row[0]}</td>
+              <td className="concentration-cell concentration-left">
+                {row[0]}
+              </td>
               <td className="concentration-cell concentration-spacing" style={{ minWidth: `${this.props.exerciseOptions.columnSpacing}px` }} />
-              <td className="concentration-cell concentration-right">{row[1]}</td>
+              <td className="concentration-cell concentration-right">
+                {row[1]}
+              </td>
               <td className="concentration-cell concentration-choices">
                 <Button.Group size="tiny" style={{ verticalAlign: 'middle' }}>
                   <Button

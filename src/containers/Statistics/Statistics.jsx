@@ -10,28 +10,6 @@ import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import { getExerciseId } from '../../store/reducers/exercise';
 
 export class Statistics extends Component {
-  state = {
-    isTeacher: rolePermissions[this.props.role] >= rolePermissions.teacher,
-    groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
-    userId: this.props.userId,
-    exercise: 'readingExercises',
-    chartIndex: 0,
-    scale: 'date',
-    filterOutliers: false,
-  };
-
-  componentDidMount() {
-    if (this.state.isTeacher) {
-      if (this.props.users.length === 0) {
-        this.props.onFetchUsers(this.props.token);
-      }
-      if (this.props.groups.length === 0) {
-        this.props.onFetchGroups();
-      }
-    }
-    this.props.onFetchExerciseStatistics(this.props.userId, this.props.token);
-  }
-
   exerciseCharts = [
     [
       {
@@ -92,6 +70,46 @@ export class Statistics extends Component {
     ],
   ];
 
+  exerciseOptions = [
+    { text: this.props.translate('statistics.reading-exercises'), value: 'readingExercises' },
+    { text: this.props.translate('statistics.reading-test'), value: 'readingTest' },
+    { text: this.props.translate('statistics.reading-aid'), value: 'readingAid' },
+    { text: this.props.translate('statistics.scrolling-text'), value: 'scrolling' },
+    { text: this.props.translate('statistics.disappearing-text'), value: 'disappearing' },
+    { text: this.props.translate('statistics.word-groups'), value: 'wordGroups' },
+    { text: this.props.translate('statistics.schulte-tables'), value: 'schulteTables' },
+    { text: this.props.translate('statistics.concentration'), value: 'concentration' },
+  ];
+
+  scaleOptions = [
+    { text: this.props.translate('statistics.exercise-index'), value: 'index' },
+    { text: this.props.translate('statistics.exercise-date'), value: 'date' },
+    { text: this.props.translate('statistics.exercise-time-spent'), value: 'time', disabled: true },
+  ];
+
+  state = {
+    isTeacher: rolePermissions[this.props.role] >= rolePermissions.teacher,
+    groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
+    userId: this.props.userId,
+    exercise: 'readingExercises',
+    chartIndex: 0,
+    scale: 'date',
+    filterOutliers: false,
+  };
+
+  componentDidMount() {
+    if (this.state.isTeacher) {
+      if (this.props.users.length === 0) {
+        this.props.onFetchUsers(this.props.token);
+      }
+      if (this.props.groups.length === 0) {
+        this.props.onFetchGroups();
+      }
+    }
+    this.props.onFetchExerciseStatistics(this.props.userId, this.props.token);
+  }
+
+
   groupChangeHandler = (event, { value }) => {
     let { userId } = this.state;
     const currentUser = this.props.users.find(user => user.publicId === userId);
@@ -143,23 +161,6 @@ export class Statistics extends Component {
       filterOutliers: !this.state.filterOutliers,
     });
   }
-
-  exerciseOptions = [
-    { text: this.props.translate('statistics.reading-exercises'), value: 'readingExercises' },
-    { text: this.props.translate('statistics.reading-test'), value: 'readingTest' },
-    { text: this.props.translate('statistics.reading-aid'), value: 'readingAid' },
-    { text: this.props.translate('statistics.scrolling-text'), value: 'scrolling' },
-    { text: this.props.translate('statistics.disappearing-text'), value: 'disappearing' },
-    { text: this.props.translate('statistics.word-groups'), value: 'wordGroups' },
-    { text: this.props.translate('statistics.schulte-tables'), value: 'schulteTables' },
-    { text: this.props.translate('statistics.concentration'), value: 'concentration' },
-  ];
-
-  scaleOptions = [
-    { text: this.props.translate('statistics.exercise-index'), value: 'index' },
-    { text: this.props.translate('statistics.exercise-date'), value: 'date' },
-    { text: this.props.translate('statistics.exercise-time-spent'), value: 'time', disabled: true },
-  ];
 
   render() {
     const groupOptions = [{
@@ -327,8 +328,12 @@ export class Statistics extends Component {
     ];
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2">{this.props.translate('statistics.title')}</Header>
-        <p>{this.props.translate('statistics.description')}</p>
+        <Header as="h2">
+          {this.props.translate('statistics.title')}
+        </Header>
+        <p>
+          {this.props.translate('statistics.description')}
+        </p>
         <Tab panes={panes} />
       </Container>
     );

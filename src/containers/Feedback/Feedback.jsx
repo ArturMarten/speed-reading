@@ -80,7 +80,9 @@ export class Feedback extends Component {
     const sent = this.props.feedbackStatus.message !== null;
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>{this.props.translate('feedback.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('feedback.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Form
             loading={this.props.feedbackStatus.loading}
@@ -90,7 +92,9 @@ export class Feedback extends Component {
             <Form.Group>
               <Form.Field disabled={sent}>
                 <label htmlFor="functionality-rating">
-                  <div>{this.props.translate('feedback.functionality-rating')}</div>
+                  <div>
+                    {this.props.translate('feedback.functionality-rating')}
+                  </div>
                   <Rating
                     id="functionality-rating"
                     clearable
@@ -105,7 +109,9 @@ export class Feedback extends Component {
               </Form.Field>
               <Form.Field disabled={sent}>
                 <label htmlFor="usability-rating">
-                  <div>{this.props.translate('feedback.usability-rating')}</div>
+                  <div>
+                    {this.props.translate('feedback.usability-rating')}
+                  </div>
                   <Rating
                     id="usability-rating"
                     clearable
@@ -120,7 +126,9 @@ export class Feedback extends Component {
               </Form.Field>
               <Form.Field disabled={sent}>
                 <label htmlFor="design-rating">
-                  <div>{this.props.translate('feedback.design-rating')}</div>
+                  <div>
+                    {this.props.translate('feedback.design-rating')}
+                  </div>
                   <Rating
                     id="design-rating"
                     clearable
@@ -136,7 +144,9 @@ export class Feedback extends Component {
             </Form.Group>
             <Form.Field error={!this.state.feedbackForm.message.valid && this.state.feedbackForm.message.touched} disabled={sent}>
               <label htmlFor="feedback-message">
-                <div>{this.props.translate('feedback.textarea-message')}</div>
+                <div>
+                  {this.props.translate('feedback.textarea-message')}
+                </div>
                 <TextArea
                   id="feedback-message"
                   name="message"

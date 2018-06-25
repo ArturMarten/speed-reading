@@ -33,7 +33,9 @@ export class TestResults extends Component {
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
-        <Modal.Header>{this.props.translate('test-results.modal-header')}</Modal.Header>
+        <Modal.Header>
+          {this.props.translate('test-results.modal-header')}
+        </Modal.Header>
         <Modal.Content>
           <Grid>
             <Grid.Row>
@@ -44,34 +46,62 @@ export class TestResults extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 <Statistic size="small" color="black">
-                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
+                  <Statistic.Value>
+                    {formatMilliseconds(this.props.result.elapsedTime)}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.elapsed-time')}
+                  </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>{Math.round(this.props.result.testResult * 100)}%</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.test-result')}</Statistic.Label>
+                  <Statistic.Value>
+                    {`${Math.round(this.props.result.testResult * 100)}%`}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.test-result')}
+                  </Statistic.Label>
                 </Statistic>
                 <br />
                 <Statistic size="small" color="green">
-                  <Statistic.Value>{this.props.result.correct}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.correct')}</Statistic.Label>
+                  <Statistic.Value>
+                    {this.props.result.correct}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.correct')}
+                  </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="red">
-                  <Statistic.Value>{this.props.result.incorrect}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.incorrect')}</Statistic.Label>
+                  <Statistic.Value>
+                    {this.props.result.incorrect}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.incorrect')}
+                  </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="grey">
-                  <Statistic.Value>{this.props.result.unanswered}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.unanswered')}</Statistic.Label>
+                  <Statistic.Value>
+                    {this.props.result.unanswered}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.unanswered')}
+                  </Statistic.Label>
                 </Statistic>
                 <br />
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>{Math.round(this.props.result.comprehensionResult * 100)}%</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.comprehension-result')}</Statistic.Label>
+                  <Statistic.Value>
+                    {`${Math.round(this.props.result.comprehensionResult * 100)}%`}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.comprehension-result')}
+                  </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">
-                  <Statistic.Value>{Math.round(this.props.result.cpm)}</Statistic.Value>
-                  <Statistic.Label>{this.props.translate('test-results.comprehension-speed')}</Statistic.Label>
+                  <Statistic.Value>
+                    {Math.round(this.props.result.cpm)}
+                  </Statistic.Value>
+                  <Statistic.Label>
+                    {this.props.translate('test-results.comprehension-speed')}
+                  </Statistic.Label>
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
@@ -79,8 +109,10 @@ export class TestResults extends Component {
               <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
                 <Grid.Column width={5} textAlign="right">
                   <span>
-                    <b>{this.props.translate('test-results.rate-test-difficulty')} </b>
-                    ({this.props.translate('test-results.optional')})
+                    <b>
+                      {this.props.translate('test-results.rate-test-difficulty')}
+                    </b>
+                    {` (${this.props.translate('test-results.optional')})`}
                   </span>
                 </Grid.Column>
                 <Grid.Column width={11} verticalAlign="middle">

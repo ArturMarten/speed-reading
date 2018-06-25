@@ -24,11 +24,15 @@ export class Home extends Component {
   render() {
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2">{this.props.translate('home.welcome')}!</Header>
+        <Header as="h2">
+          {`${this.props.translate('home.welcome')}!`}
+        </Header>
         <Grid stackable>
           <Grid.Row style={{ paddingBottom: '5em' }}>
             <Grid.Column width={8}>
-              <p>{this.props.translate('home.description')}</p>
+              <p>
+                {this.props.translate('home.description')}
+              </p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
               <Button
                 positive
@@ -103,9 +107,13 @@ export class Home extends Component {
           </Grid.Row>
           <Grid.Row columns={1}>
             <Grid.Column textAlign="right">
-              <a href="https://gitlab.com/martensiiber/speed-reading">{this.props.translate('home.project')}</a>
-              {` ${this.props.translate('home.mit-license')} © ${(new Date()).getFullYear()} `}
-              <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
+              <a href="https://gitlab.com/martensiiber/speed-reading">
+                {this.props.translate('home.project')}
+              </a>
+              {` ${this.props.translate('home.gpl-3-license')} © ${(new Date()).getFullYear()} `}
+              <a href="mailto:martensiiber@gmail.com">
+                Marten Siiber
+              </a>
             </Grid.Column>
           </Grid.Row>
         </Grid>

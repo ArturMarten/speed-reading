@@ -10,6 +10,7 @@ export class QuestionTestAnswers extends Component {
     loading: true,
     testQuestionAnswers: [],
   };
+
   componentDidMount() {
     axios.get(`/testQuestionAnswers?testAttemptId=${this.props.testAttemptId}`)
       .then((response) => {
@@ -25,6 +26,7 @@ export class QuestionTestAnswers extends Component {
         });
       });
   }
+
   render() {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>

@@ -53,8 +53,9 @@ export class StatisticsTable extends Component {
                   />
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'wpm' ? direction : null} onClick={this.sortHandler('wpm')}>
-                  {this.props.translate('statistics-table.reading-speed')}<br />
-                  ({this.props.translate('statistics-table.wpm')})
+                  {this.props.translate('statistics-table.reading-speed')}
+                  <br />
+                  {`(${this.props.translate('statistics-table.wpm')})`}
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'testResult' ? direction : null} onClick={this.sortHandler('testResult')}>
                   {this.props.translate('statistics-table.test-result')}
@@ -63,8 +64,9 @@ export class StatisticsTable extends Component {
                   {this.props.translate('statistics-table.comprehension-result')}
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'cpm' ? direction : null} onClick={this.sortHandler('cpm')}>
-                  {this.props.translate('statistics-table.comprehension-speed')}<br />
-                  ({this.props.translate('statistics-table.wpm')})
+                  {this.props.translate('statistics-table.comprehension-speed')}
+                  <br />
+                  {`(${this.props.translate('statistics-table.wpm')})`}
                 </Table.HeaderCell>
               </Fragment> : null}
             {this.props.exercise === 'schulteTables' ?
@@ -97,8 +99,8 @@ export class StatisticsTable extends Component {
               <Table.Cell collapsing>
                 {this.props.translate(`modification.${attempt.modification}`)}
               </Table.Cell>
-              <Table.Cell>{
-                new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+              <Table.Cell>
+                {new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
                   day: '2-digit',
                   month: '2-digit',
                   year: 'numeric',
