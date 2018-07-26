@@ -40,10 +40,12 @@ export class RegressionChart extends Component {
     const { data } = nextProps;
 
     const width = nextProps.width - margin.left - margin.right;
-    if (data[0][nextProps.xField] instanceof Date) {
-      widthScale = scaleTime().range([0, width]);
-    } else {
-      widthScale = scaleLinear().range([0, width]);
+    if (data.length > 0) {
+      if (data[0][nextProps.xField] instanceof Date) {
+        widthScale = scaleTime().range([0, width]);
+      } else {
+        widthScale = scaleLinear().range([0, width]);
+      }
     }
 
     return {

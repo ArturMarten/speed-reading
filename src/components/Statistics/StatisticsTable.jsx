@@ -28,7 +28,8 @@ export class StatisticsTable extends Component {
 
   render() {
     const { column, direction } = this.state;
-    const sortedAttempts = sortByColumn(this.props.data, column, direction);
+    const { data } = this.props;
+    const sortedAttempts = sortByColumn(data, column, direction);
     return (
       <Table basic celled selectable compact="very" sortable singleLine>
         <Table.Header>
