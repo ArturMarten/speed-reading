@@ -18,6 +18,7 @@ describe.only('Disappearing updateState', () => {
   offscreenContext.textBaseline = 'bottom';
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
+  console.log(JSON.stringify(textMetadata, null, 2));
 
   before(() => {
     // console.log(textMetadata);
