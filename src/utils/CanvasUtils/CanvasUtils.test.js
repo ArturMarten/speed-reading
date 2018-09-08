@@ -89,8 +89,11 @@ describe('CanvasUtils', () => {
     actualContext.font = `${fontSize}px ${font}`; actualContext.textBaseline = textBaseline;
     diffContext.font = `${fontSize}px ${font}`; diffContext.textBaseline = textBaseline;
 
+    /*
+    // When required, output diff images
     const testName = `CanvasUtils ${this.currentTest.title}`;
     outputCanvasAsPNG(diffCanvas, `${imgOutputFolder}/diff/${testName}.png`);
+    */
     /*
     // When required, output actual and expected images
     outputCanvasAsPNG(actualCanvas, `${imgOutputFolder}/actual/${testName}.png`);

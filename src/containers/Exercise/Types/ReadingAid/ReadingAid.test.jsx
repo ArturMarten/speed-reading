@@ -20,7 +20,7 @@ describe('Reading aid updateState', () => {
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
 
   before(() => {
-    console.log(textMetadata.wordsMetadata);
+    // console.log(textMetadata);
   });
 
   it('increases initial state line character index', () => {
