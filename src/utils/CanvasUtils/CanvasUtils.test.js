@@ -62,10 +62,9 @@ describe('CanvasUtils', () => {
   const fontSize = 20;
   const lineHeight = fontSize;
   const paragraphSpace = 5;
-  const font = 'Arial';
+  const font = 'sans-serif';
   const textBaseline = 'bottom';
   const expectedContext = expectedCanvas.getContext('2d');
-  console.log(expectedContext.font);
   const actualContext = actualCanvas.getContext('2d');
   const diffContext = diffCanvas.getContext('2d');
 
@@ -165,8 +164,8 @@ describe('CanvasUtils', () => {
   });
 
   it('passes text wrap test', () => {
-    expectedContext.fillText('this is a multiline text that', 0, lineHeight);
-    expectedContext.fillText('should be wrapped', 0, lineHeight + lineHeight);
+    expectedContext.fillText('this is a multiline text', 0, lineHeight);
+    expectedContext.fillText('that should be wrapped', 0, lineHeight + lineHeight);
     const content = getDraftJSContentFromHTML('this is a multiline text that should be wrapped');
     writeText(actualContext, content, { lineHeight });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
@@ -181,16 +180,16 @@ describe('CanvasUtils', () => {
   });
 
   it('passes paragraph wrap test', () => {
-    expectedContext.fillText('paragraph text should be', 0, lineHeight);
-    expectedContext.fillText('wrapped', 0, lineHeight + lineHeight);
+    expectedContext.fillText('paragraph text should', 0, lineHeight);
+    expectedContext.fillText('be wrapped', 0, lineHeight + lineHeight);
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
     writeText(actualContext, content, { paragraphSpace });
     expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).to.equal(0);
   });
 
   it('passes two paragraph wrap test', () => {
-    expectedContext.fillText('paragraph text should be', 0, lineHeight);
-    expectedContext.fillText('wrapped', 0, lineHeight + lineHeight);
+    expectedContext.fillText('paragraph text should', 0, lineHeight);
+    expectedContext.fillText('be wrapped', 0, lineHeight + lineHeight);
     expectedContext.fillText('paragraph', 0, lineHeight + lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
     writeText(actualContext, content, { paragraphSpace });
@@ -307,14 +306,16 @@ describe('CanvasUtils', () => {
 
   it('returns multiple line metadata', () => {
     const content = getDraftJSContentFromHTML('multiple word metadata that should be wrapped');
-    const firstWordWidth = expectedContext.measureText('should').width;
-    const secondWordWidth = expectedContext.measureText('be').width;
-    const thirdWordWidth = expectedContext.measureText('wrapped').width;
+    const firstWordWidth = expectedContext.measureText('that').width;
+    const secondWordWidth = expectedContext.measureText('should').width;
+    const thirdWordWidth = expectedContext.measureText('be').width;
+    const fourthWordWidth = expectedContext.measureText('wrapped').width;
     const spaceWidth = expectedContext.measureText(' ').width;
     const secondWordStart = firstWordWidth + spaceWidth;
     const thirdWordStart = secondWordStart + secondWordWidth + spaceWidth;
+    const fourthWordStart = thirdWordStart + thirdWordWidth + spaceWidth;
     const expectedWordsMetadata = [{
-      word: 'should',
+      word: 'that',
       lineNumber: 1,
       rect: {
         top: lineHeight,
@@ -323,7 +324,7 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     }, {
-      word: 'be',
+      word: 'should',
       lineNumber: 1,
       rect: {
         top: lineHeight,
@@ -332,13 +333,22 @@ describe('CanvasUtils', () => {
         left: secondWordStart,
       },
     }, {
-      word: 'wrapped',
+      word: 'be',
       lineNumber: 1,
       rect: {
         top: lineHeight,
         right: thirdWordStart + thirdWordWidth,
         bottom: lineHeight + lineHeight,
         left: thirdWordStart,
+      },
+    }, {
+      word: 'wrapped',
+      lineNumber: 1,
+      rect: {
+        top: lineHeight,
+        right: fourthWordStart + fourthWordWidth,
+        bottom: lineHeight + lineHeight,
+        left: fourthWordStart,
       },
     }];
     const actualTextMetadata = writeText(actualContext, content, { lineHeight });
@@ -396,9 +406,9 @@ describe('CanvasUtils', () => {
 
   it('returns paragraph wrap metadata', () => {
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
-    const lastWordWidth = expectedContext.measureText('wrapped').width;
+    const lastWordWidth = expectedContext.measureText('be').width;
     const expectedWordsMetadata = {
-      word: 'wrapped',
+      word: 'be',
       lineNumber: 1,
       rect: {
         top: lineHeight,
@@ -409,7 +419,7 @@ describe('CanvasUtils', () => {
     };
     const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     expect(actualTextMetadata.linesMetadata.length).to.equal(2);
-    expect(actualTextMetadata.wordsMetadata[4]).to.eql(expectedWordsMetadata);
+    expect(actualTextMetadata.wordsMetadata[3]).to.eql(expectedWordsMetadata);
   });
 
   it('returns empty paragraph metadata', () => {
@@ -488,9 +498,9 @@ describe('CanvasUtils', () => {
 
   it('returns two paragraph wrap metadata', () => {
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
-    const wrappedWordWidth = expectedContext.measureText('wrapped').width;
+    const wrappedWordWidth = expectedContext.measureText('be').width;
     const expectedWordsMetadata = {
-      word: 'wrapped',
+      word: 'be',
       lineNumber: 1,
       rect: {
         top: lineHeight,
@@ -501,7 +511,7 @@ describe('CanvasUtils', () => {
     };
     const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
     expect(actualTextMetadata.linesMetadata.length).to.equal(3);
-    expect(actualTextMetadata.wordsMetadata[4]).to.eql(expectedWordsMetadata);
+    expect(actualTextMetadata.wordsMetadata[3]).to.eql(expectedWordsMetadata);
   });
 });
 
