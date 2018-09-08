@@ -5,7 +5,7 @@ const CANVAS_HEIGHT = 400;
 
 describe('Reading aid updateState', () => {
   const textOptions = {
-    font: 'Arial',
+    font: 'sans-serif',
     width: 250,
     fontSize: 14,
     lineSpacing: 1.0,
@@ -42,10 +42,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -59,10 +60,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -87,10 +89,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -104,10 +107,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
-      x: 12,
+      x: averageCharacterWidth,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -160,15 +164,16 @@ describe('Reading aid updateState', () => {
   it('outputs second line restore rect', () => {
     const currentState = {
       wordIndex: 3,
-      lineCharacterIndex: 17,
+      lineCharacterIndex: 20,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
-      x: 190,
+      x: 264,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -182,10 +187,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[1].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 19,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -199,10 +205,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[1].averageCharacterWidth);
     const expectedRect = {
-      x: 34,
+      x: 42,
       y: 19,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -216,10 +223,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[2].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 43,
-      width: 9,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -228,7 +236,7 @@ describe('Reading aid updateState', () => {
   it('detects that text has not finished', () => {
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 9,
+      lineCharacterIndex: 13,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -239,7 +247,7 @@ describe('Reading aid updateState', () => {
   it('detects that text has finished', () => {
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 10,
+      lineCharacterIndex: 14,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -249,8 +257,8 @@ describe('Reading aid updateState', () => {
 
   it('detects that there it is not new page', () => {
     const currentState = {
-      wordIndex: 70,
-      lineCharacterIndex: 21,
+      wordIndex: 61,
+      lineCharacterIndex: 20,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -260,8 +268,8 @@ describe('Reading aid updateState', () => {
 
   it('detects that there it is new page', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -271,8 +279,8 @@ describe('Reading aid updateState', () => {
 
   it('increases margin top', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -282,16 +290,16 @@ describe('Reading aid updateState', () => {
 
   it('outputs new page restore rect', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
-      x: 224,
+      x: 236,
       y: 366,
-      width: 11,
+      width: 12,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -299,16 +307,16 @@ describe('Reading aid updateState', () => {
 
   it('outputs new page draw rect', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
       x: 0,
-      y: -19,
-      width: 10,
+      y: 0,
+      width: 12,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);

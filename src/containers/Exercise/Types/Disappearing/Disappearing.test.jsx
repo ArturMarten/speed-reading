@@ -5,7 +5,7 @@ const CANVAS_HEIGHT = 400;
 
 describe('Disappearing updateState', () => {
   const textOptions = {
-    font: 'Arial',
+    font: 'sans-serif',
     width: 250,
     fontSize: 14,
     lineSpacing: 1.0,
@@ -42,10 +42,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -70,10 +71,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
-      x: 12,
+      x: averageCharacterWidth,
       y: 0,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -131,10 +133,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[1].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 19,
-      width: 12,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -148,10 +151,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[2].averageCharacterWidth);
     const expectedRect = {
       x: 0,
       y: 43,
-      width: 9,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -171,7 +175,7 @@ describe('Disappearing updateState', () => {
   it('detects that text has not finished', () => {
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 9,
+      lineCharacterIndex: 13,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -182,7 +186,7 @@ describe('Disappearing updateState', () => {
   it('detects that text has finished', () => {
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 10,
+      lineCharacterIndex: 14,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -192,8 +196,8 @@ describe('Disappearing updateState', () => {
 
   it('detects that there it is not new page', () => {
     const currentState = {
-      wordIndex: 70,
-      lineCharacterIndex: 21,
+      wordIndex: 61,
+      lineCharacterIndex: 20,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -203,8 +207,8 @@ describe('Disappearing updateState', () => {
 
   it('detects that there it is new page', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -214,8 +218,8 @@ describe('Disappearing updateState', () => {
 
   it('increases margin top', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -225,16 +229,16 @@ describe('Disappearing updateState', () => {
 
   it('outputs new page clear rect', () => {
     const currentState = {
-      wordIndex: 71,
-      lineCharacterIndex: 22,
+      wordIndex: 61,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
       x: 0,
-      y: -19,
-      width: 10,
+      y: 0,
+      width: 12,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
