@@ -5,7 +5,7 @@ const CANVAS_HEIGHT = 400;
 
 describe('Scrolling updateState', () => {
   const textOptions = {
-    font: 'Calibri',
+    font: 'Arial',
     width: 250,
     fontSize: 14,
     lineSpacing: 1.0,

@@ -5,7 +5,7 @@ const CANVAS_HEIGHT = 400;
 
 describe('Reading test', () => {
   const textOptions = {
-    font: 'Calibri',
+    font: 'Arial',
     width: 250,
     fontSize: 25,
     lineSpacing: 1.0,

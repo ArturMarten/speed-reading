@@ -8,7 +8,7 @@ const GROUP_CHARACTER_COUNT = 15;
 
 describe('Wordgroups updateState', () => {
   const textOptions = {
-    font: 'Calibri',
+    font: 'Arial',
     width: 250,
     fontSize: 14,
     lineSpacing: 1.0,
@@ -60,7 +60,7 @@ describe('Wordgroups updateState', () => {
     const expectedRects = [{
       x: 0,
       y: 0,
-      width: 102,
+      width: 121,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -97,9 +97,14 @@ describe('Wordgroups updateState', () => {
     };
     const newState = updateState(currentState, textMetadata, wordGroups);
     const expectedRects = [{
-      x: 106,
+      x: 126,
       y: 0,
-      width: 111,
+      width: 75,
+      height: 19,
+    }, {
+      x: 0,
+      y: 19,
+      width: 45,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -137,8 +142,8 @@ describe('Wordgroups updateState', () => {
     const newState = updateState(currentState, textMetadata, wordGroups);
     const expectedRects = [{
       x: 0,
-      y: 24,
-      width: 91,
+      y: 43,
+      width: 101,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -186,14 +191,9 @@ describe('Wordgroups updateState', () => {
     };
     const newState = updateState(currentState, textMetadata, wordGroups);
     const expectedRects = [{
-      x: 207,
-      y: 24,
-      width: 27,
-      height: 19,
-    }, {
       x: 0,
-      y: 43,
-      width: 90,
+      y: 62,
+      width: 138,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -212,8 +212,8 @@ describe('Wordgroups updateState', () => {
 
   it('detects that there is not new page', () => {
     const currentState = {
-      wordIndex: 84,
-      groupIndex: 47,
+      wordIndex: 73,
+      groupIndex: 41,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -223,8 +223,8 @@ describe('Wordgroups updateState', () => {
 
   it('detects that there is new page', () => {
     const currentState = {
-      wordIndex: 86,
-      groupIndex: 48,
+      wordIndex: 74,
+      groupIndex: 42,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -234,19 +234,19 @@ describe('Wordgroups updateState', () => {
 
   it('increases margin top', () => {
     const currentState = {
-      wordIndex: 86,
-      groupIndex: 48,
+      wordIndex: 74,
+      groupIndex: 42,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.marginTop).to.equal(390);
+    expect(newState.marginTop).to.equal(385);
   });
 
   it('outputs new page draw rect', () => {
     const currentState = {
-      wordIndex: 86,
-      groupIndex: 48,
+      wordIndex: 74,
+      groupIndex: 42,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -254,7 +254,7 @@ describe('Wordgroups updateState', () => {
     const expectedRects = [{
       x: 0,
       y: 0,
-      width: 94,
+      width: 106,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);

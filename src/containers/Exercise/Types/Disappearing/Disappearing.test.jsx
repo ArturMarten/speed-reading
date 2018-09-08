@@ -5,7 +5,7 @@ const CANVAS_HEIGHT = 400;
 
 describe('Disappearing updateState', () => {
   const textOptions = {
-    font: 'Calibri',
+    font: 'Arial',
     width: 250,
     fontSize: 14,
     lineSpacing: 1.0,
@@ -45,7 +45,7 @@ describe('Disappearing updateState', () => {
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -71,9 +71,9 @@ describe('Disappearing updateState', () => {
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
-      x: 10,
+      x: 12,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -92,19 +92,19 @@ describe('Disappearing updateState', () => {
 
   it('increases word index on new line', () => {
     const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
+      wordIndex: 3,
+      lineCharacterIndex: 17,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(5);
+    expect(newState.wordIndex).to.equal(4);
   });
 
   it('detects new line', () => {
     const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
+      wordIndex: 3,
+      lineCharacterIndex: 17,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -114,8 +114,8 @@ describe('Disappearing updateState', () => {
 
   it('resets line character index on new line', () => {
     const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
+      wordIndex: 3,
+      lineCharacterIndex: 17,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -125,6 +125,23 @@ describe('Disappearing updateState', () => {
 
   it('outputs second line clear rect', () => {
     const currentState = {
+      wordIndex: 3,
+      lineCharacterIndex: 17,
+      canvasHeight: CANVAS_HEIGHT,
+      marginTop: 0,
+    };
+    const newState = updateState(currentState, textMetadata);
+    const expectedRect = {
+      x: 0,
+      y: 19,
+      width: 12,
+      height: 19,
+    };
+    expect(newState.clearRect).to.eql(expectedRect);
+  });
+
+  it('outputs third line clear rect', () => {
+    const currentState = {
       wordIndex: 4,
       lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
@@ -133,25 +150,8 @@ describe('Disappearing updateState', () => {
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
       x: 0,
-      y: 24,
-      width: 9,
-      height: 19,
-    };
-    expect(newState.clearRect).to.eql(expectedRect);
-  });
-
-  it('outputs third line clear rect', () => {
-    const currentState = {
-      wordIndex: 8,
-      lineCharacterIndex: 28,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const expectedRect = {
-      x: 0,
       y: 43,
-      width: 10,
+      width: 9,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);
@@ -192,8 +192,8 @@ describe('Disappearing updateState', () => {
 
   it('detects that there it is not new page', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 26,
+      wordIndex: 70,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -203,8 +203,8 @@ describe('Disappearing updateState', () => {
 
   it('detects that there it is new page', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -214,27 +214,27 @@ describe('Disappearing updateState', () => {
 
   it('increases margin top', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(390);
+    expect(newState.marginTop).to.equal(385);
   });
 
   it('outputs new page clear rect', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
       x: 0,
-      y: 0,
-      width: 9,
+      y: -19,
+      width: 10,
       height: 19,
     };
     expect(newState.clearRect).to.eql(expectedRect);

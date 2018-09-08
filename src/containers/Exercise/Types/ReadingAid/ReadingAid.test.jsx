@@ -5,7 +5,7 @@ const CANVAS_HEIGHT = 400;
 
 describe('Reading aid updateState', () => {
   const textOptions = {
-    font: 'Calibri',
+    font: 'Arial',
     width: 250,
     fontSize: 14,
     lineSpacing: 1.0,
@@ -20,7 +20,7 @@ describe('Reading aid updateState', () => {
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
 
   before(() => {
-    // console.log(textMetadata);
+    console.log(textMetadata.wordsMetadata);
   });
 
   it('increases initial state line character index', () => {
@@ -45,7 +45,7 @@ describe('Reading aid updateState', () => {
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -62,7 +62,7 @@ describe('Reading aid updateState', () => {
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -90,7 +90,7 @@ describe('Reading aid updateState', () => {
     const expectedRect = {
       x: 0,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -105,9 +105,9 @@ describe('Reading aid updateState', () => {
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
-      x: 10,
+      x: 12,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -159,16 +159,16 @@ describe('Reading aid updateState', () => {
 
   it('outputs second line restore rect', () => {
     const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
+      wordIndex: 3,
+      lineCharacterIndex: 17,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
-      x: 208,
+      x: 190,
       y: 0,
-      width: 10,
+      width: 12,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -176,16 +176,16 @@ describe('Reading aid updateState', () => {
 
   it('outputs second line draw rect', () => {
     const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
+      wordIndex: 3,
+      lineCharacterIndex: 17,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
       x: 0,
-      y: 24,
-      width: 9,
+      y: 19,
+      width: 12,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
@@ -193,16 +193,16 @@ describe('Reading aid updateState', () => {
 
   it('outputs third line restore rect', () => {
     const currentState = {
-      wordIndex: 8,
-      lineCharacterIndex: 28,
+      wordIndex: 4,
+      lineCharacterIndex: 3,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
-      x: 226,
-      y: 24,
-      width: 9,
+      x: 34,
+      y: 19,
+      width: 12,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -210,8 +210,8 @@ describe('Reading aid updateState', () => {
 
   it('outputs third line draw rect', () => {
     const currentState = {
-      wordIndex: 8,
-      lineCharacterIndex: 28,
+      wordIndex: 4,
+      lineCharacterIndex: 3,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -219,21 +219,10 @@ describe('Reading aid updateState', () => {
     const expectedRect = {
       x: 0,
       y: 43,
-      width: 10,
+      width: 9,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);
-  });
-
-  it('increases word index on new line', () => {
-    const currentState = {
-      wordIndex: 22,
-      lineCharacterIndex: 26,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(23);
   });
 
   it('detects that text has not finished', () => {
@@ -260,8 +249,8 @@ describe('Reading aid updateState', () => {
 
   it('detects that there it is not new page', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 26,
+      wordIndex: 70,
+      lineCharacterIndex: 21,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -271,8 +260,8 @@ describe('Reading aid updateState', () => {
 
   it('detects that there it is new page', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -282,27 +271,27 @@ describe('Reading aid updateState', () => {
 
   it('increases margin top', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(390);
+    expect(newState.marginTop).to.equal(385);
   });
 
   it('outputs new page restore rect', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
-      x: 216,
-      y: 371,
-      width: 8,
+      x: 224,
+      y: 366,
+      width: 11,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
@@ -310,16 +299,16 @@ describe('Reading aid updateState', () => {
 
   it('outputs new page draw rect', () => {
     const currentState = {
-      wordIndex: 86,
-      lineCharacterIndex: 27,
+      wordIndex: 71,
+      lineCharacterIndex: 22,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
     const expectedRect = {
       x: 0,
-      y: 0,
-      width: 9,
+      y: -19,
+      width: 10,
       height: 19,
     };
     expect(newState.drawRect).to.eql(expectedRect);

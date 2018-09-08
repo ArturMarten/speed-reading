@@ -45,7 +45,6 @@ export const updateState = (currentState, textMetadata) => {
       nextMarginTop = nextLine.rect.top;
     }
   }
-
   const clearRect = {
     x: Math.ceil(nextLinePosition),
     y: nextWordMetadata.rect.top - nextMarginTop,
