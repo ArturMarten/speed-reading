@@ -3,18 +3,18 @@ import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtil
 
 const CANVAS_HEIGHT = 400;
 
-describe.only('Disappearing updateState', () => {
+describe('Disappearing updateState', () => {
   const textOptions = {
     font: 'sans-serif',
     width: 250,
-    fontSize: 10,
+    fontSize: 14,
     lineSpacing: 1.0,
   };
   const offscreenCanvas = document.createElement('canvas');
   offscreenCanvas.width = textOptions.width;
   offscreenCanvas.height = CANVAS_HEIGHT;
   const offscreenContext = offscreenCanvas.getContext('2d');
-  offscreenContext.font = `900 ${Math.ceil(textOptions.fontSize / 0.75)}px ${textOptions.font}`;
+  offscreenContext.font = `${Math.ceil(textOptions.fontSize / 0.75)}px ${textOptions.font}`;
   offscreenContext.textBaseline = 'bottom';
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
