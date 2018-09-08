@@ -39,6 +39,7 @@ export class TextAnalysis extends Component {
 
   onRefresh = () => {
     const textData = {
+      language: 'estonian',
       text: this.state.text,
     };
     this.props.onAnalyzeText(textData);
@@ -117,6 +118,7 @@ export class TextAnalysis extends Component {
     </div>
   );
 
+  /*
   formatWordFrequencyValue = wordFrequencyPercentage => wordFrequency => (
     <div style={{ textAlign: 'center' }}>
       <span style={{ fontSize: '1.5em' }}>
@@ -129,6 +131,7 @@ export class TextAnalysis extends Component {
       {this.props.translate('text-analysis.of-most-frequent-words')}
     </div>
   );
+  */
 
   formatSentenceLengthValues = sentencePercentage => sentenceLengths => (
     <div style={{ textAlign: 'center' }}>
@@ -156,11 +159,6 @@ export class TextAnalysis extends Component {
         .filter(data => data.x >= currentWordLengths[0] && data.x <= currentWordLengths[1])
         .map(data => data.y)
         .reduce(reduceSumFunc, 0) / analysis.wordCount) * 100 : 0;
-
-    const wordFrequencyPercentage = analysis !== null ?
-      (Math.max(...analysis.wordFrequencyCounts
-        .filter(data => data.x <= currentWordFrequency[0])
-        .map(data => data.y)) / analysis.wordCount) * 100 : 0;
 
     const sentencePercentage = analysis !== null ?
       (analysis.sentenceLengths
@@ -265,6 +263,7 @@ export class TextAnalysis extends Component {
                   />
                 </div>
               }
+              {/*
               <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
                 <LabeledSlider
                   snap
@@ -275,20 +274,7 @@ export class TextAnalysis extends Component {
                   formatValues={this.formatWordFrequencyValue(wordFrequencyPercentage)}
                 />
               </div>
-              {this.props.analyzeStatus.loading || this.props.analysis === null ?
-                null :
-                <div style={{ overflowX: 'auto', textAlign: 'center' }}>
-                  <BarChart
-                    title={this.props.translate('text-analysis.word-frequency-distribution')}
-                    xLabel={this.props.translate('text-analysis.word-frequency-top')}
-                    yLabel={this.props.translate('text-analysis.word-count')}
-                    fill={WORD_FREQ_COLOR}
-                    width={700}
-                    height={250}
-                    data={this.props.analysis.wordFrequencyCounts}
-                  />
-                </div>
-              }
+              */}
               {this.props.analyzeStatus.loading || this.props.analysis === null ?
                 null :
                 <div style={{ overflowX: 'auto', textAlign: 'center' }}>

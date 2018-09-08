@@ -66,13 +66,15 @@ export const authCheckState = () => (dispatch) => {
     dispatch(logout(null));
   } else {
     const expirationDate = new Date(localStorage.getItem('expirationDate'));
-    if (expirationDate <= new Date()) {
+    const now = new Date();
+    if (expirationDate <= now) {
       dispatch(logout('Authentication expired'));
     } else {
       dispatch(authStart());
       const userId = localStorage.getItem('userId');
+      const expiresIn = (expirationDate.getTime() - new Date().getTime()) / 1000;
       dispatch(authSucceeded(token, userId));
-      dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
+      dispatch(checkAuthTimeout(expiresIn));
       dispatch(actionCreators.fetchUserProfile(userId, token));
     }
   }

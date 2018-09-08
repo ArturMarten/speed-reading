@@ -203,7 +203,6 @@ const reducer = (state = initialState, action) => {
         wordLengths,
         sentenceLengths,
         wordTypeCounts,
-        wordFrequencyCounts,
       } = analysis;
 
       const updatedWordLengths = [];
@@ -233,22 +232,10 @@ const reducer = (state = initialState, action) => {
         });
       });
 
-      const updatedWordFrequencyCounts = [];
-      let total = 0;
-      Object.keys(wordFrequencyCounts).sort((a, b) => a - b).forEach((wordFrequencyCount, index) => {
-        total += wordFrequencyCounts[wordFrequencyCount];
-        updatedWordFrequencyCounts.push({
-          id: index,
-          x: wordFrequencyCount,
-          y: total,
-        });
-      });
-
       const updatedAnalysis = updateObject(analysis, {
         wordLengths: updatedWordLengths,
         sentenceLengths: updatedSentenceLengths,
         wordTypeCounts: updatedWordTypeCounts,
-        wordFrequencyCounts: updatedWordFrequencyCounts,
       });
 
       return updateObject(state, {
