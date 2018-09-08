@@ -65,6 +65,7 @@ describe('CanvasUtils', () => {
   const font = 'Arial';
   const textBaseline = 'bottom';
   const expectedContext = expectedCanvas.getContext('2d');
+  console.log(expectedContext.font);
   const actualContext = actualCanvas.getContext('2d');
   const diffContext = diffCanvas.getContext('2d');
 
