@@ -3,7 +3,7 @@ import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtil
 
 const CANVAS_HEIGHT = 400;
 
-describe('Disappearing updateState', () => {
+describe.only('Disappearing updateState', () => {
   const textOptions = {
     font: 'sans-serif',
     width: 250,
@@ -184,6 +184,7 @@ describe('Disappearing updateState', () => {
   });
 
   it('detects that text has finished', () => {
+    console.log(textMetadata.wordsMetadata[121]);
     const currentState = {
       wordIndex: 121,
       lineCharacterIndex: 14,
