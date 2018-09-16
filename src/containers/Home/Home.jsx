@@ -6,6 +6,8 @@ import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 import About from './About/About';
 import IntroVideo from './IntroVideo/IntroVideo';
 import ApplicationStatistics from './ApplicationStatistics/ApplicationStatistics';
+import ekkEstLogo from '../../assets/img/ekk_est.png';
+import ekkEngLogo from '../../assets/img/ekk_eng.png';
 import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
 import studyEstLogo from '../../assets/img/study_est.jpg';
@@ -87,7 +89,15 @@ export class Home extends Component {
         <ApplicationStatistics />
         <Divider />
         <Grid verticalAlign="middle">
-          <Grid.Row columns={2} style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <Grid.Row columns={3} style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <Grid.Column>
+              <Image
+                centered
+                src={this.props.currentLanguage === 'ee' ? ekkEstLogo : ekkEngLogo}
+                size="small"
+                alt="EEK logo"
+              />
+            </Grid.Column>
             <Grid.Column>
               <Image
                 centered

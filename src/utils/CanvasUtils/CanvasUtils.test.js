@@ -83,6 +83,7 @@ describe('CanvasUtils', () => {
     diffContext.clearRect(0, 0, canvasWidth, canvasHeight);
   });
 
+  // eslint-disable-next-line prefer-arrow-callback
   afterEach(function () {
     // Reset any applied styling
     expectedContext.font = `${fontSize}px ${font}`; expectedContext.textBaseline = textBaseline;

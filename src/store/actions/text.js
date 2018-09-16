@@ -144,7 +144,7 @@ const selectOwnTextFailed = error => ({
 
 export const selectOwnText = textData => (dispatch) => {
   dispatch(selectOwnTextStart());
-  axios.post('/analyze', { text: textData.plain })
+  axios.post('/analyze', { text: textData.plain, language: textData.language })
     .then((response) => {
       const analysis = response.data;
       dispatch(selectOwnTextSucceeded({ ...textData, ...analysis }));

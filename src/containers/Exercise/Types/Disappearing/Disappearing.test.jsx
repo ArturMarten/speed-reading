@@ -22,7 +22,6 @@ describe('Disappearing updateState', () => {
 
   before(() => {
     // console.log(textMetadata);
-    console.log(process);
   });
 
   it('increases initial state line character index', () => {
@@ -186,7 +185,6 @@ describe('Disappearing updateState', () => {
   });
 
   it('detects that text has finished', () => {
-    console.log(textMetadata.wordsMetadata[121]);
     const currentState = {
       wordIndex: 121,
       lineCharacterIndex: 14,

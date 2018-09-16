@@ -20,8 +20,8 @@ describe('<Home />', () => {
     expect(translateStub).to.have.been.calledWith('home.welcome');
   });
 
-  it('should render two logos', () => {
+  it('should render three logos', () => {
     const home = shallow(<Home translate={sinon.stub()} />);
-    expect(home.find(Image)).to.have.length(2);
+    expect(home.find(Image)).to.have.length(3);
   });
 });

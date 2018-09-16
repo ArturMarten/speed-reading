@@ -166,23 +166,6 @@ export const getSimilarSymbol = (symbol) => {
   return similar[Math.floor(Math.random() * similar.length)];
 };
 
-const BASE64_MARKER = ';base64,';
-
-export const convertDataURIToBinary = (dataURI) => {
-  console.log(dataURI);
-  const base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-  const base64 = dataURI.substring(base64Index);
-  const raw = window.atob(base64);
-  const rawLength = raw.length;
-  const array = new Uint8Array(rawLength);
-
-  for (let i = 0; i < rawLength; i += 1) {
-    array[i] = raw.charCodeAt(i);
-  }
-  console.log(array);
-  return array;
-};
-
 export const reduceSumFunc = (prev, cur) => prev + cur;
 
 export const leastSquares = (xSeries, ySeries) => {

@@ -24,6 +24,7 @@ export class OwnTextEditor extends Component {
   onSubmit = () => {
     const textEditorComponent = this.textEditorRef.getWrappedInstance();
     const selectedText = {
+      language: 'estonian',
       plain: textEditorComponent.getPlainText(),
       contentState: textEditorComponent.getRawContent(),
     };
