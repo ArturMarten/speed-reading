@@ -73,17 +73,16 @@ describe('Wordgroups updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    const firstWordMetadata = textMetadata.wordsMetadata[2];
-    const lastWordMetadata = textMetadata.wordsMetadata[4];
+    const groupMetadata = textMetadata.groupsMetadata[1];
     const expectedRects = [{
-      x: firstWordMetadata.rect.left,
+      x: groupMetadata.rects[0].left,
       y: 0,
-      width: 90,
+      width: groupMetadata.rects[0].right - groupMetadata.rects[0].left,
       height: 19,
     }, {
-      x: 0,
+      x: groupMetadata.rects[1].left,
       y: 19,
-      width: lastWordMetadata.rect.right,
+      width: groupMetadata.rects[1].right - groupMetadata.rects[1].left,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -106,11 +105,11 @@ describe('Wordgroups updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    const groupWordMetadata = textMetadata.wordsMetadata[5];
+    const groupMetadata = textMetadata.groupsMetadata[2];
     const expectedRects = [{
       x: 0,
-      y: groupWordMetadata.rect.top,
-      width: groupWordMetadata.rect.right,
+      y: groupMetadata.rects[0].top,
+      width: groupMetadata.rects[0].right - groupMetadata.rects[0].left,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
