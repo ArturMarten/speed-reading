@@ -174,9 +174,10 @@ describe('Disappearing updateState', () => {
   });
 
   it('detects that text has not finished', () => {
+    const textLastLineMetadata = textMetadata.linesMetadata[textMetadata.linesMetadata.length - 1];
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 13,
+      lineCharacterIndex: textLastLineMetadata.characterCount - 3,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -185,9 +186,10 @@ describe('Disappearing updateState', () => {
   });
 
   it('detects that text has finished', () => {
+    const textLastLineMetadata = textMetadata.linesMetadata[textMetadata.linesMetadata.length - 1];
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 14,
+      lineCharacterIndex: textLastLineMetadata.characterCount - 2,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -196,9 +198,13 @@ describe('Disappearing updateState', () => {
   });
 
   it('detects that there it is not new page', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 20,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 2,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -207,9 +213,13 @@ describe('Disappearing updateState', () => {
   });
 
   it('detects that there it is new page', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -218,9 +228,13 @@ describe('Disappearing updateState', () => {
   });
 
   it('increases margin top', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -229,9 +243,13 @@ describe('Disappearing updateState', () => {
   });
 
   it('outputs new page clear rect', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };

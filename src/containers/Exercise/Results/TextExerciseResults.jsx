@@ -7,25 +7,25 @@ import { formatMilliseconds } from '../../../shared/utility';
 
 export class TextExerciseResults extends Component {
   state = {
-    complexityRating: 0,
+    interestingnessRating: 0,
   };
 
   onRateHandler = (event, data) => {
     this.setState({
-      complexityRating: data.rating,
+      interestingnessRating: data.rating,
     });
   }
 
   onEndHandler = () => {
-    if (this.state.complexityRating) {
-      this.props.onRate(this.state.complexityRating);
+    if (this.state.interestingnessRating) {
+      this.props.onRate(this.state.interestingnessRating);
     }
     this.props.onEnd();
   }
 
   onProceedHandler = () => {
-    if (this.state.complexityRating) {
-      this.props.onRate(this.state.complexityRating);
+    if (this.state.interestingnessRating) {
+      this.props.onRate(this.state.interestingnessRating);
     }
     this.props.onProceed();
   }
@@ -76,7 +76,7 @@ export class TextExerciseResults extends Component {
                 <Grid.Column width={6} textAlign="right">
                   <span>
                     <b>
-                      {this.props.translate('text-exercise-results.rate-text-complexity')}
+                      {this.props.translate('text-exercise-results.rate-text-interestingness')}
                     </b>
                     {` (${this.props.translate('text-exercise-results.optional')})`}
                   </span>
@@ -88,11 +88,11 @@ export class TextExerciseResults extends Component {
                         icon="star"
                         clearable
                         maxRating={10}
-                        rating={this.state.complexityRating}
+                        rating={this.state.interestingnessRating}
                         onRate={this.onRateHandler}
                       />}
                     position="top center"
-                    content={this.props.translate('text-exercise-results.rate-text-complexity-description')}
+                    content={this.props.translate('text-exercise-results.rate-text-interestingness-description')}
                   />
                 </Grid.Column>
               </Grid.Row> : null}

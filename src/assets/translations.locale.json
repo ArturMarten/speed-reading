@@ -349,9 +349,9 @@
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
     "wpm": ["sõna minutis", "words per minute"],
     "cps": ["tähemärki sekundis", "characters per second"],
-    "rate-text-complexity": ["Hinda teksti keerukust", "Rate text complexity"],
+    "rate-text-interestingness": ["Hinda teksti huvitavust", "Rate text interestingness"],
     "optional": ["valikuline", "optional"],
-    "rate-text-complexity-description": ["1 täht - väga lihtne, 10 tähte - väga keeruline", "1 star - very simple, 10 stars - very complex"],
+    "rate-text-interestingness-description": ["1 täht - väga igav, 10 tähte - väga huvitav", "1 star - very boring, 10 stars - very interesting"],
     "proceed": ["Jätka testiga", "Proceed with test"],
     "end": ["Lõpeta", "Finish"]
   },

@@ -230,6 +230,7 @@ export class TextEntry extends Component {
       const textEditorComponent = this.textEditorRef.getWrappedInstance();
       const text = textEditorComponent.getPlainText();
       const textData = {
+        language: 'estonian',
         text,
       };
       this.props.onAnalyzeText(textData);

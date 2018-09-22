@@ -53,7 +53,8 @@ export const formatMilliseconds = (input) => {
 
 export const formatMillisecondsInHours = (input) => {
   const inputTime = new Date(input);
-  const hours = pad(inputTime.getUTCHours().toString(), 1);
+  const days = Math.floor(inputTime.getTime() / 86400000);
+  const hours = pad((days * 24 + inputTime.getUTCHours()).toString(), 1);
   const minutes = pad(inputTime.getMinutes().toString(), 2);
   return `${hours}h ${minutes}m`;
 };

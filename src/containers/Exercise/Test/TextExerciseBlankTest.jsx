@@ -117,7 +117,7 @@ export class TextExerciseBlankTest extends Component {
             onClick={this.onTestStartHandler}
             floated="right"
             loading={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
-            disabled={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
+            disabled={this.props.testStatus === 'preparation' || this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
           >
             {this.props.translate('text-exercise-blank-test.start-test')}
           </Button>}

@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 import { updateState } from './WordGroups';
-import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+import { exampleText, writeText, getGroupsMetadata } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { splitIntoWordGroups } from '../../../../utils/TextUtils';
 
 const CANVAS_HEIGHT = 400;
@@ -20,8 +20,10 @@ describe('Wordgroups updateState', () => {
   offscreenContext.font = `${Math.ceil(textOptions.fontSize / 0.75)}px ${textOptions.font}`;
   offscreenContext.textBaseline = 'bottom';
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-  const textMetadata = writeText(offscreenContext, exampleText.contentState);
+  const { wordsMetadata, linesMetadata } = writeText(offscreenContext, exampleText.contentState);
   const wordGroups = splitIntoWordGroups(exampleText.contentState.getPlainText(''), GROUP_CHARACTER_COUNT);
+  const groupsMetadata = getGroupsMetadata(wordsMetadata, wordGroups);
+  const textMetadata = { wordsMetadata, linesMetadata, groupsMetadata };
 
   before(() => {
     // console.log(wordGroups);
@@ -29,38 +31,26 @@ describe('Wordgroups updateState', () => {
 
   it('increases initial state group index', () => {
     const currentState = {
-      wordIndex: -1,
       groupIndex: -1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.groupIndex).to.equal(0);
-  });
-
-  it('increases initial state word index', () => {
-    const currentState = {
-      wordIndex: -1,
-      groupIndex: -1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.wordIndex).to.equal(1);
   });
 
   it('outputs first draw rect', () => {
     const currentState = {
-      wordIndex: -1,
       groupIndex: -1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
+    const firstWordGroup = wordGroups[0];
     const expectedRects = [{
       x: 0,
       y: 0,
-      width: 140,
+      width: textMetadata.wordsMetadata[firstWordGroup.length - 1].rect.right,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -68,82 +58,59 @@ describe('Wordgroups updateState', () => {
 
   it('increases group index after first group', () => {
     const currentState = {
-      wordIndex: 1,
       groupIndex: 0,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.groupIndex).to.equal(1);
-  });
-
-  it('increases word index after first group', () => {
-    const currentState = {
-      wordIndex: 1,
-      groupIndex: 0,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.wordIndex).to.equal(4);
   });
 
   it('outputs second draw rect', () => {
     const currentState = {
-      wordIndex: 1,
       groupIndex: 0,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
+    const firstWordMetadata = textMetadata.wordsMetadata[2];
+    const lastWordMetadata = textMetadata.wordsMetadata[4];
     const expectedRects = [{
-      x: 147,
+      x: firstWordMetadata.rect.left,
       y: 0,
       width: 90,
       height: 19,
     }, {
       x: 0,
       y: 19,
-      width: 55,
+      width: lastWordMetadata.rect.right,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
   });
 
-  it('increases word index after second group', () => {
-    const currentState = {
-      wordIndex: 4,
-      groupIndex: 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.wordIndex).to.equal(5);
-  });
-
   it('increases group index after second group', () => {
     const currentState = {
-      wordIndex: 4,
       groupIndex: 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.groupIndex).to.equal(2);
   });
 
   it('outputs third draw rect', () => {
     const currentState = {
-      wordIndex: 4,
       groupIndex: 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
+    const groupWordMetadata = textMetadata.wordsMetadata[5];
     const expectedRects = [{
       x: 0,
-      y: 43,
-      width: 112,
+      y: groupWordMetadata.rect.top,
+      width: groupWordMetadata.rect.right,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -151,110 +118,95 @@ describe('Wordgroups updateState', () => {
 
   it('detects new line after second group', () => {
     const currentState = {
-      wordIndex: 4,
       groupIndex: 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.newLine).to.equal(true);
-  });
-
-  it('increases word index after fourth group', () => {
-    const currentState = {
-      wordIndex: 7,
-      groupIndex: 4,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.wordIndex).to.equal(10);
   });
 
   it('increases group index after fourth group', () => {
     const currentState = {
-      wordIndex: 7,
-      groupIndex: 4,
+      groupIndex: 3,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.groupIndex).to.equal(5);
+    const newState = updateState(currentState, textMetadata);
+    expect(newState.groupIndex).to.equal(4);
   });
 
   it('outputs fifth draw rect', () => {
     const currentState = {
-      wordIndex: 7,
-      groupIndex: 4,
+      groupIndex: 3,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
+    const groupMetadata = textMetadata.wordsMetadata[7];
     const expectedRects = [{
-      x: 41,
-      y: 62,
-      width: 152,
+      x: groupMetadata.rect.left,
+      y: groupMetadata.rect.top,
+      width: groupMetadata.rect.right - groupMetadata.rect.left,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
   });
 
-  it('detects new line after fourth group', () => {
-    const currentState = {
-      wordIndex: 8,
-      groupIndex: 4,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata, wordGroups);
-    expect(newState.newLine).to.equal(true);
-  });
-
   it('detects that there is not new page', () => {
+    const pageFirstGroupIndex = textMetadata.groupsMetadata
+      .findIndex(group => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT);
+    const pageLastGroupIndex = pageFirstGroupIndex - 1;
     const currentState = {
-      wordIndex: 60,
-      groupIndex: 41,
+      groupIndex: pageLastGroupIndex - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.newPage).to.equal(false);
   });
 
   it('detects that there is new page', () => {
+    const pageFirstGroupIndex = textMetadata.groupsMetadata
+      .findIndex(group => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT);
+    const pageLastGroupIndex = pageFirstGroupIndex - 1;
     const currentState = {
-      wordIndex: 61,
-      groupIndex: 41,
+      groupIndex: pageLastGroupIndex,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.newPage).to.equal(true);
   });
 
   it('increases margin top', () => {
+    const pageFirstGroupIndex = textMetadata.groupsMetadata
+      .findIndex(group => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT);
+    const pageLastGroupIndex = pageFirstGroupIndex - 1;
     const currentState = {
-      wordIndex: 61,
-      groupIndex: 41,
+      groupIndex: pageLastGroupIndex,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.marginTop).to.equal(385);
   });
 
   it('outputs new page draw rect', () => {
+    const pageFirstGroupIndex = textMetadata.groupsMetadata
+      .findIndex(group => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT);
+    const pageLastGroupIndex = pageFirstGroupIndex - 1;
     const currentState = {
-      wordIndex: 61,
-      groupIndex: 41,
+      groupIndex: pageLastGroupIndex,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
+    const firstGroupMetadata = textMetadata.groupsMetadata[pageFirstGroupIndex];
     const expectedRects = [{
       x: 0,
       y: 0,
-      width: 68,
+      width: firstGroupMetadata.rects[0].right - firstGroupMetadata.rects[0].left,
       height: 19,
     }];
     expect(newState.drawRects).to.eql(expectedRects);
@@ -262,23 +214,21 @@ describe('Wordgroups updateState', () => {
 
   it('detects that text has not finished', () => {
     const currentState = {
-      wordIndex: 119,
       groupIndex: 63,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 390,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.finished).to.equal(false);
   });
 
   it('detects that text has finished', () => {
     const currentState = {
-      wordIndex: 120,
       groupIndex: 64,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 390,
     };
-    const newState = updateState(currentState, textMetadata, wordGroups);
+    const newState = updateState(currentState, textMetadata);
     expect(newState.finished).to.equal(true);
   });
 });

@@ -66,10 +66,10 @@ export class TextExerciseContainer extends Component {
     }
   }
 
-  textComplexityRating = (complexityRating) => {
+  textInterestingnessRating = (interestingnessRating) => {
     axios.post(
       '/textRatings',
-      { readingTextId: this.props.selectedText.id, complexityRating }, { headers: { 'x-access-token': this.props.token } },
+      { readingTextId: this.props.selectedText.id, interestingnessRating }, { headers: { 'x-access-token': this.props.token } },
     )
       .then(() => {
       }, (error) => {
@@ -110,7 +110,7 @@ export class TextExerciseContainer extends Component {
           <TextExerciseResults
             open={this.state.status === 'exercise' && this.props.exerciseStatus === 'finished'}
             onProceed={() => this.switchViewHandler('test')}
-            onRate={this.textComplexityRating}
+            onRate={this.textInterestingnessRating}
             onEnd={this.onExerciseEnd}
           /> : null}
         {this.state.status === 'test' && this.props.testStatus === 'finished' ?

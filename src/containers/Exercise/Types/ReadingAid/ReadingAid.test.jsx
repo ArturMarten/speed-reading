@@ -164,14 +164,17 @@ describe('Reading aid updateState', () => {
   it('outputs second line restore rect', () => {
     const currentState = {
       wordIndex: 3,
-      lineCharacterIndex: 20,
+      lineCharacterIndex: 17,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const lineFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > 19);
+    const lineLastWordIndex = lineFirstWordIndex - 1;
+    const lineLastWordMetadata = textMetadata.wordsMetadata[lineLastWordIndex];
     const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
     const expectedRect = {
-      x: 264,
+      x: lineLastWordMetadata.rect.right - averageCharacterWidth + 1,
       y: 0,
       width: averageCharacterWidth,
       height: 19,
@@ -234,9 +237,10 @@ describe('Reading aid updateState', () => {
   });
 
   it('detects that text has not finished', () => {
+    const textLastLineMetadata = textMetadata.linesMetadata[textMetadata.linesMetadata.length - 1];
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 13,
+      lineCharacterIndex: textLastLineMetadata.characterCount - 3,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -245,9 +249,10 @@ describe('Reading aid updateState', () => {
   });
 
   it('detects that text has finished', () => {
+    const textLastLineMetadata = textMetadata.linesMetadata[textMetadata.linesMetadata.length - 1];
     const currentState = {
       wordIndex: 121,
-      lineCharacterIndex: 14,
+      lineCharacterIndex: textLastLineMetadata.characterCount - 2,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -256,9 +261,13 @@ describe('Reading aid updateState', () => {
   });
 
   it('detects that there it is not new page', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 20,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 2,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -267,9 +276,13 @@ describe('Reading aid updateState', () => {
   });
 
   it('detects that there it is new page', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -278,9 +291,13 @@ describe('Reading aid updateState', () => {
   });
 
   it('increases margin top', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
@@ -289,26 +306,35 @@ describe('Reading aid updateState', () => {
   });
 
   it('outputs new page restore rect', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
+    const averageCharacterWidth = Math.ceil(pageLastLineMetadata.averageCharacterWidth);
     const expectedRect = {
-      x: 236,
-      y: 366,
-      width: 12,
+      x: pageLastLineMetadata.rect.right - averageCharacterWidth + 1,
+      y: pageLastLineMetadata.rect.top,
+      width: averageCharacterWidth,
       height: 19,
     };
     expect(newState.restoreRect).to.eql(expectedRect);
   });
 
   it('outputs new page draw rect', () => {
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageLastWordIndex = pageFirstWordIndex - 1;
+    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
     const currentState = {
-      wordIndex: 61,
-      lineCharacterIndex: 21,
+      wordIndex: pageLastWordIndex,
+      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
       canvasHeight: CANVAS_HEIGHT,
       marginTop: 0,
     };

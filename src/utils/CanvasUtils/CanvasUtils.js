@@ -66,6 +66,36 @@ const getLinesMetadata = (wordsMetadata) => {
   return linesMetadata;
 };
 
+export const getGroupsMetadata = (wordsMetadata, wordGroups) => {
+  const groupsMetadata = [];
+  let nextWordIndex = 0;
+  wordGroups.forEach((words) => {
+    const rects = [];
+    let nextWordMetadata = wordsMetadata[nextWordIndex];
+    const groupRect = {
+      top: nextWordMetadata.rect.top,
+      right: nextWordMetadata.rect.right,
+      bottom: nextWordMetadata.rect.bottom,
+      left: nextWordMetadata.rect.left,
+    };
+    nextWordIndex += 1;
+    words.slice(1).forEach(() => {
+      nextWordMetadata = wordsMetadata[Math.min(nextWordIndex, wordsMetadata.length - 1)];
+      if (groupRect.right > nextWordMetadata.rect.left) {
+        rects.push({ ...groupRect });
+        groupRect.left = nextWordMetadata.rect.left;
+      }
+      groupRect.top = nextWordMetadata.rect.top;
+      groupRect.right = nextWordMetadata.rect.right;
+      groupRect.bottom = nextWordMetadata.rect.bottom;
+      nextWordIndex += 1;
+    });
+    rects.push({ ...groupRect });
+    groupsMetadata.push({ rects, words });
+  });
+  return groupsMetadata;
+};
+
 const addWordMetadata = (wordsMetadata, word, context, lineNumber, wordStartPosition, fillYStart, lineHeight) => {
   const wordWidth = context.measureText(word).width;
   wordsMetadata.push({

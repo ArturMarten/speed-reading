@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+import { writeText, getGroupsMetadata } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
@@ -35,69 +35,47 @@ export const drawState = (currentState, context, restoreCanvas) => {
   });
 };
 
-export const updateState = (currentState, textMetadata, wordGroups) => {
+export const updateState = (currentState, textMetadata) => {
   const { canvasHeight } = currentState;
-  const { wordsMetadata } = textMetadata;
+  const { groupsMetadata } = textMetadata;
 
   // Calculate current state
-  const currentWordMetadata = wordsMetadata[Math.max(currentState.wordIndex, 0)];
+  const currentGroupMetadata = groupsMetadata[Math.max(currentState.groupIndex, 0)];
 
   // Calculate next state
   let newLine = false;
   let newPage = false;
   let finished = false;
-  let { wordIndex: nextWordIndex, groupIndex: nextGroupIndex, marginTop: nextMarginTop } = currentState;
+  let { groupIndex: nextGroupIndex, marginTop: nextMarginTop } = currentState;
   nextGroupIndex += 1;
-  nextWordIndex += 1;
-  const nextWordGroup = wordGroups[nextGroupIndex].slice(1);
-  let nextWordMetadata = wordsMetadata[nextWordIndex];
-  let groupLeft = nextWordMetadata.rect.left;
-  let groupRight = nextWordMetadata.rect.right;
-  let groupBottom = nextWordMetadata.rect.bottom;
-  let groupTop = nextWordMetadata.rect.top;
+  const nextGroupMetadata = groupsMetadata[nextGroupIndex];
   const drawRects = [];
-  nextWordGroup.forEach(() => {
-    nextWordIndex += 1;
-    nextWordMetadata = wordsMetadata[nextWordIndex];
-    if (groupBottom - nextMarginTop > canvasHeight) {
+  nextGroupMetadata.rects.forEach((groupRect) => {
+    if (groupRect.bottom - nextMarginTop > canvasHeight) {
       // New page
       newPage = true;
-      nextMarginTop = groupTop;
+      nextMarginTop = groupRect.top;
     }
-    if (groupRight > nextWordMetadata.rect.left) {
-      const drawRect = {
-        x: groupLeft,
-        y: groupTop - nextMarginTop,
-        width: groupRight - groupLeft,
-        height: groupBottom - groupTop,
-      };
-      drawRects.push(drawRect);
-      groupLeft = nextWordMetadata.rect.left;
-      newLine = true;
-    }
-    groupRight = nextWordMetadata.rect.right;
-    groupBottom = nextWordMetadata.rect.bottom;
-    groupTop = nextWordMetadata.rect.top;
+    const drawRect = {
+      x: groupRect.left,
+      y: groupRect.top - nextMarginTop,
+      width: groupRect.right - groupRect.left,
+      height: groupRect.bottom - groupRect.top,
+    };
+    drawRects.push(drawRect);
   });
 
-  if (currentWordMetadata.lineNumber !== nextWordMetadata.lineNumber) {
+  const currentGroupRectBottom = currentGroupMetadata.rects[currentGroupMetadata.rects.length - 1].bottom;
+  const nextGroupRectBottom = nextGroupMetadata.rects[nextGroupMetadata.rects.length - 1].bottom;
+  if (currentGroupRectBottom !== nextGroupRectBottom) {
     newLine = true;
   }
 
-  const drawRect = {
-    x: groupLeft,
-    y: groupTop - nextMarginTop,
-    width: groupRight - groupLeft,
-    height: groupBottom - groupTop,
-  };
-  drawRects.push(drawRect);
-
-  if (nextGroupIndex === wordGroups.length - 1) {
+  if (nextGroupIndex === groupsMetadata.length - 1) {
     finished = true;
   }
 
   return updateObject(currentState, {
-    wordIndex: nextWordIndex,
     groupIndex: nextGroupIndex,
     marginTop: nextMarginTop,
     drawRects,
@@ -111,7 +89,6 @@ let timeout = null;
 let frame = null;
 
 const initialState = {
-  wordIndex: -1,
   groupIndex: -1,
   marginTop: 0,
 };
@@ -169,11 +146,9 @@ export class WordGroups extends Component {
     this.offscreenContext.textBaseline = 'bottom';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     // Prerender off-screen-canvas
-    if (this.currentState.modification === 'group-spacing') {
-      this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
-    } else {
-      this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
-    }
+    const { wordsMetadata, linesMetadata } = writeText(this.offscreenContext, this.props.selectedText.contentState);
+    const groupsMetadata = getGroupsMetadata(wordsMetadata, this.props.wordGroups);
+    this.textMetadata = { wordsMetadata, linesMetadata, groupsMetadata };
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
