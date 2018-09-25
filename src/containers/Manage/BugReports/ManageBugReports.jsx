@@ -140,7 +140,7 @@ export class ManageBugReports extends Component {
                     <Table.Cell positive={bugReport.resolved} negative={!bugReport.resolved}>
                       {bugReport.resolved ?
                         this.props.translate('manage-bug-reports.bug-resolved') :
-                        this.props.translate('manage-bug-reports.bug-not-resolved')}
+                        this.props.translate('manage-bug-reports.bug-unresolved')}
                     </Table.Cell>
                     <Table.Cell>
                       {bugReport.description}
@@ -148,15 +148,24 @@ export class ManageBugReports extends Component {
                     <Table.Cell>
                       <Button.Group compact vertical>
                         <Button
-                          primary
-                          content={this.props.translate('manage-bug-reports.screenshot')}
-                          onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}bugReportScreenshots/${bugReport.screenshotFilename}`)}
-                        />
-                        <Button
                           positive
                           content={this.props.translate('manage-bug-reports.log-info')}
                           onClick={this.logBugReportInfo(bugReport)}
                         />
+                        <Button
+                          primary
+                          content={this.props.translate('manage-bug-reports.screenshot')}
+                          onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}bugReportScreenshots/${bugReport.screenshotFilename}`)}
+                        />
+                        {bugReport.resolved ?
+                          <Button
+                            negative
+                            content={this.props.translate('manage-bug-reports.mark-unresolved')}
+                          /> :
+                          <Button
+                            positive
+                            content={this.props.translate('manage-bug-reports.mark-resolved')}
+                          />}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>

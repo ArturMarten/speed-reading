@@ -87,6 +87,11 @@ export {
 } from './feedback';
 
 export {
+  sendProblemReport,
+  fetchProblemReports,
+} from './problemReport';
+
+export {
   sendBugReport,
   fetchBugReports,
 } from './bugReport';

@@ -7,6 +7,7 @@ import { rolePermissions } from '../../store/reducers/profile';
 import ManageGroups from './Groups/ManageGroups';
 import ManageUsers from './Users/ManageUsers';
 import ManageFeedback from './Feedback/ManageFeedback';
+import ManageProblemReports from './ProblemReports/ManageProblemReports';
 import ManageBugReports from './BugReports/ManageBugReports';
 
 export class Manage extends Component {
@@ -44,9 +45,6 @@ export class Manage extends Component {
           </Tab.Pane>
         ),
       },
-    ];
-    const developerPanes = [
-      ...teacherPanes,
       {
         menuItem: {
           key: 'feedback',
@@ -61,6 +59,23 @@ export class Manage extends Component {
           </Tab.Pane>
         ),
       },
+      {
+        menuItem: {
+          key: 'problem-reports',
+          icon: 'exclamation triangle',
+          content: this.props.translate('manage.problem-reports'),
+        },
+        render: () => (
+          <Tab.Pane>
+            <div style={{ overflowX: 'auto' }}>
+              <ManageProblemReports />
+            </div>
+          </Tab.Pane>
+        ),
+      },
+    ];
+    const developerPanes = [
+      ...teacherPanes,
       {
         menuItem: {
           key: 'bug-reports',

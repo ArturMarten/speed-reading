@@ -51,7 +51,8 @@ export class BugReport extends Component {
       consoleErrors: errorData.getErrors(),
       state: updateObject(this.props.state, { locale: undefined, bugReport: undefined }),
       actions: actionData.getActions(30),
-      screenshot: this.state.sendScreenshot ? this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '') : null,
+      screenshot: this.state.sendScreenshot && this.state.screenshotImage ?
+        this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '') : null,
     };
     this.props.onSubmit(submittedForm);
   }

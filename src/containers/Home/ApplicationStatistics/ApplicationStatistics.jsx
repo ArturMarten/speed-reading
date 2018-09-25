@@ -74,7 +74,7 @@ export class ApplicationStatistics extends Component {
           </Statistic>
           <Statistic>
             <Statistic.Value>
-              <Icon name="file text outline" />
+              <Icon name="file alternate outline" />
               {this.state.loading ? <Icon loading name="spinner" /> : this.state.statistics.textCount}
             </Statistic.Value>
             <Statistic.Label>
@@ -150,7 +150,7 @@ export class ApplicationStatistics extends Component {
           </Statistic>
           <Statistic>
             <Statistic.Value style={{ textTransform: 'lowercase' }}>
-              <Icon name="time" />
+              <Icon name="clock" />
               {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.totalTime)}
             </Statistic.Value>
             <Statistic.Label>

@@ -13,6 +13,7 @@ import userReducer from './user';
 import profileReducer from './profile';
 import statisticsReducer from './statistics';
 import feedbackReducer from './feedback';
+import problemReportReducer from './problemReport';
 import bugReportReducer from './bugReport';
 
 export default combineReducers({
@@ -28,6 +29,7 @@ export default combineReducers({
   profile: profileReducer,
   statistics: statisticsReducer,
   feedback: feedbackReducer,
+  problemReport: problemReportReducer,
   bugReport: bugReportReducer,
   locale: localeReducer,
 });

@@ -5,23 +5,17 @@ import { Home } from './Home';
 
 describe('<Home />', () => {
   it('renders', () => {
-    const home = shallow(<Home translate={sinon.stub()} />);
-    expect(home).to.be.present();
+    const wrapper = shallow(<Home translate={sinon.stub()} />);
+    expect(wrapper).to.be.present();
   });
 
   it('should render header', () => {
-    const home = shallow(<Home translate={sinon.stub()} />);
-    expect(home.find(Header)).to.have.length(1);
-  });
-
-  it('should translate header', () => {
-    const translateStub = sinon.stub();
-    shallow(<Home translate={translateStub} />);
-    expect(translateStub).to.have.been.calledWith('home.welcome');
+    const wrapper = shallow(<Home translate={sinon.stub()} />);
+    expect(wrapper.find(Header)).to.have.length(1);
   });
 
   it('should render three logos', () => {
-    const home = shallow(<Home translate={sinon.stub()} />);
-    expect(home.find(Image)).to.have.length(3);
+    const wrapper = shallow(<Home translate={sinon.stub()} />);
+    expect(wrapper.find(Image)).to.have.length(3);
   });
 });

@@ -143,7 +143,7 @@ export class Timing extends Component {
             onClick={this.stopClickHandler}
           />
           <Label basic size="big" style={{ marginTop: '5px' }}>
-            <Icon name="clock" />
+            <Icon name="clock outline" />
             {format(this.state.elapsedTime)}
           </Label>
         </Responsive>
@@ -179,7 +179,7 @@ export class Timing extends Component {
             onClick={this.stopClickHandler}
           />
           <Label basic size="big" style={{ marginTop: '5px' }}>
-            <Icon name="clock" />
+            <Icon name="clock outline" />
             {format(this.state.elapsedTime)}
           </Label>
         </Responsive>

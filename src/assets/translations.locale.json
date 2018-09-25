@@ -16,6 +16,7 @@
     "statistics": ["Statistika", "Statistics"],
     "manage": ["Halda", "Manage"],
     "feedback-popup": ["Anna tagasisidet", "Give feedback"],
+    "problem-report-popup": ["Teata probleemist", "Report a problem"],
     "bug-report-popup": ["Teata veast", "Report a bug"]
   },
   "auth": {
@@ -66,6 +67,19 @@
     "anonymous": ["Anonüümne", "Anonymous"],
     "send": ["Saada", "Send"]
   },
+  "problem-report": {
+    "modal-header": ["Probleemi teade", "Problem report"],
+    "select-type": ["Probleemi tüüp", "Problem type"],
+    "type-text": ["Probleem tekstiga", "Problem with text"],
+    "type-other": ["Muu probleem", "Other problem"],
+    "input-text-title": ["Teksti pealkiri", "Text title"],
+    "input-text-title-placeholder": ["Sisesta probleemse teksti pealkiri siia...", "Insert the title of problematic text here..."],
+    "textarea-description": ["Probleemi kirjeldus", "Problem description"],
+    "textarea-placeholder": ["Sisesta probleemi kirjeldus siia...", "Insert problem description here..."],
+    "screenshot-alt": ["Ekraanipilt", "Screenshot"],
+    "send-screenshot": ["Saada ekraanipilt", "Send screenshot"],
+    "send": ["Saada", "Send"]
+  },
   "bug-report": {
     "modal-header": ["Veateade", "Bug report"],
     "textarea-description": ["Vea kirjeldus", "Bug description"],
@@ -81,8 +95,10 @@
       "This is a free web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
     "about": ["Rakenduse kohta", "About application"],
-    "user-manual": ["Rakenduse kasutusjuhend", "Application user manual (only in Estonian)"],
-    "bug-report-title": ["Vigade esinemisel", "Encountering bugs"],
+    "user-manual": ["Kasutusjuhend", "User manual (only in Estonian)"],
+    "problem-report-title": ["Probleem mõne tekstiga?", "Problem with some text?"],
+    "problem-report-content": ["Vajutage menüüs olevale hüüumärgiga kolmnurgal ja andke sellest teada", "Click on bug icon in the menu and report immediately"],
+    "bug-report-title": ["Leidsite vea?", "Found a bug?"],
     "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
     "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
     "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
@@ -102,6 +118,47 @@
     "contributed-texts-names": ["Enel Tubin, Kirsika-Marian Bazilenko ja Ilona Võik", "Enel Tubin, Kirsika-Marian Bazilenko and Ilona Võik"],
     "place": ["Tartu Ülikool", "University of Tartu"],
     "copyright": ["Autoriõigustega kaitstud.", "Copyright."]
+  },
+  "features": {
+    "header": ["Rakenduse võimalused", "Application features"],
+    "reading-speed-development-header": ["Lugemiskiiruse arendamine", "Reading speed development"],
+    "reading-speed-development-description": [
+      "Erinevate lugemis- ja abiharjutuste abil on võimalik arendada oma lugemiskiirust",
+      "Missing translation"
+    ],
+    "taking-tests-header": ["Kontrollküsimuste läbimine", "Taking reading tests"],
+    "taking-tests-description": [
+      "Peale harjutuste läbimist saab sooritada testi, millega kontrollitakse loetud teksti omandamistaset",
+      "Missing translation"
+    ],
+    "reading-text-selection-header": ["Lugemistekstide valimine", "Reading text selection"],
+    "reading-text-selection-description": [
+      "Harjutamiseks saab kasutada nii olemasolevaid lugemistekste kui ka enda tekste",
+      "Missing translation"
+    ],
+    "difficulty-adjustment-header": ["Raskusastme kohandamine", "Difficulty adjustment"],
+    "difficulty-adjustment-description": [
+      "Kõiki harjutusi saab kohandada sobivaks vastavalt enda lugemisharjumustele ja tasemele",
+      "Missing translation"
+    ],
+    "improvement-observing-header": ["Arengujoone jälgimine", "Improvement observation"],
+    "improvement-observing-description": [
+      "Harjutuste ja testide andmed statistika salvestatakse, mida on võimalik vaadata nii tabeli kui ka graafiku kujul",
+      "Missing translation"
+    ],
+    "management-header": ["Haldamine", "Management"],
+    "management-description": [
+      "Autoriseeritud kasutajad saavad hallata lugemistekste, küsimusi ja teisi kasutajaid",
+      "Missing translation"
+    ],
+    "user-rating-header": ["Hinnangu andmine", "User rating"],
+    "user-rating-description": [
+      "Kasutajate hinnanguid arvestatakse rakenduse edasisel arendamisel",
+      "Missing translation"
+    ]
+  },
+  "release-notes": {
+    "header": ["Viimased uuendused", "Recent updates"]
   },
   "intro-video": {
     "header": ["Tutvustav video", "Introduction video"],
@@ -558,6 +615,7 @@
     "groups": ["Grupid", "Groups"],
     "users": ["Kasutajad", "Users"],
     "feedback": ["Tagasiside", "Feedback"],
+    "problem-reports": ["Probleemiteated", "Problem reports"],
     "bug-reports": ["Veateated", "Bug reports"]
   },
   "manage-groups": {
@@ -618,6 +676,20 @@
     "design-rating": ["Disain", "Design"],
     "user-anonymous": ["Anonüümne", "Anonymous"]
   },
+  "manage-problem-reports": {
+    "refresh": ["Värskenda", "Refresh"],
+    "fetching-bug-reports": ["Laen probleemide teateid", "Fetching problem reports"],
+    "date": ["Kuupäev", "Date"],
+    "user": ["Kasutaja", "User"],
+    "resolved": ["Staatus", "Status"],
+    "description": ["Probleemi kirjeldus", "Problem description"],
+    "problem-resolved": ["Lahendatud", "Resolved"],
+    "problem-unresolved": ["Lahendamata", "Not resolved"],
+    "mark-resolved": ["Lahendatud", "Mark resolved"],
+    "mark-unresolved": ["Lahendamata", "Mark unresolved"],
+    "screenshot": ["Ekraanipilt", "Screenshot"],
+    "screenshot-alt": ["Ekraanipilt", "Screenshot"]
+  },
   "manage-bug-reports": {
     "refresh": ["Värskenda", "Refresh"],
     "fetching-bug-reports": ["Laen veateateid", "Fetching bug reports"],
@@ -626,7 +698,9 @@
     "resolved": ["Staatus", "Status"],
     "description": ["Vea kirjeldus", "Bug description"],
     "bug-resolved": ["Parandatud", "Fixed"],
-    "bug-not-resolved": ["Parandamata", "Not fixed"],
+    "bug-unresolved": ["Parandamata", "Not fixed"],
+    "mark-resolved": ["Parandatud", "Mark fixed"],
+    "mark-unresolved": ["Parandamata", "Mark not fixed"],
     "log-info": ["Logi info", "Log info"],
     "screenshot": ["Ekraanipilt", "Screenshot"],
     "screenshot-alt": ["Ekraanipilt", "Screenshot"]
@@ -639,6 +713,7 @@
     "generic": ["Õnnestus", "Succeeded"],
     "password-changed": ["Parool vahetatud", "Password changed"],
     "feedback-added": ["Tagasiside saadetud", "Feedback sent"],
+    "problem-report-added": ["Probleemi teade saadetud", "Problem report sent"],
     "bug-report-added": ["Veateade saadetud", "Bug report sent"],
     "reading-text-added": ["Lugemistekst lisatud", "Reading text added"],
     "reading-text-updated": ["Lugemistekst uuendatud", "Reading text updated"],

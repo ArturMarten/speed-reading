@@ -19,6 +19,10 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import { rolePermissions } from '../../store/reducers/profile';
 import Loadable from '../../hoc/Loadable/Loadable';
 
+const ProblemReport = Loadable({
+  loader: () => import('../ProblemReport/ProblemReport'),
+});
+
 const BugReport = Loadable({
   loader: () => import('../BugReport/BugReport'),
 });
@@ -31,6 +35,7 @@ export class ResponsiveLayout extends Component {
     profileSettingsOpened: false,
     changePasswordOpened: false,
     feedbackOpened: false,
+    problemReportOpened: false,
     bugReportOpened: false,
   };
 
@@ -62,6 +67,10 @@ export class ResponsiveLayout extends Component {
     this.setState({ feedbackOpened: !this.state.feedbackOpened });
   }
 
+  problemReportToggleHandler = () => {
+    this.setState({ problemReportOpened: !this.state.problemReportOpened });
+  }
+
   bugReportToggleHandler = () => {
     this.setState({ bugReportOpened: !this.state.bugReportOpened });
   }
@@ -84,6 +93,8 @@ export class ResponsiveLayout extends Component {
             <ChangePassword open={this.state.changePasswordOpened} onClose={this.changePasswordToggleHandler} /> : null}
           {this.state.feedbackOpened ?
             <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} /> : null}
+          {this.state.problemReportOpened ?
+            <ProblemReport open={this.state.problemReportOpened} onClose={this.problemReportToggleHandler} /> : null}
           {this.state.bugReportOpened ?
             <BugReport open={this.state.bugReportOpened} onClose={this.bugReportToggleHandler} /> : null}
           <Sidebar as={Menu} animation="overlay" vertical visible={this.state.sidebarOpened}>
@@ -152,7 +163,7 @@ export class ResponsiveLayout extends Component {
                 onClick={this.itemClickHandler}
                 to="/text-entry"
               >
-                <Icon name="file text outline" color="blue" size="large" />
+                <Icon name="file alternate outline" color="blue" size="large" />
                 {this.props.translate('menu.text-entry')}
               </Menu.Item> : null}
             <Menu.Item
@@ -262,6 +273,9 @@ export class ResponsiveLayout extends Component {
                   <Icon name="talk" color="black" size="big" onClick={this.feedbackToggleHandler} />
                 </Grid.Column>
                 <Grid.Column>
+                  <Icon name="exclamation triangle" color="yellow" size="big" onClick={this.problemReportToggleHandler} />
+                </Grid.Column>
+                <Grid.Column>
                   <Icon name="bug" color="olive" size="big" onClick={this.bugReportToggleHandler} />
                 </Grid.Column>
               </Grid.Row>
@@ -317,7 +331,7 @@ export class ResponsiveLayout extends Component {
                     onClick={this.itemClickHandler}
                     to="/text-entry"
                   >
-                    <Icon name="file text outline" color="blue" size="large" />
+                    <Icon name="file alternate outline" color="blue" size="large" />
                     {this.props.translate('menu.text-entry')}
                   </Menu.Item> : null}
                 <Menu.Item
@@ -426,7 +440,7 @@ export class ResponsiveLayout extends Component {
                       open={this.state.profileOpened}
                       onOpen={this.profileToggleHandler}
                       onClose={this.profileToggleHandler}
-                      trigger={<Icon fitted name="user" color="red" size="big" />}
+                      trigger={<Icon fitted name="user" color="red" size="large" />}
                       position="bottom right"
                       header={this.props.isAuthenticated ?
                         <Header textAlign="center">
@@ -474,15 +488,26 @@ export class ResponsiveLayout extends Component {
                   </Menu.Item>
                   <Menu.Item fitted>
                     <Popup
-                      trigger={<Icon fitted name="talk" color="black" size="big" onClick={this.feedbackToggleHandler} />}
+                      trigger={<Icon fitted name="talk" color="black" size="large" onClick={this.feedbackToggleHandler} />}
                       content={this.props.translate('menu.feedback-popup')}
                       on="hover"
                     />
                   </Menu.Item>
                   <Menu.Item fitted>
                     <Popup
-                      trigger={<Icon fitted name="bug" color="olive" size="big" onClick={this.bugReportToggleHandler} />}
-                      content={this.props.translate('menu.bug-report-popup')}
+                      trigger={<Icon fitted name="exclamation triangle" color="yellow" size="large" onClick={this.problemReportToggleHandler} />}
+                      content={
+                        this.props.translate('menu.problem-report-popup')
+                      }
+                      on="hover"
+                    />
+                  </Menu.Item>
+                  <Menu.Item fitted>
+                    <Popup
+                      trigger={<Icon fitted name="bug" color="olive" size="large" onClick={this.bugReportToggleHandler} />}
+                      content={
+                        this.props.translate('menu.bug-report-popup')
+                      }
                       on="hover"
                     />
                   </Menu.Item>

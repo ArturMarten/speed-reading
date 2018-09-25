@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Divider, Image, Message, Grid, Button } from 'semantic-ui-react';
+import { Container, Header, Divider, Image, Message, Grid, Button, Icon } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import About from './About/About';
+import ReleaseNotes from './ReleaseNotes/ReleaseNotes';
+import Features from './Features/Features';
 import IntroVideo from './IntroVideo/IntroVideo';
 import ApplicationStatistics from './ApplicationStatistics/ApplicationStatistics';
 import ekkEstLogo from '../../assets/img/ekk_est.png';
@@ -30,24 +32,39 @@ export class Home extends Component {
           {`${this.props.translate('home.welcome')}!`}
         </Header>
         <Grid stackable>
-          <Grid.Row style={{ paddingBottom: '5em' }}>
+          <Grid.Row style={{ paddingBottom: '1em' }}>
             <Grid.Column width={8}>
               <p>
                 {this.props.translate('home.description')}
               </p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
               <Button
-                positive
                 floated="right"
                 content={this.props.translate('home.about')}
                 onClick={this.aboutToggleHandler}
               />
-              <a
-                download
+              <Button
+                as="a"
+                positive
+                icon="file pdf outline"
+                content={this.props.translate('home.user-manual')}
                 href={userManual}
-              >
-                {this.props.translate('home.user-manual')}
-              </a>
+              />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Features
+                language={this.props.currentLanguage}
+                translate={this.props.translate}
+              />
+            </Grid.Column>
+          </Grid.Row>
+          <Divider />
+          <Grid.Row style={{ paddingBottom: '5em' }}>
+            <Grid.Column width={8}>
+              <ReleaseNotes
+                language={this.props.currentLanguage}
+                translate={this.props.translate}
+              />
             </Grid.Column>
             <Grid.Column width={8}>
               <IntroVideo
@@ -57,11 +74,11 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
           <Divider />
-          <Grid.Row columns={2}>
+          <Grid.Row columns={3}>
             <Grid.Column>
               <Message
                 positive
-                icon="mobile"
+                icon="mobile alternate"
                 header={this.props.translate('home.mobile-use-title')}
                 content={this.props.translate('home.mobile-use-content')}
               />
@@ -78,8 +95,16 @@ export class Home extends Component {
             */}
             <Grid.Column>
               <Message
+                warning
+                icon={<Icon name="exclamation triangle" color="yellow" />}
+                header={this.props.translate('home.problem-report-title')}
+                content={this.props.translate('home.problem-report-content')}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Message
                 negative
-                icon="bug"
+                icon={<Icon name="bug" color="olive" />}
                 header={this.props.translate('home.bug-report-title')}
                 content={this.props.translate('home.bug-report-content')}
               />
