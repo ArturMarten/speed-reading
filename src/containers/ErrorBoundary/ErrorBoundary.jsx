@@ -18,14 +18,14 @@ export class ErrorBoundary extends Component {
   componentDidCatch(error) {
     const submittedForm = {
       userId: this.props.userId,
-      description: error.toString(),
+      description: error && error.stack ? error.stack.toString() : error.toString(),
       version: environment.version,
       userAgent: window && window.navigator ? window.navigator.userAgent : 'Unknown',
       platform: window && window.navigator ? window.navigator.platform : 'Unknown',
       windowDimensions: window ? [window.innerWidth, window.innerHeight] : [],
       consoleErrors: errorData.getErrors(),
       state: updateObject(this.props.state, { locale: undefined, bugReport: undefined }),
-      actions: actionData.getActions(3),
+      actions: actionData.getActions(5),
       screenshot: null,
     };
     this.props.onSubmit(submittedForm);

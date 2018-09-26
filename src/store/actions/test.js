@@ -391,7 +391,6 @@ export const finishBlankTest = (attemptId, blankExercises, answers, token) => (d
     });
 };
 
-
 export const endTest = () => (dispatch) => {
   dispatch(testEnd());
 };

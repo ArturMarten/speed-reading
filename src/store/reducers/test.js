@@ -346,8 +346,13 @@ const reducer = (state = initialState, action) => {
       // Cleanup after test end
       return updateObject(state, {
         attemptId: null,
+        status: 'preparation',
       });
     }
+    case actionTypes.EXERCISE_PREPARED:
+      return updateObject(state, {
+        ...initialState,
+      });
     default:
       return state;
   }
