@@ -107,7 +107,9 @@ export class ManageProblemReports extends Component {
                   <Table.HeaderCell sorted={column === 'description' ? direction : null} onClick={this.sortHandler('description')}>
                     {this.props.translate('manage-problem-reports.description')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing />
+                  <Table.HeaderCell collapsing>
+                    {this.props.translate('manage-problem-reports.actions')}
+                  </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -141,11 +143,12 @@ export class ManageProblemReports extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <Button.Group compact vertical>
-                        <Button
-                          primary
-                          content={this.props.translate('manage-problem-reports.screenshot')}
-                          onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}problemReportScreenshots/${problemReport.screenshotFilename}`)}
-                        />
+                        {problemReport.screenshotFilename ?
+                          <Button
+                            primary
+                            content={this.props.translate('manage-problem-reports.screenshot')}
+                            onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}problemReportScreenshots/${problemReport.screenshotFilename}`)}
+                          /> : null}
                         {problemReport.resolved ?
                           <Button
                             negative

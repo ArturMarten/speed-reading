@@ -42,6 +42,7 @@ export class ErrorPopup extends Component {
 }
 
 const mapStateToProps = state => ({
+  bugReportStatus: state.bugReport.bugReportStatus,
   translate: getTranslate(state.locale),
 });
 

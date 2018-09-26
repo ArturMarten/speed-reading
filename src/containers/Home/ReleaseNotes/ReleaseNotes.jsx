@@ -36,6 +36,7 @@ class ReleaseNotes extends Component {
                   <List.List>
                     <List.Item>Lisatud võimalus teksti probleemide teatamiseks</List.Item>
                     <List.Item>Lisatud arvukalt lugemistekste (suured tänud toimetajale!)</List.Item>
+                    <List.Item>Lisatud automaatne vea teatamine</List.Item>
                     <List.Item>Rakenduse esilehe täiendused</List.Item>
                     <List.Item>Pisimuudatused kujunduses</List.Item>
                     <List.Item>Vigade parandused</List.Item>

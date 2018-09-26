@@ -50,7 +50,7 @@ export class BugReport extends Component {
       windowDimensions: window ? [window.innerWidth, window.innerHeight] : [],
       consoleErrors: errorData.getErrors(),
       state: updateObject(this.props.state, { locale: undefined, bugReport: undefined }),
-      actions: actionData.getActions(30),
+      actions: actionData.getActions(3),
       screenshot: this.state.sendScreenshot && this.state.screenshotImage ?
         this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '') : null,
     };

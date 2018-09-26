@@ -118,7 +118,9 @@ export class ManageBugReports extends Component {
                   <Table.HeaderCell sorted={column === 'description' ? direction : null} onClick={this.sortHandler('description')}>
                     {this.props.translate('manage-bug-reports.description')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing />
+                  <Table.HeaderCell collapsing>
+                    {this.props.translate('manage-bug-reports.actions')}
+                  </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -152,11 +154,12 @@ export class ManageBugReports extends Component {
                           content={this.props.translate('manage-bug-reports.log-info')}
                           onClick={this.logBugReportInfo(bugReport)}
                         />
-                        <Button
-                          primary
-                          content={this.props.translate('manage-bug-reports.screenshot')}
-                          onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}bugReportScreenshots/${bugReport.screenshotFilename}`)}
-                        />
+                        {bugReport.screenshotFilename ?
+                          <Button
+                            primary
+                            content={this.props.translate('manage-bug-reports.screenshot')}
+                            onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}bugReportScreenshots/${bugReport.screenshotFilename}`)}
+                          /> : null}
                         {bugReport.resolved ?
                           <Button
                             negative
