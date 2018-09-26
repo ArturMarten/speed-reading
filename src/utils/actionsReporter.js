@@ -8,7 +8,7 @@ export const actionData = {
   getActions: function getActions(length = this.actions.length) {
     return this.actions
       .filter(action => action.type.indexOf('@@localize/ADD_TRANSLATION') === -1)
-      .slice(Math.max(this.actions.length - length, 0));
+      .slice(Math.max(this.actions.length - length - 1, 0));
   },
 };
 
