@@ -45,10 +45,11 @@
   },
   "profile-settings": {
     "modal-header": ["Kasutaja seaded", "Account settings"],
-    "name": ["Nimi", "Name"],
-    "please-enter-name": ["Palun sisesta oma nimi...", "Please enter your name..."],
-    "save": ["Salvesta", "Save"],
-    "not-implemented": ["Pole implementeeritud", "Not implemented"]
+    "first-name": ["Eesnimi", "First name"],
+    "please-enter-first-name": ["Palun sisesta oma eesnimi...", "Please enter your first name..."],
+    "last-name": ["Perekonnanimi", "Last name"],
+    "please-enter-last-name": ["Palun sisesta oma perekonnanimi...", "Please enter your last name..."],
+    "save": ["Salvesta", "Save"]
   },
   "change-password": {
     "modal-header": ["Parooli vahetamine", "Password change"],

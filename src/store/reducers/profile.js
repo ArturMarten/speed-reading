@@ -15,8 +15,11 @@ const initialState = {
   groupId: null,
   email: '',
   role: '',
+  firstName: '',
+  lastName: '',
   profileStatus: {
     loading: false,
+    message: null,
     error: null,
   },
 };
@@ -27,6 +30,7 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         profileStatus: {
           loading: true,
+          message: null,
           error: null,
         },
       });
@@ -35,15 +39,47 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         profileStatus: {
           loading: false,
+          message: null,
           error: null,
         },
         ...action.payload,
+        firstName: action.payload.firstName !== null ? action.payload.firstName : '',
+        lastName: action.payload.lastName !== null ? action.payload.lastName : '',
       });
     }
     case actionTypes.FETCH_USER_PROFILE_FAILED: {
       return updateObject(state, {
         profileStatus: {
           loading: false,
+          message: null,
+          error: action.payload,
+        },
+      });
+    }
+    case actionTypes.SAVE_USER_PROFILE_START: {
+      return updateObject(state, {
+        profileStatus: {
+          loading: true,
+          message: null,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.SAVE_USER_PROFILE_SUCCEEDED: {
+      return updateObject(state, {
+        profileStatus: {
+          loading: false,
+          message: action.payload.message,
+          error: null,
+        },
+        ...action.payload.userProfile,
+      });
+    }
+    case actionTypes.SAVE_USER_PROFILE_FAILED: {
+      return updateObject(state, {
+        profileStatus: {
+          loading: false,
+          message: null,
           error: action.payload,
         },
       });

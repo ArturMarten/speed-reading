@@ -77,7 +77,10 @@ export {
   changeUser,
 } from './user';
 
-export { fetchUserProfile } from './profile';
+export {
+  fetchUserProfile,
+  saveUserProfile,
+} from './profile';
 
 export { fetchExerciseStatistics } from './statistics';
 

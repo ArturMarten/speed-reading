@@ -147,7 +147,7 @@ export class ManageProblemReports extends Component {
                           <Button
                             primary
                             content={this.props.translate('manage-problem-reports.screenshot')}
-                            onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}problemReportScreenshots/${problemReport.screenshotFilename}`)}
+                            onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}submittedScreenshots/${problemReport.screenshotFilename}`)}
                           /> : null}
                         {problemReport.resolved ?
                           <Button

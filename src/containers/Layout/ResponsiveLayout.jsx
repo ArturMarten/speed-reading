@@ -39,6 +39,13 @@ export class ResponsiveLayout extends Component {
     bugReportOpened: false,
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.role === '' && this.props.role !== ''
+      && this.props.firstName === '' && this.props.lastName === '') {
+      this.profileSettingsToggleHandler();
+    }
+  }
+
   onLogout = () => {
     this.setState({ profileOpened: false });
   }
@@ -538,6 +545,8 @@ const mapStateToProps = state => ({
   role: state.profile.role,
   isAuthenticated: state.auth.token !== null,
   userEmail: state.profile.email,
+  firstName: state.profile.firstName,
+  lastName: state.profile.lastName,
   translate: getTranslate(state.locale),
 });
 
