@@ -24,7 +24,7 @@ const listenToOnError = () => {
       };
       errorData.addError(data);
       if (originalWindowError) {
-        originalWindowError.apply(window, arguments);
+        originalWindowError.apply(window);
       }
     };
   }
