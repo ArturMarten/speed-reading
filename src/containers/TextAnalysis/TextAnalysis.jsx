@@ -7,12 +7,12 @@ import * as actionCreators from '../../store/actions';
 import HelpPopup from '../../components/HelpPopup/HelpPopup';
 import BarChart from '../../components/Statistics/BarChart';
 import PieChart from '../../components/Statistics/PieChart';
-import LabeledSlider from '../../components/LabeledSlider/LabeledSlider';
+// import LabeledSlider from '../../components/LabeledSlider/LabeledSlider';
 import LabeledMultipleSlider from '../../components/LabeledSlider/LabeledMultipleSlider';
 import { reduceSumFunc } from '../../shared/utility';
 
 const WORD_LENGTH_COLOR = 'rgb(47, 141, 255)';
-const WORD_FREQ_COLOR = 'rgb(247, 94, 37)';
+// const WORD_FREQ_COLOR = 'rgb(247, 94, 37)';
 const SENTENCE_LENGTH_COLOR = 'rgb(23, 219, 36)';
 
 const initialState = {
@@ -55,10 +55,12 @@ export class TextAnalysis extends Component {
     this.setState({ currentSentenceLengths });
   }
 
+  /*
   onWordFrequencyChangeHandler = (data) => {
     const currentWordFrequency = data.values;
     this.setState({ currentWordFrequency });
   }
+  */
 
   setInitialLengths = (analysis) => {
     const { wordLengths, sentenceLengths } = analysis;
@@ -152,7 +154,7 @@ export class TextAnalysis extends Component {
   );
 
   render() {
-    const { currentWordLengths, currentSentenceLengths, currentWordFrequency } = this.state;
+    const { currentWordLengths, currentSentenceLengths } = this.state;
     const { analysis } = this.props;
     const wordPercentage = analysis !== null ?
       (analysis.wordLengths
