@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createMemoryHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
-import { LocalizeProvider } from 'react-localize-redux';
 
 // Styles
 /*
@@ -61,11 +60,8 @@ ReactDOM.render(
   React.createElement(
     Provider, { store },
     React.createElement(
-      LocalizeProvider, { store },
-      React.createElement(
-        ConnectedRouter, { history },
-        React.createElement(App),
-      ),
+      ConnectedRouter, { history },
+      React.createElement(App),
     ),
   ),
   document.getElementById('root'),

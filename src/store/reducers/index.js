@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { localizeReducer } from 'react-localize-redux';
+import { localeReducer } from 'react-localize-redux';
 
 import infoReducer from './info';
 import authReducer from './auth';
@@ -31,5 +31,5 @@ export default combineReducers({
   feedback: feedbackReducer,
   problemReport: problemReportReducer,
   bugReport: bugReportReducer,
-  localize: localizeReducer,
+  locale: localeReducer,
 });
