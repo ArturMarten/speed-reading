@@ -3,7 +3,7 @@ import { Modal, TextArea, Button } from 'semantic-ui-react';
 
 import { ProblemReport } from './ProblemReport';
 
-describe.only('<ProblemReport />', () => {
+describe('<ProblemReport />', () => {
   it('renders', () => {
     const wrapper = shallow(
       <ProblemReport

@@ -8,7 +8,7 @@ import rootReducer from './reducers';
 import errorHandler from '../utils/errorHandler';
 import actionsReporter from '../utils/actionsReporter';
 // import logger from '../utils/logger';
-import * as translations from '../assets/translations.locale.json';
+import translations from '../assets/translations.locale.json';
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?

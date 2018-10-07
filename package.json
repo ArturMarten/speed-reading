@@ -17,35 +17,34 @@
     "speed reading exercises"
   ],
   "devDependencies": {
-    "@storybook/addon-actions": "^3.4.11",
-    "@storybook/addon-links": "^3.4.11",
-    "@storybook/addons": "^3.4.11",
-    "@storybook/react": "^3.4.11",
-    "babel-core": "^6.26.3",
-    "babel-preset-react-app": "^3.1.2",
+    "@storybook/addon-actions": "^v4.0.0-alpha.24",
+    "@storybook/addon-links": "^v4.0.0-alpha.24",
+    "@storybook/addons": "^v4.0.0-alpha.24",
+    "@storybook/react": "^v4.0.0-alpha.24",
+    "@babel/register": "^7.0.0",
     "canvas-prebuilt": "^1.6.11",
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "chai-enzyme": "^1.0.0-beta.1",
     "cross-env": "^5.2.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
-    "eslint": "^5.6.0",
+    "eslint": "5.6.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "immutable": "^3.8.2",
-    "jsdom": "^12.0.0",
+    "jsdom": "^12.1.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
     "pixelmatch": "^4.0.2",
     "prop-types": "^15.6.2",
-    "react-scripts": "^1.1.5",
+    "react-scripts": "^2.0.4",
     "react-test-renderer": "^16.5.2",
     "replace-in-file": "^3.4.2",
-    "serve": "^10.0.1",
-    "sinon": "^6.3.4",
+    "serve": "^10.0.2",
+    "sinon": "^6.3.5",
     "sinon-chai": "^3.2.0",
     "source-map-explorer": "^1.6.0"
   },
@@ -101,9 +100,12 @@
   "babel": {
     "presets": [
       "react-app"
-    ],
-    "plugins": [
-      "transform-es2015-modules-commonjs"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
