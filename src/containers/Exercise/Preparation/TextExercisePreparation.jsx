@@ -224,12 +224,17 @@ export class TextExercisePreparation extends Component {
               <Segment>
                 <Header as="h4" textAlign="center">
                   {this.props.translate('exercise-preparation.exercise-options')}
+                  &nbsp;
                   <Popup
                     trigger={
-                      <Icon
-                        size="small"
-                        name="repeat"
-                        color="grey"
+                      <Button
+                        inverted
+                        circular
+                        compact
+                        size="tiny"
+                        color="orange"
+                        icon="repeat"
+                        content={this.props.translate('exercise-preparation.reset')}
                         onClick={this.exerciseOptionsResetHandler}
                       />
                     }
@@ -262,12 +267,17 @@ export class TextExercisePreparation extends Component {
               <Segment>
                 <Header as="h4" textAlign="center">
                   {this.props.translate('exercise-preparation.text-options')}
+                  &nbsp;
                   <Popup
                     trigger={
-                      <Icon
-                        size="small"
-                        name="repeat"
-                        color="grey"
+                      <Button
+                        inverted
+                        circular
+                        compact
+                        size="tiny"
+                        color="orange"
+                        icon="repeat"
+                        content={this.props.translate('exercise-preparation.reset')}
                         onClick={this.textOptionsResetHandler}
                       />
                     }

@@ -5,6 +5,8 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 import { checkValidity } from '../../shared/utility';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 const initialState = {
   userProfileForm: {
@@ -124,6 +126,15 @@ export class ProfileSettings extends Component {
             />
           </Form>
         </Modal.Content>
+        <SuccessMessage
+          icon="check"
+          style={{ margin: '0 0' }}
+          message={this.props.profileStatus.message !== null ? this.props.profileStatus.message : null}
+        />
+        <ErrorMessage
+          style={{ margin: '0 0' }}
+          error={this.props.profileStatus.error !== null ? this.props.profileStatus.error : null}
+        />
         <Modal.Actions>
           <Button
             positive

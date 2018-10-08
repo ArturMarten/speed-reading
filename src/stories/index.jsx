@@ -85,7 +85,8 @@ storiesOf('Text analysis', module)
   .add('Container', () => {
     const { selectedText } = store.getState().text;
     const text = selectedText ? selectedText.plain : '';
-    store.dispatch(actionCreators.analyzeText({ text }));
+    const language = 'estonian';
+    store.dispatch(actionCreators.analyzeText({ text, language }));
     return <TextAnalysisContainer open />;
   })
   .add('Component', () => (

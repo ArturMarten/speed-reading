@@ -123,8 +123,11 @@ export class ManageUsers extends Component {
                   <Table.HeaderCell sorted={column === 'groupId' ? direction : null} onClick={this.sortHandler('groupId')}>
                     {this.props.translate('manage-users.group')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.sortHandler('name')}>
-                    {this.props.translate('manage-users.name')}
+                  <Table.HeaderCell sorted={column === 'firstName' ? direction : null} onClick={this.sortHandler('firstName')}>
+                    {this.props.translate('manage-users.first-name')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell sorted={column === 'lastName' ? direction : null} onClick={this.sortHandler('lastName')}>
+                    {this.props.translate('manage-users.last-name')}
                   </Table.HeaderCell>
                   <Table.HeaderCell sorted={column === 'email' ? direction : null} onClick={this.sortHandler('email')}>
                     {this.props.translate('manage-users.email')}
@@ -152,7 +155,10 @@ export class ManageUsers extends Component {
                       </Fragment>}
                     </Table.Cell>
                     <Table.Cell>
-                      {user.name}
+                      {user.firstName}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {user.lastName}
                     </Table.Cell>
                     <Table.Cell>
                       {user.email}

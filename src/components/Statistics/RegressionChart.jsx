@@ -61,7 +61,8 @@ export class RegressionChart extends Component {
       widthScale,
       heightScale,
     } = this.state;
-    const { data, xField, yFields } = this.props;
+    let { data } = this.props;
+    const { xField, yFields } = this.props;
     if (data.length === 0) {
       return;
     }
@@ -70,6 +71,7 @@ export class RegressionChart extends Component {
       .attr('class', 'chart')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
+    data = data.filter(d => d[xField] !== null && d[yFields[0]] !== null);
     // console.log(data);
     const xValues = data.map(d => d[xField]);
     const yValues = data.map(d => d[yFields[0]]);
@@ -80,8 +82,8 @@ export class RegressionChart extends Component {
     const verticalSpacing = maxValue * VERTICAL_SPACING;
     this.xScale = widthScale.domain([new Date(minDate - horizontalSpacing), new Date(maxDate + horizontalSpacing)]);
     this.yScale = heightScale.domain([maxValue + verticalSpacing, -verticalSpacing]);
-    const xSeries = data.map(d => this.xScale(d[xField]));
-    const ySeries = data.map(d => this.yScale(d[yFields[0]]));
+    const xSeries = xValues.map(d => this.xScale(d));
+    const ySeries = yValues.map(d => this.yScale(d));
     const [slope, intercept] = leastSquares(xSeries, ySeries);
     const change = slope * -100;
     const average = getAverage(yValues);
@@ -193,8 +195,8 @@ export class RegressionChart extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    let { data } = this.props;
     const {
-      data,
       translate,
       xField,
       yFields,
@@ -208,6 +210,7 @@ export class RegressionChart extends Component {
     console.log('Regression chart update');
     // Move data from render method to parent state
     if (prevProps.data !== data && data.length > 0) {
+      data = data.filter(d => d[xField] !== null && d[yFields[0]] !== null);
       const { widthScale, heightScale } = this.state;
       const svg = select(this.svgRef);
       const chart = svg.select('g');
@@ -221,8 +224,8 @@ export class RegressionChart extends Component {
       const verticalSpacing = maxValue * VERTICAL_SPACING;
       this.xScale = widthScale.domain([new Date(minDate - horizontalSpacing), new Date(maxDate + horizontalSpacing)]);
       this.yScale = heightScale.domain([maxValue + verticalSpacing, -verticalSpacing]);
-      const xSeries = data.map(d => this.xScale(d[xField]));
-      const ySeries = data.map(d => this.yScale(d[yFields[0]]));
+      const xSeries = xValues.map(d => this.xScale(d));
+      const ySeries = yValues.map(d => this.yScale(d));
       const [slope, intercept] = leastSquares(xSeries, ySeries);
       const change = slope * -100;
       const average = getAverage(yValues);

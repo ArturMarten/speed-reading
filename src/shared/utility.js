@@ -69,6 +69,8 @@ export const translateSuccess = (translate, message) => {
       return translate('success.feedback-added');
     case 'Problem report added':
       return translate('success.problem-report-added');
+    case 'User updated':
+      return translate('success.user-updated');
     case 'Bug report added':
       return translate('success.bug-report-added');
     case 'Reading text added':

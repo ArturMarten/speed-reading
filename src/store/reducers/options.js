@@ -172,6 +172,17 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.FETCH_USER_PROFILE_SUCCEEDED: {
+      const { settings } = action.payload;
+      if (settings != null) {
+        return updateObject(state, {
+          textOptions: updateObject(state.textOptions, settings.textOptions),
+          exerciseOptions: updateObject(state.exerciseOptions, settings.exerciseOptions),
+          speedOptions: updateObject(state.speedOptions, settings.speedOptions),
+        });
+      }
+      return state;
+    }
     case actionTypes.TEXT_OPTION_UPDATED: {
       const updatedTextOptions = updateObject(state.textOptions, action.payload);
       return updateObject(state, {
