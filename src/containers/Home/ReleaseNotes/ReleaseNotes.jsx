@@ -15,7 +15,7 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.7 (arendamisel, eeldatavalt 15.10.2018)
+                  Versioon 5.1.7 (arendamisel, eeldatavalt 17.10.2018)
                 </List.Header>
                 <List.Description>
                   <List.List>
@@ -27,7 +27,7 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.6
+                  Versioon 5.1.6 (08.10.2018)
                 </List.Header>
                 <List.Description>
                   <List.List>
