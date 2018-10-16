@@ -1,6 +1,11 @@
 {
   "register": "babel-register",
+  "extension": [
+    ".jsx"
+  ],
   "exclude": [
+    "build",
+    "src/polyfill",
     "**/*.test.jsx",
     "**/*.test.js"
   ],
@@ -9,7 +14,5 @@
     "text-summary"
   ],
   "all": true,
-  "cache": true,
-  "sourceMap": false,
-  "instrument": false
+  "cache": true
 }
