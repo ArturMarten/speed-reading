@@ -1,0 +1,11 @@
+{
+  "register": "babel-register",
+  "exclude": [
+    "**/*.test.jsx"
+  ],
+  "reporter": [
+    "text",
+    "text-summary"
+  ],
+  "all": true,
+}
