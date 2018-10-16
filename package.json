@@ -88,7 +88,7 @@
     "test": "cross-env NODE_ENV=test mocha",
     "test-watch": "cross-env NODE_ENV=test mocha --reporter list --watch --watch-extensions jsx",
     "test-debug": "cross-env NODE_ENV=test mocha --inspect-brk",
-    "test-coverage": "cross-env NODE_ENV=test nyc --extension .jsx mocha",
+    "test-coverage": "cross-env NODE_ENV=test nyc --extension .jsx --reporter=text --reporter=text-summary mocha",
     "test-jest": "react-scripts test --runInBand --env=jsdom",
     "test-jest-debug": "react-scripts --inspect-brk test --runInBand --env=jsdom",
     "test-jest-coverage": "react-scripts test --coverage --env=jsdom",
