@@ -1,11 +1,15 @@
 {
   "register": "babel-register",
   "exclude": [
-    "**/*.test.jsx"
+    "**/*.test.jsx",
+    "**/*.test.js"
   ],
   "reporter": [
     "text",
     "text-summary"
   ],
-  "all": true
+  "all": true,
+  "cache": true,
+  "sourceMap": false,
+  "instrument": false
 }
