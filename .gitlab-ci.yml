@@ -17,6 +17,6 @@ test:
    - npm run test
 
 coverage:
-  stage: coverage
+  stage: test
   script:
    - npm run test-coverage
