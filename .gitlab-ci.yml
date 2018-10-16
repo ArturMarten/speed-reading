@@ -9,6 +9,12 @@ cache:
 before_script:
   - npm install
 
-all_tests:
+test:
+  stage: test
   script:
    - npm run test
+
+coverage:
+  stage: coverage
+  script:
+   - npm run test-coverage
