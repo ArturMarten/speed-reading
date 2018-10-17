@@ -6,6 +6,7 @@
   "exclude": [
     "build",
     "src/polyfill",
+    "src/stories",
     "**/*.test.jsx",
     "**/*.test.js"
   ],
