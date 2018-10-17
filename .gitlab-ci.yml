@@ -28,6 +28,7 @@ pages:
   dependencies:
     - coverage
   script:
+    - mv src/credentials.js.example src/credentials.js # Credentials are required
     - npm run build
     - rm -rf public
 ##  - mv build public
