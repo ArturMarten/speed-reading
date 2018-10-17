@@ -1,7 +1,7 @@
 # Kiirlugemine 5.1 front-end
 
 [![pipeline status](https://gitlab.com/martensiiber/speed-reading/badges/dev/pipeline.svg)](https://gitlab.com/martensiiber/speed-reading/commits/dev)
-[![coverage report](https://gitlab.com/martensiiber/speed-reading/badges/dev/coverage.svg)](https://gitlab.com/martensiiber/speed-reading/commits/dev)
+[![coverage report](https://gitlab.com/martensiiber/speed-reading/badges/dev/coverage.svg)](https://martensiiber.gitlab.io/speed-reading/coverage/)
 
 ## Running the application
 ```
