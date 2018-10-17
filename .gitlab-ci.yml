@@ -2,7 +2,6 @@ image: node:8.11.4
 
 # Cache modules between builds
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
   paths:
   - node_modules/
 
@@ -29,7 +28,10 @@ pages:
   dependencies:
     - coverage
   script:
-    - mv coverage/ public/
+    - npm run build
+    - rm -rf public
+##  - mv build public
+    - mv coverage public
   artifacts:
     paths:
       - public
