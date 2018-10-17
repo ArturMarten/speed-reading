@@ -12,7 +12,8 @@
   ],
   "reporter": [
     "text",
-    "text-summary"
+    "text-summary",
+    "html"
   ],
   "all": true,
   "cache": true
