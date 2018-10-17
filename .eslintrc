@@ -25,14 +25,6 @@
     "jsx-a11y/label-has-for": 0,
     "operator-linebreak": 0,
     "import/no-named-as-default": 0,
-    "import/no-extraneous-dependencies": [
-      "error", {
-        "dependencies": true,
-        "devDependencies": true,
-        "optionalDependencies": true,
-        "peerDependencies": true
-      }
-    ],
     "no-console": [
       "error", { "allow": ["log"]}
     ]
