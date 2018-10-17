@@ -29,7 +29,7 @@ pages:
     - coverage
   script:
     - mv src/credentials.js.example src/credentials.js # Credentials are required
-    - npm run build
+    - CI=false npm run build # Set CI=false or else build fails when there are warnings
     - rm -rf public
 ##  - mv build public
     - mv coverage public
