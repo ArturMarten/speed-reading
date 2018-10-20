@@ -596,6 +596,7 @@
     "average": ["keskmine", "average"],
     "standard-deviation": ["standardhälve", "standard deviation"],
     "date": ["Kuupäev", "Date"],
+    "index": ["Järjekorranumber", "Exercise number"],
     "reading-speed-trend": ["Lugemiskiiruse arengujoon", "Reading speed trend"],
     "speed-wpm": ["Kiirus (sõnu minutis)", "Speed (Words Per Minute)"],
     "reading-speed": ["Lugemiskiirus", "Reading speed"],

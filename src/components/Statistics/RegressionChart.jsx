@@ -19,7 +19,7 @@ const margin = {
 };
 
 const DATA_POINT_RADIUS = 4;
-const TRANSITION_DURATION = 5000;
+const TRANSITION_DURATION = 2000;
 const FONT_SIZE = 12;
 const HORIZONTAL_SPACING = 0.05;
 const VERTICAL_SPACING = 0.05;
@@ -75,17 +75,25 @@ export class RegressionChart extends Component {
     // console.log(data);
     const xValues = data.map(d => d[xField]);
     const yValues = data.map(d => d[yFields[0]]);
-    const minDate = Math.min(...xValues);
-    const maxDate = Math.max(...xValues);
-    const maxValue = Math.max(...yValues);
-    const horizontalSpacing = (maxDate - minDate) * HORIZONTAL_SPACING;
-    const verticalSpacing = maxValue * VERTICAL_SPACING;
-    this.xScale = widthScale.domain([new Date(minDate - horizontalSpacing), new Date(maxDate + horizontalSpacing)]);
-    this.yScale = heightScale.domain([maxValue + verticalSpacing, -verticalSpacing]);
+    const minXValue = Math.min(...xValues);
+    const maxXValue = Math.max(...xValues);
+    const maxYValue = Math.max(...yValues);
+    const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING;
+    const verticalSpacing = maxYValue * VERTICAL_SPACING;
+    if (data[0][xField] instanceof Date) {
+      this.xScale = widthScale.domain([new Date(minXValue - horizontalSpacing), new Date(maxXValue + horizontalSpacing)]);
+    } else {
+      this.xScale = widthScale.domain([minXValue - horizontalSpacing, maxXValue + horizontalSpacing]);
+    }
+    this.yScale = heightScale.domain([maxYValue + verticalSpacing, -verticalSpacing]);
     const xSeries = xValues.map(d => this.xScale(d));
     const ySeries = yValues.map(d => this.yScale(d));
     const [slope, intercept] = leastSquares(xSeries, ySeries);
-    const change = slope * -100;
+
+    const initial = this.yScale.invert(intercept + (slope * this.xScale(minXValue)));
+    const end = this.yScale.invert(intercept + (slope * this.xScale(maxXValue)));
+    const change = end - initial;
+    const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
     const average = getAverage(yValues);
     const standardDeviation = getStandardDeviation(yValues, average);
 
@@ -102,7 +110,11 @@ export class RegressionChart extends Component {
       .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${height})`)
       .style('font-size', FONT_SIZE)
-      .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')))
+      .call(
+        data[0][this.props.xField] instanceof Date ?
+          axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')).tickSizeInner(-height)
+          : axisBottom(this.xScale).tickSizeInner(-height),
+      )
       .append('text')
       .attr('class', 'label')
       .attr('y', -2)
@@ -111,7 +123,7 @@ export class RegressionChart extends Component {
     chart.append('g')
       .attr('class', 'y-axis')
       .style('font-size', FONT_SIZE)
-      .call(axisLeft(this.yScale).ticks(10))
+      .call(axisLeft(this.yScale).ticks(10).tickSizeInner(-width))
       .append('text')
       .attr('class', 'label')
       .attr('transform', 'rotate(-90)')
@@ -132,13 +144,19 @@ export class RegressionChart extends Component {
       .attr('x', 20)
       .attr('y', 10);
     legendText.append('tspan')
-      .text(`${this.props.legendTitles[0]} (${this.props.translate('regression-chart.change')}: `);
+      .text(`${this.props.legendTitles[0]} [${this.props.translate('regression-chart.change')}: `);
     legendText.append('tspan')
       .attr('class', 'change')
       .style('fill', change >= 0 ? 'green' : 'red')
-      .text(`${change > 0 ? '+' : ''}${change.toFixed(2)}%`);
+      .text(`${change > 0 ? '+' : ''}${change.toFixed(0)}`);
     legendText.append('tspan')
-      .text(`, ${this.props.translate('regression-chart.average')}: `);
+      .text(' (');
+    legendText.append('tspan')
+      .attr('class', 'changePercentage')
+      .style('fill', changePercentage >= 0 ? 'green' : 'red')
+      .text(`${changePercentage > 0 ? '+' : ''}${changePercentage.toFixed(2)}%`);
+    legendText.append('tspan')
+      .text(`), ${this.props.translate('regression-chart.average')}: `);
     legendText.append('tspan')
       .attr('class', 'average')
       .text(`${average.toFixed(2)}`);
@@ -148,7 +166,7 @@ export class RegressionChart extends Component {
       .attr('class', 'standard-deviation')
       .text(`${standardDeviation.toFixed(2)}`);
     legendText.append('tspan')
-      .text(')');
+      .text(']');
 
     // Append tooltip
     const tooltip = chart.append('g')
@@ -190,44 +208,60 @@ export class RegressionChart extends Component {
     chart.append('path')
       .attr('class', 'regression-line')
       .style('stroke', this.props.dataLineColor[0])
-      .datum([minDate, maxDate])
+      .datum([minXValue, maxXValue])
       .attr('d', newLine);
   }
 
   componentDidUpdate(prevProps) {
+    const {
+      width,
+      height,
+    } = this.state;
     let { data } = this.props;
     const {
       translate,
+      xLabel,
       xField,
       yFields,
     } = this.props;
+    const { widthScale, heightScale } = this.state;
+    const svg = select(this.svgRef);
+    const chart = svg.select('g');
     if (prevProps.xField !== xField) {
-      console.log('Scale changed!');
+      // console.log('Scale changed!');
+      chart.select('.x-axis .label')
+        .transition()
+        .duration(TRANSITION_DURATION)
+        .text(xLabel);
     }
     if (prevProps.translate !== translate) {
-      console.log('Translate changed');
+      // console.log('Translate changed');
     }
-    console.log('Regression chart update');
+    // console.log('Regression chart update');
     // Move data from render method to parent state
     if (prevProps.data !== data && data.length > 0) {
       data = data.filter(d => d[xField] !== null && d[yFields[0]] !== null);
-      const { widthScale, heightScale } = this.state;
-      const svg = select(this.svgRef);
-      const chart = svg.select('g');
       // Update scales
       const xValues = data.map(d => d[xField]);
       const yValues = data.map(d => d[yFields[0]]);
-      const minDate = Math.min(...xValues);
-      const maxDate = Math.max(...xValues);
-      const maxValue = Math.max(...yValues);
-      const horizontalSpacing = (maxDate - minDate) * HORIZONTAL_SPACING;
-      const verticalSpacing = maxValue * VERTICAL_SPACING;
-      this.xScale = widthScale.domain([new Date(minDate - horizontalSpacing), new Date(maxDate + horizontalSpacing)]);
-      this.yScale = heightScale.domain([maxValue + verticalSpacing, -verticalSpacing]);
+      const minXValue = Math.min(...xValues);
+      const maxXValue = Math.max(...xValues);
+      const maxYValue = Math.max(...yValues);
+      const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING;
+      const verticalSpacing = maxYValue * VERTICAL_SPACING;
+      if (data[0][xField] instanceof Date) {
+        this.xScale = widthScale.domain([new Date(minXValue - horizontalSpacing), new Date(maxXValue + horizontalSpacing)]);
+      } else {
+        this.xScale = widthScale.domain([minXValue - horizontalSpacing, maxXValue + horizontalSpacing]);
+      }
+      this.yScale = heightScale.domain([maxYValue + verticalSpacing, -verticalSpacing]);
       const xSeries = xValues.map(d => this.xScale(d));
       const ySeries = yValues.map(d => this.yScale(d));
       const [slope, intercept] = leastSquares(xSeries, ySeries);
-      const change = slope * -100;
+      const initial = this.yScale.invert(intercept + (slope * this.xScale(minXValue)));
+      const end = this.yScale.invert(intercept + (slope * this.xScale(maxXValue)));
+      const change = end - initial;
+      const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
       const average = getAverage(yValues);
       const standardDeviation = getStandardDeviation(yValues, average);
 
@@ -236,25 +270,30 @@ export class RegressionChart extends Component {
         chart.select('.x-axis')
           .transition()
           .duration(TRANSITION_DURATION)
-          .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')));
+          .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')).tickSizeInner(-height));
       } else {
         chart.select('.x-axis')
           .transition()
           .duration(TRANSITION_DURATION)
-          .call(axisBottom(this.xScale));
+          .call(axisBottom(this.xScale).tickSizeInner(-height));
       }
 
       chart.select('.y-axis')
         .transition()
         .duration(TRANSITION_DURATION)
-        .call(axisLeft(this.yScale).ticks(10));
+        .call(axisLeft(this.yScale).ticks(10).tickSizeInner(-width));
 
       // Update legend
       svg.select('.change')
         .transition()
         .duration(TRANSITION_DURATION)
         .style('fill', change >= 0 ? 'green' : 'red')
-        .text(`${change > 0 ? '+' : ''}${change.toFixed(2)}%`);
+        .text(`${change > 0 ? '+' : ''}${change.toFixed(0)}`);
+      svg.select('.changePercentage')
+        .transition()
+        .duration(TRANSITION_DURATION)
+        .style('fill', changePercentage >= 0 ? 'green' : 'red')
+        .text(`${changePercentage > 0 ? '+' : ''}${changePercentage.toFixed(2)}%`);
       svg.select('.average')
         .transition()
         .duration(TRANSITION_DURATION)
@@ -303,12 +342,12 @@ export class RegressionChart extends Component {
         .x(d => this.xScale(d))
         .y(d => intercept + (slope * this.xScale(d)));
       chart.select('.regression-line')
-        .datum([minDate, maxDate])
+        .datum([minXValue, maxXValue])
         .transition()
         .duration(TRANSITION_DURATION)
         .attr('d', newLine);
     } else {
-      console.log('Props changed');
+      // console.log('Props changed');
     }
   }
 

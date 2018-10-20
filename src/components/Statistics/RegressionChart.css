@@ -13,3 +13,7 @@
   margin-right: .5em;
   width: 12px;
 }
+
+.tick line {
+  color: #d8d8d8;
+}

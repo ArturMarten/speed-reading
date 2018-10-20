@@ -15,10 +15,11 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.7 (arendamisel, eeldatavalt 17.10.2018)
+                  Versioon 5.1.7 (arendamisel)
                 </List.Header>
                 <List.Description>
                   <List.List>
+                    <List.Item>Parandused statistika arvutustel</List.Item>
                     <List.Item>Täiendused tekstide valikul</List.Item>
                   </List.List>
                 </List.Description>

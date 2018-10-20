@@ -174,7 +174,7 @@ export const getSimilarSymbol = (symbol) => {
 export const reduceSumFunc = (prev, cur) => prev + cur;
 
 export const leastSquares = (xSeries, ySeries) => {
-  if (xSeries.length === 0 || ySeries.length === 0) {
+  if (xSeries === null || ySeries === null || xSeries.length === 0 || ySeries.length === 0) {
     return [0, 0, 0];
   }
   if (xSeries.length === 1 || ySeries.length === 1) {
