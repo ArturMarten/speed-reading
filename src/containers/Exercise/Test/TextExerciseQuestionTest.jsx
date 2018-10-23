@@ -78,16 +78,13 @@ export class TextExerciseQuestionTest extends Component {
             </Grid.Row>
             <Grid.Row centered>
               <Pagination
-                ariaLabel="Questions"
                 defaultActivePage={1}
                 firstItem={null}
                 lastItem={null}
                 nextItem={{
-                  ariaLabel: this.props.translate('text-exercise-question-test.next-question'),
                   content: this.props.translate('text-exercise-question-test.next-question'),
                 }}
                 prevItem={{
-                  ariaLabel: this.props.translate('text-exercise-question-test.previous-question'),
                   content: this.props.translate('text-exercise-question-test.previous-question'),
                 }}
                 boundaryRange={1}

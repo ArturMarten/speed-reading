@@ -100,7 +100,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.FETCH_TEXTS_SUCCEEDED: {
       return updateObject(state, {
-        texts: action.payload,
+        texts: action.payload.map(({ statistics, ...rest }) => ({ ...statistics, ...rest })),
         textsStatus: {
           loading: false,
           error: null,
@@ -126,6 +126,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_READING_TEXT_SUCCEEDED: {
       const updatedText = updateObject(action.payload, {
         contentState: convertFromRaw(action.payload.contentState),
+        ...action.payload.statistics,
       });
       return updateObject(state, {
         selectedText: updatedText,

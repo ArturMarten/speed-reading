@@ -118,7 +118,7 @@ export class TextEntry extends Component {
       editor: this.state.textEntryForm.editor.value,
       questionsAuthor: this.state.textEntryForm.questionsAuthor.value,
       reference: this.state.textEntryForm.reference.value,
-      plain: textEditorComponent.getPlainText(),
+      plainText: textEditorComponent.getPlainText(),
       contentState: textEditorComponent.getRawContent(),
       complexity: this.state.textEntryForm.complexity.value,
       keywords: this.state.textEntryForm.keywords.value,

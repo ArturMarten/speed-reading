@@ -25,7 +25,7 @@ export class OwnTextEditor extends Component {
     const textEditorComponent = this.textEditorRef.getWrappedInstance();
     const selectedText = {
       language: 'estonian',
-      plain: textEditorComponent.getPlainText(),
+      plainText: textEditorComponent.getPlainText(),
       contentState: textEditorComponent.getRawContent(),
     };
     this.props.onOwnTextSelect(selectedText);

@@ -12,7 +12,7 @@ export class TextExerciseBlankTest extends Component {
   };
 
   componentDidMount() {
-    this.props.onTestPrepare(this.props.selectedText.plain);
+    this.props.onTestPrepare(this.props.selectedText.plainText);
   }
 
   onBlankChange = (event, data) => {
@@ -78,16 +78,13 @@ export class TextExerciseBlankTest extends Component {
             </Grid.Row>
             <Grid.Row centered>
               <Pagination
-                ariaLabel="Blanks"
                 defaultActivePage={1}
                 firstItem={null}
                 lastItem={null}
                 nextItem={{
-                  ariaLabel: this.props.translate('text-exercise-blank-test.next-blank'),
                   content: this.props.translate('text-exercise-blank-test.next-blank'),
                 }}
                 prevItem={{
-                  ariaLabel: this.props.translate('text-exercise-blank-test.previous-blank'),
                   content: this.props.translate('text-exercise-blank-test.previous-blank'),
                 }}
                 boundaryRange={1}

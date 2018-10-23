@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader, Dropdown, Label } from 'semantic-ui-react';
+import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader, Dropdown, Label, Table } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -37,11 +37,15 @@ export class TextSelection extends Component {
       language: this.props.currentLanguage === 'gb' ? 'english' : 'estonian',
     },
     sortOptions: [
-      { key: 0, value: 'complexity', text: this.props.translate('text-selection.by-complexity') },
+      { key: 0, value: 'averageInterestingnessRating', text: this.props.translate('text-selection.by-average-interestingness-rating') },
+      { key: 0, value: 'interestingnessRatingCount', text: this.props.translate('text-selection.by-interestingness-rating-count') },
       { key: 1, value: 'wordCount', text: this.props.translate('text-selection.by-word-count') },
-      { key: 2, value: 'readingAttempt', text: this.props.translate('text-selection.by-reading-attempt') },
-      { key: 3, value: 'title', text: this.props.translate('text-selection.by-title') },
-      { key: 4, value: 'author', text: this.props.translate('text-selection.by-author') },
+      { key: 2, value: 'userReadingAttemptCount', text: this.props.translate('text-selection.by-user-reading-attempt') },
+      { key: 3, value: 'totalReadingAttemptCount', text: this.props.translate('text-selection.by-total-reading-attempt') },
+      { key: 4, value: 'wordLengthClassRating', text: this.props.translate('text-selection.by-word-length-class-rating') },
+      { key: 5, value: 'sentenceLengthClassRating', text: this.props.translate('text-selection.by-sentence-length-class-rating') },
+      { key: 6, value: 'title', text: this.props.translate('text-selection.by-title') },
+      { key: 7, value: 'author', text: this.props.translate('text-selection.by-author') },
     ],
   };
 
@@ -118,6 +122,20 @@ export class TextSelection extends Component {
     });
   }
 
+  sortHandler = selectedColumn => () => {
+    const { column, direction } = this.state;
+    if (column !== selectedColumn) {
+      this.setState({
+        column: selectedColumn,
+        direction: 'ascending',
+      });
+    } else {
+      this.setState({
+        direction: direction === 'ascending' ? 'descending' : 'ascending',
+      });
+    }
+  };
+
   textSelectionHandler = (textId) => {
     this.setState({ selectedTextId: textId });
   }
@@ -138,7 +156,7 @@ export class TextSelection extends Component {
     const sortedTexts = sortByColumn(filteredTexts, column, direction);
     const texts = sortedTexts.map((text) => {
       const { wordCount } = text;
-      const color = 100 - Math.round(((wordCount - 250) / 750) * 100);
+      const color = 100 - Math.round(((wordCount - 250) / 1000) * 100);
       return (
         <List.Item
           key={text.id}
@@ -146,8 +164,8 @@ export class TextSelection extends Component {
           onClick={() => this.textSelectionHandler(text.id)}
         >
           <List.Content floated="right">
-            {text.readingAttempt ?
-              `${this.props.translate('text-selection.reading-count')}: ${text.readingAttempt} ` :
+            {text.userReadingAttemptCount ?
+              `${this.props.translate('text-selection.reading-count')}: ${text.userReadingAttemptCount} ` :
               `${this.props.translate('text-selection.not-read')} `}
             <Label
               basic
@@ -171,8 +189,74 @@ export class TextSelection extends Component {
             <List.Description>
               {`${this.props.translate('text-selection.author')}: ${text.author}`}
             </List.Description>
+            <List.Description>
+              <Label as="a">
+                <Icon name="info" />
+                {`${text.averageInterestingnessRating ? text.averageInterestingnessRating.toFixed(1) : '-'}
+                (${text.interestingnessRatingCount})`}
+              </Label>
+            </List.Description>
           </List.Content>
         </List.Item>
+      );
+    });
+    const textTableRows = sortedTexts.map((text) => {
+      const { wordCount, wordLengthClassRating, sentenceLengthClassRating } = text;
+      const wordCountColor = 100 - Math.round(((wordCount - 250) / 1000) * 100);
+      const wordLengthClassRatingColor = 160 - wordLengthClassRating * 14;
+      const sentenceLengthClassRatingColor = 160 - sentenceLengthClassRating * 14;
+      return (
+        <Table.Row
+          key={text.id}
+          active={text.id === this.state.selectedTextId}
+          onClick={() => this.textSelectionHandler(text.id)}
+        >
+          <Table.Cell textAlign="left" width={6}>
+            <div>
+              <b>
+                {text.title}
+              </b>
+            </div>
+            <span>
+              {text.author}
+            </span>
+          </Table.Cell>
+          <Table.Cell>
+            <div style={{ fontSize: '1.2em' }}>
+              {text.userReadingAttemptCount ?
+                `${text.userReadingAttemptCount}` :
+                `${this.props.translate('text-selection.not-read')}`}
+            </div>
+            <div style={{ fontSize: '0.8em' }}>
+              {`(kokku ${text.totalReadingAttemptCount})`}
+            </div>
+          </Table.Cell>
+          <Table.Cell>
+            <Label circular size="large" style={{ color: 'black', background: `hsl(${wordCountColor}, 100%, 50%)` }}>
+              {`${wordCount}`}
+            </Label>
+          </Table.Cell>
+          <Table.Cell>
+            <span style={{ fontSize: '1.2em' }}>
+              {`${text.wordLengthClassRating}. klass `}
+            </span>
+            <Label circular empty style={{ color: 'black', background: `hsl(${wordLengthClassRatingColor}, 100%, 50%)` }} />
+          </Table.Cell>
+          <Table.Cell>
+            <span style={{ fontSize: '1.2em' }}>
+              {`${text.sentenceLengthClassRating}. klass `}
+            </span>
+            <Label circular empty style={{ color: 'black', background: `hsl(${sentenceLengthClassRatingColor}, 100%, 50%)` }} />
+          </Table.Cell>
+          <Table.Cell>
+            <div style={{ fontSize: '1.6em' }}>
+              {text.averageInterestingnessRating ? text.averageInterestingnessRating.toFixed(1) : '-'}
+            </div>
+            <div style={{ fontSize: '0.8em' }}>
+              {`(${text.interestingnessRatingCount} hinnangut)`}
+            </div>
+          </Table.Cell>
+        </Table.Row>
       );
     });
     return (
@@ -184,7 +268,7 @@ export class TextSelection extends Component {
           <Dimmer active={this.props.textsStatus.loading} inverted>
             <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
           </Dimmer>
-          <Grid centered style={{ maxHeight: '6vh' }}>
+          <Grid centered style={{ paddingBottom: '2px' }}>
             <Grid.Row columns={2} style={{ paddingTop: 0 }}>
               <Grid.Column mobile={10} computer={8}>
                 <Search
@@ -246,9 +330,58 @@ export class TextSelection extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <List style={{ height: '55vh', maxHeight: '55vh', overflow: 'auto' }} selection verticalAlign="middle">
+          <div style={{ height: '55vh', maxHeight: '55vh', overflow: 'auto' }}>
+            <Table selectable compact="very" textAlign="center" verticalAlign="middle" basic unstackable sortable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell
+                    sorted={column === 'title' ? direction : null}
+                    onClick={this.sortHandler('title')}
+                  >
+                    Pealkiri ja autor
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={column === 'userReadingAttemptCount' ? direction : null}
+                    onClick={this.sortHandler('userReadingAttemptCount')}
+                  >
+                    Lugemiste arv
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={column === 'wordCount' ? direction : null}
+                    onClick={this.sortHandler('wordCount')}
+                  >
+                    Sõnade arv
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={column === 'wordLengthClassRating' ? direction : null}
+                    onClick={this.sortHandler('wordLengthClassRating')}
+                  >
+                    Keerukus sõnadele
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={column === 'sentenceLengthClassRating' ? direction : null}
+                    onClick={this.sortHandler('sentenceLengthClassRating')}
+                  >
+                    Keerukus lausetele
+                  </Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={column === 'averageInterestingnessRating' ? direction : null}
+                    onClick={this.sortHandler('averageInterestingnessRating')}
+                  >
+                    Huvitavus
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {textTableRows}
+              </Table.Body>
+            </Table>
+          </div>
+          {/**
+          <List celled style={{ height: '55vh', maxHeight: '55vh', overflow: 'auto' }} selection verticalAlign="middle">
             {texts}
           </List>
+           */}
         </Modal.Content>
         <Modal.Actions>
           <Button

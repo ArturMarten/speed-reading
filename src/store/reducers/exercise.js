@@ -179,7 +179,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.EXERCISE_PREPARED: {
       let preparation = {};
       if (state.type === 'wordGroups') {
-        const wordGroups = splitIntoWordGroups(action.payload.selectedText.plain, action.payload.exerciseOptions.groupCharacterCount);
+        const wordGroups = splitIntoWordGroups(action.payload.selectedText.plainText, action.payload.exerciseOptions.groupCharacterCount);
         preparation = { wordGroups };
       } else if (state.type === 'schulteTables') {
         const symbols = generateSymbols(25, state.modification);

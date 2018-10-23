@@ -84,7 +84,7 @@ storiesOf('Text editor', module)
 storiesOf('Text analysis', module)
   .add('Container', () => {
     const { selectedText } = store.getState().text;
-    const text = selectedText ? selectedText.plain : '';
+    const text = selectedText ? selectedText.plainText : '';
     const language = 'estonian';
     store.dispatch(actionCreators.analyzeText({ text, language }));
     return <TextAnalysisContainer open />;
@@ -155,7 +155,7 @@ storiesOf('Text exercise preparation', module)
   });
 
 storiesOf('Text selection', module)
-  .add('Container', () => <TextSelectionContainer open />);
+  .add('Container', () => <TextSelectionContainer open onClose={() => 0} />);
 
 storiesOf('Text selection filter', module)
   .add('Container', () => {
