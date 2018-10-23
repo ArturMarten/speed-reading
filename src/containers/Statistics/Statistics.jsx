@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -8,6 +8,7 @@ import { rolePermissions } from '../../store/reducers/profile';
 import RegressionChart from '../../components/Statistics/RegressionChart';
 import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import { getExerciseId } from '../../store/reducers/exercise';
+import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
 
 export class Statistics extends Component {
   exerciseCharts = [
@@ -179,6 +180,8 @@ export class Statistics extends Component {
       .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
       .filter(this.filterOutliers)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
+    const totalExerciseTime = data.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
+    const totalTestTime = data.map(exercise => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
     const userFilter = (
       <Fragment>
@@ -213,6 +216,50 @@ export class Statistics extends Component {
           </Form.Group> : null}
       </Fragment>
     );
+
+    const exerciseStatistics = (
+      <Grid style={{ width: '75%' }} textAlign="center">
+        <Grid.Row columns={4}>
+          <Grid.Column>
+            <span style={{ fontSize: '0.9em' }}>
+              {this.props.translate('statistics.total-attempt-count')}
+            </span>
+            <br />
+            <span style={{ fontSize: '1.6em' }}>
+              {data.length}
+            </span>
+          </Grid.Column>
+          <Grid.Column>
+            <span style={{ fontSize: '0.9em' }}>
+              {this.props.translate('statistics.total-attempt-time')}
+            </span>
+            <br />
+            <span style={{ fontSize: '1.6em' }}>
+              {formatMillisecondsInHours(totalExerciseTime)}
+            </span>
+          </Grid.Column>
+          <Grid.Column>
+            <span style={{ fontSize: '0.9em' }}>
+              {this.props.translate('statistics.total-test-time')}
+            </span>
+            <br />
+            <span style={{ fontSize: '1.6em' }}>
+              {formatMillisecondsInHours(totalTestTime)}
+            </span>
+          </Grid.Column>
+          <Grid.Column>
+            <span style={{ fontSize: '0.9em' }}>
+              {this.props.translate('statistics.total-time')}
+            </span>
+            <br />
+            <span style={{ fontSize: '1.6em' }}>
+              {formatMillisecondsInHours(totalExerciseTime + totalTestTime)}
+            </span>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    );
+
     const panes = [
       {
         menuItem: {
@@ -238,13 +285,16 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              <Form.Field
-                id="filter-checkbox"
-                checked={this.state.filterOutliers}
-                onChange={this.filterOutliersHandler}
-                label={this.props.translate('statistics.filter-outliers')}
-                control={Checkbox}
-              />
+              <Form.Group style={{ margin: 0 }} inline>
+                <Form.Field
+                  id="filter-checkbox"
+                  checked={this.state.filterOutliers}
+                  onChange={this.filterOutliersHandler}
+                  label={this.props.translate('statistics.filter-outliers')}
+                  control={Checkbox}
+                />
+                {exerciseStatistics}
+              </Form.Group>
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
@@ -298,13 +348,16 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              <Form.Field
-                id="filter-checkbox"
-                checked={this.state.filterOutliers}
-                onChange={this.filterOutliersHandler}
-                label={this.props.translate('statistics.filter-outliers')}
-                control={Checkbox}
-              />
+              <Form.Group style={{ margin: 0 }} inline>
+                <Form.Field
+                  id="filter-checkbox"
+                  checked={this.state.filterOutliers}
+                  onChange={this.filterOutliersHandler}
+                  label={this.props.translate('statistics.filter-outliers')}
+                  control={Checkbox}
+                />
+                {exerciseStatistics}
+              </Form.Group>
             </Form>
             <div style={{ margin: '1em 0em' }}>
               {this.exerciseCharts[this.state.chartIndex].map(({ id, ...chartProps }) => (

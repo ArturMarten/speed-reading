@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Button, List, Rating, Search, Grid, Popup, Icon, Dimmer, Loader, Dropdown, Label, Table } from 'semantic-ui-react';
+import { Modal, Button, Search, Grid, Popup, Icon, Dimmer, Loader, Dropdown, Label, Table } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -154,54 +154,9 @@ export class TextSelection extends Component {
         (text.language === this.state.filter.language)
       ));
     const sortedTexts = sortByColumn(filteredTexts, column, direction);
-    const texts = sortedTexts.map((text) => {
-      const { wordCount } = text;
-      const color = 100 - Math.round(((wordCount - 250) / 1000) * 100);
-      return (
-        <List.Item
-          key={text.id}
-          active={text.id === this.state.selectedTextId}
-          onClick={() => this.textSelectionHandler(text.id)}
-        >
-          <List.Content floated="right">
-            {text.userReadingAttemptCount ?
-              `${this.props.translate('text-selection.reading-count')}: ${text.userReadingAttemptCount} ` :
-              `${this.props.translate('text-selection.not-read')} `}
-            <Label
-              basic
-              circular
-              style={{ color: 'black', background: `hsl(${color}, 100%, 50%)` }}
-            >
-              {`${wordCount} ${this.props.translate('text-selection.words')}`}
-            </Label>
-            {` ${this.props.translate('text-selection.complexity')}`}
-            <Rating
-              disabled
-              maxRating={10}
-              icon="star"
-              defaultRating={text.complexity}
-            />
-          </List.Content>
-          <List.Content>
-            <List.Header>
-              {text.title}
-            </List.Header>
-            <List.Description>
-              {`${this.props.translate('text-selection.author')}: ${text.author}`}
-            </List.Description>
-            <List.Description>
-              <Label as="a">
-                <Icon name="info" />
-                {`${text.averageInterestingnessRating ? text.averageInterestingnessRating.toFixed(1) : '-'}
-                (${text.interestingnessRatingCount})`}
-              </Label>
-            </List.Description>
-          </List.Content>
-        </List.Item>
-      );
-    });
     const textTableRows = sortedTexts.map((text) => {
       const { wordCount, wordLengthClassRating, sentenceLengthClassRating } = text;
+      const readTime = wordCount / this.props.wpm;
       const wordCountColor = 100 - Math.round(((wordCount - 250) / 1000) * 100);
       const wordLengthClassRatingColor = 160 - wordLengthClassRating * 14;
       const sentenceLengthClassRatingColor = 160 - sentenceLengthClassRating * 14;
@@ -211,15 +166,15 @@ export class TextSelection extends Component {
           active={text.id === this.state.selectedTextId}
           onClick={() => this.textSelectionHandler(text.id)}
         >
-          <Table.Cell textAlign="left" width={6}>
+          <Table.Cell textAlign="left" computer={6}>
             <div>
               <b>
                 {text.title}
               </b>
             </div>
-            <span>
+            <div>
               {text.author}
-            </span>
+            </div>
           </Table.Cell>
           <Table.Cell>
             <div style={{ fontSize: '1.2em' }}>
@@ -228,23 +183,30 @@ export class TextSelection extends Component {
                 `${this.props.translate('text-selection.not-read')}`}
             </div>
             <div style={{ fontSize: '0.8em' }}>
-              {`(kokku ${text.totalReadingAttemptCount})`}
+              {`(${this.props.translate('text-selection.total')}`}
+              &nbsp;
+              {`${text.totalReadingAttemptCount})`}
             </div>
           </Table.Cell>
           <Table.Cell>
             <Label circular size="large" style={{ color: 'black', background: `hsl(${wordCountColor}, 100%, 50%)` }}>
               {`${wordCount}`}
             </Label>
+            <div style={{ fontSize: '0.8em' }}>
+              {`${readTime.toFixed(1)}`}
+              &nbsp;
+              {`${this.props.translate('text-selection.min')}`}
+            </div>
           </Table.Cell>
           <Table.Cell>
             <span style={{ fontSize: '1.2em' }}>
-              {`${text.wordLengthClassRating}. klass `}
+              {`${text.wordLengthClassRating}${this.props.translate('text-selection.class')} `}
             </span>
             <Label circular empty style={{ color: 'black', background: `hsl(${wordLengthClassRatingColor}, 100%, 50%)` }} />
           </Table.Cell>
           <Table.Cell>
             <span style={{ fontSize: '1.2em' }}>
-              {`${text.sentenceLengthClassRating}. klass `}
+              {`${text.sentenceLengthClassRating}${this.props.translate('text-selection.class')} `}
             </span>
             <Label circular empty style={{ color: 'black', background: `hsl(${sentenceLengthClassRatingColor}, 100%, 50%)` }} />
           </Table.Cell>
@@ -253,7 +215,9 @@ export class TextSelection extends Component {
               {text.averageInterestingnessRating ? text.averageInterestingnessRating.toFixed(1) : '-'}
             </div>
             <div style={{ fontSize: '0.8em' }}>
-              {`(${text.interestingnessRatingCount} hinnangut)`}
+              {`(${text.interestingnessRatingCount}`}
+              &nbsp;
+              {`${this.props.translate('text-selection.ratings')})`}
             </div>
           </Table.Cell>
         </Table.Row>
@@ -264,7 +228,7 @@ export class TextSelection extends Component {
         <Modal.Header>
           {this.props.translate('text-selection.modal-header')}
         </Modal.Header>
-        <Modal.Content>
+        <Modal.Content style={{ paddingBottom: 0 }}>
           <Dimmer active={this.props.textsStatus.loading} inverted>
             <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
           </Dimmer>
@@ -291,7 +255,7 @@ export class TextSelection extends Component {
                     open={this.state.textSelectionFilterOpened}
                     onClose={this.textSelectionFilterToggleHandler}
                     filter={this.state.filter}
-                    textCount={texts.length}
+                    textCount={textTableRows.length}
                     onFilterChange={this.onFilterChange}
                     onFilterClear={this.onFilterClear}
                   />
@@ -330,58 +294,53 @@ export class TextSelection extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <div style={{ height: '55vh', maxHeight: '55vh', overflow: 'auto' }}>
-            <Table selectable compact="very" textAlign="center" verticalAlign="middle" basic unstackable sortable>
+          <div style={{ height: '60vh', maxHeight: '60vh', overflow: 'auto' }}>
+            <Table selectable compact="very" textAlign="center" verticalAlign="middle" basic sortable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
                     sorted={column === 'title' ? direction : null}
                     onClick={this.sortHandler('title')}
                   >
-                    Pealkiri ja autor
+                    {this.props.translate('text-selection.title-and-author')}
                   </Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={column === 'userReadingAttemptCount' ? direction : null}
                     onClick={this.sortHandler('userReadingAttemptCount')}
                   >
-                    Lugemiste arv
+                    {this.props.translate('text-selection.user-reading-attempt-count')}
                   </Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={column === 'wordCount' ? direction : null}
                     onClick={this.sortHandler('wordCount')}
                   >
-                    Sõnade arv
+                    {this.props.translate('text-selection.word-count')}
                   </Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={column === 'wordLengthClassRating' ? direction : null}
                     onClick={this.sortHandler('wordLengthClassRating')}
                   >
-                    Keerukus sõnadele
+                    {this.props.translate('text-selection.word-class-rating')}
                   </Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={column === 'sentenceLengthClassRating' ? direction : null}
                     onClick={this.sortHandler('sentenceLengthClassRating')}
                   >
-                    Keerukus lausetele
+                    {this.props.translate('text-selection.sentence-class-rating')}
                   </Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={column === 'averageInterestingnessRating' ? direction : null}
                     onClick={this.sortHandler('averageInterestingnessRating')}
                   >
-                    Huvitavus
+                    {this.props.translate('text-selection.interestingness')}
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
-              <Table.Body>
+              <Table.Body style={{ cursor: 'pointer' }}>
                 {textTableRows}
               </Table.Body>
             </Table>
           </div>
-          {/**
-          <List celled style={{ height: '55vh', maxHeight: '55vh', overflow: 'auto' }} selection verticalAlign="middle">
-            {texts}
-          </List>
-           */}
         </Modal.Content>
         <Modal.Actions>
           <Button
@@ -402,6 +361,7 @@ export class TextSelection extends Component {
 const mapStateToProps = state => ({
   token: state.auth.token,
   texts: state.text.texts,
+  wpm: state.options.speedOptions.wpm,
   collections: state.text.collections,
   textsStatus: state.text.textsStatus,
   selectStatus: state.text.selectStatus,
