@@ -19,6 +19,7 @@ class ReleaseNotes extends Component {
                 </List.Header>
                 <List.Description>
                   <List.List>
+                    <List.Item>Parandused teksti küsimuste ja vastusevariantidega</List.Item>
                     <List.Item>Vigade parandused ja testimine</List.Item>
                   </List.List>
                 </List.Description>

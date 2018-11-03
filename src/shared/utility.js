@@ -89,7 +89,7 @@ export const translateSuccess = (translate, message) => {
       return translate('success.answer-updated');
     case 'Answer removed':
       return translate('success.answer-removed');
-    case 'Account registered, password sent with e-email':
+    case 'Account registered, password sent with email':
       return translate('success.account-registered-password-sent');
     default:
       return message;
