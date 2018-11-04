@@ -15,10 +15,23 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.8 (arendamisel)
+                  Versioon 5.1.9 (arendamisel)
                 </List.Header>
                 <List.Description>
                   <List.List>
+                    <List.Item>Lugemiskiiruse parandused</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>
+                  Versioon 5.1.8 (05.10.2018)
+                </List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Lisatud üldstatistika</List.Item>
                     <List.Item>Parandused teksti küsimuste ja vastusevariantidega</List.Item>
                     <List.Item>Vigade parandused ja testimine</List.Item>
                   </List.List>

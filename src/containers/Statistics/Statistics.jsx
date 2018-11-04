@@ -5,8 +5,9 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 import { rolePermissions } from '../../store/reducers/profile';
-import RegressionChart from '../../components/Statistics/RegressionChart';
 import StatisticsTable from '../../components/Statistics/StatisticsTable';
+import RegressionChart from '../../components/Statistics/RegressionChart';
+import GeneralTable from '../../components/Statistics/GeneralTable';
 import { getExerciseId } from '../../store/reducers/exercise';
 import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
 
@@ -16,18 +17,18 @@ export class Statistics extends Component {
       {
         id: 0,
         title: this.props.translate('regression-chart.reading-speed-trend'),
-        yLabel: this.props.translate('regression-chart.speed-wpm'),
+        yLabel: this.props.translate('regression-chart.speed-words-per-minute'),
         legendTitles: [this.props.translate('regression-chart.reading-speed')],
-        yFields: ['wpm'],
+        yFields: ['wordsPerMinute'],
         dataStrokeColor: ['#FF4C4C'],
         dataFillColor: ['#FF9999'],
         dataLineColor: ['#FF0000'],
       }, {
         id: 1,
         title: this.props.translate('regression-chart.comprehension-speed-trend'),
-        yLabel: this.props.translate('regression-chart.speed-wpm'),
+        yLabel: this.props.translate('regression-chart.speed-words-per-minute'),
         legendTitles: [this.props.translate('regression-chart.comprehension-speed')],
-        yFields: ['cpm'],
+        yFields: ['comprehensionPerMinute'],
         dataStrokeColor: ['#009900'],
         dataFillColor: ['#00FF00'],
         dataLineColor: ['#007F00'],
@@ -45,9 +46,9 @@ export class Statistics extends Component {
       {
         id: 0,
         title: this.props.translate('regression-chart.finding-speed-trend'),
-        yLabel: this.props.translate('regression-chart.speed-spm'),
+        yLabel: this.props.translate('regression-chart.speed-symbols-per-minute'),
         legendTitles: [this.props.translate('regression-chart.finding-speed')],
-        yFields: ['spm'],
+        yFields: ['symbolsPerMinute'],
         dataStrokeColor: ['#009900'],
         dataFillColor: ['#00FF00'],
         dataLineColor: ['#007F00'],
@@ -84,6 +85,7 @@ export class Statistics extends Component {
   ];
 
   state = {
+    activeIndex: 0,
     isTeacher: rolePermissions[this.props.role] >= rolePermissions.teacher,
     groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
     userId: this.props.userId,
@@ -91,6 +93,8 @@ export class Statistics extends Component {
     chartIndex: 0,
     scale: 'index',
     xLabel: this.props.translate('regression-chart.index'),
+    startTime: new Date(2018, 2, 2).toISOString().split('T')[0],
+    endTime: new Date().toISOString().split('T')[0],
     filterOutliers: true,
   };
 
@@ -103,28 +107,42 @@ export class Statistics extends Component {
         this.props.onFetchGroups();
       }
     }
-    this.props.onFetchExerciseStatistics(this.props.userId, this.props.token);
+    this.props.onFetchUserExerciseStatistics(this.props.userId, this.props.token);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.activeIndex !== this.state.activeIndex && this.state.activeIndex === 2) {
+      const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
+      this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
+    }
+  }
+
+  tabChangeHandler = (event, { activeIndex }) => this.setState({ activeIndex });
 
   groupChangeHandler = (event, { value }) => {
-    let { userId } = this.state;
-    const currentUser = this.props.users.find(user => user.publicId === userId);
-    if (currentUser && currentUser.groupId !== value) {
-      const groupUsers = this.props.users.filter(groupUser => groupUser.groupId === value);
-      if (groupUsers.length > 0) {
-        userId = groupUsers[0].publicId;
-        this.props.onFetchExerciseStatistics(userId, this.props.token);
+    if (this.state.groupId !== value) {
+      let { userId } = this.state;
+      const currentUser = this.props.users.find(user => user.publicId === userId);
+      if (currentUser && currentUser.groupId !== value) {
+        const groupUsers = this.props.users.filter(groupUser => groupUser.groupId === value);
+        if (groupUsers.length > 0) {
+          userId = groupUsers[0].publicId;
+          this.props.onFetchUserExerciseStatistics(userId, this.props.token);
+        }
       }
+      if (this.state.activeIndex === 2) {
+        const fetchGroupId = value === 'all-groups' ? null : value;
+        this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
+      }
+      this.setState({ groupId: value, userId });
     }
-    this.setState({ groupId: value, userId });
   }
 
   userChangeHandler = (event, { value }) => {
     if (this.state.userId !== value) {
       const selectedUser = this.props.users.find(user => user.publicId === value);
       if (selectedUser) {
-        this.props.onFetchExerciseStatistics(value, this.props.token);
+        this.props.onFetchUserExerciseStatistics(value, this.props.token);
         const { groupId } = selectedUser;
         this.setState({ userId: value, groupId: groupId === null ? 'all-groups' : groupId });
       }
@@ -154,7 +172,28 @@ export class Statistics extends Component {
     }
   }
 
-  filterOutliers = attempt => !this.state.filterOutliers || !attempt.wpm || attempt.wpm <= 500;
+  timeChangeHandler = (event, { name, value }) => {
+    let newTime = value;
+    if (newTime === '') {
+      const currentTime = new Date(this.state[name]);
+      if (currentTime.getDate() === 1) {
+        currentTime.setDate(currentTime.getDate() - 1);
+      } else {
+        currentTime.setDate(currentTime.getDate() + 1);
+      }
+      [newTime] = currentTime.toISOString().split('T');
+    }
+    this.setState({
+      [name]: newTime,
+    });
+  }
+
+  outlierFilter = attempt => !this.state.filterOutliers || !attempt.wordsPerMinute || attempt.wordsPerMinute <= 500;
+
+  timeFilter = attempt => (
+    attempt.date >= new Date(this.state.startTime) &&
+    attempt.date <= new Date(this.state.endTime)
+  );
 
   filterOutliersHandler = () => {
     this.setState({
@@ -168,7 +207,11 @@ export class Statistics extends Component {
       text: this.props.translate('statistics.all-groups'),
       value: 'all-groups',
     }].concat(this.props.groups
-      .map((group, index) => ({ key: index, value: group.id, text: group.name })));
+      .map((group, index) => ({
+        key: index,
+        value: group.id,
+        text: `${group.name} (${group.userCount} ${this.props.translate('statistics.users')})`,
+      })));
     const userOptions = this.props.users
       .filter(user => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId)
       .map((user, index) => ({
@@ -176,43 +219,62 @@ export class Statistics extends Component {
         value: user.publicId,
         text: `${user.firstName ? user.firstName : ''} ${user.lastName ? user.lastName : ''} <${user.email}>`,
       }));
-    const data = this.props.exerciseStatistics
+    const userExerciseData = this.props.userExerciseStatistics
       .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
-      .filter(this.filterOutliers)
+      .filter(this.outlierFilter)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
-    const totalExerciseTime = data.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
-    const totalTestTime = data.map(exercise => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
+    const totalExerciseTime = userExerciseData.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
+    const totalTestTime = userExerciseData.map(exercise => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
+
+    const groupExerciseData = Object.assign(
+      {},
+      ...Object.keys(this.props.groupExerciseStatistics)
+        .map(userId => ({
+          [userId]: this.props.groupExerciseStatistics[userId]
+            .filter(this.timeFilter)
+            .filter(this.outlierFilter),
+        })),
+    );
+
+    const groupFilter = (
+      <Form.Field
+        id="group-dropdown"
+        fluid
+        inline
+        search
+        selection
+        value={this.state.groupId}
+        onChange={this.groupChangeHandler}
+        options={groupOptions}
+        loading={this.props.groupsStatus.loading || this.props.groupExerciseStatisticsStatus.loading}
+        label={this.props.translate('statistics.group')}
+        control={Dropdown}
+      />
+    );
+
     const userFilter = (
+      <Form.Field
+        id="user-dropdown"
+        fluid
+        inline
+        search
+        selection
+        value={this.state.userId}
+        onChange={this.userChangeHandler}
+        options={userOptions}
+        loading={this.props.usersStatus.loading || this.props.userExerciseStatisticsStatus.loading}
+        label={this.props.translate('statistics.user')}
+        control={Dropdown}
+      />
+    );
+
+    const userAndGroupFilter = (
       <Fragment>
         {this.state.isTeacher ?
           <Form.Group widths="equal">
-            <Form.Field
-              id="group-dropdown"
-              fluid
-              inline
-              search
-              selection
-              value={this.state.groupId}
-              onChange={this.groupChangeHandler}
-              options={groupOptions}
-              loading={this.props.groupsStatus.loading}
-              label={this.props.translate('statistics.group')}
-              control={Dropdown}
-            />
-            <Form.Field
-              id="user-dropdown"
-              fluid
-              inline
-              search
-              selection
-              value={this.state.userId}
-              onChange={this.userChangeHandler}
-              options={userOptions}
-              loading={this.props.usersStatus.loading}
-              label={this.props.translate('statistics.user')}
-              control={Dropdown}
-            />
+            {groupFilter}
+            {userFilter}
           </Form.Group> : null}
       </Fragment>
     );
@@ -226,7 +288,7 @@ export class Statistics extends Component {
             </span>
             <br />
             <span style={{ fontSize: '1.6em' }}>
-              {data.length}
+              {userExerciseData.length}
             </span>
           </Grid.Column>
           <Grid.Column>
@@ -266,11 +328,12 @@ export class Statistics extends Component {
           key: 'table',
           icon: 'table',
           content: this.props.translate('statistics.table'),
+          disabled: this.props.userExerciseStatisticsStatus.loading || this.props.groupExerciseStatisticsStatus.loading,
         },
         render: () => (
           <Tab.Pane>
             <Form>
-              {userFilter}
+              {userAndGroupFilter}
               <Form.Group widths="equal">
                 <Form.Field
                   id="exercise-dropdown"
@@ -280,7 +343,7 @@ export class Statistics extends Component {
                   value={this.state.exercise}
                   onChange={this.exerciseSelectionHandler}
                   options={this.exerciseOptions}
-                  loading={this.props.exerciseStatisticsStatus.loading}
+                  loading={this.props.userExerciseStatisticsStatus.loading}
                   label={this.props.translate('statistics.exercise')}
                   control={Dropdown}
                 />
@@ -298,12 +361,12 @@ export class Statistics extends Component {
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
-                <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
+                <Dimmer inverted active={this.props.userExerciseStatisticsStatus.loading}>
                   <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                 </Dimmer>
                 <StatisticsTable
                   exercise={this.state.exercise}
-                  data={data}
+                  data={userExerciseData}
                   translate={this.props.translate}
                 />
               </Segment>
@@ -316,12 +379,12 @@ export class Statistics extends Component {
           key: 'chart',
           icon: 'line chart',
           content: this.props.translate('statistics.regression'),
-          disabled: this.props.exerciseStatisticsStatus.loading,
+          disabled: this.props.userExerciseStatisticsStatus.loading || this.props.groupExerciseStatisticsStatus.loading,
         },
         render: () => (
           <Tab.Pane>
             <Form>
-              {userFilter}
+              {userAndGroupFilter}
               <Form.Group widths="equal">
                 <Form.Field
                   id="exercise-dropdown"
@@ -331,7 +394,7 @@ export class Statistics extends Component {
                   value={this.state.exercise}
                   onChange={this.exerciseSelectionHandler}
                   options={this.exerciseOptions}
-                  loading={this.props.exerciseStatisticsStatus.loading}
+                  loading={this.props.userExerciseStatisticsStatus.loading}
                   label={this.props.translate('statistics.exercise')}
                   control={Dropdown}
                 />
@@ -343,7 +406,7 @@ export class Statistics extends Component {
                   value={this.state.scale}
                   onChange={this.scaleSelectionHandler}
                   options={this.scaleOptions}
-                  loading={this.props.exerciseStatisticsStatus.loading}
+                  loading={this.props.userExerciseStatisticsStatus.loading}
                   label={this.props.translate('statistics.scale')}
                   control={Dropdown}
                 />
@@ -362,14 +425,14 @@ export class Statistics extends Component {
             <div style={{ margin: '1em 0em' }}>
               {this.exerciseCharts[this.state.chartIndex].map(({ id, ...chartProps }) => (
                 <Segment key={id}>
-                  <Dimmer inverted active={this.props.exerciseStatisticsStatus.loading}>
+                  <Dimmer inverted active={this.props.userExerciseStatisticsStatus.loading}>
                     <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                   </Dimmer>
                   <div style={{ textAlign: 'center', overflowX: 'auto' }}>
                     <RegressionChart
                       width={1000}
                       height={400}
-                      data={data}
+                      data={userExerciseData}
                       xField={xField}
                       xLabel={this.state.xLabel}
                       translate={this.props.translate}
@@ -378,6 +441,58 @@ export class Statistics extends Component {
                   </div>
                 </Segment>
               ))}
+            </div>
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: {
+          key: 'general-table',
+          icon: 'columns',
+          content: this.props.translate('statistics.general-table'),
+          disabled: !this.state.isTeacher || this.props.userExerciseStatisticsStatus.loading || this.props.groupExerciseStatisticsStatus.loading,
+        },
+        render: () => (
+          <Tab.Pane>
+            <Form>
+              <Form.Group widths="equal">
+                {groupFilter}
+                <Form.Input
+                  id="statistics-start"
+                  name="startTime"
+                  fluid
+                  inline
+                  type="date"
+                  value={this.state.startTime}
+                  onChange={this.timeChangeHandler}
+                  loading={this.props.groupExerciseStatisticsStatus.loading}
+                  label={this.props.translate('statistics.start-time')}
+                />
+                <Form.Input
+                  id="statistics-end"
+                  name="endTime"
+                  fluid
+                  inline
+                  type="date"
+                  value={this.state.endTime}
+                  onChange={this.timeChangeHandler}
+                  loading={this.props.groupExerciseStatisticsStatus.loading}
+                  label={this.props.translate('statistics.end-time')}
+                />
+              </Form.Group>
+            </Form>
+            <div style={{ overflowX: 'auto' }}>
+              <Segment basic style={{ padding: 0 }}>
+                <Dimmer inverted active={this.props.groupExerciseStatisticsStatus.loading}>
+                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                </Dimmer>
+                <GeneralTable
+                  startTime={this.state.startTime}
+                  endTime={this.state.endTime}
+                  data={groupExerciseData}
+                  translate={this.props.translate}
+                />
+              </Segment>
             </div>
           </Tab.Pane>
         ),
@@ -391,7 +506,11 @@ export class Statistics extends Component {
         <p>
           {this.props.translate('statistics.description')}
         </p>
-        <Tab panes={panes} />
+        <Tab
+          panes={panes}
+          activeIndex={this.state.activeIndex}
+          onTabChange={this.tabChangeHandler}
+        />
       </Container>
     );
   }
@@ -406,8 +525,10 @@ const mapStateToProps = state => ({
   users: state.user.users,
   groupsStatus: state.group.groupsStatus,
   groups: state.group.groups,
-  exerciseStatisticsStatus: state.statistics.exerciseStatisticsStatus,
-  exerciseStatistics: state.statistics.exerciseStatistics,
+  userExerciseStatisticsStatus: state.statistics.userExerciseStatisticsStatus,
+  userExerciseStatistics: state.statistics.userExerciseStatistics,
+  groupExerciseStatisticsStatus: state.statistics.groupExerciseStatisticsStatus,
+  groupExerciseStatistics: state.statistics.groupExerciseStatistics,
   translate: getTranslate(state.locale),
 });
 
@@ -418,8 +539,11 @@ const mapDispatchToProps = dispatch => ({
   onFetchGroups: () => {
     dispatch(actionCreators.fetchGroups());
   },
-  onFetchExerciseStatistics: (userId, token) => {
-    dispatch(actionCreators.fetchExerciseStatistics(userId, token));
+  onFetchUserExerciseStatistics: (userId, token) => {
+    dispatch(actionCreators.fetchUserExerciseStatistics(userId, token));
+  },
+  onFetchGroupExerciseStatistics: (groupId, token) => {
+    dispatch(actionCreators.fetchGroupExerciseStatistics(groupId, token));
   },
 });
 

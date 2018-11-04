@@ -82,7 +82,10 @@ export {
   saveUserProfile,
 } from './profile';
 
-export { fetchExerciseStatistics } from './statistics';
+export {
+  fetchUserExerciseStatistics,
+  fetchGroupExerciseStatistics,
+} from './statistics';
 
 export {
   sendFeedback,

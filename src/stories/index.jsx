@@ -31,6 +31,7 @@ import { QuestionTestAnswers } from '../containers/Exercise/TestAnswers/Question
 import { BlankTestAnswers } from '../containers/Exercise/TestAnswers/BlankTestAnswers';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import RegressionChart from '../components/Statistics/RegressionChart';
+import GeneralTable from '../components/Statistics/GeneralTable';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
 import ChangePasswordContainer from '../containers/Auth/ChangePassword';
@@ -330,13 +331,13 @@ storiesOf('RegressionChart', module)
     <RegressionChart
       title={translate('regression-chart.reading-speed-trend')}
       xLabel={translate('regression-chart.date')}
-      yLabel={translate('regression-chart.speed-wpm')}
+      yLabel={translate('regression-chart.speed-words-per-minute')}
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
       data={[]}
       xField="date"
-      yFields={['wpm']}
+      yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
       dataFillColor={['#9999FF']}
       dataLineColor={['#0000FF']}
@@ -347,15 +348,15 @@ storiesOf('RegressionChart', module)
     <RegressionChart
       title={translate('regression-chart.reading-speed-trend')}
       xLabel={translate('regression-chart.date')}
-      yLabel={translate('regression-chart.speed-wpm')}
+      yLabel={translate('regression-chart.speed-words-per-minute')}
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
       data={[
-        { date: new Date(new Date() - (6 ** 11)), wpm: 185 },
+        { date: new Date(new Date() - (6 ** 11)), wordsPerMinute: 185 },
       ]}
       xField="date"
-      yFields={['wpm']}
+      yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
       dataFillColor={['#9999FF']}
       dataLineColor={['#0000FF']}
@@ -366,22 +367,33 @@ storiesOf('RegressionChart', module)
     <RegressionChart
       title={translate('regression-chart.reading-speed-trend')}
       xLabel={translate('regression-chart.date')}
-      yLabel={translate('regression-chart.speed-wpm')}
+      yLabel={translate('regression-chart.speed-words-per-minute')}
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
       data={[
-        { date: new Date(new Date() - (6 ** 11)), wpm: 185 },
-        { date: new Date(new Date() - (4 ** 10)), wpm: 192 },
+        { date: new Date(new Date() - (6 ** 11)), wordsPerMinute: 185 },
+        { date: new Date(new Date() - (4 ** 10)), wordsPerMinute: 192 },
       ]}
       xField="date"
-      yFields={['wpm']}
+      yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
       dataFillColor={['#9999FF']}
       dataLineColor={['#0000FF']}
       translate={translate}
     />
   ));
+
+storiesOf('GeneralTable', module)
+  .add('Component', () => {
+    store.dispatch(actionCreators.fetchGroupExerciseStatistics(4, store.getState().auth.token));
+    return (
+      <GeneralTable
+        data={store.getState().statistics.groupExerciseStatistics}
+        translate={translate}
+      />
+    );
+  });
 
 storiesOf('Manage', module)
   .add('Container', () => <ManageContainer />);

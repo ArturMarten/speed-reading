@@ -2,31 +2,56 @@ import * as actionTypes from './actionTypes';
 import axios from '../../axios-http';
 import { serverErrorMessage } from '../../shared/utility';
 
-const fetchExerciseStatisticsStart = () => ({
-  type: actionTypes.FETCH_EXERCISE_STATISTICS_START,
+const fetchUserExerciseStatisticsStart = () => ({
+  type: actionTypes.FETCH_USER_EXERCISE_STATISTICS_START,
 });
 
-const fetchExerciseStatisticsSucceeded = exercisesStatistics => ({
-  type: actionTypes.FETCH_EXERCISE_STATISTICS_SUCCEEDED,
-  payload: exercisesStatistics,
+const fetchUserExerciseStatisticsSucceeded = userExercisesStatistics => ({
+  type: actionTypes.FETCH_USER_EXERCISE_STATISTICS_SUCCEEDED,
+  payload: userExercisesStatistics,
 });
 
-const fetchExerciseStatisticsFailed = error => ({
-  type: actionTypes.FETCH_EXERCISE_STATISTICS_FAILED,
+const fetchUserExerciseStatisticsFailed = error => ({
+  type: actionTypes.FETCH_USER_EXERCISE_STATISTICS_FAILED,
   payload: error,
 });
 
-export const fetchExerciseStatistics = (userId, token) => (dispatch) => {
-  dispatch(fetchExerciseStatisticsStart());
+export const fetchUserExerciseStatistics = (userId, token) => (dispatch) => {
+  dispatch(fetchUserExerciseStatisticsStart());
   axios.get(`/exerciseAttempts?userId=${userId}&embed=test`, { headers: { 'x-access-token': token } })
     .then((response) => {
-      dispatch(fetchExerciseStatisticsSucceeded(response.data));
+      dispatch(fetchUserExerciseStatisticsSucceeded(response.data));
     }, (error) => {
-      dispatch(fetchExerciseStatisticsFailed(serverErrorMessage(error)));
+      dispatch(fetchUserExerciseStatisticsFailed(serverErrorMessage(error)));
     })
     .catch((error) => {
-      dispatch(fetchExerciseStatisticsFailed(error.message));
+      dispatch(fetchUserExerciseStatisticsFailed(error.message));
     });
 };
 
-export default fetchExerciseStatistics;
+const fetchGroupExerciseStatisticsStart = () => ({
+  type: actionTypes.FETCH_GROUP_EXERCISE_STATISTICS_START,
+});
+
+const fetchGroupExerciseStatisticsSucceeded = groupExercisesStatistics => ({
+  type: actionTypes.FETCH_GROUP_EXERCISE_STATISTICS_SUCCEEDED,
+  payload: groupExercisesStatistics,
+});
+
+const fetchGroupExerciseStatisticsFailed = error => ({
+  type: actionTypes.FETCH_GROUP_EXERCISE_STATISTICS_FAILED,
+  payload: error,
+});
+
+export const fetchGroupExerciseStatistics = (groupId, token) => (dispatch) => {
+  dispatch(fetchGroupExerciseStatisticsStart());
+  axios.get(`/exerciseAttempts?${groupId != null ? `&groupId=${groupId}&` : ''}groupBy=userId&embed=test`, { headers: { 'x-access-token': token } })
+    .then((response) => {
+      dispatch(fetchGroupExerciseStatisticsSucceeded(response.data));
+    }, (error) => {
+      dispatch(fetchGroupExerciseStatisticsFailed(serverErrorMessage(error)));
+    })
+    .catch((error) => {
+      dispatch(fetchGroupExerciseStatisticsFailed(error.message));
+    });
+};

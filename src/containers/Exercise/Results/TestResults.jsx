@@ -92,7 +92,7 @@ export class TestResults extends Component {
                     {`${Math.round(this.props.result.comprehensionResult * 100)}%`}
                   </Statistic.Value>
                   <Statistic.Label>
-                    {this.props.translate('test-results.comprehension-result')}
+                    {this.props.translate('test-results.comprehension-level')}
                   </Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">

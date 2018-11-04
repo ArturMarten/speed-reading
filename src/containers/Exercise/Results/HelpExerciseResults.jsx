@@ -37,7 +37,7 @@ export class HelpExerciseResults extends Component {
                       {this.props.result.spm}
                     </Statistic.Value>
                     <Statistic.Label>
-                      {this.props.translate('help-exercise-results.spm')}
+                      {this.props.translate('help-exercise-results.symbolsPerMinute')}
                     </Statistic.Label>
                   </Statistic> : null}
                 {this.props.result.total !== undefined && this.props.result.correct !== undefined &&

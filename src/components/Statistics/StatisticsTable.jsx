@@ -4,7 +4,15 @@ import { Table, Menu, Icon, Popup } from 'semantic-ui-react';
 
 import HelpPopup from '../HelpPopup/HelpPopup';
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';
-import { getExerciseById } from '../../store/reducers/exercise';
+
+const readingExercises = [
+  'readingExercises',
+  'readingTest',
+  'readingAid',
+  'scrolling',
+  'disappearing',
+  'wordGroups',
+];
 
 export class StatisticsTable extends Component {
   state = {
@@ -44,7 +52,7 @@ export class StatisticsTable extends Component {
             <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
               {this.props.translate('statistics-table.attempt-date')}
             </Table.HeaderCell>
-            {['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+            {readingExercises.indexOf(this.props.exercise) !== -1 ?
               <Fragment>
                 <Table.HeaderCell sorted={column === 'userReadingAttemptCount' ? direction : null} onClick={this.sortHandler('userReadingAttemptCount')}>
                   {this.props.translate('statistics-table.reading-attempt')}
@@ -53,21 +61,21 @@ export class StatisticsTable extends Component {
                     content={this.props.translate('statistics-table.reading-attempt-description')}
                   />
                 </Table.HeaderCell>
-                <Table.HeaderCell sorted={column === 'wpm' ? direction : null} onClick={this.sortHandler('wpm')}>
+                <Table.HeaderCell sorted={column === 'wordsPerMinute' ? direction : null} onClick={this.sortHandler('wordsPerMinute')}>
                   {this.props.translate('statistics-table.reading-speed')}
                   <br />
-                  {`(${this.props.translate('statistics-table.wpm')})`}
+                  {`(${this.props.translate('statistics-table.words-per-minute')})`}
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'testResult' ? direction : null} onClick={this.sortHandler('testResult')}>
                   {this.props.translate('statistics-table.test-result')}
                 </Table.HeaderCell>
                 <Table.HeaderCell sorted={column === 'comprehensionResult' ? direction : null} onClick={this.sortHandler('comprehensionResult')}>
-                  {this.props.translate('statistics-table.comprehension-result')}
+                  {this.props.translate('statistics-table.comprehension-level')}
                 </Table.HeaderCell>
-                <Table.HeaderCell sorted={column === 'cpm' ? direction : null} onClick={this.sortHandler('cpm')}>
+                <Table.HeaderCell sorted={column === 'comprehensionPerMinute' ? direction : null} onClick={this.sortHandler('comprehensionPerMinute')}>
                   {this.props.translate('statistics-table.comprehension-speed')}
                   <br />
-                  {`(${this.props.translate('statistics-table.wpm')})`}
+                  {`(${this.props.translate('statistics-table.words-per-minute')})`}
                 </Table.HeaderCell>
               </Fragment> : null}
             {this.props.exercise === 'schulteTables' ?
@@ -75,8 +83,8 @@ export class StatisticsTable extends Component {
                 <Table.HeaderCell sorted={column === 'elapsedTime' ? direction : null} onClick={this.sortHandler('elapsedTime')}>
                   {this.props.translate('statistics-table.elapsed-time')}
                 </Table.HeaderCell>
-                <Table.HeaderCell sorted={column === 'spm' ? direction : null} onClick={this.sortHandler('spm')}>
-                  {this.props.translate('statistics-table.spm')}
+                <Table.HeaderCell sorted={column === 'symbolsPerMinute' ? direction : null} onClick={this.sortHandler('symbolsPerMinute')}>
+                  {this.props.translate('statistics-table.symbolsPerMinute')}
                 </Table.HeaderCell>
               </Fragment> : null}
             {this.props.exercise === 'concentration' ?
@@ -95,7 +103,7 @@ export class StatisticsTable extends Component {
             <Table.Row key={attempt.id} title={attempt.readingTextTitle ? attempt.readingTextTitle : null}>
               {this.props.exercise === 'readingExercises' ?
                 <Table.Cell>
-                  {this.props.translate(`exercises.title-${getExerciseById(attempt.exerciseId)}`)}
+                  {this.props.translate(`exercises.title-${attempt.exercise}`)}
                 </Table.Cell> : null}
               <Table.Cell collapsing>
                 {this.props.translate(`modification.${attempt.modification}`)}
@@ -110,13 +118,13 @@ export class StatisticsTable extends Component {
                   minute: 'numeric',
                 }).format(attempt.date)}
               </Table.Cell>
-              {['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].indexOf(this.props.exercise) !== -1 ?
+              {readingExercises.indexOf(this.props.exercise) !== -1 ?
                 <Fragment>
                   <Table.Cell collapsing>
                     {attempt.userReadingAttemptCount ? attempt.userReadingAttemptCount : this.props.translate('statistics.own-text')}
                   </Table.Cell>
                   <Table.Cell>
-                    {attempt.wpm}
+                    {attempt.wordsPerMinute}
                   </Table.Cell>
                   <Table.Cell
                     negative={!attempt.testResult || attempt.testResult === 0}
@@ -135,9 +143,9 @@ export class StatisticsTable extends Component {
                       null}
                   </Table.Cell>
                   <Table.Cell
-                    negative={attempt.cpm === null}
+                    negative={attempt.comprehensionPerMinute === null}
                   >
-                    {attempt.cpm}
+                    {attempt.comprehensionPerMinute}
                   </Table.Cell>
                 </Fragment> : null}
               {this.props.exercise === 'schulteTables' ?
@@ -149,9 +157,9 @@ export class StatisticsTable extends Component {
                       this.props.translate('statistics-table.not-recorded')}
                   </Table.Cell>
                   <Table.Cell
-                    negative={!attempt.spm}
+                    negative={!attempt.symbolsPerMinute}
                   >
-                    {attempt.spm !== null ? attempt.spm :
+                    {attempt.symbolsPerMinute !== null ? attempt.symbolsPerMinute :
                       this.props.translate('statistics-table.not-recorded')}
                   </Table.Cell>
                 </Fragment> : null}
@@ -203,8 +211,8 @@ StatisticsTable.propTypes = {
   exercise: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.instanceOf(Date).isRequired,
-    wpm: PropTypes.number,
-    spm: PropTypes.number,
+    wordsPerMinute: PropTypes.number,
+    symbolsPerMinute: PropTypes.number,
   })).isRequired,
   translate: PropTypes.func.isRequired,
 };
