@@ -31,7 +31,7 @@ import { QuestionTestAnswers } from '../containers/Exercise/TestAnswers/Question
 import { BlankTestAnswers } from '../containers/Exercise/TestAnswers/BlankTestAnswers';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import RegressionChart from '../components/Statistics/RegressionChart';
-import GeneralTable from '../components/Statistics/GeneralTable';
+import GroupTable from '../components/Statistics/GroupTable';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
 import ChangePasswordContainer from '../containers/Auth/ChangePassword';
@@ -384,11 +384,11 @@ storiesOf('RegressionChart', module)
     />
   ));
 
-storiesOf('GeneralTable', module)
+storiesOf('GroupTable', module)
   .add('Component', () => {
     store.dispatch(actionCreators.fetchGroupExerciseStatistics(4, store.getState().auth.token));
     return (
-      <GeneralTable
+      <GroupTable
         data={store.getState().statistics.groupExerciseStatistics}
         translate={translate}
       />

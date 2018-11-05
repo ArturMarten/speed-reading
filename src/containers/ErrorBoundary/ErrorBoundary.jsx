@@ -28,7 +28,9 @@ export class ErrorBoundary extends Component {
       actions: actionData.getActions(5),
       screenshot: null,
     };
-    this.props.onSubmit(submittedForm);
+    if (process.env.NODE_ENV !== 'development') {
+      this.props.onSubmit(submittedForm);
+    }
     this.setState({ error });
   }
 

@@ -562,7 +562,7 @@
     "description": ["Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul.", "Here you can select an exercise and see your statistics. Data is shown as a table or on a chart."],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
-    "general-table": ["Üldtabel", "General table"],
+    "group-table": ["Grupi tulemused", "Group results"],
     "group": ["Grupp", "Group"],
     "users": ["kasutajat", "users"],
     "user": ["Kasutaja", "User"],
@@ -632,20 +632,22 @@
     "result-percentage": ["Tulemus (%)", "Result (%)"],
     "exercise-result": ["Harjutuse tulemus", "Exercise result"]
   },
-  "general-statistics-table": {
+  "group-statistics-table": {
     "exercise": ["Harjutus", "Exercise"],
     "total-exercise-count": ["Harjutuste koguarv", "Exercise total count"],
-    "average-exercise-count": ["Keskmine harjutuste arv", "Average exercise count"],
+    "average-exercise-count-per-user": ["Keskmine harjutuste arv kasutaja kohta", "Average exercise count per user"],
     "average-initial-reading-speed": ["Keskmine lugemise algkiirus", "Average initial reading speed"],
     "average-final-reading-speed": ["Keskmine lugemise lõppkiirus", "Average final reading speed"],
+    "average-reading-speed-change-percentage": ["Keskmine lugemiskiiruse muutus", "Average reading speed change"],
     "average-initial-comprehension-speed": ["Keskmine omandamise algkiirus", "Average initial comprehension speed"],
     "average-final-comprehension-speed": ["Keskmine omandamise lõppkiirus", "Average final comprehension speed"],
+    "average-comprehension-speed-change-percentage": ["Keskmine omandamiskiiruse muutus", "Average comprehension speed change"],
     "average-initial-comprehension-level": ["Keskmine algne omandamistase", "Average initial comprehension level"],
     "average-final-comprehension-level": ["Keskmine lõpp omandamisetase", "Average final comprehension level"],
-    "average-speed-change-percentage": ["Keskmine kiiruse muutus", "Average speed change"],
-    "average-initial-speed": ["Keskmine algkiirus", "Average initial speed"],
-    "average-final-speed": ["Keskmine lõppkiirus", "Average final speed"],
-    "average-change-percentage": ["Keskmine arengu protsent", "Average change percentage"]
+    "average-comprehension-level-change-percentage": ["Keskmine omandamistaseme muutus", "Average comprehension level change"],
+    "average-initial-exercise-speed": ["Keskmine algkiirus", "Average initial speed"],
+    "average-final-exercise-speed": ["Keskmine lõppkiirus", "Average final speed"],
+    "average-exercise-speed-change-percentage": ["Keskmine kiiruse muutus", "Average speed change"]
   },
   "manage": {
     "title": ["Halda", "Manage"],

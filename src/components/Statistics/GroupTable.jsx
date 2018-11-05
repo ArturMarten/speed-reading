@@ -28,7 +28,7 @@ const helpExerciseNames = [
   'concentration',
 ];
 
-export class GeneralTable extends Component {
+export class GroupTable extends Component {
   state = {};
 
   render() {
@@ -157,7 +157,7 @@ export class GeneralTable extends Component {
           };
         } else {
           const averageInitialExerciseSpeed = getAverage(exerciseResults.map(({ initialExerciseSpeed }) => initialExerciseSpeed));
-          const averageFinalExerciseSpeed = getAverage(exerciseResults.map(({ finalSpeed }) => finalSpeed));
+          const averageFinalExerciseSpeed = getAverage(exerciseResults.map(({ finalExerciseSpeed }) => finalExerciseSpeed));
           const averageExerciseSpeedChange = averageFinalExerciseSpeed - averageInitialExerciseSpeed;
           const averageExerciseSpeedChangePercentage = (averageExerciseSpeedChange / averageInitialExerciseSpeed) * 100;
           aggregatedResult = {
@@ -176,26 +176,26 @@ export class GeneralTable extends Component {
 
     return (
       <Fragment>
-        <Table basic celled selectable sortable singleLine textAlign="center">
+        <Table basic celled selectable textAlign="center" compact fixed>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.exercise')}
+                {this.props.translate('group-statistics-table.exercise')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.total-exercise-count')}
+                {this.props.translate('group-statistics-table.total-exercise-count')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-exercise-count')}
+                {this.props.translate('group-statistics-table.average-exercise-count-per-user')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-initial-reading-speed')}
+                {this.props.translate('group-statistics-table.average-initial-reading-speed')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-final-reading-speed')}
+                {this.props.translate('group-statistics-table.average-final-reading-speed')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-speed-change-percentage')}
+                {this.props.translate('group-statistics-table.average-reading-speed-change-percentage')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -248,29 +248,29 @@ export class GeneralTable extends Component {
               })}
           </Table.Body>
         </Table>
-        <Table basic celled selectable sortable singleLine textAlign="center" fixed>
+        <Table basic celled selectable textAlign="center" compact fixed>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.exercise')}
+                {this.props.translate('group-statistics-table.exercise')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-initial-comprehension-speed')}
+                {this.props.translate('group-statistics-table.average-initial-comprehension-speed')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-final-comprehension-speed')}
+                {this.props.translate('group-statistics-table.average-final-comprehension-speed')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-speed-change-percentage')}
+                {this.props.translate('group-statistics-table.average-comprehension-speed-change-percentage')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-initial-comprehension-level')}
+                {this.props.translate('group-statistics-table.average-initial-comprehension-level')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-final-comprehension-level')}
+                {this.props.translate('group-statistics-table.average-final-comprehension-level')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-speed-change-percentage')}
+                {this.props.translate('group-statistics-table.average-comprehension-level-change-percentage')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -332,26 +332,26 @@ export class GeneralTable extends Component {
               })}
           </Table.Body>
         </Table>
-        <Table basic celled selectable sortable singleLine textAlign="center">
+        <Table basic celled selectable textAlign="center" compact fixed>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.exercise')}
+                {this.props.translate('group-statistics-table.exercise')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.total-exercise-count')}
+                {this.props.translate('group-statistics-table.total-exercise-count')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-exercise-count')}
+                {this.props.translate('group-statistics-table.average-exercise-count-per-user')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-initial-speed')}
+                {this.props.translate('group-statistics-table.average-initial-exercise-speed')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-final-speed')}
+                {this.props.translate('group-statistics-table.average-final-exercise-speed')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('general-statistics-table.average-speed-change-percentage')}
+                {this.props.translate('group-statistics-table.average-exercise-speed-change-percentage')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -409,4 +409,4 @@ export class GeneralTable extends Component {
   }
 }
 
-export default GeneralTable;
+export default GroupTable;

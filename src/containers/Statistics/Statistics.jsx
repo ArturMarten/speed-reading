@@ -7,7 +7,7 @@ import * as actionCreators from '../../store/actions';
 import { rolePermissions } from '../../store/reducers/profile';
 import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import RegressionChart from '../../components/Statistics/RegressionChart';
-import GeneralTable from '../../components/Statistics/GeneralTable';
+import GroupTable from '../../components/Statistics/GroupTable';
 import { getExerciseId } from '../../store/reducers/exercise';
 import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
 
@@ -87,6 +87,7 @@ export class Statistics extends Component {
   state = {
     activeIndex: 0,
     isTeacher: rolePermissions[this.props.role] >= rolePermissions.teacher,
+    isAdmin: rolePermissions[this.props.role] >= rolePermissions.admin,
     groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
     userId: this.props.userId,
     exercise: 'readingExercises',
@@ -111,7 +112,9 @@ export class Statistics extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.activeIndex !== this.state.activeIndex && this.state.activeIndex === 2) {
+    // TODO: Group statistics fetching fix
+    if (prevState.activeIndex !== this.state.activeIndex &&
+      this.state.activeIndex === 2 && Object.keys(this.props.groupExerciseStatistics).length === 0) {
       const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
       this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
     }
@@ -192,7 +195,7 @@ export class Statistics extends Component {
 
   timeFilter = attempt => (
     attempt.date >= new Date(this.state.startTime) &&
-    attempt.date <= new Date(this.state.endTime)
+    attempt.date <= new Date(`${this.state.endTime}T23:59:59Z`)
   );
 
   filterOutliersHandler = () => {
@@ -221,6 +224,7 @@ export class Statistics extends Component {
       }));
     const userExerciseData = this.props.userExerciseStatistics
       .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
+      .filter(attempt => !this.state.isAdmin || this.timeFilter(attempt))
       .filter(this.outlierFilter)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
     const totalExerciseTime = userExerciseData.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
@@ -276,6 +280,33 @@ export class Statistics extends Component {
             {groupFilter}
             {userFilter}
           </Form.Group> : null}
+      </Fragment>
+    );
+
+    const timeFilter = (
+      <Fragment>
+        <Form.Input
+          id="statistics-start"
+          name="startTime"
+          fluid
+          inline
+          type="date"
+          value={this.state.startTime}
+          onChange={this.timeChangeHandler}
+          loading={this.props.groupExerciseStatisticsStatus.loading}
+          label={this.props.translate('statistics.start-time')}
+        />
+        <Form.Input
+          id="statistics-end"
+          name="endTime"
+          fluid
+          inline
+          type="date"
+          value={this.state.endTime}
+          onChange={this.timeChangeHandler}
+          loading={this.props.groupExerciseStatisticsStatus.loading}
+          label={this.props.translate('statistics.end-time')}
+        />
       </Fragment>
     );
 
@@ -348,6 +379,10 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
+              {this.state.isAdmin ?
+                <Form.Group widths="equal">
+                  {timeFilter}
+                </Form.Group> : null}
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -411,6 +446,10 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
+              {this.state.isAdmin ?
+                <Form.Group widths="equal">
+                  {timeFilter}
+                </Form.Group> : null}
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -447,38 +486,19 @@ export class Statistics extends Component {
       },
       {
         menuItem: {
-          key: 'general-table',
+          key: 'group-table',
           icon: 'columns',
-          content: this.props.translate('statistics.general-table'),
-          disabled: !this.state.isTeacher || this.props.userExerciseStatisticsStatus.loading || this.props.groupExerciseStatisticsStatus.loading,
+          content: this.props.translate('statistics.group-table'),
+          disabled: (!this.state.isTeacher && this.props.groupId === null) ||
+                      this.props.userExerciseStatisticsStatus.loading ||
+                      this.props.groupExerciseStatisticsStatus.loading,
         },
         render: () => (
           <Tab.Pane>
             <Form>
               <Form.Group widths="equal">
-                {groupFilter}
-                <Form.Input
-                  id="statistics-start"
-                  name="startTime"
-                  fluid
-                  inline
-                  type="date"
-                  value={this.state.startTime}
-                  onChange={this.timeChangeHandler}
-                  loading={this.props.groupExerciseStatisticsStatus.loading}
-                  label={this.props.translate('statistics.start-time')}
-                />
-                <Form.Input
-                  id="statistics-end"
-                  name="endTime"
-                  fluid
-                  inline
-                  type="date"
-                  value={this.state.endTime}
-                  onChange={this.timeChangeHandler}
-                  loading={this.props.groupExerciseStatisticsStatus.loading}
-                  label={this.props.translate('statistics.end-time')}
-                />
+                {this.state.isTeacher ? groupFilter : null}
+                {timeFilter}
               </Form.Group>
             </Form>
             <div style={{ overflowX: 'auto' }}>
@@ -486,7 +506,7 @@ export class Statistics extends Component {
                 <Dimmer inverted active={this.props.groupExerciseStatisticsStatus.loading}>
                   <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                 </Dimmer>
-                <GeneralTable
+                <GroupTable
                   startTime={this.state.startTime}
                   endTime={this.state.endTime}
                   data={groupExerciseData}
