@@ -224,7 +224,7 @@ export class Statistics extends Component {
       }));
     const userExerciseData = this.props.userExerciseStatistics
       .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
-      .filter(attempt => !this.state.isAdmin || this.timeFilter(attempt))
+      .filter(attempt => !this.state.isTeacher || this.timeFilter(attempt))
       .filter(this.outlierFilter)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
     const totalExerciseTime = userExerciseData.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
@@ -379,7 +379,7 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              {this.state.isAdmin ?
+              {this.state.isTeacher ?
                 <Form.Group widths="equal">
                   {timeFilter}
                 </Form.Group> : null}
@@ -446,7 +446,7 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              {this.state.isAdmin ?
+              {this.state.isTeacher ?
                 <Form.Group widths="equal">
                   {timeFilter}
                 </Form.Group> : null}

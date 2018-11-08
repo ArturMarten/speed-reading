@@ -319,7 +319,8 @@ export class RegressionChart extends Component {
           .transition()
           .duration(TRANSITION_DURATION)
           .attr('cx', d => this.xScale(d[xField]))
-          .attr('cy', d => this.yScale(d[yField]));
+          .attr('cy', d => this.yScale(d[yField]))
+          .style('opacity', 1);
         // Add new datapoints
         dataPoints
           .data(data, d => d.id)

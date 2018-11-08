@@ -19,7 +19,8 @@ class ReleaseNotes extends Component {
                 </List.Header>
                 <List.Description>
                   <List.List>
-                    <List.Item>Lugemiskiiruse parandused</List.Item>
+                    <List.Item>Lugemiskiiruse valiku parandused</List.Item>
+                    <List.Item>Grupi statistika päringute kiiruse optimeerimine</List.Item>
                   </List.List>
                 </List.Description>
               </List.Content>
@@ -31,7 +32,7 @@ class ReleaseNotes extends Component {
                 </List.Header>
                 <List.Description>
                   <List.List>
-                    <List.Item>Lisatud üldstatistika</List.Item>
+                    <List.Item>Lisatud grupi keskmiste statistika</List.Item>
                     <List.Item>Parandused teksti küsimuste ja vastusevariantidega</List.Item>
                     <List.Item>Vigade parandused ja testimine</List.Item>
                   </List.List>
