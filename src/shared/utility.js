@@ -100,6 +100,8 @@ export const translateError = (translate, error) => {
   switch (error) {
     case 'Network Error':
       return translate('error.network-error');
+    case 'Request failed with status code 503':
+      return translate('error.server-maintenance');
     case 'There was a problem processing the requested URL':
       return translate('error.internal-server-error');
     case 'Authentication missing':

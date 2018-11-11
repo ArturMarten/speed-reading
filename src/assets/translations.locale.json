@@ -570,6 +570,13 @@
     "scale": ["Skaala", "Scale"],
     "start-time": ["Algusaeg", "Start time"],
     "end-time": ["Lõppaeg", "End time"],
+    "period": ["Periood", "Period"],
+    "period-not-defined": ["Määramata", "Not specified"],
+    "period-one-week": ["Üks nädal", "One week"],
+    "period-two-weeks": ["Kaks nädalat", "Two weeks"],
+    "period-three-weeks": ["Kolm nädalat", "Three weeks"],
+    "period-one-month": ["Üks kuu", "One month"],
+    "period-three-months": ["Kolm kuud", "Three months"],
     "filter-outliers": ["Eemalda ebarealistlikud väärtused", "Remove unrealistic values"],
     "total-attempt-count": ["Soorituste koguarv", "Total attempts"],
     "total-attempt-time": ["Harjutuste koguaeg", "Total attempts time"],
@@ -612,6 +619,7 @@
     "export": ["Expordi", "Export"]
   },
   "regression-chart": {
+    "no-data": ["Valitud perioodil andmed puuduvad", "No data in selected period"],
     "change": ["muutus", "change"],
     "average": ["keskmine", "average"],
     "standard-deviation": ["standardhälve", "standard deviation"],
@@ -770,6 +778,7 @@
     "account-registered-password-sent": ["Kasutajakonto registreeritud, parool saadeti e-postiga", "Account registered, password sent with an e-mail"]
   },
   "error": {
+    "server-maintenance": ["Hooldustööd serveris", "Server maintenance"],
     "network-error": ["Probleem serveri ühendusega", "Problem with server connection"],
     "internal-server-error": ["Serveris tekkis viga", "An error occurred in the server"],
     "authentication-missing": ["Autentimisväljad puuduvad", "Authentication fields missing"],

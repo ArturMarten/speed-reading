@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createMemoryHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
+import ReactGA from 'react-ga';
 
 // Styles
 /*
@@ -53,6 +54,13 @@ import App from './App';
 const history = createMemoryHistory({
   basename: '/~arturmar/',
 });
+
+// Google Analytics
+if (process.env.NODE_ENV !== 'development') {
+  ReactGA.initialize('UA-129049943-1');
+  ReactGA.pageview('/');
+  history.listen(location => ReactGA.pageview(location.pathname));
+}
 
 const store = configureStore(history);
 

@@ -2,6 +2,7 @@ import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { object } from '@storybook/addon-knobs';
 import { getTranslate, setActiveLanguage } from 'react-localize-redux';
 
 /* eslint-disable max-len */
@@ -85,9 +86,9 @@ storiesOf('Text editor', module)
 storiesOf('Text analysis', module)
   .add('Container', () => {
     const { selectedText } = store.getState().text;
-    const text = selectedText ? selectedText.plainText : '';
+    const plainText = selectedText ? selectedText.plainText : '';
     const language = 'estonian';
-    store.dispatch(actionCreators.analyzeText({ text, language }));
+    store.dispatch(actionCreators.analyzeText({ plainText, language }));
     return <TextAnalysisContainer open />;
   })
   .add('Component', () => (
@@ -257,11 +258,11 @@ storiesOf('Text exercise results', module)
     <TextExerciseResults
       open
       translate={translate}
-      result={{
+      result={object('Result', {
         elapsedTime: 224200,
         wpm: 306,
         cps: 35,
-      }}
+      })}
       selectedText={store.getState().text.selectedText}
     />));
 
@@ -330,13 +331,13 @@ storiesOf('RegressionChart', module)
   .add('Time scale with no data', () => (
     <RegressionChart
       title={translate('regression-chart.reading-speed-trend')}
-      xLabel={translate('regression-chart.date')}
+      xLabel={translate('regression-chart.index')}
       yLabel={translate('regression-chart.speed-words-per-minute')}
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={[]}
-      xField="date"
+      data={object('Data', [])}
+      xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
       dataFillColor={['#9999FF']}
@@ -344,38 +345,63 @@ storiesOf('RegressionChart', module)
       translate={translate}
     />
   ))
-  .add('Time scale with one value', () => (
-    <RegressionChart
-      title={translate('regression-chart.reading-speed-trend')}
-      xLabel={translate('regression-chart.date')}
-      yLabel={translate('regression-chart.speed-words-per-minute')}
-      legendTitles={[translate('regression-chart.reading-speed')]}
-      width={1000}
-      height={400}
-      data={[
-        { date: new Date(new Date() - (6 ** 11)), wordsPerMinute: 185 },
-      ]}
-      xField="date"
-      yFields={['wordsPerMinute']}
-      dataStrokeColor={['#4C4CFF']}
-      dataFillColor={['#9999FF']}
-      dataLineColor={['#0000FF']}
-      translate={translate}
-    />
-  ))
+  .add('Time scale with one value', () => {
+    return (
+      <RegressionChart
+        title={translate('regression-chart.reading-speed-trend')}
+        xLabel={translate('regression-chart.index')}
+        yLabel={translate('regression-chart.speed-words-per-minute')}
+        legendTitles={[translate('regression-chart.reading-speed')]}
+        width={1000}
+        height={400}
+        data={object('Data', [
+          { index: 1, wordsPerMinute: 185 },
+        ])}
+        xField="index"
+        yFields={['wordsPerMinute']}
+        dataStrokeColor={['#4C4CFF']}
+        dataFillColor={['#9999FF']}
+        dataLineColor={['#0000FF']}
+        translate={translate}
+      />
+    );
+  })
   .add('Time scale with two values', () => (
     <RegressionChart
       title={translate('regression-chart.reading-speed-trend')}
-      xLabel={translate('regression-chart.date')}
+      xLabel={translate('regression-chart.index')}
       yLabel={translate('regression-chart.speed-words-per-minute')}
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={[
-        { date: new Date(new Date() - (6 ** 11)), wordsPerMinute: 185 },
-        { date: new Date(new Date() - (4 ** 10)), wordsPerMinute: 192 },
-      ]}
-      xField="date"
+      data={object('Data', [
+        { index: 1, wordsPerMinute: 185 },
+        { index: 2, wordsPerMinute: 192 },
+      ])}
+      xField="index"
+      yFields={['wordsPerMinute']}
+      dataStrokeColor={['#4C4CFF']}
+      dataFillColor={['#9999FF']}
+      dataLineColor={['#0000FF']}
+      translate={translate}
+    />
+  ))
+  .add('Time scale with multiple values', () => (
+    <RegressionChart
+      title={translate('regression-chart.reading-speed-trend')}
+      xLabel={translate('regression-chart.index')}
+      yLabel={translate('regression-chart.speed-words-per-minute')}
+      legendTitles={[translate('regression-chart.reading-speed')]}
+      width={1000}
+      height={400}
+      data={object('Data', [
+        { index: 1, wordsPerMinute: 185 },
+        { index: 2, wordsPerMinute: 192 },
+        { index: 3, wordsPerMinute: 190 },
+        { index: 4, wordsPerMinute: 204 },
+        { index: 5, wordsPerMinute: 197 },
+      ])}
+      xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
       dataFillColor={['#9999FF']}
