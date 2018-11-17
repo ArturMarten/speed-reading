@@ -110,7 +110,7 @@
   },
   "about": {
     "modal-header": ["Rakenduse kohta", "About application"],
-    "title": ["Kiirlugemine 5.0", "Kiirlugemine 5.0"],
+    "title": ["Kiirlugemine 5.1", "Kiirlugemine 5.1"],
     "developer": ["Arendaja", "Developer"],
     "developer-name": ["Marten Siiber", "Marten Siiber"],
     "contributed-creatively": ["Loovalt panustasid", "Contribute creatively"],
@@ -164,8 +164,8 @@
   "intro-video": {
     "header": ["Tutvustav video", "Introduction video"],
     "being-made": ["Valmimisel..", "Being made.."],
-    "title": ["Kiirlugemine 5.0 tutvustav video", "Kiirlugemine 5.0 introduction video"],
-    "no-iframe": ["Kiirlugemine 5.0 tutvustav video", "Kiirlugemine 5.0 introduction video"],
+    "title": ["Kiirlugemine 5.1 tutvustav video", "Kiirlugemine 5.1 introduction video"],
+    "no-iframe": ["Kiirlugemine 5.1 tutvustav video", "Kiirlugemine 5.1 introduction video"],
     "authentication": ["Sisselogimine", "Authentication"],
     "add-user": ["Kasutaja lisamine", "Adding user"]
   },

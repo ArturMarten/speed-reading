@@ -63,13 +63,6 @@ export class RegressionChart extends Component {
     } = this.state;
     let { data } = this.props;
     const { xField, yFields } = this.props;
-    if (data.length === 0) {
-      return;
-    }
-    const svg = select(this.svgRef);
-    const chart = svg.append('g')
-      .attr('class', 'chart')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     data = data.filter(d => d[xField] !== null && d[yFields[0]] !== null);
     // console.log(data);
@@ -78,9 +71,10 @@ export class RegressionChart extends Component {
     const minXValue = Math.min(...xValues);
     const maxXValue = Math.max(...xValues);
     const maxYValue = Math.max(...yValues);
-    const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING;
+    const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
+    const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING || 1;
     const verticalSpacing = maxYValue * VERTICAL_SPACING;
-    if (data[0][xField] instanceof Date) {
+    if (data[0] && data[0][xField] instanceof Date) {
       this.xScale = widthScale.domain([new Date(minXValue - horizontalSpacing), new Date(maxXValue + horizontalSpacing)]);
     } else {
       this.xScale = widthScale.domain([minXValue - horizontalSpacing, maxXValue + horizontalSpacing]);
@@ -92,10 +86,15 @@ export class RegressionChart extends Component {
 
     const initial = this.yScale.invert(intercept + (slope * this.xScale(minXValue)));
     const end = this.yScale.invert(intercept + (slope * this.xScale(maxXValue)));
-    const change = end - initial;
+    const change = end - initial || 0;
     const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
-    const average = getAverage(yValues);
-    const standardDeviation = getStandardDeviation(yValues, average);
+    const average = getAverage(yValues) || 0;
+    const standardDeviation = getStandardDeviation(yValues, average) || 0;
+
+    const svg = select(this.svgRef);
+    const chart = svg.append('g')
+      .attr('class', 'chart')
+      .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Append title
     svg.append('text')
@@ -105,14 +104,24 @@ export class RegressionChart extends Component {
       .attr('transform', `translate(${margin.left - 10}, ${FONT_SIZE + 3})`)
       .text(this.props.title);
 
+    // Append no data message
+    svg.append('text')
+      .attr('class', 'no-data')
+      .attr('dy', '-.7em')
+      .style('opacity', data.length === 0 ? 1 : 0)
+      .style('text-anchor', 'middle')
+      .attr('x', margin.left + width / 2)
+      .attr('y', margin.top + height / 2)
+      .text(this.props.translate('regression-chart.no-data'));
+
     // Append axis
     chart.append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${height})`)
       .style('font-size', FONT_SIZE)
       .call(
-        data[0][this.props.xField] instanceof Date ?
-          axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')).tickSizeInner(-height)
+        data[0] && data[0][this.props.xField] instanceof Date ?
+          axisBottom(this.xScale).tickFormat(timeFormat('%d/%m')).tickSizeInner(-height)
           : axisBottom(this.xScale).tickSizeInner(-height),
       )
       .append('text')
@@ -178,11 +187,11 @@ export class RegressionChart extends Component {
     // Append datapoints
     this.props.yFields.forEach((yField, index) => {
       chart.append('g')
-        .selectAll(`.data-point-${yField}`)
+        .selectAll('.data-point')
         .data(data, d => d.id)
         .enter()
         .append('circle')
-        .attr('class', `data-point-${yField}`)
+        .attr('class', 'data-point')
         .attr('cx', d => this.xScale(d[xField]))
         .attr('cy', d => this.yScale(d[yField]))
         .attr('r', DATA_POINT_RADIUS)
@@ -208,7 +217,7 @@ export class RegressionChart extends Component {
     chart.append('path')
       .attr('class', 'regression-line')
       .style('stroke', this.props.dataLineColor[0])
-      .datum([minXValue, maxXValue])
+      .data(linePoints)
       .attr('d', newLine);
   }
 
@@ -228,7 +237,6 @@ export class RegressionChart extends Component {
     const svg = select(this.svgRef);
     const chart = svg.select('g');
     if (prevProps.xField !== xField) {
-      // console.log('Scale changed!');
       chart.select('.x-axis .label')
         .transition()
         .duration(TRANSITION_DURATION)
@@ -239,7 +247,7 @@ export class RegressionChart extends Component {
     }
     // console.log('Regression chart update');
     // Move data from render method to parent state
-    if (prevProps.data !== data && data.length > 0) {
+    if (prevProps.data !== data) {
       data = data.filter(d => d[xField] !== null && d[yFields[0]] !== null);
       // Update scales
       const xValues = data.map(d => d[xField]);
@@ -247,9 +255,10 @@ export class RegressionChart extends Component {
       const minXValue = Math.min(...xValues);
       const maxXValue = Math.max(...xValues);
       const maxYValue = Math.max(...yValues);
-      const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING;
+      const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
+      const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING || 1;
       const verticalSpacing = maxYValue * VERTICAL_SPACING;
-      if (data[0][xField] instanceof Date) {
+      if (data[0] && data[0][xField] instanceof Date) {
         this.xScale = widthScale.domain([new Date(minXValue - horizontalSpacing), new Date(maxXValue + horizontalSpacing)]);
       } else {
         this.xScale = widthScale.domain([minXValue - horizontalSpacing, maxXValue + horizontalSpacing]);
@@ -260,17 +269,23 @@ export class RegressionChart extends Component {
       const [slope, intercept] = leastSquares(xSeries, ySeries);
       const initial = this.yScale.invert(intercept + (slope * this.xScale(minXValue)));
       const end = this.yScale.invert(intercept + (slope * this.xScale(maxXValue)));
-      const change = end - initial;
+      const change = end - initial || 0;
       const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
-      const average = getAverage(yValues);
-      const standardDeviation = getStandardDeviation(yValues, average);
+      const average = getAverage(yValues) || 0;
+      const standardDeviation = getStandardDeviation(yValues, average) || 0;
+
+      // Update no data message
+      svg.select('.no-data')
+        .transition()
+        .duration(TRANSITION_DURATION / 2)
+        .style('opacity', data.length === 0 ? 1 : 0);
 
       // Update axis
-      if (data[0][this.props.xField] instanceof Date) {
+      if (data[0] && data[0][this.props.xField] instanceof Date) {
         chart.select('.x-axis')
           .transition()
           .duration(TRANSITION_DURATION)
-          .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m/%y')).tickSizeInner(-height));
+          .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m')).tickSizeInner(-height));
       } else {
         chart.select('.x-axis')
           .transition()
@@ -304,29 +319,28 @@ export class RegressionChart extends Component {
         .text(`${standardDeviation.toFixed(2)}`);
 
       yFields.forEach((yField, index) => {
-        const dataPoints = chart.selectAll(`.data-point-${yField}`);
+        const dataPoints = chart.selectAll('.data-point').data(data);
         // Remove old datapoints
         dataPoints
-          .data(data)
           .exit()
           .transition()
-          .duration(TRANSITION_DURATION)
+          .duration(TRANSITION_DURATION / 2)
           .style('opacity', 0)
           .remove();
         // Update existing datapoints
         dataPoints
-          .data(data, d => d.id)
           .transition()
           .duration(TRANSITION_DURATION)
           .attr('cx', d => this.xScale(d[xField]))
           .attr('cy', d => this.yScale(d[yField]))
+          .style('fill', this.props.dataFillColor[index])
+          .style('stroke', this.props.dataStrokeColor[index])
           .style('opacity', 1);
         // Add new datapoints
         dataPoints
-          .data(data, d => d.id)
           .enter()
           .append('circle')
-          .attr('class', `data-point-${yField}`)
+          .attr('class', 'data-point')
           .style('opacity', 0)
           .style('stroke', this.props.dataStrokeColor[index])
           .style('fill', this.props.dataFillColor[index])
@@ -334,7 +348,7 @@ export class RegressionChart extends Component {
           .attr('cy', d => this.yScale(d[yField]))
           .attr('r', DATA_POINT_RADIUS)
           .transition()
-          .duration(TRANSITION_DURATION)
+          .duration(TRANSITION_DURATION / 2)
           .style('opacity', 1);
       });
 
@@ -342,11 +356,29 @@ export class RegressionChart extends Component {
       const newLine = line()
         .x(d => this.xScale(d))
         .y(d => intercept + (slope * this.xScale(d)));
-      chart.select('.regression-line')
-        .datum([minXValue, maxXValue])
+      const regressionLine = chart.selectAll('.regression-line').data(linePoints);
+      regressionLine
+        .enter()
+        .append('path')
+        .attr('class', 'regression-line')
+        .style('opacity', 0)
+        .style('stroke', this.props.dataLineColor[0])
+        .attr('d', newLine)
+        .transition()
+        .duration(TRANSITION_DURATION / 2)
+        .style('opacity', 1);
+      regressionLine
         .transition()
         .duration(TRANSITION_DURATION)
-        .attr('d', newLine);
+        .attr('d', newLine)
+        .style('opacity', 1)
+        .style('stroke', this.props.dataLineColor[0]);
+      regressionLine
+        .exit()
+        .transition()
+        .duration(TRANSITION_DURATION / 2)
+        .style('opacity', 0)
+        .remove();
     } else {
       // console.log('Props changed');
     }
@@ -369,9 +401,7 @@ RegressionChart.propTypes = {
   xLabel: PropTypes.string.isRequired,
   yLabel: PropTypes.string.isRequired,
   xField: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.shape({
-    date: PropTypes.instanceOf(Date).isRequired,
-  })).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   dataStrokeColor: PropTypes.arrayOf(PropTypes.string).isRequired,
   dataFillColor: PropTypes.arrayOf(PropTypes.string).isRequired,
   dataLineColor: PropTypes.arrayOf(PropTypes.string).isRequired,

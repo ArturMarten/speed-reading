@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -10,6 +10,25 @@ import RegressionChart from '../../components/Statistics/RegressionChart';
 import GroupTable from '../../components/Statistics/GroupTable';
 import { getExerciseId } from '../../store/reducers/exercise';
 import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
+
+const getPeriodTime = (period) => {
+  switch (period) {
+    case 'one-day':
+      return 24 * 60 * 60 * 1000;
+    case 'one-week':
+      return 7 * 24 * 60 * 60 * 1000;
+    case 'two-weeks':
+      return 14 * 24 * 60 * 60 * 1000;
+    case 'three-weeks':
+      return 21 * 24 * 60 * 60 * 1000;
+    case 'one-month':
+      return 30.4398 * 24 * 60 * 60 * 1000;
+    case 'three-months':
+      return 91.3194 * 24 * 60 * 60 * 1000;
+    default:
+      return 0;
+  }
+};
 
 export class Statistics extends Component {
   exerciseCharts = [
@@ -84,10 +103,17 @@ export class Statistics extends Component {
     { text: this.props.translate('statistics.exercise-time-spent'), value: 'time', disabled: true },
   ];
 
+  periodOptions = [
+    { text: this.props.translate('statistics.period-not-defined'), value: 'not-defined' },
+    { text: this.props.translate('statistics.period-one-week'), value: 'one-week' },
+    { text: this.props.translate('statistics.period-two-weeks'), value: 'two-weeks' },
+    { text: this.props.translate('statistics.period-three-weeks'), value: 'three-weeks' },
+    { text: this.props.translate('statistics.period-one-month'), value: 'one-month' },
+    { text: this.props.translate('statistics.period-three-months'), value: 'three-months' },
+  ];
+
   state = {
     activeIndex: 0,
-    isTeacher: rolePermissions[this.props.role] >= rolePermissions.teacher,
-    isAdmin: rolePermissions[this.props.role] >= rolePermissions.admin,
     groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
     userId: this.props.userId,
     exercise: 'readingExercises',
@@ -96,11 +122,37 @@ export class Statistics extends Component {
     xLabel: this.props.translate('regression-chart.index'),
     startTime: new Date(2018, 2, 2).toISOString().split('T')[0],
     endTime: new Date().toISOString().split('T')[0],
+    period: 'not-defined',
     filterOutliers: true,
   };
 
   componentDidMount() {
-    if (this.state.isTeacher) {
+    document.addEventListener('keydown', this.preventDefault);
+    document.addEventListener('keyup', this.keyUpHandler);
+    if (this.props.isAuthenticated) {
+      this.fetchInitialData();
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.isAuthenticated && this.props.isAuthenticated) {
+      this.fetchInitialData();
+    }
+    // TODO: Group statistics fetching fix
+    if (prevState.activeIndex !== this.state.activeIndex &&
+      this.state.activeIndex === 2 && Object.keys(this.props.groupExerciseStatistics).length === 0) {
+      const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
+      this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.preventDefault);
+    document.removeEventListener('keyup', this.keyUpHandler);
+  }
+
+  fetchInitialData = () => {
+    if (this.props.isTeacher) {
       if (this.props.users.length === 0) {
         this.props.onFetchUsers(this.props.token);
       }
@@ -109,15 +161,6 @@ export class Statistics extends Component {
       }
     }
     this.props.onFetchUserExerciseStatistics(this.props.userId, this.props.token);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // TODO: Group statistics fetching fix
-    if (prevState.activeIndex !== this.state.activeIndex &&
-      this.state.activeIndex === 2 && Object.keys(this.props.groupExerciseStatistics).length === 0) {
-      const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
-      this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
-    }
   }
 
   tabChangeHandler = (event, { activeIndex }) => this.setState({ activeIndex });
@@ -176,6 +219,7 @@ export class Statistics extends Component {
   }
 
   timeChangeHandler = (event, { name, value }) => {
+    const { startTime, endTime, period } = this.state;
     let newTime = value;
     if (newTime === '') {
       const currentTime = new Date(this.state[name]);
@@ -186,9 +230,94 @@ export class Statistics extends Component {
       }
       [newTime] = currentTime.toISOString().split('T');
     }
+    if (period !== 'not-defined') {
+      const periodTime = getPeriodTime(period);
+      const dayCorrection = getPeriodTime('one-day');
+      const currentStartTime = new Date(startTime);
+      const currentEndTime = new Date(endTime);
+      let newStartTime = currentStartTime;
+      let newEndTime = currentEndTime;
+      if (name === 'startTime') {
+        newStartTime = new Date(newTime);
+        newEndTime = new Date(newStartTime.getTime() + periodTime - dayCorrection);
+      } else {
+        newEndTime = new Date(newTime);
+        newStartTime = new Date(newEndTime.getTime() - periodTime + dayCorrection);
+      }
+      const [changedStartTime] = newStartTime.toISOString().split('T');
+      const [changedEndTime] = newEndTime.toISOString().split('T');
+      this.setState({
+        startTime: changedStartTime,
+        endTime: changedEndTime,
+      });
+    } else {
+      this.setState({
+        [name]: newTime,
+      });
+    }
+  }
+
+  periodSelectionHandler = (event, { value }) => {
+    const { startTime, endTime } = this.state;
+    let changedStartTime = startTime;
+    if (value !== 'not-defined') {
+      const currentEndTime = new Date(endTime);
+      const periodTime = getPeriodTime(value);
+      const dayCorrection = getPeriodTime('one-day');
+      const newStartTime = new Date(currentEndTime.getTime() - periodTime + dayCorrection);
+      [changedStartTime] = newStartTime.toISOString().split('T');
+    }
     this.setState({
-      [name]: newTime,
+      period: value,
+      startTime: changedStartTime,
     });
+  }
+
+  periodChangeHandler = (event, { name }) => {
+    const { startTime, endTime, period } = this.state;
+    const periodTime = getPeriodTime(period);
+    const currentStartTime = new Date(startTime);
+    const currentEndTime = new Date(endTime);
+    let newStartTime = currentStartTime;
+    let newEndTime = currentEndTime;
+    if (name === 'prev') {
+      newStartTime = new Date(currentStartTime.getTime() - periodTime);
+      newEndTime = new Date(currentEndTime.getTime() - periodTime);
+    } else {
+      newStartTime = new Date(currentStartTime.getTime() + periodTime);
+      newEndTime = new Date(currentEndTime.getTime() + periodTime);
+    }
+    const [changedStartTime] = newStartTime.toISOString().split('T');
+    const [changedEndTime] = newEndTime.toISOString().split('T');
+    this.setState({
+      startTime: changedStartTime,
+      endTime: changedEndTime,
+    });
+  }
+
+  preventDefault = (event) => {
+    const { key } = event;
+    if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
+      event.preventDefault();
+    }
+  }
+
+  keyUpHandler = (event) => {
+    event.preventDefault();
+    const { key } = event;
+    switch (key) {
+      case 'ArrowLeft': {
+        this.periodChangeHandler(event, { name: 'prev' });
+        break;
+      }
+      case 'ArrowRight': {
+        this.periodChangeHandler(event, { name: 'next' });
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 
   outlierFilter = attempt => !this.state.filterOutliers || !attempt.wordsPerMinute || attempt.wordsPerMinute <= 500;
@@ -224,7 +353,7 @@ export class Statistics extends Component {
       }));
     const userExerciseData = this.props.userExerciseStatistics
       .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
-      .filter(attempt => !this.state.isTeacher || this.timeFilter(attempt))
+      .filter(attempt => this.timeFilter(attempt))
       .filter(this.outlierFilter)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
     const totalExerciseTime = userExerciseData.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
@@ -275,7 +404,7 @@ export class Statistics extends Component {
 
     const userAndGroupFilter = (
       <Fragment>
-        {this.state.isTeacher ?
+        {this.props.isTeacher ?
           <Form.Group widths="equal">
             {groupFilter}
             {userFilter}
@@ -307,6 +436,42 @@ export class Statistics extends Component {
           loading={this.props.groupExerciseStatisticsStatus.loading}
           label={this.props.translate('statistics.end-time')}
         />
+        <Form.Field>
+          <label
+            htmlFor="statistics-period"
+            style={{ margin: 0 }}
+          >
+            {this.props.translate('statistics.period')}
+          </label>
+          <Dropdown
+            id="statistics-period"
+            name="period"
+            compact
+            selection
+            value={this.state.period}
+            onChange={this.periodSelectionHandler}
+            options={this.periodOptions}
+            style={{ width: '50%' }}
+          />
+          <Button.Group basic style={{ width: '50%' }}>
+            <Button
+              id="statistics-period-prev"
+              name="prev"
+              type="button"
+              disabled={this.state.period === 'not-defined'}
+              icon="angle double left"
+              onClick={this.periodChangeHandler}
+            />
+            <Button
+              id="statistics-period-next"
+              name="next"
+              type="button"
+              disabled={this.state.period === 'not-defined'}
+              icon="angle double right"
+              onClick={this.periodChangeHandler}
+            />
+          </Button.Group>
+        </Form.Field>
       </Fragment>
     );
 
@@ -379,10 +544,9 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              {this.state.isTeacher ?
-                <Form.Group widths="equal">
-                  {timeFilter}
-                </Form.Group> : null}
+              <Form.Group widths="equal">
+                {timeFilter}
+              </Form.Group>
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -446,10 +610,9 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              {this.state.isTeacher ?
-                <Form.Group widths="equal">
-                  {timeFilter}
-                </Form.Group> : null}
+              <Form.Group widths="equal">
+                {timeFilter}
+              </Form.Group>
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -489,7 +652,7 @@ export class Statistics extends Component {
           key: 'group-table',
           icon: 'columns',
           content: this.props.translate('statistics.group-table'),
-          disabled: (!this.state.isTeacher && this.props.groupId === null) ||
+          disabled: (!this.props.isTeacher && this.props.groupId === null) ||
                       this.props.userExerciseStatisticsStatus.loading ||
                       this.props.groupExerciseStatisticsStatus.loading,
         },
@@ -497,7 +660,9 @@ export class Statistics extends Component {
           <Tab.Pane>
             <Form>
               <Form.Group widths="equal">
-                {this.state.isTeacher ? groupFilter : null}
+                {this.props.isTeacher ? groupFilter : null}
+              </Form.Group>
+              <Form.Group widths="equal">
                 {timeFilter}
               </Form.Group>
             </Form>
@@ -537,8 +702,11 @@ export class Statistics extends Component {
 }
 
 const mapStateToProps = state => ({
+  isAuthenticated: state.auth.token !== null,
   token: state.auth.token,
   role: state.profile.role,
+  isTeacher: rolePermissions[state.profile.role] >= rolePermissions.teacher,
+  isAdmin: rolePermissions[state.profile.role] >= rolePermissions.admin,
   groupId: state.profile.groupId,
   userId: state.auth.userId,
   usersStatus: state.user.usersStatus,

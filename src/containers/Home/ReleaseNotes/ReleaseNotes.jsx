@@ -15,11 +15,24 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.9 (arendamisel)
+                  Versioon 5.1.10 (arendamisel)
                 </List.Header>
                 <List.Description>
                   <List.List>
+                    <List.Item>Abiharjutuste statistika parandused</List.Item>
                     <List.Item>Lugemiskiiruse valiku parandused</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>
+                  Versioon 5.1.9 (12.10.2018)
+                </List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Lisatud statistika ajavahemiku valik</List.Item>
                     <List.Item>Grupi statistika päringute kiiruse optimeerimine</List.Item>
                   </List.List>
                 </List.Description>

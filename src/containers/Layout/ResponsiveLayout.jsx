@@ -87,13 +87,14 @@ export class ResponsiveLayout extends Component {
   }
 
   render() {
-    const { children } = this.props;
-    const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;
-    const isPermittedToManageUsers = rolePermissions[this.props.role] >= rolePermissions.teacher;
+    const { role, children } = this.props;
+    const isPermittedToModifyTexts = rolePermissions[role] >= rolePermissions.editor;
+    const isPermittedToManageUsers = rolePermissions[role] >= rolePermissions.teacher;
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
-          {this.state.authOpened || !this.props.isAuthenticated ? <Auth open={this.state.authOpened} /> : null}
+          {this.state.authOpened || (!this.props.isAuthenticated) ?
+            <Auth open={this.state.authOpened} /> : null}
           {this.state.profileSettingsOpened ?
             <ProfileSettings open={this.state.profileSettingsOpened} onClose={this.profileSettingsToggleHandler} /> : null}
           {this.state.changePasswordOpened ?
@@ -305,8 +306,7 @@ export class ResponsiveLayout extends Component {
                   to="/"
                 >
                   <Icon color="blue" name="book" size="big" />
-                  {this.props.translate('menu.title')}&nbsp;
-                  {environment.version}
+                  {`${this.props.translate('menu.title')} ${environment.version}`}
                 </Menu.Item>
               </Menu>
             </Responsive>
@@ -319,8 +319,7 @@ export class ResponsiveLayout extends Component {
                   to="/"
                 >
                   <Icon color="blue" name="book" size="big" />
-                  {this.props.translate('menu.title')}&nbsp;
-                  {environment.version}
+                  {`${this.props.translate('menu.title')} ${environment.version}`}
                 </Menu.Item>
                 <Menu.Item
                   as={Link}
