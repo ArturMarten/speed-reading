@@ -3,6 +3,7 @@ import pixelmatch from 'pixelmatch';
 import fs from 'fs';
 import { List } from 'immutable';
 import { ContentState, convertFromHTML, ContentBlock, genKey } from 'draft-js';
+import { createImageData } from 'canvas';
 import { writeText } from './CanvasUtils';
 
 const imgOutputFolder = `${__dirname}/output`;
@@ -24,7 +25,7 @@ export const logJSON = (json) => {
 const getPixelDifference = (expectedContext, actualContext, diffContext, canvasWidth, canvasHeight) => {
   const expectedImage = expectedContext.getImageData(0, 0, canvasWidth, canvasHeight);
   const actualImage = actualContext.getImageData(0, 0, canvasWidth, canvasHeight);
-  const diffImage = diffContext.createImageData(canvasWidth, canvasHeight);
+  const diffImage = createImageData(canvasWidth, canvasHeight);
   const pixelDiff = pixelmatch(expectedImage.data, actualImage.data, diffImage.data, canvasWidth, canvasHeight);
   diffContext.putImageData(diffImage, 0, 0);
   return pixelDiff;
