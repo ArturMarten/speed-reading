@@ -8,7 +8,6 @@ cache:
 build:
   stage: build
   script:
-   - npm rebuild
    - npm install
 
 test:
