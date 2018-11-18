@@ -1,4 +1,4 @@
-image: node:8.11.4
+image: node:10.13.0
 
 # Cache modules between builds
 cache:
