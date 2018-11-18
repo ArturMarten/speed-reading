@@ -5,7 +5,7 @@ import { axisBottom, axisLeft } from 'd3-axis';
 import { timeFormat } from 'd3-time-format';
 // eslint-disable-next-line no-unused-vars
 import { transition } from 'd3-transition';
-import { select } from 'd3-selection';
+import { select, event } from 'd3-selection';
 import { line } from 'd3-shape';
 
 import './RegressionChart.css';
@@ -18,7 +18,7 @@ const margin = {
   left: 50,
 };
 
-const DATA_POINT_RADIUS = 4;
+const DATA_POINT_RADIUS = 4.5;
 const TRANSITION_DURATION = 2000;
 const FONT_SIZE = 12;
 const HORIZONTAL_SPACING = 0.05;
@@ -92,9 +92,6 @@ export class RegressionChart extends Component {
     const standardDeviation = getStandardDeviation(yValues, average) || 0;
 
     const svg = select(this.svgRef);
-    const chart = svg.append('g')
-      .attr('class', 'chart')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Append title
     svg.append('text')
@@ -110,9 +107,14 @@ export class RegressionChart extends Component {
       .attr('dy', '-.7em')
       .style('opacity', data.length === 0 ? 1 : 0)
       .style('text-anchor', 'middle')
+      .style('user-select', 'none')
       .attr('x', margin.left + width / 2)
       .attr('y', margin.top + height / 2)
       .text(this.props.translate('regression-chart.no-data'));
+
+    const chart = svg.append('g')
+      .attr('class', 'chart')
+      .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Append axis
     chart.append('g')
@@ -144,6 +146,7 @@ export class RegressionChart extends Component {
       .attr('class', 'legend')
       .attr('transform', `translate(${width * 0.4}, ${FONT_SIZE})`);
     legend.append('rect')
+      .attr('class', 'legend-color')
       .attr('x', 0)
       .attr('y', 0)
       .attr('width', 12)
@@ -153,36 +156,50 @@ export class RegressionChart extends Component {
       .attr('x', 20)
       .attr('y', 10);
     legendText.append('tspan')
-      .text(`${this.props.legendTitles[0]} [${this.props.translate('regression-chart.change')}: `);
+      .attr('class', 'legend-title')
+      .text(this.props.legendTitles[0]);
     legendText.append('tspan')
-      .attr('class', 'change')
+      .text(` [${this.props.translate('regression-chart.change')}: `);
+    legendText.append('tspan')
+      .attr('class', 'legend-change')
       .style('fill', change >= 0 ? 'green' : 'red')
       .text(`${change > 0 ? '+' : ''}${change.toFixed(0)}`);
     legendText.append('tspan')
       .text(' (');
     legendText.append('tspan')
-      .attr('class', 'changePercentage')
+      .attr('class', 'legend-change-percentage')
       .style('fill', changePercentage >= 0 ? 'green' : 'red')
       .text(`${changePercentage > 0 ? '+' : ''}${changePercentage.toFixed(2)}%`);
     legendText.append('tspan')
       .text(`), ${this.props.translate('regression-chart.average')}: `);
     legendText.append('tspan')
-      .attr('class', 'average')
+      .attr('class', 'legend-average')
       .text(`${average.toFixed(2)}`);
     legendText.append('tspan')
       .text(`, ${this.props.translate('regression-chart.standard-deviation')}: `);
     legendText.append('tspan')
-      .attr('class', 'standard-deviation')
+      .attr('class', 'legend-standard-deviation')
       .text(`${standardDeviation.toFixed(2)}`);
     legendText.append('tspan')
       .text(']');
 
     // Append tooltip
-    const tooltip = chart.append('g')
-      .attr('id', 'tooltip')
+    if (select('#tooltip').empty()) {
+      select('#root').append('div').attr('id', 'tooltip');
+    }
+    select('#tooltip')
       .style('visibility', 'hidden');
 
-    const tooltipLabel = tooltip.append('text');
+    // Append regression line
+    const newLine = line()
+      .x(d => this.xScale(d))
+      .y(d => intercept + (slope * this.xScale(d)));
+
+    chart.append('path')
+      .attr('class', 'regression-line')
+      .style('stroke', this.props.dataLineColor[0])
+      .data(linePoints)
+      .attr('d', newLine);
 
     // Append datapoints
     this.props.yFields.forEach((yField, index) => {
@@ -198,27 +215,12 @@ export class RegressionChart extends Component {
         .style('fill', this.props.dataFillColor[index])
         .style('stroke', this.props.dataStrokeColor[index])
         .on('mouseover', (d) => {
-          const x = this.xScale(d[xField]);
-          const y = this.yScale(d[yField]);
-          tooltip.style('visibility', 'visible')
-            .attr('transform', `translate(${x}, ${y})`);
-          tooltipLabel.text(`ID: ${d.id}`);
+          this.updateTooltip(d, yField);
         })
         .on('mouseout', () => {
-          tooltip.style('visibility', 'hidden');
+          select('#tooltip').style('visibility', 'hidden');
         });
     });
-
-    // Append regression line
-    const newLine = line()
-      .x(d => this.xScale(d))
-      .y(d => intercept + (slope * this.xScale(d)));
-
-    chart.append('path')
-      .attr('class', 'regression-line')
-      .style('stroke', this.props.dataLineColor[0])
-      .data(linePoints)
-      .attr('d', newLine);
   }
 
   componentDidUpdate(prevProps) {
@@ -228,22 +230,33 @@ export class RegressionChart extends Component {
     } = this.state;
     let { data } = this.props;
     const {
-      translate,
+      title,
       xLabel,
+      yLabel,
       xField,
       yFields,
     } = this.props;
     const { widthScale, heightScale } = this.state;
     const svg = select(this.svgRef);
     const chart = svg.select('g');
+    if (prevProps.title !== title) {
+      svg.select('.title')
+        .text(title);
+    }
     if (prevProps.xField !== xField) {
       chart.select('.x-axis .label')
         .transition()
         .duration(TRANSITION_DURATION)
         .text(xLabel);
     }
-    if (prevProps.translate !== translate) {
-      // console.log('Translate changed');
+    if (prevProps.yFields !== yFields) {
+      chart.select('.y-axis .label')
+        .transition()
+        .duration(TRANSITION_DURATION)
+        .text(yLabel);
+    }
+    if (select('#tooltip').empty()) {
+      select('#root').append('div').attr('id', 'tooltip');
     }
     // console.log('Regression chart update');
     // Move data from render method to parent state
@@ -299,58 +312,28 @@ export class RegressionChart extends Component {
         .call(axisLeft(this.yScale).ticks(10).tickSizeInner(-width));
 
       // Update legend
-      svg.select('.change')
+      svg.select('.legend-title')
+        .text(this.props.legendTitles[0]);
+      svg.select('.legend-color')
+        .style('fill', this.props.dataLineColor[0]);
+      svg.select('.legend-change')
         .transition()
         .duration(TRANSITION_DURATION)
         .style('fill', change >= 0 ? 'green' : 'red')
         .text(`${change > 0 ? '+' : ''}${change.toFixed(0)}`);
-      svg.select('.changePercentage')
+      svg.select('.legend-change-percentage')
         .transition()
         .duration(TRANSITION_DURATION)
         .style('fill', changePercentage >= 0 ? 'green' : 'red')
         .text(`${changePercentage > 0 ? '+' : ''}${changePercentage.toFixed(2)}%`);
-      svg.select('.average')
+      svg.select('.legend-average')
         .transition()
         .duration(TRANSITION_DURATION)
         .text(`${average.toFixed(2)}`);
-      svg.select('.standard-deviation')
+      svg.select('.legend-standard-deviation')
         .transition()
         .duration(TRANSITION_DURATION)
         .text(`${standardDeviation.toFixed(2)}`);
-
-      yFields.forEach((yField, index) => {
-        const dataPoints = chart.selectAll('.data-point').data(data);
-        // Remove old datapoints
-        dataPoints
-          .exit()
-          .transition()
-          .duration(TRANSITION_DURATION / 2)
-          .style('opacity', 0)
-          .remove();
-        // Update existing datapoints
-        dataPoints
-          .transition()
-          .duration(TRANSITION_DURATION)
-          .attr('cx', d => this.xScale(d[xField]))
-          .attr('cy', d => this.yScale(d[yField]))
-          .style('fill', this.props.dataFillColor[index])
-          .style('stroke', this.props.dataStrokeColor[index])
-          .style('opacity', 1);
-        // Add new datapoints
-        dataPoints
-          .enter()
-          .append('circle')
-          .attr('class', 'data-point')
-          .style('opacity', 0)
-          .style('stroke', this.props.dataStrokeColor[index])
-          .style('fill', this.props.dataFillColor[index])
-          .attr('cx', d => this.xScale(d[xField]))
-          .attr('cy', d => this.yScale(d[yField]))
-          .attr('r', DATA_POINT_RADIUS)
-          .transition()
-          .duration(TRANSITION_DURATION / 2)
-          .style('opacity', 1);
-      });
 
       // Update regression line
       const newLine = line()
@@ -379,10 +362,74 @@ export class RegressionChart extends Component {
         .duration(TRANSITION_DURATION / 2)
         .style('opacity', 0)
         .remove();
+
+      // Update datapoints
+      yFields.forEach((yField, index) => {
+        const dataPoints = chart.selectAll('.data-point').data(data);
+        // Remove old datapoints
+        dataPoints
+          .exit()
+          .transition()
+          .duration(TRANSITION_DURATION / 2)
+          .style('opacity', 0)
+          .remove();
+        // Update existing datapoints
+        dataPoints
+          .on('mouseover', (d) => {
+            this.updateTooltip(d, yField);
+          })
+          .on('mouseout', () => {
+            select('#tooltip')
+              .style('visibility', 'hidden');
+          })
+          .transition()
+          .duration(TRANSITION_DURATION)
+          .attr('cx', d => this.xScale(d[xField]))
+          .attr('cy', d => this.yScale(d[yField]))
+          .style('fill', this.props.dataFillColor[index])
+          .style('stroke', this.props.dataStrokeColor[index])
+          .style('opacity', 1);
+        // Add new datapoints
+        dataPoints
+          .enter()
+          .append('circle')
+          .attr('class', 'data-point')
+          .style('opacity', 0)
+          .style('stroke', this.props.dataStrokeColor[index])
+          .style('fill', this.props.dataFillColor[index])
+          .attr('cx', d => this.xScale(d[xField]))
+          .attr('cy', d => this.yScale(d[yField]))
+          .attr('r', DATA_POINT_RADIUS)
+          .on('mouseover', (d) => {
+            this.updateTooltip(d, yField);
+          })
+          .on('mouseout', () => {
+            select('#tooltip').style('visibility', 'hidden');
+          })
+          .transition()
+          .duration(TRANSITION_DURATION / 2)
+          .style('opacity', 1);
+      });
     } else {
       // console.log('Props changed');
     }
   }
+
+  componentWillUnmount() {
+    if (!select('#tooltip').empty()) {
+      select('#tooltip').remove();
+    }
+  }
+
+  updateTooltip = (d, yField) => {
+    select('#tooltip').style('visibility', 'visible')
+      .style('left', `${event.pageX + 20}px`)
+      .style('top', `${event.pageY - 75}px`)
+      .html(
+        `<div>${this.props.xLabel}: ${d[this.props.xField]}</div>
+        <div>${this.props.yLabel}: ${d[yField]}</div>`,
+      );
+  };
 
   render() {
     return (

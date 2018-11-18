@@ -17,3 +17,11 @@
 .tick line {
   color: #d8d8d8;
 }
+
+#tooltip {
+  position: absolute;
+  background-color: #ffffff;
+  border: 1px solid #d4d4d5;
+  border-radius: 0.28571429rem;
+  padding: 0.833em 1em;
+}
