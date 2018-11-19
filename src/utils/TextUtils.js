@@ -11,16 +11,16 @@ Array.prototype.flatMap = function (lambda) {
 const splitWords = words => words.match(wordRegex).map(group => group.trim());
 
 // Then split groups at ','
-const splitWithComma = (sentence, characterCount) =>
+const splitWithComma = (sentence, characterCount) => (
   sentence.match(commaRegex).flatMap(words => (
     words.length > characterCount ? splitWords(words, characterCount) : words.trim()
-  ));
+  )));
 
 // First split groups at '.'
-const splitWithPeriod = (text, characterCount) =>
+const splitWithPeriod = (text, characterCount) => (
   text.match(sentenceRegex).flatMap(sentence => (
     sentence.length > characterCount ? splitWithComma(sentence, characterCount) : sentence.trim()
-  ));
+  )));
 
 // eslint-disable-next-line import/prefer-default-export
 export const splitIntoWordGroups = (text, characterCount) => {

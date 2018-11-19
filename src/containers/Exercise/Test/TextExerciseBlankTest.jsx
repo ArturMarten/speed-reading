@@ -37,14 +37,14 @@ export class TextExerciseBlankTest extends Component {
       exerciseAttemptId: this.props.exerciseAttemptId,
       startTime: new Date(),
     };
-    this.props.onTestStart(attemptData, this.props.token);
+    this.props.onTestStart(attemptData);
   }
 
   onTestFinishHandler = () => {
     const answers = this.props.blankExercises.map((blankExercise, index) => (
       this.state.answers[index] ? this.state.answers[index] : null
     ));
-    this.props.onTestFinish(this.props.attemptId, this.props.blankExercises, answers, this.props.token);
+    this.props.onTestFinish(this.props.attemptId, this.props.blankExercises, answers);
   }
 
   render() {
@@ -124,12 +124,11 @@ export class TextExerciseBlankTest extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   exerciseAttemptId: state.exercise.attemptId,
-  attemptId: state.test.attemptId,
+  attemptId: state.exerciseTest.attemptId,
   selectedText: state.text.selectedText,
-  blankExercises: state.test.blankExercises,
-  testStatus: state.test.status,
+  blankExercises: state.exerciseTest.blankExercises,
+  testStatus: state.exerciseTest.status,
   translate: getTranslate(state.locale),
 });
 
@@ -137,11 +136,11 @@ const mapDispatchToProps = dispatch => ({
   onTestPrepare: (readingText) => {
     dispatch(actionCreators.prepareBlankTest(readingText));
   },
-  onTestStart: (attemptData, token) => {
-    dispatch(actionCreators.startTest(attemptData, token));
+  onTestStart: (attemptData) => {
+    dispatch(actionCreators.startTest(attemptData));
   },
-  onTestFinish: (attemptId, blankExercises, answers, token) => {
-    dispatch(actionCreators.finishBlankTest(attemptId, blankExercises, answers, token));
+  onTestFinish: (attemptId, blankExercises, answers) => {
+    dispatch(actionCreators.finishBlankTest(attemptId, blankExercises, answers));
   },
 });
 

@@ -126,7 +126,6 @@ export class ManageGroups extends Component {
 const mapStateToProps = state => ({
   groupsStatus: state.group.groupsStatus,
   groups: state.group.groups,
-  token: state.auth.token,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });

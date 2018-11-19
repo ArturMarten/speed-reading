@@ -7,7 +7,7 @@ import textReducer from './text';
 import timingReducer from './timing';
 import optionsReducer from './options';
 import exerciseReducer from './exercise';
-import testReducer from './test';
+import exerciseTestReducer from './exerciseTest';
 import groupReducer from './group';
 import userReducer from './user';
 import profileReducer from './profile';
@@ -23,7 +23,7 @@ export default combineReducers({
   timing: timingReducer,
   options: optionsReducer,
   exercise: exerciseReducer,
-  test: testReducer,
+  exerciseTest: exerciseTestReducer,
   group: groupReducer,
   user: userReducer,
   profile: profileReducer,

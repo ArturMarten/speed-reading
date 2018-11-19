@@ -1,7 +1,30 @@
 import * as actionTypes from './actionTypes';
 import * as actionCreators from './index';
-import axios from '../../axios-http';
-import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
+
+const registerStart = () => ({
+  type: actionTypes.REGISTER_START,
+});
+
+const registerSucceeded = message => ({
+  type: actionTypes.REGISTER_SUCCEEDED,
+  payload: message,
+});
+
+const registerFailed = error => ({
+  type: actionTypes.REGISTER_FAILED,
+  payload: error,
+});
+
+export const register = registerData => (dispatch) => {
+  dispatch(registerStart());
+  api.register(registerData)
+    .then((message) => {
+      dispatch(registerSucceeded(message));
+    }, (errorMessage) => {
+      dispatch(registerFailed(errorMessage));
+    });
+};
 
 const authStart = () => ({
   type: actionTypes.AUTH_START,
@@ -21,6 +44,7 @@ const authFailed = error => ({
 });
 
 export const logout = (error) => {
+  api.saveToken(null);
   localStorage.removeItem('token');
   localStorage.removeItem('userId');
   localStorage.removeItem('expirationDate');
@@ -37,34 +61,31 @@ const checkAuthTimeout = expirationTime => (dispatch) => {
   }, expirationTime * 1000);
 };
 
-export const login = (email, password) => (dispatch) => {
+export const login = (username, password) => (dispatch) => {
   dispatch(authStart());
-  const auth = {
-    username: email,
-    password,
-  };
-  axios.get('/login', { auth })
-    .then((response) => {
-      const expirationDate = new Date(new Date().getTime() + (response.data.expiresIn * 1000));
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.userId);
+  api.login({ username, password })
+    .then((data) => {
+      const { token, userId, expiresIn } = data;
+      api.saveToken(token);
+      const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
       localStorage.setItem('expirationDate', expirationDate);
-      dispatch(authSucceeded(response.data.token, response.data.userId));
-      dispatch(checkAuthTimeout(response.data.expiresIn));
-      dispatch(actionCreators.fetchUserProfile(response.data.userId, response.data.token));
-    }, (error) => {
-      dispatch(authFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(authFailed(error.message));
+      dispatch(authSucceeded(token, userId));
+      dispatch(checkAuthTimeout(expiresIn));
+      dispatch(actionCreators.fetchUserProfile(userId));
+    }, (errorMessage) => {
+      dispatch(authFailed(errorMessage));
     });
 };
 
 export const authCheckState = () => (dispatch) => {
   const token = localStorage.getItem('token');
   if (!token) {
+    api.saveToken(null);
     dispatch(logout(null));
   } else {
+    api.saveToken(token);
     const expirationDate = new Date(localStorage.getItem('expirationDate'));
     const now = new Date();
     if (expirationDate <= now) {
@@ -75,36 +96,9 @@ export const authCheckState = () => (dispatch) => {
       const expiresIn = (expirationDate.getTime() - new Date().getTime()) / 1000;
       dispatch(authSucceeded(token, userId));
       dispatch(checkAuthTimeout(expiresIn));
-      dispatch(actionCreators.fetchUserProfile(userId, token));
+      dispatch(actionCreators.fetchUserProfile(userId));
     }
   }
-};
-
-const registerStart = () => ({
-  type: actionTypes.REGISTER_START,
-});
-
-const registerSucceeded = message => ({
-  type: actionTypes.REGISTER_SUCCEEDED,
-  payload: message,
-});
-
-const registerFailed = error => ({
-  type: actionTypes.REGISTER_FAILED,
-  payload: error,
-});
-
-export const register = registerData => (dispatch) => {
-  dispatch(registerStart());
-  axios.post('/register', registerData)
-    .then((response) => {
-      dispatch(registerSucceeded(serverSuccessMessage(response)));
-    }, (error) => {
-      dispatch(registerFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(registerFailed(error.message));
-    });
 };
 
 const changePasswordStart = () => ({
@@ -121,18 +115,12 @@ const changePasswordFailed = error => ({
   payload: error,
 });
 
-export const changePassword = (oldPassword, newPassword, token) => (dispatch) => {
+export const changePassword = (oldPassword, newPassword) => (dispatch) => {
   dispatch(changePasswordStart());
-  const auth = {
-    password: `${oldPassword}_${newPassword}`,
-  };
-  axios.get('/changePassword', { auth, headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(changePasswordSucceeded(serverSuccessMessage(response)));
-    }, (error) => {
-      dispatch(changePasswordFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(changePasswordFailed(error.message));
+  api.changePassword({ oldPassword, newPassword })
+    .then((message) => {
+      dispatch(changePasswordSucceeded(message));
+    }, (errorMessage) => {
+      dispatch(changePasswordFailed(errorMessage));
     });
 };

@@ -151,7 +151,7 @@ export class TestResults extends Component {
 }
 
 const mapStateToProps = state => ({
-  result: state.test.result,
+  result: state.exerciseTest.result,
   selectedText: state.text.selectedText,
   translate: getTranslate(state.locale),
 });

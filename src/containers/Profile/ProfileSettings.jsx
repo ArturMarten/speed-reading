@@ -74,7 +74,7 @@ export class ProfileSettings extends Component {
       firstName: this.state.userProfileForm.firstName.value,
       lastName: this.state.userProfileForm.lastName.value,
     };
-    this.props.onUserProfileSave(this.props.userId, userProfileData, this.props.token);
+    this.props.onUserProfileSave(this.props.userId, userProfileData);
   }
 
   inputChangeHandler = (event, { name, value }) => {
@@ -152,7 +152,6 @@ export class ProfileSettings extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   userId: state.auth.userId,
   profileStatus: state.profile.profileStatus,
   firstName: state.profile.firstName,
@@ -162,8 +161,8 @@ const mapStateToProps = state => ({
 
 // eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
-  onUserProfileSave: (userId, userProfileData, token) => {
-    dispatch(actionCreators.saveUserProfile(userId, userProfileData, token));
+  onUserProfileSave: (userId, userProfileData) => {
+    dispatch(actionCreators.saveUserProfile(userId, userProfileData));
   },
 });
 

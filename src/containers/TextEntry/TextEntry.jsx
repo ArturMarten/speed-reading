@@ -125,9 +125,9 @@ export class TextEntry extends Component {
     };
     if (this.props.selectedText) {
       const textId = this.props.selectedText.id;
-      this.props.onTextSave(submittedForm, textId, this.props.token);
+      this.props.onTextSave(submittedForm, textId);
     } else {
-      this.props.onTextSave(submittedForm, null, this.props.token);
+      this.props.onTextSave(submittedForm, null);
     }
   }
 
@@ -476,7 +476,6 @@ export class TextEntry extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   collections: state.text.collections,
   selectedText: state.text.selectedText,
   collectionsStatus: state.text.collectionsStatus,
@@ -488,8 +487,8 @@ const mapDispatchToProps = dispatch => ({
   onFetchTextCollections: () => {
     dispatch(actionCreators.fetchTextCollections());
   },
-  onTextSave: (text, textId, token) => {
-    dispatch(actionCreators.saveText(text, textId, token));
+  onTextSave: (text, textId) => {
+    dispatch(actionCreators.saveText(text, textId));
   },
   onNewText: () => {
     dispatch(actionCreators.unselectText());

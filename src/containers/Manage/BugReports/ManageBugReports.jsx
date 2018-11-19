@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Table, Button, Icon, Segment, Loader, Modal, Image } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
-import axios from '../../../axios-http';
+import axios from '../../../api/axios-http';
 import * as actionCreators from '../../../store/actions';
 import { sortByColumn } from '../../../shared/utility';
 
@@ -17,16 +17,16 @@ export class ManageBugReports extends Component {
 
   componentDidMount() {
     if (this.props.users.length === 0) {
-      this.props.onFetchUsers(this.props.token);
+      this.props.onFetchUsers();
     }
     if (this.props.bugReports.length === 0) {
-      this.props.onFetchBugReports(this.props.token);
+      this.props.onFetchBugReports();
     }
   }
 
   onRefresh = () => {
-    this.props.onFetchUsers(this.props.token);
-    this.props.onFetchBugReports(this.props.token);
+    this.props.onFetchUsers();
+    this.props.onFetchBugReports();
   }
 
   getUserEmailById = (userId) => {
@@ -186,17 +186,16 @@ const mapStateToProps = state => ({
   users: state.user.users,
   bugReportsStatus: state.bugReport.bugReportsStatus,
   bugReports: state.bugReport.bugReports,
-  token: state.auth.token,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchUsers: (token) => {
-    dispatch(actionCreators.fetchUsers(token));
+  onFetchUsers: () => {
+    dispatch(actionCreators.fetchUsers());
   },
-  onFetchBugReports: (token) => {
-    dispatch(actionCreators.fetchBugReports(token));
+  onFetchBugReports: () => {
+    dispatch(actionCreators.fetchBugReports());
   },
 });
 

@@ -45,7 +45,7 @@ export {
   finishQuestionTest,
   finishBlankTest,
   endTest,
-} from './test';
+} from './exerciseTest';
 
 export {
   register,

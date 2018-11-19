@@ -50,7 +50,7 @@ export class TextSelection extends Component {
   };
 
   componentDidMount() {
-    this.props.onFetchTexts(this.props.token);
+    this.props.onFetchTexts();
     if (this.props.collections === []) {
       this.props.onFetchTextCollections();
     }
@@ -66,7 +66,7 @@ export class TextSelection extends Component {
   }
 
   onSubmit = () => {
-    this.props.onTextSelect(this.state.selectedTextId, this.props.token);
+    this.props.onTextSelect(this.state.selectedTextId);
   }
 
   onFilterChange = (name, value) => {
@@ -359,7 +359,6 @@ export class TextSelection extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   texts: state.text.texts,
   wpm: state.options.speedOptions.wpm,
   collections: state.text.collections,
@@ -370,14 +369,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchTexts: (token) => {
-    dispatch(actionCreators.fetchTexts(token));
+  onFetchTexts: () => {
+    dispatch(actionCreators.fetchTexts());
   },
   onFetchTextCollections: () => {
     dispatch(actionCreators.fetchTextCollections());
   },
-  onTextSelect: (textId, token) => {
-    dispatch(actionCreators.selectText(textId, token));
+  onTextSelect: (textId) => {
+    dispatch(actionCreators.selectText(textId));
   },
 });
 

@@ -53,7 +53,7 @@ export class UserEditor extends Component {
       role: this.state.role,
       notify: this.state.notify,
     };
-    this.props.onAddUser(user, this.props.token);
+    this.props.onAddUser(user);
     this.setState({ submitted: true });
   }
 
@@ -64,7 +64,7 @@ export class UserEditor extends Component {
       role: this.state.role,
       notify: this.state.notify,
     };
-    this.props.onChangeUser(this.props.user.publicId, user, this.props.token);
+    this.props.onChangeUser(this.props.user.publicId, user);
     this.setState({ submitted: true });
   }
 
@@ -199,7 +199,6 @@ export class UserEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   userStatus: state.user.userStatus,
   role: state.profile.role,
   groups: state.group.groups,
@@ -207,11 +206,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddUser: (user, token) => {
-    dispatch(actionCreators.addUser(user, token));
+  onAddUser: (user) => {
+    dispatch(actionCreators.addUser(user));
   },
-  onChangeUser: (userId, user, token) => {
-    dispatch(actionCreators.changeUser(userId, user, token));
+  onChangeUser: (userId, user) => {
+    dispatch(actionCreators.changeUser(userId, user));
   },
 });
 

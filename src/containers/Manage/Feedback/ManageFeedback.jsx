@@ -14,16 +14,16 @@ export class ManageFeedback extends Component {
 
   componentDidMount() {
     if (this.props.users.length === 0) {
-      this.props.onFetchUsers(this.props.token);
+      this.props.onFetchUsers();
     }
     if (this.props.feedbackList.length === 0) {
-      this.props.onFetchFeedback(this.props.token);
+      this.props.onFetchFeedback();
     }
   }
 
   onRefresh = () => {
-    this.props.onFetchUsers(this.props.token);
-    this.props.onFetchFeedback(this.props.token);
+    this.props.onFetchUsers();
+    this.props.onFetchFeedback();
   }
 
   getUserEmailById = (userId) => {
@@ -159,17 +159,16 @@ const mapStateToProps = state => ({
   users: state.user.users,
   feedbackListStatus: state.feedback.feedbackListStatus,
   feedbackList: state.feedback.feedbackList,
-  token: state.auth.token,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchUsers: (token) => {
-    dispatch(actionCreators.fetchUsers(token));
+  onFetchUsers: () => {
+    dispatch(actionCreators.fetchUsers());
   },
-  onFetchFeedback: (token) => {
-    dispatch(actionCreators.fetchFeedback(token));
+  onFetchFeedback: () => {
+    dispatch(actionCreators.fetchFeedback());
   },
 });
 

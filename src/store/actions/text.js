@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverErrorMessage, serverSuccessMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const saveTextStart = () => ({
   type: actionTypes.SAVE_TEXT_START,
@@ -19,29 +18,14 @@ const saveTextFailed = error => ({
   payload: error,
 });
 
-export const saveText = (text, textId, token) => (dispatch) => {
+export const saveText = (text, textId) => (dispatch) => {
   dispatch(saveTextStart());
-  if (textId) {
-    axios.put(`/texts/${textId}`, text, { headers: { 'x-access-token': token } })
-      .then((response) => {
-        dispatch(saveTextSucceeded(text, serverSuccessMessage(response)));
-      }, (error) => {
-        dispatch(saveTextFailed(serverErrorMessage(error)));
-      })
-      .catch((error) => {
-        dispatch(saveTextFailed(error.message));
-      });
-  } else {
-    axios.post('/texts', text, { headers: { 'x-access-token': token } })
-      .then((response) => {
-        dispatch(saveTextSucceeded(text, serverSuccessMessage(response)));
-      }, (error) => {
-        dispatch(saveTextFailed(serverErrorMessage(error)));
-      })
-      .catch((error) => {
-        dispatch(saveTextFailed(error.message));
-      });
-  }
+  api.saveText({ text, textId })
+    .then((message) => {
+      dispatch(saveTextSucceeded(text, message));
+    }, (errorMessage) => {
+      dispatch(saveTextFailed(errorMessage));
+    });
 };
 
 const fetchTextCollectionsStart = () => ({
@@ -60,15 +44,11 @@ const fetchTextCollectionsFailed = error => ({
 
 export const fetchTextCollections = () => (dispatch) => {
   dispatch(fetchTextCollectionsStart());
-  axios.get('/collections')
-    .then((response) => {
-      const fetchedTextCollections = response.data;
-      dispatch(fetchTextCollectionsSucceeded(fetchedTextCollections));
-    }, (error) => {
-      dispatch(fetchTextCollectionsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchTextCollectionsFailed(error.message));
+  api.fetchTextCollections()
+    .then((textCollections) => {
+      dispatch(fetchTextCollectionsSucceeded(textCollections));
+    }, (errorMessage) => {
+      dispatch(fetchTextCollectionsFailed(errorMessage));
     });
 };
 
@@ -86,17 +66,13 @@ const fetchTextsFailed = error => ({
   payload: error,
 });
 
-export const fetchTexts = token => (dispatch) => {
+export const fetchTexts = () => (dispatch) => {
   dispatch(fetchTextsStart());
-  axios.get('/texts', { headers: { 'x-access-token': token } })
-    .then((response) => {
-      const fetchedTexts = response.data;
-      dispatch(fetchTextsSucceeded(fetchedTexts));
-    }, (error) => {
-      dispatch(fetchTextsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchTextsFailed(error.message));
+  api.fetchTexts()
+    .then((texts) => {
+      dispatch(fetchTextsSucceeded(texts));
+    }, (errorMessage) => {
+      dispatch(fetchTextsFailed(errorMessage));
     });
 };
 
@@ -114,17 +90,13 @@ const fetchReadingTextFailed = error => ({
   payload: error,
 });
 
-export const selectText = (textId, token) => (dispatch) => {
+export const selectText = textId => (dispatch) => {
   dispatch(fetchReadingTextStart());
-  axios.get(`/texts/${textId}`, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      const text = response.data;
+  api.selectText(textId)
+    .then((text) => {
       dispatch(fetchReadingTextSucceeded(text));
-    }, (error) => {
-      dispatch(fetchReadingTextFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchReadingTextFailed(error.message));
+    }, (errorMessage) => {
+      dispatch(fetchReadingTextFailed(errorMessage));
     });
 };
 
@@ -144,15 +116,11 @@ const selectOwnTextFailed = error => ({
 
 export const selectOwnText = textData => (dispatch) => {
   dispatch(selectOwnTextStart());
-  axios.post('/analyze', { text: textData.plainText, language: textData.language })
-    .then((response) => {
-      const analysis = response.data;
+  api.analyzeText({ text: textData.plainText, language: textData.language })
+    .then((analysis) => {
       dispatch(selectOwnTextSucceeded({ ...textData, ...analysis }));
-    }, (error) => {
-      dispatch(selectOwnTextFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(selectOwnTextFailed(error.message));
+    }, (errorMessage) => {
+      dispatch(selectOwnTextFailed(errorMessage));
     });
 };
 
@@ -176,14 +144,10 @@ const analyzeTextFailed = error => ({
 
 export const analyzeText = textData => (dispatch) => {
   dispatch(analyzeTextStart());
-  axios.post('/analyze', textData)
-    .then((response) => {
-      const analysis = response.data;
+  api.analyzeText(textData)
+    .then((analysis) => {
       dispatch(analyzeTextSucceeded(analysis));
-    }, (error) => {
-      dispatch(analyzeTextFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(analyzeTextFailed(error.message));
+    }, (errorMessage) => {
+      dispatch(analyzeTextFailed(errorMessage));
     });
 };

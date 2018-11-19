@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const sendFeedbackStart = () => ({
   type: actionTypes.SEND_FEEDBACK_START,
@@ -18,14 +17,11 @@ const sendFeedbackFailed = error => ({
 
 export const sendFeedback = feedbackData => (dispatch) => {
   dispatch(sendFeedbackStart());
-  axios.post('/feedback', feedbackData)
-    .then((response) => {
-      dispatch(sendFeedbackSucceeded(serverSuccessMessage(response)));
-    }, (error) => {
-      dispatch(sendFeedbackFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(sendFeedbackFailed(error.message));
+  api.sendFeedback(feedbackData)
+    .then((message) => {
+      dispatch(sendFeedbackSucceeded(message));
+    }, (errorMessage) => {
+      dispatch(sendFeedbackFailed(errorMessage));
     });
 };
 
@@ -43,15 +39,12 @@ const fetchFeedbackFailed = error => ({
   payload: error,
 });
 
-export const fetchFeedback = token => (dispatch) => {
+export const fetchFeedback = () => (dispatch) => {
   dispatch(fetchFeedbackStart());
-  axios.get('/feedback', { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchFeedbackSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchFeedbackFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchFeedbackFailed(error.message));
+  api.fetchFeedback()
+    .then((feedback) => {
+      dispatch(fetchFeedbackSucceeded(feedback));
+    }, (errorMessage) => {
+      dispatch(fetchFeedbackFailed(errorMessage));
     });
 };

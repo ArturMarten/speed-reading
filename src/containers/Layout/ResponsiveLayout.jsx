@@ -7,7 +7,7 @@ import { Responsive, Sidebar, Menu, Dropdown, Icon, Grid, Popup, Button, Header 
 import { environment } from '../../environment';
 
 import './ResponsiveLayout.css';
-import axios from '../../axios-http';
+import axios from '../../api/axios-http';
 import credentials from '../../credentials';
 import Auth from '../Auth/Auth';
 import ProfileSettings from '../Profile/ProfileSettings';

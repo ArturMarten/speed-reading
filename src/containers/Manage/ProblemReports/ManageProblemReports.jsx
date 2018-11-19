@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Table, Button, Icon, Segment, Loader, Modal, Image } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
-import axios from '../../../axios-http';
+import axios from '../../../api/axios-http';
 import * as actionCreators from '../../../store/actions';
 import { sortByColumn } from '../../../shared/utility';
 
@@ -17,16 +17,16 @@ export class ManageProblemReports extends Component {
 
   componentDidMount() {
     if (this.props.users.length === 0) {
-      this.props.onFetchUsers(this.props.token);
+      this.props.onFetchUsers();
     }
     if (this.props.problemReports.length === 0) {
-      this.props.onFetchProblemReports(this.props.token);
+      this.props.onFetchProblemReports();
     }
   }
 
   onRefresh = () => {
-    this.props.onFetchUsers(this.props.token);
-    this.props.onFetchProblemReports(this.props.token);
+    this.props.onFetchUsers();
+    this.props.onFetchProblemReports();
   }
 
   getUserEmailById = (userId) => {
@@ -175,17 +175,16 @@ const mapStateToProps = state => ({
   users: state.user.users,
   problemReportsStatus: state.problemReport.problemReportsStatus,
   problemReports: state.problemReport.problemReports,
-  token: state.auth.token,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchUsers: (token) => {
-    dispatch(actionCreators.fetchUsers(token));
+  onFetchUsers: () => {
+    dispatch(actionCreators.fetchUsers());
   },
-  onFetchProblemReports: (token) => {
-    dispatch(actionCreators.fetchProblemReports(token));
+  onFetchProblemReports: () => {
+    dispatch(actionCreators.fetchProblemReports());
   },
 });
 

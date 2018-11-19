@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Header, Statistic, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
-import axios from '../../../axios-http';
+import * as api from '../../../api';
 import { updateObject, formatMillisecondsInHours } from '../../../shared/utility';
 import { EXERCISE_COUNT } from '../../../store/reducers/exercise';
 
@@ -26,17 +26,16 @@ export class ApplicationStatistics extends Component {
 
   componentDidMount() {
     // console.log(navigator.userAgent, navigator.platform);
-    axios.get('/applicationStatistics')
-      .then((response) => {
+    api.fetchApplicationStatistics()
+      .then((statistics) => {
         const updatedStatistics = updateObject(this.state.statistics, {
-          ...response.data,
+          ...statistics,
         });
         this.setState({
           loading: false,
           statistics: updatedStatistics,
         });
-      })
-      .catch(() => {
+      }, () => {
         this.setState({
           loading: false,
         });

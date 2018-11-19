@@ -47,7 +47,7 @@ export class QuestionEditor extends Component {
       questionText: this.state.questionText,
       category: this.state.category,
     };
-    this.props.onAddQuestion(question, this.props.token);
+    this.props.onAddQuestion(question);
     this.setState({ submitted: true });
   }
 
@@ -57,7 +57,7 @@ export class QuestionEditor extends Component {
       questionText: this.state.questionText,
       category: this.state.category,
     };
-    this.props.onChangeQuestion(this.props.question.id, question, this.props.token);
+    this.props.onChangeQuestion(this.props.question.id, question);
     this.setState({ submitted: true });
   }
 
@@ -152,17 +152,16 @@ export class QuestionEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
-  questionStatus: state.test.questionStatus,
+  questionStatus: state.exerciseTest.questionStatus,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddQuestion: (question, token) => {
-    dispatch(actionCreators.addQuestion(question, token));
+  onAddQuestion: (question) => {
+    dispatch(actionCreators.addQuestion(question));
   },
-  onChangeQuestion: (questionId, question, token) => {
-    dispatch(actionCreators.changeQuestion(questionId, question, token));
+  onChangeQuestion: (questionId, question) => {
+    dispatch(actionCreators.changeQuestion(questionId, question));
   },
 });
 

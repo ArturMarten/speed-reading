@@ -30,12 +30,12 @@ export class TextTestEditor extends Component {
 
   removeQuestionHandler = (questionId) => {
     this.setState({ removedQuestionId: questionId });
-    this.props.onRemoveQuestion(questionId, this.props.token);
+    this.props.onRemoveQuestion(questionId);
   }
 
   removeAnswerHandler = (questionId, answerId) => {
     this.setState({ removedAnswerId: answerId });
-    this.props.onRemoveAnswer(questionId, answerId, this.props.token);
+    this.props.onRemoveAnswer(questionId, answerId);
   }
 
   questionEditorToggleHandler = (event, data) => {
@@ -201,10 +201,9 @@ export class TextTestEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
-  questions: state.test.questions,
-  questionStatus: state.test.questionStatus,
-  answerStatus: state.test.answerStatus,
+  questions: state.exerciseTest.questions,
+  questionStatus: state.exerciseTest.questionStatus,
+  answerStatus: state.exerciseTest.answerStatus,
   translate: getTranslate(state.locale),
 });
 
@@ -212,11 +211,11 @@ const mapDispatchToProps = dispatch => ({
   onFetchQuestions: (readingTextId) => {
     dispatch(actionCreators.fetchTestEditorQuestions(readingTextId));
   },
-  onRemoveQuestion: (questionId, token) => {
-    dispatch(actionCreators.removeQuestion(questionId, token));
+  onRemoveQuestion: (questionId) => {
+    dispatch(actionCreators.removeQuestion(questionId));
   },
-  onRemoveAnswer: (questionId, answerId, token) => {
-    dispatch(actionCreators.removeAnswer(questionId, answerId, token));
+  onRemoveAnswer: (questionId, answerId) => {
+    dispatch(actionCreators.removeAnswer(questionId, answerId));
   },
 });
 

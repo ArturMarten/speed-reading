@@ -142,7 +142,7 @@ export class Statistics extends Component {
     if (prevState.activeIndex !== this.state.activeIndex &&
       this.state.activeIndex === 2 && Object.keys(this.props.groupExerciseStatistics).length === 0) {
       const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
-      this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
+      this.props.onFetchGroupExerciseStatistics(fetchGroupId);
     }
   }
 
@@ -154,13 +154,13 @@ export class Statistics extends Component {
   fetchInitialData = () => {
     if (this.props.isTeacher) {
       if (this.props.users.length === 0) {
-        this.props.onFetchUsers(this.props.token);
+        this.props.onFetchUsers();
       }
       if (this.props.groups.length === 0) {
         this.props.onFetchGroups();
       }
     }
-    this.props.onFetchUserExerciseStatistics(this.props.userId, this.props.token);
+    this.props.onFetchUserExerciseStatistics(this.props.userId);
   }
 
   tabChangeHandler = (event, { activeIndex }) => this.setState({ activeIndex });
@@ -173,12 +173,12 @@ export class Statistics extends Component {
         const groupUsers = this.props.users.filter(groupUser => groupUser.groupId === value);
         if (groupUsers.length > 0) {
           userId = groupUsers[0].publicId;
-          this.props.onFetchUserExerciseStatistics(userId, this.props.token);
+          this.props.onFetchUserExerciseStatistics(userId);
         }
       }
       if (this.state.activeIndex === 2) {
         const fetchGroupId = value === 'all-groups' ? null : value;
-        this.props.onFetchGroupExerciseStatistics(fetchGroupId, this.props.token);
+        this.props.onFetchGroupExerciseStatistics(fetchGroupId);
       }
       this.setState({ groupId: value, userId });
     }
@@ -188,7 +188,7 @@ export class Statistics extends Component {
     if (this.state.userId !== value) {
       const selectedUser = this.props.users.find(user => user.publicId === value);
       if (selectedUser) {
-        this.props.onFetchUserExerciseStatistics(value, this.props.token);
+        this.props.onFetchUserExerciseStatistics(value);
         const { groupId } = selectedUser;
         this.setState({ userId: value, groupId: groupId === null ? 'all-groups' : groupId });
       }
@@ -703,7 +703,6 @@ export class Statistics extends Component {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.token !== null,
-  token: state.auth.token,
   role: state.profile.role,
   isTeacher: rolePermissions[state.profile.role] >= rolePermissions.teacher,
   isAdmin: rolePermissions[state.profile.role] >= rolePermissions.admin,
@@ -721,17 +720,17 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchUsers: (token) => {
-    dispatch(actionCreators.fetchUsers(token));
+  onFetchUsers: () => {
+    dispatch(actionCreators.fetchUsers());
   },
   onFetchGroups: () => {
     dispatch(actionCreators.fetchGroups());
   },
-  onFetchUserExerciseStatistics: (userId, token) => {
-    dispatch(actionCreators.fetchUserExerciseStatistics(userId, token));
+  onFetchUserExerciseStatistics: (userId) => {
+    dispatch(actionCreators.fetchUserExerciseStatistics(userId));
   },
-  onFetchGroupExerciseStatistics: (groupId, token) => {
-    dispatch(actionCreators.fetchGroupExerciseStatistics(groupId, token));
+  onFetchGroupExerciseStatistics: (groupId) => {
+    dispatch(actionCreators.fetchGroupExerciseStatistics(groupId));
   },
 });
 

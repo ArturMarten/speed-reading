@@ -47,7 +47,7 @@ export class AnswerEditor extends Component {
       answerText: this.state.answerText,
       correct: this.state.correct,
     };
-    this.props.onAddAnswer(answer, this.props.token);
+    this.props.onAddAnswer(answer);
     this.setState({ submitted: true });
   }
 
@@ -57,7 +57,7 @@ export class AnswerEditor extends Component {
       answerText: this.state.answerText,
       correct: this.state.correct,
     };
-    this.props.onChangeAnswer(this.props.questionId, this.props.answer.id, answer, this.props.token);
+    this.props.onChangeAnswer(this.props.questionId, this.props.answer.id, answer);
     this.setState({ submitted: true });
   }
 
@@ -148,17 +148,16 @@ export class AnswerEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
-  answerStatus: state.test.answerStatus,
+  answerStatus: state.exerciseTest.answerStatus,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddAnswer: (answer, token) => {
-    dispatch(actionCreators.addAnswer(answer, token));
+  onAddAnswer: (answer) => {
+    dispatch(actionCreators.addAnswer(answer));
   },
-  onChangeAnswer: (questionId, answerId, answer, token) => {
-    dispatch(actionCreators.changeAnswer(questionId, answerId, answer, token));
+  onChangeAnswer: (questionId, answerId, answer) => {
+    dispatch(actionCreators.changeAnswer(questionId, answerId, answer));
   },
 });
 

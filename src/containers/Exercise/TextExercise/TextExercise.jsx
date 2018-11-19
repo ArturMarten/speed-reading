@@ -36,11 +36,11 @@ export class TextExercise extends Component {
       startTime: new Date(),
       readingTextId: this.props.selectedText.id,
     };
-    this.props.onExerciseStart(attemptData, this.props.token);
+    this.props.onExerciseStart(attemptData);
   }
 
   onExerciseFinishHandler = () => {
-    this.props.onExerciseFinish(this.props.attemptId, this.props.token);
+    this.props.onExerciseFinish(this.props.attemptId);
   }
 
   calculateCanvasHeight = () => {
@@ -144,7 +144,6 @@ export class TextExercise extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   userId: state.auth.userId,
   saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
@@ -158,11 +157,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onExerciseStart: (attemptData, token) => {
-    dispatch(actionCreators.startExercise(attemptData, token));
+  onExerciseStart: (attemptData) => {
+    dispatch(actionCreators.startExercise(attemptData));
   },
-  onExerciseFinish: (attemptId, token) => {
-    dispatch(actionCreators.finishReadingExercise(attemptId, token));
+  onExerciseFinish: (attemptId) => {
+    dispatch(actionCreators.finishReadingExercise(attemptId));
   },
 });
 

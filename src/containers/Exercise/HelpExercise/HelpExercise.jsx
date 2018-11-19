@@ -23,16 +23,16 @@ export class HelpExercise extends Component {
       modification: this.props.exerciseModification,
       startTime: new Date(),
     };
-    this.props.onExerciseStart(attemptData, this.props.token);
+    this.props.onExerciseStart(attemptData);
   }
 
   onExerciseFinishHandler = () => {
-    let data;
+    let data = null;
     if (this.props.type === 'concentration') {
       const { answers } = this.exerciseRef.getWrappedInstance().state;
       data = { answers };
     }
-    this.props.onExerciseFinish(this.props.attemptId, this.props.token, data);
+    this.props.onExerciseFinish(this.props.attemptId, data);
   }
 
   render() {
@@ -86,7 +86,6 @@ export class HelpExercise extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   userId: state.auth.userId,
   saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
@@ -99,11 +98,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onExerciseStart: (attemptData, token) => {
-    dispatch(actionCreators.startExercise(attemptData, token));
+  onExerciseStart: (attemptData) => {
+    dispatch(actionCreators.startExercise(attemptData));
   },
-  onExerciseFinish: (attemptId, token, data) => {
-    dispatch(actionCreators.finishHelpExercise(attemptId, token, data));
+  onExerciseFinish: (attemptId, data) => {
+    dispatch(actionCreators.finishHelpExercise(attemptId, data));
   },
 });
 

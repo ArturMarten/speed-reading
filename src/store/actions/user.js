@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const fetchUsersStart = () => ({
   type: actionTypes.FETCH_USERS_START,
@@ -16,16 +15,13 @@ const fetchUsersFailed = error => ({
   payload: error,
 });
 
-export const fetchUsers = token => (dispatch) => {
+export const fetchUsers = () => (dispatch) => {
   dispatch(fetchUsersStart());
-  axios.get('/users', { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchUsersSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchUsersFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchUsersFailed(error.message));
+  api.fetchUsers()
+    .then((users) => {
+      dispatch(fetchUsersSucceeded(users));
+    }, (errorMessage) => {
+      dispatch(fetchUsersFailed(errorMessage));
     });
 };
 
@@ -46,16 +42,13 @@ const addUserFailed = error => ({
   payload: error,
 });
 
-export const addUser = (userData, token) => (dispatch) => {
+export const addUser = userData => (dispatch) => {
   dispatch(addUserStart());
-  axios.post('/users', userData, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(addUserSucceeded(response.data.publicId, userData));
-    }, (error) => {
-      dispatch(addUserFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(addUserFailed(error.message));
+  api.addUser(userData)
+    .then((userPublicId) => {
+      dispatch(addUserSucceeded(userPublicId, userData));
+    }, (errorMessage) => {
+      dispatch(addUserFailed(errorMessage));
     });
 };
 
@@ -76,13 +69,13 @@ const changeUserFailed = error => ({
   payload: error,
 });
 
-export const changeUser = (publicId, userData, token) => (dispatch) => {
+export const changeUser = (publicId, userData) => (dispatch) => {
   dispatch(changeUserStart());
-  axios.put(`/users/${publicId}`, userData, { headers: { 'x-access-token': token } })
+  api.changeUser({ publicId, userData })
     .then(() => {
       dispatch(changeUserSucceeded(publicId, userData));
-    }, (error) => {
-      dispatch(changeUserFailed(serverErrorMessage(error)));
+    }, (errorMessage) => {
+      dispatch(changeUserFailed(errorMessage));
     })
     .catch((error) => {
       dispatch(changeUserFailed(error.message));

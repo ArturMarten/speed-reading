@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const fetchUserExerciseStatisticsStart = () => ({
   type: actionTypes.FETCH_USER_EXERCISE_STATISTICS_START,
@@ -16,16 +15,13 @@ const fetchUserExerciseStatisticsFailed = error => ({
   payload: error,
 });
 
-export const fetchUserExerciseStatistics = (userId, token) => (dispatch) => {
+export const fetchUserExerciseStatistics = userId => (dispatch) => {
   dispatch(fetchUserExerciseStatisticsStart());
-  axios.get(`/exerciseAttempts?userId=${userId}&embed=test`, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchUserExerciseStatisticsSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchUserExerciseStatisticsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchUserExerciseStatisticsFailed(error.message));
+  api.fetchUserExerciseStatistics(userId)
+    .then((userStatistics) => {
+      dispatch(fetchUserExerciseStatisticsSucceeded(userStatistics));
+    }, (errorMessage) => {
+      dispatch(fetchUserExerciseStatisticsFailed(errorMessage));
     });
 };
 
@@ -43,15 +39,12 @@ const fetchGroupExerciseStatisticsFailed = error => ({
   payload: error,
 });
 
-export const fetchGroupExerciseStatistics = (groupId, token) => (dispatch) => {
+export const fetchGroupExerciseStatistics = groupId => (dispatch) => {
   dispatch(fetchGroupExerciseStatisticsStart());
-  axios.get(`/exerciseAttempts?${groupId != null ? `&groupId=${groupId}&` : ''}groupBy=userId&embed=test`, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchGroupExerciseStatisticsSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchGroupExerciseStatisticsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchGroupExerciseStatisticsFailed(error.message));
+  api.fetchGroupExerciseStatistics(groupId)
+    .then((groupStatistics) => {
+      dispatch(fetchGroupExerciseStatisticsSucceeded(groupStatistics));
+    }, (errorMessage) => {
+      dispatch(fetchGroupExerciseStatisticsFailed(errorMessage));
     });
 };

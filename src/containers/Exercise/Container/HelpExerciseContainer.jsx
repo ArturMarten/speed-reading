@@ -74,7 +74,7 @@ export class HelpExerciseContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  testStatus: state.test.status,
+  testStatus: state.exerciseTest.status,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });

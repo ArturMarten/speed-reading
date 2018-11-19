@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes';
 import * as actionCreators from './index';
-import axios from '../../axios-http';
-import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const fetchUserProfileStart = () => ({
   type: actionTypes.FETCH_USER_PROFILE_START,
@@ -17,19 +16,14 @@ const fetchUserProfileFailed = error => ({
   payload: error,
 });
 
-export const fetchUserProfile = (userId, token) => (dispatch) => {
+export const fetchUserProfile = userId => (dispatch) => {
   dispatch(fetchUserProfileStart());
-  axios.get(`/users/${userId}`, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchUserProfileSucceeded(response.data));
-    }, (error) => {
-      const errorMessage = serverErrorMessage(error);
+  api.fetchUserProfile(userId)
+    .then((userProfile) => {
+      dispatch(fetchUserProfileSucceeded(userProfile));
+    }, (errorMessage) => {
       dispatch(fetchUserProfileFailed(errorMessage));
       dispatch(actionCreators.logout(errorMessage));
-    })
-    .catch((error) => {
-      dispatch(fetchUserProfileFailed(error.message));
-      dispatch(actionCreators.logout(error.message));
     });
 };
 
@@ -50,17 +44,13 @@ const saveUserProfileFailed = error => ({
   payload: error,
 });
 
-export const saveUserProfile = (userId, userProfileData, token) => (dispatch) => {
+export const saveUserProfile = (userId, userProfileData) => (dispatch) => {
   dispatch(saveUserProfileStart());
-  axios.put(`/users/${userId}`, userProfileData, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(saveUserProfileSucceeded(serverSuccessMessage(response), userProfileData));
-    }, (error) => {
-      const errorMessage = serverErrorMessage(error);
+  api.saveUserProfile({ userId, userProfileData })
+    .then((message) => {
+      dispatch(saveUserProfileSucceeded(message, userProfileData));
+    }, (errorMessage) => {
       dispatch(saveUserProfileFailed(errorMessage));
-    })
-    .catch((error) => {
-      dispatch(saveUserProfileFailed(error.message));
     });
 };
 

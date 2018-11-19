@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const fetchGroupsStart = () => ({
   type: actionTypes.FETCH_GROUPS_START,
@@ -18,14 +17,11 @@ const fetchGroupsFailed = error => ({
 
 export const fetchGroups = () => (dispatch) => {
   dispatch(fetchGroupsStart());
-  axios.get('/groups')
-    .then((response) => {
-      dispatch(fetchGroupsSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchGroupsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchGroupsFailed(error.message));
+  api.fetchGroups()
+    .then((groups) => {
+      dispatch(fetchGroupsSucceeded(groups));
+    }, (errorMessage) => {
+      dispatch(fetchGroupsFailed(errorMessage));
     });
 };
 
@@ -46,16 +42,13 @@ const addGroupFailed = error => ({
   payload: error,
 });
 
-export const addGroup = (groupData, token) => (dispatch) => {
+export const addGroup = groupData => (dispatch) => {
   dispatch(addGroupStart());
-  axios.post('/groups', groupData, { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(addGroupSucceeded(response.data.id, groupData));
-    }, (error) => {
-      dispatch(addGroupFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(addGroupFailed(error.message));
+  api.addGroup(groupData)
+    .then((groupId) => {
+      dispatch(addGroupSucceeded(groupId, groupData));
+    }, (errorMessage) => {
+      dispatch(addGroupFailed(errorMessage));
     });
 };
 
@@ -76,15 +69,12 @@ const changeGroupFailed = error => ({
   payload: error,
 });
 
-export const changeGroup = (groupId, groupData, token) => (dispatch) => {
+export const changeGroup = (groupId, groupData) => (dispatch) => {
   dispatch(changeGroupStart());
-  axios.put(`/groups/${groupId}`, groupData, { headers: { 'x-access-token': token } })
+  api.changeGroup({ groupId, groupData })
     .then(() => {
       dispatch(changeGroupSucceeded(groupId, groupData));
-    }, (error) => {
-      dispatch(changeGroupFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(changeGroupFailed(error.message));
+    }, (errorMessage) => {
+      dispatch(changeGroupFailed(errorMessage));
     });
 };

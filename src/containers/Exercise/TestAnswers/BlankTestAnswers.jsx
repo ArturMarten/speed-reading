@@ -51,8 +51,8 @@ export class BlankTestAnswers extends Component {
 }
 
 const mapStateToProps = state => ({
-  blankExercises: state.test.blankExercises,
-  answers: state.test.answers,
+  blankExercises: state.exerciseTest.blankExercises,
+  answers: state.exerciseTest.answers,
   translate: getTranslate(state.locale),
 });
 

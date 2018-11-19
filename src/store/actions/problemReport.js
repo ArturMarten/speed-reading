@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const sendProblemReportStart = () => ({
   type: actionTypes.SEND_PROBLEM_REPORT_START,
@@ -18,14 +17,11 @@ const sendProblemReportFailed = error => ({
 
 export const sendProblemReport = problemReportData => (dispatch) => {
   dispatch(sendProblemReportStart());
-  axios.post('/problemReports', problemReportData)
-    .then((response) => {
-      dispatch(sendProblemReportSucceeded(serverSuccessMessage(response)));
-    }, (error) => {
-      dispatch(sendProblemReportFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(sendProblemReportFailed(error.message));
+  api.sendProblemReport(problemReportData)
+    .then((message) => {
+      dispatch(sendProblemReportSucceeded(message));
+    }, (errorMessage) => {
+      dispatch(sendProblemReportFailed(errorMessage));
     });
 };
 
@@ -43,15 +39,12 @@ const fetchProblemReportsFailed = error => ({
   payload: error,
 });
 
-export const fetchProblemReports = token => (dispatch) => {
+export const fetchProblemReports = () => (dispatch) => {
   dispatch(fetchProblemReportsStart());
-  axios.get('/problemReports', { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchProblemReportsSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchProblemReportsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchProblemReportsFailed(error.message));
+  api.fetchProblemReports()
+    .then((problemReports) => {
+      dispatch(fetchProblemReportsSucceeded(problemReports));
+    }, (errorMessage) => {
+      dispatch(fetchProblemReportsFailed(errorMessage));
     });
 };

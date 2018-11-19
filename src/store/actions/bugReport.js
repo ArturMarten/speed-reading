@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverSuccessMessage, serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 
 const sendBugReportStart = () => ({
   type: actionTypes.SEND_BUG_REPORT_START,
@@ -11,21 +10,18 @@ const sendBugReportSucceeded = message => ({
   payload: message,
 });
 
-const sendBugReportFailed = error => ({
+const sendBugReportFailed = errorMessage => ({
   type: actionTypes.SEND_BUG_REPORT_FAILED,
-  payload: error,
+  payload: errorMessage,
 });
 
 export const sendBugReport = bugReportData => (dispatch) => {
   dispatch(sendBugReportStart());
-  axios.post('/bugReports', bugReportData)
-    .then((response) => {
-      dispatch(sendBugReportSucceeded(serverSuccessMessage(response)));
-    }, (error) => {
-      dispatch(sendBugReportFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(sendBugReportFailed(error.message));
+  api.sendBugReport(bugReportData)
+    .then((message) => {
+      dispatch(sendBugReportSucceeded(message));
+    }, (errorMessage) => {
+      dispatch(sendBugReportFailed(errorMessage));
     });
 };
 
@@ -38,20 +34,17 @@ const fetchBugReportsSucceeded = bugReports => ({
   payload: bugReports,
 });
 
-const fetchBugReportsFailed = error => ({
+const fetchBugReportsFailed = errorMessage => ({
   type: actionTypes.FETCH_BUG_REPORTS_FAILED,
-  payload: error,
+  payload: errorMessage,
 });
 
-export const fetchBugReports = token => (dispatch) => {
+export const fetchBugReports = () => (dispatch) => {
   dispatch(fetchBugReportsStart());
-  axios.get('/bugReports', { headers: { 'x-access-token': token } })
-    .then((response) => {
-      dispatch(fetchBugReportsSucceeded(response.data));
-    }, (error) => {
-      dispatch(fetchBugReportsFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(fetchBugReportsFailed(error.message));
+  api.fetchBugReports()
+    .then((data) => {
+      dispatch(fetchBugReportsSucceeded(data));
+    }, (errorMessage) => {
+      dispatch(fetchBugReportsFailed(errorMessage));
     });
 };

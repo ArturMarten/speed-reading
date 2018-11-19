@@ -47,7 +47,7 @@ export class ChangePassword extends Component {
 
   onPasswordChange = () => {
     const { oldPassword, newPassword } = this.state.passwordChangeForm;
-    this.props.onPasswordChange(oldPassword.value, newPassword.value, this.props.token);
+    this.props.onPasswordChange(oldPassword.value, newPassword.value);
   }
 
   inputChangeHandler = (event, { name, value }) => {
@@ -146,7 +146,6 @@ export class ChangePassword extends Component {
 }
 
 ChangePassword.propTypes = {
-  token: PropTypes.string.isRequired,
   passwordChangeStatus: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     message: PropTypes.string,
@@ -157,14 +156,13 @@ ChangePassword.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   passwordChangeStatus: state.auth.passwordChangeStatus,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onPasswordChange: (oldPassword, newPassword, token) => {
-    dispatch(actionCreators.changePassword(oldPassword, newPassword, token));
+  onPasswordChange: (oldPassword, newPassword) => {
+    dispatch(actionCreators.changePassword(oldPassword, newPassword));
   },
 });
 

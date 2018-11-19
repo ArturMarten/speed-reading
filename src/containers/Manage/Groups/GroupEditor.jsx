@@ -43,7 +43,7 @@ export class GroupEditor extends Component {
     const group = {
       name: this.state.name,
     };
-    this.props.onAddGroup(group, this.props.token);
+    this.props.onAddGroup(group);
     this.setState({ submitted: true });
   }
 
@@ -51,7 +51,7 @@ export class GroupEditor extends Component {
     const group = {
       name: this.state.name,
     };
-    this.props.onChangeGroup(this.props.group.id, group, this.props.token);
+    this.props.onChangeGroup(this.props.group.id, group);
     this.setState({ submitted: true });
   }
 
@@ -127,17 +127,16 @@ export class GroupEditor extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   groupStatus: state.group.groupStatus,
   translate: getTranslate(state.locale),
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddGroup: (group, token) => {
-    dispatch(actionCreators.addGroup(group, token));
+  onAddGroup: (group) => {
+    dispatch(actionCreators.addGroup(group));
   },
-  onChangeGroup: (groupId, group, token) => {
-    dispatch(actionCreators.changeGroup(groupId, group, token));
+  onChangeGroup: (groupId, group) => {
+    dispatch(actionCreators.changeGroup(groupId, group));
   },
 });
 

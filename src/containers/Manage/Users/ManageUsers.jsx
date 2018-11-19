@@ -19,7 +19,7 @@ export class ManageUsers extends Component {
 
   componentDidMount() {
     if (this.props.users.length === 0) {
-      this.props.onFetchUsers(this.props.token);
+      this.props.onFetchUsers();
     }
     if (this.props.groups.length === 0) {
       this.props.onFetchGroups();
@@ -27,7 +27,7 @@ export class ManageUsers extends Component {
   }
 
   onRefresh = () => {
-    this.props.onFetchUsers(this.props.token);
+    this.props.onFetchUsers();
     this.props.onFetchGroups();
   }
 
@@ -221,15 +221,14 @@ const mapStateToProps = state => ({
   users: state.user.users,
   groupsStatus: state.group.groupsStatus,
   groups: state.group.groups,
-  token: state.auth.token,
   userId: state.auth.userId,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchUsers: (token) => {
-    dispatch(actionCreators.fetchUsers(token));
+  onFetchUsers: () => {
+    dispatch(actionCreators.fetchUsers());
   },
   onFetchGroups: () => {
     dispatch(actionCreators.fetchGroups());

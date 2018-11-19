@@ -6,7 +6,7 @@ import { ContentState, convertFromHTML, ContentBlock, genKey } from 'draft-js';
 import { createImageData } from 'canvas';
 import { writeText } from './CanvasUtils';
 
-const imgOutputFolder = `${__dirname}/output`;
+// const imgOutputFolder = `${__dirname}/output`;
 
 // To get test name in Jasmine
 /*

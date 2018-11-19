@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
-import axios from '../../../axios-http';
+import * as api from '../../../api';
 
 import * as actionCreators from '../../../store/actions';
 import TextExercisePreparation from '../Preparation/TextExercisePreparation';
@@ -67,31 +67,13 @@ export class TextExerciseContainer extends Component {
   }
 
   textInterestingnessRating = (interestingnessRating) => {
-    axios.post(
-      '/textRatings',
-      { readingTextId: this.props.selectedText.id, interestingnessRating }, { headers: { 'x-access-token': this.props.token } },
-    )
-      .then(() => {
-      }, (error) => {
-        console.log(error);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    api.addTextRating({ readingTextId: this.props.selectedText.id, interestingnessRating })
+      .then(() => {}, (errorMessage) => { console.log(errorMessage); });
   }
 
   testDifficultyRating = (difficultyRating) => {
-    axios.post(
-      '/testRatings',
-      { readingTextId: this.props.selectedText.id, difficultyRating }, { headers: { 'x-access-token': this.props.token } },
-    )
-      .then(() => {
-      }, (error) => {
-        console.log(error);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    api.addTestRating({ readingTextId: this.props.selectedText.id, difficultyRating })
+      .then(() => {}, (errorMessage) => { console.log(errorMessage); });
   }
 
   switchViewHandler = (status) => {
@@ -127,9 +109,8 @@ export class TextExerciseContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
   selectedText: state.text.selectedText,
-  testStatus: state.test.status,
+  testStatus: state.exerciseTest.status,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });

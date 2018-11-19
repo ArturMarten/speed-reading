@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-http';
-import { serverErrorMessage } from '../../shared/utility';
+import * as api from '../../api';
 import { getCurrentOptions } from '../reducers/options';
 
 const timerInit = () => ({
@@ -114,23 +113,20 @@ export const prepareHelpExercise = (save, exerciseOptions) => (dispatch) => {
   dispatch(exercisePrepared(save, exerciseOptions));
 };
 
-export const startExercise = (attemptData, token) => (dispatch, getState) => {
+export const startExercise = attemptData => (dispatch, getState) => {
   dispatch(exerciseStarting());
   const settings = getCurrentOptions(getState().options);
-  axios.post('/exerciseAttempts', { ...attemptData, settings }, { headers: { 'x-access-token': token } })
-    .then((response) => {
+  api.startExercise({ ...attemptData, settings })
+    .then((attemptId) => {
       dispatch(timerStart());
       dispatch(exerciseStarted());
-      dispatch(exerciseAttemptStarted(response.data.id));
-    }, (error) => {
-      dispatch(exerciseStartFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(exerciseStartFailed(error.message));
+      dispatch(exerciseAttemptStarted(attemptId));
+    }, (errorMessage) => {
+      dispatch(exerciseStartFailed(errorMessage));
     });
 };
 
-export const finishReadingExercise = (attemptId, token) => (dispatch, getState) => {
+export const finishReadingExercise = attemptId => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(exerciseFinishing());
   let state = getState();
@@ -139,18 +135,15 @@ export const finishReadingExercise = (attemptId, token) => (dispatch, getState) 
   dispatch(readingExerciseFinished(elapsedTime, selectedText));
   state = getState();
   const { result } = state.exercise;
-  axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
+  api.finishExercise({ attemptId, result })
     .then(() => {
       // Dispatch event
-    }, (error) => {
-      dispatch(exerciseFinishFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(exerciseFinishFailed(error.message));
+    }, (errorMessage) => {
+      dispatch(exerciseFinishFailed(errorMessage));
     });
 };
 
-export const finishHelpExercise = (attemptId, token, data) => (dispatch, getState) => {
+export const finishHelpExercise = (attemptId, data) => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(exerciseFinishing());
   let state = getState();
@@ -166,14 +159,11 @@ export const finishHelpExercise = (attemptId, token, data) => (dispatch, getStat
   }
   state = getState();
   const { result } = state.exercise;
-  axios.patch(`/exerciseAttempts/${attemptId}`, { result }, { headers: { 'x-access-token': token } })
+  api.finishExercise({ attemptId, result })
     .then(() => {
       // Dispatch event
-    }, (error) => {
-      dispatch(exerciseFinishFailed(serverErrorMessage(error)));
-    })
-    .catch((error) => {
-      dispatch(exerciseFinishFailed(error.message));
+    }, (errorMessage) => {
+      dispatch(exerciseFinishFailed(errorMessage));
     });
 };
 
@@ -182,6 +172,7 @@ export const retryExercise = () => (dispatch, getState) => {
   const { exerciseOptions } = getState().options;
   dispatch(exerciseRetry({ exerciseOptions }));
 };
+
 export const endExercise = () => (dispatch) => {
   dispatch(exerciseEnd());
 };

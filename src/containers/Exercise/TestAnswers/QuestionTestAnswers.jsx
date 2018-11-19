@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Grid, Icon, Segment, Loader } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
-
-import axios from '../../../axios-http';
+import * as api from '../../../api';
 
 export class QuestionTestAnswers extends Component {
   state = {
@@ -12,19 +11,18 @@ export class QuestionTestAnswers extends Component {
   };
 
   componentDidMount() {
-    axios.get(`/testQuestionAnswers?testAttemptId=${this.props.testAttemptId}`)
-      .then((response) => {
+    api.fetchTestQuestionAnswers(this.props.testAttemptId)
+      .then((testQuestionAnswers) => {
         this.setState({
           loading: false,
-          testQuestionAnswers: response.data,
+          testQuestionAnswers,
         });
-      })
-      .catch(() => {
+      }, () => {
         this.setState({
           loading: false,
           testQuestionAnswers: [],
         });
-      });
+      })
   }
 
   render() {
@@ -96,7 +94,7 @@ export class QuestionTestAnswers extends Component {
 }
 
 const mapStateToProps = state => ({
-  testAttemptId: state.test.attemptId,
+  testAttemptId: state.exerciseTest.attemptId,
   translate: getTranslate(state.locale),
 });
 
