@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Dropdown, Icon, Grid, Popup, Button, Header } from 'semantic-ui-react';
 import { environment } from '../../environment';
 
-import './ResponsiveLayout.css';
 import axios from '../../api/axios-http';
 import credentials from '../../credentials';
 import Auth from '../Auth/Auth';
@@ -174,85 +173,86 @@ export class ResponsiveLayout extends Component {
                 <Icon name="file alternate outline" color="blue" size="large" />
                 {this.props.translate('menu.text-entry')}
               </Menu.Item> : null}
-            <Menu.Item
+            <Dropdown
               as="div"
-              active={this.props.path.indexOf('/exercise') !== -1}
-              className="Dropdown-Item"
+              className={`item ${this.props.path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
+              openOnFocus
+              icon={
+                <Fragment>
+                  {this.props.translate('menu.exercise')}
+                  <Icon name="winner" color="yellow" size="large" />
+                  <Icon name="caret down" />
+                </Fragment>
+              }
             >
-              <Icon name="winner" color="yellow" size="large" />
-              <Dropdown
-                fluid
-                text={this.props.translate('menu.exercise')}
-              >
-                <Dropdown.Menu>
-                  <Dropdown.Header
-                    style={{ color: 'rgba(0, 76, 255, 0.85)' }}
-                    content={this.props.translate('menu.reading-exercises')}
-                  />
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/reading-test'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/reading-test"
-                  >
-                    {this.props.translate('menu.reading-test')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/reading-aid'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/reading-aid"
-                  >
-                    {this.props.translate('menu.reading-aid')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/scrolling-text'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/scrolling-text"
-                  >
-                    {this.props.translate('menu.scrolling-text')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/disappearing-text'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/disappearing-text"
-                  >
-                    {this.props.translate('menu.disappearing-text')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/word-groups'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/word-groups"
-                  >
-                    {this.props.translate('menu.word-groups')}
-                  </Dropdown.Item>
-                  <Dropdown.Divider style={{ margin: 0 }} />
-                  <Dropdown.Header
-                    style={{ color: 'rgba(0, 76, 255, 0.85)' }}
-                    content={this.props.translate('menu.help-exercises')}
-                  />
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/schulte-tables'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/schulte-tables"
-                  >
-                    {this.props.translate('menu.schulte-tables')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as={Link}
-                    active={this.props.path === '/exercise/concentration'}
-                    onClick={this.itemClickHandler}
-                    to="/exercise/concentration"
-                  >
-                    {this.props.translate('menu.concentration')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Menu.Item>
+              <Dropdown.Menu style={{ left: '0px', top: '100%', minWidth: 'calc(100% - 1px)' }}>
+                <Dropdown.Header
+                  style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                  content={this.props.translate('menu.reading-exercises')}
+                />
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/reading-test'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/reading-test"
+                >
+                  {this.props.translate('menu.reading-test')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/reading-aid'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/reading-aid"
+                >
+                  {this.props.translate('menu.reading-aid')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/scrolling-text'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/scrolling-text"
+                >
+                  {this.props.translate('menu.scrolling-text')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/disappearing-text'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/disappearing-text"
+                >
+                  {this.props.translate('menu.disappearing-text')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/word-groups'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/word-groups"
+                >
+                  {this.props.translate('menu.word-groups')}
+                </Dropdown.Item>
+                <Dropdown.Divider style={{ margin: 0 }} />
+                <Dropdown.Header
+                  style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                  content={this.props.translate('menu.help-exercises')}
+                />
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/schulte-tables'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/schulte-tables"
+                >
+                  {this.props.translate('menu.schulte-tables')}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  active={this.props.path === '/exercise/concentration'}
+                  onClick={this.itemClickHandler}
+                  to="/exercise/concentration"
+                >
+                  {this.props.translate('menu.concentration')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             <Menu.Item
               as={Link}
               active={this.props.path === '/statistics'}
@@ -340,86 +340,85 @@ export class ResponsiveLayout extends Component {
                     <Icon name="file alternate outline" color="blue" size="large" />
                     {this.props.translate('menu.text-entry')}
                   </Menu.Item> : null}
-                <Menu.Item
+                <Dropdown
                   as="div"
-                  active={this.props.path.indexOf('/exercise') !== -1}
-                  onClick={this.dropdownHandler}
-                  className="Dropdown-Item"
+                  className={`link item ${this.props.path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
+                  icon={
+                    <Fragment>
+                      <Icon name="winner" color="yellow" size="large" />
+                      {this.props.translate('menu.exercise')}
+                      <i className="dropdown icon" />
+                    </Fragment>
+                  }
                 >
-                  <Icon name="winner" color="yellow" size="large" />
-                  <Dropdown
-                    fluid
-                    text={this.props.translate('menu.exercise')}
-                  >
-                    <Dropdown.Menu>
-                      <Dropdown.Header
-                        style={{ color: 'rgba(0, 76, 255, 0.85)' }}
-                        content={this.props.translate('menu.reading-exercises')}
-                      />
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/reading-test'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/reading-test"
-                      >
-                        {this.props.translate('menu.reading-test')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/reading-aid'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/reading-aid"
-                      >
-                        {this.props.translate('menu.reading-aid')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/scrolling-text'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/scrolling-text"
-                      >
-                        {this.props.translate('menu.scrolling-text')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/disappearing-text'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/disappearing-text"
-                      >
-                        {this.props.translate('menu.disappearing-text')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/word-groups'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/word-groups"
-                      >
-                        {this.props.translate('menu.word-groups')}
-                      </Dropdown.Item>
-                      <Dropdown.Divider style={{ margin: 0 }} />
-                      <Dropdown.Header
-                        style={{ color: 'rgba(0, 76, 255, 0.85)' }}
-                        content={this.props.translate('menu.help-exercises')}
-                      />
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/schulte-tables'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/schulte-tables"
-                      >
-                        {this.props.translate('menu.schulte-tables')}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as={Link}
-                        active={this.props.path === '/exercise/concentration'}
-                        onClick={this.itemClickHandler}
-                        to="/exercise/concentration"
-                      >
-                        {this.props.translate('menu.concentration')}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Menu.Item>
+                  <Dropdown.Menu style={{ marginTop: '0em' }}>
+                    <Dropdown.Header
+                      style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                      content={this.props.translate('menu.reading-exercises')}
+                    />
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/reading-test'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/reading-test"
+                    >
+                      {this.props.translate('menu.reading-test')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/reading-aid'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/reading-aid"
+                    >
+                      {this.props.translate('menu.reading-aid')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/scrolling-text'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/scrolling-text"
+                    >
+                      {this.props.translate('menu.scrolling-text')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/disappearing-text'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/disappearing-text"
+                    >
+                      {this.props.translate('menu.disappearing-text')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/word-groups'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/word-groups"
+                    >
+                      {this.props.translate('menu.word-groups')}
+                    </Dropdown.Item>
+                    <Dropdown.Divider style={{ margin: 0 }} />
+                    <Dropdown.Header
+                      style={{ color: 'rgba(0, 76, 255, 0.85)' }}
+                      content={this.props.translate('menu.help-exercises')}
+                    />
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/schulte-tables'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/schulte-tables"
+                    >
+                      {this.props.translate('menu.schulte-tables')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as={Link}
+                      active={this.props.path === '/exercise/concentration'}
+                      onClick={this.itemClickHandler}
+                      to="/exercise/concentration"
+                    >
+                      {this.props.translate('menu.concentration')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
                 <Menu.Item
                   as={Link}
                   active={this.props.path === '/statistics'}
