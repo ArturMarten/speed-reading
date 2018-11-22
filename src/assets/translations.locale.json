@@ -679,6 +679,7 @@
     "fetching-users": ["Laen kasutajaid", "Fetching users"],
     "all-groups": ["Kõik grupid", "All groups"],
     "group": ["Grupp", "Group"],
+    "group-not-set": ["Määramata", "Not specified"],
     "first-name": ["Eesnimi", "First name"],
     "last-name": ["Perekonnanimi", "Last name"],
     "email": ["E-posti aadress", "E-mail address"],

@@ -165,6 +165,7 @@ export class TextSelection extends Component {
           key={text.id}
           active={text.id === this.state.selectedTextId}
           onClick={() => this.textSelectionHandler(text.id)}
+          onDoubleClick={() => this.onSubmit()}
         >
           <Table.Cell textAlign="left" computer={6}>
             <div>

@@ -10,7 +10,7 @@ import ErrorMessage from '../../Message/ErrorMessage';
 
 export class UserEditor extends Component {
   state = {
-    groupId: null,
+    groupId: '',
     email: '',
     role: 'student',
     notify: false,
@@ -39,7 +39,7 @@ export class UserEditor extends Component {
 
   setUser(user) {
     this.setState({
-      groupId: user.groupId,
+      groupId: user.groupId.toString(),
       email: user.email,
       role: user.role,
       valid: true,
@@ -58,11 +58,12 @@ export class UserEditor extends Component {
   }
 
   changeUserHandler = () => {
+    const { groupId, email, role, notify } = this.state;
     const user = {
-      groupId: this.state.groupId,
-      email: this.state.email,
-      role: this.state.role,
-      notify: this.state.notify,
+      groupId: groupId.value !== '' ? +groupId : null,
+      email,
+      role,
+      notify,
     };
     this.props.onChangeUser(this.props.user.publicId, user);
     this.setState({ submitted: true });
@@ -108,12 +109,15 @@ export class UserEditor extends Component {
   }
 
   render() {
-    const groupOptions = this.props.groups
-      .map((group, index) => ({
-        key: index,
-        text: group.name,
-        value: group.id,
-      }));
+    const groupOptions = [{
+      key: 0,
+      text: this.props.translate('manage-users.group-not-set'),
+      value: '',
+    }].concat(this.props.groups.map((group, index) => ({
+      key: index + 1,
+      text: group.name,
+      value: group.id.toString(),
+    })));
     const roleOptions = ['student', 'editor', 'teacher', 'developer', 'admin']
       .filter(role => rolePermissions[role] <= rolePermissions[this.props.role])
       .map((role, index) => ({

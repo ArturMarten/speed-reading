@@ -198,7 +198,7 @@ export class ManageUsers extends Component {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell colSpan="7">
+                  <Table.HeaderCell colSpan="8">
                     <Button
                       positive
                       floated="right"
