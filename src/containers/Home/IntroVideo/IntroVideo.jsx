@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import {
   Header,
+  Embed,
 //   Label,
 } from 'semantic-ui-react';
 
@@ -39,7 +40,7 @@ class IntroVideo extends Component {
         <Header as="h3">
           {this.props.translate('intro-video.header')}
         </Header>
-        {this.props.translate('intro-video.being-made')}
+        <Embed />
         {/*
         <Label.Group size="large">
           <Label as="a" color="green" onClick={this.timestampHandler(2)}>

@@ -147,7 +147,7 @@ export class Auth extends Component {
       value: group.id.toString(),
     })));
     return (
-      <Modal size="mini" open={this.props.open || !this.props.isAuthenticated}>
+      <Modal size="mini" open={this.props.open || !this.props.isAuthenticated} onClose={this.props.onClose} closeIcon={this.props.closeIcon}>
         <Modal.Header>
           {this.state.isSignup ? this.props.translate('auth.register-modal-header') : this.props.translate('auth.login-modal-header')}
           <LanguageSelection

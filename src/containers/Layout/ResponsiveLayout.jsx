@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
+import { push } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Dropdown, Icon, Grid, Popup, Button, Header } from 'semantic-ui-react';
 import { environment } from '../../environment';
@@ -36,12 +37,16 @@ export class ResponsiveLayout extends Component {
     feedbackOpened: false,
     problemReportOpened: false,
     bugReportOpened: false,
+    redirectPath: '',
   };
 
   componentDidUpdate(prevProps) {
     if (prevProps.role === '' && this.props.role !== ''
       && this.props.firstName === '' && this.props.lastName === '') {
       this.profileSettingsToggleHandler();
+    }
+    if (!prevProps.profileFetched && this.props.profileFetched) {
+      this.redirect();
     }
   }
 
@@ -65,6 +70,10 @@ export class ResponsiveLayout extends Component {
     this.setState({ authOpened: !this.state.authOpened, profileOpened: false });
   }
 
+  authCloseHandler = () => {
+    this.setState({ authOpened: false, redirectPath: '' });
+  }
+
   changePasswordToggleHandler = () => {
     this.setState({ changePasswordOpened: !this.state.changePasswordOpened, profileOpened: false });
   }
@@ -81,19 +90,41 @@ export class ResponsiveLayout extends Component {
     this.setState({ bugReportOpened: !this.state.bugReportOpened });
   }
 
-  itemClickHandler = () => {
-    this.setState({ sidebarOpened: false });
+  itemClickHandler = (event, path) => {
+    const { isAuthenticated } = this.props;
+    const isHomePage = path === '/';
+    if (isAuthenticated || isHomePage) {
+      this.props.redirect(path);
+    }
+    this.setState({
+      sidebarOpened: false,
+      profileOpened: false,
+      authOpened: !isAuthenticated && !isHomePage,
+      redirectPath: isAuthenticated || isHomePage ? '' : path,
+    });
+  }
+
+  redirect = () => {
+    if (this.state.redirectPath !== '') {
+      this.props.redirect(this.state.redirectPath);
+    }
+    this.setState({ authOpened: false, redirectPath: '' });
   }
 
   render() {
-    const { role, children } = this.props;
+    const { role, children, path } = this.props;
     const isPermittedToModifyTexts = rolePermissions[role] >= rolePermissions.editor;
     const isPermittedToManageUsers = rolePermissions[role] >= rolePermissions.teacher;
+    const isHomePage = path === '/' && true;
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
-          {this.state.authOpened || (!this.props.isAuthenticated) ?
-            <Auth open={this.state.authOpened} /> : null}
+          {(this.state.authOpened && !this.props.isAuthenticated) || (!this.props.isAuthenticated && !isHomePage) ?
+            <Auth
+              open={this.state.authOpened}
+              onClose={this.authCloseHandler}
+              closeIcon={this.state.authOpened}
+            /> : null}
           {this.state.profileSettingsOpened ?
             <ProfileSettings open={this.state.profileSettingsOpened} onClose={this.profileSettingsToggleHandler} /> : null}
           {this.state.changePasswordOpened ?
@@ -155,27 +186,25 @@ export class ResponsiveLayout extends Component {
               </Menu.Item>
             </Menu.Menu>
             <Menu.Item
-              as={Link}
-              active={this.props.path === '/'}
-              onClick={this.itemClickHandler}
-              to="/"
+              as="a"
+              active={path === '/'}
+              onClick={event => this.itemClickHandler(event, '/')}
             >
               <Icon name="home" size="large" />
               {this.props.translate('menu.home')}
             </Menu.Item>
             {isPermittedToModifyTexts ?
               <Menu.Item
-                as={Link}
-                active={this.props.path === '/text-entry'}
-                onClick={this.itemClickHandler}
-                to="/text-entry"
+                as="a"
+                active={path === '/text-entry'}
+                onClick={event => this.itemClickHandler(event, '/text-entry')}
               >
                 <Icon name="file alternate outline" color="blue" size="large" />
                 {this.props.translate('menu.text-entry')}
               </Menu.Item> : null}
             <Dropdown
               as="div"
-              className={`item ${this.props.path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
+              className={`item ${path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
               openOnFocus
               icon={
                 <Fragment>
@@ -191,42 +220,37 @@ export class ResponsiveLayout extends Component {
                   content={this.props.translate('menu.reading-exercises')}
                 />
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/reading-test'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/reading-test"
+                  as="a"
+                  active={path === '/exercise/reading-test'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/reading-test')}
                 >
                   {this.props.translate('menu.reading-test')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/reading-aid'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/reading-aid"
+                  as="a"
+                  active={path === '/exercise/reading-aid'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/reading-aid')}
                 >
                   {this.props.translate('menu.reading-aid')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/scrolling-text'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/scrolling-text"
+                  as="a"
+                  active={path === '/exercise/scrolling-text'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/scrolling-text')}
                 >
                   {this.props.translate('menu.scrolling-text')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/disappearing-text'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/disappearing-text"
+                  as="a"
+                  active={path === '/exercise/disappearing-text'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/disappearing-text')}
                 >
                   {this.props.translate('menu.disappearing-text')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/word-groups'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/word-groups"
+                  as="a"
+                  active={path === '/exercise/word-groups'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/word-groups')}
                 >
                   {this.props.translate('menu.word-groups')}
                 </Dropdown.Item>
@@ -236,38 +260,34 @@ export class ResponsiveLayout extends Component {
                   content={this.props.translate('menu.help-exercises')}
                 />
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/schulte-tables'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/schulte-tables"
+                  as="a"
+                  active={path === '/exercise/schulte-tables'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/schulte-tables')}
                 >
                   {this.props.translate('menu.schulte-tables')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  as={Link}
-                  active={this.props.path === '/exercise/concentration'}
-                  onClick={this.itemClickHandler}
-                  to="/exercise/concentration"
+                  as="a"
+                  active={path === '/exercise/concentration'}
+                  onClick={event => this.itemClickHandler(event, '/exercise/concentration')}
                 >
                   {this.props.translate('menu.concentration')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Menu.Item
-              as={Link}
-              active={this.props.path === '/statistics'}
-              onClick={this.itemClickHandler}
-              to="/statistics"
+              as="a"
+              active={path === '/statistics'}
+              onClick={event => this.itemClickHandler(event, '/statistics')}
             >
               <Icon name="line graph" color="red" size="large" />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
             {isPermittedToManageUsers ?
               <Menu.Item
-                as={Link}
-                active={this.props.path === '/manage'}
-                onClick={this.itemClickHandler}
-                to="/manage"
+                as="a"
+                active={path === '/manage'}
+                onClick={event => this.itemClickHandler(event, '/manage')}
               >
                 <Icon name="settings" size="large" />
                 {this.props.translate('menu.manage')}
@@ -300,10 +320,9 @@ export class ResponsiveLayout extends Component {
                   <Icon name="sidebar" size="large" />
                 </Menu.Item>
                 <Menu.Item
-                  as={Link}
+                  as="a"
                   header
-                  onClick={this.itemClickHandler}
-                  to="/"
+                  onClick={event => this.itemClickHandler(event, '/')}
                 >
                   <Icon color="blue" name="book" size="big" />
                   {`${this.props.translate('menu.title')} ${environment.version}`}
@@ -313,36 +332,33 @@ export class ResponsiveLayout extends Component {
             <Responsive minWidth={992}>
               <Menu compact attached="top" secondary>
                 <Menu.Item
-                  as={Link}
+                  as="a"
                   header
-                  onClick={this.itemClickHandler}
-                  to="/"
+                  onClick={event => this.itemClickHandler(event, '/')}
                 >
                   <Icon color="blue" name="book" size="big" />
                   {`${this.props.translate('menu.title')} ${environment.version}`}
                 </Menu.Item>
                 <Menu.Item
-                  as={Link}
-                  active={this.props.path === '/'}
-                  onClick={this.itemClickHandler}
-                  to="/"
+                  as="a"
+                  active={path === '/'}
+                  onClick={event => this.itemClickHandler(event, '/')}
                 >
                   <Icon name="home" size="large" />
                   {this.props.translate('menu.home')}
                 </Menu.Item>
                 {isPermittedToModifyTexts ?
                   <Menu.Item
-                    as={Link}
-                    active={this.props.path === '/text-entry'}
-                    onClick={this.itemClickHandler}
-                    to="/text-entry"
+                    as="a"
+                    active={path === '/text-entry'}
+                    onClick={event => this.itemClickHandler(event, '/text-entry')}
                   >
                     <Icon name="file alternate outline" color="blue" size="large" />
                     {this.props.translate('menu.text-entry')}
                   </Menu.Item> : null}
                 <Dropdown
                   as="div"
-                  className={`link item ${this.props.path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
+                  className={`link item ${path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
                   icon={
                     <Fragment>
                       <Icon name="winner" color="yellow" size="large" />
@@ -357,42 +373,37 @@ export class ResponsiveLayout extends Component {
                       content={this.props.translate('menu.reading-exercises')}
                     />
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/reading-test'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/reading-test"
+                      as="a"
+                      active={path === '/exercise/reading-test'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/reading-test')}
                     >
                       {this.props.translate('menu.reading-test')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/reading-aid'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/reading-aid"
+                      as="a"
+                      active={path === '/exercise/reading-aid'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/reading-aid')}
                     >
                       {this.props.translate('menu.reading-aid')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/scrolling-text'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/scrolling-text"
+                      as="a"
+                      active={path === '/exercise/scrolling-text'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/scrolling-text')}
                     >
                       {this.props.translate('menu.scrolling-text')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/disappearing-text'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/disappearing-text"
+                      as="a"
+                      active={path === '/exercise/disappearing-text'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/disappearing-text')}
                     >
                       {this.props.translate('menu.disappearing-text')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/word-groups'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/word-groups"
+                      as="a"
+                      active={path === '/exercise/word-groups'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/word-groups')}
                     >
                       {this.props.translate('menu.word-groups')}
                     </Dropdown.Item>
@@ -402,57 +413,54 @@ export class ResponsiveLayout extends Component {
                       content={this.props.translate('menu.help-exercises')}
                     />
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/schulte-tables'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/schulte-tables"
+                      as="a"
+                      active={path === '/exercise/schulte-tables'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/schulte-tables')}
                     >
                       {this.props.translate('menu.schulte-tables')}
                     </Dropdown.Item>
                     <Dropdown.Item
-                      as={Link}
-                      active={this.props.path === '/exercise/concentration'}
-                      onClick={this.itemClickHandler}
-                      to="/exercise/concentration"
+                      as="a"
+                      active={path === '/exercise/concentration'}
+                      onClick={event => this.itemClickHandler(event, '/exercise/concentration')}
                     >
                       {this.props.translate('menu.concentration')}
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
                 <Menu.Item
-                  as={Link}
-                  active={this.props.path === '/statistics'}
-                  onClick={this.itemClickHandler}
-                  to="/statistics"
+                  as="a"
+                  active={path === '/statistics'}
+                  onClick={event => this.itemClickHandler(event, '/statistics')}
                 >
                   <Icon name="line graph" color="red" size="large" />
                   {this.props.translate('menu.statistics')}
                 </Menu.Item>
                 {isPermittedToManageUsers ?
                   <Menu.Item
-                    as={Link}
-                    active={this.props.path === '/manage'}
-                    onClick={this.itemClickHandler}
-                    to="/manage"
+                    as="a"
+                    active={path === '/manage'}
+                    onClick={event => this.itemClickHandler(event, '/manage')}
                   >
                     <Icon name="settings" size="large" />
                     {this.props.translate('menu.manage')}
                   </Menu.Item> : null}
                 <Menu.Menu position="right">
-                  <Menu.Item fitted>
-                    <Popup
-                      on="click"
-                      open={this.state.profileOpened}
-                      onOpen={this.profileToggleHandler}
-                      onClose={this.profileToggleHandler}
-                      trigger={<Icon fitted name="user" color="red" size="large" />}
-                      position="bottom right"
-                      header={this.props.isAuthenticated ?
-                        <Header textAlign="center">
-                          {this.props.userEmail}
-                        </Header> : null}
-                      content={
-                        this.props.isAuthenticated ?
+                  {this.props.isAuthenticated ?
+                    <Menu.Item fitted>
+                      <Popup
+                        on="click"
+                        open={this.state.profileOpened}
+                        onOpen={this.profileToggleHandler}
+                        onClose={this.profileToggleHandler}
+                        trigger={<Icon fitted name="user" color="red" size="large" />}
+                        position="bottom right"
+                        header={
+                          <Header textAlign="center">
+                            {this.props.userEmail}
+                          </Header>
+                        }
+                        content={
                           <Button.Group vertical fluid>
                             <Button
                               color="black"
@@ -484,13 +492,17 @@ export class ResponsiveLayout extends Component {
                               {this.props.translate('profile.change-password-button')}
                               <Icon name="lock" style={{ opacity: 1 }} />
                             </Button>
-                          </Button.Group> :
-                          <Button positive icon labelPosition="right" onClick={this.authToggleHandler}>
-                            {this.props.translate('auth.login-button')}
-                            <Icon name="sign in" style={{ opacity: 1 }} />
-                          </Button>}
-                    />
-                  </Menu.Item>
+                          </Button.Group>
+                        }
+                      />
+                    </Menu.Item> :
+                    <Menu.Item fitted>
+                      <Popup
+                        trigger={<Icon fitted name="sign in" style={{ opacity: 1 }} color="green" size="big" onClick={this.authToggleHandler} />}
+                        content={this.props.translate('menu.login-popup')}
+                        on="hover"
+                      />
+                    </Menu.Item>}
                   <Menu.Item fitted>
                     <Popup
                       trigger={<Icon fitted name="talk" color="black" size="large" onClick={this.feedbackToggleHandler} />}
@@ -542,6 +554,7 @@ const mapStateToProps = state => ({
   path: state.router.location.pathname,
   role: state.profile.role,
   isAuthenticated: state.auth.token !== null,
+  profileFetched: state.profile.role !== '',
   userEmail: state.profile.email,
   firstName: state.profile.firstName,
   lastName: state.profile.lastName,
@@ -550,6 +563,9 @@ const mapStateToProps = state => ({
 
 // eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = dispatch => ({
+  redirect: (to) => {
+    dispatch(push(to));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ResponsiveLayout, axios));

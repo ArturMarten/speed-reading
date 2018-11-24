@@ -15,6 +15,7 @@
     "concentration": ["Keskendumine", "Concentration"],
     "statistics": ["Statistika", "Statistics"],
     "manage": ["Halda", "Manage"],
+    "login-popup": ["Logi sisse", "Log in"],
     "feedback-popup": ["Anna tagasisidet", "Give feedback"],
     "problem-report-popup": ["Teata probleemist", "Report a problem"],
     "bug-report-popup": ["Teata veast", "Report a bug"]
@@ -101,8 +102,6 @@
     "problem-report-content": ["Vajutage menüüs olevale hüüumärgiga kolmnurgal ja andke sellest teada", "Click on bug icon in the menu and report immediately"],
     "bug-report-title": ["Leidsite vea?", "Found a bug?"],
     "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
-    "browser-warning-title": ["Brauseri ühilduvus", "Browser compatibility"],
-    "browser-warning-content": ["Ainult Google Chrome on hetkel toetatud.", "Only Google Chrome is currently supported."],
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
     "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
     "project": ["Projekt", "Project"],
@@ -115,7 +114,7 @@
     "developer-name": ["Marten Siiber", "Marten Siiber"],
     "contributed-creatively": ["Loovalt panustasid", "Contribute creatively"],
     "contributed-creatively-names": ["prof. Jaan Mikk ja Sven Aller", "prof. Jaan Mikk and Sven Aller"],
-    "contributed-texts": ["Aitasid lugemistekstidega", "Helped with reading texts"],
+    "contributed-texts": ["Lugemistekstidega aitasid", "Helped with reading texts"],
     "contributed-texts-names": ["Enel Tubin, Kirsika-Marian Bazilenko ja Ilona Võik", "Enel Tubin, Kirsika-Marian Bazilenko and Ilona Võik"],
     "place": ["Tartu Ülikool", "University of Tartu"],
     "copyright": ["Autoriõigustega kaitstud.", "Copyright."]
@@ -162,8 +161,7 @@
     "header": ["Viimased uuendused", "Recent updates"]
   },
   "intro-video": {
-    "header": ["Tutvustav video", "Introduction video"],
-    "being-made": ["Valmimisel..", "Being made.."],
+    "header": ["Tutvustav video (valmimisel)", "Introduction video (being made)"],
     "title": ["Kiirlugemine 5.1 tutvustav video", "Kiirlugemine 5.1 introduction video"],
     "no-iframe": ["Kiirlugemine 5.1 tutvustav video", "Kiirlugemine 5.1 introduction video"],
     "authentication": ["Sisselogimine", "Authentication"],

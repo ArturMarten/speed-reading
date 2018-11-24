@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Header, List } from 'semantic-ui-react';
+import { Header, Icon, List } from 'semantic-ui-react';
 
 class ReleaseNotes extends Component {
   state = {};
@@ -8,6 +8,7 @@ class ReleaseNotes extends Component {
     return (
       <Fragment>
         <Header as="h3">
+          <Icon name="announcement" color="grey" size="large" />
           {this.props.translate('release-notes.header')}
         </Header>
         <div style={{ maxHeight: '20em', overflowX: 'auto' }}>

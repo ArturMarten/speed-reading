@@ -39,13 +39,17 @@ export class Home extends Component {
               </p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
               <Button
+                basic
                 floated="right"
+                icon={<Icon name="info circle" color="blue" />}
                 content={this.props.translate('home.about')}
                 onClick={this.aboutToggleHandler}
               />
               <Button
+                basic
                 as="a"
                 positive
+                floated="right"
                 icon="file pdf outline"
                 content={this.props.translate('home.user-manual')}
                 href={userManual}
@@ -59,7 +63,7 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
           <Divider />
-          <Grid.Row style={{ paddingBottom: '5em' }}>
+          <Grid.Row style={{ paddingBottom: '2em' }}>
             <Grid.Column width={8}>
               <ReleaseNotes
                 language={this.props.currentLanguage}
@@ -83,16 +87,6 @@ export class Home extends Component {
                 content={this.props.translate('home.mobile-use-content')}
               />
             </Grid.Column>
-            {/*
-            <Grid.Column>
-              <Message
-                warning
-                icon="chrome"
-                header={this.props.translate('home.browser-warning-title')}
-                content={this.props.translate('home.browser-warning-content')}
-              />
-            </Grid.Column>
-            */}
             <Grid.Column>
               <Message
                 warning
