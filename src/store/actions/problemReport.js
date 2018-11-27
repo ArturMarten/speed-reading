@@ -48,3 +48,36 @@ export const fetchProblemReports = () => (dispatch) => {
       dispatch(fetchProblemReportsFailed(errorMessage));
     });
 };
+
+const resolveProblemReportStart = problemReportId => ({
+  type: actionTypes.RESOLVE_PROBLEM_REPORT_START,
+  payload: {
+    problemReportId,
+  },
+});
+
+const resolveProblemReportSucceeded = (problemReportId, resolved) => ({
+  type: actionTypes.RESOLVE_PROBLEM_REPORT_SUCCEEDED,
+  payload: {
+    problemReportId,
+    resolved,
+  },
+});
+
+const resolveProblemReportFailed = (problemReportId, errorMessage) => ({
+  type: actionTypes.RESOLVE_PROBLEM_REPORT_FAILED,
+  payload: {
+    problemReportId,
+    errorMessage,
+  },
+});
+
+export const resolveProblemReport = (problemReportId, resolved) => (dispatch) => {
+  dispatch(resolveProblemReportStart(problemReportId));
+  api.resolveProblemReport(problemReportId, resolved)
+    .then(() => {
+      dispatch(resolveProblemReportSucceeded(problemReportId, resolved));
+    }, (errorMessage) => {
+      dispatch(resolveProblemReportFailed(problemReportId, errorMessage));
+    });
+};

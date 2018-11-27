@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Table, Button, Icon, Segment, Loader, Modal, Image } from 'semantic-ui-react';
+import { Table, Button, Icon, Segment, Loader, Modal, Image, Dropdown } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import axios from '../../../api/axios-http';
@@ -58,6 +58,10 @@ export class ManageBugReports extends Component {
     }
   };
 
+  resolvedChangeHandler = (bugReportId, resolved) => {
+    this.props.onResolveBugReport(bugReportId, resolved);
+  }
+
   logBugReportInfo = bugReport => () => {
     console.log({
       platform: bugReport.platform,
@@ -72,6 +76,10 @@ export class ManageBugReports extends Component {
   render() {
     const { column, direction } = this.state;
     const sortedBugReports = sortByColumn(this.props.bugReports, column, direction);
+    const resolvedOptions = [
+      { key: 0, value: false, text: this.props.translate('manage-bug-reports.bug-unresolved') },
+      { key: 1, value: true, text: this.props.translate('manage-bug-reports.bug-resolved') },
+    ];
     const screenshotModal = (
       <Modal open={this.state.screenshotOpen} onClose={this.openScreenshotToggle(null)} closeIcon>
         <Image
@@ -140,9 +148,14 @@ export class ManageBugReports extends Component {
                       {this.getUserEmailById(bugReport.userId)}
                     </Table.Cell>
                     <Table.Cell positive={bugReport.resolved} negative={!bugReport.resolved}>
-                      {bugReport.resolved ?
-                        this.props.translate('manage-bug-reports.bug-resolved') :
-                        this.props.translate('manage-bug-reports.bug-unresolved')}
+                      <Dropdown
+                        selection
+                        loading={bugReport.loading}
+                        disabled={bugReport.loading}
+                        value={bugReport.resolved}
+                        onChange={(event, { value }) => this.resolvedChangeHandler(bugReport.id, value)}
+                        options={resolvedOptions}
+                      />
                     </Table.Cell>
                     <Table.Cell>
                       {bugReport.description}
@@ -160,15 +173,6 @@ export class ManageBugReports extends Component {
                             content={this.props.translate('manage-bug-reports.screenshot')}
                             onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}submittedScreenshots/${bugReport.screenshotFilename}`)}
                           /> : null}
-                        {bugReport.resolved ?
-                          <Button
-                            negative
-                            content={this.props.translate('manage-bug-reports.mark-unresolved')}
-                          /> :
-                          <Button
-                            positive
-                            content={this.props.translate('manage-bug-reports.mark-resolved')}
-                          />}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
@@ -196,6 +200,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onFetchBugReports: () => {
     dispatch(actionCreators.fetchBugReports());
+  },
+  onResolveBugReport: (bugReportId, resolved) => {
+    dispatch(actionCreators.resolveBugReport(bugReportId, resolved));
   },
 });
 

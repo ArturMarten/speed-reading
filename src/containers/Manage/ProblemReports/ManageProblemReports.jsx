@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Table, Button, Icon, Segment, Loader, Modal, Image } from 'semantic-ui-react';
+import { Table, Button, Icon, Segment, Loader, Modal, Image, Dropdown } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 
 import axios from '../../../api/axios-http';
@@ -58,9 +58,17 @@ export class ManageProblemReports extends Component {
     }
   };
 
+  resolvedChangeHandler = (problemReportId, resolved) => {
+    this.props.onResolveProblemReport(problemReportId, resolved);
+  }
+
   render() {
     const { column, direction } = this.state;
     const sortedProblemReports = sortByColumn(this.props.problemReports, column, direction);
+    const resolvedOptions = [
+      { key: 0, value: false, text: this.props.translate('manage-problem-reports.problem-unresolved') },
+      { key: 1, value: true, text: this.props.translate('manage-problem-reports.problem-resolved') },
+    ];
     const screenshotModal = (
       <Modal open={this.state.screenshotOpen} onClose={this.openScreenshotToggle(null)} closeIcon>
         <Image
@@ -129,9 +137,14 @@ export class ManageProblemReports extends Component {
                       {this.getUserEmailById(problemReport.userId)}
                     </Table.Cell>
                     <Table.Cell positive={problemReport.resolved} negative={!problemReport.resolved}>
-                      {problemReport.resolved ?
-                        this.props.translate('manage-problem-reports.problem-resolved') :
-                        this.props.translate('manage-problem-reports.problem-unresolved')}
+                      <Dropdown
+                        selection
+                        loading={problemReport.loading}
+                        disabled={problemReport.loading}
+                        value={problemReport.resolved}
+                        onChange={(event, { value }) => this.resolvedChangeHandler(problemReport.id, value)}
+                        options={resolvedOptions}
+                      />
                     </Table.Cell>
                     <Table.Cell>
                       {problemReport.textTitle !== null ?
@@ -149,15 +162,6 @@ export class ManageProblemReports extends Component {
                             content={this.props.translate('manage-problem-reports.screenshot')}
                             onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}submittedScreenshots/${problemReport.screenshotFilename}`)}
                           /> : null}
-                        {problemReport.resolved ?
-                          <Button
-                            negative
-                            content={this.props.translate('manage-problem-reports.mark-unresolved')}
-                          /> :
-                          <Button
-                            positive
-                            content={this.props.translate('manage-problem-reports.mark-resolved')}
-                          />}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
@@ -185,6 +189,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onFetchProblemReports: () => {
     dispatch(actionCreators.fetchProblemReports());
+  },
+  onResolveProblemReport: (problemReportId, resolved) => {
+    dispatch(actionCreators.resolveProblemReport(problemReportId, resolved));
   },
 });
 

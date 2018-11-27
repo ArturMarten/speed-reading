@@ -95,9 +95,11 @@ export {
 export {
   sendProblemReport,
   fetchProblemReports,
+  resolveProblemReport,
 } from './problemReport';
 
 export {
   sendBugReport,
   fetchBugReports,
+  resolveBugReport,
 } from './bugReport';

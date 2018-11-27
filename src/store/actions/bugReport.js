@@ -48,3 +48,36 @@ export const fetchBugReports = () => (dispatch) => {
       dispatch(fetchBugReportsFailed(errorMessage));
     });
 };
+
+const resolveBugReportStart = bugReportId => ({
+  type: actionTypes.RESOLVE_BUG_REPORT_START,
+  payload: {
+    bugReportId,
+  },
+});
+
+const resolveBugReportSucceeded = (bugReportId, resolved) => ({
+  type: actionTypes.RESOLVE_BUG_REPORT_SUCCEEDED,
+  payload: {
+    bugReportId,
+    resolved,
+  },
+});
+
+const resolveBugReportFailed = (bugReportId, errorMessage) => ({
+  type: actionTypes.RESOLVE_BUG_REPORT_FAILED,
+  payload: {
+    bugReportId,
+    errorMessage,
+  },
+});
+
+export const resolveBugReport = (bugReportId, resolved) => (dispatch) => {
+  dispatch(resolveBugReportStart(bugReportId));
+  api.resolveBugReport(bugReportId, resolved)
+    .then(() => {
+      dispatch(resolveBugReportSucceeded(bugReportId, resolved));
+    }, (errorMessage) => {
+      dispatch(resolveBugReportFailed(bugReportId, errorMessage));
+    });
+};

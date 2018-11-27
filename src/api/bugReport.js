@@ -28,3 +28,17 @@ export const fetchBugReports = () => (
       });
   })
 );
+
+export const resolveBugReport = (bugReportId, resolved) => (
+  new Promise((resolve, reject) => {
+    axios.patch(`/bugReports/${bugReportId}`, { resolved })
+      .then((response) => {
+        resolve(serverSuccessMessage(response));
+      }, (error) => {
+        reject(serverErrorMessage(error));
+      })
+      .catch((error) => {
+        reject(error.message);
+      });
+  })
+);

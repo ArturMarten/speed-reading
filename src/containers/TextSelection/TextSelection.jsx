@@ -38,14 +38,14 @@ export class TextSelection extends Component {
     },
     sortOptions: [
       { key: 0, value: 'averageInterestingnessRating', text: this.props.translate('text-selection.by-average-interestingness-rating') },
-      { key: 0, value: 'interestingnessRatingCount', text: this.props.translate('text-selection.by-interestingness-rating-count') },
-      { key: 1, value: 'wordCount', text: this.props.translate('text-selection.by-word-count') },
-      { key: 2, value: 'userReadingAttemptCount', text: this.props.translate('text-selection.by-user-reading-attempt') },
-      { key: 3, value: 'totalReadingAttemptCount', text: this.props.translate('text-selection.by-total-reading-attempt') },
-      { key: 4, value: 'wordLengthClassRating', text: this.props.translate('text-selection.by-word-length-class-rating') },
-      { key: 5, value: 'sentenceLengthClassRating', text: this.props.translate('text-selection.by-sentence-length-class-rating') },
-      { key: 6, value: 'title', text: this.props.translate('text-selection.by-title') },
-      { key: 7, value: 'author', text: this.props.translate('text-selection.by-author') },
+      { key: 1, value: 'interestingnessRatingCount', text: this.props.translate('text-selection.by-interestingness-rating-count') },
+      { key: 2, value: 'wordCount', text: this.props.translate('text-selection.by-word-count') },
+      { key: 3, value: 'userReadingAttemptCount', text: this.props.translate('text-selection.by-user-reading-attempt') },
+      { key: 4, value: 'totalReadingAttemptCount', text: this.props.translate('text-selection.by-total-reading-attempt') },
+      { key: 5, value: 'wordLengthClassRating', text: this.props.translate('text-selection.by-word-length-class-rating') },
+      { key: 6, value: 'sentenceLengthClassRating', text: this.props.translate('text-selection.by-sentence-length-class-rating') },
+      { key: 7, value: 'title', text: this.props.translate('text-selection.by-title') },
+      { key: 8, value: 'author', text: this.props.translate('text-selection.by-author') },
     ],
   };
 
