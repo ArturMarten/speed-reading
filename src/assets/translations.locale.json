@@ -562,6 +562,7 @@
     "regression": ["Regressioon", "Regression"],
     "group-table": ["Grupi tulemused", "Group results"],
     "group": ["Grupp", "Group"],
+    "minimum-attempt-count": ["Minimaalne soorituste arv", "Minimal attempt count"],
     "users": ["kasutajat", "users"],
     "user": ["Kasutaja", "User"],
     "exercise": ["Harjutus", "Exercise"],
@@ -641,6 +642,7 @@
   "group-statistics-table": {
     "exercise": ["Harjutus", "Exercise"],
     "total-exercise-count": ["Harjutuste koguarv", "Exercise total count"],
+    "total-exercise-elapsed-time": ["Harjutuste koguaeg", "Exercise total time"],
     "average-exercise-count-per-user": ["Keskmine harjutuste arv kasutaja kohta", "Average exercise count per user"],
     "average-initial-reading-speed": ["Keskmine lugemise algkiirus", "Average initial reading speed"],
     "average-final-reading-speed": ["Keskmine lugemise lõppkiirus", "Average final reading speed"],

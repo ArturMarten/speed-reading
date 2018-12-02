@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid, Button } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid, Button, Input } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -124,6 +124,7 @@ export class Statistics extends Component {
     endTime: new Date().toISOString().split('T')[0],
     period: 'not-defined',
     filterOutliers: true,
+    minimumAttemptCount: 0,
   };
 
   componentDidMount() {
@@ -218,6 +219,12 @@ export class Statistics extends Component {
     }
   }
 
+  minimumAttemptCountChangeHandler = (event, { value }) => {
+    this.setState({
+      minimumAttemptCount: value,
+    });
+  }
+
   timeChangeHandler = (event, { name, value }) => {
     const { startTime, endTime, period } = this.state;
     let newTime = value;
@@ -297,25 +304,27 @@ export class Statistics extends Component {
 
   preventDefault = (event) => {
     const { key } = event;
-    if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
+    if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1 && document.activeElement.id === '') {
       event.preventDefault();
     }
   }
 
   keyUpHandler = (event) => {
-    event.preventDefault();
-    const { key } = event;
-    switch (key) {
-      case 'ArrowLeft': {
-        this.periodChangeHandler(event, { name: 'prev' });
-        break;
-      }
-      case 'ArrowRight': {
-        this.periodChangeHandler(event, { name: 'next' });
-        break;
-      }
-      default: {
-        break;
+    if (document.activeElement.id === '') {
+      event.preventDefault();
+      const { key } = event;
+      switch (key) {
+        case 'ArrowLeft': {
+          this.periodChangeHandler(event, { name: 'prev' });
+          break;
+        }
+        case 'ArrowRight': {
+          this.periodChangeHandler(event, { name: 'next' });
+          break;
+        }
+        default: {
+          break;
+        }
       }
     }
   }
@@ -360,7 +369,7 @@ export class Statistics extends Component {
     const totalTestTime = userExerciseData.map(exercise => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
 
-    const groupExerciseData = Object.assign(
+    let groupExerciseData = Object.assign(
       {},
       ...Object.keys(this.props.groupExerciseStatistics)
         .map(userId => ({
@@ -369,6 +378,15 @@ export class Statistics extends Component {
             .filter(this.outlierFilter),
         })),
     );
+    if (this.props.isTeacher) {
+      groupExerciseData = {
+        ...Object.keys(groupExerciseData)
+          .map(userId => (
+            groupExerciseData[userId].length >= this.state.minimumAttemptCount ?
+              groupExerciseData[userId] : []
+          )),
+      };
+    }
 
     const groupFilter = (
       <Form.Field
@@ -383,6 +401,19 @@ export class Statistics extends Component {
         loading={this.props.groupsStatus.loading || this.props.groupExerciseStatisticsStatus.loading}
         label={this.props.translate('statistics.group')}
         control={Dropdown}
+      />
+    );
+
+    const exerciseFilter = (
+      <Form.Field
+        id="attempt-count-input"
+        type="number"
+        width={6}
+        value={this.state.minimumAttemptCount}
+        onChange={this.minimumAttemptCountChangeHandler}
+        loading={this.props.groupExerciseStatisticsStatus.loading}
+        label={this.props.translate('statistics.minimum-attempt-count')}
+        control={Input}
       />
     );
 
@@ -661,6 +692,7 @@ export class Statistics extends Component {
             <Form>
               <Form.Group widths="equal">
                 {this.props.isTeacher ? groupFilter : null}
+                {this.props.isTeacher ? exerciseFilter : null}
               </Form.Group>
               <Form.Group widths="equal">
                 {timeFilter}

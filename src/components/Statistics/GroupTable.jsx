@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Table } from 'semantic-ui-react';
 
-import { leastSquares, getAverage, reduceSumFunc } from '../../shared/utility';
+import { leastSquares, getAverage, reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
 
 const exerciseTranslateMapping = {
   readingExercises: 'reading-exercises',
@@ -33,6 +33,9 @@ export class GroupTable extends Component {
 
   render() {
     const { data } = this.props;
+    const userCount =
+      Object.keys(data)
+        .filter(userId => data[userId].length > 0).length;
     const exerciseData = Object.keys(data)
       .reduce((prevUserArray, currentUserId) => (
         prevUserArray.concat(data[currentUserId]
@@ -62,10 +65,14 @@ export class GroupTable extends Component {
           .reduce((prevUserExercises, currentExercise) => {
             const attempts = userExercises[currentExercise];
             const exerciseCount = attempts.length;
+            const exerciseElapsedTime = attempts.map(({ elapsedTime }) => elapsedTime).reduce(reduceSumFunc, 0);
             const indeces = attempts.map(attempt => attempt.index);
             const finalIndex = Math.max(...indeces);
             const isReadingExercise = readingExerciseNames.indexOf(currentExercise) !== -1;
-            let userExerciseResults = { exerciseCount };
+            let userExerciseResults = {
+              exerciseCount,
+              exerciseElapsedTime,
+            };
             if (isReadingExercise) {
               const readingSpeedResults = attempts.map(attempt => attempt.wordsPerMinute);
               const [readingSpeedSlope, readingSpeedIntercept] = leastSquares(indeces, readingSpeedResults);
@@ -121,11 +128,16 @@ export class GroupTable extends Component {
     const aggregatedResults = Object.keys(results)
       .reduce((prevExercisesResults, currentExercise) => {
         const exerciseResults = results[currentExercise];
+        if (exerciseResults.length === 0) {
+          return prevExercisesResults;
+        }
         const totalExerciseCount = exerciseResults.map(({ exerciseCount }) => exerciseCount).reduce(reduceSumFunc, 0);
-        const averageExerciseCount = getAverage(exerciseResults.map(({ exerciseCount }) => exerciseCount));
+        const totalExerciseElapsedTime = exerciseResults.map(({ exerciseElapsedTime }) => exerciseElapsedTime).reduce(reduceSumFunc, 0);
+        const averageExerciseCount = totalExerciseCount / userCount;
         const isReadingExercise = readingExerciseNames.indexOf(currentExercise) !== -1;
         let aggregatedResult = {
           totalExerciseCount,
+          totalExerciseElapsedTime,
           averageExerciseCount,
         };
         if (isReadingExercise) {
@@ -186,7 +198,10 @@ export class GroupTable extends Component {
                 {this.props.translate('group-statistics-table.total-exercise-count')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('group-statistics-table.average-exercise-count-per-user')}
+                {this.props.translate('group-statistics-table.total-exercise-elapsed-time')}
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                {`${this.props.translate('group-statistics-table.average-exercise-count-per-user')} (${userCount})`}
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {this.props.translate('group-statistics-table.average-initial-reading-speed')}
@@ -204,6 +219,8 @@ export class GroupTable extends Component {
               .map((exercise) => {
                 const totalExerciseCount = aggregatedResults[exercise] ?
                   aggregatedResults[exercise].totalExerciseCount : 0;
+                const totalExerciseElapsedTime = aggregatedResults[exercise] ?
+                  aggregatedResults[exercise].totalExerciseElapsedTime : 0;
                 const averageExerciseCount = aggregatedResults[exercise] ?
                   aggregatedResults[exercise].averageExerciseCount : 0;
                 const averageInitialReadingSpeed = aggregatedResults[exercise] ?
@@ -221,6 +238,11 @@ export class GroupTable extends Component {
                       warning={totalExerciseCount === 0}
                     >
                       {totalExerciseCount.toFixed(0)}
+                    </Table.Cell>
+                    <Table.Cell
+                      warning={totalExerciseElapsedTime === 0}
+                    >
+                      {formatMillisecondsInHours(totalExerciseElapsedTime)}
                     </Table.Cell>
                     <Table.Cell
                       warning={averageExerciseCount === 0}
@@ -342,7 +364,10 @@ export class GroupTable extends Component {
                 {this.props.translate('group-statistics-table.total-exercise-count')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {this.props.translate('group-statistics-table.average-exercise-count-per-user')}
+                {this.props.translate('group-statistics-table.total-exercise-elapsed-time')}
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                {`${this.props.translate('group-statistics-table.average-exercise-count-per-user')} (${userCount})`}
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {this.props.translate('group-statistics-table.average-initial-exercise-speed')}
@@ -360,6 +385,8 @@ export class GroupTable extends Component {
               .map((exercise) => {
                 const totalExerciseCount = aggregatedResults[exercise] ?
                   aggregatedResults[exercise].totalExerciseCount : 0;
+                const totalExerciseElapsedTime = aggregatedResults[exercise] ?
+                  aggregatedResults[exercise].totalExerciseElapsedTime : 0;
                 const averageExerciseCount = aggregatedResults[exercise] ?
                   aggregatedResults[exercise].averageExerciseCount : 0;
                 const averageInitialExerciseSpeed = aggregatedResults[exercise] ?
@@ -377,6 +404,11 @@ export class GroupTable extends Component {
                       warning={totalExerciseCount === 0}
                     >
                       {totalExerciseCount.toFixed(0)}
+                    </Table.Cell>
+                    <Table.Cell
+                      warning={totalExerciseElapsedTime === 0}
+                    >
+                      {formatMillisecondsInHours(totalExerciseElapsedTime)}
                     </Table.Cell>
                     <Table.Cell
                       warning={averageExerciseCount === 0}
