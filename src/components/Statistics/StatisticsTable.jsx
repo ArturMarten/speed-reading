@@ -193,7 +193,7 @@ export class StatisticsTable extends Component {
                 trigger={
                   <Menu floated="right">
                     <Menu.Item as="a" icon>
-                      {this.props.translate('statistics-table.export')}
+                      {`${this.props.translate('statistics-table.export')} `}
                       <Icon name="download" />
                     </Menu.Item>
                   </Menu>

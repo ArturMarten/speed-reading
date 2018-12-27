@@ -1,10 +1,10 @@
 
 import { createStore, applyMiddleware, compose } from 'redux';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { initialize, addTranslation } from 'react-localize-redux';
 
-import rootReducer from './reducers';
+import createRootReducer from './reducers';
 import errorHandler from '../utils/errorHandler';
 import actionsReporter from '../utils/actionsReporter';
 // import logger from '../utils/logger';
@@ -17,7 +17,7 @@ const composeEnhancers = process.env.NODE_ENV === 'development' && window.__REDU
 
 export default function configureStore(history) {
   const store = createStore(
-    connectRouter(history)(rootReducer),
+    createRootReducer(history),
     composeEnhancers(applyMiddleware(
       errorHandler,
       routerMiddleware(history),

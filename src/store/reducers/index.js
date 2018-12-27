@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import { localeReducer } from 'react-localize-redux';
 
 import infoReducer from './info';
@@ -16,7 +17,8 @@ import feedbackReducer from './feedback';
 import problemReportReducer from './problemReport';
 import bugReportReducer from './bugReport';
 
-export default combineReducers({
+export default history => combineReducers({
+  router: connectRouter(history),
   info: infoReducer,
   auth: authReducer,
   text: textReducer,

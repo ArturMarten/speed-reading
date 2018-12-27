@@ -22,7 +22,7 @@ const initialState = {
     language: 'estonian',
   },
   filterApplied: false,
-  column: null,
+  column: 'averageInterestingnessRating',
   direction: 'descending',
 };
 

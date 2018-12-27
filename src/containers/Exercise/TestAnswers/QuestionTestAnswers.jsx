@@ -22,7 +22,7 @@ export class QuestionTestAnswers extends Component {
           loading: false,
           testQuestionAnswers: [],
         });
-      })
+      });
   }
 
   render() {
