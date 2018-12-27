@@ -16,7 +16,7 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.10 (arendamisel)
+                  Versioon 5.1.11 (arendamisel)
                 </List.Header>
                 <List.Description>
                   <List.List>
@@ -29,7 +29,20 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.9 (12.10.2018)
+                  Versioon 5.1.10 (02.12.2018)
+                </List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Grupi statistika täiendused</List.Item>
+                    <List.Item>Vigade parandused ja testimine</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>
+                  Versioon 5.1.9 (12.11.2018)
                 </List.Header>
                 <List.Description>
                   <List.List>
@@ -42,7 +55,7 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.8 (05.10.2018)
+                  Versioon 5.1.8 (05.11.2018)
                 </List.Header>
                 <List.Description>
                   <List.List>

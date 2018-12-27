@@ -156,12 +156,11 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
   const draw = () => {
     const { canvas } = canvasContext;
     if (fillYStart > canvas.height) {
-      // Increase canvas size, when text doesn't fit anymore
+      // Increase canvas height, when text doesn't fit anymore
       setCanvasHeight(canvasContext, canvas.height + 500);
     }
     canvasContext.fillText(fillText, fillXStart, fillYStart);
   };
-
 
   // console.log(content.getBlockMap().toArray()[0].getCharacterList());
 
