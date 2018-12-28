@@ -103,4 +103,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(TextEditor);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(TextEditor);

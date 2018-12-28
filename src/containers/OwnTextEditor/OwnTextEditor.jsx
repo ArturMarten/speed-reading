@@ -22,7 +22,7 @@ export class OwnTextEditor extends Component {
   }
 
   onSubmit = () => {
-    const textEditorComponent = this.textEditorRef.getWrappedInstance();
+    const textEditorComponent = this.textEditorRef;
     const selectedText = {
       language: 'estonian',
       plainText: textEditorComponent.getPlainText(),
@@ -34,14 +34,14 @@ export class OwnTextEditor extends Component {
   textAnalysisToggleHandler = (event) => {
     stopPropagation(event);
     if (!this.state.textAnalysisOpened) {
-      const textEditorComponent = this.textEditorRef.getWrappedInstance();
+      const textEditorComponent = this.textEditorRef;
       const text = textEditorComponent.getPlainText();
       const textData = {
         language: 'estonian',
         text,
       };
       this.props.onAnalyzeText(textData);
-      const textAnalysisComponent = this.textAnalysisRef.getWrappedInstance();
+      const textAnalysisComponent = this.textAnalysisRef;
       textAnalysisComponent.setText(text);
     }
     this.setState({ textAnalysisOpened: !this.state.textAnalysisOpened });

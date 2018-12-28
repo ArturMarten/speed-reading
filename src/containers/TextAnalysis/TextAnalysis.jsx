@@ -397,4 +397,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(TextAnalysis);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(TextAnalysis);

@@ -110,7 +110,7 @@ export class TextEntry extends Component {
   }
 
   onSubmit = () => {
-    const textEditorComponent = this.textEditorRef.getWrappedInstance();
+    const textEditorComponent = this.textEditorRef;
     const submittedForm = {
       title: this.state.textEntryForm.title.value,
       author: this.state.textEntryForm.author.value,
@@ -149,7 +149,7 @@ export class TextEntry extends Component {
       updatedFormElement.touched = false;
       updatedTextEntryForm[inputName] = updatedFormElement;
     }
-    this.textEditorRef.getWrappedInstance().setContent(selectedText.contentState);
+    this.textEditorRef.setContent(selectedText.contentState);
     let formIsValid = true;
     // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedTextEntryForm) {
@@ -162,7 +162,7 @@ export class TextEntry extends Component {
   }
 
   resetForm = () => {
-    this.textEditorRef.getWrappedInstance().clearContent();
+    this.textEditorRef.clearContent();
     this.setState({ ...initialState });
   }
 
@@ -227,14 +227,14 @@ export class TextEntry extends Component {
 
   textAnalysisToggleHandler = () => {
     if (!this.state.textAnalysisOpened) {
-      const textEditorComponent = this.textEditorRef.getWrappedInstance();
+      const textEditorComponent = this.textEditorRef;
       const text = textEditorComponent.getPlainText();
       const textData = {
         language: 'estonian',
         text,
       };
       this.props.onAnalyzeText(textData);
-      const textAnalysisComponent = this.textAnalysisRef.getWrappedInstance();
+      const textAnalysisComponent = this.textAnalysisRef;
       textAnalysisComponent.setText(text);
     }
     this.setState({ textAnalysisOpened: !this.state.textAnalysisOpened });

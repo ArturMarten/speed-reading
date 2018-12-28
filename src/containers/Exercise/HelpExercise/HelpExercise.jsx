@@ -29,7 +29,7 @@ export class HelpExercise extends Component {
   onExerciseFinishHandler = () => {
     let data = null;
     if (this.props.type === 'concentration') {
-      const { answers } = this.exerciseRef.getWrappedInstance().state;
+      const { answers } = this.exerciseRef.state;
       data = { answers };
     }
     this.props.onExerciseFinish(this.props.attemptId, data);
