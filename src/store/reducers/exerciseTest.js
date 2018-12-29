@@ -334,12 +334,15 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.TEST_FINISHED: {
-      const result = updateObject(state.result, action.payload.result);
-      const answers = action.payload.answers ? action.payload.answers : [];
+      const result = updateObject(state.result, action.payload);
       return updateObject(state, {
         status: 'finished',
-        answers,
         result,
+      });
+    }
+    case actionTypes.TEST_FINISH_FAILED: {
+      return updateObject(state, {
+        status: 'started',
       });
     }
     case actionTypes.TEST_END: {
@@ -347,6 +350,11 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         attemptId: null,
         status: 'preparation',
+      });
+    }
+    case actionTypes.RECALCULATE_TEST_ATTEMPT_SUCCEEDED: {
+      return updateObject(state, {
+        result: action.payload,
       });
     }
     case actionTypes.EXERCISE_PREPARED:

@@ -4,8 +4,10 @@ import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { object } from '@storybook/addon-knobs';
 import { getTranslate, setActiveLanguage } from 'react-localize-redux';
+import MockAdapter from 'axios-mock-adapter';
 
 /* eslint-disable max-len */
+import axios from '../api/axios-http';
 import * as actionCreators from '../store/actions';
 import credentials from '../credentials';
 import Provider, { store } from './Provider';
@@ -49,20 +51,82 @@ const questions = [
 ];
 
 const blankExercises = [
-  { id: 0, text: ['Üks selline on ', 'BLANK', ', mis loodi 1960-ndatel täiskasvanute keeleõppeks.'], answer: 'TPR-meetod' },
-  { id: 1, text: ['Lapsed õpivad', 'BLANK', ' üldjuhul linnulennult, samas kui täiskasvanu võibki jääda oma emakeele vangiks,” tõdeb Petar Hodulov, kes õpetab Eesti massaaži- ja teraapiakoolis\nmuuhulgas ka inglise keelt.'], answer: 'võõrkeelt' },
-  { id: 2, text: ['', 'BLANK', ' õppimine sõltub tema meelest paljuski sellest, kuidas inimene​ ​saab​ ​hakkama​ ​häbitundega​ ​–​ ​eksida​ ​tuleb​ ​ju​ ​omajagu.'], answer: 'Võõrkeele' },
-  { id: 3, text: ['Liigutused saavad täiskasvanud õppijad suuresti​ ​ise​ ​välja​ ​mõelda.​ ​Kui​ ​üldse​ ', 'BLANK', ' ​ei​ ​ole,​ ​siis​ ​õpetaja​ ​aitab.'], answer: 'inspiratsiooni' },
-  { id: 4, text: ['Nii tekib ', 'BLANK', ' lause „Stomach breaks down food” juures.'], answer: 'tõrge' },
-  { id: 5, text: ['Kidneys get ', 'BLANK', ' of waste products?'], answer: 'rid' },
-  { id: 6, text: ['„Mul oli väga lõbus,” võtab ', 'BLANK', ' vaos hoidev Liis Metusala (44) tunni hiljem kokku.'], answer: 'emotsioone' },
-  { id: 7, text: ['„Hea ', 'BLANK', ' on, hästi praktiline ja käed küljes.'], answer: 'energia' },
+  { id: 0, blankExercise: ['Üks selline on ', 'BLANK', ', mis loodi 1960-ndatel täiskasvanute keeleõppeks.'], correct: 'TPR-meetod' },
+  { id: 1, blankExercise: ['Lapsed õpivad', 'BLANK', ' üldjuhul linnulennult, samas kui täiskasvanu võibki jääda oma emakeele vangiks,” tõdeb Petar Hodulov, kes õpetab Eesti massaaži- ja teraapiakoolis\nmuuhulgas ka inglise keelt.'], correct: 'võõrkeelt' },
+  { id: 2, blankExercise: ['', 'BLANK', ' õppimine sõltub tema meelest paljuski sellest, kuidas inimene​ ​saab​ ​hakkama​ ​häbitundega​ ​–​ ​eksida​ ​tuleb​ ​ju​ ​omajagu.'], correct: 'Võõrkeele' },
+  { id: 3, blankExercise: ['Liigutused saavad täiskasvanud õppijad suuresti​ ​ise​ ​välja​ ​mõelda.​ ​Kui​ ​üldse​ ', 'BLANK', ' ​ei​ ​ole,​ ​siis​ ​õpetaja​ ​aitab.'], correct: 'inspiratsiooni' },
+  { id: 4, blankExercise: ['Nii tekib ', 'BLANK', ' lause „Stomach breaks down food” juures.'], correct: 'tõrge' },
+  { id: 5, blankExercise: ['Kidneys get ', 'BLANK', ' of waste products?'], correct: 'rid' },
+  { id: 6, blankExercise: ['„Mul oli väga lõbus,” võtab ', 'BLANK', ' vaos hoidev Liis Metusala (44) tunni hiljem kokku.'], correct: 'emotsioone' },
+  { id: 7, blankExercise: ['„Hea ', 'BLANK', ' on, hästi praktiline ja käed küljes.”'], correct: 'energia' },
 ];
+
+const testBlankAnswers = [
+  {
+    id: 0,
+    blankExercise: ['Üks selline on ', 'BLANK', ', mis loodi 1960-ndatel täiskasvanute keeleõppeks.'],
+    correct: 'TPR-meetod',
+    answer: 'TPR-meetod',
+    autoEvaluation: 'correct',
+  }, {
+    id: 1,
+    blankExercise: ['Lapsed õpivad', 'BLANK', ' üldjuhul linnulennult, samas kui täiskasvanu võibki jääda oma emakeele vangiks,” tõdeb Petar Hodulov, kes õpetab Eesti massaaži- ja teraapiakoolis\nmuuhulgas ka inglise keelt.'],
+    correct: 'võõrkeelt',
+    answer: 'võõrkeelt',
+    autoEvaluation: 'correct',
+  }, {
+    id: 2,
+    blankExercise: ['', 'BLANK', ' õppimine sõltub tema meelest paljuski sellest, kuidas inimene​ ​saab​ ​hakkama​ ​häbitundega​ ​–​ ​eksida​ ​tuleb​ ​ju​ ​omajagu.'],
+    correct: 'Võõrkeele',
+    answer: 'Keele',
+    autoEvaluation: 'synonym',
+  }, {
+    id: 3,
+    blankExercise: ['Liigutused saavad täiskasvanud õppijad suuresti​ ​ise​ ​välja​ ​mõelda.​ ​Kui​ ​üldse​ ', 'BLANK', ' ​ei​ ​ole,​ ​siis​ ​õpetaja​ ​aitab.'],
+    correct: 'inspiratsiooni',
+    answer: null,
+    autoEvaluation: 'unanswered',
+  }, {
+    id: 4,
+    blankExercise: ['Nii tekib ', 'BLANK', ' lause „Stomach breaks down food” juures.'],
+    correct: 'tõrge',
+    answer: 'viga',
+    autoEvaluation: 'incorrect',
+  }, {
+    id: 5,
+    blankExercise: ['Kidneys get ', 'BLANK', ' of waste products?'],
+    correct: 'rid',
+    answer: 'rid',
+    autoEvaluation: 'correct',
+  }, {
+    id: 6,
+    blankExercise: ['„Mul oli väga lõbus,” võtab ', 'BLANK', ' vaos hoidev Liis Metusala (44) tunni hiljem kokku.'],
+    correct: 'emotsioone',
+    answer: 'emotisoone',
+    autoEvaluation: 'misspelled',
+  }, {
+    id: 7,
+    blankExercise: ['„Hea ', 'BLANK', ' on, hästi praktiline ja käed küljes.”'],
+    correct: 'energia',
+    answer: 'energia',
+    autoEvaluation: 'correct',
+  },
+];
+
+const testResult = {
+  elapsedTime: 124200,
+  total: 7,
+  correct: 4,
+  incorrect: 2,
+  unanswered: 1,
+  testResult: 4 / 7,
+  comprehensionResult: 3 / 7,
+  cpm: 231,
+};
 
 store.dispatch(setActiveLanguage('ee'));
 store.dispatch(actionCreators.login(credentials.admin.username, credentials.admin.password));
 setTimeout(() => store.dispatch(actionCreators.selectText(1, store.getState().auth.token)), 3000);
-
 
 const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
 
@@ -296,16 +360,7 @@ storiesOf('Test results', module)
     <TestResults
       open
       translate={translate}
-      result={{
-        elapsedTime: 124200,
-        total: 7,
-        correct: 4,
-        incorrect: 2,
-        unanswered: 1,
-        testResult: 4 / 7,
-        comprehensionResult: 3 / 7,
-        cpm: 231,
-      }}
+      result={testResult}
       selectedText={store.getState().text.selectedText}
     />));
 
@@ -317,12 +372,18 @@ storiesOf('Question test answers', module)
     />));
 
 storiesOf('Blank test answers', module)
-  .add('Component', () => (
-    <BlankTestAnswers
-      blankExercises={blankExercises}
-      answers={['tpr-meetod', 'keelt', 'Keele', 'inspiratsiooni', '', 'rid', 'tundeid']}
-      translate={translate}
-    />));
+  .add('Component', () => {
+    const mock = new MockAdapter(axios);
+    mock
+      .onGet(`${axios.defaults.baseURL}testBlankAnswers?testAttemptId=1`).reply(200, testBlankAnswers)
+      .onAny().passThrough();
+    return (
+      <BlankTestAnswers
+        testAttemptId={1}
+        result={testResult}
+        translate={translate}
+      />);
+  });
 
 storiesOf('Statistics', module)
   .add('Container', () => <StatisticsContainer />);
@@ -345,27 +406,25 @@ storiesOf('RegressionChart', module)
       translate={translate}
     />
   ))
-  .add('Time scale with one value', () => {
-    return (
-      <RegressionChart
-        title={translate('regression-chart.reading-speed-trend')}
-        xLabel={translate('regression-chart.index')}
-        yLabel={translate('regression-chart.speed-words-per-minute')}
-        legendTitles={[translate('regression-chart.reading-speed')]}
-        width={1000}
-        height={400}
-        data={object('Data', [
-          { index: 1, wordsPerMinute: 185 },
-        ])}
-        xField="index"
-        yFields={['wordsPerMinute']}
-        dataStrokeColor={['#4C4CFF']}
-        dataFillColor={['#9999FF']}
-        dataLineColor={['#0000FF']}
-        translate={translate}
-      />
-    );
-  })
+  .add('Time scale with one value', () => (
+    <RegressionChart
+      title={translate('regression-chart.reading-speed-trend')}
+      xLabel={translate('regression-chart.index')}
+      yLabel={translate('regression-chart.speed-words-per-minute')}
+      legendTitles={[translate('regression-chart.reading-speed')]}
+      width={1000}
+      height={400}
+      data={object('Data', [
+        { index: 1, wordsPerMinute: 185 },
+      ])}
+      xField="index"
+      yFields={['wordsPerMinute']}
+      dataStrokeColor={['#4C4CFF']}
+      dataFillColor={['#9999FF']}
+      dataLineColor={['#0000FF']}
+      translate={translate}
+    />
+  ))
   .add('Time scale with two values', () => (
     <RegressionChart
       title={translate('regression-chart.reading-speed-trend')}
@@ -415,6 +474,7 @@ storiesOf('GroupTable', module)
     store.dispatch(actionCreators.fetchGroupExerciseStatistics(4, store.getState().auth.token));
     return (
       <GroupTable
+        isTeacher
         data={store.getState().statistics.groupExerciseStatistics}
         translate={translate}
       />

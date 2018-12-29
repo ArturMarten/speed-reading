@@ -211,3 +211,17 @@ export const getStandardDeviation = (values, average = getAverage(values)) => {
   const avgSquareDiff = getAverage(squareDiffs);
   return Math.sqrt(avgSquareDiff);
 };
+
+export const downloadExcelData = (data, filename, filetype) => {
+  const blob = new Blob([data], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  });
+  const link = document.createElement('a');
+  const href = window.URL.createObjectURL(blob);
+  link.href = href;
+  link.setAttribute('download', `${filename}.${filetype}`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(href);
+};

@@ -160,11 +160,11 @@ export const finishQuestionTest = ({ attemptId, answers, result }) => (
   })
 );
 
-export const finishBlankTest = ({ attemptId, blankExercises, answers, result }) => (
+export const finishBlankTest = ({ attemptId, answers, result }) => (
   new Promise((resolve, reject) => {
-    axios.post('/checkBlankAnswers', { blankExercises, answers })
-      .then(response => (
-        axios.patch(`/testAttempts/${attemptId}`, { result: { ...result, ...response.data.result } })
+    axios.post('/testBlankAnswers', answers)
+      .then(() => (
+        axios.patch(`/testAttempts/${attemptId}`, { result })
       ), (error) => {
         reject(serverErrorMessage(error));
       })
@@ -196,6 +196,48 @@ export const addTestRating = ratingData => (
 export const fetchTestQuestionAnswers = testAttemptId => (
   new Promise((resolve, reject) => {
     axios.get(`/testQuestionAnswers?testAttemptId=${testAttemptId}`)
+      .then((response) => {
+        resolve(response.data);
+      }, (error) => {
+        reject(serverErrorMessage(error));
+      })
+      .catch((error) => {
+        reject(error.message);
+      });
+  })
+);
+
+export const fetchTestBlankAnswers = testAttemptId => (
+  new Promise((resolve, reject) => {
+    axios.get(`/testBlankAnswers?testAttemptId=${testAttemptId}`)
+      .then((response) => {
+        resolve(response.data);
+      }, (error) => {
+        reject(serverErrorMessage(error));
+      })
+      .catch((error) => {
+        reject(error.message);
+      });
+  })
+);
+
+export const changeTestBlankAnswer = ({ blankAnswerId, userEvaluation }) => (
+  new Promise((resolve, reject) => {
+    axios.patch(`/testBlankAnswers/${blankAnswerId}`, { userEvaluation })
+      .then(() => {
+        resolve();
+      }, (error) => {
+        reject(serverErrorMessage(error));
+      })
+      .catch((error) => {
+        reject(error.message);
+      });
+  })
+);
+
+export const recalculateTestAttempt = ({ testAttemptId }) => (
+  new Promise((resolve, reject) => {
+    axios.get(`/testAttempts/${testAttemptId}/recalculate`)
       .then((response) => {
         resolve(response.data);
       }, (error) => {

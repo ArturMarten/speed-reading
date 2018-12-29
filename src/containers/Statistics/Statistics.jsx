@@ -379,13 +379,14 @@ export class Statistics extends Component {
         })),
     );
     if (this.props.isTeacher) {
-      groupExerciseData = {
+      groupExerciseData = Object.assign(
+        {},
         ...Object.keys(groupExerciseData)
-          .map(userId => (
-            groupExerciseData[userId].length >= this.state.minimumAttemptCount ?
-              groupExerciseData[userId] : []
-          )),
-      };
+          .map(userId => ({
+            [userId]: groupExerciseData[userId].length >= this.state.minimumAttemptCount ?
+              groupExerciseData[userId] : [],
+          })),
+      );
     }
 
     const groupFilter = (
@@ -704,6 +705,7 @@ export class Statistics extends Component {
                   <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                 </Dimmer>
                 <GroupTable
+                  isTeacher={this.props.isTeacher}
                   startTime={this.state.startTime}
                   endTime={this.state.endTime}
                   data={groupExerciseData}

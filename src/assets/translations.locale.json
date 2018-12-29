@@ -472,7 +472,14 @@
     "loading": ["Laen vastuseid", "Loading answers"]
   },
   "blank-test-answers": {
-    "header": ["Testi vastused", "Test answers"]
+    "header": ["Testi vastused", "Test answers"],
+    "loading": ["Laen vastuseid", "Loading answers"],
+    "correct-answer": ["õige vastus", "correct answer"],
+    "unanswered": ["Vastamata", "Unanswered"],
+    "correct": ["Õige", "Correct"],
+    "incorrect": ["Vale", "Incorrect"],
+    "misspelled": ["Kirjaviga", "Misspelled"],
+    "synonym": ["Sünonüüm", "Synonym"]
   },
   "text-options": {
     "font": ["Font", "Font"],

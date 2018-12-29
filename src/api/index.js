@@ -31,6 +31,9 @@ export {
   finishBlankTest,
   addTestRating,
   fetchTestQuestionAnswers,
+  fetchTestBlankAnswers,
+  changeTestBlankAnswer,
+  recalculateTestAttempt,
 } from './exerciseTest';
 
 export {
@@ -75,3 +78,5 @@ export {
   addUser,
   changeUser,
 } from './user';
+
+export { exportFile } from './utils';

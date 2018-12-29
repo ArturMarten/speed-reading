@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Button, Icon } from 'semantic-ui-react';
 
-import { leastSquares, getAverage, reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
+import { exportFile } from '../../api';
+import { leastSquares, getAverage, reduceSumFunc, formatMillisecondsInHours, downloadExcelData } from '../../shared/utility';
 
 const exerciseTranslateMapping = {
   readingExercises: 'reading-exercises',
@@ -31,6 +32,101 @@ const helpExerciseNames = [
 export class GroupTable extends Component {
   state = {};
 
+  exportData = (results) => {
+    const now = new Date();
+    const filename = `data_${now.toLocaleDateString()}_${now.toLocaleTimeString()}`;
+    const filetype = 'xlsx';
+    const columns = [
+      'userId',
+      'exerciseName',
+      'exerciseCount',
+      'exerciseElapsedTime',
+      'initialReadingSpeed',
+      'finalReadingSpeed',
+      'readingSpeedChange',
+      'readingSpeedChangePercentage',
+      'initialComprehensionSpeed',
+      'finalComprehensionSpeed',
+      'comprehensionSpeedChange',
+      'comprehensionSpeedChangePercentage',
+      'initialComprehensionLevel',
+      'finalComprehensionLevel',
+      'comprehensionLevelChange',
+      'comprehensionLevelChangePercentage',
+    ];
+    const rows = Object.keys(results)
+      .reduce((prevResults, exerciseName) => {
+        if (readingExerciseNames.indexOf(exerciseName) === -1 || exerciseName === 'readingExercises') {
+          return [...prevResults];
+        }
+        const currentResults = results[exerciseName]
+          .map((result) => {
+            const exerciseElapsedTime = formatMillisecondsInHours(result.exerciseElapsedTime);
+            const initialReadingSpeed = +result.initialReadingSpeed.toFixed(0);
+            const finalReadingSpeed = +result.finalReadingSpeed.toFixed(0);
+            const readingSpeedChange = +(result.finalReadingSpeed - result.initialReadingSpeed).toFixed(2);
+            const readingSpeedChangePercentage = +((readingSpeedChange / result.initialReadingSpeed) * 100).toFixed(2);
+            const initialComprehensionSpeed = +result.initialComprehensionSpeed.toFixed(0);
+            const finalComprehensionSpeed = +result.finalComprehensionSpeed.toFixed(0);
+            const comprehensionSpeedChange = +(result.finalComprehensionSpeed - result.initialComprehensionSpeed).toFixed(0);
+            const comprehensionSpeedChangePercentage = +((comprehensionSpeedChange / result.initialComprehensionSpeed) * 100).toFixed(2);
+            const initialComprehensionLevel = +result.initialComprehensionLevel.toFixed(0);
+            const finalComprehensionLevel = +result.finalComprehensionLevel.toFixed(0);
+            const comprehensionLevelChange = +(result.finalComprehensionLevel - result.initialComprehensionLevel).toFixed(0);
+            const comprehensionLevelChangePercentage = +((comprehensionLevelChange / result.initialComprehensionLevel) * 100).toFixed(2);
+            return {
+              ...result,
+              exerciseName: this.props.translate(`statistics.${exerciseTranslateMapping[exerciseName]}`),
+              exerciseElapsedTime,
+              initialReadingSpeed,
+              finalReadingSpeed,
+              readingSpeedChange,
+              initialComprehensionSpeed,
+              finalComprehensionSpeed,
+              readingSpeedChangePercentage,
+              comprehensionSpeedChange,
+              comprehensionSpeedChangePercentage,
+              initialComprehensionLevel,
+              finalComprehensionLevel,
+              comprehensionLevelChange,
+              comprehensionLevelChangePercentage,
+            };
+          });
+        return [
+          ...prevResults,
+          ...currentResults,
+        ];
+      }, []);
+    const headings = {
+      userId: 'Identifikaator',
+      exerciseCount: this.props.translate('group-statistics-table.total-exercise-count'),
+      exerciseName: this.props.translate('group-statistics-table.exercise'),
+      exerciseElapsedTime: this.props.translate('group-statistics-table.total-exercise-elapsed-time'),
+      initialReadingSpeed: 'Lugemise algkiirus',
+      finalReadingSpeed: 'Lugemise lõppkiirus',
+      readingSpeedChange: 'Lugemiskiiruse muutus',
+      readingSpeedChangePercentage: 'Lugemiskiiruse muutus %',
+      initialComprehensionSpeed: 'Omandamise algkiirus',
+      finalComprehensionSpeed: 'Omandamise lõppkiirus',
+      comprehensionSpeedChange: 'Omandamiskiiruse muutus',
+      comprehensionSpeedChangePercentage: 'Omandamiskiiruse muutus %',
+      initialComprehensionLevel: 'Algne omandamistase',
+      finalComprehensionLevel: 'Lõpp omandamistase',
+      comprehensionLevelChange: 'Omandamistaseme muutus',
+      comprehensionLevelChangePercentage: 'Omandamistaseme muutus %',
+    };
+
+    exportFile({
+      filename,
+      filetype,
+      columns,
+      rows,
+      headings,
+    }).then((data) => {
+      downloadExcelData(data, filename, filetype);
+    });
+  }
+
   render() {
     const { data } = this.props;
     const userCount =
@@ -46,6 +142,7 @@ export class GroupTable extends Component {
                 [currentAttempt.exercise]: prevExercisesObject[currentAttempt.exercise].concat({
                   ...currentAttempt,
                   index: prevExercisesObject[currentAttempt.exercise].length + 1,
+                  userId: currentUserId,
                 }),
               };
             }
@@ -54,6 +151,7 @@ export class GroupTable extends Component {
               [currentAttempt.exercise]: [{
                 ...currentAttempt,
                 index: 1,
+                userId: currentUserId,
               }],
             };
           }, {}))
@@ -64,12 +162,14 @@ export class GroupTable extends Component {
         const { readingExercises, ...rest } = Object.keys(userExercises)
           .reduce((prevUserExercises, currentExercise) => {
             const attempts = userExercises[currentExercise];
+            const { userId } = attempts[0];
             const exerciseCount = attempts.length;
             const exerciseElapsedTime = attempts.map(({ elapsedTime }) => elapsedTime).reduce(reduceSumFunc, 0);
             const indeces = attempts.map(attempt => attempt.index);
             const finalIndex = Math.max(...indeces);
             const isReadingExercise = readingExerciseNames.indexOf(currentExercise) !== -1;
             let userExerciseResults = {
+              userId,
               exerciseCount,
               exerciseElapsedTime,
             };
@@ -185,7 +285,6 @@ export class GroupTable extends Component {
           [currentExercise]: aggregatedResult,
         };
       }, {});
-
     return (
       <Fragment>
         <Table basic celled selectable textAlign="center" compact fixed>
@@ -436,6 +535,19 @@ export class GroupTable extends Component {
               })}
           </Table.Body>
         </Table>
+        {this.props.isTeacher ?
+          <Button
+            icon
+            basic
+            floated="right"
+            size="large"
+            color="blue"
+            disabled={Object.keys(results).length <= 1}
+            onClick={() => this.exportData(results)}
+          >
+            {`${this.props.translate('statistics-table.export')} `}
+            <Icon name="download" />
+          </Button> : null}
       </Fragment>
     );
   }

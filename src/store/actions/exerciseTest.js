@@ -254,12 +254,9 @@ const testFinishing = () => ({
   type: actionTypes.TEST_FINISHING,
 });
 
-const testFinished = (result, answers) => ({
+const testFinished = result => ({
   type: actionTypes.TEST_FINISHED,
-  payload: {
-    result,
-    answers,
-  },
+  payload: result,
 });
 
 const testFinishFailed = error => ({
@@ -325,15 +322,15 @@ export const finishQuestionTest = (attemptId, answers) => (dispatch, getState) =
     });
 };
 
-export const finishBlankTest = (attemptId, blankExercises, answers) => (dispatch, getState) => {
+export const finishBlankTest = (attemptId, answers) => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(testFinishing());
   const state = getState();
   const { elapsedTime } = state.timing;
   const result = { elapsedTime };
-  api.finishBlankTest({ attemptId, blankExercises, answers, result })
+  api.finishBlankTest({ attemptId, answers, result })
     .then((testResult) => {
-      dispatch(testFinished(testResult, answers));
+      dispatch(testFinished(testResult));
     }, (errorMessage) => {
       dispatch(testFinishFailed(errorMessage));
     });
@@ -341,4 +338,28 @@ export const finishBlankTest = (attemptId, blankExercises, answers) => (dispatch
 
 export const endTest = () => (dispatch) => {
   dispatch(testEnd());
+};
+
+const recalculateTestAttemptStart = () => ({
+  type: actionTypes.RECALCULATE_TEST_ATTEMPT_START,
+});
+
+const recalculateTestAttemptSucceeded = result => ({
+  type: actionTypes.RECALCULATE_TEST_ATTEMPT_SUCCEEDED,
+  payload: result,
+});
+
+const recalculateTestAttemptFailed = error => ({
+  type: actionTypes.RECALCULATE_TEST_ATTEMPT_FAILED,
+  payload: error,
+});
+
+export const recalculateTestAttempt = testAttemptId => (dispatch) => {
+  dispatch(recalculateTestAttemptStart());
+  api.recalculateTestAttempt({ testAttemptId })
+    .then((testAttempt) => {
+      dispatch(recalculateTestAttemptSucceeded(testAttempt.result));
+    }, (errorMessage) => {
+      dispatch(recalculateTestAttemptFailed(errorMessage));
+    });
 };

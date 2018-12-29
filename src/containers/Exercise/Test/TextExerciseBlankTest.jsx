@@ -41,10 +41,14 @@ export class TextExerciseBlankTest extends Component {
   }
 
   onTestFinishHandler = () => {
-    const answers = this.props.blankExercises.map((blankExercise, index) => (
-      this.state.answers[index] ? this.state.answers[index] : null
-    ));
-    this.props.onTestFinish(this.props.attemptId, this.props.blankExercises, answers);
+    const answers = this.props.blankExercises.map((blankExercise, index) => ({
+      testAttemptId: this.props.attemptId,
+      language: 'estonian',
+      blankExercise: blankExercise.blankExercise,
+      correct: blankExercise.correct,
+      answer: this.state.answers[index] ? this.state.answers[index] : null,
+    }));
+    this.props.onTestFinish(this.props.attemptId, answers);
   }
 
   render() {
@@ -56,7 +60,7 @@ export class TextExerciseBlankTest extends Component {
             <Grid.Row columns={1} style={{ paddingTop: '5em', paddingBottom: '10em' }}>
               <Grid.Column textAlign="center">
                 <Header as="h3">
-                  {`${this.state.blankExerciseIndex + 1}. ${this.props.blankExercises[this.state.blankExerciseIndex].text[0]}`}
+                  {`${this.state.blankExerciseIndex + 1}. ${this.props.blankExercises[this.state.blankExerciseIndex].blankExercise[0]}`}
                   <Input
                     focus
                     autoFocus
@@ -67,12 +71,12 @@ export class TextExerciseBlankTest extends Component {
                   >
                     <input
                       style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(0, 76, 255)' }}
-                      size={this.props.blankExercises[this.state.blankExerciseIndex].answer.length}
+                      size={this.props.blankExercises[this.state.blankExerciseIndex].correct.length}
                       value={this.state.answers[this.state.blankExerciseIndex] === undefined ? '' : this.state.answers[this.state.blankExerciseIndex]}
                       onChange={this.onInputChangeHandler(this.state.blankExerciseIndex)}
                     />
                   </Input>
-                  {this.props.blankExercises[this.state.blankExerciseIndex].text[2]}
+                  {this.props.blankExercises[this.state.blankExerciseIndex].blankExercise[2]}
                 </Header>
               </Grid.Column>
             </Grid.Row>
@@ -139,8 +143,8 @@ const mapDispatchToProps = dispatch => ({
   onTestStart: (attemptData) => {
     dispatch(actionCreators.startTest(attemptData));
   },
-  onTestFinish: (attemptId, blankExercises, answers) => {
-    dispatch(actionCreators.finishBlankTest(attemptId, blankExercises, answers));
+  onTestFinish: (attemptId, answers) => {
+    dispatch(actionCreators.finishBlankTest(attemptId, answers));
   },
 });
 
