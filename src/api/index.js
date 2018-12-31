@@ -33,7 +33,7 @@ export {
   fetchTestQuestionAnswers,
   fetchTestBlankAnswers,
   changeTestBlankAnswer,
-  recalculateTestAttempt,
+  reevaluateTestAttempt,
 } from './exerciseTest';
 
 export {

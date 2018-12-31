@@ -340,26 +340,26 @@ export const endTest = () => (dispatch) => {
   dispatch(testEnd());
 };
 
-const recalculateTestAttemptStart = () => ({
-  type: actionTypes.RECALCULATE_TEST_ATTEMPT_START,
+const reevaluateTestAttemptStart = () => ({
+  type: actionTypes.REEVALUATE_TEST_ATTEMPT_START,
 });
 
-const recalculateTestAttemptSucceeded = result => ({
-  type: actionTypes.RECALCULATE_TEST_ATTEMPT_SUCCEEDED,
+const reevaluateTestAttemptSucceeded = result => ({
+  type: actionTypes.REEVALUATE_TEST_ATTEMPT_SUCCEEDED,
   payload: result,
 });
 
-const recalculateTestAttemptFailed = error => ({
-  type: actionTypes.RECALCULATE_TEST_ATTEMPT_FAILED,
+const reevaluateTestAttemptFailed = error => ({
+  type: actionTypes.REEVALUATE_TEST_ATTEMPT_FAILED,
   payload: error,
 });
 
-export const recalculateTestAttempt = testAttemptId => (dispatch) => {
-  dispatch(recalculateTestAttemptStart());
-  api.recalculateTestAttempt({ testAttemptId })
+export const reevaluateTestAttempt = testAttemptId => (dispatch) => {
+  dispatch(reevaluateTestAttemptStart());
+  api.reevaluateTestAttempt({ testAttemptId })
     .then((testAttempt) => {
-      dispatch(recalculateTestAttemptSucceeded(testAttempt.result));
+      dispatch(reevaluateTestAttemptSucceeded(testAttempt.result));
     }, (errorMessage) => {
-      dispatch(recalculateTestAttemptFailed(errorMessage));
+      dispatch(reevaluateTestAttemptFailed(errorMessage));
     });
 };

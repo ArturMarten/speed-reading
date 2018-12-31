@@ -45,7 +45,7 @@ export {
   finishQuestionTest,
   finishBlankTest,
   endTest,
-  recalculateTestAttempt,
+  reevaluateTestAttempt,
 } from './exerciseTest';
 
 export {

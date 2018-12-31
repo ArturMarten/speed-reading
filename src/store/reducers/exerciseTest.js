@@ -352,7 +352,7 @@ const reducer = (state = initialState, action) => {
         status: 'preparation',
       });
     }
-    case actionTypes.RECALCULATE_TEST_ATTEMPT_SUCCEEDED: {
+    case actionTypes.REEVALUATE_TEST_ATTEMPT_SUCCEEDED: {
       return updateObject(state, {
         result: action.payload,
       });

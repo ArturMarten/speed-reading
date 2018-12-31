@@ -235,9 +235,9 @@ export const changeTestBlankAnswer = ({ blankAnswerId, userEvaluation }) => (
   })
 );
 
-export const recalculateTestAttempt = ({ testAttemptId }) => (
+export const reevaluateTestAttempt = ({ testAttemptId }) => (
   new Promise((resolve, reject) => {
-    axios.get(`/testAttempts/${testAttemptId}/recalculate`)
+    axios.patch(`/testAttempts/${testAttemptId}/re-evaluate`)
       .then((response) => {
         resolve(response.data);
       }, (error) => {

@@ -43,7 +43,7 @@ export class BlankTestAnswers extends Component {
               userEvaluation : testBlankAnswer.userEvaluation,
           })),
         });
-        this.props.recalculateTestAttempt(this.props.testAttemptId);
+        this.props.reevaluateTestAttempt(this.props.testAttemptId);
       }, (errorMessage) => {
         console.log(errorMessage);
       });
@@ -83,7 +83,7 @@ export class BlankTestAnswers extends Component {
                   <span style={{ color: 'rgb(204, 0, 0)', textDecoration: 'line-through' }}>
                     {testBlankAnswer.answer}
                   </span> : null}
-                {testBlankAnswer.autoEvaluation === 'misspelled' || testBlankAnswer.autoEvaluation === 'misspelled' ?
+                {testBlankAnswer.autoEvaluation === 'misspelled' || testBlankAnswer.userEvaluation === 'misspelled' ?
                   <span style={{
                     color: 'rgb(168, 168, 0)',
                     textDecoration: 'underline',
@@ -93,7 +93,7 @@ export class BlankTestAnswers extends Component {
                   >
                     {`${testBlankAnswer.answer}`}
                   </span> : null}
-                {testBlankAnswer.autoEvaluation === 'synonym' || testBlankAnswer.autoEvaluation === 'synonym' ?
+                {testBlankAnswer.autoEvaluation === 'synonym' || testBlankAnswer.userEvaluation === 'synonym' ?
                   <span style={{ color: 'rgb(168, 168, 0)' }}>
                     {`${testBlankAnswer.answer}`}
                   </span> : null}
@@ -132,8 +132,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  recalculateTestAttempt: (testAttemptId) => {
-    dispatch(actionCreators.recalculateTestAttempt(testAttemptId));
+  reevaluateTestAttempt: (testAttemptId) => {
+    dispatch(actionCreators.reevaluateTestAttempt(testAttemptId));
   },
 });
 
