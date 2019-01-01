@@ -16,12 +16,23 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.11 (arendamisel)
+                  Versioon 5.1.12 (arendamisel)
                 </List.Header>
                 <List.Description>
                   <List.List>
-                    <List.Item>Abiharjutuste statistika parandused</List.Item>
-                    <List.Item>Lugemiskiiruse valiku parandused</List.Item>
+                    <List.Item>Keskendumise harjutuse täiendused ja parandused</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>
+                  Versioon 5.1.11 (01.01.2019)
+                </List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Lisatud lünkülesannete vastuste hindamine</List.Item>
                   </List.List>
                 </List.Description>
               </List.Content>

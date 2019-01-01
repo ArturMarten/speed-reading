@@ -1,5 +1,5 @@
 export const environment = {
-  version: '5.1.10',
+  version: '5.1.11',
 };
 
 export default environment;

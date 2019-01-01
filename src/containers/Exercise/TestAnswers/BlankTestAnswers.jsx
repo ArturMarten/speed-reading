@@ -79,13 +79,13 @@ export class BlankTestAnswers extends Component {
 
                 {testBlankAnswer.autoEvaluation === 'unanswered' ?
                   <span style={{ color: 'rgb(204, 0, 0)' }}>...</span> : null}
-                {testBlankAnswer.autoEvaluation === 'incorrect' || testBlankAnswer.userEvaluation === 'incorrect' ?
+                {(testBlankAnswer.autoEvaluation === 'incorrect' && !testBlankAnswer.userEvaluation) || testBlankAnswer.userEvaluation === 'incorrect' ?
                   <span style={{ color: 'rgb(204, 0, 0)', textDecoration: 'line-through' }}>
                     {testBlankAnswer.answer}
                   </span> : null}
-                {testBlankAnswer.autoEvaluation === 'misspelled' || testBlankAnswer.userEvaluation === 'misspelled' ?
+                {(testBlankAnswer.autoEvaluation === 'misspelled' && !testBlankAnswer.userEvaluation) || testBlankAnswer.userEvaluation === 'misspelled' ?
                   <span style={{
-                    color: 'rgb(168, 168, 0)',
+                    color: 'rgb(20, 122, 195)',
                     textDecoration: 'underline',
                     textDecorationColor: 'rgb(204, 0, 0)',
                     textDecorationStyle: 'wavy',
@@ -93,8 +93,8 @@ export class BlankTestAnswers extends Component {
                   >
                     {`${testBlankAnswer.answer}`}
                   </span> : null}
-                {testBlankAnswer.autoEvaluation === 'synonym' || testBlankAnswer.userEvaluation === 'synonym' ?
-                  <span style={{ color: 'rgb(168, 168, 0)' }}>
+                {(testBlankAnswer.autoEvaluation === 'synonym' && !testBlankAnswer.userEvaluation) || testBlankAnswer.userEvaluation === 'synonym' ?
+                  <span style={{ color: 'rgb(20, 122, 195)' }}>
                     {`${testBlankAnswer.answer}`}
                   </span> : null}
                 {testBlankAnswer.autoEvaluation !== 'correct' ?
