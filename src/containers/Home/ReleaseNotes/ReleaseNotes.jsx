@@ -33,6 +33,7 @@ class ReleaseNotes extends Component {
                 <List.Description>
                   <List.List>
                     <List.Item>Lisatud lünkülesannete vastuste hindamine</List.Item>
+                    <List.Item>Lisatud statistika graafiku polünoomina kuvamine</List.Item>
                   </List.List>
                 </List.Description>
               </List.Content>

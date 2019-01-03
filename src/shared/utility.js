@@ -1,3 +1,5 @@
+import regression from 'regression';
+
 export const updateObject = (oldObject, newValues) => ({
   ...oldObject,
   ...newValues,
@@ -174,6 +176,15 @@ export const getSimilarSymbol = (symbol) => {
 };
 
 export const reduceSumFunc = (prev, cur) => prev + cur;
+
+export const polynomial = (xSeries, ySeries, order) => {
+  const data = xSeries.map((x, index) => [x, ySeries[index]]);
+  return regression.polynomial(data, { order, precision: 100 });
+};
+
+export const calculateY = equation => x => (
+  equation.reduce((prev, cur, index) => prev + cur * (x ** (equation.length - index - 1)), 0)
+);
 
 export const leastSquares = (xSeries, ySeries) => {
   if (xSeries === null || ySeries === null || xSeries.length === 0 || ySeries.length === 0) {

@@ -6,10 +6,11 @@ import { timeFormat } from 'd3-time-format';
 // eslint-disable-next-line no-unused-vars
 import { transition } from 'd3-transition';
 import { select, event } from 'd3-selection';
-import { line } from 'd3-shape';
+import { interpolatePath } from 'd3-interpolate-path';
+import { line, curveBasis } from 'd3-shape';
 
 import './RegressionChart.css';
-import { leastSquares, getAverage, getStandardDeviation } from '../../shared/utility';
+import { getAverage, getStandardDeviation, polynomial, calculateY } from '../../shared/utility';
 
 const margin = {
   top: 50,
@@ -71,7 +72,7 @@ export class RegressionChart extends Component {
     const minXValue = Math.min(...xValues);
     const maxXValue = Math.max(...xValues);
     const maxYValue = Math.max(...yValues);
-    const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
+    // const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
     const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING || 1;
     const verticalSpacing = maxYValue * VERTICAL_SPACING;
     if (data[0] && data[0][xField] instanceof Date) {
@@ -82,10 +83,11 @@ export class RegressionChart extends Component {
     this.yScale = heightScale.domain([maxYValue + verticalSpacing, -verticalSpacing]);
     const xSeries = xValues.map(d => this.xScale(d));
     const ySeries = yValues.map(d => this.yScale(d));
-    const [slope, intercept] = leastSquares(xSeries, ySeries);
+    const result = polynomial(xSeries, ySeries, this.props.order);
+    const equation = calculateY(result.equation);
 
-    const initial = this.yScale.invert(intercept + (slope * this.xScale(minXValue)));
-    const end = this.yScale.invert(intercept + (slope * this.xScale(maxXValue)));
+    const initial = this.yScale.invert(equation(this.xScale(minXValue)));
+    const end = this.yScale.invert(equation(this.xScale(maxXValue)));
     const change = end - initial || 0;
     const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
     const average = getAverage(yValues) || 0;
@@ -192,13 +194,14 @@ export class RegressionChart extends Component {
 
     // Append regression line
     const newLine = line()
+      .curve(curveBasis)
       .x(d => this.xScale(d))
-      .y(d => intercept + (slope * this.xScale(d)));
+      .y(d => equation(this.xScale(d)));
 
     chart.append('path')
       .attr('class', 'regression-line')
       .style('stroke', this.props.dataLineColor[0])
-      .data(linePoints)
+      .datum(xValues)
       .attr('d', newLine);
 
     // Append datapoints
@@ -268,7 +271,7 @@ export class RegressionChart extends Component {
       const minXValue = Math.min(...xValues);
       const maxXValue = Math.max(...xValues);
       const maxYValue = Math.max(...yValues);
-      const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
+      // const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
       const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING || 1;
       const verticalSpacing = maxYValue * VERTICAL_SPACING;
       if (data[0] && data[0][xField] instanceof Date) {
@@ -279,9 +282,10 @@ export class RegressionChart extends Component {
       this.yScale = heightScale.domain([maxYValue + verticalSpacing, -verticalSpacing]);
       const xSeries = xValues.map(d => this.xScale(d));
       const ySeries = yValues.map(d => this.yScale(d));
-      const [slope, intercept] = leastSquares(xSeries, ySeries);
-      const initial = this.yScale.invert(intercept + (slope * this.xScale(minXValue)));
-      const end = this.yScale.invert(intercept + (slope * this.xScale(maxXValue)));
+      const result = polynomial(xSeries, ySeries, this.props.order);
+      const equation = calculateY(result.equation);
+      const initial = this.yScale.invert(equation(this.xScale(minXValue)));
+      const end = this.yScale.invert(equation(this.xScale(maxXValue)));
       const change = end - initial || 0;
       const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
       const average = getAverage(yValues) || 0;
@@ -337,9 +341,10 @@ export class RegressionChart extends Component {
 
       // Update regression line
       const newLine = line()
+        .curve(curveBasis)
         .x(d => this.xScale(d))
-        .y(d => intercept + (slope * this.xScale(d)));
-      const regressionLine = chart.selectAll('.regression-line').data(linePoints);
+        .y(d => equation(this.xScale(d)));
+      const regressionLine = chart.selectAll('.regression-line').datum(xValues);
       regressionLine
         .enter()
         .append('path')
@@ -353,7 +358,11 @@ export class RegressionChart extends Component {
       regressionLine
         .transition()
         .duration(TRANSITION_DURATION)
-        .attr('d', newLine)
+        .attrTween('d', (d) => {
+          const previous = regressionLine.attr('d');
+          const current = newLine(d);
+          return interpolatePath(previous, current);
+        })
         .style('opacity', 1)
         .style('stroke', this.props.dataLineColor[0]);
       regressionLine

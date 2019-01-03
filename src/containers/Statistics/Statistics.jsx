@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid, Button, Input } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid, Button, Input, Label } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -125,6 +125,7 @@ export class Statistics extends Component {
     period: 'not-defined',
     filterOutliers: true,
     minimumAttemptCount: 0,
+    order: 1,
   };
 
   componentDidMount() {
@@ -662,6 +663,16 @@ export class Statistics extends Component {
                   <Dimmer inverted active={this.props.userExerciseStatisticsStatus.loading}>
                     <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
                   </Dimmer>
+                  <Input
+                    type="number"
+                    labelPosition="left"
+                    value={this.state.order}
+                    style={{ display: 'block', textAlign: 'right' }}
+                    onChange={event => this.setState({ order: +event.target.value })}
+                  >
+                    <Label basic>Polünoomi aste</Label>
+                    <input style={{ width: '5em' }} max="30" />
+                  </Input>
                   <div style={{ textAlign: 'center', overflowX: 'auto' }}>
                     <RegressionChart
                       width={1000}
@@ -670,6 +681,7 @@ export class Statistics extends Component {
                       xField={xField}
                       xLabel={this.state.xLabel}
                       translate={this.props.translate}
+                      order={this.state.order}
                       {...chartProps}
                     />
                   </div>
