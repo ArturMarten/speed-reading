@@ -1,5 +1,5 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier", "prettier/react"],
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -15,21 +15,42 @@
     "sinon": true
   },
   "rules": {
-    "max-len": ["error", 150],
+    "max-len": ["error", 120],
     "linebreak-style": 0,
     "react/prop-types": 0,
     "react/destructuring-assignment": 0,
     "react/jsx-wrap-multilines": 0,
     "react/no-access-state-in-setstate": 0,
-    "import/no-extraneous-dependencies": ["error", {
-      "devDependencies": true
-    }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
     "object-curly-newline": 0,
     "jsx-a11y/label-has-for": 0,
     "operator-linebreak": 0,
     "import/no-named-as-default": 0,
     "no-console": [
-      "error", { "allow": ["log"]}
+      "error",
+      {
+        "allow": ["log"]
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "trailingComma": "all",
+        "tabWidth": 2,
+        "semi": true,
+        "singleQuote": true,
+        "bracketSpacing": true,
+        "arrowParens": "always",
+        "jsxSingleQuote": false,
+        "jsxBracketSameLine": false
+      }
     ]
-  }
+  },
+  "plugins": ["prettier"]
 }
