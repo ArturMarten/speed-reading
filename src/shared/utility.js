@@ -162,6 +162,7 @@ export const shuffle = (array) => {
 };
 
 /* eslint-disable object-property-newline */
+/* prettier-ignore */
 const similarSymbols = {
   0: ['8'], 1: ['7'], 2: ['5'], 3: ['6'], 4: ['7'], 5: ['2', '6'], 7: ['1'], 8: ['3', '6', '9'], 9: ['3', '6', '8'],
   a: ['e'], b: ['d'], c: ['o'], d: ['b'], e: ['a'], f: ['t'], g: ['j'], h: ['k'], i: ['l'],
@@ -173,6 +174,11 @@ export const getSimilarSymbol = (symbol) => {
   const similar = similarSymbols[symbol];
   if (!similar) return symbol;
   return similar[Math.floor(Math.random() * similar.length)];
+};
+
+export const getSymbolCount = (tableDimensions) => {
+  const [rows, columns] = tableDimensions.split('x');
+  return Number.parseInt(rows, 10) * Number.parseInt(columns, 10);
 };
 
 export const reduceSumFunc = (prev, cur) => prev + cur;

@@ -6,9 +6,9 @@ import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 
 import {
-  MIN_WPM,
-  MAX_WPM,
-  STEP_WPM,
+  MIN_WORDS_PER_MINUTE,
+  MAX_WORDS_PER_MINUTE,
+  STEP_WORDS_PER_MINUTE,
   MIN_FIXATION,
   MAX_FIXATION,
   STEP_FIXATION,
@@ -29,35 +29,38 @@ export class SpeedOptions extends PureComponent {
     const { keyCode } = event;
     const key = String.fromCharCode(keyCode);
     if (key === '+') {
-      if (this.wpmSpeedRef) {
-        this.wpmSpeedRef.increaseHandler(event);
+      if (this.wordsPerMinuteSpeedRef) {
+        this.wordsPerMinuteSpeedRef.increaseHandler(event);
       } else if (this.fixationSpeedRef) {
         this.fixationSpeedRef.decreaseHandler(event);
       }
     } else if (key === '-') {
-      if (this.wpmSpeedRef) {
-        this.wpmSpeedRef.decreaseHandler(event);
+      if (this.wordsPerMinuteSpeedRef) {
+        this.wordsPerMinuteSpeedRef.decreaseHandler(event);
       } else if (this.fixationSpeedRef) {
         this.fixationSpeedRef.increaseHandler(event);
       }
     }
-  }
+  };
 
   render() {
     return (
       <Fragment>
-        {this.props.visibleOptions.indexOf('wpm') !== -1 ?
+        {this.props.visibleOptions.indexOf('wordsPerMinute') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('speed-options.reading-speed')}
-            unit={this.props.translate('speed-options.wpm')}
-            value={this.props.options.wpm}
-            min={MIN_WPM}
-            max={MAX_WPM}
-            step={STEP_WPM}
-            updateValue={value => this.props.onSubmit(Object.assign({}, { wpm: value }))}
-            ref={(ref) => { this.wpmSpeedRef = ref; }}
-          /> : null}
-        {this.props.visibleOptions.indexOf('fixation') !== -1 ?
+            unit={this.props.translate('speed-options.words-per-minute')}
+            value={this.props.options.wordsPerMinute}
+            min={MIN_WORDS_PER_MINUTE}
+            max={MAX_WORDS_PER_MINUTE}
+            step={STEP_WORDS_PER_MINUTE}
+            updateValue={(value) => this.props.onSubmit(Object.assign({}, { wordsPerMinute: value }))}
+            ref={(ref) => {
+              this.wordsPerMinuteSpeedRef = ref;
+            }}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('fixation') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('speed-options.fixation-time')}
             unit={this.props.translate('speed-options.ms')}
@@ -65,22 +68,28 @@ export class SpeedOptions extends PureComponent {
             min={MIN_FIXATION}
             max={MAX_FIXATION}
             step={STEP_FIXATION}
-            updateValue={value => this.props.onSubmit({ fixation: value })}
-            ref={(ref) => { this.fixationSpeedRef = ref; }}
-          /> : null}
+            updateValue={(value) => this.props.onSubmit({ fixation: value })}
+            ref={(ref) => {
+              this.fixationSpeedRef = ref;
+            }}
+          />
+        ) : null}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   options: state.options.speedOptions,
   visibleOptions: state.options.visibleSpeedOptions,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: option => dispatch(actionCreators.speedOptionUpdated(option)),
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: (option) => dispatch(actionCreators.speedOptionUpdated(option)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SpeedOptions);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SpeedOptions);

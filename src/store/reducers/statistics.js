@@ -16,9 +16,9 @@ const initialState = {
   },
 };
 
-const exerciseAttemptResultFilter = attempt => attempt.result !== null;
+const exerciseAttemptResultFilter = (attempt) => attempt.result !== null;
 
-const exerciseAttemptMap = attempt => ({
+const exerciseAttemptMap = (attempt) => ({
   id: attempt.id,
   exerciseId: attempt.exerciseId,
   exercise: getExerciseById(attempt.exerciseId),
@@ -26,15 +26,19 @@ const exerciseAttemptMap = attempt => ({
   date: new Date(attempt.startTime),
   readingTextTitle: attempt.readingTextTitle,
   userReadingAttemptCount: attempt.userReadingAttemptCount,
-  wordsPerMinute: attempt.result.wpm,
+  wordsPerMinute: attempt.result.wordsPerMinute,
   symbolsPerMinute: attempt.result.spm,
-  exerciseResult: attempt.result.correct !== undefined && attempt.result.total !== undefined ?
-    Math.round((attempt.result.correct / attempt.result.total) * 100) : null,
+  exerciseResult:
+    attempt.result.correct !== undefined && attempt.result.total !== undefined
+      ? Math.round((attempt.result.correct / attempt.result.total) * 100)
+      : null,
   elapsedTime: attempt.result.elapsedTime,
   testElapsedTime: attempt.test && attempt.test.result ? attempt.test.result.elapsedTime : 0,
   testResult: attempt.test && attempt.test.result ? Math.round(attempt.test.result.testResult * 100) : null,
-  comprehensionResult: attempt.test && attempt.test.result ? Math.round(attempt.test.result.comprehensionResult * 100) : null,
-  comprehensionPerMinute: attempt.test && attempt.test.result ? Math.round(attempt.test.result.cpm) : null,
+  comprehensionResult:
+    attempt.test && attempt.test.result ? Math.round(attempt.test.result.comprehensionResult * 100) : null,
+  comprehensionPerMinute:
+    attempt.test && attempt.test.result ? Math.round(attempt.test.result.comprehensionPerMinute) : null,
 });
 
 const reducer = (state = initialState, action) => {
@@ -49,9 +53,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.FETCH_USER_EXERCISE_STATISTICS_SUCCEEDED: {
       // Map statistics to specific exercise
-      const userExerciseStatistics = action.payload
-        .filter(exerciseAttemptResultFilter)
-        .map(exerciseAttemptMap);
+      const userExerciseStatistics = action.payload.filter(exerciseAttemptResultFilter).map(exerciseAttemptMap);
       return updateObject(state, {
         userExerciseStatistics,
         userExerciseStatisticsStatus: {
@@ -80,12 +82,9 @@ const reducer = (state = initialState, action) => {
       // Map statistics to specific exercise
       const groupExerciseStatistics = Object.assign(
         {},
-        ...Object.keys(action.payload)
-          .map(userId => ({
-            [userId]: action.payload[userId]
-              .filter(exerciseAttemptResultFilter)
-              .map(exerciseAttemptMap),
-          })),
+        ...Object.keys(action.payload).map((userId) => ({
+          [userId]: action.payload[userId].filter(exerciseAttemptResultFilter).map(exerciseAttemptMap),
+        })),
       );
       return updateObject(state, {
         groupExerciseStatistics,

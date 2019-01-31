@@ -14,28 +14,26 @@ export class TestResults extends Component {
     this.setState({
       difficultyRating: data.rating,
     });
-  }
+  };
 
   onEndHandler = () => {
     if (this.state.difficultyRating) {
       this.props.onRate(this.state.difficultyRating);
     }
     this.props.onEnd();
-  }
+  };
 
   onCheckTestAnswersHandler = () => {
     if (this.state.difficultyRating) {
       this.props.onRate(this.state.difficultyRating);
     }
     this.props.onCheckAnswers();
-  }
+  };
 
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
-        <Modal.Header>
-          {this.props.translate('test-results.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('test-results.modal-header')}</Modal.Header>
         <Modal.Content>
           <Grid>
             <Grid.Row>
@@ -46,72 +44,42 @@ export class TestResults extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 <Statistic size="small" color="black">
-                  <Statistic.Value>
-                    {formatMilliseconds(this.props.result.elapsedTime)}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.elapsed-time')}
-                  </Statistic.Label>
+                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>
-                    {`${Math.round(this.props.result.testResult * 100)}%`}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.test-result')}
-                  </Statistic.Label>
+                  <Statistic.Value>{`${Math.round(this.props.result.testResult * 100)}%`}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.test-result')}</Statistic.Label>
                 </Statistic>
                 <br />
                 <Statistic size="small" color="green">
-                  <Statistic.Value>
-                    {this.props.result.correct}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.correct')}
-                  </Statistic.Label>
+                  <Statistic.Value>{this.props.result.correct}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.correct')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="red">
-                  <Statistic.Value>
-                    {this.props.result.incorrect}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.incorrect')}
-                  </Statistic.Label>
+                  <Statistic.Value>{this.props.result.incorrect}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.incorrect')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="grey">
-                  <Statistic.Value>
-                    {this.props.result.unanswered}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.unanswered')}
-                  </Statistic.Label>
+                  <Statistic.Value>{this.props.result.unanswered}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.unanswered')}</Statistic.Label>
                 </Statistic>
                 <br />
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>
-                    {`${Math.round(this.props.result.comprehensionResult * 100)}%`}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.comprehension-level')}
-                  </Statistic.Label>
+                  <Statistic.Value>{`${Math.round(this.props.result.comprehensionResult * 100)}%`}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.comprehension-level')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">
-                  <Statistic.Value>
-                    {Math.round(this.props.result.cpm)}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('test-results.comprehension-speed')}
-                  </Statistic.Label>
+                  <Statistic.Value>{Math.round(this.props.result.comprehensionPerMinute)}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('test-results.comprehension-speed')}</Statistic.Label>
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
-            {this.props.selectedText.id ?
+            {this.props.selectedText.id ? (
               <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
                 <Grid.Column width={5} textAlign="right">
                   <span>
-                    <b>
-                      {this.props.translate('test-results.rate-test-difficulty')}
-                    </b>
+                    <b>{this.props.translate('test-results.rate-test-difficulty')}</b>
                     {` (${this.props.translate('test-results.optional')})`}
                   </span>
                 </Grid.Column>
@@ -124,12 +92,14 @@ export class TestResults extends Component {
                         maxRating={10}
                         rating={this.state.difficultyRating}
                         onRate={this.onRateHandler}
-                      />}
+                      />
+                    }
                     position="top center"
                     content={this.props.translate('test-results.rate-test-difficulty-description')}
                   />
                 </Grid.Column>
-              </Grid.Row> : null}
+              </Grid.Row>
+            ) : null}
           </Grid>
         </Modal.Content>
         <Modal.Actions>
@@ -139,25 +109,23 @@ export class TestResults extends Component {
             onClick={this.onCheckTestAnswersHandler}
             content={this.props.translate('test-results.check-correct-answers')}
           />
-          <Button
-            negative
-            onClick={this.onEndHandler}
-            content={this.props.translate('test-results.end')}
-          />
+          <Button negative onClick={this.onEndHandler} content={this.props.translate('test-results.end')} />
         </Modal.Actions>
       </Modal>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   result: state.exerciseTest.result,
   selectedText: state.text.selectedText,
   translate: getTranslate(state.locale),
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(TestResults);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TestResults);

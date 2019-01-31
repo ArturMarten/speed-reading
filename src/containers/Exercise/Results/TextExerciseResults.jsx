@@ -14,28 +14,26 @@ export class TextExerciseResults extends Component {
     this.setState({
       interestingnessRating: data.rating,
     });
-  }
+  };
 
   onEndHandler = () => {
     if (this.state.interestingnessRating) {
       this.props.onRate(this.state.interestingnessRating);
     }
     this.props.onEnd();
-  }
+  };
 
   onProceedHandler = () => {
     if (this.state.interestingnessRating) {
       this.props.onRate(this.state.interestingnessRating);
     }
     this.props.onProceed();
-  }
+  };
 
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
-        <Modal.Header>
-          {this.props.translate('text-exercise-results.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('text-exercise-results.modal-header')}</Modal.Header>
         <Modal.Content>
           <Grid>
             <Grid.Row>
@@ -46,38 +44,26 @@ export class TextExerciseResults extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 <Statistic size="small" color="black">
-                  <Statistic.Value>
-                    {formatMilliseconds(this.props.result.elapsedTime)}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('text-exercise-results.elapsed-time')}
-                  </Statistic.Label>
+                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('text-exercise-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="green">
-                  <Statistic.Value>
-                    {this.props.result.wpm}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('text-exercise-results.wpm')}
-                  </Statistic.Label>
+                  <Statistic.Value>{this.props.result.wordsPerMinute}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('text-exercise-results.words-per-minute')}</Statistic.Label>
                 </Statistic>
                 <Statistic size="small" color="blue">
-                  <Statistic.Value>
-                    {this.props.result.cps}
-                  </Statistic.Value>
+                  <Statistic.Value>{this.props.result.charactersPerSecond}</Statistic.Value>
                   <Statistic.Label>
-                    {this.props.translate('text-exercise-results.cps')}
+                    {this.props.translate('text-exercise-results.characters-per-second')}
                   </Statistic.Label>
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
-            {this.props.selectedText.id ?
+            {this.props.selectedText.id ? (
               <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
                 <Grid.Column width={6} textAlign="right">
                   <span>
-                    <b>
-                      {this.props.translate('text-exercise-results.rate-text-interestingness')}
-                    </b>
+                    <b>{this.props.translate('text-exercise-results.rate-text-interestingness')}</b>
                     {` (${this.props.translate('text-exercise-results.optional')})`}
                   </span>
                 </Grid.Column>
@@ -90,24 +76,19 @@ export class TextExerciseResults extends Component {
                         maxRating={10}
                         rating={this.state.interestingnessRating}
                         onRate={this.onRateHandler}
-                      />}
+                      />
+                    }
                     position="top center"
                     content={this.props.translate('text-exercise-results.rate-text-interestingness-description')}
                   />
                 </Grid.Column>
-              </Grid.Row> : null}
+              </Grid.Row>
+            ) : null}
           </Grid>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            negative
-            onClick={this.onEndHandler}
-            content={this.props.translate('text-exercise-results.end')}
-          />
-          <Button
-            positive
-            onClick={this.onProceedHandler}
-          >
+          <Button negative onClick={this.onEndHandler} content={this.props.translate('text-exercise-results.end')} />
+          <Button positive onClick={this.onProceedHandler}>
             {this.props.translate('text-exercise-results.proceed')}
             <Icon name="right chevron" />
           </Button>
@@ -117,14 +98,16 @@ export class TextExerciseResults extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   result: state.exercise.result,
   selectedText: state.text.selectedText,
   translate: getTranslate(state.locale),
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseResults);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TextExerciseResults);

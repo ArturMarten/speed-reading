@@ -23,7 +23,7 @@ export const updateState = (currentState, textMetadata) => {
   let { lineNumber } = nextWordMetadata;
   let nextLine = linesMetadata[lineNumber];
   let nextCharacterWidth = nextLine.averageCharacterWidth;
-  let nextLinePosition = nextLine.rect.left + (nextLineCharacterIndex * nextCharacterWidth);
+  let nextLinePosition = nextLine.rect.left + nextLineCharacterIndex * nextCharacterWidth;
   const wordEndPosition = nextWordMetadata.rect.right;
   const currentLineCharacterCount = linesMetadata[lineNumber].characterCount;
   if (Math.ceil(nextLinePosition) >= wordEndPosition) {
@@ -38,7 +38,7 @@ export const updateState = (currentState, textMetadata) => {
     lineNumber += 1;
     nextLine = linesMetadata[lineNumber];
     nextCharacterWidth = nextLine.averageCharacterWidth;
-    nextLinePosition = nextLine.rect.left + (nextLineCharacterIndex * nextCharacterWidth);
+    nextLinePosition = nextLine.rect.left + nextLineCharacterIndex * nextCharacterWidth;
     if (nextLine.rect.bottom - nextMarginTop > canvasHeight) {
       // New page
       newPage = true;
@@ -52,7 +52,10 @@ export const updateState = (currentState, textMetadata) => {
     height: nextWordMetadata.rect.bottom - nextWordMetadata.rect.top,
   };
 
-  if (nextWordIndex === textMetadata.wordsMetadata.length - 1 && nextLineCharacterIndex === currentLineCharacterCount - 1) {
+  if (
+    nextWordIndex === textMetadata.wordsMetadata.length - 1 &&
+    nextLineCharacterIndex === currentLineCharacterCount - 1
+  ) {
     finished = true;
   }
 
@@ -84,13 +87,14 @@ export class Disappearing extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if ((!this.props.timerState.started && nextProps.timerState.started) ||
-        (this.props.timerState.paused && !nextProps.timerState.paused)) {
+    if (
+      (!this.props.timerState.started && nextProps.timerState.started) ||
+      (this.props.timerState.paused && !nextProps.timerState.paused)
+    ) {
       // Exercise started
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.loop()); },
-        this.updateInterval + this.props.exerciseOptions.startDelay,
-      );
+      timeout = setTimeout(() => {
+        frame = requestAnimationFrame(() => this.loop());
+      }, this.updateInterval + this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(timeout);
@@ -107,7 +111,7 @@ export class Disappearing extends Component {
       cancelAnimationFrame(frame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval(nextProps.speedOptions.wpm);
+      this.calculateUpdateInterval(nextProps.speedOptions.wordsPerMinute);
     }
     return false;
   }
@@ -124,7 +128,9 @@ export class Disappearing extends Component {
     this.offscreenCanvas.width = this.shownCanvas.width;
     this.offscreenCanvas.height = this.shownCanvas.height;
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
-    this.offscreenContext.font = `${Math.ceil(this.props.textOptions.fontSize / 0.75)}px ${this.props.textOptions.font}`;
+    this.offscreenContext.font = `${Math.ceil(this.props.textOptions.fontSize / 0.75)}px ${
+      this.props.textOptions.font
+    }`;
     this.offscreenContext.textBaseline = 'bottom';
     this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
     // Prerender off-screen canvas
@@ -134,23 +140,31 @@ export class Disappearing extends Component {
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     if (this.offscreenCanvas.height > this.shownCanvas.height) {
       // Multi page
-      const copyHeight = Math.max(...this.textMetadata.linesMetadata
-        .map(lineMetadata => lineMetadata.rect.bottom)
-        .filter(lineBottom => lineBottom < this.shownCanvas.height));
+      const copyHeight = Math.max(
+        ...this.textMetadata.linesMetadata
+          .map((lineMetadata) => lineMetadata.rect.bottom)
+          .filter((lineBottom) => lineBottom < this.shownCanvas.height),
+      );
       this.shownContext.drawImage(
         this.offscreenCanvas,
-        0, 0, this.shownCanvas.width, copyHeight,
-        0, 0, this.shownCanvas.width, copyHeight,
+        0,
+        0,
+        this.shownCanvas.width,
+        copyHeight,
+        0,
+        0,
+        this.shownCanvas.width,
+        copyHeight,
       );
     } else {
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     }
     // Calculate update interval
-    this.calculateUpdateInterval(this.props.speedOptions.wpm);
+    this.calculateUpdateInterval(this.props.speedOptions.wordsPerMinute);
   }
 
-  calculateUpdateInterval(newWPM) {
-    const timeInSeconds = (this.textMetadata.wordsMetadata.length / newWPM) * 60;
+  calculateUpdateInterval(updatedWordsPerMinute) {
+    const timeInSeconds = (this.textMetadata.wordsMetadata.length / updatedWordsPerMinute) * 60;
     this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
   }
 
@@ -162,31 +176,36 @@ export class Disappearing extends Component {
     if (newState.newPage) {
       // Draw new page
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-      const copyHeight = Math.max(...this.textMetadata.linesMetadata
-        .map(lineMetadata => lineMetadata.rect.bottom - newState.marginTop)
-        .filter(lineBottom => lineBottom < this.shownCanvas.height));
+      const copyHeight = Math.max(
+        ...this.textMetadata.linesMetadata
+          .map((lineMetadata) => lineMetadata.rect.bottom - newState.marginTop)
+          .filter((lineBottom) => lineBottom < this.shownCanvas.height),
+      );
       this.shownContext.drawImage(
         this.offscreenCanvas,
-        0, newState.marginTop, this.shownCanvas.width, copyHeight,
-        0, 0, this.shownCanvas.width, copyHeight,
+        0,
+        newState.marginTop,
+        this.shownCanvas.width,
+        copyHeight,
+        0,
+        0,
+        this.shownCanvas.width,
+        copyHeight,
       );
     }
     if (newState.finished) {
       drawState(newState, this.shownContext);
-      timeout = setTimeout(
-        () => { this.props.onExerciseFinish(); },
-        this.updateInterval,
-      );
+      timeout = setTimeout(() => {
+        this.props.onExerciseFinish();
+      }, this.updateInterval);
     } else if (newState.newPage) {
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.drawAndScheduleNext()); },
-        this.updateInterval + this.props.exerciseOptions.pageBreakDelay,
-      );
+      timeout = setTimeout(() => {
+        frame = requestAnimationFrame(() => this.drawAndScheduleNext());
+      }, this.updateInterval + this.props.exerciseOptions.pageBreakDelay);
     } else if (newState.newLine) {
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.drawAndScheduleNext()); },
-        this.updateInterval + this.props.exerciseOptions.lineBreakDelay,
-      );
+      timeout = setTimeout(() => {
+        frame = requestAnimationFrame(() => this.drawAndScheduleNext());
+      }, this.updateInterval + this.props.exerciseOptions.lineBreakDelay);
     } else {
       this.drawAndScheduleNext();
     }
@@ -194,16 +213,17 @@ export class Disappearing extends Component {
 
   drawAndScheduleNext() {
     drawState(this.currentState, this.shownContext);
-    timeout = setTimeout(
-      () => { frame = requestAnimationFrame(() => this.loop()); },
-      this.updateInterval,
-    );
+    timeout = setTimeout(() => {
+      frame = requestAnimationFrame(() => this.loop());
+    }, this.updateInterval);
   }
 
   render() {
     return (
       <canvas
-        ref={(ref) => { this.shownCanvas = ref; }}
+        ref={(ref) => {
+          this.shownCanvas = ref;
+        }}
         width={this.props.textOptions.width}
         height={this.props.canvasHeight}
       />
@@ -211,14 +231,16 @@ export class Disappearing extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Disappearing);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Disappearing);

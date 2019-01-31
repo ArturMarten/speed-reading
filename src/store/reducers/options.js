@@ -16,10 +16,7 @@ export const fontOptions = [
   { text: 'Sans-serif', value: 'sans-serif' },
 ];
 
-export const cursorTypeOptions = [
-  { value: 'background' },
-  { value: 'underline' },
-];
+export const cursorTypeOptions = [{ value: 'background' }, { value: 'underline' }];
 
 export const cursorColorOptions = [
   { value: 'bright-green' },
@@ -47,7 +44,9 @@ export const getColorRGBA = (color) => {
 };
 
 export const tableDimensionOptions = [
-  { text: '5 x 5', value: 25 },
+  { text: '3 x 3', value: '3x3' },
+  { text: '4 x 4', value: '4x4' },
+  { text: '5 x 5', value: '5x5' },
 ];
 
 export const MIN_TEXT_WIDTH = 250;
@@ -117,7 +116,7 @@ const initialExerciseOptions = {
   cursorColor: 'bright-green',
   groupCharacterCount: 15,
   groupSpacing: 30,
-  tableDimensions: 25,
+  tableDimensions: '5x5',
   tableSize: 100,
   tableCheck: false,
   symbolCount: 7,
@@ -127,23 +126,23 @@ const initialExerciseOptions = {
 
 const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay', 'pageBreakDelay'];
 
-export const MIN_WPM = 10;
-export const MAX_WPM = 500;
-export const STEP_WPM = 10;
+export const MIN_WORDS_PER_MINUTE = 10;
+export const MAX_WORDS_PER_MINUTE = 500;
+export const STEP_WORDS_PER_MINUTE = 10;
 export const MIN_FIXATION = 50;
 export const MAX_FIXATION = 750;
 export const STEP_FIXATION = 10;
 
 const initialSpeedOptions = {
-  wpm: 250,
+  wordsPerMinute: 250,
   fixation: 400,
 };
 
-const defaultVisibleSpeedOptions = ['wpm'];
+const defaultVisibleSpeedOptions = ['wordsPerMinute'];
 
-const includesKey = array => key => array.includes(key);
+const includesKey = (array) => (key) => array.includes(key);
 
-const reduceObject = obj => (acc, key) => {
+const reduceObject = (obj) => (acc, key) => {
   acc[key] = obj[key];
   return acc;
 };

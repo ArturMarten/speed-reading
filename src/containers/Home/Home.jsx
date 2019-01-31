@@ -23,20 +23,16 @@ export class Home extends Component {
 
   aboutToggleHandler = () => {
     this.setState({ aboutOpened: !this.state.aboutOpened });
-  }
+  };
 
   render() {
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2">
-          {`${this.props.translate('home.welcome')}!`}
-        </Header>
+        <Header as="h2">{`${this.props.translate('home.title')}`}</Header>
         <Grid stackable>
           <Grid.Row style={{ paddingBottom: '1em' }}>
             <Grid.Column width={8}>
-              <p>
-                {this.props.translate('home.description')}
-              </p>
+              <p>{this.props.translate('home.description')}</p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
               <Button
                 basic
@@ -56,25 +52,16 @@ export class Home extends Component {
               />
             </Grid.Column>
             <Grid.Column width={8}>
-              <Features
-                language={this.props.currentLanguage}
-                translate={this.props.translate}
-              />
+              <Features language={this.props.currentLanguage} translate={this.props.translate} />
             </Grid.Column>
           </Grid.Row>
           <Divider />
           <Grid.Row style={{ paddingBottom: '2em' }}>
             <Grid.Column width={8}>
-              <ReleaseNotes
-                language={this.props.currentLanguage}
-                translate={this.props.translate}
-              />
+              <ReleaseNotes language={this.props.currentLanguage} translate={this.props.translate} />
             </Grid.Column>
             <Grid.Column width={8}>
-              <IntroVideo
-                language={this.props.currentLanguage}
-                translate={this.props.translate}
-              />
+              <IntroVideo language={this.props.currentLanguage} translate={this.props.translate} />
             </Grid.Column>
           </Grid.Row>
           <Divider />
@@ -135,14 +122,13 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={1}>
+            <Grid.Column textAlign="center">{this.props.translate('home.supported')}</Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={1}>
             <Grid.Column textAlign="right">
-              <a href="https://gitlab.com/martensiiber/speed-reading">
-                {this.props.translate('home.project')}
-              </a>
-              {` ${this.props.translate('home.gpl-3-license')} © ${(new Date()).getFullYear()} `}
-              <a href="mailto:martensiiber@gmail.com">
-                Marten Siiber
-              </a>
+              <a href="https://gitlab.com/martensiiber/speed-reading">{this.props.translate('home.project')}</a>
+              {` ${this.props.translate('home.gpl-3-license')} © ${new Date().getFullYear()} `}
+              <a href="mailto:martensiiber@gmail.com">Marten Siiber</a>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -151,13 +137,15 @@ export class Home extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentLanguage: getActiveLanguage(state.locale).code,
   translate: getTranslate(state.locale),
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Home);

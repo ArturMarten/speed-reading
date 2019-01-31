@@ -91,12 +91,12 @@
     "send": ["Saada", "Send"]
   },
   "home": {
-    "welcome": ["Tere tulemast", "Welcome"],
+    "title": ["Kiirlugemise tarkvara", "Speed reading software"],
     "description": [
       "Tegemist on tasuta veebipõhise kiirlugemise rakendusega. Alustamiseks vali endale sobiv harjutus menüüst. Esmasel kasutamisel on soovitav alustada lugemistestiga, et selgitada oma hetke lugemiskiirus.",
       "This is a free web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
-    "about": ["Rakenduse kohta", "About application"],
+    "about": ["Tarkvara kohta", "About software"],
     "user-manual": ["Kasutusjuhend", "User manual (only in Estonian)"],
     "problem-report-title": ["Probleem mõne tekstiga?", "Problem with some text?"],
     "problem-report-content": ["Vajutage menüüs olevale hüüumärgiga kolmnurgal ja andke sellest teada", "Click on bug icon in the menu and report immediately"],
@@ -104,11 +104,12 @@
     "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
     "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
+    "supported": ["Lugemistekstide sisestamist on toetanud Tartu Ülikool.", "Entering the reading texts has been supported by University of Tartu"],
     "project": ["Projekt", "Project"],
     "gpl-3-license": ["GPL-3 litsents", "GPL-3 license"]
   },
   "about": {
-    "modal-header": ["Rakenduse kohta", "About application"],
+    "modal-header": ["Tarkvara kohta", "About software"],
     "title": ["Kiirlugemine 5.1", "Kiirlugemine 5.1"],
     "developer": ["Arendaja", "Developer"],
     "developer-name": ["Marten Siiber", "Marten Siiber"],
@@ -136,8 +137,8 @@
       "Harjutamiseks saab kasutada ligi 200 olemasolevat lugemisteksti kui ka enda tekste",
       "Missing translation"
     ],
-    "difficulty-adjustment-header": ["Raskusastme kohandamine", "Difficulty adjustment"],
-    "difficulty-adjustment-description": [
+    "presentation-adjustment-header": ["Esitusviisi kohandamine", "Presentation adjustment"],
+    "presentation-adjustment-description": [
       "Kõiki harjutusi saab kohandada sobivaks vastavalt enda lugemisharjumustele ja tasemele",
       "Missing translation"
     ],
@@ -416,8 +417,8 @@
   "text-exercise-results": {
     "modal-header": ["Harjutus lõpetatud", "Exercise finished"],
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
-    "wpm": ["sõna minutis", "words per minute"],
-    "cps": ["tähemärki sekundis", "characters per second"],
+    "words-per-minute": ["sõna minutis", "words per minute"],
+    "characters-per-second": ["tähemärki sekundis", "characters per second"],
     "rate-text-interestingness": ["Hinda teksti huvitavust", "Rate text interestingness"],
     "optional": ["valikuline", "optional"],
     "rate-text-interestingness-description": ["1 täht - väga igav, 10 tähte - väga huvitav", "1 star - very boring, 10 stars - very interesting"],
@@ -525,7 +526,7 @@
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
-    "wpm": ["sõna minutis", "words per minute"],
+    "words-per-minute": ["sõna minutis", "words per minute"],
     "fixation-time": ["Fiksatsiooni aeg", "Fixation time"],
     "ms": ["ms", "ms"]
   },

@@ -19,122 +19,136 @@ export class BlankTestAnswers extends Component {
   };
 
   componentDidMount() {
-    api.fetchTestBlankAnswers(this.props.testAttemptId)
-      .then((testBlankAnswers) => {
+    api.fetchTestBlankAnswers(this.props.testAttemptId).then(
+      (testBlankAnswers) => {
         this.setState({
           loading: false,
           testBlankAnswers,
         });
-      }, () => {
+      },
+      () => {
         this.setState({
           loading: false,
           testBlankAnswers: [],
         });
-      });
+      },
+    );
   }
 
   answerCategoryChangeHandler = (blankAnswerId, userEvaluation) => {
-    api.changeTestBlankAnswer({ blankAnswerId, userEvaluation })
-      .then(() => {
+    api.changeTestBlankAnswer({ blankAnswerId, userEvaluation }).then(
+      () => {
         this.setState({
-          testBlankAnswers: this.state.testBlankAnswers.map(testBlankAnswer => ({
+          testBlankAnswers: this.state.testBlankAnswers.map((testBlankAnswer) => ({
             ...testBlankAnswer,
-            userEvaluation: testBlankAnswer.id === blankAnswerId ?
-              userEvaluation : testBlankAnswer.userEvaluation,
+            userEvaluation: testBlankAnswer.id === blankAnswerId ? userEvaluation : testBlankAnswer.userEvaluation,
           })),
         });
         this.props.reevaluateTestAttempt(this.props.testAttemptId);
-      }, (errorMessage) => {
+      },
+      (errorMessage) => {
         console.log(errorMessage);
-      });
-  }
+      },
+    );
+  };
 
   render() {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>
-        <Header as="h2">
-          {this.props.translate('blank-test-answers.header')}
-        </Header>
+        <Header as="h2">{this.props.translate('blank-test-answers.header')}</Header>
         <Grid stackable style={{ fontSize: '1.2em' }}>
           <Grid.Row columns="equal">
             <Grid.Column textAlign="center">
-              {`${this.props.translate('test-results.test-result')}: ${Math.round(this.props.result.testResult * 100)}%`}
+              {`${this.props.translate('test-results.test-result')}: ${Math.round(
+                this.props.result.testResult * 100,
+              )}%`}
             </Grid.Column>
             <Grid.Column textAlign="center">
-              {`${this.props.translate('test-results.comprehension-level')}: ${Math.round(this.props.result.comprehensionResult * 100)}%`}
+              {`${this.props.translate('test-results.comprehension-level')}: ${Math.round(
+                this.props.result.comprehensionResult * 100,
+              )}%`}
             </Grid.Column>
             <Grid.Column textAlign="center">
-              {`${this.props.translate('test-results.comprehension-speed')}: ${Math.round(this.props.result.cpm)}`}
+              {`${this.props.translate('test-results.comprehension-speed')}: ${Math.round(
+                this.props.result.comprehensionPerMinute,
+              )}`}
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {this.state.loading ?
+        {this.state.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>
             <Loader active indeterminate content={this.props.translate('blank-test-answers.loading')} />
-          </Segment> :
+          </Segment>
+        ) : (
           this.state.testBlankAnswers.map((testBlankAnswer, testBlankAnswerIndex) => (
             <Segment clearing key={testBlankAnswer.id}>
               <Header as="h3">
                 {`${testBlankAnswerIndex + 1}. ${testBlankAnswer.blankExercise[0]} `}
 
-                {testBlankAnswer.autoEvaluation === 'unanswered' ?
-                  <span style={{ color: 'rgb(204, 0, 0)' }}>...</span> : null}
-                {(testBlankAnswer.autoEvaluation === 'incorrect' && !testBlankAnswer.userEvaluation) || testBlankAnswer.userEvaluation === 'incorrect' ?
+                {testBlankAnswer.autoEvaluation === 'unanswered' ? (
+                  <span style={{ color: 'rgb(204, 0, 0)' }}>...</span>
+                ) : null}
+                {(testBlankAnswer.autoEvaluation === 'incorrect' && !testBlankAnswer.userEvaluation) ||
+                testBlankAnswer.userEvaluation === 'incorrect' ? (
                   <span style={{ color: 'rgb(204, 0, 0)', textDecoration: 'line-through' }}>
                     {testBlankAnswer.answer}
-                  </span> : null}
-                {(testBlankAnswer.autoEvaluation === 'misspelled' && !testBlankAnswer.userEvaluation) || testBlankAnswer.userEvaluation === 'misspelled' ?
-                  <span style={{
-                    color: 'rgb(20, 122, 195)',
-                    textDecoration: 'underline',
-                    textDecorationColor: 'rgb(204, 0, 0)',
-                    textDecorationStyle: 'wavy',
-                  }}
+                  </span>
+                ) : null}
+                {(testBlankAnswer.autoEvaluation === 'misspelled' && !testBlankAnswer.userEvaluation) ||
+                testBlankAnswer.userEvaluation === 'misspelled' ? (
+                  <span
+                    style={{
+                      color: 'rgb(20, 122, 195)',
+                      textDecoration: 'underline',
+                      textDecorationColor: 'rgb(204, 0, 0)',
+                      textDecorationStyle: 'wavy',
+                    }}
                   >
                     {`${testBlankAnswer.answer}`}
-                  </span> : null}
-                {(testBlankAnswer.autoEvaluation === 'synonym' && !testBlankAnswer.userEvaluation) || testBlankAnswer.userEvaluation === 'synonym' ?
-                  <span style={{ color: 'rgb(20, 122, 195)' }}>
-                    {`${testBlankAnswer.answer}`}
-                  </span> : null}
-                {testBlankAnswer.autoEvaluation !== 'correct' ?
-                  <span>
-                    {` (${this.props.translate('blank-test-answers.correct-answer')}: `}
-                  </span> : null}
-                <span style={{ color: 'rgb(0, 128, 0)' }}>
-                  {testBlankAnswer.correct}
-                </span>
-                {testBlankAnswer.autoEvaluation !== 'correct' ?
-                  <span>
-                    {')'}
-                  </span> : null}
+                  </span>
+                ) : null}
+                {(testBlankAnswer.autoEvaluation === 'synonym' && !testBlankAnswer.userEvaluation) ||
+                testBlankAnswer.userEvaluation === 'synonym' ? (
+                  <span style={{ color: 'rgb(20, 122, 195)' }}>{`${testBlankAnswer.answer}`}</span>
+                ) : null}
+                {testBlankAnswer.autoEvaluation !== 'correct' ? (
+                  <span>{` (${this.props.translate('blank-test-answers.correct-answer')}: `}</span>
+                ) : null}
+                <span style={{ color: 'rgb(0, 128, 0)' }}>{testBlankAnswer.correct}</span>
+                {testBlankAnswer.autoEvaluation !== 'correct' ? <span>{')'}</span> : null}
                 {` ${testBlankAnswer.blankExercise[2]}`}
               </Header>
               <Dropdown
                 selection
                 value={testBlankAnswer.userEvaluation || testBlankAnswer.autoEvaluation}
-                disabled={testBlankAnswer.autoEvaluation === 'unanswered' || testBlankAnswer.autoEvaluation === 'correct'}
+                disabled={
+                  testBlankAnswer.autoEvaluation === 'unanswered' || testBlankAnswer.autoEvaluation === 'correct'
+                }
                 onChange={(event, { value }) => this.answerCategoryChangeHandler(testBlankAnswer.id, value)}
                 options={this.state.answerCategoryOptions}
                 style={{ float: 'right' }}
               />
             </Segment>
-          ))}
+          ))
+        )}
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   result: state.exerciseTest.result,
   testAttemptId: state.exerciseTest.attemptId,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   reevaluateTestAttempt: (testAttemptId) => {
     dispatch(actionCreators.reevaluateTestAttempt(testAttemptId));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BlankTestAnswers);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(BlankTestAnswers);

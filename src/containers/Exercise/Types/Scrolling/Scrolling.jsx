@@ -8,8 +8,14 @@ export const drawState = (currentState, context, restoreCanvas) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   context.drawImage(
     restoreCanvas,
-    0, currentState.marginTop, context.canvas.width, context.canvas.height,
-    0, 0, context.canvas.width, context.canvas.height,
+    0,
+    currentState.marginTop,
+    context.canvas.width,
+    context.canvas.height,
+    0,
+    0,
+    context.canvas.width,
+    context.canvas.height,
   );
 };
 
@@ -44,13 +50,14 @@ export class Scrolling extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if ((!this.props.timerState.started && nextProps.timerState.started) ||
-        (this.props.timerState.paused && !nextProps.timerState.paused)) {
+    if (
+      (!this.props.timerState.started && nextProps.timerState.started) ||
+      (this.props.timerState.paused && !nextProps.timerState.paused)
+    ) {
       // Exercise started
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.loop()); },
-        this.updateInterval + this.props.exerciseOptions.startDelay,
-      );
+      timeout = setTimeout(() => {
+        frame = requestAnimationFrame(() => this.loop());
+      }, this.updateInterval + this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(timeout);
@@ -66,7 +73,7 @@ export class Scrolling extends Component {
       cancelAnimationFrame(frame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval(nextProps.speedOptions.wpm);
+      this.calculateUpdateInterval(nextProps.speedOptions.wordsPerMinute);
     }
     return false;
   }
@@ -94,16 +101,17 @@ export class Scrolling extends Component {
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     // Calculate update interval
-    this.calculateUpdateInterval(this.props.speedOptions.wpm);
+    this.calculateUpdateInterval(this.props.speedOptions.wordsPerMinute);
   }
 
-  calculateUpdateInterval(newWPM) {
+  calculateUpdateInterval(updatedWordsPerMinute) {
     const { wordsMetadata } = this.textMetadata;
-    const timeInSeconds = (wordsMetadata.length / newWPM) * 60;
-    const pixelHeight = (wordsMetadata[wordsMetadata.length - 1].rect.bottom - wordsMetadata[0].rect.top) + this.shownCanvas.height;
+    const timeInSeconds = (wordsMetadata.length / updatedWordsPerMinute) * 60;
+    const pixelHeight =
+      wordsMetadata[wordsMetadata.length - 1].rect.bottom - wordsMetadata[0].rect.top + this.shownCanvas.height;
     const scrollStep = 1;
     this.currentState.scrollStep = scrollStep;
-    this.updateInterval = 1000 / ((pixelHeight / scrollStep) / timeInSeconds);
+    this.updateInterval = 1000 / (pixelHeight / scrollStep / timeInSeconds);
     // console.log('Time in seconds', timeInSeconds, ', pixel height', pixelHeight);
     // console.log('Update interval in fps', this.updateInterval);
   }
@@ -115,22 +123,22 @@ export class Scrolling extends Component {
     this.currentState = newState;
     drawState(newState, this.shownContext, this.offscreenCanvas);
     if (newState.finished) {
-      timeout = setTimeout(
-        () => { this.props.onExerciseFinish(); },
-        this.updateInterval,
-      );
+      timeout = setTimeout(() => {
+        this.props.onExerciseFinish();
+      }, this.updateInterval);
     } else {
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.loop()); },
-        this.updateInterval,
-      );
+      timeout = setTimeout(() => {
+        frame = requestAnimationFrame(() => this.loop());
+      }, this.updateInterval);
     }
   }
 
   render() {
     return (
       <canvas
-        ref={(ref) => { this.shownCanvas = ref; }}
+        ref={(ref) => {
+          this.shownCanvas = ref;
+        }}
         width={this.props.textOptions.width}
         height={400}
       />
@@ -138,14 +146,16 @@ export class Scrolling extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Scrolling);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Scrolling);

@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import { splitIntoWordGroups } from '../../utils/TextUtils';
-import { updateObject, shuffle, getSimilarSymbol } from '../../shared/utility';
+import { updateObject, shuffle, getSimilarSymbol, getSymbolCount } from '../../shared/utility';
 
 const READING_TEST_ID = 1;
 const READING_AID_ID = 2;
@@ -23,13 +23,18 @@ export const generateSymbols = (count, modification) => {
     case 'letters-uppercase':
       return shuffle([...Array(count)].map((e, index) => letters[index].toUpperCase()));
     case 'letters-mixed':
-      return shuffle([...Array(count)].map((e, index) => (Math.floor(Math.random() * 2) === 0 ? letters[index].toUpperCase() : letters[index])));
+      return shuffle(
+        [...Array(count)].map((e, index) =>
+          Math.floor(Math.random() * 2) === 0 ? letters[index].toUpperCase() : letters[index],
+        ),
+      );
     default:
       return shuffle([...Array(count)].map((e, index) => index + 1));
   }
 };
 
-const generateRandomString = (array, length) => [...Array(length)].map(() => array[Math.floor(Math.random() * array.length)]).join('');
+const generateRandomString = (array, length) =>
+  [...Array(length)].map(() => array[Math.floor(Math.random() * array.length)]).join('');
 
 const swapRandomSymbol = (string) => {
   const array = string.split('');
@@ -47,13 +52,15 @@ export const generateStringPairs = (count, length, modification) => {
       first = [...Array(count)].map(() => generateRandomString(letters, length));
       break;
     case 'concentration-mixed':
-      first = [...Array(count)].map(() => generateRandomString(Math.floor(Math.random() * 2) === 0 ? numbers : letters, length));
+      first = [...Array(count)].map(() =>
+        generateRandomString(Math.floor(Math.random() * 2) === 0 ? numbers : letters, length),
+      );
       break;
     default:
       first = [...Array(count)].map(() => generateRandomString(numbers, length));
       break;
   }
-  return first.map(string => [string, Math.floor(Math.random() * 2) === 0 ? string : swapRandomSymbol(string)]);
+  return first.map((string) => [string, Math.floor(Math.random() * 2) === 0 ? string : swapRandomSymbol(string)]);
 };
 
 export const getExerciseId = (exerciseType) => {
@@ -179,7 +186,10 @@ const reducer = (state = initialState, action) => {
     case actionTypes.EXERCISE_PREPARED: {
       let preparation = {};
       if (state.type === 'wordGroups') {
-        const wordGroups = splitIntoWordGroups(action.payload.selectedText.plainText, action.payload.exerciseOptions.groupCharacterCount);
+        const wordGroups = splitIntoWordGroups(
+          action.payload.selectedText.plainText,
+          action.payload.exerciseOptions.groupCharacterCount,
+        );
         preparation = { wordGroups };
       } else if (state.type === 'schulteTables') {
         const symbols = generateSymbols(25, state.modification);
@@ -227,8 +237,8 @@ const reducer = (state = initialState, action) => {
       const { elapsedTime, selectedText } = action.payload;
       const result = {
         elapsedTime,
-        wpm: Math.round(selectedText.wordCount / (elapsedTime / (1000 * 60))),
-        cps: Math.round(selectedText.characterCount / (elapsedTime / 1000)),
+        wordsPerMinute: Math.round(selectedText.wordCount / (elapsedTime / (1000 * 60))),
+        charactersPerSecond: Math.round(selectedText.characterCount / (elapsedTime / 1000)),
       };
       return updateObject(state, {
         status: 'finished',
@@ -240,10 +250,17 @@ const reducer = (state = initialState, action) => {
       let result = {};
       if (state.type === 'schulteTables') {
         const { tableDimensions } = action.payload;
-        result = { elapsedTime, spm: +(tableDimensions / (elapsedTime / (1000 * 60))).toFixed(2) };
+        const symbolCount = getSymbolCount(tableDimensions);
+        result = {
+          elapsedTime,
+          spm: Number.parseFloat((symbolCount / (elapsedTime / (1000 * 60))).toFixed(2)),
+        };
       } else if (state.type === 'concentration') {
         const { answers } = action.payload;
-        let total = 0; let correct = 0; let incorrect = 0; let unanswered = 0;
+        let total = 0;
+        let correct = 0;
+        let incorrect = 0;
+        let unanswered = 0;
         state.stringPairs.forEach((pair, index) => {
           if (answers[index] !== undefined) {
             const match = pair[0] === pair[1];
