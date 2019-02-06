@@ -1,6 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Dropdown, Segment, Tab, Form, Dimmer, Loader, Checkbox, Grid, Button, Input, Label } from 'semantic-ui-react';
+import {
+  Container,
+  Header,
+  Dropdown,
+  Segment,
+  Tab,
+  Form,
+  Dimmer,
+  Loader,
+  Checkbox,
+  Grid,
+  Button,
+  Input,
+  Label,
+} from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -42,7 +56,8 @@ export class Statistics extends Component {
         dataStrokeColor: ['#FF4C4C'],
         dataFillColor: ['#FF9999'],
         dataLineColor: ['#FF0000'],
-      }, {
+      },
+      {
         id: 1,
         title: this.props.translate('regression-chart.comprehension-speed-trend'),
         yLabel: this.props.translate('regression-chart.speed-words-per-minute'),
@@ -51,7 +66,8 @@ export class Statistics extends Component {
         dataStrokeColor: ['#009900'],
         dataFillColor: ['#00FF00'],
         dataLineColor: ['#007F00'],
-      }, {
+      },
+      {
         id: 2,
         title: this.props.translate('regression-chart.comprehension-level-trend'),
         yLabel: this.props.translate('regression-chart.comprehension-level-percentage'),
@@ -61,7 +77,8 @@ export class Statistics extends Component {
         dataFillColor: ['#9999FF'],
         dataLineColor: ['#0000FF'],
       },
-    ], [
+    ],
+    [
       {
         id: 0,
         title: this.props.translate('regression-chart.finding-speed-trend'),
@@ -72,7 +89,8 @@ export class Statistics extends Component {
         dataFillColor: ['#00FF00'],
         dataLineColor: ['#007F00'],
       },
-    ], [
+    ],
+    [
       {
         id: 0,
         title: this.props.translate('regression-chart.exercise-result-trend'),
@@ -141,8 +159,11 @@ export class Statistics extends Component {
       this.fetchInitialData();
     }
     // TODO: Group statistics fetching fix
-    if (prevState.activeIndex !== this.state.activeIndex &&
-      this.state.activeIndex === 2 && Object.keys(this.props.groupExerciseStatistics).length === 0) {
+    if (
+      prevState.activeIndex !== this.state.activeIndex &&
+      this.state.activeIndex === 2 &&
+      Object.keys(this.props.groupExerciseStatistics).length === 0
+    ) {
       const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
       this.props.onFetchGroupExerciseStatistics(fetchGroupId);
     }
@@ -163,16 +184,16 @@ export class Statistics extends Component {
       }
     }
     this.props.onFetchUserExerciseStatistics(this.props.userId);
-  }
+  };
 
   tabChangeHandler = (event, { activeIndex }) => this.setState({ activeIndex });
 
   groupChangeHandler = (event, { value }) => {
     if (this.state.groupId !== value) {
       let { userId } = this.state;
-      const currentUser = this.props.users.find(user => user.publicId === userId);
+      const currentUser = this.props.users.find((user) => user.publicId === userId);
       if (currentUser && currentUser.groupId !== value) {
-        const groupUsers = this.props.users.filter(groupUser => groupUser.groupId === value);
+        const groupUsers = this.props.users.filter((groupUser) => groupUser.groupId === value);
         if (groupUsers.length > 0) {
           userId = groupUsers[0].publicId;
           this.props.onFetchUserExerciseStatistics(userId);
@@ -184,18 +205,18 @@ export class Statistics extends Component {
       }
       this.setState({ groupId: value, userId });
     }
-  }
+  };
 
   userChangeHandler = (event, { value }) => {
     if (this.state.userId !== value) {
-      const selectedUser = this.props.users.find(user => user.publicId === value);
+      const selectedUser = this.props.users.find((user) => user.publicId === value);
       if (selectedUser) {
         this.props.onFetchUserExerciseStatistics(value);
         const { groupId } = selectedUser;
         this.setState({ userId: value, groupId: groupId === null ? 'all-groups' : groupId });
       }
     }
-  }
+  };
 
   exerciseSelectionHandler = (event, { value }) => {
     if (this.state.exercise !== value) {
@@ -209,22 +230,25 @@ export class Statistics extends Component {
       }
       this.setState({ exercise: value, chartIndex });
     }
-  }
+  };
 
   scaleSelectionHandler = (event, { value }) => {
     if (this.state.scale !== value) {
       this.setState({
         scale: value,
-        xLabel: value === 'date' ? this.props.translate('regression-chart.date') : this.props.translate('regression-chart.index'),
+        xLabel:
+          value === 'date'
+            ? this.props.translate('regression-chart.date')
+            : this.props.translate('regression-chart.index'),
       });
     }
-  }
+  };
 
   minimumAttemptCountChangeHandler = (event, { value }) => {
     this.setState({
       minimumAttemptCount: value,
     });
-  }
+  };
 
   timeChangeHandler = (event, { name, value }) => {
     const { startTime, endTime, period } = this.state;
@@ -263,7 +287,7 @@ export class Statistics extends Component {
         [name]: newTime,
       });
     }
-  }
+  };
 
   periodSelectionHandler = (event, { value }) => {
     const { startTime, endTime } = this.state;
@@ -279,7 +303,7 @@ export class Statistics extends Component {
       period: value,
       startTime: changedStartTime,
     });
-  }
+  };
 
   periodChangeHandler = (event, { name }) => {
     const { startTime, endTime, period } = this.state;
@@ -301,14 +325,14 @@ export class Statistics extends Component {
       startTime: changedStartTime,
       endTime: changedEndTime,
     });
-  }
+  };
 
   preventDefault = (event) => {
     const { key } = event;
     if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1 && document.activeElement.id === '') {
       event.preventDefault();
     }
-  }
+  };
 
   keyUpHandler = (event) => {
     if (document.activeElement.id === '') {
@@ -328,65 +352,61 @@ export class Statistics extends Component {
         }
       }
     }
-  }
+  };
 
-  outlierFilter = attempt => !this.state.filterOutliers || !attempt.wordsPerMinute || attempt.wordsPerMinute <= 500;
+  outlierFilter = (attempt) => !this.state.filterOutliers || !attempt.wordsPerMinute || attempt.wordsPerMinute <= 500;
 
-  timeFilter = attempt => (
-    attempt.date >= new Date(this.state.startTime) &&
-    attempt.date <= new Date(`${this.state.endTime}T23:59:59Z`)
-  );
+  timeFilter = (attempt) =>
+    attempt.date >= new Date(this.state.startTime) && attempt.date <= new Date(`${this.state.endTime}T23:59:59Z`);
 
   filterOutliersHandler = () => {
     this.setState({
       filterOutliers: !this.state.filterOutliers,
     });
-  }
+  };
 
   render() {
-    const groupOptions = [{
-      key: -1,
-      text: this.props.translate('statistics.all-groups'),
-      value: 'all-groups',
-    }].concat(this.props.groups
-      .map((group, index) => ({
+    const groupOptions = [
+      {
+        key: -1,
+        text: this.props.translate('statistics.all-groups'),
+        value: 'all-groups',
+      },
+    ].concat(
+      this.props.groups.map((group, index) => ({
         key: index,
         value: group.id,
         text: `${group.name} (${group.userCount} ${this.props.translate('statistics.users')})`,
-      })));
+      })),
+    );
     const userOptions = this.props.users
-      .filter(user => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId)
+      .filter((user) => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId)
       .map((user, index) => ({
         key: index,
         value: user.publicId,
         text: `${user.firstName ? user.firstName : ''} ${user.lastName ? user.lastName : ''} <${user.email}>`,
       }));
     const userExerciseData = this.props.userExerciseStatistics
-      .filter(attempt => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
-      .filter(attempt => this.timeFilter(attempt))
+      .filter((attempt) => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
+      .filter((attempt) => this.timeFilter(attempt))
       .filter(this.outlierFilter)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
-    const totalExerciseTime = userExerciseData.map(exercise => exercise.elapsedTime).reduce(reduceSumFunc, 0);
-    const totalTestTime = userExerciseData.map(exercise => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
+    const totalExerciseTime = userExerciseData.map((exercise) => exercise.elapsedTime).reduce(reduceSumFunc, 0);
+    const totalTestTime = userExerciseData.map((exercise) => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
 
     let groupExerciseData = Object.assign(
       {},
-      ...Object.keys(this.props.groupExerciseStatistics)
-        .map(userId => ({
-          [userId]: this.props.groupExerciseStatistics[userId]
-            .filter(this.timeFilter)
-            .filter(this.outlierFilter),
-        })),
+      ...Object.keys(this.props.groupExerciseStatistics).map((userId) => ({
+        [userId]: this.props.groupExerciseStatistics[userId].filter(this.timeFilter).filter(this.outlierFilter),
+      })),
     );
     if (this.props.isTeacher) {
       groupExerciseData = Object.assign(
         {},
-        ...Object.keys(groupExerciseData)
-          .map(userId => ({
-            [userId]: groupExerciseData[userId].length >= this.state.minimumAttemptCount ?
-              groupExerciseData[userId] : [],
-          })),
+        ...Object.keys(groupExerciseData).map((userId) => ({
+          [userId]: groupExerciseData[userId].length >= this.state.minimumAttemptCount ? groupExerciseData[userId] : [],
+        })),
       );
     }
 
@@ -437,11 +457,12 @@ export class Statistics extends Component {
 
     const userAndGroupFilter = (
       <Fragment>
-        {this.props.isTeacher ?
+        {this.props.isTeacher ? (
           <Form.Group widths="equal">
             {groupFilter}
             {userFilter}
-          </Form.Group> : null}
+          </Form.Group>
+        ) : null}
       </Fragment>
     );
 
@@ -470,10 +491,7 @@ export class Statistics extends Component {
           label={this.props.translate('statistics.end-time')}
         />
         <Form.Field>
-          <label
-            htmlFor="statistics-period"
-            style={{ margin: 0 }}
-          >
+          <label htmlFor="statistics-period" style={{ margin: 0 }}>
             {this.props.translate('statistics.period')}
           </label>
           <Dropdown
@@ -512,40 +530,24 @@ export class Statistics extends Component {
       <Grid style={{ width: '75%' }} textAlign="center">
         <Grid.Row columns={4}>
           <Grid.Column>
-            <span style={{ fontSize: '0.9em' }}>
-              {this.props.translate('statistics.total-attempt-count')}
-            </span>
+            <span style={{ fontSize: '0.9em' }}>{this.props.translate('statistics.total-attempt-count')}</span>
             <br />
-            <span style={{ fontSize: '1.6em' }}>
-              {userExerciseData.length}
-            </span>
+            <span style={{ fontSize: '1.6em' }}>{userExerciseData.length}</span>
           </Grid.Column>
           <Grid.Column>
-            <span style={{ fontSize: '0.9em' }}>
-              {this.props.translate('statistics.total-attempt-time')}
-            </span>
+            <span style={{ fontSize: '0.9em' }}>{this.props.translate('statistics.total-attempt-time')}</span>
             <br />
-            <span style={{ fontSize: '1.6em' }}>
-              {formatMillisecondsInHours(totalExerciseTime)}
-            </span>
+            <span style={{ fontSize: '1.6em' }}>{formatMillisecondsInHours(totalExerciseTime)}</span>
           </Grid.Column>
           <Grid.Column>
-            <span style={{ fontSize: '0.9em' }}>
-              {this.props.translate('statistics.total-test-time')}
-            </span>
+            <span style={{ fontSize: '0.9em' }}>{this.props.translate('statistics.total-test-time')}</span>
             <br />
-            <span style={{ fontSize: '1.6em' }}>
-              {formatMillisecondsInHours(totalTestTime)}
-            </span>
+            <span style={{ fontSize: '1.6em' }}>{formatMillisecondsInHours(totalTestTime)}</span>
           </Grid.Column>
           <Grid.Column>
-            <span style={{ fontSize: '0.9em' }}>
-              {this.props.translate('statistics.total-time')}
-            </span>
+            <span style={{ fontSize: '0.9em' }}>{this.props.translate('statistics.total-time')}</span>
             <br />
-            <span style={{ fontSize: '1.6em' }}>
-              {formatMillisecondsInHours(totalExerciseTime + totalTestTime)}
-            </span>
+            <span style={{ fontSize: '1.6em' }}>{formatMillisecondsInHours(totalExerciseTime + totalTestTime)}</span>
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -577,9 +579,7 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              <Form.Group widths="equal">
-                {timeFilter}
-              </Form.Group>
+              <Form.Group widths="equal">{timeFilter}</Form.Group>
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -643,9 +643,7 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              <Form.Group widths="equal">
-                {timeFilter}
-              </Form.Group>
+              <Form.Group widths="equal">{timeFilter}</Form.Group>
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -668,7 +666,7 @@ export class Statistics extends Component {
                     labelPosition="left"
                     value={this.state.order}
                     style={{ display: 'block', textAlign: 'right' }}
-                    onChange={event => this.setState({ order: +event.target.value })}
+                    onChange={(event) => this.setState({ order: +event.target.value })}
                   >
                     <Label basic>Polünoomi aste</Label>
                     <input style={{ width: '5em' }} max="30" />
@@ -696,9 +694,10 @@ export class Statistics extends Component {
           key: 'group-table',
           icon: 'columns',
           content: this.props.translate('statistics.group-table'),
-          disabled: (!this.props.isTeacher && this.props.groupId === null) ||
-                      this.props.userExerciseStatisticsStatus.loading ||
-                      this.props.groupExerciseStatisticsStatus.loading,
+          disabled:
+            (!this.props.isTeacher && this.props.groupId === null) ||
+            this.props.userExerciseStatisticsStatus.loading ||
+            this.props.groupExerciseStatisticsStatus.loading,
         },
         render: () => (
           <Tab.Pane>
@@ -707,9 +706,7 @@ export class Statistics extends Component {
                 {this.props.isTeacher ? groupFilter : null}
                 {this.props.isTeacher ? exerciseFilter : null}
               </Form.Group>
-              <Form.Group widths="equal">
-                {timeFilter}
-              </Form.Group>
+              <Form.Group widths="equal">{timeFilter}</Form.Group>
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
@@ -731,26 +728,18 @@ export class Statistics extends Component {
     ];
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2">
-          {this.props.translate('statistics.title')}
-        </Header>
-        <p>
-          {this.props.translate('statistics.description')}
-        </p>
-        <Tab
-          panes={panes}
-          activeIndex={this.state.activeIndex}
-          onTabChange={this.tabChangeHandler}
-        />
+        <Header as="h2">{this.props.translate('statistics.title')}</Header>
+        <p>{this.props.translate('statistics.description')}</p>
+        <Tab panes={panes} activeIndex={this.state.activeIndex} onTabChange={this.tabChangeHandler} />
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.token !== null,
   role: state.profile.role,
-  isTeacher: rolePermissions[state.profile.role] >= rolePermissions.teacher,
+  isTeacher: rolePermissions[state.profile.role] >= rolePermissions.teacher || state.profile.role === 'statistician',
   isAdmin: rolePermissions[state.profile.role] >= rolePermissions.admin,
   groupId: state.profile.groupId,
   userId: state.auth.userId,
@@ -765,7 +754,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onFetchUsers: () => {
     dispatch(actionCreators.fetchUsers());
   },
@@ -780,4 +769,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Statistics);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Statistics);

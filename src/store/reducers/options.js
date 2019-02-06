@@ -45,8 +45,14 @@ export const getColorRGBA = (color) => {
 
 export const tableDimensionOptions = [
   { text: '3 x 3', value: '3x3' },
+  { text: '3 x 4', value: '3x4' },
+  { text: '3 x 5', value: '3x5' },
   { text: '4 x 4', value: '4x4' },
+  { text: '4 x 5', value: '4x5' },
+  { text: '5 x 4', value: '5x4' },
   { text: '5 x 5', value: '5x5' },
+  { text: '5 x 6', value: '5x6' },
+  { text: '6 x 5', value: '6x5' },
 ];
 
 export const MIN_TEXT_WIDTH = 250;

@@ -5,6 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 import { SchulteTables } from '../Types/SchulteTables/SchulteTables';
 import { generateSymbols } from '../../../store/reducers/exercise';
+import { getSymbolCount } from '../../../shared/utility';
 
 export class SchulteTablesPreview extends Component {
   state = {
@@ -23,7 +24,9 @@ export class SchulteTablesPreview extends Component {
   }
 
   refreshPreview = () => {
-    this.setState({ symbols: generateSymbols(25, this.props.exerciseModification) });
+    const { tableDimensions } = this.props.exerciseOptions;
+    const symbolCount = getSymbolCount(tableDimensions);
+    this.setState({ symbols: generateSymbols(symbolCount, this.props.exerciseModification) });
   }
 
   toggleClickHandler = () => {

@@ -17,7 +17,7 @@ export class UserEditor extends Component {
     touched: false,
     valid: false,
     submitted: false,
-  }
+  };
 
   componentDidMount() {
     if (this.props.user) {
@@ -39,7 +39,7 @@ export class UserEditor extends Component {
 
   setUser(user) {
     this.setState({
-      groupId: user.groupId.toString(),
+      groupId: user.groupId ? user.groupId.toString() : '',
       email: user.email,
       role: user.role,
       valid: true,
@@ -55,26 +55,26 @@ export class UserEditor extends Component {
     };
     this.props.onAddUser(user);
     this.setState({ submitted: true });
-  }
+  };
 
   changeUserHandler = () => {
     const { groupId, email, role, notify } = this.state;
     const user = {
-      groupId: groupId.value !== '' ? +groupId : null,
+      groupId: groupId.value !== '' ? Number.parseInt(groupId, 10) : null,
       email,
       role,
       notify,
     };
     this.props.onChangeUser(this.props.user.publicId, user);
     this.setState({ submitted: true });
-  }
+  };
 
   userGroupChangeHandler = (event, data) => {
     this.setState({
       touched: true,
       groupId: data.value,
     });
-  }
+  };
 
   emailInputChangeHandler = (event, data) => {
     this.setState({
@@ -82,14 +82,14 @@ export class UserEditor extends Component {
       valid: isEmail(data.value.trim()),
       email: data.value,
     });
-  }
+  };
 
   userRoleChangeHandler = (event, data) => {
     this.setState({
       touched: true,
       role: data.value,
     });
-  }
+  };
 
   keyPressHandler = (event) => {
     if (event.key === 'Enter') {
@@ -99,56 +99,59 @@ export class UserEditor extends Component {
         this.addUserHandler(event, {});
       }
     }
-  }
+  };
 
   notifyChangeHandler = () => {
     this.setState({
       touched: true,
       notify: !this.state.notify,
     });
-  }
+  };
 
   render() {
-    const groupOptions = [{
-      key: 0,
-      text: this.props.translate('manage-users.group-not-set'),
-      value: '',
-    }].concat(this.props.groups.map((group, index) => ({
-      key: index + 1,
-      text: group.name,
-      value: group.id.toString(),
-    })));
-    const roleOptions = ['student', 'editor', 'teacher', 'developer', 'admin']
-      .filter(role => rolePermissions[role] <= rolePermissions[this.props.role])
+    const groupOptions = [
+      {
+        key: 0,
+        text: this.props.translate('manage-users.group-not-set'),
+        value: '',
+      },
+    ].concat(
+      this.props.groups.map((group, index) => ({
+        key: index + 1,
+        text: group.name,
+        value: group.id.toString(),
+      })),
+    );
+    const roleOptions = ['student', 'statistician', 'editor', 'teacher', 'developer', 'admin']
+      .filter((role) => rolePermissions[role] <= rolePermissions[this.props.role])
       .map((role, index) => ({
         key: index,
         text: this.props.translate(`manage-users.role-${role}`),
         value: role,
       }));
     return (
-      <Modal
-        open={this.props.open}
-        onClose={this.props.onClose}
-        size="small"
-        closeIcon
-      >
+      <Modal open={this.props.open} onClose={this.props.onClose} size="small" closeIcon>
         <Modal.Header>
-          {this.props.user ?
-            this.props.translate('user-editor.modal-header-change') :
-            this.props.translate('user-editor.modal-header-new')}
+          {this.props.user
+            ? this.props.translate('user-editor.modal-header-change')
+            : this.props.translate('user-editor.modal-header-new')}
         </Modal.Header>
         <Modal.Content>
           <Input
             fluid
             action
-            ref={(ref) => { this.inputRef = ref; }}
+            ref={(ref) => {
+              this.inputRef = ref;
+            }}
             value={this.state.email}
             onChange={this.emailInputChangeHandler}
             onKeyPress={this.keyPressHandler}
             error={!this.state.valid}
-            placeholder={this.props.user ?
-              this.props.translate('user-editor.insert-changed-placeholder') :
-              this.props.translate('user-editor.insert-new-placeholder')}
+            placeholder={
+              this.props.user
+                ? this.props.translate('user-editor.insert-changed-placeholder')
+                : this.props.translate('user-editor.insert-new-placeholder')
+            }
           >
             <Dropdown
               compact
@@ -174,42 +177,42 @@ export class UserEditor extends Component {
             onChange={this.notifyChangeHandler}
             label={this.props.translate('user-editor.notify-user-password')}
           />
-          {this.props.userStatus.error && this.state.submitted ?
-            <ErrorMessage
-              error={this.props.userStatus.error}
-            /> : null}
+          {this.props.userStatus.error && this.state.submitted ? (
+            <ErrorMessage error={this.props.userStatus.error} />
+          ) : null}
         </Modal.Content>
         <Modal.Actions>
-          {this.props.user ?
+          {this.props.user ? (
             <Button
               primary
               loading={this.props.userStatus.loading}
               disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
               content={this.props.translate('user-editor.change-user')}
               onClick={this.changeUserHandler}
-            /> :
-            <Button
-              positive
-              loading={this.props.userStatus.loading}
-              disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
-              content={this.props.translate('user-editor.add-user')}
-              onClick={this.addUserHandler}
             />
-          }
+          ) : (
+              <Button
+                positive
+                loading={this.props.userStatus.loading}
+                disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
+                content={this.props.translate('user-editor.add-user')}
+                onClick={this.addUserHandler}
+              />
+            )}
         </Modal.Actions>
       </Modal>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userStatus: state.user.userStatus,
   role: state.profile.role,
   groups: state.group.groups,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onAddUser: (user) => {
     dispatch(actionCreators.addUser(user));
   },
@@ -218,4 +221,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserEditor);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UserEditor);

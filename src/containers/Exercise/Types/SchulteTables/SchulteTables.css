@@ -1,22 +1,18 @@
 .schulte-table {
-  display: flex;
-  width: 90vmin;
-  height: 90vmin;
-  flex-wrap: wrap;
-  max-width: 90vmin;
-  max-height: 90vmin;
+  display: grid;
+  grid-gap: 1px;
   font-size: 15vmin;
-  box-shadow: 0 0 1px black;
   user-select: none;
+  padding: 1px;
+  background-color: gray;
 }
 
 .schulte-cell {
-  width: 18vmin;
-  height: 18vmin;
-  line-height: 18vmin;
-  text-align: center;
-  overflow: hidden;
-  box-shadow: 0 0 1px black;
+  display: grid;
+  justify-content: center;
+  box-sizing: border-box;
+  align-items: center;
+  background-color: white;
 }
 
 .schulte-center {

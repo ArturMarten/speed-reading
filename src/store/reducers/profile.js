@@ -5,10 +5,11 @@ import { updateObject } from '../../shared/utility';
 export const rolePermissions = {
   guest: 0,
   student: 1,
-  editor: 2,
-  teacher: 3,
-  developer: 4,
-  admin: 5,
+  statistician: 2,
+  editor: 3,
+  teacher: 4,
+  developer: 5,
+  admin: 6,
 };
 
 const initialState = {

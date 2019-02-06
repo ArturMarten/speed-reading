@@ -16,11 +16,24 @@ class ReleaseNotes extends Component {
             <List.Item>
               <List.Content>
                 <List.Header>
-                  Versioon 5.1.12 (arendamisel)
+                  Versioon 5.1.13 (arendamisel)
                 </List.Header>
                 <List.Description>
                   <List.List>
-                    <List.Item>Keskendumise harjutuse täiendused ja parandused</List.Item>
+                    <List.Item>Keskendumise harjutuse statistika</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>
+                  Versioon 5.1.12 (06.02.2019)
+                </List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Schulte tabeli suuruse valik</List.Item>
+                    <List.Item>Kasutusjuhendi uuendamine</List.Item>
                   </List.List>
                 </List.Description>
               </List.Content>

@@ -176,8 +176,12 @@ export const getSimilarSymbol = (symbol) => {
   return similar[Math.floor(Math.random() * similar.length)];
 };
 
+export const getSymbolDimensions = (tableDimensions) => {
+  return tableDimensions.split('x');
+};
+
 export const getSymbolCount = (tableDimensions) => {
-  const [rows, columns] = tableDimensions.split('x');
+  const [rows, columns] = getSymbolDimensions(tableDimensions);
   return Number.parseInt(rows, 10) * Number.parseInt(columns, 10);
 };
 

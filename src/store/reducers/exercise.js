@@ -11,7 +11,7 @@ const SCHULTE_TABLES_ID = 6;
 const CONCENTRATION_ID = 7;
 export const EXERCISE_COUNT = 7;
 
-const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const letters = 'abcdefghijklmnopqrsztuvwõäöüxy'.split('');
 const numbers = '0123456789'.split('');
 
 export const generateSymbols = (count, modification) => {
@@ -192,7 +192,8 @@ const reducer = (state = initialState, action) => {
         );
         preparation = { wordGroups };
       } else if (state.type === 'schulteTables') {
-        const symbols = generateSymbols(25, state.modification);
+        const symbolCount = getSymbolCount(action.payload.exerciseOptions.tableDimensions);
+        const symbols = generateSymbols(symbolCount, state.modification);
         preparation = { symbols };
       } else if (state.type === 'concentration') {
         const stringPairs = generateStringPairs(
@@ -296,8 +297,9 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.EXERCISE_RETRY: {
       if (state.type === 'schulteTables') {
+        const symbolCount = getSymbolCount(action.payload.exerciseOptions.tableDimensions);
         return updateObject(state, {
-          symbols: generateSymbols(25, state.modification),
+          symbols: generateSymbols(symbolCount, state.modification),
           status: 'prepared',
         });
       }

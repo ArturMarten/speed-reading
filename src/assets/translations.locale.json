@@ -699,6 +699,7 @@
     "last-login-never": ["Mitte kunagi", "Never"],
     "role-guest": ["Külaline", "Guest"],
     "role-student": ["Õpilane", "Student"],
+    "role-statistician": ["Statistik", "Statistician"],
     "role-editor": ["Toimetaja", "Editor"],
     "role-teacher": ["Õppejõud", "Teacher"],
     "role-developer": ["Arendaja", "Developer"],
