@@ -254,7 +254,7 @@ const reducer = (state = initialState, action) => {
         const symbolCount = getSymbolCount(tableDimensions);
         result = {
           elapsedTime,
-          spm: Number.parseFloat((symbolCount / (elapsedTime / (1000 * 60))).toFixed(2)),
+          symbolsPerMinute: Number.parseFloat((symbolCount / (elapsedTime / (1000 * 60))).toFixed(2)),
         };
       } else if (state.type === 'concentration') {
         const { answers } = action.payload;

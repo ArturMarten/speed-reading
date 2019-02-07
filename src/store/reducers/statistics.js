@@ -27,7 +27,7 @@ const exerciseAttemptMap = (attempt) => ({
   readingTextTitle: attempt.readingTextTitle,
   userReadingAttemptCount: attempt.userReadingAttemptCount,
   wordsPerMinute: attempt.result.wordsPerMinute,
-  symbolsPerMinute: attempt.result.spm,
+  symbolsPerMinute: attempt.result.symbolsPerMinute,
   exerciseResult:
     attempt.result.correct !== undefined && attempt.result.total !== undefined
       ? Math.round((attempt.result.correct / attempt.result.total) * 100)

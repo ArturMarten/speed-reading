@@ -1,6 +1,6 @@
 {
   "menu": {
-    "title": ["Kiirlugemine", "Kiirlugemine"],
+    "title": ["Kiirlugemise tarkvara", "Speedreading software"],
     "home": ["Esileht", "Home"],
     "text-entry": ["Tekstide sisestamine", "Text entry"],
     "exercise": ["Harjuta", "Exercise"],
@@ -110,7 +110,7 @@
   },
   "about": {
     "modal-header": ["Tarkvara kohta", "About software"],
-    "title": ["Kiirlugemine 5.1", "Kiirlugemine 5.1"],
+    "title": ["Kiirlugemise tarkvara", "Speedreading software"],
     "developer": ["Arendaja", "Developer"],
     "developer-name": ["Marten Siiber", "Marten Siiber"],
     "contributed-creatively": ["Loovalt panustasid", "Contribute creatively"],
@@ -163,8 +163,8 @@
   },
   "intro-video": {
     "header": ["Võimalusi tutvustav video", "Introduction video"],
-    "title": ["Kiirlugemine 5.1 tutvustav video", "Kiirlugemine 5.1 introduction video"],
-    "no-iframe": ["Kiirlugemine 5.1 tutvustav video", "Kiirlugemine 5.1 introduction video"],
+    "title": ["Kiirlugemise tarkvara tutvustav video", "Speedreading software introduction video"],
+    "no-iframe": ["Kiirlugemise tarkvara tutvustav video", "Speedreading software introduction video"],
     "authentication": ["Sisselogimine", "Authentication"],
     "add-user": ["Kasutaja lisamine", "Adding user"]
   },

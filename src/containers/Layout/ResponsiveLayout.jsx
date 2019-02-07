@@ -323,6 +323,7 @@ export class ResponsiveLayout extends Component {
                   as="a"
                   header
                   onClick={event => this.itemClickHandler(event, '/')}
+                  style={{ whiteSpace: 'pre' }}
                 >
                   <Icon color="blue" name="book" size="big" />
                   {`${this.props.translate('menu.title')} ${environment.version}`}

@@ -31,10 +31,10 @@ export class HelpExerciseResults extends Component {
                     {this.props.translate('help-exercise-results.elapsed-time')}
                   </Statistic.Label>
                 </Statistic>
-                {this.props.result.spm !== undefined ?
+                {this.props.result.symbolsPerMinute !== undefined ?
                   <Statistic size="small" color="green">
                     <Statistic.Value>
-                      {this.props.result.spm}
+                      {this.props.result.symbolsPerMinute}
                     </Statistic.Value>
                     <Statistic.Label>
                       {this.props.translate('help-exercise-results.symbolsPerMinute')}
