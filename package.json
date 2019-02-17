@@ -106,6 +106,16 @@
       "react-app"
     ]
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!/node_modules/",
+      "!src/index.js",
+      "!src/registerServiceWorker.js",
+      "!src/polyfill/*",
+      "!src/stories/*"
+    ]
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
