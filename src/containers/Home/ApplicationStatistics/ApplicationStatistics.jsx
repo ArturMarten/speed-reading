@@ -24,8 +24,8 @@ export class ApplicationStatistics extends Component {
 
   componentDidMount() {
     // console.log(navigator.userAgent, navigator.platform);
-    api.fetchApplicationStatistics()
-      .then((statistics) => {
+    api.fetchApplicationStatistics().then(
+      (statistics) => {
         const updatedStatistics = updateObject(this.state.statistics, {
           ...statistics,
         });
@@ -33,19 +33,19 @@ export class ApplicationStatistics extends Component {
           loading: false,
           statistics: updatedStatistics,
         });
-      }, () => {
+      },
+      () => {
         this.setState({
           loading: false,
         });
-      });
+      },
+    );
   }
 
   render() {
     return (
       <Fragment>
-        <Header as="h3">
-          {this.props.translate('application-statistics.state')}
-        </Header>
+        <Header as="h3">{this.props.translate('application-statistics.state')}</Header>
         <Statistic.Group widths={6} size="small">
           <Statistic>
             <Statistic.Value>
@@ -117,7 +117,11 @@ export class ApplicationStatistics extends Component {
         <Statistic.Group widths={4} size="small" style={{ marginTop: '2em' }}>
           <Statistic>
             <Statistic.Value style={{ textTransform: 'lowercase' }}>
-              {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.readingExerciseTime)}
+              {this.state.loading ? (
+                <Icon loading name="spinner" />
+              ) : (
+                formatMillisecondsInHours(this.state.statistics.readingExerciseTime)
+              )}
             </Statistic.Value>
             <Statistic.Label>
               {this.props.translate('application-statistics.elapsed-time-for')}
@@ -127,7 +131,11 @@ export class ApplicationStatistics extends Component {
           </Statistic>
           <Statistic>
             <Statistic.Value style={{ textTransform: 'lowercase' }}>
-              {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.helpExerciseTime)}
+              {this.state.loading ? (
+                <Icon loading name="spinner" />
+              ) : (
+                formatMillisecondsInHours(this.state.statistics.helpExerciseTime)
+              )}
             </Statistic.Value>
             <Statistic.Label>
               {this.props.translate('application-statistics.elapsed-time-for')}
@@ -137,7 +145,11 @@ export class ApplicationStatistics extends Component {
           </Statistic>
           <Statistic>
             <Statistic.Value style={{ textTransform: 'lowercase' }}>
-              {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.testTime)}
+              {this.state.loading ? (
+                <Icon loading name="spinner" />
+              ) : (
+                formatMillisecondsInHours(this.state.statistics.testTime)
+              )}
             </Statistic.Value>
             <Statistic.Label>
               {this.props.translate('application-statistics.elapsed-time-for')}
@@ -148,7 +160,11 @@ export class ApplicationStatistics extends Component {
           <Statistic>
             <Statistic.Value style={{ textTransform: 'lowercase' }}>
               <Icon name="clock" />
-              {this.state.loading ? <Icon loading name="spinner" /> : formatMillisecondsInHours(this.state.statistics.totalTime)}
+              {this.state.loading ? (
+                <Icon loading name="spinner" />
+              ) : (
+                formatMillisecondsInHours(this.state.statistics.totalTime)
+              )}
             </Statistic.Value>
             <Statistic.Label>
               {this.props.translate('application-statistics.elapsed-time-for')}

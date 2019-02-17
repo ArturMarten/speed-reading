@@ -1,4 +1,5 @@
 export const axiosMock = {
+  get: jest.fn(),
   post: jest.fn(),
   create: jest.fn(() => axiosMock),
   interceptors: {
