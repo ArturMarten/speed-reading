@@ -18,13 +18,13 @@ it('opens and closes the modal', () => {
 it('submits feedback', async () => {
   axiosMock.post.mockResolvedValueOnce({
     data: {
-      message: 'Problem report added',
+      message: 'Feedback added',
     },
   });
   const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
   fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('feedback.send')));
-  await waitForElement(() => getByText(translate('success.problem-report-added')));
+  await waitForElement(() => getByText(translate('success.feedback-added')));
   expect(axiosMock.post).toHaveBeenCalledTimes(1);
   expect(axiosMock.post).toHaveBeenCalledWith('/feedback', {
     userId: null,

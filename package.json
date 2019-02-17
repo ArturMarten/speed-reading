@@ -113,7 +113,8 @@
       "!src/index.js",
       "!src/registerServiceWorker.js",
       "!src/polyfill/*",
-      "!src/stories/*"
+      "!src/stories/*",
+      "!src/utils/logger.js"
     ]
   },
   "browserslist": [
