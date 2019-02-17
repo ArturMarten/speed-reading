@@ -33,7 +33,7 @@ pages:
     - rm -rf public
     - mkdir public
     ##  - mv build/* public
-    - mv coverage/lcov-report public
+    - mv coverage/lcov-report/ public/coverage
   artifacts:
     paths:
       - public
