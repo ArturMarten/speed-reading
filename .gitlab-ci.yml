@@ -8,7 +8,6 @@ cache:
 build:
   stage: build
   script:
-    - cp src/credentials.js.example src/credentials.js # Credentials are required
     - npm install
 
 test:
@@ -16,6 +15,7 @@ test:
   dependencies:
     - build
   script:
+    - cp src/credentials.js.example src/credentials.js # Credentials are required
     - npm run test-no-watch
 
 coverage:
@@ -23,6 +23,7 @@ coverage:
   dependencies:
     - build
   script:
+    - cp src/credentials.js.example src/credentials.js # Credentials are required
     - npm run test-coverage
   artifacts:
     paths:
@@ -33,6 +34,7 @@ pages:
   dependencies:
     - coverage
   script:
+    - cp src/credentials.js.example src/credentials.js # Credentials are required
     - CI=false npm run build # Set CI=false or else build fails when there are warnings
     - rm -rf public
     - mkdir public
