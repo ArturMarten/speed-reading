@@ -8,8 +8,8 @@ cache:
 build:
   stage: build
   script:
+    - cp src/credentials.js.example src/credentials.js # Credentials are required
     - npm install
-    - mv src/credentials.js.example src/credentials.js # Credentials are required
 
 test:
   stage: test
