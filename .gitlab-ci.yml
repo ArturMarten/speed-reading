@@ -13,11 +13,15 @@ build:
 
 test:
   stage: test
+  dependencies:
+    - build
   script:
     - npm run test-no-watch
 
 coverage:
   stage: test
+  dependencies:
+    - build
   script:
     - npm run test-coverage
   artifacts:
