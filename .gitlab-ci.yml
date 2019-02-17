@@ -9,6 +9,7 @@ build:
   stage: build
   script:
     - npm install
+    - mv src/credentials.js.example src/credentials.js # Credentials are required
 
 test:
   stage: test
@@ -28,7 +29,6 @@ pages:
   dependencies:
     - coverage
   script:
-    - mv src/credentials.js.example src/credentials.js # Credentials are required
     - CI=false npm run build # Set CI=false or else build fails when there are warnings
     - rm -rf public
     - mkdir public
