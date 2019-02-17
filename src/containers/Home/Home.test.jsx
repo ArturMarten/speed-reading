@@ -1,21 +1,21 @@
 import React from 'react';
-import { Header, Image } from 'semantic-ui-react';
+import { fireEvent } from 'react-testing-library';
+import renderWithRedux from '../../utils/testUtils';
 
-import { Home } from './Home';
+import Home from './Home';
 
-describe('<Home />', () => {
-  it('renders', () => {
-    const wrapper = shallow(<Home translate={sinon.stub()} />);
-    expect(wrapper).to.be.present();
-  });
+it('opens user manual', () => {
+  const { translate, getByText } = renderWithRedux(<Home />);
+  expect(getByText(translate('home.user-manual')).getAttribute('href')).not.toBeNull();
+});
 
-  it('should render header', () => {
-    const wrapper = shallow(<Home translate={sinon.stub()} />);
-    expect(wrapper.find(Header)).to.have.length(1);
-  });
+it('shows about modal', () => {
+  const { translate, getByText, queryByText } = renderWithRedux(<Home />);
+  fireEvent.click(getByText(translate('home.about')));
+  expect(queryByText(translate('about.modal-header'))).not.toBeNull();
+});
 
-  it('should render three logos', () => {
-    const wrapper = shallow(<Home translate={sinon.stub()} />);
-    expect(wrapper.find(Image)).to.have.length(3);
-  });
+it('renders three logos', () => {
+  const { getAllByAltText } = renderWithRedux(<Home />);
+  expect(getAllByAltText(/logo/i).length).toEqual(3);
 });

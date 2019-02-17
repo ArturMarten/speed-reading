@@ -27,7 +27,7 @@ const BugReport = Loadable({
   loader: () => import('../BugReport/BugReport'),
 });
 
-export class ResponsiveLayout extends Component {
+export class Layout extends Component {
   state = {
     sidebarOpened: false,
     profileOpened: false,
@@ -41,8 +41,7 @@ export class ResponsiveLayout extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.role === '' && this.props.role !== ''
-      && this.props.firstName === '' && this.props.lastName === '') {
+    if (prevProps.role === '' && this.props.role !== '' && this.props.firstName === '' && this.props.lastName === '') {
       this.profileSettingsToggleHandler();
     }
     if (!prevProps.profileFetched && this.props.profileFetched) {
@@ -52,43 +51,43 @@ export class ResponsiveLayout extends Component {
 
   onLogout = () => {
     this.setState({ profileOpened: false });
-  }
+  };
 
   sidebarToggleHandler = () => {
     this.setState({ sidebarOpened: !this.state.sidebarOpened });
-  }
+  };
 
   profileToggleHandler = () => {
     this.setState({ profileOpened: !this.state.profileOpened });
-  }
+  };
 
   profileSettingsToggleHandler = () => {
     this.setState({ profileSettingsOpened: !this.state.profileSettingsOpened, profileOpened: false });
-  }
+  };
 
   authToggleHandler = () => {
     this.setState({ authOpened: !this.state.authOpened, profileOpened: false });
-  }
+  };
 
   authCloseHandler = () => {
     this.setState({ authOpened: false, redirectPath: '' });
-  }
+  };
 
   changePasswordToggleHandler = () => {
     this.setState({ changePasswordOpened: !this.state.changePasswordOpened, profileOpened: false });
-  }
+  };
 
   feedbackToggleHandler = () => {
     this.setState({ feedbackOpened: !this.state.feedbackOpened });
-  }
+  };
 
   problemReportToggleHandler = () => {
     this.setState({ problemReportOpened: !this.state.problemReportOpened });
-  }
+  };
 
   bugReportToggleHandler = () => {
     this.setState({ bugReportOpened: !this.state.bugReportOpened });
-  }
+  };
 
   itemClickHandler = (event, path) => {
     const { isAuthenticated } = this.props;
@@ -102,14 +101,14 @@ export class ResponsiveLayout extends Component {
       authOpened: !isAuthenticated && !isHomePage,
       redirectPath: isAuthenticated || isHomePage ? '' : path,
     });
-  }
+  };
 
   redirect = () => {
     if (this.state.redirectPath !== '') {
       this.props.redirect(this.state.redirectPath);
     }
     this.setState({ authOpened: false, redirectPath: '' });
-  }
+  };
 
   render() {
     const { role, children, path } = this.props;
@@ -119,30 +118,30 @@ export class ResponsiveLayout extends Component {
     return (
       <ErrorBoundary>
         <Sidebar.Pushable>
-          {(this.state.authOpened && !this.props.isAuthenticated) || (!this.props.isAuthenticated && !isHomePage) ?
-            <Auth
-              open={this.state.authOpened}
-              onClose={this.authCloseHandler}
-              closeIcon={this.state.authOpened}
-            /> : null}
-          {this.state.profileSettingsOpened ?
-            <ProfileSettings open={this.state.profileSettingsOpened} onClose={this.profileSettingsToggleHandler} /> : null}
-          {this.state.changePasswordOpened ?
-            <ChangePassword open={this.state.changePasswordOpened} onClose={this.changePasswordToggleHandler} /> : null}
-          {this.state.feedbackOpened ?
-            <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} /> : null}
-          {this.state.problemReportOpened ?
-            <ProblemReport open={this.state.problemReportOpened} onClose={this.problemReportToggleHandler} /> : null}
-          {this.state.bugReportOpened ?
-            <BugReport open={this.state.bugReportOpened} onClose={this.bugReportToggleHandler} /> : null}
+          {(this.state.authOpened && !this.props.isAuthenticated) || (!this.props.isAuthenticated && !isHomePage) ? (
+            <Auth open={this.state.authOpened} onClose={this.authCloseHandler} closeIcon={this.state.authOpened} />
+          ) : null}
+          {this.state.profileSettingsOpened ? (
+            <ProfileSettings open={this.state.profileSettingsOpened} onClose={this.profileSettingsToggleHandler} />
+          ) : null}
+          {this.state.changePasswordOpened ? (
+            <ChangePassword open={this.state.changePasswordOpened} onClose={this.changePasswordToggleHandler} />
+          ) : null}
+          {this.state.feedbackOpened ? (
+            <Feedback open={this.state.feedbackOpened} onClose={this.feedbackToggleHandler} />
+          ) : null}
+          {this.state.problemReportOpened ? (
+            <ProblemReport open={this.state.problemReportOpened} onClose={this.problemReportToggleHandler} />
+          ) : null}
+          {this.state.bugReportOpened ? (
+            <BugReport open={this.state.bugReportOpened} onClose={this.bugReportToggleHandler} />
+          ) : null}
           <Sidebar as={Menu} animation="overlay" vertical visible={this.state.sidebarOpened}>
             <Menu.Menu>
               <Menu.Item>
-                {this.props.isAuthenticated ?
+                {this.props.isAuthenticated ? (
                   <Fragment>
-                    <Header textAlign="center">
-                      {this.props.userEmail}
-                    </Header>
+                    <Header textAlign="center">{this.props.userEmail}</Header>
                     <Grid>
                       <Grid.Row columns={3} textAlign="center">
                         <Grid.Column>
@@ -177,31 +176,29 @@ export class ResponsiveLayout extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                  </Fragment> :
+                  </Fragment>
+                ) : (
                   <Button fluid positive icon labelPosition="right" onClick={this.authToggleHandler}>
                     {this.props.translate('auth.login-button')}
                     <Icon name="sign in" style={{ opacity: 1 }} />
                   </Button>
-                }
+                )}
               </Menu.Item>
             </Menu.Menu>
-            <Menu.Item
-              as="a"
-              active={path === '/'}
-              onClick={event => this.itemClickHandler(event, '/')}
-            >
+            <Menu.Item as="a" active={path === '/'} onClick={(event) => this.itemClickHandler(event, '/')}>
               <Icon name="home" size="large" />
               {this.props.translate('menu.home')}
             </Menu.Item>
-            {isPermittedToModifyTexts ?
+            {isPermittedToModifyTexts ? (
               <Menu.Item
                 as="a"
                 active={path === '/text-entry'}
-                onClick={event => this.itemClickHandler(event, '/text-entry')}
+                onClick={(event) => this.itemClickHandler(event, '/text-entry')}
               >
                 <Icon name="file alternate outline" color="blue" size="large" />
                 {this.props.translate('menu.text-entry')}
-              </Menu.Item> : null}
+              </Menu.Item>
+            ) : null}
             <Dropdown
               as="div"
               className={`item ${path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
@@ -222,35 +219,35 @@ export class ResponsiveLayout extends Component {
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/reading-test'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/reading-test')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/reading-test')}
                 >
                   {this.props.translate('menu.reading-test')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/reading-aid'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/reading-aid')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/reading-aid')}
                 >
                   {this.props.translate('menu.reading-aid')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/scrolling-text'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/scrolling-text')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/scrolling-text')}
                 >
                   {this.props.translate('menu.scrolling-text')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/disappearing-text'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/disappearing-text')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/disappearing-text')}
                 >
                   {this.props.translate('menu.disappearing-text')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/word-groups'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/word-groups')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/word-groups')}
                 >
                   {this.props.translate('menu.word-groups')}
                 </Dropdown.Item>
@@ -262,14 +259,14 @@ export class ResponsiveLayout extends Component {
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/schulte-tables'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/schulte-tables')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/schulte-tables')}
                 >
                   {this.props.translate('menu.schulte-tables')}
                 </Dropdown.Item>
                 <Dropdown.Item
                   as="a"
                   active={path === '/exercise/concentration'}
-                  onClick={event => this.itemClickHandler(event, '/exercise/concentration')}
+                  onClick={(event) => this.itemClickHandler(event, '/exercise/concentration')}
                 >
                   {this.props.translate('menu.concentration')}
                 </Dropdown.Item>
@@ -278,20 +275,21 @@ export class ResponsiveLayout extends Component {
             <Menu.Item
               as="a"
               active={path === '/statistics'}
-              onClick={event => this.itemClickHandler(event, '/statistics')}
+              onClick={(event) => this.itemClickHandler(event, '/statistics')}
             >
               <Icon name="line graph" color="red" size="large" />
               {this.props.translate('menu.statistics')}
             </Menu.Item>
-            {isPermittedToManageUsers ?
+            {isPermittedToManageUsers ? (
               <Menu.Item
                 as="a"
                 active={path === '/manage'}
-                onClick={event => this.itemClickHandler(event, '/manage')}
+                onClick={(event) => this.itemClickHandler(event, '/manage')}
               >
                 <Icon name="settings" size="large" />
                 {this.props.translate('menu.manage')}
-              </Menu.Item> : null}
+              </Menu.Item>
+            ) : null}
             <Grid container columns="equal">
               <Grid.Row verticalAlign="middle">
                 <Grid.Column textAlign="center">
@@ -301,7 +299,12 @@ export class ResponsiveLayout extends Component {
                   <Icon name="talk" color="black" size="big" onClick={this.feedbackToggleHandler} />
                 </Grid.Column>
                 <Grid.Column>
-                  <Icon name="exclamation triangle" color="yellow" size="big" onClick={this.problemReportToggleHandler} />
+                  <Icon
+                    name="exclamation triangle"
+                    color="yellow"
+                    size="big"
+                    onClick={this.problemReportToggleHandler}
+                  />
                 </Grid.Column>
                 <Grid.Column>
                   <Icon name="bug" color="olive" size="big" onClick={this.bugReportToggleHandler} />
@@ -322,7 +325,7 @@ export class ResponsiveLayout extends Component {
                 <Menu.Item
                   as="a"
                   header
-                  onClick={event => this.itemClickHandler(event, '/')}
+                  onClick={(event) => this.itemClickHandler(event, '/')}
                   style={{ whiteSpace: 'pre' }}
                 >
                   <Icon color="blue" name="book" size="big" />
@@ -332,31 +335,24 @@ export class ResponsiveLayout extends Component {
             </Responsive>
             <Responsive minWidth={992}>
               <Menu compact attached="top" secondary>
-                <Menu.Item
-                  as="a"
-                  header
-                  onClick={event => this.itemClickHandler(event, '/')}
-                >
+                <Menu.Item as="a" header onClick={(event) => this.itemClickHandler(event, '/')}>
                   <Icon color="blue" name="book" size="big" />
                   {`${this.props.translate('menu.title')} ${environment.version}`}
                 </Menu.Item>
-                <Menu.Item
-                  as="a"
-                  active={path === '/'}
-                  onClick={event => this.itemClickHandler(event, '/')}
-                >
+                <Menu.Item as="a" active={path === '/'} onClick={(event) => this.itemClickHandler(event, '/')}>
                   <Icon name="home" size="large" />
                   {this.props.translate('menu.home')}
                 </Menu.Item>
-                {isPermittedToModifyTexts ?
+                {isPermittedToModifyTexts ? (
                   <Menu.Item
                     as="a"
                     active={path === '/text-entry'}
-                    onClick={event => this.itemClickHandler(event, '/text-entry')}
+                    onClick={(event) => this.itemClickHandler(event, '/text-entry')}
                   >
                     <Icon name="file alternate outline" color="blue" size="large" />
                     {this.props.translate('menu.text-entry')}
-                  </Menu.Item> : null}
+                  </Menu.Item>
+                ) : null}
                 <Dropdown
                   as="div"
                   className={`link item ${path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
@@ -376,35 +372,35 @@ export class ResponsiveLayout extends Component {
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/reading-test'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/reading-test')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/reading-test')}
                     >
                       {this.props.translate('menu.reading-test')}
                     </Dropdown.Item>
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/reading-aid'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/reading-aid')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/reading-aid')}
                     >
                       {this.props.translate('menu.reading-aid')}
                     </Dropdown.Item>
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/scrolling-text'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/scrolling-text')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/scrolling-text')}
                     >
                       {this.props.translate('menu.scrolling-text')}
                     </Dropdown.Item>
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/disappearing-text'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/disappearing-text')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/disappearing-text')}
                     >
                       {this.props.translate('menu.disappearing-text')}
                     </Dropdown.Item>
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/word-groups'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/word-groups')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/word-groups')}
                     >
                       {this.props.translate('menu.word-groups')}
                     </Dropdown.Item>
@@ -416,14 +412,14 @@ export class ResponsiveLayout extends Component {
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/schulte-tables'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/schulte-tables')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/schulte-tables')}
                     >
                       {this.props.translate('menu.schulte-tables')}
                     </Dropdown.Item>
                     <Dropdown.Item
                       as="a"
                       active={path === '/exercise/concentration'}
-                      onClick={event => this.itemClickHandler(event, '/exercise/concentration')}
+                      onClick={(event) => this.itemClickHandler(event, '/exercise/concentration')}
                     >
                       {this.props.translate('menu.concentration')}
                     </Dropdown.Item>
@@ -432,22 +428,23 @@ export class ResponsiveLayout extends Component {
                 <Menu.Item
                   as="a"
                   active={path === '/statistics'}
-                  onClick={event => this.itemClickHandler(event, '/statistics')}
+                  onClick={(event) => this.itemClickHandler(event, '/statistics')}
                 >
                   <Icon name="line graph" color="red" size="large" />
                   {this.props.translate('menu.statistics')}
                 </Menu.Item>
-                {isPermittedToManageUsers ?
+                {isPermittedToManageUsers ? (
                   <Menu.Item
                     as="a"
                     active={path === '/manage'}
-                    onClick={event => this.itemClickHandler(event, '/manage')}
+                    onClick={(event) => this.itemClickHandler(event, '/manage')}
                   >
                     <Icon name="settings" size="large" />
                     {this.props.translate('menu.manage')}
-                  </Menu.Item> : null}
+                  </Menu.Item>
+                ) : null}
                 <Menu.Menu position="right">
-                  {this.props.isAuthenticated ?
+                  {this.props.isAuthenticated ? (
                     <Menu.Item fitted>
                       <Popup
                         on="click"
@@ -456,11 +453,7 @@ export class ResponsiveLayout extends Component {
                         onClose={this.profileToggleHandler}
                         trigger={<Icon fitted name="user" color="red" size="large" />}
                         position="bottom right"
-                        header={
-                          <Header textAlign="center">
-                            {this.props.userEmail}
-                          </Header>
-                        }
+                        header={<Header textAlign="center">{this.props.userEmail}</Header>}
                         content={
                           <Button.Group vertical fluid>
                             <Button
@@ -472,14 +465,7 @@ export class ResponsiveLayout extends Component {
                               {this.props.translate('profile.user-settings')}
                               <Icon name="setting" style={{ opacity: 1 }} />
                             </Button>
-                            <Button
-                              as={Link}
-                              positive
-                              icon
-                              labelPosition="right"
-                              onClick={this.onLogout}
-                              to="/logout"
-                            >
+                            <Button as={Link} positive icon labelPosition="right" onClick={this.onLogout} to="/logout">
                               {this.props.translate('profile.logout-button')}
                               <Icon name="sign out" style={{ opacity: 1 }} />
                             </Button>
@@ -496,36 +482,55 @@ export class ResponsiveLayout extends Component {
                           </Button.Group>
                         }
                       />
-                    </Menu.Item> :
+                    </Menu.Item>
+                  ) : (
                     <Menu.Item fitted>
                       <Popup
-                        trigger={<Icon fitted name="sign in" style={{ opacity: 1 }} color="green" size="big" onClick={this.authToggleHandler} />}
+                        trigger={
+                          <Icon
+                            fitted
+                            name="sign in"
+                            style={{ opacity: 1 }}
+                            color="green"
+                            size="big"
+                            onClick={this.authToggleHandler}
+                          />
+                        }
                         content={this.props.translate('menu.login-popup')}
                         on="hover"
                       />
-                    </Menu.Item>}
+                    </Menu.Item>
+                  )}
                   <Menu.Item fitted>
                     <Popup
-                      trigger={<Icon fitted name="talk" color="black" size="large" onClick={this.feedbackToggleHandler} />}
+                      trigger={
+                        <Icon fitted name="talk" color="black" size="large" onClick={this.feedbackToggleHandler} />
+                      }
                       content={this.props.translate('menu.feedback-popup')}
                       on="hover"
                     />
                   </Menu.Item>
                   <Menu.Item fitted>
                     <Popup
-                      trigger={<Icon fitted name="exclamation triangle" color="yellow" size="large" onClick={this.problemReportToggleHandler} />}
-                      content={
-                        this.props.translate('menu.problem-report-popup')
+                      trigger={
+                        <Icon
+                          fitted
+                          name="exclamation triangle"
+                          color="yellow"
+                          size="large"
+                          onClick={this.problemReportToggleHandler}
+                        />
                       }
+                      content={this.props.translate('menu.problem-report-popup')}
                       on="hover"
                     />
                   </Menu.Item>
                   <Menu.Item fitted>
                     <Popup
-                      trigger={<Icon fitted name="bug" color="olive" size="large" onClick={this.bugReportToggleHandler} />}
-                      content={
-                        this.props.translate('menu.bug-report-popup')
+                      trigger={
+                        <Icon fitted name="bug" color="olive" size="large" onClick={this.bugReportToggleHandler} />
                       }
+                      content={this.props.translate('menu.bug-report-popup')}
                       on="hover"
                     />
                   </Menu.Item>
@@ -543,7 +548,7 @@ export class ResponsiveLayout extends Component {
   }
 }
 
-ResponsiveLayout.propTypes = {
+Layout.propTypes = {
   path: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
@@ -551,7 +556,7 @@ ResponsiveLayout.propTypes = {
   translate: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   path: state.router.location.pathname,
   role: state.profile.role,
   isAuthenticated: state.auth.token !== null,
@@ -563,10 +568,13 @@ const mapStateToProps = state => ({
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   redirect: (to) => {
     dispatch(push(to));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ResponsiveLayout, axios));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withErrorHandler(Layout, axios));

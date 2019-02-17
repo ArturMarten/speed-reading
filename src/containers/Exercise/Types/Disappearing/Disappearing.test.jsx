@@ -20,7 +20,7 @@ describe('Disappearing updateState', () => {
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
   // console.log(JSON.stringify(textMetadata, null, 2));
 
-  before(() => {
+  beforeAll(() => {
     // console.log(textMetadata);
   });
 
@@ -32,7 +32,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).to.equal(0);
+    expect(newState.lineCharacterIndex).toEqual(0);
   });
 
   it('outputs first clear rect', () => {
@@ -50,7 +50,7 @@ describe('Disappearing updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.clearRect).toEqual(expectedRect);
   });
 
   it('increases first update line character index', () => {
@@ -61,7 +61,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).to.equal(1);
+    expect(newState.lineCharacterIndex).toEqual(1);
   });
 
   it('outputs second clear rect', () => {
@@ -79,7 +79,7 @@ describe('Disappearing updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.clearRect).toEqual(expectedRect);
   });
 
   it('increases word index on new word', () => {
@@ -90,7 +90,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(1);
+    expect(newState.wordIndex).toEqual(1);
   });
 
   it('increases word index on new line', () => {
@@ -101,7 +101,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(4);
+    expect(newState.wordIndex).toEqual(4);
   });
 
   it('detects new line', () => {
@@ -112,7 +112,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.newLine).to.equal(true);
+    expect(newState.newLine).toEqual(true);
   });
 
   it('resets line character index on new line', () => {
@@ -123,7 +123,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).to.equal(0);
+    expect(newState.lineCharacterIndex).toEqual(0);
   });
 
   it('outputs second line clear rect', () => {
@@ -141,7 +141,7 @@ describe('Disappearing updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.clearRect).toEqual(expectedRect);
   });
 
   it('outputs third line clear rect', () => {
@@ -159,7 +159,7 @@ describe('Disappearing updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.clearRect).toEqual(expectedRect);
   });
 
   it('increases word index on new line', () => {
@@ -170,7 +170,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(23);
+    expect(newState.wordIndex).toEqual(23);
   });
 
   it('detects that text has not finished', () => {
@@ -182,7 +182,7 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).to.equal(false);
+    expect(newState.finished).toEqual(false);
   });
 
   it('detects that text has finished', () => {
@@ -194,11 +194,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).to.equal(true);
+    expect(newState.finished).toEqual(true);
   });
 
   it('detects that there it is not new page', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -209,11 +209,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).to.equal(false);
+    expect(newState.newPage).toEqual(false);
   });
 
   it('detects that there it is new page', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -224,11 +224,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).to.equal(true);
+    expect(newState.newPage).toEqual(true);
   });
 
   it('increases margin top', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -239,11 +239,11 @@ describe('Disappearing updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(385);
+    expect(newState.marginTop).toEqual(385);
   });
 
   it('outputs new page clear rect', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -260,6 +260,6 @@ describe('Disappearing updateState', () => {
       width: 12,
       height: 19,
     };
-    expect(newState.clearRect).to.eql(expectedRect);
+    expect(newState.clearRect).toEqual(expectedRect);
   });
 });

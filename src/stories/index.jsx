@@ -12,7 +12,7 @@ import * as actionCreators from '../store/actions';
 import credentials from '../credentials';
 import Provider, { store } from './Provider';
 
-// import HomeContainer from '../containers/Home/Home';
+import HomeContainer from '../containers/Home/Home';
 import TextEntryContainer from '../containers/TextEntry/TextEntry';
 import TextEditorContainer from '../containers/TextEditor/TextEditor';
 import TextAnalysisContainer, { TextAnalysis } from '../containers/TextAnalysis/TextAnalysis';
@@ -43,6 +43,7 @@ import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
 import ChangePasswordContainer from '../containers/Auth/ChangePassword';
 import FeedbackContainer, { Feedback } from '../containers/Feedback/Feedback';
+import ProblemReportContainer, { ProblemReport } from '../containers/ProblemReport/ProblemReport';
 import BugReportContainer, { BugReport } from '../containers/BugReport/BugReport';
 import { generateSymbols, generateStringPairs } from '../store/reducers/exercise';
 
@@ -249,11 +250,8 @@ const translate = getTranslate(store.getState().locale);
 
 addDecorator((story) => <Provider story={story()} />);
 
-/*
 // Breaks with .pdf file import
-storiesOf('Home', module)
-  .add('Container', () => <HomeContainer />);
-*/
+storiesOf('Home', module).add('Container', () => <HomeContainer />);
 
 storiesOf('Text entry', module).add('Container', () => <TextEntryContainer />);
 
@@ -570,4 +568,20 @@ storiesOf('Bug report', module)
   ))
   .add('Component submitted', () => (
     <BugReport open bugReportStatus={{ loading: false, error: null, message: 'Submitted' }} translate={translate} />
+  ));
+
+storiesOf('Problem report', module)
+  .add('Container', () => <ProblemReportContainer open />)
+  .add('Component', () => (
+    <ProblemReport open problemReportStatus={{ loading: false, error: null, message: null }} translate={translate} />
+  ))
+  .add('Component submitting', () => (
+    <ProblemReport open problemReportStatus={{ loading: true, error: null, message: null }} translate={translate} />
+  ))
+  .add('Component submitted', () => (
+    <ProblemReport
+      open
+      problemReportStatus={{ loading: false, error: null, message: 'Submitted' }}
+      translate={translate}
+    />
   ));

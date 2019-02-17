@@ -54,7 +54,7 @@ export class ProblemReport extends Component {
     this.setState({
       problemType: value,
     });
-  }
+  };
 
   selectDefaultText = () => {
     const updatedProblemReportForm = { ...this.state.problemReportForm };
@@ -65,25 +65,29 @@ export class ProblemReport extends Component {
     this.setState({
       problemReportForm: updatedProblemReportForm,
     });
-  }
+  };
 
   onSubmit = () => {
     const submittedForm = {
       userId: this.props.userId,
       type: this.state.problemType,
-      textTitle: this.state.problemType === 'text' && this.state.problemReportForm.textTitle.value !== '' ?
-        this.state.problemReportForm.textTitle.value : null,
+      textTitle:
+        this.state.problemType === 'text' && this.state.problemReportForm.textTitle.value !== ''
+          ? this.state.problemReportForm.textTitle.value
+          : null,
       description: this.state.problemReportForm.description.value,
-      screenshot: this.state.sendScreenshot && this.state.screenshotImage ?
-        this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '') : null,
+      screenshot:
+        this.state.sendScreenshot && this.state.screenshotImage
+          ? this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '')
+          : null,
     };
     this.props.onSubmit(submittedForm);
-  }
+  };
 
   openScreenshotToggle = (event) => {
     stopPropagation(event);
     this.setState({ screenshotOpen: !this.state.screenshotOpen });
-  }
+  };
 
   inputChangeHandler = (event, { name, value }) => {
     const updatedProblemReportForm = { ...this.state.problemReportForm };
@@ -101,11 +105,11 @@ export class ProblemReport extends Component {
       problemReportForm: updatedProblemReportForm,
       problemReportFormValid: formIsValid,
     });
-  }
+  };
 
   changeSendScreenshot = () => {
     this.setState({ sendScreenshot: !this.state.sendScreenshot });
-  }
+  };
 
   render() {
     const problemTypeOptions = [
@@ -125,9 +129,7 @@ export class ProblemReport extends Component {
     );
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('problem-report.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('problem-report.modal-header')}</Modal.Header>
         <Modal.Content>
           {screenshotModal}
           <Form
@@ -135,10 +137,10 @@ export class ProblemReport extends Component {
             success={this.props.problemReportStatus.message !== null}
             error={this.props.problemReportStatus.error !== null}
           >
-            <Form.Field error={!this.state.problemReportForm.textTitle.valid && this.state.problemReportForm.textTitle.touched}>
-              <label htmlFor="problem-report-type">
-                {this.props.translate('problem-report.select-type')}
-              </label>
+            <Form.Field
+              error={!this.state.problemReportForm.textTitle.valid && this.state.problemReportForm.textTitle.touched}
+            >
+              <label htmlFor="problem-report-type">{this.props.translate('problem-report.select-type')}</label>
               <Dropdown
                 id="problem-report-type"
                 fluid
@@ -148,11 +150,11 @@ export class ProblemReport extends Component {
                 options={problemTypeOptions}
               />
             </Form.Field>
-            {this.state.problemType === 'text' ?
-              <Form.Field error={!this.state.problemReportForm.textTitle.valid && this.state.problemReportForm.textTitle.touched}>
-                <label htmlFor="problem-report-text">
-                  {this.props.translate('problem-report.input-text-title')}
-                </label>
+            {this.state.problemType === 'text' ? (
+              <Form.Field
+                error={!this.state.problemReportForm.textTitle.valid && this.state.problemReportForm.textTitle.touched}
+              >
+                <label htmlFor="problem-report-text">{this.props.translate('problem-report.input-text-title')}</label>
                 <Input
                   id="problem-report-text"
                   name="textTitle"
@@ -160,8 +162,13 @@ export class ProblemReport extends Component {
                   value={this.state.problemReportForm.textTitle.value}
                   onChange={this.inputChangeHandler}
                 />
-              </Form.Field> : null}
-            <Form.Field error={!this.state.problemReportForm.description.valid && this.state.problemReportForm.description.touched}>
+              </Form.Field>
+            ) : null}
+            <Form.Field
+              error={
+                !this.state.problemReportForm.description.valid && this.state.problemReportForm.description.touched
+              }
+            >
               <label htmlFor="problem-report-description">
                 {this.props.translate('problem-report.textarea-description')}
               </label>
@@ -190,13 +197,8 @@ export class ProblemReport extends Component {
                 onChange={this.changeSendScreenshot}
               />
             </Form.Field>
-            <SuccessMessage
-              icon="check"
-              message={this.props.problemReportStatus.message}
-            />
-            <ErrorMessage
-              error={this.props.problemReportStatus.error}
-            />
+            <SuccessMessage icon="check" message={this.props.problemReportStatus.message} />
+            <ErrorMessage error={this.props.problemReportStatus.error} />
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -214,7 +216,7 @@ export class ProblemReport extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   state,
   userId: state.auth.userId,
   selectedText: state.text.selectedText,
@@ -222,10 +224,13 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSubmit: (problemReport) => {
     dispatch(actionCreators.sendProblemReport(problemReport));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProblemReport);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProblemReport);

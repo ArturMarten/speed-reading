@@ -19,7 +19,7 @@ describe('Reading test', () => {
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
 
-  before(() => {
+  beforeAll(() => {
     // console.log(textMetadata);
   });
 
@@ -29,7 +29,7 @@ describe('Reading test', () => {
       marginTop: 0,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).to.equal(379);
+    expect(newState.marginTop).toEqual(379);
   });
 
   it('previous page on second page decreases margin top', () => {
@@ -38,7 +38,7 @@ describe('Reading test', () => {
       marginTop: 379,
     };
     const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).to.equal(0);
+    expect(newState.marginTop).toEqual(0);
   });
 
   it('next page on second page increases margin top', () => {
@@ -47,7 +47,7 @@ describe('Reading test', () => {
       marginTop: 379,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).to.equal(753);
+    expect(newState.marginTop).toEqual(753);
   });
 
   it('previous page on third page decreases margin top', () => {
@@ -56,7 +56,7 @@ describe('Reading test', () => {
       marginTop: 753,
     };
     const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).to.equal(379);
+    expect(newState.marginTop).toEqual(379);
   });
 
   it('next page on third page increases margin top', () => {
@@ -65,7 +65,7 @@ describe('Reading test', () => {
       marginTop: 753,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).to.equal(1127);
+    expect(newState.marginTop).toEqual(1127);
   });
 
   it('previous page on fourth page decreases margin top', () => {
@@ -74,6 +74,6 @@ describe('Reading test', () => {
       marginTop: 1127,
     };
     const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).to.equal(753);
+    expect(newState.marginTop).toEqual(753);
   });
 });

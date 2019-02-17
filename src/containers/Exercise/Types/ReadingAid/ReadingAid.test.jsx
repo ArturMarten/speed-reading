@@ -19,7 +19,7 @@ describe('Reading aid updateState', () => {
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
 
-  before(() => {
+  beforeAll(() => {
     // console.log(textMetadata);
   });
 
@@ -31,7 +31,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).to.equal(0);
+    expect(newState.lineCharacterIndex).toEqual(0);
   });
 
   it('outputs first restore rect', () => {
@@ -49,7 +49,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.restoreRect).to.eql(expectedRect);
+    expect(newState.restoreRect).toEqual(expectedRect);
   });
 
   it('outputs first draw rect', () => {
@@ -67,7 +67,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.drawRect).to.eql(expectedRect);
+    expect(newState.drawRect).toEqual(expectedRect);
   });
 
   it('increases first update line character index', () => {
@@ -78,7 +78,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).to.equal(1);
+    expect(newState.lineCharacterIndex).toEqual(1);
   });
 
   it('outputs second restore rect', () => {
@@ -96,7 +96,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.restoreRect).to.eql(expectedRect);
+    expect(newState.restoreRect).toEqual(expectedRect);
   });
 
   it('outputs second draw rect', () => {
@@ -114,7 +114,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.drawRect).to.eql(expectedRect);
+    expect(newState.drawRect).toEqual(expectedRect);
   });
 
   it('increases word index on new word', () => {
@@ -125,7 +125,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(1);
+    expect(newState.wordIndex).toEqual(1);
   });
 
   it('increases word index on new line', () => {
@@ -136,7 +136,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).to.equal(5);
+    expect(newState.wordIndex).toEqual(5);
   });
 
   it('detects new line', () => {
@@ -147,7 +147,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.newLine).to.equal(true);
+    expect(newState.newLine).toEqual(true);
   });
 
   it('resets line character index on new line', () => {
@@ -158,7 +158,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).to.equal(0);
+    expect(newState.lineCharacterIndex).toEqual(0);
   });
 
   it('outputs second line restore rect', () => {
@@ -169,7 +169,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    const lineFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > 19);
+    const lineFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > 19);
     const lineLastWordIndex = lineFirstWordIndex - 1;
     const lineLastWordMetadata = textMetadata.wordsMetadata[lineLastWordIndex];
     const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
@@ -179,7 +179,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.restoreRect).to.eql(expectedRect);
+    expect(newState.restoreRect).toEqual(expectedRect);
   });
 
   it('outputs second line draw rect', () => {
@@ -197,7 +197,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.drawRect).to.eql(expectedRect);
+    expect(newState.drawRect).toEqual(expectedRect);
   });
 
   it('outputs third line restore rect', () => {
@@ -215,7 +215,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.restoreRect).to.eql(expectedRect);
+    expect(newState.restoreRect).toEqual(expectedRect);
   });
 
   it('outputs third line draw rect', () => {
@@ -233,7 +233,7 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.drawRect).to.eql(expectedRect);
+    expect(newState.drawRect).toEqual(expectedRect);
   });
 
   it('detects that text has not finished', () => {
@@ -245,7 +245,7 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).to.equal(false);
+    expect(newState.finished).toEqual(false);
   });
 
   it('detects that text has finished', () => {
@@ -257,11 +257,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).to.equal(true);
+    expect(newState.finished).toEqual(true);
   });
 
   it('detects that there it is not new page', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -272,11 +272,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).to.equal(false);
+    expect(newState.newPage).toEqual(false);
   });
 
   it('detects that there it is new page', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -287,11 +287,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).to.equal(true);
+    expect(newState.newPage).toEqual(true);
   });
 
   it('increases margin top', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -302,11 +302,11 @@ describe('Reading aid updateState', () => {
       marginTop: 0,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(385);
+    expect(newState.marginTop).toEqual(385);
   });
 
   it('outputs new page restore rect', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -324,11 +324,11 @@ describe('Reading aid updateState', () => {
       width: averageCharacterWidth,
       height: 19,
     };
-    expect(newState.restoreRect).to.eql(expectedRect);
+    expect(newState.restoreRect).toEqual(expectedRect);
   });
 
   it('outputs new page draw rect', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex(word => word.rect.bottom > CANVAS_HEIGHT);
+    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
     const pageLastWordIndex = pageFirstWordIndex - 1;
     const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
@@ -345,6 +345,6 @@ describe('Reading aid updateState', () => {
       width: 12,
       height: 19,
     };
-    expect(newState.drawRect).to.eql(expectedRect);
+    expect(newState.drawRect).toEqual(expectedRect);
   });
 });

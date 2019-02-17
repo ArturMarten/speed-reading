@@ -14,7 +14,7 @@ import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
 import studyEstLogo from '../../assets/img/study_est.jpg';
 import studyEngLogo from '../../assets/img/study_eng.jpg';
-import userManual from '../../assets/doc/kasutusjuhend_est.pdf';
+// import userManual from '../../assets/doc/kasutusjuhend_est.pdf';
 
 export class Home extends Component {
   state = {
@@ -33,7 +33,7 @@ export class Home extends Component {
           <Grid.Row style={{ paddingBottom: '1em' }}>
             <Grid.Column width={8}>
               <p>{this.props.translate('home.description')}</p>
-              <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} />
+              <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} translate={this.props.translate} />
               <Button
                 basic
                 floated="right"
@@ -48,20 +48,20 @@ export class Home extends Component {
                 floated="right"
                 icon="file pdf outline"
                 content={this.props.translate('home.user-manual')}
-                href={userManual}
+                href="https://kiirlugemine.keeleressursid.ee/api/kasutusjuhend_est.pdf"
               />
             </Grid.Column>
             <Grid.Column width={8}>
-              <Features language={this.props.currentLanguage} translate={this.props.translate} />
+              <Features translate={this.props.translate} />
             </Grid.Column>
           </Grid.Row>
           <Divider />
           <Grid.Row style={{ paddingBottom: '2em' }}>
             <Grid.Column width={8}>
-              <ReleaseNotes language={this.props.currentLanguage} translate={this.props.translate} />
+              <ReleaseNotes translate={this.props.translate} />
             </Grid.Column>
             <Grid.Column width={8}>
-              <IntroVideo language={this.props.currentLanguage} translate={this.props.translate} />
+              <IntroVideo translate={this.props.translate} />
             </Grid.Column>
           </Grid.Row>
           <Divider />
@@ -92,7 +92,7 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <ApplicationStatistics />
+        <ApplicationStatistics translate={this.props.translate} />
         <Divider />
         <Grid verticalAlign="middle">
           <Grid.Row columns={3} style={{ paddingTop: 0, paddingBottom: 0 }}>

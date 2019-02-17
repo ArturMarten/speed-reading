@@ -142,15 +142,11 @@ export const sortByColumn = (data, column, direction) => {
   return direction === 'descending' ? sorted.reverse() : sorted;
 };
 
-export const serverSuccessMessage = response => (
-  response.data && response.data.message ?
-    response.data.message : 'Success'
-);
+export const serverSuccessMessage = (response) =>
+  response.data && response.data.message ? response.data.message : 'Success';
 
-export const serverErrorMessage = error => (
-  error.response && error.response.data && error.response.data.error ?
-    error.response.data.error : error.message
-);
+export const serverErrorMessage = (error) =>
+  error.response && error.response.data && error.response.data.error ? error.response.data.error : error.message;
 
 export const shuffle = (array) => {
   const shuffled = array;
@@ -176,9 +172,7 @@ export const getSimilarSymbol = (symbol) => {
   return similar[Math.floor(Math.random() * similar.length)];
 };
 
-export const getSymbolDimensions = (tableDimensions) => {
-  return tableDimensions.split('x');
-};
+export const getSymbolDimensions = (tableDimensions) => tableDimensions.split('x');
 
 export const getSymbolCount = (tableDimensions) => {
   const [rows, columns] = getSymbolDimensions(tableDimensions);
@@ -192,9 +186,9 @@ export const polynomial = (xSeries, ySeries, order) => {
   return regression.polynomial(data, { order, precision: 100 });
 };
 
-export const calculateY = equation => x => (
-  equation.reduce((prev, cur, index) => prev + cur * (x ** (equation.length - index - 1)), 0)
-);
+export const calculateY = (equation) => (x) => {
+  return equation.reduce((prev, cur, index) => prev + cur * x ** (equation.length - index - 1), 0);
+};
 
 export const leastSquares = (xSeries, ySeries) => {
   if (xSeries === null || ySeries === null || xSeries.length === 0 || ySeries.length === 0) {
@@ -206,15 +200,15 @@ export const leastSquares = (xSeries, ySeries) => {
   const xBar = (xSeries.reduce(reduceSumFunc, 0) * 1.0) / xSeries.length;
   const yBar = (ySeries.reduce(reduceSumFunc, 0) * 1.0) / ySeries.length;
 
-  const ssXX = xSeries.map(d => (d - xBar) ** 2).reduce(reduceSumFunc, 0);
+  const ssXX = xSeries.map((d) => (d - xBar) ** 2).reduce(reduceSumFunc, 0);
 
-  const ssYY = ySeries.map(d => (d - yBar) ** 2).reduce(reduceSumFunc, 0);
+  const ssYY = ySeries.map((d) => (d - yBar) ** 2).reduce(reduceSumFunc, 0);
 
   const ssXY = xSeries.map((d, i) => (d - xBar) * (ySeries[i] - yBar)).reduce(reduceSumFunc, 0);
 
   const slope = ssXY / ssXX;
-  const intercept = yBar - (xBar * slope);
-  const rSquare = (ssXY ** 2) / (ssXX * ssYY);
+  const intercept = yBar - xBar * slope;
+  const rSquare = ssXY ** 2 / (ssXX * ssYY);
 
   return [slope, intercept, rSquare];
 };

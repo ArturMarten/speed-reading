@@ -1,46 +1,51 @@
 import React from 'react';
-import { Modal, Rating, TextArea, Button } from 'semantic-ui-react';
+import { fireEvent, waitForElement } from 'react-testing-library';
+import axiosMock from 'axios';
+import renderWithRedux from '../../utils/testUtils';
 
-import { Feedback } from './Feedback';
+import Feedback from './Feedback';
 
-describe('<Feedback />', () => {
-  it('renders', () => {
-    const wrapper = shallow(<Feedback feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper).to.be.present();
+it('opens and closes the modal', () => {
+  const onClose = jest.fn();
+  const { translate, queryByText, baseElement, rerender } = renderWithRedux(<Feedback open onClose={onClose} />);
+  expect(queryByText(translate('feedback.modal-header'))).not.toBeNull();
+  fireEvent.click(baseElement.querySelector('i.close.icon'));
+  expect(onClose).toHaveBeenCalledTimes(1);
+  rerender(<Feedback open={false} />);
+  expect(queryByText(translate('feedback.modal-header'))).toBeNull();
+});
+
+it('submits feedback', async () => {
+  axiosMock.post.mockResolvedValueOnce({
+    data: {
+      message: 'Problem report added',
+    },
   });
-
-  it('should render as modal', () => {
-    const wrapper = shallow(<Feedback feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(Modal)).to.have.length(1);
+  const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
+  fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
+  fireEvent.click(getByText(translate('feedback.send')));
+  await waitForElement(() => getByText(translate('success.problem-report-added')));
+  expect(axiosMock.post).toHaveBeenCalledTimes(1);
+  expect(axiosMock.post).toHaveBeenCalledWith('/feedback', {
+    userId: null,
+    message: 'test',
+    functionalityRating: 0,
+    usabilityRating: 0,
+    designRating: 0,
   });
+});
 
-  it('should not render modal when closed', () => {
-    const wrapper = shallow(<Feedback open={false} feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(Modal)).to.have.prop('open', false);
+it('shows error', async () => {
+  axiosMock.post.mockRejectedValueOnce({
+    response: {
+      data: {
+        error: 'Network Error',
+      },
+    },
   });
-
-  it('should not render modal when closed', () => {
-    const wrapper = shallow(<Feedback open feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(Modal)).to.have.prop('open', true);
-  });
-
-  it('should render modal header', () => {
-    const wrapper = shallow(<Feedback open feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(Modal.Header)).to.have.length(1);
-  });
-
-  it('should render three rating bars', () => {
-    const wrapper = shallow(<Feedback open feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(Rating)).to.have.length(3);
-  });
-
-  it('should render a textarea', () => {
-    const wrapper = shallow(<Feedback open feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(TextArea)).to.have.length(1);
-  });
-
-  it('should render button', () => {
-    const wrapper = shallow(<Feedback open feedbackStatus={{}} translate={sinon.stub()} />);
-    expect(wrapper.find(Button)).to.have.length(1);
-  });
+  const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
+  fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
+  fireEvent.click(getByText(translate('feedback.send')));
+  await waitForElement(() => getByText(translate('error.network-error')));
+  expect(axiosMock.post).toHaveBeenCalledTimes(1);
 });

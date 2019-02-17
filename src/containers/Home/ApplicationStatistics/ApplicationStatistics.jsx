@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
 import { Header, Statistic, Icon } from 'semantic-ui-react';
-import { getTranslate } from 'react-localize-redux';
 
 import * as api from '../../../api';
 import { updateObject, formatMillisecondsInHours } from '../../../shared/utility';
@@ -164,12 +162,4 @@ export class ApplicationStatistics extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  translate: getTranslate(state.locale),
-});
-
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ApplicationStatistics);
+export default ApplicationStatistics;

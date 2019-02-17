@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Modal, Icon, Grid, Header } from 'semantic-ui-react';
-import { getTranslate } from 'react-localize-redux';
 
 export class About extends Component {
   state = {};
@@ -56,12 +54,4 @@ export class About extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  translate: getTranslate(state.locale),
-});
-
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(About);
+export default About;

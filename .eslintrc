@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "airbnb"
-  ],
+  "extends": ["airbnb"],
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -9,19 +7,9 @@
     "jasmine": true,
     "mocha": true
   },
-  "globals": {
-    "shallow": true,
-    "mount": true,
-    "render": true,
-    "expect": true,
-    "sinon": true
-  },
   "rules": {
     "arrow-parens": "off",
-    "max-len": [
-      "error",
-      120
-    ],
+    "max-len": ["error", 120],
     "linebreak-style": 0,
     "react/prop-types": 0,
     "react/destructuring-assignment": 0,
@@ -40,9 +28,7 @@
     "no-console": [
       "error",
       {
-        "allow": [
-          "log"
-        ]
+        "allow": ["log"]
       }
     ]
   }

@@ -19,7 +19,7 @@ describe('Scrolling updateState', () => {
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   const textMetadata = writeText(offscreenContext, exampleText.contentState);
 
-  before(() => {
+  beforeAll(() => {
     // console.log(textMetadata);
   });
 
@@ -29,7 +29,7 @@ describe('Scrolling updateState', () => {
       marginTop: -400,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(-399);
+    expect(newState.marginTop).toEqual(-399);
   });
 
   it('increases initial state margin top by two', () => {
@@ -38,7 +38,7 @@ describe('Scrolling updateState', () => {
       marginTop: -400,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(-398);
+    expect(newState.marginTop).toEqual(-398);
   });
 
   it('increases initial state margin top by three', () => {
@@ -47,6 +47,6 @@ describe('Scrolling updateState', () => {
       marginTop: -400,
     };
     const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).to.equal(-397);
+    expect(newState.marginTop).toEqual(-397);
   });
 });

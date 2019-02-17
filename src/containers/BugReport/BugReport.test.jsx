@@ -1,98 +1,59 @@
 import React from 'react';
-import { Modal, TextArea, Button } from 'semantic-ui-react';
+import { fireEvent, waitForElement } from 'react-testing-library';
+import axiosMock from 'axios';
+import renderWithRedux from '../../utils/testUtils';
 
-import { BugReport } from './BugReport';
+import BugReport from './BugReport';
 
-describe('<BugReport />', () => {
-  it('renders', () => {
-    const wrapper = shallow(
-      <BugReport
-        open
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    expect(wrapper).to.be.present();
+it('opens and closes the modal', () => {
+  const onClose = jest.fn();
+  const { translate, queryByText, baseElement, rerender } = renderWithRedux(<BugReport open onClose={onClose} />);
+  expect(queryByText(translate('bug-report.modal-header'))).not.toBeNull();
+  fireEvent.click(baseElement.querySelector('i.close.icon'));
+  expect(onClose).toHaveBeenCalledTimes(1);
+  rerender(<BugReport open={false} />);
+  expect(queryByText(translate('bug-report.modal-header'))).toBeNull();
+});
+
+it('submits bug report', async () => {
+  axiosMock.post.mockResolvedValueOnce({
+    data: {
+      message: 'Bug report added',
+    },
   });
+  const { translate, getByText, getByLabelText } = renderWithRedux(<BugReport open />);
+  fireEvent.change(getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
+  fireEvent.click(getByText(translate('bug-report.send')));
+  await waitForElement(() => getByText(translate('success.bug-report-added')));
+  expect(axiosMock.post).toHaveBeenCalledTimes(1);
+  expect(axiosMock.post).toHaveBeenCalledWith(
+    '/bugReports',
+    expect.objectContaining({
+      userId: null,
+      description: 'test',
+      version: expect.any(String),
+      userAgent: expect.any(String),
+      platform: expect.any(String),
+      windowDimensions: [1024, 768],
+      consoleErrors: [],
+      state: expect.any(Object),
+      actions: expect.any(Array),
+      screenshot: null,
+    }),
+  );
+});
 
-  it('should contain two modals', () => {
-    const wrapper = shallow(
-      <BugReport
-        open
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    expect(wrapper.find(Modal)).to.have.length(2);
-  });
-
-  it('should render modal header', () => {
-    const wrapper = shallow(
-      <BugReport
-        open
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    expect(wrapper.find(Modal.Header)).to.have.length(1);
-  });
-
-  it('should render a textarea', () => {
-    const wrapper = shallow(
-      <BugReport
-        open
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    expect(wrapper.find(TextArea)).to.have.length(1);
-  });
-
-  it('should render submit button', () => {
-    const wrapper = shallow(
-      <BugReport
-        open
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    expect(wrapper.find(Button)).to.have.length(1);
-  });
-
-  it('should call submit on click', () => {
-    const onSubmitStub = sinon.stub();
-    const wrapper = shallow(
-      <BugReport
-        open
-        onSubmit={onSubmitStub}
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    wrapper.find(Button).simulate('click');
-    expect(onSubmitStub).to.have.been.calledWith();
-  });
-
-  it('should submit description', () => {
-    const onSubmitStub = sinon.stub();
-    const wrapper = shallow(
-      <BugReport
-        open
-        onSubmit={onSubmitStub}
-        bugReportStatus={{}}
-        translate={sinon.stub()}
-      />,
-    );
-    wrapper.setState({
-      bugReportForm: {
-        ...wrapper.state().bugReportForm,
-        description: {
-          ...wrapper.state().bugReportForm.description,
-          value: 'Some bug',
-        },
+it('shows error', async () => {
+  axiosMock.post.mockRejectedValueOnce({
+    response: {
+      data: {
+        error: 'Network Error',
       },
-    });
-    wrapper.find(Button).simulate('click');
-    expect(onSubmitStub.getCall(0).args[0].description).to.equal('Some bug');
+    },
   });
+  const { translate, getByText, getByLabelText } = renderWithRedux(<BugReport open />);
+  fireEvent.change(getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
+  fireEvent.click(getByText(translate('bug-report.send')));
+  await waitForElement(() => getByText(translate('error.network-error')));
+  expect(axiosMock.post).toHaveBeenCalledTimes(1);
 });

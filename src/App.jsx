@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from './store/actions';
 import { listenToErrors } from './utils/errorReporter';
 import Loadable from './hoc/Loadable/Loadable';
-import ResponsiveLayout from './containers/Layout/ResponsiveLayout';
+import Layout from './containers/Layout/Layout';
 import Logout from './containers/Auth/Logout';
 import { rolePermissions } from './store/reducers/profile';
 
@@ -52,10 +52,9 @@ export class App extends Component {
     const isPermittedToModifyTexts = rolePermissions[this.props.role] >= rolePermissions.editor;
     const isPermittedToManageUsers = rolePermissions[this.props.role] >= rolePermissions.teacher;
     return (
-      <ResponsiveLayout>
+      <Layout>
         <Route exact path="/" component={Home} />
-        {isPermittedToModifyTexts ?
-          <Route path="/text-entry" component={TextEntry} /> : null}
+        {isPermittedToModifyTexts ? <Route path="/text-entry" component={TextEntry} /> : null}
         <Route path="/exercise/reading-test" render={() => <TextExerciseContainer type="readingTest" />} />
         <Route path="/exercise/reading-aid" render={() => <TextExerciseContainer type="readingAid" />} />
         <Route path="/exercise/scrolling-text" render={() => <TextExerciseContainer type="scrolling" />} />
@@ -64,10 +63,9 @@ export class App extends Component {
         <Route path="/exercise/schulte-tables" render={() => <HelpExerciseContainer type="schulteTables" />} />
         <Route path="/exercise/concentration" render={() => <HelpExerciseContainer type="concentration" />} />
         <Route path="/statistics" component={Statistics} />
-        {isPermittedToManageUsers ?
-          <Route path="/manage" component={Manage} /> : null}
+        {isPermittedToManageUsers ? <Route path="/manage" component={Manage} /> : null}
         <Route path="/logout" component={Logout} />
-      </ResponsiveLayout>
+      </Layout>
     );
   }
 }
@@ -77,14 +75,19 @@ App.propTypes = {
   onTryAutoLogin: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   role: state.profile.role,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onTryAutoLogin: () => {
     dispatch(actionCreators.authCheckState());
   },
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(App),
+);
