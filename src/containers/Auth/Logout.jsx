@@ -11,7 +11,7 @@ class Logout extends Component {
   }
 
   render() {
-    return <Redirect to="/" />;
+    return this.props.path !== '/' && <Redirect to="/" />;
   }
 }
 
@@ -19,10 +19,17 @@ Logout.propTypes = {
   onLogout: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = (state) => ({
+  path: state.router.location.pathname,
+});
+
+const mapDispatchToProps = (dispatch) => ({
   onLogout: () => {
     dispatch(actionCreators.logout(null));
   },
 });
 
-export default connect(null, mapDispatchToProps)(Logout);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Logout);
