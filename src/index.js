@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createMemoryHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
 import ReactGA from 'react-ga';
+import { getTranslate } from 'react-localize-redux';
 
 // Styles
 /*
@@ -46,10 +47,11 @@ import './index.css';
 // Polyfills
 import './polyfill';
 
-// import registerServiceWorker from './registerServiceWorker';
-import { unregister } from './registerServiceWorker';
+import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';
 import App from './App';
+import UpdateMessage from './containers/Message/UpdateMessage';
+import OfflineMessage from './containers/Message/OfflineMessage';
 
 const history = createMemoryHistory({
   basename: '/~arturmar/',
@@ -59,21 +61,46 @@ const history = createMemoryHistory({
 if (process.env.NODE_ENV !== 'development') {
   ReactGA.initialize('UA-129049943-1');
   ReactGA.pageview('/');
-  history.listen(location => ReactGA.pageview(location.pathname));
+  history.listen((location) => ReactGA.pageview(location.pathname));
 }
 
 const store = configureStore(history);
 
 ReactDOM.render(
-  React.createElement(
-    Provider, { store },
-    React.createElement(
-      ConnectedRouter, { history },
-      React.createElement(App),
-    ),
-  ),
+  React.createElement(Provider, { store }, React.createElement(ConnectedRouter, { history }, React.createElement(App))),
   document.getElementById('root'),
 );
 
-// registerServiceWorker();
-unregister();
+serviceWorker.register({
+  onOffline: () => {
+    const updateMessage = document.createElement('div');
+    updateMessage.id = 'offline-message';
+    const root = document.getElementById('root');
+    root.insertBefore(updateMessage, root.firstChild);
+    ReactDOM.render(
+      React.createElement(OfflineMessage, { translate: getTranslate(store.getState().locale) }),
+      document.getElementById(updateMessage.id),
+    );
+  },
+  onUpdate: (registration) => {
+    const onUpdateHandler = () => {
+      if (!registration.waiting) {
+        // Just to ensure registration.waiting is available before calling postMessage()
+        return;
+      }
+      registration.waiting.postMessage('skipWaiting');
+    };
+
+    const updateMessage = document.createElement('div');
+    updateMessage.id = 'update-message';
+    const root = document.getElementById('root');
+    root.insertBefore(updateMessage, root.firstChild);
+    ReactDOM.render(
+      React.createElement(UpdateMessage, {
+        translate: getTranslate(store.getState().locale),
+        onUpdate: onUpdateHandler,
+      }),
+      document.getElementById(updateMessage.id),
+    );
+  },
+});

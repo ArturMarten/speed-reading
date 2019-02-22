@@ -21,23 +21,20 @@ class ExerciseSelectOption extends Component {
 
   setValue = (newValue) => {
     this.setState({ value: newValue });
-  }
+  };
 
   selectionChangeHandler = (event, data) => {
     const updatedValue = data.value;
     this.props.updateValue(updatedValue);
     this.setValue(updatedValue);
-  }
+  };
 
   render() {
     return (
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
-          <HelpPopup
-            position="right center"
-            content={this.props.description}
-          />
+          <HelpPopup position="right center" content={this.props.description} />
         </Table.Cell>
         <Table.Cell colSpan={3}>
           <Dropdown
@@ -61,18 +58,14 @@ ExerciseSelectOption.defaultProps = {
 ExerciseSelectOption.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.any,
-    text: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-  })).isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.any,
+      text: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    }),
+  ).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   updateValue: PropTypes.func.isRequired,
 };
 

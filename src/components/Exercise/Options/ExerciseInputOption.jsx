@@ -30,11 +30,11 @@ class ExerciseInputOption extends PureComponent {
       }, UPDATE_DELAY);
     }
     this.setValue(correctedValue);
-  }
+  };
 
   setValue = (newValue) => {
     this.setState({ value: newValue });
-  }
+  };
 
   changeHandler = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
@@ -46,15 +46,15 @@ class ExerciseInputOption extends PureComponent {
         this.setValue(updatedValue);
       }
     }
-  }
+  };
 
   decreaseHandler = () => {
     this.changeValue(this.state.value - this.props.step);
-  }
+  };
 
   increaseHandler = () => {
     this.changeValue(this.state.value + this.props.step);
-  }
+  };
 
   changeValue = (newValue) => {
     let updatedValue = this.state.value;
@@ -67,40 +67,29 @@ class ExerciseInputOption extends PureComponent {
     }
     this.onSubmit(updatedValue);
     this.setValue(updatedValue);
-  }
+  };
 
   keyPressHandler = (event) => {
     if (event.key === 'Enter') {
       this.onSubmit();
     }
-  }
+  };
 
   blurHandler = () => {
     this.onSubmit();
-  }
+  };
 
   render() {
     return (
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
-          <HelpPopup
-            position="right center"
-            content={this.props.description}
-          />
+          <HelpPopup position="right center" content={this.props.description} />
         </Table.Cell>
         <Table.Cell>
           <Button.Group size="mini" fluid basic>
-            <Button
-              icon="minus"
-              disabled={this.state.value <= this.props.min}
-              onClick={this.decreaseHandler}
-            />
-            <Button
-              icon="plus"
-              disabled={this.state.value >= this.props.max}
-              onClick={this.increaseHandler}
-            />
+            <Button icon="minus" disabled={this.state.value <= this.props.min} onClick={this.decreaseHandler} />
+            <Button icon="plus" disabled={this.state.value >= this.props.max} onClick={this.increaseHandler} />
           </Button.Group>
         </Table.Cell>
         <Table.Cell>
@@ -115,9 +104,7 @@ class ExerciseInputOption extends PureComponent {
             <input style={{ textAlign: 'center' }} size={5} />
           </Input>
         </Table.Cell>
-        <Table.Cell>
-          {this.props.unit}
-        </Table.Cell>
+        <Table.Cell>{this.props.unit}</Table.Cell>
       </Table.Row>
     );
   }

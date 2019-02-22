@@ -46,6 +46,8 @@ import FeedbackContainer, { Feedback } from '../containers/Feedback/Feedback';
 import ProblemReportContainer, { ProblemReport } from '../containers/ProblemReport/ProblemReport';
 import BugReportContainer, { BugReport } from '../containers/BugReport/BugReport';
 import { generateSymbols, generateStringPairs } from '../store/reducers/exercise';
+import UpdateMessage from '../containers/Message/UpdateMessage';
+import OfflineMessage from '../containers/Message/OfflineMessage';
 
 const questions = [
   {
@@ -585,3 +587,7 @@ storiesOf('Problem report', module)
       translate={translate}
     />
   ));
+
+storiesOf('Messages', module)
+  .add('UpdateMessage', () => <UpdateMessage translate={translate} />)
+  .add('OfflineMessage', () => <OfflineMessage translate={translate} />);

@@ -3,6 +3,6 @@ import renderWithRedux from './utils/testUtils';
 
 import App from './App';
 
-it('temp', () => {
+it('renders', () => {
   renderWithRedux(<App />);
 });

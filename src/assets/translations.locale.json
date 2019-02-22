@@ -1,4 +1,11 @@
 {
+  "message": {
+    "new-update-title": ["Uuendus on saadaval", "Update is available"],
+    "new-update-description": ["Hetkel on kasutusel vana versioon, probleemide vältimiseks on soovitav koheselt uuendada", " "],
+    "update": ["Uuenda", "Update"],
+    "offline-title": ["Probleemid võrguühendusega", "Problems with network connection"],
+    "offline-description": [" ", " "]
+  },
   "menu": {
     "title": ["Kiirlugemise tarkvara", "Speedreading software"],
     "home": ["Esileht", "Home"],
