@@ -24,7 +24,9 @@ coverage:
     - build
   script:
     - cp src/credentials.js.example src/credentials.js # Credentials are required
+    - npm install -g codecov
     - npm run test-coverage
+    - codecov
   artifacts:
     paths:
       - coverage/
