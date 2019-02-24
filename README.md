@@ -2,6 +2,7 @@
 
 [![pipeline status](https://gitlab.com/martensiiber/speed-reading/badges/dev/pipeline.svg)](https://gitlab.com/martensiiber/speed-reading/commits/dev)
 [![coverage report](https://gitlab.com/martensiiber/speed-reading/badges/dev/coverage.svg)](https://martensiiber.gitlab.io/speed-reading/coverage/)
+[![codecov](https://codecov.io/gl/martensiiber/speed-reading/branch/dev/graph/badge.svg)](https://codecov.io/gl/martensiiber/speed-reading)
 
 ## Running the application
 ```
