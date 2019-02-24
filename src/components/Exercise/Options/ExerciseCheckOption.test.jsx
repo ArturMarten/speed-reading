@@ -1,19 +1,18 @@
 import React from 'react';
-import { fireEvent } from 'react-testing-library';
-import renderWithRedux from '../../../utils/testUtils';
+import { render, fireEvent } from 'react-testing-library';
 
 import ExerciseCheckOption from './ExerciseCheckOption';
 
 it('calls function on change', async () => {
   const updateValue = jest.fn();
-  const { baseElement } = renderWithRedux(
+  const { container } = render(
     <table>
       <tbody>
         <ExerciseCheckOption name="OptionName" value={false} updateValue={updateValue} />
       </tbody>
     </table>,
   );
-  const input = baseElement.querySelector('input');
+  const input = container.querySelector('input');
   fireEvent.click(input);
   expect(input.value).toEqual('');
 });

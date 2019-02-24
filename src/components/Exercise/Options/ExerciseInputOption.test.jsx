@@ -1,12 +1,11 @@
 import React from 'react';
-import { fireEvent, wait } from 'react-testing-library';
-import renderWithRedux from '../../../utils/testUtils';
+import { render, fireEvent, wait } from 'react-testing-library';
 
 import ExerciseInputOption from './ExerciseInputOption';
 
 it('calls function on change', async () => {
   const updateValue = jest.fn();
-  const { baseElement } = renderWithRedux(
+  const { container } = render(
     <table>
       <tbody>
         <ExerciseInputOption
@@ -21,9 +20,9 @@ it('calls function on change', async () => {
       </tbody>
     </table>,
   );
-  const plusButton = baseElement.querySelector('button i.plus.icon');
-  const minusButton = baseElement.querySelector('button i.minus.icon');
-  const input = baseElement.querySelector('input');
+  const plusButton = container.querySelector('button i.plus.icon');
+  const minusButton = container.querySelector('button i.minus.icon');
+  const input = container.querySelector('input');
   fireEvent.click(plusButton);
   expect(input.value).toEqual('100');
   fireEvent.click(minusButton);

@@ -1,12 +1,11 @@
 import React from 'react';
-import { fireEvent } from 'react-testing-library';
-import renderWithRedux from '../../../utils/testUtils';
+import { render, fireEvent } from 'react-testing-library';
 
 import ExerciseSelectOption from './ExerciseSelectOption';
 
 it('calls function on change', async () => {
   const updateValue = jest.fn();
-  const { getByText } = renderWithRedux(
+  const { getByText } = render(
     <table>
       <tbody>
         <ExerciseSelectOption

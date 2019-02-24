@@ -16,11 +16,9 @@ export class BarChart extends Component {
   state = {
     width: this.props.width - margin.left - margin.right,
     height: this.props.height - margin.top - margin.bottom,
-    widthScale: scaleBand()
-      .range([0, this.props.width - margin.left - margin.right]),
-    heightScale: scaleLinear()
-      .range([0, this.props.height - margin.top - margin.bottom]),
-  }
+    widthScale: scaleBand().range([0, this.props.width - margin.left - margin.right]),
+    heightScale: scaleLinear().range([0, this.props.height - margin.top - margin.bottom]),
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { widthScale, heightScale } = prevState;
@@ -28,16 +26,12 @@ export class BarChart extends Component {
     const width = nextProps.width - margin.left - margin.right;
     const height = nextProps.height - margin.top - margin.bottom;
 
-    const xValues = nextProps.data.map(d => d.x);
-    const yValues = nextProps.data.map(d => d.y);
+    const xValues = nextProps.data.map((d) => d.x);
+    const yValues = nextProps.data.map((d) => d.y);
 
-    widthScale
-      .domain(range(Math.min(...xValues), Math.max(...xValues) + 1))
-      .range([0, width]);
+    widthScale.domain(range(Math.min(...xValues), Math.max(...xValues) + 1)).range([0, width]);
 
-    heightScale
-      .domain([max(yValues), 0])
-      .range([0, height]);
+    heightScale.domain([max(yValues), 0]).range([0, height]);
 
     return {
       ...prevState,
@@ -50,35 +44,23 @@ export class BarChart extends Component {
 
   render() {
     const { data } = this.props;
-    const {
-      widthScale,
-      heightScale,
-      height,
-      width,
-    } = this.state;
+    const { widthScale, heightScale, height, width } = this.state;
 
     return (
       <svg width={this.props.width} height={this.props.height}>
         <text transform="translate(0, 10)" fontWeight="bold">
           {this.props.title}
         </text>
-        <g
-          transform={`translate(${margin.left}, ${margin.top})`}
-        >
-          <g
-            ref={node => select(node).call(axisLeft(heightScale).tickFormat(format('.0f')))}
-          />
+        <g transform={`translate(${margin.left}, ${margin.top})`}>
+          <g ref={(node) => select(node).call(axisLeft(heightScale).tickFormat(format('.0f')))} />
           <text transform="rotate(-90)" y="-30" x={-height / 2} textAnchor="middle">
             {this.props.yLabel}
           </text>
-          <g
-            transform={`translate(0, ${height})`}
-            ref={node => select(node).call(axisBottom(widthScale))}
-          />
+          <g transform={`translate(0, ${height})`} ref={(node) => select(node).call(axisBottom(widthScale))} />
           <text y={height + 30} x={width / 2} textAnchor="middle">
             {this.props.xLabel}
           </text>
-          {data.map(d => (
+          {data.map((d) => (
             <rect
               key={d.id}
               fill={this.props.fill || 'black'}
