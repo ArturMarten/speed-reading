@@ -47,7 +47,7 @@
     "prop-types": "^15.7.2",
     "react-scripts": "^2.1.5",
     "react-test-renderer": "^16.7.0",
-    "react-testing-library": "^5.9.0",
+    "react-testing-library": "^6.0.0",
     "replace-in-file": "^3.4.3",
     "serve": "^10.1.2",
     "source-map-explorer": "^1.7.0",
