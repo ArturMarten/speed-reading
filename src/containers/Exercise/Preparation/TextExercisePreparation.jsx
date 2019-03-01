@@ -29,78 +29,73 @@ export class TextExercisePreparation extends Component {
 
   saveChangeHandler = (event, data) => {
     this.setState({ saveStatistics: data.checked });
-  }
+  };
 
   ownTextEditorToggleHandler = () => {
     this.setState({ ownTextEditorOpened: !this.state.ownTextEditorOpened });
-  }
+  };
 
   textSelectionToggleHandler = () => {
     this.setState({ textSelectionOpened: !this.state.textSelectionOpened });
-  }
+  };
 
   textPreparationHandler = () => {
     this.props.onExercisePrepare(this.state.saveStatistics, this.props.exerciseOptions, this.props.selectedText);
-  }
+  };
 
   modificationChangeHandler = (event, data) => {
     this.props.onModificationChange(data.value);
-  }
+  };
 
   exerciseOptionsResetHandler = () => {
     this.props.onExerciseOptionsReset();
-  }
+  };
 
   textOptionsResetHandler = () => {
     this.props.onTextOptionsReset();
-  }
+  };
 
   render() {
-    let selectedText = (
-      <b style={{ color: 'red' }}>
-        {this.props.translate('exercise-preparation.text-not-selected')}
-      </b>);
+    let selectedText = <b style={{ color: 'red' }}>{this.props.translate('exercise-preparation.text-not-selected')}</b>;
     if (this.props.selectedText && this.props.selectedText.id) {
       selectedText = (
         <div>
           <div>
             {`${this.props.translate('exercise-preparation.title')}: `}
-            <b>
-              {this.props.selectedText.title}
-            </b>
+            <b>{this.props.selectedText.title}</b>
           </div>
           <div>
             <span>
               {`${this.props.translate('exercise-preparation.author')}: `}
-              <b>
-                {this.props.selectedText.author}
-              </b>
+              <b>{this.props.selectedText.author}</b>
             </span>
             <span>
               {` ${this.props.translate('exercise-preparation.questions-author')}: `}
               <b>
-                {this.props.selectedText.questionsAuthor ?
-                  this.props.selectedText.questionsAuthor : this.props.translate('exercise-preparation.questions-author-missing')}
+                {this.props.selectedText.questionsAuthor
+                  ? this.props.selectedText.questionsAuthor
+                  : this.props.translate('exercise-preparation.questions-author-missing')}
               </b>
             </span>
           </div>
           <div>
             {`${this.props.translate('exercise-preparation.reference')}: `}
             <b>
-              {this.props.selectedText.reference ?
-                this.props.selectedText.reference : this.props.translate('exercise-preparation.reference-missing')}
+              {this.props.selectedText.reference
+                ? this.props.selectedText.reference
+                : this.props.translate('exercise-preparation.reference-missing')}
             </b>
           </div>
         </div>
       );
     } else if (this.props.selectedText) {
-      selectedText = (
-        <b>
-          {this.props.translate('exercise-preparation.own-text')}
-        </b>);
+      selectedText = <b>{this.props.translate('exercise-preparation.own-text')}</b>;
     }
-    const modificationOptions = this.props.modificationOptions
-      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`modification.${option.value}`) }));
+    const modificationOptions = this.props.modificationOptions.map((option, index) => ({
+      ...option,
+      key: index,
+      text: this.props.translate(`modification.${option.value}`),
+    }));
     const startCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.start-automatically')}
@@ -108,7 +103,8 @@ export class TextExercisePreparation extends Component {
           position="left center"
           content={this.props.translate('exercise-preparation.start-automatically-description')}
         />
-      </Fragment>);
+      </Fragment>
+    );
     const saveCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.save-statistics')}
@@ -116,15 +112,14 @@ export class TextExercisePreparation extends Component {
           position="left center"
           content={this.props.translate('exercise-preparation.save-statistics-description')}
         />
-      </Fragment>);
+      </Fragment>
+    );
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Grid stackable>
           <Grid.Row verticalAlign="bottom">
             <Grid.Column width={10}>
-              <Header as="h2">
-                {this.props.translate(`exercises.title-${this.props.type}`)}
-              </Header>
+              <Header as="h2">{this.props.translate(`exercises.title-${this.props.type}`)}</Header>
             </Grid.Column>
             <Grid.Column width={6}>
               {this.props.translate('exercise-preparation.exercise-modification')}
@@ -145,9 +140,7 @@ export class TextExercisePreparation extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={13}>
-              <ExerciseDescription
-                type={this.props.type}
-              />
+              <ExerciseDescription type={this.props.type} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
@@ -167,21 +160,19 @@ export class TextExercisePreparation extends Component {
                   <Button
                     primary
                     onClick={this.textSelectionToggleHandler}
-                    content={this.props.selectedText ?
-                      this.props.translate('exercise-preparation.change-text') :
-                      this.props.translate('exercise-preparation.select-text')}
+                    content={
+                      this.props.selectedText
+                        ? this.props.translate('exercise-preparation.change-text')
+                        : this.props.translate('exercise-preparation.select-text')
+                    }
                   />
                 </Button.Group>
-                {this.state.ownTextEditorOpened ?
-                  <OwnTextEditor
-                    open={this.state.ownTextEditorOpened}
-                    onClose={this.ownTextEditorToggleHandler}
-                  /> : null}
-                {this.state.textSelectionOpened ?
-                  <TextSelection
-                    open={this.state.textSelectionOpened}
-                    onClose={this.textSelectionToggleHandler}
-                  /> : null}
+                {this.state.ownTextEditorOpened ? (
+                  <OwnTextEditor open={this.state.ownTextEditorOpened} onClose={this.ownTextEditorToggleHandler} />
+                ) : null}
+                {this.state.textSelectionOpened ? (
+                  <TextSelection open={this.state.textSelectionOpened} onClose={this.textSelectionToggleHandler} />
+                ) : null}
               </Segment>
             </Grid.Column>
             <Grid.Column floated="right" width={3} verticalAlign="bottom">
@@ -196,10 +187,7 @@ export class TextExercisePreparation extends Component {
                 {this.props.translate('exercise-preparation.proceed')}
                 <Icon name="right chevron" />
               </Button>
-              <Checkbox
-                style={{ float: 'right', margin: '2px' }}
-                label={{ children: startCheckboxLabel }}
-              />
+              <Checkbox style={{ float: 'right', margin: '2px' }} label={{ children: startCheckboxLabel }} />
               <Checkbox
                 checked={this.state.saveStatistics}
                 onChange={this.saveChangeHandler}
@@ -208,7 +196,7 @@ export class TextExercisePreparation extends Component {
               />
             </Grid.Column>
           </Grid.Row>
-          {this.props.info.exerciseSettingsInfo ?
+          {this.props.info.exerciseSettingsInfo ? (
             <Grid.Row columns={1}>
               <Grid.Column>
                 <Message info onDismiss={this.props.onExerciseSettingsInfoDismiss}>
@@ -216,7 +204,8 @@ export class TextExercisePreparation extends Component {
                   {this.props.translate('exercise-preparation.info-content')}
                 </Message>
               </Grid.Column>
-            </Grid.Row> : null}
+            </Grid.Row>
+          ) : null}
         </Grid>
         <Grid stackable>
           <Grid.Row columns={2}>
@@ -242,25 +231,25 @@ export class TextExercisePreparation extends Component {
                     position="bottom center"
                   />
                 </Header>
-                {this.props.visibleSpeedOptions.length !== 0 && this.props.info.speedChangeInfo ?
+                {this.props.visibleSpeedOptions.length !== 0 && this.props.info.speedChangeInfo ? (
                   <Message info onDismiss={this.props.onSpeedChangeInfoDismiss}>
                     {this.props.translate('exercise-preparation.keyboard-keys')}
                     <Icon style={{ marginRight: 0 }} size="large" color="black" name="plus square outline" />
                     {this.props.translate('exercise-preparation.and')}
                     <Icon style={{ marginRight: 0 }} size="large" color="black" name="minus square outline" />
                     {this.props.translate('exercise-preparation.can-be-used')}
-                  </Message> : null}
-                {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
-                  <p>
-                    {this.props.translate('exercise-preparation.exercise-options-missing')}
-                  </p> :
+                  </Message>
+                ) : null}
+                {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ? (
+                  <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p>
+                ) : (
                   <table>
                     <tbody>
                       <SpeedOptions />
                       <ExerciseOptions />
                     </tbody>
                   </table>
-                }
+                )}
               </Segment>
             </Grid.Column>
             <Grid.Column>
@@ -285,23 +274,20 @@ export class TextExercisePreparation extends Component {
                     position="bottom center"
                   />
                 </Header>
-                {this.props.visibleTextOptions.length === 0 ?
-                  <p>
-                    {this.props.translate('exercise-preparation.text-options-missing')}
-                  </p> :
+                {this.props.visibleTextOptions.length === 0 ? (
+                  <p>{this.props.translate('exercise-preparation.text-options-missing')}</p>
+                ) : (
                   <table>
                     <tbody>
                       <TextOptions exerciseType={this.props.type} />
                     </tbody>
                   </table>
-                }
+                )}
               </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <TextExercisePreview
-          exerciseType={this.props.type}
-        />
+        <TextExercisePreview exerciseType={this.props.type} />
         {/*
         <TextPreview />
         */}
@@ -310,7 +296,7 @@ export class TextExercisePreparation extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   info: state.info,
   selectedText: state.text.selectedText,
   exerciseModification: state.exercise.modification,
@@ -323,7 +309,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onExerciseSettingsInfoDismiss: () => {
     dispatch(actionCreators.dismissExerciseSettingsInfo());
   },
@@ -344,4 +330,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExercisePreparation);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TextExercisePreparation);

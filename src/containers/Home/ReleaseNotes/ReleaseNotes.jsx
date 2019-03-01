@@ -15,9 +15,7 @@ class ReleaseNotes extends Component {
           <List verticalAlign="middle" bulleted>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.13 (arendamisel)
-                </List.Header>
+                <List.Header>Versioon 5.1.14 (arendamisel)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Keskendumise harjutuse statistika</List.Item>
@@ -27,9 +25,17 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.12 (06.02.2019)
-                </List.Header>
+                <List.Header>Versioon 5.1.13 (25.02.2019)</List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Uuendamise protsessi täiustused</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>Versioon 5.1.12 (06.02.2019)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Schulte tabeli suuruse valik</List.Item>
@@ -40,9 +46,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.11 (01.01.2019)
-                </List.Header>
+                <List.Header>Versioon 5.1.11 (01.01.2019)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Lisatud lünkülesannete vastuste hindamine</List.Item>
@@ -53,9 +57,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.10 (02.12.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.10 (02.12.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Grupi statistika täiendused</List.Item>
@@ -66,9 +68,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.9 (12.11.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.9 (12.11.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Lisatud statistika ajavahemiku valik</List.Item>
@@ -79,9 +79,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.8 (05.11.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.8 (05.11.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Lisatud grupi keskmiste statistika</List.Item>
@@ -93,9 +91,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.7 (22.10.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.7 (22.10.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Täiendused tekstide valikul</List.Item>
@@ -108,9 +104,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.6 (08.10.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.6 (08.10.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Harjutuse sätete salvestamine</List.Item>
@@ -121,9 +115,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.5 (01.10.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.5 (01.10.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Täiendused kasutajaprofiilidega</List.Item>
@@ -134,9 +126,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.4 (24.09.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.4 (24.09.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Lisatud võimalus teksti probleemide teatamiseks</List.Item>
@@ -151,9 +141,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.3 (17.09.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.3 (17.09.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Teksti huvitavuse hindamine</List.Item>
@@ -165,17 +153,13 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.2 (29.08.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.2 (29.08.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Täiendused teksti keerukuse hindamisel</List.Item>
                     <List.Item>
                       Serverisse lisatud võimalus&nbsp;
-                      <a href="http://prog.keeleressursid.ee/abstraktsus/">
-                        teksti abstraktsuse hindamiseks
-                      </a>
+                      <a href="http://prog.keeleressursid.ee/abstraktsus/">teksti abstraktsuse hindamiseks</a>
                     </List.Item>
                     <List.Item>Vigade parandused</List.Item>
                   </List.List>
@@ -184,9 +168,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1.1 (30.06.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1.1 (30.06.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Graafikule animatsioonide lisamine</List.Item>
@@ -197,9 +179,7 @@ class ReleaseNotes extends Component {
             </List.Item>
             <List.Item>
               <List.Content>
-                <List.Header>
-                  Versioon 5.1 (07.06.2018)
-                </List.Header>
+                <List.Header>Versioon 5.1 (07.06.2018)</List.Header>
                 <List.Description>
                   <List.List>
                     <List.Item>Lisatud graafikud omandamiskiirusele ja tasemele</List.Item>

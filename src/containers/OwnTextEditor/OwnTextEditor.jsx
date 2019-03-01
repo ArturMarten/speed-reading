@@ -15,6 +15,13 @@ const initialState = {
 export class OwnTextEditor extends Component {
   state = { ...initialState };
 
+  componentDidMount() {
+    const { selectedText } = this.props;
+    if (selectedText && !selectedText.id) {
+      this.textEditorRef.setContent(this.props.selectedText.contentState);
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.selectStatus.loading && !this.props.selectStatus.loading && this.props.selectStatus.error === null) {
       this.props.onClose();
@@ -29,7 +36,7 @@ export class OwnTextEditor extends Component {
       contentState: textEditorComponent.getRawContent(),
     };
     this.props.onOwnTextSelect(selectedText);
-  }
+  };
 
   textAnalysisToggleHandler = (event) => {
     stopPropagation(event);
@@ -45,14 +52,12 @@ export class OwnTextEditor extends Component {
       textAnalysisComponent.setText(text);
     }
     this.setState({ textAnalysisOpened: !this.state.textAnalysisOpened });
-  }
+  };
 
   render() {
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('own-text-editor.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('own-text-editor.modal-header')}</Modal.Header>
         {/*
         <Message
           warning
@@ -62,19 +67,19 @@ export class OwnTextEditor extends Component {
         */}
         <Modal.Content>
           <TextEditor
-            ref={(ref) => { this.textEditorRef = ref; }}
+            ref={(ref) => {
+              this.textEditorRef = ref;
+            }}
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            primary
-            type="button"
-            onClick={this.textAnalysisToggleHandler}
-          >
+          <Button primary type="button" onClick={this.textAnalysisToggleHandler}>
             {this.props.translate('own-text-editor.analyze-text')}
           </Button>
           <TextAnalysis
-            ref={(ref) => { this.textAnalysisRef = ref; }}
+            ref={(ref) => {
+              this.textAnalysisRef = ref;
+            }}
             open={this.state.textAnalysisOpened}
             onClose={this.textAnalysisToggleHandler}
           />
@@ -93,12 +98,13 @@ export class OwnTextEditor extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
+  selectedText: state.text.selectedText,
   selectStatus: state.text.selectStatus,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onAnalyzeText: (textData) => {
     dispatch(actionCreators.analyzeText(textData));
   },
@@ -107,4 +113,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnTextEditor);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OwnTextEditor);

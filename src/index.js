@@ -83,11 +83,20 @@ serviceWorker.register({
     );
   },
   onUpdate: (registration) => {
+    ReactGA.event({
+      category: 'Service worker',
+      action: 'Installed an update',
+    });
+
     const onUpdateHandler = () => {
       if (!registration.waiting) {
         // Just to ensure registration.waiting is available before calling postMessage()
         return;
       }
+      ReactGA.event({
+        category: 'User',
+        action: 'Applied installed update',
+      });
       registration.waiting.postMessage('skipWaiting');
     };
 

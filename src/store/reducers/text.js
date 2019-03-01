@@ -161,7 +161,6 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SELECT_OWN_TEXT_SUCCEEDED: {
       const updatedText = updateObject(action.payload, {
         contentState: convertFromRaw(action.payload.contentState),
-        keywords: [],
       });
       return updateObject(state, {
         selectedText: updatedText,
@@ -200,29 +199,29 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.ANALYZE_TEXT_SUCCEEDED: {
       const analysis = action.payload;
-      const {
-        wordLengths,
-        sentenceLengths,
-        wordTypeCounts,
-      } = analysis;
+      const { wordLengths, sentenceLengths, wordTypeCounts } = analysis;
 
       const updatedWordLengths = [];
-      Object.keys(wordLengths).sort((a, b) => a - b).forEach((wordLength, index) => {
-        updatedWordLengths.push({
-          id: index,
-          x: +wordLength,
-          y: wordLengths[wordLength],
+      Object.keys(wordLengths)
+        .sort((a, b) => a - b)
+        .forEach((wordLength, index) => {
+          updatedWordLengths.push({
+            id: index,
+            x: +wordLength,
+            y: wordLengths[wordLength],
+          });
         });
-      });
 
       const updatedSentenceLengths = [];
-      Object.keys(sentenceLengths).sort((a, b) => a - b).forEach((sentenceLength, index) => {
-        updatedSentenceLengths.push({
-          id: index,
-          x: +sentenceLength,
-          y: sentenceLengths[sentenceLength],
+      Object.keys(sentenceLengths)
+        .sort((a, b) => a - b)
+        .forEach((sentenceLength, index) => {
+          updatedSentenceLengths.push({
+            id: index,
+            x: +sentenceLength,
+            y: sentenceLengths[sentenceLength],
+          });
         });
-      });
 
       const updatedWordTypeCounts = [];
       Object.keys(wordTypeCounts).forEach((wordType, index) => {
