@@ -1,7 +1,10 @@
 {
   "message": {
     "new-update-title": ["Uuendus on saadaval", "Update is available"],
-    "new-update-description": ["Hetkel on kasutusel vana versioon, probleemide vältimiseks on soovitav koheselt uuendada", " "],
+    "new-update-description": [
+      "Hetkel on kasutusel vana versioon, probleemide vältimiseks on soovitav koheselt uuendada",
+      " "
+    ],
     "update": ["Uuenda", "Update"],
     "offline-title": ["Probleemid võrguühendusega", "Problems with network connection"],
     "offline-description": [" ", " "]
@@ -82,7 +85,10 @@
     "type-text": ["Probleem tekstiga", "Problem with text"],
     "type-other": ["Muu probleem", "Other problem"],
     "input-text-title": ["Teksti pealkiri", "Text title"],
-    "input-text-title-placeholder": ["Sisesta probleemse teksti pealkiri siia...", "Insert the title of problematic text here..."],
+    "input-text-title-placeholder": [
+      "Sisesta probleemse teksti pealkiri siia...",
+      "Insert the title of problematic text here..."
+    ],
     "textarea-description": ["Probleemi kirjeldus", "Problem description"],
     "textarea-placeholder": ["Sisesta probleemi kirjeldus siia...", "Insert problem description here..."],
     "screenshot-alt": ["Ekraanipilt", "Screenshot"],
@@ -106,12 +112,24 @@
     "about": ["Tarkvara kohta", "About software"],
     "user-manual": ["Kasutusjuhend", "User manual (only in Estonian)"],
     "problem-report-title": ["Probleem mõne tekstiga?", "Problem with some text?"],
-    "problem-report-content": ["Vajutage menüüs olevale hüüumärgiga kolmnurgal ja andke sellest teada", "Click on bug icon in the menu and report immediately"],
+    "problem-report-content": [
+      "Vajutage menüüs olevale hüüumärgiga kolmnurgal ja andke sellest teada",
+      "Click on bug icon in the menu and report immediately"
+    ],
     "bug-report-title": ["Leidsite vea?", "Found a bug?"],
-    "bug-report-content": ["Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt", "Click on bug icon in the menu and report immediately"],
+    "bug-report-content": [
+      "Vajutage menüüs olevale putuka ikoonile ja teatage sellest koheselt",
+      "Click on bug icon in the menu and report immediately"
+    ],
     "mobile-use-title": ["Mobiilsed seadmed on osaliselt toetatud", "Mobile devices are partially compatible"],
-    "mobile-use-content": ["Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.", "Bugs may occur. Performance issues with slower devices."],
-    "supported": ["Lugemistekstide sisestamist on toetanud Tartu Ülikool.", "Entering the reading texts has been supported by University of Tartu"],
+    "mobile-use-content": [
+      "Võib esineda vigu. Jõudlusprobleemid aeglasemate seadmetega.",
+      "Bugs may occur. Performance issues with slower devices."
+    ],
+    "supported": [
+      "Lugemistekstide sisestamist on toetanud Tartu Ülikool.",
+      "Entering the reading texts has been supported by University of Tartu"
+    ],
     "project": ["Projekt", "Project"],
     "gpl-3-license": ["GPL-3 litsents", "GPL-3 license"]
   },
@@ -123,7 +141,10 @@
     "contributed-creatively": ["Loovalt panustasid", "Contribute creatively"],
     "contributed-creatively-names": ["prof. Jaan Mikk ja Sven Aller", "prof. Jaan Mikk and Sven Aller"],
     "contributed-texts": ["Lugemistekstidega aitasid", "Helped with reading texts"],
-    "contributed-texts-names": ["Enel Tubin, Kirsika-Marian Bazilenko ja Ilona Võik", "Enel Tubin, Kirsika-Marian Bazilenko and Ilona Võik"],
+    "contributed-texts-names": [
+      "Enel Tubin, Kirsika-Marian Bazilenko ja Ilona Võik",
+      "Enel Tubin, Kirsika-Marian Bazilenko and Ilona Võik"
+    ],
     "place": ["Tartu Ülikool", "University of Tartu"],
     "copyright": ["Autoriõigustega kaitstud.", "Copyright."]
   },
@@ -198,7 +219,7 @@
   "text-entry": {
     "title": ["Tekstide sisestamine", "Text entry"],
     "description": [
-      "Siin saab lisada tekste lugemisharjutustes kasutamiseks. Lisatud tekst salvestatakse ja muutub teistele kasutajatele nähtavaks.", 
+      "Siin saab lisada tekste lugemisharjutustes kasutamiseks. Lisatud tekst salvestatakse ja muutub teistele kasutajatele nähtavaks.",
       "Here you can add texts for reading exercises. Added text is saved and becomes visible to other users."
     ],
     "new-text": ["Uus tekst", "New text"],
@@ -213,12 +234,18 @@
     "text-collection-placeholder": ["Teksti kogumik", "Text collection"],
     "text-collection-not-set": ["Määramata", "Not set"],
     "text-editor": ["Toimetaja", "Editor"],
-    "text-editor-description": ["Isik, kes kohandas ja sisestas lugemisteksti ning küsimused", "Person, who customized and entered reading text and questions"],
+    "text-editor-description": [
+      "Isik, kes kohandas ja sisestas lugemisteksti ning küsimused",
+      "Person, who customized and entered reading text and questions"
+    ],
     "text-editor-placeholder": ["Teksti toimetaja", "Text editor"],
     "text-questions-author": ["Küsimuste autor", "Questions author"],
     "text-questions-author-placeholder": ["Küsimuste autor", "Questions author"],
     "text-reference": ["Ilmumisandmed", "Reference"],
-    "text-reference-description": ["Originaalteksti kirjastus, avaldamise koht, aasta, veebiaadress", "Original text publisher, place, year, web address"],
+    "text-reference-description": [
+      "Originaalteksti kirjastus, avaldamise koht, aasta, veebiaadress",
+      "Original text publisher, place, year, web address"
+    ],
     "text-reference-placeholder": ["Teksti ilmumisandmed", "Text reference"],
     "text-input": ["Tekst", "Text"],
     "text-complexity": ["Keerukus", "Complexity"],
@@ -230,7 +257,10 @@
   },
   "text-editor": {
     "warning-title": ["Tekstile stiili lisamine", "Text styling"],
-    "warning-content": ["Hetkel on toetatud vaid rasvane ning kaldkirja stiil", "Bold and italic styles are currently supported"],
+    "warning-content": [
+      "Hetkel on toetatud vaid rasvane ning kaldkirja stiil",
+      "Bold and italic styles are currently supported"
+    ],
     "bold": ["Rasvane", "Bold"],
     "italic": ["Kaldkirjas", "Italic"],
     "header-1": ["Pealkiri 1", "Heading 1"],
@@ -326,27 +356,63 @@
     "goal": ["Ülesanne", "Goal"],
     "shortkeys": ["Kiirklahvid", "Shortkeys"],
     "title-readingTest": ["Lugemistest", "Reading test"],
-    "description-readingTest": ["Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga. Parema ja vasaku nooleklahviga saab liikuda lehtede vahel.", "This test allows to measure your reading speed with normal text. Left and right arrow keys can be used to change pages."],
+    "description-readingTest": [
+      "Selle testiga saab mõõta oma lugemiskiirust tavalise tekstiga. Parema ja vasaku nooleklahviga saab liikuda lehtede vahel.",
+      "This test allows to measure your reading speed with normal text. Left and right arrow keys can be used to change pages."
+    ],
     "goal-readingTest": ["Lugege teksti oma normaalse lugemisekiirusega.", "Read text with normal reading speed."],
     "title-readingAid": ["Lugemise soodustaja", "Reading aid"],
-    "description-readingAid": ["See harjutus vähendab tagasivaatamisi ja kiirendab lugemist.", "This exercise decreases regressions and increase reading speed."],
-    "goal-readingAid": ["Valige lugemiskiirus 20 – 40% suurem oma tavakiirusest. Lugege teksti püüdes liikuda pilgujuhtija kiirusega.", "Choose reading speed 20% to 40% higher than normal reading speed. Read text and try to keep up with moving cursor"],
+    "description-readingAid": [
+      "See harjutus vähendab tagasivaatamisi ja kiirendab lugemist.",
+      "This exercise decreases regressions and increase reading speed."
+    ],
+    "goal-readingAid": [
+      "Valige lugemiskiirus 20 – 40% suurem oma tavakiirusest. Lugege teksti püüdes liikuda pilgujuhtija kiirusega.",
+      "Choose reading speed 20% to 40% higher than normal reading speed. Read text and try to keep up with moving cursor"
+    ],
     "title-scrolling": ["Keriva teksti harjutus", "Scrolling text exercise"],
-    "description-scrolling": ["See harjutus vähendab tagasivaatamisi ehk regressioone.", "This exercise decreases regressions."],
-    "goal-scrolling": ["Valige lugemiskiirus 20 – 40% suurem oma tavakiirusest. Lugege teksti kerimise kiirusel.", "Choose reading speed 20% to 40% higher than normal reading speed. Read text at scrolling speed."],
+    "description-scrolling": [
+      "See harjutus vähendab tagasivaatamisi ehk regressioone.",
+      "This exercise decreases regressions."
+    ],
+    "goal-scrolling": [
+      "Valige lugemiskiirus 20 – 40% suurem oma tavakiirusest. Lugege teksti kerimise kiirusel.",
+      "Choose reading speed 20% to 40% higher than normal reading speed. Read text at scrolling speed."
+    ],
     "title-disappearing": ["Kustuva teksti harjutus", "Disappearing text exercise"],
-    "description-disappearing": ["See harjutus välistab tagasivaatamised ehk regressioonid.", "This exercise eliminates regressions."],
+    "description-disappearing": [
+      "See harjutus välistab tagasivaatamised ehk regressioonid.",
+      "This exercise eliminates regressions."
+    ],
     "goal-disappearing": ["Lugege teksti kiiremini kui see ära kaob.", "Read text faster than it disappears."],
     "title-wordGroups": ["Sõnarühmade harjutus", "Word group exercise"],
-    "description-wordGroups": ["See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.", "This exercise increases perceptual span, decreases fixation time and eliminates regressions."],
+    "description-wordGroups": [
+      "See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.",
+      "This exercise increases perceptual span, decreases fixation time and eliminates regressions."
+    ],
     "goal-wordGroups": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
     "title-schulteTables": ["Schulte tabelite harjutus", "Schulte tables exercise"],
-    "description-schulteTables": ["See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.", "This exercise helps to increase perceptual span and develop concentration."],
-    "goal-schulteTables": ["Jälgides tabeli keskel olevat punast täppi, leida kõik sümbolid kasvavas või kahanevas järjestuses.", "By looking at the red dot in the middle of the table, find all symbols in ascending or descending order."],
+    "description-schulteTables": [
+      "See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.",
+      "This exercise helps to increase perceptual span and develop concentration."
+    ],
+    "goal-schulteTables": [
+      "Jälgides tabeli keskel olevat punast täppi, leida kõik sümbolid kasvavas või kahanevas järjestuses.",
+      "By looking at the red dot in the middle of the table, find all symbols in ascending or descending order."
+    ],
     "title-concentration": ["Keskendumise harjutus", "Concentration exercise"],
-    "description-concentration": ["See harjutus aitab arendada keskendumist.", "This exercise helps to develop concentration."],
-    "goal-concentration": ["Vaadata kõrvuti olevaid sümbolite gruppe ja otsustada, kas need on identsed või mitte.", "Look at two symbol groups side-by-side and decide whether they are identical or not."],
-    "shortkeys-concentration": ["Klahvidega + ja - ning vasaku ja parema nooreklahviga saab vastata. Backspace'iga saab kustutada eelmise vastuse. Üles ja alla nooleklahvidega saab liigutada valitud gruppi.", "Keyboard keys + and -, left and right arrow keys can be used to answer. Backspace allows to remove last answer. Up and down arrow can be used to move currently selected group."]
+    "description-concentration": [
+      "See harjutus aitab arendada keskendumist.",
+      "This exercise helps to develop concentration."
+    ],
+    "goal-concentration": [
+      "Vaadata kõrvuti olevaid sümbolite gruppe ja otsustada, kas need on identsed või mitte.",
+      "Look at two symbol groups side-by-side and decide whether they are identical or not."
+    ],
+    "shortkeys-concentration": [
+      "Klahvidega + ja - ning vasaku ja parema nooreklahviga saab vastata. Backspace'iga saab kustutada eelmise vastuse. Üles ja alla nooleklahvidega saab liigutada valitud gruppi.",
+      "Keyboard keys + and -, left and right arrow keys can be used to answer. Backspace allows to remove last answer. Up and down arrow can be used to move currently selected group."
+    ]
   },
   "modification": {
     "default": ["Vaikimisi", "Default"],
@@ -368,9 +434,15 @@
     "exercise-modification-description": ["Harjutuse erikuju", "Exercise alternation"],
     "proceed": ["Edasi", "Proceed"],
     "start-automatically": ["Alusta automaatselt", "Start automatically"],
-    "start-automatically-description": ["Märkimisel algab harjutus kohe peale \"Edasi\" vajutamist", "By ticking checkbox, the exercise starts right after clicking \"Proceed\""],
+    "start-automatically-description": [
+      "Märkimisel algab harjutus kohe peale \"Edasi\" vajutamist",
+      "By ticking checkbox, the exercise starts right after clicking \"Proceed\""
+    ],
     "save-statistics": ["Salvesta statistikas", "Save statistics"],
-    "save-statistics-description": ["Märkimisel harjutuse tulemus salvestatakse", "By ticking checkbox, the exercise result will be recorded"],
+    "save-statistics-description": [
+      "Märkimisel harjutuse tulemus salvestatakse",
+      "By ticking checkbox, the exercise result will be recorded"
+    ],
     "text-selection": ["Teksti valik", "Text selection"],
     "text-selected": ["Valitud tekst", "Text selected"],
     "title": ["Pealkiri", "Title"],
@@ -387,7 +459,10 @@
     "or": ["või", "or"],
     "select-text": ["Vali tekst", "Choose text"],
     "change-text": ["Vali muu tekst", "Choose other text"],
-    "info-content": ["Enne harjutusega alustamist saab muuta sätteid, et muuta harjutus endale sobivamaks", "Before starting the exercise you can change the settings to make exercise more comfortable"],
+    "info-content": [
+      "Enne harjutusega alustamist saab muuta sätteid, et muuta harjutus endale sobivamaks",
+      "Before starting the exercise you can change the settings to make exercise more comfortable"
+    ],
     "reset": ["Algväärtusta", "Reset"],
     "exercise-options": ["Harjutuse sätted", "Exercise options"],
     "reset-exercise-options": ["Algväärtusta harjutuse sätted", "Reset exercise options"],
@@ -429,7 +504,10 @@
     "characters-per-second": ["tähemärki sekundis", "characters per second"],
     "rate-text-interestingness": ["Hinda teksti huvitavust", "Rate text interestingness"],
     "optional": ["valikuline", "optional"],
-    "rate-text-interestingness-description": ["1 täht - väga igav, 10 tähte - väga huvitav", "1 star - very boring, 10 stars - very interesting"],
+    "rate-text-interestingness-description": [
+      "1 täht - väga igav, 10 tähte - väga huvitav",
+      "1 star - very boring, 10 stars - very interesting"
+    ],
     "proceed": ["Jätka testiga", "Proceed with test"],
     "end": ["Lõpeta", "Finish"]
   },
@@ -446,7 +524,10 @@
   },
   "text-exercise-question-test": {
     "title": ["Teksti omandamistaseme kontroll", "Text comprehension test"],
-    "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned küsimused või lünkülesanded. Ainult üks vastusevariant on õige.", "Text comprehension is tested here. Some questions and blank exercises about read text are asked. There is only one correct answer."],
+    "description": [
+      "Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned küsimused või lünkülesanded. Ainult üks vastusevariant on õige.",
+      "Text comprehension is tested here. Some questions and blank exercises about read text are asked. There is only one correct answer."
+    ],
     "start-test": ["Alusta testiga", "Start test"],
     "previous-question": ["Eelmine küsimus", "Previous question"],
     "next-question": ["Järgmine küsimus", "Next question"],
@@ -454,7 +535,10 @@
   },
   "text-exercise-blank-test": {
     "title": ["Teksti omandamistaseme kontroll", "Text comprehension test"],
-    "description": ["Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned lünkülesanded. Lünka oodatakse ühte nimisõna.", "Text comprehension is tested here. Blank exercises about read text are asked. A single noun is expected in the blank."],
+    "description": [
+      "Siin kontrollitakse teksti mõistmist. Loetud teksti kohta esitatakse mõned lünkülesanded. Lünka oodatakse ühte nimisõna.",
+      "Text comprehension is tested here. Blank exercises about read text are asked. A single noun is expected in the blank."
+    ],
     "start-test": ["Alusta testiga", "Start test"],
     "blank-placeholder": ["...", "..."],
     "previous-blank": ["Eelmine lünkülesanne", "Previous blank exercise"],
@@ -472,7 +556,10 @@
     "comprehension-speed": ["Omandamiskiirus", "Comprehension speed"],
     "rate-test-difficulty": ["Hinda testi raskust", "Rate test difficulty"],
     "optional": ["valikuline", "optional"],
-    "rate-test-difficulty-description": ["1 tärn - lihtsad küsimused, 10 tärni - väga keerulised küsimused", "1 stars - easy questions, 10 stars - very difficult questions"],
+    "rate-test-difficulty-description": [
+      "1 tärn - lihtsad küsimused, 10 tärni - väga keerulised küsimused",
+      "1 stars - easy questions, 10 stars - very difficult questions"
+    ],
     "check-correct-answers": ["Vaata vastuseid", "Check answers"],
     "end": ["Lõpeta", "Finish"]
   },
@@ -507,7 +594,10 @@
   "exercise-options": {
     "characters": ["tähemärki", "characters"],
     "start-delay": ["Alustamise viide", "Starting delay"],
-    "start-delay-description": ["Ooteaeg harjutuse alustamise ja harjutuse käivitamise vahel", "Delay between starting exercise and exercise start"],
+    "start-delay-description": [
+      "Ooteaeg harjutuse alustamise ja harjutuse käivitamise vahel",
+      "Delay between starting exercise and exercise start"
+    ],
     "line-break-delay": ["Reavahetuse viide", "Line break delay"],
     "line-break-delay-description": ["Ooteaeg uue tekstirea alguses", "New line delay at the start of the line"],
     "page-break-delay": ["Lehevahetuse viide", "Page break delay"],
@@ -546,7 +636,10 @@
     "sentences": ["lauset", "sentences"],
     "complexity-rating": ["Keerukuse näitaja", "Complexity rating"],
     "class-rating": ["klass", "class"],
-    "class-rating-description": ["Väärtus on tuletatud prof. Jaan Miku kirjeldatud gümnaasiumiõpilastele sobivate tekstide keerukuse näitajate tabeli ekstrapoleerimisel. Antud väärtus võib olla ebatäpne.", "Value is derived by prof. Jaan Mikk's students appropriate text complexity table extrapolation. The value may be inaccurate."],
+    "class-rating-description": [
+      "Väärtus on tuletatud prof. Jaan Miku kirjeldatud gümnaasiumiõpilastele sobivate tekstide keerukuse näitajate tabeli ekstrapoleerimisel. Antud väärtus võib olla ebatäpne.",
+      "Value is derived by prof. Jaan Mikk's students appropriate text complexity table extrapolation. The value may be inaccurate."
+    ],
     "text-word-data": ["Teksti sõnade andmed", "Text word data"],
     "average-word-length": ["keskmine sõna pikkus", "average word length"],
     "words-with-length-from": ["Sõnad pikkusega", "Words with length from"],
@@ -573,7 +666,10 @@
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],
-    "description": ["Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul.", "Here you can select an exercise and see your statistics. Data is shown as a table or on a chart."],
+    "description": [
+      "Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul.",
+      "Here you can select an exercise and see your statistics. Data is shown as a table or on a chart."
+    ],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
     "group-table": ["Grupi tulemused", "Group results"],
@@ -616,18 +712,21 @@
   },
   "statistics-table": {
     "exercise": ["Harjutus", "Exercise"],
-    "modification": ["Modifikatsioon" , "Modification"],
-    "attempt-date": ["Soorituse kuupäev" , "Attempt date"],
-    "reading-attempt": ["Lugemise katse" , "Reading attempt"],
-    "reading-attempt-description": ["Näitab, mitmes lugemise kord see valitud tekstiga oli", "Shows the count of reads with selected text"],
+    "modification": ["Modifikatsioon", "Modification"],
+    "attempt-date": ["Soorituse kuupäev", "Attempt date"],
+    "reading-attempt": ["Lugemise katse", "Reading attempt"],
+    "reading-attempt-description": [
+      "Näitab, mitmes lugemise kord see valitud tekstiga oli",
+      "Shows the count of reads with selected text"
+    ],
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
-    "words-per-minute": ["sõnu minutis" , "words per minute"],
-    "test-result": ["Testi tulemus" , "Test result"],
-    "comprehension-level": ["Omandamistase" , "Comprehension level"],
-    "comprehension-speed": ["Omandamiskiirus" , "Comprehension speed"],
-    "elapsed-time": ["Kulunud aeg" , "Elapsed time"],
-    "symbolsPerMinute": ["Sümbolit minutis" , "Symbols Per Minute"],
-    "exercise-result": ["Harjutuse tulemus" , "Exercise result"],
+    "words-per-minute": ["sõnu minutis", "words per minute"],
+    "test-result": ["Testi tulemus", "Test result"],
+    "comprehension-level": ["Omandamistase", "Comprehension level"],
+    "comprehension-speed": ["Omandamiskiirus", "Comprehension speed"],
+    "elapsed-time": ["Kulunud aeg", "Elapsed time"],
+    "symbolsPerMinute": ["Sümbolit minutis", "Symbols Per Minute"],
+    "exercise-result": ["Harjutuse tulemus", "Exercise result"],
     "not-finished": ["Lõpetamata", "Unfinished"],
     "not-recorded": ["Salvestamata", "Unsaved"],
     "test-missing": ["Sooritamata", "No attempt"],
@@ -665,17 +764,26 @@
     "average-reading-speed-change-percentage": ["Keskmine lugemiskiiruse muutus", "Average reading speed change"],
     "average-initial-comprehension-speed": ["Keskmine omandamise algkiirus", "Average initial comprehension speed"],
     "average-final-comprehension-speed": ["Keskmine omandamise lõppkiirus", "Average final comprehension speed"],
-    "average-comprehension-speed-change-percentage": ["Keskmine omandamiskiiruse muutus", "Average comprehension speed change"],
+    "average-comprehension-speed-change-percentage": [
+      "Keskmine omandamiskiiruse muutus",
+      "Average comprehension speed change"
+    ],
     "average-initial-comprehension-level": ["Keskmine algne omandamistase", "Average initial comprehension level"],
     "average-final-comprehension-level": ["Keskmine lõpp omandamisetase", "Average final comprehension level"],
-    "average-comprehension-level-change-percentage": ["Keskmine omandamistaseme muutus", "Average comprehension level change"],
+    "average-comprehension-level-change-percentage": [
+      "Keskmine omandamistaseme muutus",
+      "Average comprehension level change"
+    ],
     "average-initial-exercise-speed": ["Keskmine algkiirus", "Average initial speed"],
     "average-final-exercise-speed": ["Keskmine lõppkiirus", "Average final speed"],
     "average-exercise-speed-change-percentage": ["Keskmine kiiruse muutus", "Average speed change"]
   },
   "manage": {
     "title": ["Halda", "Manage"],
-    "description": ["Siin saab hallata kasutajate nimekirja ja lisada uusi kasutajaid.", "Here you can manage user list and add new users."],
+    "description": [
+      "Siin saab hallata kasutajate nimekirja ja lisada uusi kasutajaid.",
+      "Here you can manage user list and add new users."
+    ],
     "groups": ["Grupid", "Groups"],
     "users": ["Kasutajad", "Users"],
     "feedback": ["Tagasiside", "Feedback"],
@@ -793,7 +901,10 @@
     "answer-added": ["Vastusevariant lisatud", "Answer added"],
     "answer-updated": ["Vastusevariant uuendatud", "Answer updated"],
     "answer-removed": ["Vastusevariant kustutatud", "Answer removed"],
-    "account-registered-password-sent": ["Kasutajakonto registreeritud, parool saadeti e-postiga", "Account registered, password sent with an e-mail"]
+    "account-registered-password-sent": [
+      "Kasutajakonto registreeritud, parool saadeti e-postiga",
+      "Account registered, password sent with an e-mail"
+    ]
   },
   "error": {
     "server-maintenance": ["Hooldustööd serveris", "Server maintenance"],
