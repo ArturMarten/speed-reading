@@ -236,6 +236,7 @@
     "header-1": ["Pealkiri 1", "Heading 1"],
     "header-2": ["Pealkiri 2", "Heading 2"],
     "header-3": ["Pealkiri 3", "Heading 3"],
+    "spell-check": ["Õigekirjakontroll", "Spell check"],
     "characters": ["Tähemärke", "Characters"],
     "words": ["Sõnu", "Words"],
     "sentences": ["Lauseid", "Sentences"]

@@ -6,5 +6,7 @@
 }
 
 .DraftEditor-root .public-DraftEditor-content {
-  min-height: 100px;
+  min-height: 150px;
+  font-size: 1.2em;
+  line-height: 1.3em;
 }
