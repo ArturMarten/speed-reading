@@ -395,20 +395,12 @@ export class Statistics extends Component {
     const totalTestTime = userExerciseData.map((exercise) => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
 
-    let groupExerciseData = Object.assign(
+    const groupExerciseData = Object.assign(
       {},
       ...Object.keys(this.props.groupExerciseStatistics).map((userId) => ({
         [userId]: this.props.groupExerciseStatistics[userId].filter(this.timeFilter).filter(this.outlierFilter),
       })),
     );
-    if (this.props.isTeacher) {
-      groupExerciseData = Object.assign(
-        {},
-        ...Object.keys(groupExerciseData).map((userId) => ({
-          [userId]: groupExerciseData[userId].length >= this.state.minimumAttemptCount ? groupExerciseData[userId] : [],
-        })),
-      );
-    }
 
     const groupFilter = (
       <Form.Field
@@ -715,9 +707,8 @@ export class Statistics extends Component {
                 </Dimmer>
                 <GroupTable
                   isTeacher={this.props.isTeacher}
-                  startTime={this.state.startTime}
-                  endTime={this.state.endTime}
                   data={groupExerciseData}
+                  minimumAttemptCount={this.state.minimumAttemptCount}
                   translate={this.props.translate}
                 />
               </Segment>
