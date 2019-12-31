@@ -288,9 +288,6 @@ export class TextExercisePreparation extends Component {
           </Grid.Row>
         </Grid>
         <TextExercisePreview exerciseType={this.props.type} />
-        {/*
-        <TextPreview />
-        */}
       </Container>
     );
   }

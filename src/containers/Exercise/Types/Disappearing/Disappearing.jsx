@@ -1,82 +1,113 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+import { createOffscreenContext, writeText, pixelRatio } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context) => {
-  const { clearRect } = currentState;
-  context.clearRect(clearRect.x, clearRect.y, clearRect.width, clearRect.height);
-};
-
-export const updateState = (currentState, textMetadata) => {
-  const { canvasHeight } = currentState;
-  const { wordsMetadata, linesMetadata } = textMetadata;
-
-  // Calculate next state
-  let newLine = false;
-  let newPage = false;
-  let finished = false;
-  let { wordIndex: nextWordIndex, lineCharacterIndex: nextLineCharacterIndex, marginTop: nextMarginTop } = currentState;
-  nextLineCharacterIndex += 1;
-  let nextWordMetadata = wordsMetadata[nextWordIndex];
-  let { lineNumber } = nextWordMetadata;
-  let nextLine = linesMetadata[lineNumber];
-  let nextCharacterWidth = nextLine.averageCharacterWidth;
-  let nextLinePosition = nextLine.rect.left + nextLineCharacterIndex * nextCharacterWidth;
-  const wordEndPosition = nextWordMetadata.rect.right;
-  const currentLineCharacterCount = linesMetadata[lineNumber].characterCount;
-  if (Math.ceil(nextLinePosition) >= wordEndPosition) {
-    // New word
-    nextWordIndex += 1;
-    nextWordMetadata = wordsMetadata[nextWordIndex];
-  }
-  if (nextLineCharacterIndex >= currentLineCharacterCount) {
-    // New line
-    nextLineCharacterIndex = 0;
-    newLine = true;
-    lineNumber += 1;
-    nextLine = linesMetadata[lineNumber];
-    nextCharacterWidth = nextLine.averageCharacterWidth;
-    nextLinePosition = nextLine.rect.left + nextLineCharacterIndex * nextCharacterWidth;
-    if (nextLine.rect.bottom - nextMarginTop > canvasHeight) {
-      // New page
-      newPage = true;
-      nextMarginTop = nextLine.rect.top;
+  const { clearRects } = currentState;
+  clearRects.forEach((clearRect) => {
+    if (clearRect && clearRect.width > 0 && clearRect.height > 0) {
+      context.clearRect(clearRect.x, clearRect.y, clearRect.width, clearRect.height);
     }
-  }
-  const clearRect = {
-    x: Math.ceil(nextLinePosition),
-    y: nextWordMetadata.rect.top - nextMarginTop,
-    width: Math.ceil(nextCharacterWidth),
-    height: nextWordMetadata.rect.bottom - nextWordMetadata.rect.top,
-  };
-
-  if (
-    nextWordIndex === textMetadata.wordsMetadata.length - 1 &&
-    nextLineCharacterIndex === currentLineCharacterCount - 1
-  ) {
-    finished = true;
-  }
-
-  return updateObject(currentState, {
-    wordIndex: nextWordIndex,
-    lineCharacterIndex: nextLineCharacterIndex,
-    marginTop: nextMarginTop,
-    clearRect,
-    newLine,
-    newPage,
-    finished,
   });
 };
 
+export const updateStateFunction = (textMetadata, options, state) => {
+  const { wordsMetadata, linesMetadata } = textMetadata;
+  const { wordsPerMinute } = options;
+  let speed = 0;
+
+  if (!state.speed) {
+    // Initial speed
+    const totalTime = Math.round((wordsMetadata.length / options.wordsPerMinute) * 60 * 1000);
+    const totalWidth = linesMetadata.reduce((acc, el) => acc + el.lineWidth, 0);
+    // console.log(`Total width ${totalWidth}px in ${totalTime}ms`);
+    speed = totalWidth / totalTime;
+  } else {
+    // Speed changed
+    const change = wordsPerMinute / state.wordsPerMinute;
+    speed = state.speed * change;
+  }
+  // console.log(`Speed ${speed} px/ms`);
+
+  const nextState = updateObject(state, {
+    speed,
+    wordsPerMinute,
+  });
+
+  return [
+    nextState,
+    (currentState, updateTime) => {
+      const { canvasHeight } = currentState;
+      let { lineIndex, linePosition, marginTop } = currentState;
+      let newLine = false;
+      let newPage = false;
+      let finished = false;
+      const clearRects = [];
+
+      // TODO: speed from state
+      const widthProgress = speed * updateTime;
+      const lastUpdate = performance.now();
+
+      // console.log(`Width progress ${widthProgress} px`);
+
+      linePosition += widthProgress;
+
+      let lineMetadata = linesMetadata[lineIndex];
+
+      if (linePosition >= lineMetadata.lineWidth) {
+        if (lineIndex !== linesMetadata.length - 1) {
+          // New line
+          clearRects.push({
+            x: 0,
+            y: lineMetadata.rect.top - marginTop,
+            width: lineMetadata.lineWidth,
+            height: lineMetadata.rect.bottom - lineMetadata.rect.top,
+          });
+          newLine = true;
+          linePosition -= lineMetadata.lineWidth;
+          lineIndex += 1;
+          lineMetadata = linesMetadata[lineIndex];
+          if (lineMetadata.rect.bottom - marginTop > canvasHeight) {
+            // New page
+            newPage = true;
+            marginTop = lineMetadata.rect.top;
+          }
+        } else {
+          finished = true;
+        }
+      }
+
+      clearRects.push({
+        x: 0,
+        y: lineMetadata.rect.top - marginTop,
+        width: Math.ceil(linePosition),
+        height: lineMetadata.rect.bottom - lineMetadata.rect.top,
+      });
+
+      return updateObject(currentState, {
+        marginTop,
+        lineIndex,
+        linePosition,
+        clearRects,
+        newLine,
+        newPage,
+        finished,
+        lastUpdate,
+      });
+    },
+  ];
+};
+
 let timeout = null;
-let frame = null;
+let animationFrame = null;
 
 const initialState = {
-  wordIndex: 0,
-  lineCharacterIndex: -1,
+  lineIndex: 0,
+  linePosition: 0,
   marginTop: 0,
+  clearRects: [],
 };
 
 export class Disappearing extends Component {
@@ -92,47 +123,45 @@ export class Disappearing extends Component {
       (this.props.timerState.paused && !nextProps.timerState.paused)
     ) {
       // Exercise started
-      timeout = setTimeout(() => {
-        frame = requestAnimationFrame(() => this.loop());
-      }, this.updateInterval + this.props.exerciseOptions.startDelay);
+      this.currentState = this.updateState(this.currentState, 0);
+      this.delayedStart(this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
       this.currentState = { ...initialState };
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     } else if (!this.props.timerState.stopped && nextProps.timerState.stopped) {
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
     } else if (!this.props.timerState.paused && nextProps.timerState.paused) {
       // Exercise paused
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval(nextProps.speedOptions.wordsPerMinute);
+      const [nextState, updateState] = updateStateFunction(
+        this.textMetadata,
+        nextProps.speedOptions,
+        this.currentState,
+      );
+      this.currentState = nextState;
+      this.updateState = updateState;
     }
     return false;
   }
 
   componentWillUnmount() {
     clearTimeout(timeout);
-    cancelAnimationFrame(frame);
+    cancelAnimationFrame(animationFrame);
   }
 
   init() {
-    this.currentState.canvasHeight = this.props.canvasHeight;
+    this.currentState.canvasHeight = this.props.canvasHeight * pixelRatio;
     // Create and prepare off-screen canvas
-    this.offscreenCanvas = document.createElement('canvas');
-    this.offscreenCanvas.width = this.shownCanvas.width;
-    this.offscreenCanvas.height = this.shownCanvas.height;
-    this.offscreenContext = this.offscreenCanvas.getContext('2d');
-    this.offscreenContext.font = `${Math.ceil(this.props.textOptions.fontSize / 0.75)}px ${
-      this.props.textOptions.font
-    }`;
-    this.offscreenContext.textBaseline = 'bottom';
-    this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
+    this.offscreenContext = createOffscreenContext(this.shownCanvas, this.props.textOptions);
+    this.offscreenCanvas = this.offscreenContext.canvas;
     // Prerender off-screen canvas
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
     // Prepare visible canvas
@@ -140,82 +169,62 @@ export class Disappearing extends Component {
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     if (this.offscreenCanvas.height > this.shownCanvas.height) {
       // Multi page
-      const copyHeight = Math.max(
-        ...this.textMetadata.linesMetadata
-          .map((lineMetadata) => lineMetadata.rect.bottom)
-          .filter((lineBottom) => lineBottom < this.shownCanvas.height),
-      );
-      this.shownContext.drawImage(
-        this.offscreenCanvas,
-        0,
-        0,
-        this.shownCanvas.width,
-        copyHeight,
-        0,
-        0,
-        this.shownCanvas.width,
-        copyHeight,
-      );
+      this.drawPage();
     } else {
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     }
-    // Calculate update interval
-    this.calculateUpdateInterval(this.props.speedOptions.wordsPerMinute);
+    const [nextState, updateState] = updateStateFunction(this.textMetadata, this.props.speedOptions, this.currentState);
+    this.currentState = nextState;
+    this.updateState = updateState;
   }
 
-  calculateUpdateInterval(updatedWordsPerMinute) {
-    const timeInSeconds = (this.textMetadata.wordsMetadata.length / updatedWordsPerMinute) * 60;
-    this.updateInterval = (timeInSeconds / this.props.selectedText.characterCount) * 1000;
+  drawPage(marginTop = 0) {
+    this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+    const copyHeight = Math.max(
+      ...this.textMetadata.linesMetadata
+        .map((lineMetadata) => lineMetadata.rect.bottom - marginTop)
+        .filter((lineBottom) => lineBottom < this.shownCanvas.height),
+    );
+    this.shownContext.drawImage(
+      this.offscreenCanvas,
+      0,
+      marginTop,
+      this.shownCanvas.width,
+      copyHeight,
+      0,
+      0,
+      this.shownCanvas.width,
+      copyHeight,
+    );
   }
 
   loop() {
-    // console.log('Current state: ', this.currentState);
-    const newState = updateState(this.currentState, this.textMetadata);
-    // console.log('New state: ', newState);
-    this.currentState = newState;
-    if (newState.newPage) {
-      // Draw new page
-      this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-      const copyHeight = Math.max(
-        ...this.textMetadata.linesMetadata
-          .map((lineMetadata) => lineMetadata.rect.bottom - newState.marginTop)
-          .filter((lineBottom) => lineBottom < this.shownCanvas.height),
-      );
-      this.shownContext.drawImage(
-        this.offscreenCanvas,
-        0,
-        newState.marginTop,
-        this.shownCanvas.width,
-        copyHeight,
-        0,
-        0,
-        this.shownCanvas.width,
-        copyHeight,
-      );
+    const updateTime = performance.now() - this.currentState.lastUpdate;
+    this.currentState = this.updateState(this.currentState, updateTime);
+    if (this.currentState.newPage) {
+      this.drawPage(this.currentState.marginTop);
     }
-    if (newState.finished) {
-      drawState(newState, this.shownContext);
-      timeout = setTimeout(() => {
-        this.props.onExerciseFinish();
-      }, this.updateInterval);
-    } else if (newState.newPage) {
-      timeout = setTimeout(() => {
-        frame = requestAnimationFrame(() => this.drawAndScheduleNext());
-      }, this.updateInterval + this.props.exerciseOptions.pageBreakDelay);
-    } else if (newState.newLine) {
-      timeout = setTimeout(() => {
-        frame = requestAnimationFrame(() => this.drawAndScheduleNext());
-      }, this.updateInterval + this.props.exerciseOptions.lineBreakDelay);
+    if (this.currentState.finished) {
+      drawState(this.currentState, this.shownContext);
+      this.props.onExerciseFinish();
+    } else if (this.currentState.newPage) {
+      this.delayedStart(this.props.exerciseOptions.pageBreakDelay);
+    } else if (this.currentState.newLine) {
+      this.delayedStart(this.props.exerciseOptions.lineBreakDelay);
     } else {
-      this.drawAndScheduleNext();
+      drawState(this.currentState, this.shownContext);
+      animationFrame = requestAnimationFrame(() => this.loop());
     }
   }
 
-  drawAndScheduleNext() {
-    drawState(this.currentState, this.shownContext);
+  delayedStart(delay) {
     timeout = setTimeout(() => {
-      frame = requestAnimationFrame(() => this.loop());
-    }, this.updateInterval);
+      drawState(this.currentState, this.shownContext);
+      this.currentState = updateObject(this.currentState, {
+        lastUpdate: performance.now(),
+      });
+      animationFrame = requestAnimationFrame(() => this.loop());
+    }, delay);
   }
 
   render() {
@@ -237,10 +246,7 @@ const mapStateToProps = (state) => ({
   speedOptions: state.options.speedOptions,
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = (dispatch) => ({});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(Disappearing);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Grid, Pagination, List } from 'semantic-ui-react';
+import { Container, Header, Button, Grid, Pagination, List, Confirm } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import './TextExerciseQuestionTest.css';
@@ -10,6 +10,7 @@ export class TextExerciseQuestionTest extends Component {
   state = {
     questionIndex: 0,
     answers: [],
+    confirm: false,
   };
 
   componentDidMount() {
@@ -18,13 +19,13 @@ export class TextExerciseQuestionTest extends Component {
 
   onQuestionChange = (event, data) => {
     this.setState({ questionIndex: data.activePage - 1 });
-  }
+  };
 
   onAnswerChange = (questionIndex, answerId) => {
     const updatedAnswers = this.state.answers.slice();
     updatedAnswers[questionIndex] = answerId;
     this.setState({ answers: updatedAnswers });
-  }
+  };
 
   onTestStartHandler = () => {
     const attemptData = {
@@ -32,22 +33,45 @@ export class TextExerciseQuestionTest extends Component {
       startTime: new Date(),
     };
     this.props.onTestStart(attemptData);
-  }
+  };
+
+  getUnansweredCount = () => {
+    return this.props.questions
+      .map((question, index) => (this.state.answers[index] ? this.state.answers[index] : null))
+      .filter((answer) => answer === null).length;
+  };
+
+  onTestFinishingHandler = () => {
+    const unansweredCount = this.getUnansweredCount();
+    if (unansweredCount > 0) {
+      this.setState({ confirm: true });
+    } else {
+      this.onTestFinishHandler();
+    }
+  };
+
+  onConfirmCancel = () => {
+    this.setState({ confirm: false });
+  };
 
   onTestFinishHandler = () => {
+    this.setState({ confirm: false });
     const answers = this.props.questions.map((question, index) => ({
       testAttemptId: this.props.attemptId,
       questionId: question.id,
       answerId: this.state.answers[index] ? this.state.answers[index] : null,
     }));
     this.props.onTestFinish(this.props.attemptId, answers);
-  }
+  };
 
   render() {
+    const unansweredCount = this.getUnansweredCount();
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2" content={this.props.translate('text-exercise-question-test.title')} />
-        {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
+        {this.props.testStatus === 'started' ||
+        this.props.testStatus === 'finishing' ||
+        this.props.testStatus === 'finished' ? (
           <Grid container style={{ paddingTop: '10px' }}>
             <Grid.Row columns={1} style={{ paddingBottom: '2px' }}>
               <Grid.Column>
@@ -94,21 +118,24 @@ export class TextExerciseQuestionTest extends Component {
                 totalPages={this.props.questions.length}
               />
             </Grid.Row>
-          </Grid> :
-          <p>
-            {this.props.translate('text-exercise-question-test.description')}
-          </p>}
-        {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
+          </Grid>
+        ) : (
+          <p>{this.props.translate('text-exercise-question-test.description')}</p>
+        )}
+        {this.props.testStatus === 'started' ||
+        this.props.testStatus === 'finishing' ||
+        this.props.testStatus === 'finished' ? (
           <Button
             negative
-            onClick={this.onTestFinishHandler}
+            onClick={this.onTestFinishingHandler}
             floated="right"
             style={{ marginTop: '15px' }}
             loading={this.props.testStatus === 'finishing'}
             disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
           >
             {this.props.translate('text-exercise-question-test.finish-test')}
-          </Button> :
+          </Button>
+        ) : (
           <Button
             positive
             onClick={this.onTestStartHandler}
@@ -117,13 +144,22 @@ export class TextExerciseQuestionTest extends Component {
             disabled={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
           >
             {this.props.translate('text-exercise-question-test.start-test')}
-          </Button>}
+          </Button>
+        )}
+        <Confirm
+          open={this.state.confirm}
+          content={`${unansweredCount} ${this.props.translate('text-exercise-question-test.confirm')}`}
+          cancelButton={this.props.translate('text-exercise-question-test.back')}
+          confirmButton={this.props.translate('text-exercise-question-test.finish-test')}
+          onCancel={this.onConfirmCancel}
+          onConfirm={this.onTestFinishHandler}
+        />
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   exerciseAttemptId: state.exercise.attemptId,
   attemptId: state.exerciseTest.attemptId,
   selectedText: state.text.selectedText,
@@ -132,7 +168,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onTestPrepare: (readingTextId) => {
     dispatch(actionCreators.prepareQuestionTest(readingTextId));
   },
@@ -144,4 +180,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseQuestionTest);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TextExerciseQuestionTest);

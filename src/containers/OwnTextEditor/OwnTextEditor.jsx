@@ -56,7 +56,7 @@ export class OwnTextEditor extends Component {
 
   render() {
     return (
-      <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
+      <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon closeOnDimmerClick={false}>
         <Modal.Header>{this.props.translate('own-text-editor.modal-header')}</Modal.Header>
         {/*
         <Message

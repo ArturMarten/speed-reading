@@ -51,16 +51,18 @@ export class BugReport extends Component {
       consoleErrors: errorData.getErrors(),
       state: updateObject(this.props.state, { locale: undefined, bugReport: undefined }),
       actions: actionData.getActions(5),
-      screenshot: this.state.sendScreenshot && this.state.screenshotImage ?
-        this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '') : null,
+      screenshot:
+        this.state.sendScreenshot && this.state.screenshotImage
+          ? this.state.screenshotImage.replace(/^data:image\/\w+;base64,/, '')
+          : null,
     };
     this.props.onSubmit(submittedForm);
-  }
+  };
 
   openScreenshotToggle = (event) => {
     stopPropagation(event);
     this.setState({ screenshotOpen: !this.state.screenshotOpen });
-  }
+  };
 
   inputChangeHandler = (event, { name, value }) => {
     const updatedBugReportForm = { ...this.state.bugReportForm };
@@ -78,11 +80,11 @@ export class BugReport extends Component {
       bugReportForm: updatedBugReportForm,
       bugReportFormValid: formIsValid,
     });
-  }
+  };
 
   changeSendScreenshot = () => {
     this.setState({ sendScreenshot: !this.state.sendScreenshot });
-  }
+  };
 
   render() {
     const screenshotModal = (
@@ -98,9 +100,7 @@ export class BugReport extends Component {
     );
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('bug-report.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('bug-report.modal-header')}</Modal.Header>
         <Modal.Content>
           {screenshotModal}
           <Form
@@ -108,15 +108,15 @@ export class BugReport extends Component {
             success={this.props.bugReportStatus.message !== null}
             error={this.props.bugReportStatus.error !== null}
           >
-            <Form.Field error={!this.state.bugReportForm.description.valid && this.state.bugReportForm.description.touched}>
+            <Form.Field
+              error={!this.state.bugReportForm.description.valid && this.state.bugReportForm.description.touched}
+            >
               <label htmlFor="bug-report-description">
-                <div>
-                  {this.props.translate('bug-report.textarea-description')}
-                </div>
+                <div>{this.props.translate('bug-report.textarea-description')}</div>
                 <TextArea
                   id="bug-report-description"
                   name="description"
-                  autoHeight
+                  autoheight="true"
                   rows={6}
                   placeholder={this.props.translate('bug-report.textarea-placeholder')}
                   value={this.state.bugReportForm.description.value}
@@ -139,13 +139,8 @@ export class BugReport extends Component {
                 onChange={this.changeSendScreenshot}
               />
             </Form.Field>
-            <SuccessMessage
-              icon="check"
-              message={this.props.bugReportStatus.message}
-            />
-            <ErrorMessage
-              error={this.props.bugReportStatus.error}
-            />
+            <SuccessMessage icon="check" message={this.props.bugReportStatus.message} />
+            <ErrorMessage error={this.props.bugReportStatus.error} />
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -163,17 +158,20 @@ export class BugReport extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   state,
   userId: state.auth.userId,
   bugReportStatus: state.bugReport.bugReportStatus,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSubmit: (bugReport) => {
     dispatch(actionCreators.sendBugReport(bugReport));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BugReport);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(BugReport);

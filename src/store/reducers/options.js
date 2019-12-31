@@ -133,7 +133,7 @@ const initialExerciseOptions = {
 const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay', 'pageBreakDelay'];
 
 export const MIN_WORDS_PER_MINUTE = 10;
-export const MAX_WORDS_PER_MINUTE = 500;
+export const MAX_WORDS_PER_MINUTE = 700;
 export const STEP_WORDS_PER_MINUTE = 10;
 export const MIN_FIXATION = 50;
 export const MAX_FIXATION = 750;

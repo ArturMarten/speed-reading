@@ -175,7 +175,7 @@ export class ProblemReport extends Component {
               <TextArea
                 id="problem-report-description"
                 name="description"
-                autoHeight
+                autoheight="true"
                 rows={6}
                 placeholder={this.props.translate('problem-report.textarea-placeholder')}
                 value={this.state.problemReportForm.description.value}

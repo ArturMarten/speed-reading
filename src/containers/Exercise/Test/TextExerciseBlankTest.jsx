@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Grid, Pagination, Input } from 'semantic-ui-react';
+import { Container, Header, Button, Grid, Pagination, Input, Confirm } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import { focusInput } from '../../../shared/utility';
 
 export class TextExerciseBlankTest extends Component {
   state = {
     blankExerciseIndex: 0,
     answers: [],
+    confirm: false,
   };
 
   componentDidMount() {
@@ -17,20 +19,15 @@ export class TextExerciseBlankTest extends Component {
 
   onBlankChange = (event, data) => {
     this.setState({ blankExerciseIndex: data.activePage - 1 });
-    setTimeout(() => {
-      this.inputRef.focus();
-      const { inputRef } = this.inputRef;
-      const { length } = inputRef.value;
-      inputRef.setSelectionRange(length, length);
-    }, 100);
-  }
+    focusInput(this.inputRef);
+  };
 
-  onInputChangeHandler = blankExerciseIndex => (event) => {
+  onInputChangeHandler = (blankExerciseIndex) => (event) => {
     const newValue = event.target.value;
     const updatedAnswers = this.state.answers.slice();
     updatedAnswers[blankExerciseIndex] = newValue;
     this.setState({ answers: updatedAnswers });
-  }
+  };
 
   onTestStartHandler = () => {
     const attemptData = {
@@ -38,9 +35,29 @@ export class TextExerciseBlankTest extends Component {
       startTime: new Date(),
     };
     this.props.onTestStart(attemptData);
-  }
+  };
+
+  getUnansweredCount = () => {
+    return this.props.blankExercises
+      .map((blankExericise, index) => (this.state.answers[index] ? this.state.answers[index] : null))
+      .filter((answer) => answer === null).length;
+  };
+
+  onTestFinishingHandler = () => {
+    const unansweredCount = this.getUnansweredCount();
+    if (unansweredCount > 0) {
+      this.setState({ confirm: true });
+    } else {
+      this.onTestFinishHandler();
+    }
+  };
+
+  onConfirmCancel = () => {
+    this.setState({ confirm: false });
+  };
 
   onTestFinishHandler = () => {
+    this.setState({ confirm: false });
     const answers = this.props.blankExercises.map((blankExercise, index) => ({
       testAttemptId: this.props.attemptId,
       language: 'estonian',
@@ -49,30 +66,41 @@ export class TextExerciseBlankTest extends Component {
       answer: this.state.answers[index] ? this.state.answers[index] : null,
     }));
     this.props.onTestFinish(this.props.attemptId, answers);
-  }
+  };
 
   render() {
+    const unansweredCount = this.getUnansweredCount();
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2" content={this.props.translate('text-exercise-blank-test.title')} />
-        {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
+        {this.props.testStatus === 'started' ||
+        this.props.testStatus === 'finishing' ||
+        this.props.testStatus === 'finished' ? (
           <Grid container style={{ paddingTop: '10px' }}>
             <Grid.Row columns={1} style={{ paddingTop: '5em', paddingBottom: '10em' }}>
               <Grid.Column textAlign="center">
                 <Header as="h3">
-                  {`${this.state.blankExerciseIndex + 1}. ${this.props.blankExercises[this.state.blankExerciseIndex].blankExercise[0]}`}
+                  {`${this.state.blankExerciseIndex + 1}. ${
+                    this.props.blankExercises[this.state.blankExerciseIndex].blankExercise[0]
+                  }`}
                   <Input
                     focus
                     autoFocus
                     type="text"
                     transparent
-                    ref={(ref) => { this.inputRef = ref; }}
+                    ref={(ref) => {
+                      this.inputRef = ref;
+                    }}
                     placeholder={this.props.translate('text-exercise-blank-test.blank-placeholder')}
                   >
                     <input
                       style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(0, 76, 255)' }}
                       size={this.props.blankExercises[this.state.blankExerciseIndex].correct.length}
-                      value={this.state.answers[this.state.blankExerciseIndex] === undefined ? '' : this.state.answers[this.state.blankExerciseIndex]}
+                      value={
+                        this.state.answers[this.state.blankExerciseIndex] === undefined
+                          ? ''
+                          : this.state.answers[this.state.blankExerciseIndex]
+                      }
                       onChange={this.onInputChangeHandler(this.state.blankExerciseIndex)}
                     />
                   </Input>
@@ -98,36 +126,52 @@ export class TextExerciseBlankTest extends Component {
                 totalPages={this.props.blankExercises.length}
               />
             </Grid.Row>
-          </Grid> :
-          <p>
-            {this.props.translate('text-exercise-blank-test.description')}
-          </p>}
-        {this.props.testStatus === 'started' || this.props.testStatus === 'finishing' || this.props.testStatus === 'finished' ?
+          </Grid>
+        ) : (
+          <p>{this.props.translate('text-exercise-blank-test.description')}</p>
+        )}
+        {this.props.testStatus === 'started' ||
+        this.props.testStatus === 'finishing' ||
+        this.props.testStatus === 'finished' ? (
           <Button
             negative
-            onClick={this.onTestFinishHandler}
+            onClick={this.onTestFinishingHandler}
             floated="right"
             style={{ marginTop: '15px' }}
             loading={this.props.testStatus === 'finishing'}
             disabled={this.props.testStatus === 'finishing' || this.props.testStatus === 'finished'}
           >
             {this.props.translate('text-exercise-blank-test.finish-test')}
-          </Button> :
+          </Button>
+        ) : (
           <Button
             positive
             onClick={this.onTestStartHandler}
             floated="right"
             loading={this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
-            disabled={this.props.testStatus === 'preparation' || this.props.testStatus === 'preparing' || this.props.testStatus === 'starting'}
+            disabled={
+              this.props.testStatus === 'preparation' ||
+              this.props.testStatus === 'preparing' ||
+              this.props.testStatus === 'starting'
+            }
           >
             {this.props.translate('text-exercise-blank-test.start-test')}
-          </Button>}
+          </Button>
+        )}
+        <Confirm
+          open={this.state.confirm}
+          content={`${unansweredCount} ${this.props.translate('text-exercise-blank-test.confirm')}`}
+          cancelButton={this.props.translate('text-exercise-blank-test.back')}
+          confirmButton={this.props.translate('text-exercise-blank-test.finish-test')}
+          onCancel={this.onConfirmCancel}
+          onConfirm={this.onTestFinishHandler}
+        />
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   exerciseAttemptId: state.exercise.attemptId,
   attemptId: state.exerciseTest.attemptId,
   selectedText: state.text.selectedText,
@@ -136,7 +180,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onTestPrepare: (readingText) => {
     dispatch(actionCreators.prepareBlankTest(readingText));
   },
@@ -148,4 +192,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseBlankTest);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TextExerciseBlankTest);

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText, getGroupsMetadata } from '../../../../utils/CanvasUtils/CanvasUtils';
+import {
+  createOffscreenContext,
+  writeText,
+  getGroupsMetadata,
+  pixelRatio,
+} from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
@@ -9,14 +14,21 @@ export const drawState = (currentState, context, restoreCanvas) => {
   if (restoreRects !== null) {
     restoreRects.forEach((restoreRect) => {
       context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
-      if (currentState.modification === 'group-highlighted' ||
-          currentState.modification === 'group-spacing' ||
-          currentState.modification === 'group-vertical'
+      if (
+        currentState.modification === 'group-highlighted' ||
+        currentState.modification === 'group-spacing' ||
+        currentState.modification === 'group-vertical'
       ) {
         context.drawImage(
           restoreCanvas,
-          restoreRect.x, restoreRect.y + currentState.marginTop, restoreRect.width, restoreRect.height,
-          restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height,
+          restoreRect.x,
+          restoreRect.y + currentState.marginTop,
+          restoreRect.width,
+          restoreRect.height,
+          restoreRect.x,
+          restoreRect.y,
+          restoreRect.width,
+          restoreRect.height,
         );
       }
     });
@@ -25,8 +37,14 @@ export const drawState = (currentState, context, restoreCanvas) => {
     if (currentState.modification === 'group-single') {
       context.drawImage(
         restoreCanvas,
-        drawRect.x, drawRect.y + currentState.marginTop, drawRect.width, drawRect.height,
-        drawRect.x, drawRect.y, drawRect.width, drawRect.height,
+        drawRect.x,
+        drawRect.y + currentState.marginTop,
+        drawRect.width,
+        drawRect.height,
+        drawRect.x,
+        drawRect.y,
+        drawRect.width,
+        drawRect.height,
       );
     } else {
       const height = drawRect.height * 0.1;
@@ -86,7 +104,7 @@ export const updateState = (currentState, textMetadata) => {
 };
 
 let timeout = null;
-let frame = null;
+let animationFrame = null;
 
 const initialState = {
   groupIndex: -1,
@@ -101,27 +119,28 @@ export class WordGroups extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if ((!this.props.timerState.started && nextProps.timerState.started) ||
-        (this.props.timerState.paused && !nextProps.timerState.paused)) {
+    if (
+      (!this.props.timerState.started && nextProps.timerState.started) ||
+      (this.props.timerState.paused && !nextProps.timerState.paused)
+    ) {
       // Exercise started
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.loop()); },
-        this.updateInterval + this.props.exerciseOptions.startDelay,
-      );
+      timeout = setTimeout(() => {
+        animationFrame = requestAnimationFrame(() => this.loop());
+      }, this.updateInterval + this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
       this.currentState = { ...initialState };
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
     } else if (!this.props.timerState.stopped && nextProps.timerState.stopped) {
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
     } else if (!this.props.timerState.paused && nextProps.timerState.paused) {
       // Exercise paused
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
     } else {
       // Speed options changed
       this.updateInterval = nextProps.speedOptions.fixation;
@@ -131,20 +150,15 @@ export class WordGroups extends Component {
 
   componentWillUnmount() {
     clearTimeout(timeout);
-    cancelAnimationFrame(frame);
+    cancelAnimationFrame(animationFrame);
   }
 
   init() {
-    this.currentState.canvasHeight = this.props.canvasHeight;
+    this.currentState.canvasHeight = this.props.canvasHeight * pixelRatio;
     this.currentState.modification = this.props.modification;
     // Create and prepare off-screen canvas
-    this.offscreenCanvas = document.createElement('canvas');
-    this.offscreenCanvas.width = this.shownCanvas.width;
-    this.offscreenCanvas.height = this.shownCanvas.height;
-    this.offscreenContext = this.offscreenCanvas.getContext('2d');
-    this.offscreenContext.font = `${Math.ceil(this.props.textOptions.fontSize / 0.75)}px ${this.props.textOptions.font}`;
-    this.offscreenContext.textBaseline = 'bottom';
-    this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
+    this.offscreenContext = createOffscreenContext(this.shownCanvas, this.props.textOptions);
+    this.offscreenCanvas = this.offscreenContext.canvas;
     // Prerender off-screen-canvas
     const { wordsMetadata, linesMetadata } = writeText(this.offscreenContext, this.props.selectedText.contentState);
     const groupsMetadata = getGroupsMetadata(wordsMetadata, this.props.wordGroups);
@@ -152,20 +166,29 @@ export class WordGroups extends Component {
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-    if (this.currentState.modification === 'group-highlighted' ||
-        this.currentState.modification === 'group-spacing' ||
-        this.currentState.modification === 'group-vertical'
+    if (
+      this.currentState.modification === 'group-highlighted' ||
+      this.currentState.modification === 'group-spacing' ||
+      this.currentState.modification === 'group-vertical'
     ) {
       // Draw text
       if (this.offscreenCanvas.height > this.shownCanvas.height) {
         // Multi page
-        const copyHeight = Math.max(...this.textMetadata.linesMetadata
-          .map(lineMetadata => lineMetadata.rect.bottom)
-          .filter(lineBottom => lineBottom < this.shownCanvas.height));
+        const copyHeight = Math.max(
+          ...this.textMetadata.linesMetadata
+            .map((lineMetadata) => lineMetadata.rect.bottom)
+            .filter((lineBottom) => lineBottom < this.shownCanvas.height),
+        );
         this.shownContext.drawImage(
           this.offscreenCanvas,
-          0, 0, this.shownCanvas.width, copyHeight,
-          0, 0, this.shownCanvas.width, copyHeight,
+          0,
+          0,
+          this.shownCanvas.width,
+          copyHeight,
+          0,
+          0,
+          this.shownCanvas.width,
+          copyHeight,
         );
       } else {
         this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
@@ -188,52 +211,59 @@ export class WordGroups extends Component {
     this.currentState = newState;
     if (newState.newPage) {
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-      if (this.currentState.modification === 'group-highlighted' ||
-          this.currentState.modification === 'group-spacing' ||
-          this.currentState.modification === 'group-vertical'
+      if (
+        this.currentState.modification === 'group-highlighted' ||
+        this.currentState.modification === 'group-spacing' ||
+        this.currentState.modification === 'group-vertical'
       ) {
-        const copyHeight = Math.max(...this.textMetadata.linesMetadata
-          .map(lineMetadata => lineMetadata.rect.bottom - newState.marginTop)
-          .filter(lineBottom => lineBottom < this.shownCanvas.height));
+        const copyHeight = Math.max(
+          ...this.textMetadata.linesMetadata
+            .map((lineMetadata) => lineMetadata.rect.bottom - newState.marginTop)
+            .filter((lineBottom) => lineBottom < this.shownCanvas.height),
+        );
         this.shownContext.drawImage(
           this.offscreenCanvas,
-          0, newState.marginTop, this.shownCanvas.width, copyHeight,
-          0, 0, this.shownCanvas.width, copyHeight,
+          0,
+          newState.marginTop,
+          this.shownCanvas.width,
+          copyHeight,
+          0,
+          0,
+          this.shownCanvas.width,
+          copyHeight,
         );
       }
     }
     drawState(newState, this.shownContext, this.offscreenCanvas);
     if (newState.finished) {
-      timeout = setTimeout(
-        () => { this.props.onExerciseFinish(); },
-        this.updateInterval,
-      );
+      timeout = setTimeout(() => {
+        this.props.onExerciseFinish();
+      }, this.updateInterval);
     } else if (newState.newPage) {
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
-        this.props.exerciseOptions.pageBreakDelay,
-      );
+      timeout = setTimeout(() => {
+        animationFrame = requestAnimationFrame(() => this.scheduleNext());
+      }, this.props.exerciseOptions.pageBreakDelay);
     } else if (newState.newLine) {
-      timeout = setTimeout(
-        () => { frame = requestAnimationFrame(() => this.scheduleNext()); },
-        this.props.exerciseOptions.lineBreakDelay,
-      );
+      timeout = setTimeout(() => {
+        animationFrame = requestAnimationFrame(() => this.scheduleNext());
+      }, this.props.exerciseOptions.lineBreakDelay);
     } else {
       this.scheduleNext();
     }
   }
 
   scheduleNext() {
-    timeout = setTimeout(
-      () => { frame = requestAnimationFrame(() => this.loop()); },
-      this.updateInterval,
-    );
+    timeout = setTimeout(() => {
+      animationFrame = requestAnimationFrame(() => this.loop());
+    }, this.updateInterval);
   }
 
   render() {
     return (
       <canvas
-        ref={(ref) => { this.shownCanvas = ref; }}
+        ref={(ref) => {
+          this.shownCanvas = ref;
+        }}
         width={this.props.textOptions.width}
         height={this.props.canvasHeight}
       />
@@ -241,15 +271,14 @@ export class WordGroups extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   modification: state.exercise.modification,
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
   speedOptions: state.options.speedOptions,
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WordGroups);
+export default connect(
+  mapStateToProps,
+  null,
+)(WordGroups);

@@ -109,6 +109,18 @@
       "Tegemist on tasuta veebipõhise kiirlugemise rakendusega. Alustamiseks vali endale sobiv harjutus menüüst. Esmasel kasutamisel on soovitav alustada lugemistestiga, et selgitada oma hetke lugemiskiirus.",
       "This is a free web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
     ],
+    "course-description": [
+      "Rakendus on kasutusel Tartu Ülikoolis kiirlugemise kursusel. Järgmine kursus üliõpilastele algab 17 septembril. Täpsemalt ÕISis.",
+      "The application is used in a speed reading course at University of Tartu. Next course starts at 17th of September. More information in SIS."
+    ],
+    "rewards": [
+      "Rakendus on võitnud 2019.a kasvatusteaduslike tööde riiklikul konkursil didaktilis-rakenduslike tööde kategoorias I preemia.",
+      "The application has won the 1st prize in the didactic-applied works category at the national competition for educational work in 2019."
+    ],
+    "rewards-more-information": [
+      "Rohkem infot",
+      "More information"
+    ],
     "about": ["Tarkvara kohta", "About software"],
     "user-manual": ["Kasutusjuhend", "User manual (only in Estonian)"],
     "problem-report-title": ["Probleem mõne tekstiga?", "Problem with some text?"],
@@ -153,37 +165,37 @@
     "reading-speed-development-header": ["Lugemiskiiruse arendamine", "Reading speed development"],
     "reading-speed-development-description": [
       "Erinevate lugemis- ja abiharjutuste abil on võimalik arendada oma lugemiskiirust",
-      "Missing translation"
+      "Various reading and help exercises help you develop your reading speed"
     ],
     "taking-tests-header": ["Kontrollküsimuste läbimine", "Taking reading tests"],
     "taking-tests-description": [
       "Peale harjutuste läbimist saab sooritada testi, millega kontrollitakse loetud teksti omandamistaset",
-      "Missing translation"
+      "After completing the exercises, you can perform a test to verify the comprehension level of the read text"
     ],
     "reading-text-selection-header": ["Lugemistekstide valimine", "Reading text selection"],
     "reading-text-selection-description": [
       "Harjutamiseks saab kasutada ligi 200 olemasolevat lugemisteksti kui ka enda tekste",
-      "Missing translation"
+      "You can use almost 200 existing reading texts as well as your own texts to practice"
     ],
     "presentation-adjustment-header": ["Esitusviisi kohandamine", "Presentation adjustment"],
     "presentation-adjustment-description": [
       "Kõiki harjutusi saab kohandada sobivaks vastavalt enda lugemisharjumustele ja tasemele",
-      "Missing translation"
+      "All exercises can be customized to suit your reading habits and level"
     ],
     "improvement-observing-header": ["Arengujoone jälgimine", "Improvement observation"],
     "improvement-observing-description": [
       "Harjutuste ja testide andmed statistika salvestatakse, mida on võimalik vaadata nii tabeli kui ka graafiku kujul",
-      "Missing translation"
+      "Exercises and test data are recorded in statistics that can be viewed both in tabular and graphical form"
     ],
     "management-header": ["Haldamine", "Management"],
     "management-description": [
       "Autoriseeritud kasutajad saavad hallata lugemistekste, küsimusi ja teisi kasutajaid",
-      "Missing translation"
+      "Authorized users can manage reading texts, questions, and other users"
     ],
     "user-rating-header": ["Hinnangu andmine", "User rating"],
     "user-rating-description": [
       "Kasutajate hinnanguid arvestatakse rakenduse edasisel arendamisel",
-      "Missing translation"
+      "User feedback is taken into account in the further development of the application"
     ]
   },
   "release-notes": {
@@ -531,7 +543,12 @@
     "start-test": ["Alusta testiga", "Start test"],
     "previous-question": ["Eelmine küsimus", "Previous question"],
     "next-question": ["Järgmine küsimus", "Next question"],
-    "finish-test": ["Lõpeta test", "Finish test"]
+    "finish-test": ["Lõpeta test", "Finish test"],
+    "confirm": [
+      "küsimus(t) on jäänud vastamata. Oled kindel, et soovid testi lõpetada?",
+      "question(s) left unanswered. Are you sure you want to finish the test?"
+    ],
+    "back": ["Tagasi", "Back"]
   },
   "text-exercise-blank-test": {
     "title": ["Teksti omandamistaseme kontroll", "Text comprehension test"],
@@ -543,7 +560,12 @@
     "blank-placeholder": ["...", "..."],
     "previous-blank": ["Eelmine lünkülesanne", "Previous blank exercise"],
     "next-blank": ["Järgmine lünkülesanne", "Next blank exercise"],
-    "finish-test": ["Lõpeta test", "Finish test"]
+    "finish-test": ["Lõpeta test", "Finish test"],
+    "confirm": [
+      "lünkülesanne(t) on jäänud vastamata. Oled kindel, et soovid testi lõpetada?",
+      "blank(s) left unanswered. Are you sure you want to finish the test?"
+    ],
+    "back": ["Tagasi", "Back"]
   },
   "test-results": {
     "modal-header": ["Test lõpetatud", "Test finished"],

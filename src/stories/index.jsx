@@ -19,7 +19,6 @@ import TextAnalysisContainer, { TextAnalysis } from '../containers/TextAnalysis/
 import TextExercisePreparationContainer from '../containers/Exercise/Preparation/TextExercisePreparation';
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextSelectionFilterContainer from '../containers/TextSelection/TextSelectionFilter';
-import TextPreviewContainer from '../containers/Exercise/Preview/TextPreview';
 import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
 import HelpExercisePreparationContainer from '../containers/Exercise/Preparation/HelpExercisePreparation';
 import { HelpExercise } from '../containers/Exercise/HelpExercise/HelpExercise';
@@ -335,8 +334,6 @@ storiesOf('Text selection filter', module).add('Container', () => {
     />
   );
 });
-
-storiesOf('Text preview', module).add('Container', () => <TextPreviewContainer />);
 
 storiesOf('Reading exercise', module).add('Reading test component', () => (
   <TextExercise
