@@ -33,6 +33,14 @@ export class Home extends Component {
           <Grid.Row style={{ paddingBottom: '1em' }}>
             <Grid.Column width={8}>
               <p>{this.props.translate('home.description')}</p>
+              <p>{this.props.translate('home.course-description')}</p>
+              <p>
+                {this.props.translate('home.rewards')}
+                &nbsp;
+                <a href="https://www.etag.ee/tegevused/konkursid/kasvatusteaduslike-toode-konkurss/varasemad-konkursid/">
+                  {this.props.translate('home.rewards-more-information')}
+                </a>
+              </p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} translate={this.props.translate} />
               <Button
                 basic

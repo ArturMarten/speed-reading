@@ -228,6 +228,7 @@ export class GroupTable extends Component {
                   'group-statistics-table.average-exercise-count-per-user',
                 )} (${helpExerciseUserCount})`}
               </Table.HeaderCell>
+              {/*
               <Table.HeaderCell>
                 {this.props.translate('group-statistics-table.average-initial-exercise-speed')}
               </Table.HeaderCell>
@@ -237,6 +238,7 @@ export class GroupTable extends Component {
               <Table.HeaderCell>
                 {this.props.translate('group-statistics-table.average-exercise-speed-change-percentage')}
               </Table.HeaderCell>
+              */}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -250,6 +252,7 @@ export class GroupTable extends Component {
               const averageExerciseCount = aggregatedHelpExerciseResults[exercise]
                 ? aggregatedHelpExerciseResults[exercise].averageExerciseCount
                 : 0;
+              /*
               const averageInitialExerciseSpeed = aggregatedHelpExerciseResults[exercise]
                 ? aggregatedHelpExerciseResults[exercise].averageInitialExerciseSpeed
                 : 0;
@@ -259,6 +262,7 @@ export class GroupTable extends Component {
               const averageExerciseSpeedChangePercentage = aggregatedHelpExerciseResults[exercise]
                 ? aggregatedHelpExerciseResults[exercise].averageExerciseSpeedChangePercentage
                 : 0;
+              */
               return (
                 <Table.Row key={exercise}>
                   <Table.Cell>{this.props.translate(`statistics.${exerciseTranslateMapping[exercise]}`)}</Table.Cell>
@@ -267,6 +271,7 @@ export class GroupTable extends Component {
                     {formatMillisecondsInHours(totalExerciseElapsedTime)}
                   </Table.Cell>
                   <Table.Cell warning={averageExerciseCount === 0}>{averageExerciseCount.toFixed(2)}</Table.Cell>
+                  {/*
                   <Table.Cell warning={averageInitialExerciseSpeed === 0}>
                     {averageInitialExerciseSpeed.toFixed(0)}
                   </Table.Cell>
@@ -282,6 +287,7 @@ export class GroupTable extends Component {
                       averageExerciseSpeedChangePercentage > 0 ? '+' : ''
                     }${averageExerciseSpeedChangePercentage.toFixed(2)}%`}
                   </Table.Cell>
+                   */}
                 </Table.Row>
               );
             })}

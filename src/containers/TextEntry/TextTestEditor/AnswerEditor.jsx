@@ -5,6 +5,7 @@ import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
 import ErrorMessage from '../../Message/ErrorMessage';
+import { focusInput } from '../../../shared/utility';
 
 export class AnswerEditor extends Component {
   state = {
@@ -13,18 +14,13 @@ export class AnswerEditor extends Component {
     touched: false,
     valid: false,
     submitted: false,
-  }
+  };
 
   componentDidMount() {
     if (this.props.answer) {
       this.setAnswer(this.props.answer);
     }
-    setTimeout(() => {
-      this.inputRef.focus();
-      const { inputRef } = this.inputRef;
-      const { length } = inputRef.value;
-      inputRef.setSelectionRange(length, length);
-    }, 100);
+    focusInput(this.inputRef);
   }
 
   componentDidUpdate(prevProps) {
@@ -49,7 +45,7 @@ export class AnswerEditor extends Component {
     };
     this.props.onAddAnswer(answer);
     this.setState({ submitted: true });
-  }
+  };
 
   changeAnswerHandler = () => {
     const answer = {
@@ -59,7 +55,7 @@ export class AnswerEditor extends Component {
     };
     this.props.onChangeAnswer(this.props.questionId, this.props.answer.id, answer);
     this.setState({ submitted: true });
-  }
+  };
 
   answerInputChangeHandler = (event, data) => {
     this.setState({
@@ -67,14 +63,14 @@ export class AnswerEditor extends Component {
       valid: data.value.trim() !== '',
       answerText: data.value,
     });
-  }
+  };
 
   correctChangeHandler = () => {
     this.setState({
       touched: true,
       correct: !this.state.correct,
     });
-  }
+  };
 
   keyPressHandler = (event) => {
     if (event.key === 'Enter') {
@@ -84,32 +80,31 @@ export class AnswerEditor extends Component {
         this.addAnswerHandler(event, {});
       }
     }
-  }
+  };
 
   render() {
     return (
-      <Modal
-        open={this.props.open}
-        onClose={this.props.onClose}
-        size="small"
-        closeIcon
-      >
+      <Modal open={this.props.open} onClose={this.props.onClose} size="small" closeIcon>
         <Modal.Header>
-          {this.props.answer ?
-            this.props.translate('answer-editor.modal-header-change') :
-            this.props.translate('answer-editor.modal-header-new')}
+          {this.props.answer
+            ? this.props.translate('answer-editor.modal-header-change')
+            : this.props.translate('answer-editor.modal-header-new')}
         </Modal.Header>
         <Modal.Content>
           <Input
             fluid
             action
-            ref={(ref) => { this.inputRef = ref; }}
+            ref={(ref) => {
+              this.inputRef = ref;
+            }}
             value={this.state.answerText}
             onChange={this.answerInputChangeHandler}
             onKeyPress={this.keyPressHandler}
-            placeholder={this.props.answer ?
-              this.props.translate('answer-editor.insert-changed-placeholder') :
-              this.props.translate('answer-editor.insert-new-placeholder')}
+            placeholder={
+              this.props.answer
+                ? this.props.translate('answer-editor.insert-changed-placeholder')
+                : this.props.translate('answer-editor.insert-new-placeholder')
+            }
           >
             <input />
             <Button
@@ -119,20 +114,20 @@ export class AnswerEditor extends Component {
               icon={<Icon fitted name="check" color={this.state.correct ? 'green' : 'grey'} />}
             />
           </Input>
-          {this.props.answerStatus.error && this.state.submitted ?
-            <ErrorMessage
-              error={this.props.answerStatus.error}
-            /> : null}
+          {this.props.answerStatus.error && this.state.submitted ? (
+            <ErrorMessage error={this.props.answerStatus.error} />
+          ) : null}
         </Modal.Content>
         <Modal.Actions>
-          {this.props.answer ?
+          {this.props.answer ? (
             <Button
               primary
               loading={this.props.answerStatus.loading}
               disabled={!this.state.touched || !this.state.valid || this.props.answerStatus.loading}
               content={this.props.translate('answer-editor.change-answer')}
               onClick={this.changeAnswerHandler}
-            /> :
+            />
+          ) : (
             <Button
               positive
               loading={this.props.answerStatus.loading}
@@ -140,19 +135,19 @@ export class AnswerEditor extends Component {
               content={this.props.translate('answer-editor.add-answer')}
               onClick={this.addAnswerHandler}
             />
-          }
+          )}
         </Modal.Actions>
       </Modal>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   answerStatus: state.exerciseTest.answerStatus,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onAddAnswer: (answer) => {
     dispatch(actionCreators.addAnswer(answer));
   },
@@ -161,4 +156,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnswerEditor);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AnswerEditor);

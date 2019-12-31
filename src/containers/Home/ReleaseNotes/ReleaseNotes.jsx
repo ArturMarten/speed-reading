@@ -15,10 +15,21 @@ class ReleaseNotes extends Component {
           <List verticalAlign="middle" bulleted>
             <List.Item>
               <List.Content>
-                <List.Header>Versioon 5.1.14 (arendamisel)</List.Header>
+                <List.Header>Versioon 5.1.15 (02.06.2019)</List.Header>
                 <List.Description>
                   <List.List>
-                    <List.Item>Keskendumise harjutuse statistika</List.Item>
+                    <List.Item>Täiendus testi lõpetamisel</List.Item>
+                  </List.List>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>Versioon 5.1.14 (02.04.2019)</List.Header>
+                <List.Description>
+                  <List.List>
+                    <List.Item>Maksimaalse lugemiskiiruse tõstmine 700 sõnani minutis</List.Item>
+                    <List.Item>Lisatud (ajutine) parandus lugemiskiiruse probleemile (tagasiside oodatud!)</List.Item>
                   </List.List>
                 </List.Description>
               </List.Content>
@@ -28,7 +39,7 @@ class ReleaseNotes extends Component {
                 <List.Header>Versioon 5.1.13 (25.02.2019)</List.Header>
                 <List.Description>
                   <List.List>
-                    <List.Item>Uuendamise protsessi täiustused</List.Item>
+                    <List.Item>Uuendamise protsessi täiendused</List.Item>
                   </List.List>
                 </List.Description>
               </List.Content>

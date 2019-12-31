@@ -49,9 +49,10 @@ export class TextExercisePreview extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.textOptions !== this.props.textOptions ||
-        prevProps.exerciseOptions !== this.props.exerciseOptions ||
-        prevProps.modification !== this.props.modification
+    if (
+      prevProps.textOptions !== this.props.textOptions ||
+      prevProps.exerciseOptions !== this.props.exerciseOptions ||
+      prevProps.modification !== this.props.modification
     ) {
       if (prevProps.exerciseOptions.groupCharacterCount !== this.props.groupCharacterCount) {
         wordGroups = splitIntoWordGroups(contentState.getPlainText(''), this.props.exerciseOptions.groupCharacterCount);
@@ -66,19 +67,19 @@ export class TextExercisePreview extends Component {
 
   toggleClickHandler = () => {
     this.setState({ show: !this.state.show, restarting: !this.state.show });
-  }
+  };
 
   restart = () => {
     this.setState({ restarting: true });
-  }
+  };
 
   startExercise = () => {
     this.setState({ timerState: { ...this.state.timerState, started: true } });
-  }
+  };
 
   resetExercise = () => {
     this.setState({ timerState: initialTimerState, restarting: false });
-  }
+  };
 
   render() {
     const exercise = ((type) => {
@@ -155,35 +156,32 @@ export class TextExercisePreview extends Component {
     return (
       <Grid container centered>
         <Grid.Row style={{ paddingBottom: 0 }}>
-          <Button
-            basic
-            fluid
-            compact
-            onClick={this.toggleClickHandler}
-          >
+          <Button basic fluid compact onClick={this.toggleClickHandler}>
             <Icon name={this.state.show ? 'chevron up' : 'chevron down'} style={{ opacity: 1 }} />
-            {this.state.show ? this.props.translate('text-exercise-preview.hide') : this.props.translate('text-exercise-preview.show')}
+            {this.state.show
+              ? this.props.translate('text-exercise-preview.hide')
+              : this.props.translate('text-exercise-preview.show')}
           </Button>
         </Grid.Row>
         <Grid.Row>
-          {this.state.show ?
+          {this.state.show ? (
             <Segment compact>
               <div
                 style={{
                   padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
                 }}
               >
-                {!this.state.restarting ?
-                  exercise : null}
+                {!this.state.restarting ? exercise : null}
               </div>
-            </Segment> : null}
+            </Segment>
+          ) : null}
         </Grid.Row>
       </Grid>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   modification: state.exercise.modification,
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
@@ -192,7 +190,9 @@ const mapStateToProps = state => ({
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExercisePreview);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TextExercisePreview);

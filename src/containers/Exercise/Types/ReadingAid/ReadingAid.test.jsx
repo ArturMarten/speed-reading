@@ -1,4 +1,4 @@
-import { updateState } from './ReadingAid';
+import { updateStateFunction } from './ReadingAid';
 import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 const CANVAS_HEIGHT = 400;
@@ -10,6 +10,11 @@ describe('Reading aid updateState', () => {
     fontSize: 14,
     lineSpacing: 1.0,
   };
+
+  const speedOptions = {
+    wordsPerMinute: 250,
+  };
+
   const offscreenCanvas = document.createElement('canvas');
   offscreenCanvas.width = textOptions.width;
   offscreenCanvas.height = CANVAS_HEIGHT;
@@ -23,328 +28,149 @@ describe('Reading aid updateState', () => {
     // console.log(textMetadata);
   });
 
-  it('increases initial state line character index', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: -1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).toEqual(0);
+  const initialState = {
+    canvasHeight: CANVAS_HEIGHT,
+    marginTop: 0,
+    lineIndex: 0,
+    linePosition: 0,
+  };
+
+  const [currentState, updateState] = updateStateFunction(textMetadata, speedOptions, initialState);
+
+  it('stores initial reading speed', () => {
+    expect(currentState.wordsPerMinute).toEqual(250);
   });
 
-  it('outputs first restore rect', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: -1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
-    const expectedRect = {
+  it('calculates initial speed', () => {
+    expect(currentState.speed).toBeCloseTo(0.25434, 5);
+  });
+
+  it('returns initial line index', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.lineIndex).toEqual(0);
+  });
+
+  it('returns initial line position', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.linePosition).toEqual(0);
+  });
+
+  it('returns initial finished flag', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.finished).toEqual(false);
+  });
+
+  it('stores last update timestamp', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.lastUpdate).toBeGreaterThan(0);
+  });
+
+  it('returns initial draw rect', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.drawRect).toEqual({
       x: 0,
       y: 0,
-      width: averageCharacterWidth,
+      width: 20,
       height: 19,
-    };
-    expect(newState.restoreRect).toEqual(expectedRect);
+    });
   });
 
-  it('outputs first draw rect', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: -1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
-    const expectedRect = {
-      x: 0,
+  it('returns initial restore rect', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.restoreRect).toEqual({});
+  });
+
+  it('stores changed reading speed', () => {
+    const updatedOptions = { wordsPerMinute: 300 };
+    const [updatedState] = updateStateFunction(textMetadata, updatedOptions, CANVAS_HEIGHT, currentState);
+    expect(updatedState.wordsPerMinute).toEqual(300);
+  });
+
+  it('calculates speed change', () => {
+    const updatedOptions = { wordsPerMinute: 300 };
+    const [updatedState] = updateStateFunction(textMetadata, updatedOptions, CANVAS_HEIGHT, currentState);
+    expect(updatedState.speed).toBeCloseTo(0.3052, 5);
+  });
+
+  it('calculates updated line position', () => {
+    const nextState = updateState(currentState, 250);
+    expect(nextState.linePosition).toBeCloseTo(64, 0);
+  });
+
+  it('returns updated draw rect', () => {
+    const nextState = updateState(currentState, 250);
+    expect(nextState.drawRect).toEqual({
+      x: 64,
       y: 0,
-      width: averageCharacterWidth,
+      width: 20,
       height: 19,
-    };
-    expect(newState.drawRect).toEqual(expectedRect);
+    });
   });
 
-  it('increases first update line character index', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: 0,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
+  it('returns updated restore rect', () => {
+    const state = {
+      ...currentState,
+      drawRect: { x: 60, y: 0, width: 20, height: 19 },
     };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).toEqual(1);
-  });
-
-  it('outputs second restore rect', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: 0,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
-    const expectedRect = {
-      x: 0,
+    const nextState = updateState(state, 250);
+    expect(nextState.restoreRect).toEqual({
+      x: 60,
       y: 0,
-      width: averageCharacterWidth,
+      width: 20,
       height: 19,
-    };
-    expect(newState.restoreRect).toEqual(expectedRect);
-  });
-
-  it('outputs second draw rect', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: 0,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
-    const expectedRect = {
-      x: averageCharacterWidth,
-      y: 0,
-      width: averageCharacterWidth,
-      height: 19,
-    };
-    expect(newState.drawRect).toEqual(expectedRect);
-  });
-
-  it('increases word index on new word', () => {
-    const currentState = {
-      wordIndex: 0,
-      lineCharacterIndex: 5,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).toEqual(1);
-  });
-
-  it('increases word index on new line', () => {
-    const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.wordIndex).toEqual(5);
+    });
   });
 
   it('detects new line', () => {
-    const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.newLine).toEqual(true);
+    const nextState = updateState(currentState, 932);
+    expect(nextState.newLine).toEqual(true);
   });
 
-  it('resets line character index on new line', () => {
-    const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 21,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.lineCharacterIndex).toEqual(0);
+  it('moves line position to start on new line', () => {
+    const nextState = updateState(currentState, 932);
+    expect(nextState.linePosition).toBeCloseTo(0, 0);
   });
 
-  it('outputs second line restore rect', () => {
-    const currentState = {
-      wordIndex: 3,
-      lineCharacterIndex: 17,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const lineFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > 19);
-    const lineLastWordIndex = lineFirstWordIndex - 1;
-    const lineLastWordMetadata = textMetadata.wordsMetadata[lineLastWordIndex];
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[0].averageCharacterWidth);
-    const expectedRect = {
-      x: lineLastWordMetadata.rect.right - averageCharacterWidth + 1,
-      y: 0,
-      width: averageCharacterWidth,
-      height: 19,
-    };
-    expect(newState.restoreRect).toEqual(expectedRect);
+  it('increases line index on new line', () => {
+    const nextState = updateState(currentState, 932);
+    expect(nextState.lineIndex).toEqual(1);
   });
 
-  it('outputs second line draw rect', () => {
-    const currentState = {
-      wordIndex: 3,
-      lineCharacterIndex: 17,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
+  it('detects new page', () => {
+    const pageFirstLineIndex = textMetadata.linesMetadata.findIndex((line) => line.rect.bottom > CANVAS_HEIGHT);
+    const pageLastLineIndex = pageFirstLineIndex - 1;
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastLineIndex];
+    const state = {
+      ...currentState,
+      lineIndex: pageLastLineIndex,
+      linePosition: pageLastLineMetadata.lineWidth - 2,
     };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[1].averageCharacterWidth);
-    const expectedRect = {
-      x: 0,
-      y: 19,
-      width: averageCharacterWidth,
-      height: 19,
-    };
-    expect(newState.drawRect).toEqual(expectedRect);
+    const nextState = updateState(state, 8);
+    expect(nextState.newPage).toEqual(true);
   });
 
-  it('outputs third line restore rect', () => {
-    const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 3,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
+  it('increases margin top on new page', () => {
+    const pageFirstLineIndex = textMetadata.linesMetadata.findIndex((line) => line.rect.bottom > CANVAS_HEIGHT);
+    const pageLastLineIndex = pageFirstLineIndex - 1;
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastLineIndex];
+    const state = {
+      ...currentState,
+      lineIndex: pageLastLineIndex,
+      linePosition: pageLastLineMetadata.lineWidth - 2,
     };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[1].averageCharacterWidth);
-    const expectedRect = {
-      x: 42,
-      y: 19,
-      width: averageCharacterWidth,
-      height: 19,
-    };
-    expect(newState.restoreRect).toEqual(expectedRect);
+    const nextState = updateState(state, 8);
+    expect(nextState.marginTop).toEqual(385);
   });
 
-  it('outputs third line draw rect', () => {
-    const currentState = {
-      wordIndex: 4,
-      lineCharacterIndex: 3,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
+  it('returns finished flag after end', () => {
+    const lastLineIndex = textMetadata.linesMetadata.length - 1;
+    const lastLineMetadata = textMetadata.linesMetadata[lastLineIndex];
+    const state = {
+      ...currentState,
+      lineIndex: lastLineIndex,
+      linePosition: lastLineMetadata.lineWidth - 2,
     };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(textMetadata.linesMetadata[2].averageCharacterWidth);
-    const expectedRect = {
-      x: 0,
-      y: 43,
-      width: averageCharacterWidth,
-      height: 19,
-    };
-    expect(newState.drawRect).toEqual(expectedRect);
-  });
-
-  it('detects that text has not finished', () => {
-    const textLastLineMetadata = textMetadata.linesMetadata[textMetadata.linesMetadata.length - 1];
-    const currentState = {
-      wordIndex: 121,
-      lineCharacterIndex: textLastLineMetadata.characterCount - 3,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).toEqual(false);
-  });
-
-  it('detects that text has finished', () => {
-    const textLastLineMetadata = textMetadata.linesMetadata[textMetadata.linesMetadata.length - 1];
-    const currentState = {
-      wordIndex: 121,
-      lineCharacterIndex: textLastLineMetadata.characterCount - 2,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).toEqual(true);
-  });
-
-  it('detects that there it is not new page', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
-    const pageLastWordIndex = pageFirstWordIndex - 1;
-    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
-    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
-    const currentState = {
-      wordIndex: pageLastWordIndex,
-      lineCharacterIndex: pageLastLineMetadata.characterCount - 2,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).toEqual(false);
-  });
-
-  it('detects that there it is new page', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
-    const pageLastWordIndex = pageFirstWordIndex - 1;
-    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
-    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
-    const currentState = {
-      wordIndex: pageLastWordIndex,
-      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).toEqual(true);
-  });
-
-  it('increases margin top', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
-    const pageLastWordIndex = pageFirstWordIndex - 1;
-    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
-    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
-    const currentState = {
-      wordIndex: pageLastWordIndex,
-      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).toEqual(385);
-  });
-
-  it('outputs new page restore rect', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
-    const pageLastWordIndex = pageFirstWordIndex - 1;
-    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
-    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
-    const currentState = {
-      wordIndex: pageLastWordIndex,
-      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const averageCharacterWidth = Math.ceil(pageLastLineMetadata.averageCharacterWidth);
-    const expectedRect = {
-      x: pageLastLineMetadata.rect.right - averageCharacterWidth + 1,
-      y: pageLastLineMetadata.rect.top,
-      width: averageCharacterWidth,
-      height: 19,
-    };
-    expect(newState.restoreRect).toEqual(expectedRect);
-  });
-
-  it('outputs new page draw rect', () => {
-    const pageFirstWordIndex = textMetadata.wordsMetadata.findIndex((word) => word.rect.bottom > CANVAS_HEIGHT);
-    const pageLastWordIndex = pageFirstWordIndex - 1;
-    const pageLastWordMetadata = textMetadata.wordsMetadata[pageLastWordIndex];
-    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastWordMetadata.lineNumber];
-    const currentState = {
-      wordIndex: pageLastWordIndex,
-      lineCharacterIndex: pageLastLineMetadata.characterCount - 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const expectedRect = {
-      x: 0,
-      y: 0,
-      width: 12,
-      height: 19,
-    };
-    expect(newState.drawRect).toEqual(expectedRect);
+    const nextState = updateState(state, 8);
+    expect(nextState.finished).toBeTruthy();
   });
 });

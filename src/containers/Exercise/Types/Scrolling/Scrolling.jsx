@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+import { createOffscreenContext, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
@@ -19,26 +19,57 @@ export const drawState = (currentState, context, restoreCanvas) => {
   );
 };
 
-export const updateState = (currentState, textMetadata) => {
-  const { linesMetadata } = textMetadata;
+export const updateStateFunction = (textMetadata, options, canvasHeight, state) => {
+  // Calculate remaining time and height
+  // console.log(`Speed ${state.speed}`);
+  // console.log(`Margin top ${state.marginTop}`);
+  const { wordsMetadata, linesMetadata } = textMetadata;
+  const { wordsPerMinute } = options;
+  let speed = 0;
+  const startMargin = -canvasHeight / 2;
+  const marginTop = state.marginTop ? state.marginTop : startMargin;
+  if (!state.speed) {
+    // Initial speed
+    const totalWords = wordsMetadata.length;
+    const totalTime = Math.round((totalWords / wordsPerMinute) * 60 * 1000);
+    // console.log(`Total ${totalWords} words (${wordsPerMinute} WPM)`);
+    const totalHeight = linesMetadata[linesMetadata.length - 1].rect.bottom - linesMetadata[0].rect.top - startMargin;
+    // console.log(`Total height ${totalHeight} px in ${totalTime}ms`);
 
-  // Calculate next state
-  let finished = false;
-  let { marginTop: nextMarginTop } = currentState;
-  nextMarginTop += currentState.scrollStep;
-
-  if (nextMarginTop >= linesMetadata[linesMetadata.length - 1].rect.bottom) {
-    finished = true;
+    speed = totalHeight / totalTime;
+  } else {
+    // Speed changed
+    const change = wordsPerMinute / state.wordsPerMinute;
+    speed = state.speed * change;
   }
+  // console.log(`Speed ${speed} px/ms`);
 
-  return updateObject(currentState, {
-    marginTop: nextMarginTop,
-    finished,
+  const nextState = updateObject(state, {
+    speed,
+    wordsPerMinute,
+    marginTop,
   });
+  return [
+    nextState,
+    (currentState, updateTime) => {
+      // Calculate next state
+      const marginProgress = speed * updateTime;
+
+      const nextMarginTop = currentState.marginTop + marginProgress;
+
+      const finished = nextMarginTop >= linesMetadata[linesMetadata.length - 1].rect.bottom;
+
+      return updateObject(currentState, {
+        marginTop: nextMarginTop,
+        lastUpdate: performance.now(),
+        finished,
+      });
+    },
+  ];
 };
 
 let timeout = null;
-let frame = null;
+let animationFrame = null;
 
 const initialState = {};
 
@@ -56,80 +87,75 @@ export class Scrolling extends Component {
     ) {
       // Exercise started
       timeout = setTimeout(() => {
-        frame = requestAnimationFrame(() => this.loop());
-      }, this.updateInterval + this.props.exerciseOptions.startDelay);
+        this.currentState = updateObject(this.currentState, {
+          lastUpdate: performance.now(),
+        });
+        animationFrame = requestAnimationFrame(() => this.loop());
+      }, this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
       this.currentState = { ...initialState };
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     } else if (!this.props.timerState.stopped && nextProps.timerState.stopped) {
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
     } else if (!this.props.timerState.paused && nextProps.timerState.paused) {
       // Exercise paused
       clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animationFrame);
     } else {
       // Speed options changed
-      this.calculateUpdateInterval(nextProps.speedOptions.wordsPerMinute);
+      const [nextState, updateState] = updateStateFunction(
+        this.textMetadata,
+        nextProps.speedOptions,
+        this.shownCanvas.height,
+        this.currentState,
+      );
+      this.currentState = nextState;
+      this.updateState = updateState;
     }
     return false;
   }
 
   componentWillUnmount() {
     clearTimeout(timeout);
-    cancelAnimationFrame(frame);
+    cancelAnimationFrame(animationFrame);
   }
 
   init() {
     const fontSizeInPixels = Math.ceil(this.props.textOptions.fontSize / 0.75);
     this.shownCanvas.height = fontSizeInPixels * this.props.textOptions.lineCount;
-    this.currentState.marginTop = -this.shownCanvas.height;
+    this.currentState.marginTop = -(this.shownCanvas.height / 2);
     // Create and prepare off-screen canvas
-    this.offscreenCanvas = document.createElement('canvas');
-    this.offscreenCanvas.width = this.shownCanvas.width;
-    this.offscreenCanvas.height = this.shownCanvas.height;
-    this.offscreenContext = this.offscreenCanvas.getContext('2d');
-    this.offscreenContext.font = `${fontSizeInPixels}px ${this.props.textOptions.font}`;
-    this.offscreenContext.textBaseline = 'bottom';
-    this.offscreenContext.clearRect(0, 0, this.offscreenCanvas.width, this.offscreenCanvas.height);
+    this.offscreenContext = createOffscreenContext(this.shownCanvas, this.props.textOptions);
+    this.offscreenCanvas = this.offscreenContext.canvas;
     // Prerender off-screen canvas
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-    // Calculate update interval
-    this.calculateUpdateInterval(this.props.speedOptions.wordsPerMinute);
-  }
-
-  calculateUpdateInterval(updatedWordsPerMinute) {
-    const { wordsMetadata } = this.textMetadata;
-    const timeInSeconds = (wordsMetadata.length / updatedWordsPerMinute) * 60;
-    const pixelHeight =
-      wordsMetadata[wordsMetadata.length - 1].rect.bottom - wordsMetadata[0].rect.top + this.shownCanvas.height;
-    const scrollStep = 1;
-    this.currentState.scrollStep = scrollStep;
-    this.updateInterval = 1000 / (pixelHeight / scrollStep / timeInSeconds);
-    // console.log('Time in seconds', timeInSeconds, ', pixel height', pixelHeight);
-    // console.log('Update interval in fps', this.updateInterval);
+    // Initial draw
+    const [state, updateState] = updateStateFunction(
+      this.textMetadata,
+      this.props.speedOptions,
+      this.shownCanvas.height,
+      this.currentState,
+    );
+    this.updateState = updateState;
+    drawState(state, this.shownContext, this.offscreenCanvas);
   }
 
   loop() {
-    // console.log('Current state: ', this.currentState);
-    const newState = updateState(this.currentState, this.textMetadata);
-    // console.log('New state: ', newState);
-    this.currentState = newState;
-    drawState(newState, this.shownContext, this.offscreenCanvas);
-    if (newState.finished) {
-      timeout = setTimeout(() => {
-        this.props.onExerciseFinish();
-      }, this.updateInterval);
+    const updateTime = performance.now() - this.currentState.lastUpdate;
+    const nextState = this.updateState(this.currentState, updateTime);
+    drawState(nextState, this.shownContext, this.offscreenCanvas);
+    this.currentState = nextState;
+    if (nextState.finished) {
+      this.props.onExerciseFinish();
     } else {
-      timeout = setTimeout(() => {
-        frame = requestAnimationFrame(() => this.loop());
-      }, this.updateInterval);
+      animationFrame = requestAnimationFrame(() => this.loop());
     }
   }
 
@@ -152,10 +178,7 @@ const mapStateToProps = (state) => ({
   speedOptions: state.options.speedOptions,
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = (dispatch) => ({});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(Scrolling);

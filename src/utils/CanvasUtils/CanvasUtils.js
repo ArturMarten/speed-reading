@@ -1,5 +1,29 @@
 import { convertFromHTML, ContentState } from 'draft-js';
 
+export const pixelRatio = (() => {
+  const context = document.createElement('canvas').getContext('2d');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const backingStoreRatio =
+    context.webkitBackingStorePixelRatio ||
+    context.mozBackingStorePixelRatio ||
+    context.msBackingStorePixelRatio ||
+    context.oBackingStorePixelRatio ||
+    context.backingStorePixelRatio ||
+    1;
+  return Math.round((devicePixelRatio / backingStoreRatio) * 10) / 10;
+})();
+
+export const createOffscreenContext = (canvas, textOptions) => {
+  const offscreenCanvas = document.createElement('canvas');
+  offscreenCanvas.width = canvas.width;
+  offscreenCanvas.height = canvas.height;
+  const offscreenContext = offscreenCanvas.getContext('2d');
+  offscreenContext.font = `${Math.ceil((textOptions.fontSize / 0.75) * pixelRatio)}px ${textOptions.font}`;
+  offscreenContext.textBaseline = 'bottom';
+  offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+  return offscreenContext;
+};
+
 /*
   Word coordinates
   (x1, y1) - Bottom left corner
@@ -41,6 +65,8 @@ const setCanvasHeight = (oldContext, newHeight) => {
 const addLineMetadata = (linesMetadata, characterCount, rect) => {
   linesMetadata.push({
     characterCount,
+    lineWidth: rect.right - rect.left,
+    lineHeight: rect.bottom - rect.top,
     averageCharacterWidth: (rect.right - rect.left) / characterCount,
     rect,
   });
@@ -64,6 +90,33 @@ const getLinesMetadata = (wordsMetadata) => {
   });
   addLineMetadata(linesMetadata, characterCount, rect);
   return linesMetadata;
+};
+
+const addPageMetadata = (pagesMetadata, rect) => {
+  pagesMetadata.push({
+    pageWidth: rect.right - rect.left,
+    pageHeight: rect.bottom - rect.top,
+    rect,
+  });
+};
+
+const getPagesMetadata = (linesMetadata) => {
+  const pagesMetadata = [];
+  if (linesMetadata.length === 0) return pagesMetadata;
+  let rect = { ...linesMetadata[0].rect };
+  linesMetadata.forEach((lineMetadata) => {
+    if (rect.bottom <= lineMetadata.rect.bottom) {
+      // Same page
+      rect.right = Math.max(rect.right, lineMetadata.rect.right);
+      rect.bottom = lineMetadata.rect.bottom;
+    } else {
+      // New page
+      addPageMetadata(pagesMetadata, rect);
+      rect = { ...lineMetadata.rect };
+    }
+  });
+  addPageMetadata(pagesMetadata, rect);
+  return pagesMetadata;
 };
 
 export const getGroupsMetadata = (wordsMetadata, wordGroups) => {
@@ -157,7 +210,7 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
     const { canvas } = canvasContext;
     if (fillYStart > canvas.height) {
       // Increase canvas height, when text doesn't fit anymore
-      setCanvasHeight(canvasContext, canvas.height + 500);
+      setCanvasHeight(canvasContext, canvas.height + 500 * pixelRatio);
     }
     canvasContext.fillText(fillText, fillXStart, fillYStart);
   };
@@ -170,14 +223,25 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
       if (fillText !== '') {
         const fillTextWidth = canvasContext.measureText(fillText).width;
         if (fillXStart + fillTextWidth > canvasWidth) {
-          const word = fillText.substring(fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1, fillText.length);
+          const word = fillText.substring(
+            fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1,
+            fillText.length,
+          );
           fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
           draw();
           newLine({ overflowText: word });
           lineNumber += 1;
         }
         draw();
-        addWordMetadata(wordsMetadata, currentWord, canvasContext, lineNumber, wordStartPosition, fillYStart, lineHeight);
+        addWordMetadata(
+          wordsMetadata,
+          currentWord,
+          canvasContext,
+          lineNumber,
+          wordStartPosition,
+          fillYStart,
+          lineHeight,
+        );
         currentWord = '';
         lineNumber += 1;
       }
@@ -224,7 +288,10 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
         // Draw all remaining text
         const fillTextWidth = canvasContext.measureText(fillText).width;
         if (fillXStart + fillTextWidth > canvasWidth) {
-          const word = fillText.substring(fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1, fillText.length);
+          const word = fillText.substring(
+            fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1,
+            fillText.length,
+          );
           fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
           draw();
           lineNumber += 1;
@@ -232,7 +299,15 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
         }
         draw();
         // Add remaining word metadata
-        addWordMetadata(wordsMetadata, currentWord, canvasContext, lineNumber, wordStartPosition, fillYStart, lineHeight);
+        addWordMetadata(
+          wordsMetadata,
+          currentWord,
+          canvasContext,
+          lineNumber,
+          wordStartPosition,
+          fillYStart,
+          lineHeight,
+        );
         currentWord = '';
       }
     }
@@ -242,7 +317,8 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
     setCanvasHeight(canvasContext, textHeight);
   }
   const linesMetadata = getLinesMetadata(wordsMetadata);
-  return { wordsMetadata, linesMetadata };
+  const pagesMetadata = getPagesMetadata(linesMetadata);
+  return { wordsMetadata, linesMetadata, pagesMetadata };
 };
 
 // eslint-disable-next-line

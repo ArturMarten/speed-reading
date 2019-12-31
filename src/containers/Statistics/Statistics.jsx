@@ -354,7 +354,11 @@ export class Statistics extends Component {
     }
   };
 
-  outlierFilter = (attempt) => !this.state.filterOutliers || !attempt.wordsPerMinute || attempt.wordsPerMinute <= 500;
+  outlierFilter = (attempt) =>
+    !this.state.filterOutliers ||
+    !attempt.wordsPerMinute ||
+    attempt.wordsPerMinute <= 500 ||
+    (attempt.wordsPerMinute <= 700 && attempt.date >= new Date('2019-04-02T00:00:00Z')); // Temporary
 
   timeFilter = (attempt) =>
     attempt.date >= new Date(this.state.startTime) && attempt.date <= new Date(`${this.state.endTime}T23:59:59Z`);

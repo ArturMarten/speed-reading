@@ -49,10 +49,10 @@ it('renders empty table', () => {
   );
   const rows = container.querySelectorAll('tr');
   expect(rows.length).toBe(17);
-  expect(queryAllByText('0').length).toBe(48);
+  expect(queryAllByText('0').length).toBe(44);
   expect(queryAllByText('0h 00m').length).toBe(8);
   expect(queryAllByText('0.00').length).toBe(8);
-  expect(queryAllByText('0.00%').length).toBe(20);
+  expect(queryAllByText('0.00%').length).toBe(18);
 });
 
 it('renders table with data', () => {
@@ -71,5 +71,5 @@ it('renders table with data', () => {
   expect(queryByText('+8.06%')).not.toBeNull();
   expect(queryByText('+2.94%')).not.toBeNull();
   expect(queryAllByText('0h 00m').length).toBe(5);
-  expect(queryAllByText('0.00%').length).toBe(14);
+  expect(queryAllByText('0.00%').length).toBe(12);
 });

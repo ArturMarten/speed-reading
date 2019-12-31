@@ -13,3 +13,6 @@ import './StringEndsWith';
 
 // Array.prototype.fill is not yet available with Internet Explorer, so we add the polyfill here.
 import './ArrayFill';
+
+// High DPI canvas
+import './HTMLCanvasElement';

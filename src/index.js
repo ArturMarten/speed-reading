@@ -5,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
 import ReactGA from 'react-ga';
 import { getTranslate } from 'react-localize-redux';
+import * as Sentry from '@sentry/browser';
 
 // Styles
 /*
@@ -66,6 +67,12 @@ if (process.env.NODE_ENV !== 'development') {
 
 const store = configureStore(history);
 
+// Sentry
+Sentry.init({
+  dsn: 'https://b356121aa6694ff7bc836d0c077546b7@sentry.io/1793193',
+  enabled: process.env.NODE_ENV === 'production',
+});
+
 ReactDOM.render(
   React.createElement(Provider, { store }, React.createElement(ConnectedRouter, { history }, React.createElement(App))),
   document.getElementById('root'),
@@ -73,13 +80,13 @@ ReactDOM.render(
 
 serviceWorker.register({
   onOffline: () => {
-    const updateMessage = document.createElement('div');
-    updateMessage.id = 'offline-message';
+    const offlineMessage = document.createElement('div');
+    offlineMessage.id = 'offline-message';
     const root = document.getElementById('root');
-    root.insertBefore(updateMessage, root.firstChild);
+    root.insertBefore(offlineMessage, root.firstChild);
     ReactDOM.render(
       React.createElement(OfflineMessage, { translate: getTranslate(store.getState().locale) }),
-      document.getElementById(updateMessage.id),
+      document.getElementById(offlineMessage.id),
     );
   },
   onUpdate: (registration) => {

@@ -37,6 +37,16 @@ export const stopPropagation = (event) => {
   }
 };
 
+export const focusInput = (ref) => {
+  setTimeout(() => {
+    ref.focus();
+    const { inputRef } = ref;
+    const { current } = inputRef;
+    const { length } = current.value;
+    current.setSelectionRange(length, length);
+  }, 100);
+};
+
 const pad = (time, length) => {
   let result = time;
   while (result.length < length) {

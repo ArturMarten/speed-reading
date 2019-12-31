@@ -4,7 +4,7 @@ import { Modal, Button, Input, Dropdown, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
-import { isEmail } from '../../../shared/utility';
+import { isEmail, focusInput } from '../../../shared/utility';
 import { rolePermissions } from '../../../store/reducers/profile';
 import ErrorMessage from '../../Message/ErrorMessage';
 
@@ -23,12 +23,7 @@ export class UserEditor extends Component {
     if (this.props.user) {
       this.setUser(this.props.user);
     }
-    setTimeout(() => {
-      this.inputRef.focus();
-      const { inputRef } = this.inputRef;
-      const { length } = inputRef.value;
-      inputRef.setSelectionRange(length, length);
-    }, 100);
+    focusInput(this.inputRef);
   }
 
   componentDidUpdate(prevProps) {
@@ -191,14 +186,14 @@ export class UserEditor extends Component {
               onClick={this.changeUserHandler}
             />
           ) : (
-              <Button
-                positive
-                loading={this.props.userStatus.loading}
-                disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
-                content={this.props.translate('user-editor.add-user')}
-                onClick={this.addUserHandler}
-              />
-            )}
+            <Button
+              positive
+              loading={this.props.userStatus.loading}
+              disabled={!this.state.touched || !this.state.valid || this.props.userStatus.loading}
+              content={this.props.translate('user-editor.add-user')}
+              onClick={this.addUserHandler}
+            />
+          )}
         </Modal.Actions>
       </Modal>
     );
