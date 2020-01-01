@@ -151,7 +151,7 @@ export class ReadingAid extends Component {
       // Exercise started
       this.currentState = this.updateState(this.currentState, 0);
       drawState(this.currentState, this.shownContext, this.offscreenCanvas);
-      this.delayedStart(this.props.exerciseOptions.startDelay);
+      this.delayedLoop(this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
       clearTimeout(timeout);
@@ -194,7 +194,7 @@ export class ReadingAid extends Component {
     this.textMetadata = writeText(this.offscreenContext, this.props.selectedText.contentState);
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
-    this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
+    // Draw text
     if (this.offscreenCanvas.height > this.shownCanvas.height) {
       // Multi page
       this.drawPage();
@@ -238,15 +238,15 @@ export class ReadingAid extends Component {
     if (this.currentState.finished) {
       this.props.onExerciseFinish();
     } else if (this.currentState.newPage) {
-      this.delayedStart(this.props.exerciseOptions.pageBreakDelay);
+      this.delayedLoop(this.props.exerciseOptions.pageBreakDelay);
     } else if (this.currentState.newLine) {
-      this.delayedStart(this.props.exerciseOptions.lineBreakDelay);
+      this.delayedLoop(this.props.exerciseOptions.lineBreakDelay);
     } else {
       animationFrame = requestAnimationFrame(() => this.loop());
     }
   }
 
-  delayedStart(delay) {
+  delayedLoop(delay) {
     timeout = setTimeout(() => {
       this.currentState = updateObject(this.currentState, {
         lastUpdate: performance.now(),
