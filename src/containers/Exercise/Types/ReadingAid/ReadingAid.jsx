@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { createOffscreenContext, writeText, pixelRatio } from '../../../../utils/CanvasUtils/CanvasUtils';
+import { createOffscreenContext, writeText, drawPage, pixelRatio } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 import { getColorRGBA } from '../../../../store/reducers/options';
 
@@ -73,10 +73,7 @@ export const updateStateFunction = (textMetadata, options, state) => {
       let newPage = false;
       let finished = false;
 
-      // TODO: speed from state
-      const widthProgress = speed * updateTime;
-      const lastUpdate = performance.now();
-
+      const widthProgress = currentState.speed * updateTime;
       // console.log(`Width progress ${widthProgress} px`);
 
       linePosition += widthProgress;
@@ -120,7 +117,7 @@ export const updateStateFunction = (textMetadata, options, state) => {
         newLine,
         newPage,
         finished,
-        lastUpdate,
+        lastUpdate: performance.now(),
       });
     },
   ];
@@ -197,7 +194,7 @@ export class ReadingAid extends Component {
     // Draw text
     if (this.offscreenCanvas.height > this.shownCanvas.height) {
       // Multi page
-      this.drawPage();
+      drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas);
     } else {
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
@@ -208,31 +205,11 @@ export class ReadingAid extends Component {
     this.updateState = updateState;
   }
 
-  drawPage(marginTop = 0) {
-    this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-    const copyHeight = Math.max(
-      ...this.textMetadata.linesMetadata
-        .map((lineMetadata) => lineMetadata.rect.bottom - marginTop)
-        .filter((lineBottom) => lineBottom < this.shownCanvas.height),
-    );
-    this.shownContext.drawImage(
-      this.offscreenCanvas,
-      0,
-      marginTop,
-      this.shownCanvas.width,
-      copyHeight,
-      0,
-      0,
-      this.shownCanvas.width,
-      copyHeight,
-    );
-  }
-
   loop() {
     const updateTime = performance.now() - this.currentState.lastUpdate;
     this.currentState = this.updateState(this.currentState, updateTime);
     if (this.currentState.newPage) {
-      this.drawPage(this.currentState.marginTop);
+      drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas, this.currentState.marginTop);
     }
     drawState(this.currentState, this.shownContext, this.offscreenCanvas);
     if (this.currentState.finished) {

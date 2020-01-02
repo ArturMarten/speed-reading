@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   createOffscreenContext,
   writeText,
+  drawPage,
   getGroupsMetadata,
   pixelRatio,
 } from '../../../../utils/CanvasUtils/CanvasUtils';
@@ -11,28 +12,26 @@ import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRects, drawRects } = currentState;
-  if (restoreRects !== null) {
-    restoreRects.forEach((restoreRect) => {
-      context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
-      if (
-        currentState.modification === 'group-highlighted' ||
-        currentState.modification === 'group-spacing' ||
-        currentState.modification === 'group-vertical'
-      ) {
-        context.drawImage(
-          restoreCanvas,
-          restoreRect.x,
-          restoreRect.y + currentState.marginTop,
-          restoreRect.width,
-          restoreRect.height,
-          restoreRect.x,
-          restoreRect.y,
-          restoreRect.width,
-          restoreRect.height,
-        );
-      }
-    });
-  }
+  restoreRects.forEach((restoreRect) => {
+    context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
+    if (
+      currentState.modification === 'group-highlighted' ||
+      currentState.modification === 'group-spacing' ||
+      currentState.modification === 'group-vertical'
+    ) {
+      context.drawImage(
+        restoreCanvas,
+        restoreRect.x,
+        restoreRect.y + currentState.marginTop,
+        restoreRect.width,
+        restoreRect.height,
+        restoreRect.x,
+        restoreRect.y,
+        restoreRect.width,
+        restoreRect.height,
+      );
+    }
+  });
   drawRects.forEach((drawRect) => {
     if (currentState.modification === 'group-single') {
       context.drawImage(
@@ -53,60 +52,109 @@ export const drawState = (currentState, context, restoreCanvas) => {
   });
 };
 
-export const updateState = (currentState, textMetadata) => {
-  // Calculate next state
-  const { canvasHeight } = currentState;
-  const { groupsMetadata } = textMetadata;
-  let { groupIndex, marginTop } = currentState;
-  let newLine = false;
-  let newPage = false;
-  let finished = false;
-  const drawRects = [];
+export const updateStateFunction = (textMetadata, options, state) => {
+  const { wordsMetadata, groupsMetadata } = textMetadata;
+  const { wordsPerMinute } = options;
+  let speed = 0;
 
-  groupIndex += 1;
-  const groupMetadata = groupsMetadata[groupIndex];
-  groupMetadata.rects.forEach((groupRect) => {
-    if (groupRect.bottom - marginTop > canvasHeight) {
-      // New page
-      newPage = true;
-      marginTop = groupRect.top;
-    }
-    const drawRect = {
-      x: groupRect.left,
-      y: groupRect.top - marginTop,
-      width: groupRect.right - groupRect.left,
-      height: groupRect.bottom - groupRect.top,
-    };
-    drawRects.push(drawRect);
-  });
-
-  const previousGroupMetadata = groupsMetadata[Math.max(groupIndex - 1, 0)];
-  const previousGroupRectBottom = previousGroupMetadata.rects[previousGroupMetadata.rects.length - 1].bottom;
-  const groupRectBottom = groupMetadata.rects[groupMetadata.rects.length - 1].bottom;
-  if (previousGroupRectBottom !== groupRectBottom) {
-    newLine = true;
+  if (!state.speed) {
+    // Initial speed
+    const totalTime = Math.round((wordsMetadata.length / options.wordsPerMinute) * 60 * 1000);
+    const totalWidth = groupsMetadata.reduce((acc, el) => acc + el.groupWidth, 0);
+    // console.log(`Total width ${totalWidth}px in ${totalTime}ms`);
+    speed = totalWidth / totalTime;
+  } else {
+    // Speed changed
+    const change = wordsPerMinute / state.wordsPerMinute;
+    speed = state.speed * change;
   }
+  // console.log(`Speed ${speed} px/ms`);
 
-  if (groupIndex === groupsMetadata.length - 1) {
-    finished = true;
-  }
-
-  return updateObject(currentState, {
-    groupIndex,
-    marginTop,
-    drawRects,
-    newLine,
-    newPage,
-    finished,
+  const nextState = updateObject(state, {
+    speed,
+    wordsPerMinute,
   });
+  return [
+    nextState,
+    (currentState, updateTime) => {
+      // Calculate next state
+      const { canvasHeight } = currentState;
+      let { groupIndex, groupPosition, marginTop } = currentState;
+      let newGroup = false;
+      let newLine = false;
+      let newPage = false;
+      let finished = false;
+      const drawRects = [];
+
+      const widthProgress = currentState.speed * updateTime;
+      // console.log(`Width progress ${widthProgress} px`);
+
+      const restoreRects = currentState.drawRects.slice();
+
+      groupPosition += widthProgress;
+
+      let groupMetadata = groupsMetadata[groupIndex];
+
+      if (groupPosition >= groupMetadata.groupWidth) {
+        if (groupIndex !== groupsMetadata.length - 1) {
+          // New group
+          newGroup = true;
+          groupPosition -= groupMetadata.groupWidth;
+          groupIndex += 1;
+          groupMetadata = groupsMetadata[groupIndex];
+        } else {
+          finished = true;
+        }
+      }
+
+      groupMetadata.rects.forEach((groupRect) => {
+        // TODO: Fix new page bug
+        if (groupRect.bottom - marginTop > canvasHeight) {
+          // New page
+          newPage = true;
+          marginTop = groupRect.top;
+        }
+        const drawRect = {
+          x: groupRect.left,
+          y: groupRect.top - marginTop,
+          width: groupRect.right - groupRect.left,
+          height: groupRect.bottom - groupRect.top,
+        };
+        drawRects.push(drawRect);
+      });
+
+      const previousGroupIndex = Math.max(groupIndex - 1, 0);
+      const previousGroupMetadata = groupsMetadata[previousGroupIndex];
+      const previousGroupRectBottom = previousGroupMetadata.rects[previousGroupMetadata.rects.length - 1].bottom;
+      const groupRectBottom = groupMetadata.rects[groupMetadata.rects.length - 1].bottom;
+      if (previousGroupRectBottom !== groupRectBottom) {
+        newLine = true;
+      }
+
+      return updateObject(currentState, {
+        marginTop,
+        groupIndex,
+        groupPosition,
+        restoreRects,
+        drawRects,
+        newGroup,
+        newLine,
+        newPage,
+        finished,
+        lastUpdate: performance.now(),
+      });
+    },
+  ];
 };
 
 let timeout = null;
 let animationFrame = null;
 
 const initialState = {
-  groupIndex: -1,
+  groupIndex: 0,
+  groupPosition: 0,
   marginTop: 0,
+  drawRects: [],
 };
 
 export class WordGroups extends Component {
@@ -122,6 +170,8 @@ export class WordGroups extends Component {
       (this.props.timerState.paused && !nextProps.timerState.paused)
     ) {
       // Exercise started
+      this.currentState = this.updateState(this.currentState, 0);
+      drawState(this.currentState, this.shownContext, this.offscreenCanvas);
       this.delayedLoop(this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
@@ -139,7 +189,13 @@ export class WordGroups extends Component {
       cancelAnimationFrame(animationFrame);
     } else {
       // Speed options changed
-      this.updateInterval = nextProps.speedOptions.fixation;
+      const [nextState, updateState] = updateStateFunction(
+        this.textMetadata,
+        nextProps.speedOptions,
+        this.currentState,
+      );
+      this.currentState = nextState;
+      this.updateState = updateState;
     }
     return false;
   }
@@ -169,76 +225,51 @@ export class WordGroups extends Component {
       // Draw text
       if (this.offscreenCanvas.height > this.shownCanvas.height) {
         // Multi page
-        this.drawPage();
+        drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas);
       } else {
         this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
         this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
       }
     }
-    // Calculate update interval
-    this.updateInterval = this.props.speedOptions.fixation;
     // Initial draw
-    this.currentState.restoreRects = null;
-    this.currentState = updateState(this.currentState, this.textMetadata, this.props.wordGroups);
-    drawState(this.currentState, this.shownContext, this.offscreenCanvas);
-  }
-
-  drawPage(marginTop = 0) {
-    this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
-    const copyHeight = Math.max(
-      ...this.textMetadata.linesMetadata
-        .map((lineMetadata) => lineMetadata.rect.bottom - marginTop)
-        .filter((lineBottom) => lineBottom < this.shownCanvas.height),
-    );
-    this.shownContext.drawImage(
-      this.offscreenCanvas,
-      0,
-      marginTop,
-      this.shownCanvas.width,
-      copyHeight,
-      0,
-      0,
-      this.shownCanvas.width,
-      copyHeight,
-    );
+    const [nextState, updateState] = updateStateFunction(this.textMetadata, this.props.speedOptions, this.currentState);
+    this.currentState = nextState;
+    this.updateState = updateState;
   }
 
   loop() {
-    this.currentState.restoreRects = this.currentState.drawRects ? this.currentState.drawRects.slice() : null;
-    this.currentState = updateState(this.currentState, this.textMetadata, this.props.wordGroups);
+    const updateTime = performance.now() - this.currentState.lastUpdate;
+    this.currentState = this.updateState(this.currentState, updateTime);
     if (this.currentState.newPage) {
       if (
         this.currentState.modification === 'group-highlighted' ||
         this.currentState.modification === 'group-spacing' ||
         this.currentState.modification === 'group-vertical'
       ) {
-        this.drawPage(this.currentState.marginTop);
+        drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas, this.currentState.marginTop);
       }
     }
-    drawState(this.currentState, this.shownContext, this.offscreenCanvas);
+    if (this.currentState.newGroup) {
+      drawState(this.currentState, this.shownContext, this.offscreenCanvas);
+    }
     if (this.currentState.finished) {
-      timeout = setTimeout(() => {
-        this.props.onExerciseFinish();
-      }, this.updateInterval);
+      this.props.onExerciseFinish();
     } else if (this.currentState.newPage) {
       this.delayedLoop(this.props.exerciseOptions.pageBreakDelay);
     } else if (this.currentState.newLine) {
       this.delayedLoop(this.props.exerciseOptions.lineBreakDelay);
     } else {
-      this.scheduleLoop();
+      animationFrame = requestAnimationFrame(() => this.loop());
     }
   }
 
   delayedLoop(delay) {
     timeout = setTimeout(() => {
-      animationFrame = requestAnimationFrame(() => this.scheduleLoop());
-    }, delay);
-  }
-
-  scheduleLoop() {
-    timeout = setTimeout(() => {
+      this.currentState = updateObject(this.currentState, {
+        lastUpdate: performance.now(),
+      });
       animationFrame = requestAnimationFrame(() => this.loop());
-    }, this.updateInterval);
+    }, delay);
   }
 
   render() {

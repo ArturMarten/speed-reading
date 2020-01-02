@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-import { updateState } from './WordGroups';
+import { updateStateFunction } from './WordGroups';
 import { exampleText, writeText, getGroupsMetadata } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { splitIntoWordGroups } from '../../../../utils/TextUtils';
 
@@ -13,6 +13,11 @@ describe('Wordgroups updateState', () => {
     fontSize: 14,
     lineSpacing: 1.0,
   };
+
+  const speedOptions = {
+    wordsPerMinute: 250,
+  };
+
   const offscreenCanvas = document.createElement('canvas');
   offscreenCanvas.width = textOptions.width;
   offscreenCanvas.height = CANVAS_HEIGHT;
@@ -29,220 +34,101 @@ describe('Wordgroups updateState', () => {
     // console.log(wordGroups);
   });
 
-  it('increases initial state group index', () => {
-    const currentState = {
-      groupIndex: -1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.groupIndex).toEqual(0);
+  const initialState = {
+    canvasHeight: CANVAS_HEIGHT,
+    groupIndex: 0,
+    groupPosition: 0,
+    marginTop: 0,
+    drawRects: [],
+  };
+
+  const [currentState, updateState] = updateStateFunction(textMetadata, speedOptions, initialState);
+
+  it('stores initial reading speed', () => {
+    expect(currentState.wordsPerMinute).toEqual(250);
   });
 
-  it('outputs first draw rect', () => {
-    const currentState = {
-      groupIndex: -1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const firstWordGroup = wordGroups[0];
-    const expectedRects = [
+  it('calculates initial speed', () => {
+    expect(currentState.speed).toBeCloseTo(0.24611, 5);
+  });
+
+  it('returns initial group index', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.groupIndex).toEqual(0);
+  });
+
+  it('returns initial group position', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.groupPosition).toEqual(0);
+  });
+
+  it('returns initial finished flag', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.finished).toEqual(false);
+  });
+
+  it('stores last update timestamp', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.lastUpdate).toBeGreaterThan(0);
+  });
+
+  it('returns initial draw rects', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.drawRects).toEqual([
       {
         x: 0,
         y: 0,
-        width: textMetadata.wordsMetadata[firstWordGroup.length - 1].rect.right,
+        width: 140,
         height: 19,
       },
-    ];
-    expect(newState.drawRects).toEqual(expectedRects);
+    ]);
   });
 
-  it('increases group index after first group', () => {
-    const currentState = {
-      groupIndex: 0,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.groupIndex).toEqual(1);
+  it('returns initial restore rects', () => {
+    const nextState = updateState(currentState, 0);
+    expect(nextState.restoreRects).toEqual([]);
   });
 
-  it('outputs second draw rect', () => {
-    const currentState = {
-      groupIndex: 0,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const groupMetadata = textMetadata.groupsMetadata[1];
-    const expectedRects = [
-      {
-        x: groupMetadata.rects[0].left,
-        y: 0,
-        width: groupMetadata.rects[0].right - groupMetadata.rects[0].left,
-        height: 19,
-      },
-      {
-        x: groupMetadata.rects[1].left,
-        y: 19,
-        width: groupMetadata.rects[1].right - groupMetadata.rects[1].left,
-        height: 19,
-      },
-    ];
-    expect(newState.drawRects).toEqual(expectedRects);
+  it('stores changed reading speed', () => {
+    const updatedOptions = { wordsPerMinute: 300 };
+    const [updatedState] = updateStateFunction(textMetadata, updatedOptions, CANVAS_HEIGHT, currentState);
+    expect(updatedState.wordsPerMinute).toEqual(300);
   });
 
-  it('increases group index after second group', () => {
-    const currentState = {
-      groupIndex: 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.groupIndex).toEqual(2);
+  it('calculates speed change', () => {
+    const updatedOptions = { wordsPerMinute: 300 };
+    const [updatedState] = updateStateFunction(textMetadata, updatedOptions, CANVAS_HEIGHT, currentState);
+    expect(updatedState.speed).toBeCloseTo(0.29533, 5);
   });
 
-  it('outputs third draw rect', () => {
-    const currentState = {
-      groupIndex: 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const groupMetadata = textMetadata.groupsMetadata[2];
-    const expectedRects = [
-      {
-        x: 0,
-        y: groupMetadata.rects[0].top,
-        width: groupMetadata.rects[0].right - groupMetadata.rects[0].left,
-        height: 19,
-      },
-    ];
-    expect(newState.drawRects).toEqual(expectedRects);
+  it('calculates updated group position', () => {
+    const nextState = updateState(currentState, 250);
+    expect(nextState.groupPosition).toBeCloseTo(62, 0);
   });
 
-  it('detects new line after second group', () => {
-    const currentState = {
-      groupIndex: 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.newLine).toEqual(true);
+  it('increases line index on new group', () => {
+    const nextState = updateState(currentState, 569);
+    expect(nextState.groupIndex).toEqual(1);
   });
 
-  it('increases group index after fourth group', () => {
-    const currentState = {
-      groupIndex: 3,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.groupIndex).toEqual(4);
+  it('detects new line', () => {
+    const nextState = updateState(currentState, 569);
+    expect(nextState.newLine).toEqual(true);
   });
 
-  it('outputs fifth draw rect', () => {
-    const currentState = {
-      groupIndex: 3,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const groupMetadata = textMetadata.wordsMetadata[7];
-    const expectedRects = [
-      {
-        x: groupMetadata.rect.left,
-        y: groupMetadata.rect.top,
-        width: groupMetadata.rect.right - groupMetadata.rect.left,
-        height: 19,
-      },
-    ];
-    expect(newState.drawRects).toEqual(expectedRects);
-  });
+  it('detects new page', () => {});
 
-  it('detects that there is not new page', () => {
-    const pageFirstGroupIndex = textMetadata.groupsMetadata.findIndex(
-      (group) => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT,
-    );
-    const pageLastGroupIndex = pageFirstGroupIndex - 1;
-    const currentState = {
-      groupIndex: pageLastGroupIndex - 1,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).toEqual(false);
-  });
+  it('increases margin top on new page', () => {});
 
-  it('detects that there is new page', () => {
-    const pageFirstGroupIndex = textMetadata.groupsMetadata.findIndex(
-      (group) => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT,
-    );
-    const pageLastGroupIndex = pageFirstGroupIndex - 1;
-    const currentState = {
-      groupIndex: pageLastGroupIndex,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
+  it('returns finished flag after end', () => {
+    const lastGroupIndex = textMetadata.groupsMetadata.length - 1;
+    const lastGroupMetadata = textMetadata.groupsMetadata[lastGroupIndex];
+    const state = {
+      ...currentState,
+      groupIndex: lastGroupIndex,
+      groupPosition: lastGroupMetadata.groupWidth - 2,
     };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.newPage).toEqual(true);
-  });
-
-  it('increases margin top', () => {
-    const pageFirstGroupIndex = textMetadata.groupsMetadata.findIndex(
-      (group) => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT,
-    );
-    const pageLastGroupIndex = pageFirstGroupIndex - 1;
-    const currentState = {
-      groupIndex: pageLastGroupIndex,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.marginTop).toEqual(385);
-  });
-
-  it('outputs new page draw rect', () => {
-    const pageFirstGroupIndex = textMetadata.groupsMetadata.findIndex(
-      (group) => group.rects[group.rects.length - 1].bottom > CANVAS_HEIGHT,
-    );
-    const pageLastGroupIndex = pageFirstGroupIndex - 1;
-    const currentState = {
-      groupIndex: pageLastGroupIndex,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
-    };
-    const newState = updateState(currentState, textMetadata);
-    const firstGroupMetadata = textMetadata.groupsMetadata[pageFirstGroupIndex];
-    const expectedRects = [
-      {
-        x: 0,
-        y: 0,
-        width: firstGroupMetadata.rects[0].right - firstGroupMetadata.rects[0].left,
-        height: 19,
-      },
-    ];
-    expect(newState.drawRects).toEqual(expectedRects);
-  });
-
-  it('detects that text has not finished', () => {
-    const currentState = {
-      groupIndex: 63,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 390,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).toEqual(false);
-  });
-
-  it('detects that text has finished', () => {
-    const currentState = {
-      groupIndex: 64,
-      canvasHeight: CANVAS_HEIGHT,
-      marginTop: 390,
-    };
-    const newState = updateState(currentState, textMetadata);
-    expect(newState.finished).toEqual(true);
+    const nextState = updateState(state, 9);
+    expect(nextState.finished).toBeTruthy();
   });
 });

@@ -48,6 +48,17 @@ export const drawText = (canvasContext, textMetadata) => {
   });
 };
 
+export const drawPage = (linesMetadata, context, offscreenCanvas, marginTop = 0) => {
+  const { canvas } = context;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  const copyHeight = Math.max(
+    ...linesMetadata
+      .map((lineMetadata) => lineMetadata.rect.bottom - marginTop)
+      .filter((lineBottom) => lineBottom <= canvas.height),
+  );
+  context.drawImage(offscreenCanvas, 0, marginTop, canvas.width, copyHeight, 0, 0, canvas.width, copyHeight);
+};
+
 const setCanvasHeight = (oldContext, newHeight) => {
   const { canvas, font, textBaseline } = oldContext;
   const tempCanvas = document.createElement('canvas');
@@ -121,31 +132,34 @@ const getPagesMetadata = (linesMetadata) => {
 
 export const getGroupsMetadata = (wordsMetadata, wordGroups) => {
   const groupsMetadata = [];
-  let nextWordIndex = 0;
-  wordGroups.forEach((words) => {
+  let wordIndex = 0;
+  wordGroups.forEach((wordGroup) => {
     const rects = [];
-    let nextWordMetadata = wordsMetadata[nextWordIndex];
-    if (nextWordMetadata) {
+    let wordMetadata = wordsMetadata[wordIndex];
+    if (wordMetadata) {
       const groupRect = {
-        top: nextWordMetadata.rect.top,
-        right: nextWordMetadata.rect.right,
-        bottom: nextWordMetadata.rect.bottom,
-        left: nextWordMetadata.rect.left,
+        top: wordMetadata.rect.top,
+        right: wordMetadata.rect.right,
+        bottom: wordMetadata.rect.bottom,
+        left: wordMetadata.rect.left,
       };
-      nextWordIndex += 1;
-      words.slice(1).forEach(() => {
-        nextWordMetadata = wordsMetadata[Math.min(nextWordIndex, wordsMetadata.length - 1)];
-        if (groupRect.right > nextWordMetadata.rect.left) {
+      wordIndex += 1;
+      wordGroup.slice(1).forEach(() => {
+        wordMetadata = wordsMetadata[Math.min(wordIndex, wordsMetadata.length - 1)];
+        if (groupRect.right > wordMetadata.rect.left) {
           rects.push({ ...groupRect });
-          groupRect.left = nextWordMetadata.rect.left;
+          groupRect.left = wordMetadata.rect.left;
         }
-        groupRect.top = nextWordMetadata.rect.top;
-        groupRect.right = nextWordMetadata.rect.right;
-        groupRect.bottom = nextWordMetadata.rect.bottom;
-        nextWordIndex += 1;
+        groupRect.top = wordMetadata.rect.top;
+        groupRect.right = wordMetadata.rect.right;
+        groupRect.bottom = wordMetadata.rect.bottom;
+        wordIndex += 1;
       });
       rects.push({ ...groupRect });
-      groupsMetadata.push({ rects, words });
+
+      const groupWidth = rects.map((rect) => rect.right - rect.left).reduce((total, width) => total + width, 0);
+
+      groupsMetadata.push({ rects, wordGroup, groupWidth });
     }
   });
   return groupsMetadata;

@@ -1,5 +1,12 @@
 import React from 'react';
+
+// Styles
 import 'semantic-ui-css/semantic.min.css';
+import '../index.css';
+
+// Polyfills
+import '../polyfill';
+
 import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { object } from '@storybook/addon-knobs';
@@ -7,6 +14,7 @@ import { getTranslate, setActiveLanguage } from 'react-localize-redux';
 import MockAdapter from 'axios-mock-adapter';
 
 /* eslint-disable max-len */
+import { ContentState, convertFromHTML } from 'draft-js';
 import axios from '../api/axios-http';
 import * as actionCreators from '../store/actions';
 import credentials from '../credentials';
@@ -20,6 +28,8 @@ import TextExercisePreparationContainer from '../containers/Exercise/Preparation
 import TextSelectionContainer from '../containers/TextSelection/TextSelection';
 import TextSelectionFilterContainer from '../containers/TextSelection/TextSelectionFilter';
 import { TextExercise } from '../containers/Exercise/TextExercise/TextExercise';
+import { ReadingTest } from '../containers/Exercise/Types/ReadingTest/ReadingTest';
+import { ReadingAid } from '../containers/Exercise/Types/ReadingAid/ReadingAid';
 import HelpExercisePreparationContainer from '../containers/Exercise/Preparation/HelpExercisePreparation';
 import { HelpExercise } from '../containers/Exercise/HelpExercise/HelpExercise';
 import { SchulteTables } from '../containers/Exercise/Types/SchulteTables/SchulteTables';
@@ -47,6 +57,17 @@ import BugReportContainer, { BugReport } from '../containers/BugReport/BugReport
 import { generateSymbols, generateStringPairs } from '../store/reducers/exercise';
 import UpdateMessage from '../containers/Message/UpdateMessage';
 import OfflineMessage from '../containers/Message/OfflineMessage';
+
+// eslint-disable-next-line
+const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p><p>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc pulvinar sapien et ligula ullamcorper malesuada. Mauris cursus mattis molestie a iaculis at erat. Purus gravida quis blandit turpis cursus in hac. Placerat orci nulla pellentesque dignissim enim. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Lacus luctus accumsan tortor posuere. Ut sem nulla pharetra diam. Quisque egestas diam in arcu cursus euismod. Vitae semper quis lectus nulla at volutpat diam.</p><p>Lacus vel facilisis volutpat est velit egestas dui id ornare. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Nunc id cursus metus aliquam eleifend mi. A diam maecenas sed enim ut. Est lorem ipsum dolor sit amet consectetur.</p>');
+const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+
+const exampleText = {
+  characterCount: 801,
+  wordCount: 122,
+  sentenceCount: 15,
+  contentState,
+};
 
 const questions = [
   {
@@ -346,6 +367,33 @@ storiesOf('Reading exercise', module).add('Reading test component', () => (
     selectedText={store.getState().text.selectedText}
     onExerciseStart={action('exercise started')}
     translate={translate}
+  />
+));
+
+storiesOf('ReadingTest', module).add('Component', () => (
+  <ReadingTest
+    canvasHeight={400}
+    selectedText={exampleText}
+    translate={translate}
+    exerciseOptions={exerciseOptions}
+    textOptions={textOptions}
+    speedOptions={speedOptions}
+  />
+));
+
+storiesOf('ReadingAid', module).add('Component', () => (
+  <ReadingAid
+    canvasHeight={400}
+    timerState={{
+      started: true,
+      paused: false,
+      stopped: false,
+    }}
+    selectedText={exampleText}
+    translate={translate}
+    exerciseOptions={exerciseOptions}
+    textOptions={textOptions}
+    speedOptions={speedOptions}
   />
 ));
 

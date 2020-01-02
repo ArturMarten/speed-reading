@@ -646,9 +646,7 @@
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
-    "words-per-minute": ["sõna minutis", "words per minute"],
-    "fixation-time": ["Fiksatsiooni aeg", "Fixation time"],
-    "ms": ["ms", "ms"]
+    "words-per-minute": ["sõna minutis", "words per minute"]
   },
   "text-analysis": {
     "modal-header": ["Lugemisteksti keerukuse hindamine", "Reading text complexity estimation"],

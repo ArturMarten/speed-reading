@@ -135,13 +135,9 @@ const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay', 'pageBrea
 export const MIN_WORDS_PER_MINUTE = 10;
 export const MAX_WORDS_PER_MINUTE = 700;
 export const STEP_WORDS_PER_MINUTE = 10;
-export const MIN_FIXATION = 50;
-export const MAX_FIXATION = 750;
-export const STEP_FIXATION = 10;
 
 const initialSpeedOptions = {
-  wordsPerMinute: 250,
-  fixation: 400,
+  wordsPerMinute: 200,
 };
 
 const defaultVisibleSpeedOptions = ['wordsPerMinute'];
@@ -255,7 +251,7 @@ const reducer = (state = initialState, action) => {
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions],
             visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'groupCharacterCount'],
-            visibleSpeedOptions: ['fixation'],
+            visibleSpeedOptions: [...defaultVisibleSpeedOptions],
           });
         case 'schulteTables':
           return updateObject(state, {

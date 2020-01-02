@@ -53,7 +53,7 @@ export const updateStateFunction = (textMetadata, options, canvasHeight, state) 
     nextState,
     (currentState, updateTime) => {
       // Calculate next state
-      const marginProgress = speed * updateTime;
+      const marginProgress = currentState.speed * updateTime;
 
       const nextMarginTop = currentState.marginTop + marginProgress;
 
@@ -137,14 +137,15 @@ export class Scrolling extends Component {
     this.shownContext = this.shownCanvas.getContext('2d');
     this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
     // Initial draw
-    const [state, updateState] = updateStateFunction(
+    const [nextState, updateState] = updateStateFunction(
       this.textMetadata,
       this.props.speedOptions,
       this.shownCanvas.height,
       this.currentState,
     );
+    this.currentState = nextState;
     this.updateState = updateState;
-    drawState(state, this.shownContext, this.offscreenCanvas);
+    drawState(this.currentState, this.shownContext, this.offscreenCanvas);
   }
 
   loop() {
