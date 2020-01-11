@@ -116,9 +116,62 @@ describe('Wordgroups updateState', () => {
     expect(nextState.newLine).toEqual(true);
   });
 
-  it('detects new page', () => {});
+  it('detects new page', () => {
+    const state = {
+      ...currentState,
+      groupIndex: 35,
+      groupPosition: 80,
+      marginTop: 0,
+      drawRects: [
+        {
+          x: 163,
+          y: 366,
+          width: 84,
+          height: 19,
+        },
+      ],
+    };
+    const nextState = updateState(state, 20);
+    expect(nextState.newPage).toEqual(true);
+  });
 
-  it('increases margin top on new page', () => {});
+  it('increases margin top on new page', () => {
+    const state = {
+      ...currentState,
+      groupIndex: 35,
+      groupPosition: 80,
+      marginTop: 0,
+      drawRects: [
+        {
+          x: 163,
+          y: 366,
+          width: 84,
+          height: 19,
+        },
+      ],
+    };
+    const nextState = updateState(state, 20);
+    expect(nextState.marginTop).toEqual(385);
+  });
+
+  it('returns no restore rects on new page', () => {
+    const state = {
+      ...currentState,
+      groupIndex: 35,
+      groupPosition: 80,
+      marginTop: 0,
+      drawRects: [
+        {
+          x: 163,
+          y: 366,
+          width: 84,
+          height: 19,
+        },
+      ],
+    };
+    const nextState = updateState(state, 20);
+    expect(nextState.restoreRects).toEqual([]);
+  });
 
   it('returns finished flag after end', () => {
     const lastGroupIndex = textMetadata.groupsMetadata.length - 1;

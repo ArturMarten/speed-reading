@@ -12,6 +12,7 @@ import { updateObject } from '../../../../shared/utility';
 
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRects, drawRects } = currentState;
+
   restoreRects.forEach((restoreRect) => {
     context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
     if (
@@ -46,8 +47,8 @@ export const drawState = (currentState, context, restoreCanvas) => {
         drawRect.height,
       );
     } else {
-      const height = drawRect.height * 0.1;
-      context.fillRect(drawRect.x, drawRect.y + (drawRect.height - height), drawRect.width, height);
+      const underlineHeight = drawRect.height * 0.1;
+      context.fillRect(drawRect.x, drawRect.y + (drawRect.height - underlineHeight), drawRect.width, underlineHeight);
     }
   });
 };
@@ -89,8 +90,6 @@ export const updateStateFunction = (textMetadata, options, state) => {
       const widthProgress = currentState.speed * updateTime;
       // console.log(`Width progress ${widthProgress} px`);
 
-      const restoreRects = currentState.drawRects.slice();
-
       groupPosition += widthProgress;
 
       let groupMetadata = groupsMetadata[groupIndex];
@@ -102,14 +101,30 @@ export const updateStateFunction = (textMetadata, options, state) => {
           groupPosition -= groupMetadata.groupWidth;
           groupIndex += 1;
           groupMetadata = groupsMetadata[groupIndex];
+
+          const previousGroupIndex = Math.max(groupIndex - 1, 0);
+          const previousGroupMetadata = groupsMetadata[previousGroupIndex];
+          const previousGroupRectBottom = previousGroupMetadata.rects[previousGroupMetadata.rects.length - 1].bottom;
+          const groupRectBottom = groupMetadata.rects[groupMetadata.rects.length - 1].bottom;
+          if (previousGroupRectBottom !== groupRectBottom) {
+            newLine = true;
+          }
         } else {
           finished = true;
         }
       }
 
-      groupMetadata.rects.forEach((groupRect) => {
-        // TODO: Fix new page bug
+      for (let index = 0; index < groupMetadata.rects.length; index += 1) {
+        const groupRect = groupMetadata.rects[index];
         if (groupRect.bottom - marginTop > canvasHeight) {
+          if (drawRects.length === 1) {
+            if (groupPosition < drawRects[0].width) {
+              break;
+            } else {
+              drawRects.pop();
+            }
+          }
+
           // New page
           newPage = true;
           marginTop = groupRect.top;
@@ -121,15 +136,9 @@ export const updateStateFunction = (textMetadata, options, state) => {
           height: groupRect.bottom - groupRect.top,
         };
         drawRects.push(drawRect);
-      });
-
-      const previousGroupIndex = Math.max(groupIndex - 1, 0);
-      const previousGroupMetadata = groupsMetadata[previousGroupIndex];
-      const previousGroupRectBottom = previousGroupMetadata.rects[previousGroupMetadata.rects.length - 1].bottom;
-      const groupRectBottom = groupMetadata.rects[groupMetadata.rects.length - 1].bottom;
-      if (previousGroupRectBottom !== groupRectBottom) {
-        newLine = true;
       }
+
+      const restoreRects = newPage ? [] : currentState.drawRects.slice();
 
       return updateObject(currentState, {
         marginTop,
@@ -247,9 +256,13 @@ export class WordGroups extends Component {
         this.currentState.modification === 'group-vertical'
       ) {
         drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas, this.currentState.marginTop);
+      } else {
+        const { canvas } = this.shownContext;
+        this.shownContext.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
     if (this.currentState.newGroup) {
+      // Optimization
       drawState(this.currentState, this.shownContext, this.offscreenCanvas);
     }
     if (this.currentState.finished) {
