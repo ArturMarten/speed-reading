@@ -14,5 +14,8 @@ import './StringEndsWith';
 // Array.prototype.fill is not yet available with Internet Explorer, so we add the polyfill here.
 import './ArrayFill';
 
+// Number.parseInt and Number.parseFloat is not available with Internet Explorer, so we add the polyfill here.
+import './Number';
+
 // High DPI canvas
 import './HTMLCanvasElement';
