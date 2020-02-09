@@ -153,7 +153,7 @@ export class ReadingTest extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <canvas
           ref={(ref) => {
             this.shownCanvas = ref;
@@ -171,7 +171,7 @@ export class ReadingTest extends Component {
             <Icon name="right chevron" />
           </Button>
         </Button.Group>
-      </Fragment>
+      </>
     );
   }
 }

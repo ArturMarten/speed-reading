@@ -37,18 +37,18 @@ export class TextExercise extends Component {
       readingTextId: this.props.selectedText.id,
     };
     this.props.onExerciseStart(attemptData);
-  }
+  };
 
   onExerciseFinishHandler = () => {
     this.props.onExerciseFinish(this.props.attemptId);
-  }
+  };
 
   calculateCanvasHeight = () => {
     const canvasTop = document.querySelector('#canvasTop');
     const availableHeight = document.body.clientHeight - canvasTop.getBoundingClientRect().bottom - 20;
-    const canvasHeight = Math.max(this.state.canvasHeight, availableHeight);
+    const canvasHeight = Math.max(this.state.canvasHeight, availableHeight) - 5;
     this.setState({ heightCalculated: true, canvasHeight });
-  }
+  };
 
   render() {
     const exercise = ((type) => {
@@ -56,7 +56,7 @@ export class TextExercise extends Component {
         case 'readingTest':
           return (
             <ReadingTest
-              canvasHeight={this.state.canvasHeight}
+              canvasHeight={this.state.canvasHeight - 40}
               selectedText={this.props.selectedText}
               translate={this.props.translate}
             />
@@ -108,9 +108,7 @@ export class TextExercise extends Component {
           <Grid.Column textAlign="center" width={8}>
             <table>
               <tbody>
-                <SpeedOptions
-                  exerciseType={this.props.type}
-                />
+                <SpeedOptions exerciseType={this.props.type} />
               </tbody>
             </table>
           </Grid.Column>
@@ -128,9 +126,10 @@ export class TextExercise extends Component {
               blurring
               dimmed={!this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped}
             >
-              <div style={{
-                padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
-              }}
+              <div
+                style={{
+                  padding: `${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px ${TEXT_VERTICAL_PADDING}px ${TEXT_HORIZONTAL_PADDING}px`,
+                }}
               >
                 <div id="canvasTop" />
                 {this.state.heightCalculated ? exercise : null}
@@ -143,7 +142,7 @@ export class TextExercise extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.auth.userId,
   saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
@@ -156,7 +155,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onExerciseStart: (attemptData) => {
     dispatch(actionCreators.startExercise(attemptData));
   },
@@ -165,4 +164,7 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextExercise);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TextExercise);
