@@ -44,7 +44,7 @@ export const updateStateFunction = (textMetadata, options, state) => {
       let newLine = false;
       let newPage = false;
       let finished = false;
-      const clearRects = [];
+      let clearRects = [];
 
       const widthProgress = currentState.speed * updateTime;
       // console.log(`Width progress ${widthProgress} px`);
@@ -70,6 +70,7 @@ export const updateStateFunction = (textMetadata, options, state) => {
             // New page
             newPage = true;
             marginTop = lineMetadata.rect.top;
+            clearRects = [];
           }
         } else {
           finished = true;

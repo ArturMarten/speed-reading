@@ -165,6 +165,26 @@ describe('Disappearing updateState', () => {
     expect(nextState.marginTop).toEqual(385);
   });
 
+  it('returns single clear rect on new page', () => {
+    const pageFirstLineIndex = textMetadata.linesMetadata.findIndex((line) => line.rect.bottom > CANVAS_HEIGHT);
+    const pageLastLineIndex = pageFirstLineIndex - 1;
+    const pageLastLineMetadata = textMetadata.linesMetadata[pageLastLineIndex];
+    const state = {
+      ...currentState,
+      lineIndex: pageLastLineIndex,
+      linePosition: pageLastLineMetadata.lineWidth - 2,
+    };
+    const nextState = updateState(state, 8);
+    expect(nextState.clearRects).toEqual([
+      {
+        x: 0,
+        y: 0,
+        width: 1,
+        height: 19,
+      },
+    ]);
+  });
+
   it('returns finished flag after end', () => {
     const lastLineIndex = textMetadata.linesMetadata.length - 1;
     const lastLineMetadata = textMetadata.linesMetadata[lastLineIndex];
