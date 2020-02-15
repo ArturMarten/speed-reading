@@ -1,6 +1,5 @@
-import 'react-testing-library/cleanup-after-each';
-import 'jest-dom/extend-expect';
-import { fireEvent } from 'react-testing-library';
+import '@testing-library/jest-dom/extend-expect';
+import { fireEvent } from '@testing-library/react';
 import ReactTestUtils from 'react-dom/test-utils'; // ES6
 
 jest.mock('html2canvas', () => () => Promise.resolve({ toDataURL: () => {} }));

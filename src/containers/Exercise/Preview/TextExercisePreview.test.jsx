@@ -1,8 +1,7 @@
+import { fireEvent } from '@testing-library/react';
 import React from 'react';
-import { fireEvent } from 'react-testing-library';
-
-import TextExercisePreview from './TextExercisePreview';
 import renderWithRedux from '../../../utils/testUtils';
+import TextExercisePreview from './TextExercisePreview';
 
 it('opens and closes the exercise preview', () => {
   const { translate, getByText, baseElement } = renderWithRedux(

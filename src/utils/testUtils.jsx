@@ -1,11 +1,11 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { createMemoryHistory } from 'history';
+import { render } from '@testing-library/react';
 import { ConnectedRouter } from 'connected-react-router';
-import { render } from 'react-testing-library';
+import { createMemoryHistory } from 'history';
+import React from 'react';
 import { getTranslate } from 'react-localize-redux';
-import configureStore from '../store/configureStore';
+import { Provider } from 'react-redux';
 import { updateObject } from '../shared/utility';
+import configureStore from '../store/configureStore';
 
 const addTranslateProp = (component, translate) =>
   updateObject(component, { props: updateObject(component.props, { translate }) });

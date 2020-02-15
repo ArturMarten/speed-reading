@@ -1,9 +1,8 @@
-import React from 'react';
+import { fireEvent, wait } from '@testing-library/react';
 import axiosMock from 'axios';
-import { fireEvent, wait } from 'react-testing-library';
-
-import TextExercisePreparation from './TextExercisePreparation';
+import React from 'react';
 import renderWithRedux from '../../../utils/testUtils';
+import TextExercisePreparation from './TextExercisePreparation';
 
 it('stores own text', async () => {
   axiosMock.post.mockResolvedValueOnce({
@@ -14,7 +13,7 @@ it('stores own text', async () => {
     },
   });
 
-  const { translate, getByText, queryByText, getByRole } = renderWithRedux(
+  const { translate, getByText, queryByText, getByRole, getAllByRole } = renderWithRedux(
     <TextExercisePreparation type="readingTest" onProceed={jest.fn()} />,
   );
   expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument();
@@ -23,14 +22,16 @@ it('stores own text', async () => {
 
   const text = 'Test';
 
-  fireEvent.paste(getByRole('textbox'), {
+  const editorIndex = 6;
+
+  fireEvent.paste(getAllByRole('textbox')[editorIndex], {
     clipboardData: {
       types: ['text/plain'],
       getData: () => text,
     },
   });
 
-  await wait(() => expect(getByRole('textbox').textContent).toEqual(text));
+  await wait(() => expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text));
 
   fireEvent.click(getByText(translate('own-text-editor.use')));
   expect(axiosMock.post).toBeCalledTimes(1);
@@ -42,5 +43,5 @@ it('stores own text', async () => {
   await wait(() => expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
 
   fireEvent.click(getByText(translate('exercise-preparation.use-own-text')));
-  expect(getByRole('textbox').textContent).toEqual(text);
+  expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text);
 });

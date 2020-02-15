@@ -1,8 +1,7 @@
-import React from 'react';
-import { fireEvent, wait } from 'react-testing-library';
+import { fireEvent, wait } from '@testing-library/react';
 import axiosMock from 'axios';
+import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
-
 import ChangePassword from './ChangePassword';
 
 it('changes password', async () => {

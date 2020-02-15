@@ -1,27 +1,31 @@
 if (typeof importScripts === 'function') {
   // eslint-disable-next-line no-undef
-  importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js');
+  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.0.0/workbox-sw.js');
   /* global workbox */
   if (workbox) {
     console.log('Workbox is loaded');
 
     /* injection point for manifest files. */
-    workbox.precaching.precacheAndRoute([]);
+    // eslint-disable-next-line
+    workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
     /* custom cache rules */
-    workbox.routing.registerNavigationRoute('/index.html', {
-      blacklist: [/^\/_/, /\/[^\/]+\.[^\/]+$/],
+    const handler = workbox.precaching.createHandlerBoundToURL('/index.html');
+    const navigationRoute = new workbox.routing.NavigationRoute(handler, {
+      denylist: [/^\/_/, /\/[^\/]+\.[^\/]+$/],
     });
+
+    workbox.routing.registerRoute(navigationRoute);
 
     /* analytics */
     workbox.googleAnalytics.initialize();
 
     workbox.routing.registerRoute(
-      /\.(?:png|gif|jpg|jpeg)$/,
-      workbox.strategies.cacheFirst({
+      /\.(?:png|gif|jpg|jpeg|webp|svg)$/,
+      new workbox.strategies.CacheFirst({
         cacheName: 'images',
         plugins: [
-          new workbox.expiration.Plugin({
+          new workbox.expiration.ExpirationPlugin({
             maxEntries: 60,
             maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
           }),

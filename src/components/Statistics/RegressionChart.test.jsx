@@ -1,8 +1,7 @@
+import { wait } from '@testing-library/react';
 import React from 'react';
-import { wait } from 'react-testing-library';
-
-import RegressionChart from './RegressionChart';
 import renderWithRedux from '../../utils/testUtils';
+import RegressionChart from './RegressionChart';
 
 const exampleData = [{ id: 0, x: 1, y: 1 }, { id: 1, x: 2, y: 3 }, { id: 2, x: 3, y: 2 }];
 

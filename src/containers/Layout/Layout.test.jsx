@@ -1,7 +1,6 @@
+import { fireEvent, waitForElement } from '@testing-library/react';
 import React from 'react';
-import { fireEvent, waitForElement } from 'react-testing-library';
 import renderWithRedux from '../../utils/testUtils';
-
 import Layout from './Layout';
 
 it('opens and closes login modal', () => {
@@ -14,10 +13,10 @@ it('opens and closes login modal', () => {
 });
 
 it('opens and closes feedback modal', () => {
-  const { translate, queryByText, baseElement } = renderWithRedux(<Layout />);
+  const { translate, queryByText, queryAllByText, baseElement } = renderWithRedux(<Layout />);
   expect(queryByText(translate('feedback.modal-header'))).toBeNull();
   fireEvent.click(baseElement.querySelector('i.talk'));
-  expect(queryByText(translate('feedback.modal-header'))).not.toBeNull();
+  expect(queryAllByText(translate('feedback.modal-header'))).toHaveLength(2);
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(queryByText(translate('feedback.modal-header'))).toBeNull();
 });

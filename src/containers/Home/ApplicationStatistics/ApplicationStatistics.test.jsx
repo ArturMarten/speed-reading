@@ -1,8 +1,7 @@
-import React from 'react';
-import { waitForElement } from 'react-testing-library';
+import { waitForElement } from '@testing-library/react';
 import axiosMock from 'axios';
+import React from 'react';
 import renderWithRedux from '../../../utils/testUtils';
-
 import ApplicationStatistics from './ApplicationStatistics';
 
 it('fetches application statistics', async () => {

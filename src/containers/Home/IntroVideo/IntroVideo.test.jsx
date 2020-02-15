@@ -1,6 +1,5 @@
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
-
 import IntroVideo from './IntroVideo';
 
 it('plays video', () => {

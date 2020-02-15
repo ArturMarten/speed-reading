@@ -1,14 +1,15 @@
-import React from 'react';
-import { fireEvent, waitForElement } from 'react-testing-library';
+import { fireEvent, waitForElement } from '@testing-library/react';
 import axiosMock from 'axios';
+import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
-
 import Feedback from './Feedback';
 
 it('opens and closes the modal', () => {
   const onClose = jest.fn();
-  const { translate, queryByText, baseElement, rerender } = renderWithRedux(<Feedback open onClose={onClose} />);
-  expect(queryByText(translate('feedback.modal-header'))).not.toBeNull();
+  const { translate, queryByText, queryAllByText, baseElement, rerender } = renderWithRedux(
+    <Feedback open onClose={onClose} />,
+  );
+  expect(queryAllByText(translate('feedback.modal-header'))).toHaveLength(2);
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(onClose).toHaveBeenCalledTimes(1);
   rerender(<Feedback open={false} />);

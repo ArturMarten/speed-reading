@@ -1,7 +1,6 @@
+import { fireEvent } from '@testing-library/react';
 import React from 'react';
-import { fireEvent } from 'react-testing-library';
 import renderWithRedux from '../../utils/testUtils';
-
 import Home from './Home';
 
 it('opens user manual', () => {
@@ -10,9 +9,9 @@ it('opens user manual', () => {
 });
 
 it('shows about modal', () => {
-  const { translate, getByText, queryByText } = renderWithRedux(<Home />);
+  const { translate, getByText, queryAllByText } = renderWithRedux(<Home />);
   fireEvent.click(getByText(translate('home.about')));
-  expect(queryByText(translate('about.modal-header'))).not.toBeNull();
+  expect(queryAllByText(translate('about.modal-header'))).toHaveLength(2);
 });
 
 it('renders three logos', () => {

@@ -1,9 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
-
-import { createOffscreenContext, writeText, pixelRatio } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
+import { createOffscreenContext, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 export const previousPage = (currentState, textMetadata, context, offscreenCanvas) => {
   const { canvasHeight, marginTop } = currentState;

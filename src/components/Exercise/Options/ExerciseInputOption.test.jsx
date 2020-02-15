@@ -1,6 +1,5 @@
+import { fireEvent, render, wait } from '@testing-library/react';
 import React from 'react';
-import { render, fireEvent, wait } from 'react-testing-library';
-
 import ExerciseInputOption from './ExerciseInputOption';
 
 it('calls function on change', async () => {

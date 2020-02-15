@@ -1,11 +1,10 @@
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
-
 import ExerciseSelectOption from './ExerciseSelectOption';
 
 it('calls function on change', async () => {
   const updateValue = jest.fn();
-  const { getByText } = render(
+  const { getByText, getAllByText } = render(
     <table>
       <tbody>
         <ExerciseSelectOption
@@ -17,7 +16,7 @@ it('calls function on change', async () => {
       </tbody>
     </table>,
   );
-  fireEvent.click(getByText('Option1'));
+  fireEvent.click(getAllByText('Option1')[0]);
   fireEvent.click(getByText('Option2'));
   expect(updateValue).toHaveBeenCalledTimes(1);
   expect(updateValue).toHaveBeenCalledWith('Option2');

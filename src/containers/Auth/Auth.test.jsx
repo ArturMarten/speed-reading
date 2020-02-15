@@ -1,10 +1,9 @@
-import React from 'react';
-import { fireEvent, wait } from 'react-testing-library';
+import { fireEvent, wait } from '@testing-library/react';
 import axiosMock from 'axios';
-import renderWithRedux from '../../utils/testUtils';
-
-import Auth from './Auth';
+import React from 'react';
 import credentials from '../../credentials';
+import renderWithRedux from '../../utils/testUtils';
+import Auth from './Auth';
 
 it('registers successfully', async () => {
   axiosMock.get.mockResolvedValueOnce({

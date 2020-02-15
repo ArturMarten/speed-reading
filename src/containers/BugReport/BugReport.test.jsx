@@ -1,8 +1,7 @@
-import React from 'react';
-import { fireEvent, waitForElement } from 'react-testing-library';
+import { fireEvent, waitForElement } from '@testing-library/react';
 import axiosMock from 'axios';
+import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
-
 import BugReport from './BugReport';
 
 it('opens and closes the modal', () => {
