@@ -3,7 +3,7 @@
   "short_name": "Kiirlugemine",
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#0e6eb8",
+  "theme_color": "#1189e6",
   "background_color": "#ffffff",
   "description": "Lugemiskiiruse arendamise rakendus",
   "icons": [{

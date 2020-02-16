@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Button } from 'semantic-ui-react';
 import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js';
@@ -13,13 +13,6 @@ export class TextEditor extends Component {
   state = {
     editorState: EditorState.createEmpty(),
     spellCheck: false,
-  };
-
-  onTab = (event) => {
-    // Currently works only with lists
-    event.preventDefault();
-    const updatedEditorState = RichUtils.onTab(event, this.state.editorState, 4);
-    this.setState({ editorState: updatedEditorState });
   };
 
   getPlainText = () => {
@@ -56,13 +49,7 @@ export class TextEditor extends Component {
 
   render() {
     return (
-      <Fragment>
-        {/*
-          <Message warning attached style={{ margin: 0 }}>
-            <Message.Header>{this.props.translate('text-editor.warning-title')}</Message.Header>
-            <p>{this.props.translate('text-editor.warning-content')}</p>
-          </Message>
-        */}
+      <>
         <Segment style={{ margin: 0 }}>
           <div className="DraftEditor-controls">
             <InlineStyleControls
@@ -88,11 +75,10 @@ export class TextEditor extends Component {
           <Editor
             editorState={this.state.editorState}
             onChange={(editorState) => this.setState({ editorState })}
-            onTab={this.onTab}
             spellCheck={this.state.spellCheck}
           />
         </Segment>
-      </Fragment>
+      </>
     );
   }
 }
@@ -104,9 +90,4 @@ const mapStateToProps = (state) => ({
 // eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true },
-)(TextEditor);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(TextEditor);

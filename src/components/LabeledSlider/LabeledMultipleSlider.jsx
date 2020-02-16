@@ -18,9 +18,9 @@ export class LabeledMultipleSlider extends Component {
     this.setState({
       values: sliderState.values,
     });
-  }
+  };
 
-  progressBar = color => ({ style, ...passProps }) => (
+  progressBar = (color) => ({ style, ...passProps }) => (
     <div
       {...passProps}
       style={{
@@ -36,7 +36,10 @@ export class LabeledMultipleSlider extends Component {
     return (
       <div>
         <Rheostat
-          {...this.props}
+          min={this.props.min}
+          max={this.props.max}
+          onChange={this.props.onChange}
+          snap={this.props.snap}
           onValuesUpdated={this.updateValues}
           values={this.state.values}
           progressBar={this.progressBar(this.props.color || null)}
