@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { createOffscreenContext, writeText, drawPage, pixelRatio } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
 import { getColorRGBA } from '../../../../store/reducers/options';
+import { createOffscreenContext, drawPage, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+
 
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRect, drawRect } = currentState;
@@ -238,7 +238,7 @@ export class ReadingAid extends Component {
         ref={(ref) => {
           this.shownCanvas = ref;
         }}
-        width={this.props.textOptions.width}
+        width={this.props.canvasWidth}
         height={this.props.canvasHeight}
       />
     );
@@ -251,7 +251,4 @@ const mapStateToProps = (state) => ({
   speedOptions: state.options.speedOptions,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(ReadingAid);
+export default connect(mapStateToProps, null)(ReadingAid);

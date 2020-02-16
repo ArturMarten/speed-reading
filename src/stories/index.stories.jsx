@@ -373,6 +373,7 @@ storiesOf('Reading exercise', module).add('Reading test component', () => (
 storiesOf('ReadingTest', module).add('Component', () => (
   <ReadingTest
     canvasHeight={400}
+    canvasWidth={600}
     selectedText={exampleText}
     translate={translate}
     exerciseOptions={exerciseOptions}
@@ -384,6 +385,7 @@ storiesOf('ReadingTest', module).add('Component', () => (
 storiesOf('ReadingAid', module).add('Component', () => (
   <ReadingAid
     canvasHeight={400}
+    canvasWidth={600}
     timerState={{
       started: true,
       paused: false,
@@ -549,7 +551,10 @@ storiesOf('RegressionChart', module)
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={object('Data', [{ index: 1, wordsPerMinute: 185 }, { index: 2, wordsPerMinute: 192 }])}
+      data={object('Data', [
+        { index: 1, wordsPerMinute: 185 },
+        { index: 2, wordsPerMinute: 192 },
+      ])}
       xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}

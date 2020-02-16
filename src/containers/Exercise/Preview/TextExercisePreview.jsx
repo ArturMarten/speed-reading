@@ -1,13 +1,12 @@
+import { ContentState, convertFromHTML } from 'draft-js';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { convertFromHTML, ContentState } from 'draft-js';
-import { Grid, Button, Icon, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
-
+import { connect } from 'react-redux';
+import { Button, Grid, Icon, Segment } from 'semantic-ui-react';
 import { splitIntoWordGroups } from '../../../utils/TextUtils';
-import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
-import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
 import { Disappearing } from '../Types/Disappearing/Disappearing';
+import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
+import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
 import { Scrolling } from '../Types/Scrolling/Scrolling';
 import { WordGroups } from '../Types/WordGroups/WordGroups';
 
@@ -82,12 +81,14 @@ export class TextExercisePreview extends Component {
   };
 
   render() {
+    const canvasWidth = Math.min(this.props.textOptions.width, window.innerWidth - 30);
     const exercise = ((type) => {
       switch (type) {
         case 'readingTest':
           return (
             <ReadingTest
-              canvasHeight={CANVAS_HEIGHT}
+              canvasHeight={CANVAS_HEIGHT - 40}
+              canvasWidth={canvasWidth}
               selectedText={selectedText}
               textOptions={this.props.textOptions}
               translate={this.props.translate}
@@ -97,6 +98,7 @@ export class TextExercisePreview extends Component {
           return (
             <ReadingAid
               canvasHeight={CANVAS_HEIGHT}
+              canvasWidth={canvasWidth}
               selectedText={selectedText}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}
@@ -109,6 +111,7 @@ export class TextExercisePreview extends Component {
           return (
             <Scrolling
               selectedText={selectedText}
+              canvasWidth={canvasWidth}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}
               textOptions={this.props.textOptions}
@@ -120,6 +123,7 @@ export class TextExercisePreview extends Component {
           return (
             <Disappearing
               canvasHeight={CANVAS_HEIGHT}
+              canvasWidth={canvasWidth}
               selectedText={selectedText}
               timerState={this.state.timerState}
               onExerciseFinish={this.restart}
@@ -131,8 +135,9 @@ export class TextExercisePreview extends Component {
         case 'wordGroups':
           return (
             <WordGroups
-              modification={this.props.modification}
               canvasHeight={CANVAS_HEIGHT}
+              canvasWidth={canvasWidth}
+              modification={this.props.modification}
               selectedText={selectedText}
               wordGroups={wordGroups}
               timerState={this.state.timerState}
@@ -145,7 +150,8 @@ export class TextExercisePreview extends Component {
         default:
           return (
             <ReadingTest
-              canvasHeight={CANVAS_HEIGHT}
+              canvasHeight={CANVAS_HEIGHT - 40}
+              canvasWidth={canvasWidth}
               selectedText={selectedText}
               textOptions={this.props.textOptions}
               translate={this.props.translate}
@@ -189,10 +195,4 @@ const mapStateToProps = (state) => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = (dispatch) => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TextExercisePreview);
+export default connect(mapStateToProps, null)(TextExercisePreview);

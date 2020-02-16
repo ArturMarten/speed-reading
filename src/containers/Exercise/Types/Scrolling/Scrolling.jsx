@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { createOffscreenContext, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
+import { createOffscreenContext, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+
 
 export const drawState = (currentState, context, restoreCanvas) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
@@ -166,7 +166,7 @@ export class Scrolling extends Component {
         ref={(ref) => {
           this.shownCanvas = ref;
         }}
-        width={this.props.textOptions.width}
+        width={this.props.canvasWidth}
         height={400}
       />
     );
@@ -179,7 +179,4 @@ const mapStateToProps = (state) => ({
   speedOptions: state.options.speedOptions,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(Scrolling);
+export default connect(mapStateToProps, null)(Scrolling);

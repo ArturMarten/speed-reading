@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Grid, Segment, Dimmer } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
-
-import './TextExercise.css';
+import { connect } from 'react-redux';
+import { Dimmer, Grid, Segment } from 'semantic-ui-react';
 import * as actionCreators from '../../../store/actions';
 import SpeedOptions from '../Options/SpeedOptions';
 import Timing from '../Timing/Timing';
-import ReadingTest from '../Types/ReadingTest/ReadingTest';
-import ReadingAid from '../Types/ReadingAid/ReadingAid';
-import Scrolling from '../Types/Scrolling/Scrolling';
 import Disappearing from '../Types/Disappearing/Disappearing';
+import ReadingAid from '../Types/ReadingAid/ReadingAid';
+import ReadingTest from '../Types/ReadingTest/ReadingTest';
+import Scrolling from '../Types/Scrolling/Scrolling';
 import WordGroups from '../Types/WordGroups/WordGroups';
+import './TextExercise.css';
 
 const TEXT_VERTICAL_PADDING = 0;
 const TEXT_HORIZONTAL_PADDING = 70;
@@ -19,6 +18,7 @@ const TEXT_HORIZONTAL_PADDING = 70;
 export class TextExercise extends Component {
   state = {
     canvasHeight: 250,
+    canvasWidth: 400,
     heightCalculated: false,
   };
 
@@ -47,7 +47,8 @@ export class TextExercise extends Component {
     const canvasTop = document.querySelector('#canvasTop');
     const availableHeight = document.body.clientHeight - canvasTop.getBoundingClientRect().bottom - 20;
     const canvasHeight = Math.max(this.state.canvasHeight, availableHeight) - 5;
-    this.setState({ heightCalculated: true, canvasHeight });
+    const canvasWidth = Math.min(this.props.textOptions.width, window.innerWidth - 30);
+    this.setState({ heightCalculated: true, canvasHeight, canvasWidth });
   };
 
   render() {
@@ -57,6 +58,7 @@ export class TextExercise extends Component {
           return (
             <ReadingTest
               canvasHeight={this.state.canvasHeight - 40}
+              canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}
               translate={this.props.translate}
             />
@@ -65,6 +67,7 @@ export class TextExercise extends Component {
           return (
             <ReadingAid
               canvasHeight={this.state.canvasHeight}
+              canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
@@ -74,6 +77,7 @@ export class TextExercise extends Component {
           return (
             <Scrolling
               canvasHeight={this.state.canvasHeight}
+              canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
@@ -83,6 +87,7 @@ export class TextExercise extends Component {
           return (
             <Disappearing
               canvasHeight={this.state.canvasHeight}
+              canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
@@ -92,6 +97,7 @@ export class TextExercise extends Component {
           return (
             <WordGroups
               canvasHeight={this.state.canvasHeight}
+              canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}
               wordGroups={this.props.wordGroups}
               timerState={this.props.timerState}
@@ -151,6 +157,7 @@ const mapStateToProps = (state) => ({
   attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,
   wordGroups: state.exercise.wordGroups,
+  textOptions: state.options.textOptions,
   timerState: state.timing.timer,
   translate: getTranslate(state.locale),
 });
@@ -164,7 +171,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TextExercise);
+export default connect(mapStateToProps, mapDispatchToProps)(TextExercise);

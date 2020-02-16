@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { createOffscreenContext, writeText, drawPage, pixelRatio } from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
+import { createOffscreenContext, drawPage, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+
 
 export const drawState = (currentState, context) => {
   const { clearRects } = currentState;
@@ -212,7 +212,7 @@ export class Disappearing extends Component {
         ref={(ref) => {
           this.shownCanvas = ref;
         }}
-        width={this.props.textOptions.width}
+        width={this.props.canvasWidth}
         height={this.props.canvasHeight}
       />
     );
@@ -225,7 +225,4 @@ const mapStateToProps = (state) => ({
   speedOptions: state.options.speedOptions,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(Disappearing);
+export default connect(mapStateToProps, null)(Disappearing);

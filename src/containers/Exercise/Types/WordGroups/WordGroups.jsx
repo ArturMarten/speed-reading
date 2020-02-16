@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import {
-  createOffscreenContext,
-  writeText,
-  drawPage,
-  getGroupsMetadata,
-  pixelRatio,
-} from '../../../../utils/CanvasUtils/CanvasUtils';
 import { updateObject } from '../../../../shared/utility';
+import { createOffscreenContext, drawPage, getGroupsMetadata, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+
 
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRects, drawRects } = currentState;
@@ -291,7 +285,7 @@ export class WordGroups extends Component {
         ref={(ref) => {
           this.shownCanvas = ref;
         }}
-        width={this.props.textOptions.width}
+        width={this.props.canvasWidth}
         height={this.props.canvasHeight}
       />
     );
@@ -305,7 +299,4 @@ const mapStateToProps = (state) => ({
   speedOptions: state.options.speedOptions,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(WordGroups);
+export default connect(mapStateToProps, null)(WordGroups);

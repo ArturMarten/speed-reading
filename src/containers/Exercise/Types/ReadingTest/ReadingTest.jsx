@@ -157,7 +157,7 @@ export class ReadingTest extends Component {
           ref={(ref) => {
             this.shownCanvas = ref;
           }}
-          width={this.props.textOptions.width}
+          width={this.props.canvasWidth}
           height={this.props.canvasHeight}
         />
         <Button.Group fluid basic>
@@ -179,7 +179,4 @@ const mapStateToProps = (state) => ({
   textOptions: state.options.textOptions,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(ReadingTest);
+export default connect(mapStateToProps, null)(ReadingTest);
