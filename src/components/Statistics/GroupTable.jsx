@@ -32,20 +32,18 @@ export class GroupTable extends Component {
   };
 
   render() {
-    const { data, isTeacher, minimumAttemptCount, timeFilter, filterOutliers } = this.props;
+    const { data, isTeacher, minimumAttemptCount, timeFilter } = this.props;
     const filteredGroupData = Object.assign(
       {},
       ...Object.keys(data).map((userId) => {
         let filteredData = data[userId]
-          .filter((attempt) => !filterOutliers || upperBoundOutlierFilter(attempt))
-          .filter((attempt) => !filterOutliers || lowerBoundOutlierFilter(attempt));
-        filteredData = filterOutliers
-          ? [
-              ...filterStandardDeviation('readingExercises', filteredData),
-              ...filterStandardDeviation('schulteTables', filteredData),
-              ...filterStandardDeviation('concentration', filteredData),
-            ]
-          : filteredData;
+          .filter((attempt) => upperBoundOutlierFilter(attempt))
+          .filter((attempt) => lowerBoundOutlierFilter(attempt));
+        filteredData = [
+          ...filterStandardDeviation('readingExercises', filteredData),
+          ...filterStandardDeviation('schulteTables', filteredData),
+          ...filterStandardDeviation('concentration', filteredData),
+        ];
         filteredData = filteredData.filter(timeFilter);
         return {
           [userId]: filteredData,

@@ -44,7 +44,7 @@ const exampleData = {
 
 it('renders empty table', () => {
   const { container, queryAllByText } = renderWithRedux(
-    <GroupTable data={{}} timeFilter={() => true} filterOutliers={false} isTeacher={false} minimumAttemptCount={0} />,
+    <GroupTable data={{}} timeFilter={() => true} isTeacher={false} minimumAttemptCount={0} />,
     { useTranslate: true },
   );
   const rows = container.querySelectorAll('tr');
@@ -57,13 +57,7 @@ it('renders empty table', () => {
 
 it('renders table with data', () => {
   const { translate, queryByText, queryAllByText } = renderWithRedux(
-    <GroupTable
-      data={exampleData}
-      timeFilter={() => true}
-      filterOutliers={false}
-      isTeacher={false}
-      minimumAttemptCount={0}
-    />,
+    <GroupTable data={exampleData} timeFilter={() => true} isTeacher={false} minimumAttemptCount={0} />,
     { useTranslate: true },
   );
   expect(

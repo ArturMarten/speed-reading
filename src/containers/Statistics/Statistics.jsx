@@ -696,7 +696,6 @@ export class Statistics extends Component {
                   isTeacher={this.props.isTeacher}
                   data={this.props.groupExerciseStatistics}
                   timeFilter={timeFilter}
-                  filterOutliers={this.state.filterOutliers}
                   minimumAttemptCount={this.state.minimumAttemptCount}
                   translate={this.props.translate}
                 />
