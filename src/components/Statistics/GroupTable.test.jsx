@@ -44,7 +44,7 @@ const exampleData = {
 
 it('renders empty table', () => {
   const { container, queryAllByText } = renderWithRedux(
-    <GroupTable data={{}} isTeacher={false} minimumAttemptCount={0} />,
+    <GroupTable data={{}} timeFilter={() => true} filterOutliers={false} isTeacher={false} minimumAttemptCount={0} />,
     { useTranslate: true },
   );
   const rows = container.querySelectorAll('tr');
@@ -57,10 +57,18 @@ it('renders empty table', () => {
 
 it('renders table with data', () => {
   const { translate, queryByText, queryAllByText } = renderWithRedux(
-    <GroupTable data={exampleData} isTeacher={false} minimumAttemptCount={0} />,
+    <GroupTable
+      data={exampleData}
+      timeFilter={() => true}
+      filterOutliers={false}
+      isTeacher={false}
+      minimumAttemptCount={0}
+    />,
     { useTranslate: true },
   );
-  expect(queryByText(`${translate('group-statistics-table.average-exercise-count-per-user')} (2)`)).not.toBeNull();
+  expect(
+    queryByText(`${translate('group-statistics-table.average-exercise-count-per-user', { userCount: 2 })}`),
+  ).not.toBeNull();
   expect(queryByText('0h 05m')).not.toBeNull();
   expect(queryByText('+3.23%')).not.toBeNull();
   expect(queryByText('0h 04m')).not.toBeNull();

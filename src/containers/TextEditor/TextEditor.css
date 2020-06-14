@@ -5,6 +5,11 @@
   user-select: none;
 }
 
+.DraftEditor-root {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
 .DraftEditor-root .public-DraftEditor-content {
   min-height: 150px;
   font-size: 1.2em;

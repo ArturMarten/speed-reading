@@ -86,6 +86,21 @@ export const getExerciseId = (exerciseType) => {
   }
 };
 
+export const getExerciseStatisticsIds = (exerciseType) => {
+  if (
+    ['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].includes(exerciseType)
+  ) {
+    return [READING_TEST_ID, READING_AID_ID, SCROLLING_ID, DISAPPEARING_ID, WORD_GROUPS_ID];
+  }
+  if (exerciseType === 'schulteTables') {
+    return [SCHULTE_TABLES_ID];
+  }
+  if (exerciseType === 'concentration') {
+    return [CONCENTRATION_ID];
+  }
+  return null;
+};
+
 export const getExerciseById = (exerciseId) => {
   switch (exerciseId) {
     case READING_TEST_ID:

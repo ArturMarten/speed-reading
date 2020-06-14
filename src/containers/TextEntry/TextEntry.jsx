@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Icon, Form, Input, Label, Popup, Rating } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Form, Input, Label, Popup, Rating, Segment } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
@@ -103,8 +103,13 @@ export class TextEntry extends Component {
     if (this.props.selectedText && prevProps.selectedText !== this.props.selectedText) {
       this.setForm(this.props.selectedText);
     }
-    if (prevProps.textStatus.loading && !this.props.textStatus.loading &&
-               this.props.textStatus.error === null && this.props.selectedText && !this.props.selectedText.id) {
+    if (
+      prevProps.textStatus.loading &&
+      !this.props.textStatus.loading &&
+      this.props.textStatus.error === null &&
+      this.props.selectedText &&
+      !this.props.selectedText.id
+    ) {
       this.newTextHandler();
     }
   }
@@ -114,7 +119,8 @@ export class TextEntry extends Component {
     const submittedForm = {
       title: this.state.textEntryForm.title.value,
       author: this.state.textEntryForm.author.value,
-      collectionId: this.state.textEntryForm.collectionId.value !== 'not-set' ? +this.state.textEntryForm.collectionId.value : null,
+      collectionId:
+        this.state.textEntryForm.collectionId.value !== 'not-set' ? +this.state.textEntryForm.collectionId.value : null,
       editor: this.state.textEntryForm.editor.value,
       questionsAuthor: this.state.textEntryForm.questionsAuthor.value,
       reference: this.state.textEntryForm.reference.value,
@@ -129,21 +135,21 @@ export class TextEntry extends Component {
     } else {
       this.props.onTextSave(submittedForm, null);
     }
-  }
+  };
 
   setForm = (selectedText) => {
     const updatedTextEntryForm = { ...this.state.textEntryForm };
     // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedTextEntryForm) {
       const updatedFormElement = { ...updatedTextEntryForm[inputName] };
-      if (typeof updatedFormElement.value === 'string') {
-        if (selectedText[inputName]) {
+      if (selectedText[inputName]) {
+        if (typeof updatedFormElement.value === 'string') {
           updatedFormElement.value = selectedText[inputName].toString();
         } else {
-          updatedFormElement.value = initialState.textEntryForm[inputName].value;
+          updatedFormElement.value = selectedText[inputName];
         }
       } else {
-        updatedFormElement.value = selectedText[inputName];
+        updatedFormElement.value = initialState.textEntryForm[inputName].value;
       }
       updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation);
       updatedFormElement.touched = false;
@@ -159,24 +165,26 @@ export class TextEntry extends Component {
       textEntryForm: updatedTextEntryForm,
       textEntryFormValid: formIsValid,
     });
-  }
+  };
 
   resetForm = () => {
     this.textEditorRef.clearContent();
     this.setState({ ...initialState });
-  }
+  };
 
   newTextHandler = () => {
     this.resetForm();
     this.props.onNewText();
-  }
+  };
 
   keywordChangeHandler = (event) => {
     this.setState({ currentKeyword: event.target.value });
-  }
+  };
 
   keywordKeyPressHandler = (event) => {
-    if (event.key === 'Enter' && this.state.currentKeyword !== '' &&
+    if (
+      event.key === 'Enter' &&
+      this.state.currentKeyword !== '' &&
       this.state.textEntryForm.keywords.value.indexOf(this.state.currentKeyword) === -1
     ) {
       const updatedTextEntryForm = { ...this.state.textEntryForm };
@@ -189,7 +197,7 @@ export class TextEntry extends Component {
         textEntryForm: updatedTextEntryForm,
       });
     }
-  }
+  };
 
   keywordRemoveHandler = (keywordIndex) => {
     const updatedTextEntryForm = { ...this.state.textEntryForm };
@@ -197,7 +205,7 @@ export class TextEntry extends Component {
     updatedKeywordsElement.value = updatedKeywordsElement.value.filter((keyword, index) => index !== keywordIndex);
     updatedTextEntryForm.keywords = updatedKeywordsElement;
     this.setState({ textEntryForm: updatedTextEntryForm });
-  }
+  };
 
   inputChangeHandler = (event, { name, value }) => {
     const updatedTextEntryForm = { ...this.state.textEntryForm };
@@ -215,15 +223,15 @@ export class TextEntry extends Component {
       textEntryForm: updatedTextEntryForm,
       textEntryFormValid: formIsValid,
     });
-  }
+  };
 
   textSelectionToggleHandler = () => {
     this.setState({ textSelectionOpened: !this.state.textSelectionOpened });
-  }
+  };
 
   textTestToggleHandler = () => {
     this.setState({ textTestOpened: !this.state.textTestOpened });
-  }
+  };
 
   textAnalysisToggleHandler = () => {
     if (!this.state.textAnalysisOpened) {
@@ -238,76 +246,67 @@ export class TextEntry extends Component {
       textAnalysisComponent.setText(text);
     }
     this.setState({ textAnalysisOpened: !this.state.textAnalysisOpened });
-  }
+  };
 
   render() {
     const textEditorLabel = (
       <label htmlFor="editor-input">
         {this.props.translate('text-entry.text-editor')}
-        <HelpPopup
-          position="top center"
-          content={this.props.translate('text-entry.text-editor-description')}
-        />
+        <HelpPopup position="top center" content={this.props.translate('text-entry.text-editor-description')} />
       </label>
     );
     const textReferenceLabel = (
       <label htmlFor="reference-input">
         {this.props.translate('text-entry.text-reference')}
-        <HelpPopup
-          position="top center"
-          content={this.props.translate('text-entry.text-reference-description')}
-        />
+        <HelpPopup position="top center" content={this.props.translate('text-entry.text-reference-description')} />
       </label>
     );
     const keywords = this.state.textEntryForm.keywords.value.map((keyword, index) => (
       <Label key={keyword} as="a">
         {keyword}
-        <Icon
-          name="close"
-          onClick={() => this.keywordRemoveHandler(index)}
-        />
+        <Icon name="close" onClick={() => this.keywordRemoveHandler(index)} />
       </Label>
     ));
 
-    const collectionOptions = [{
-      key: 0,
-      text: this.props.translate('text-entry.text-collection-not-set'),
-      value: 'not-set',
-    }].concat(this.props.collections.map((collection, index) => ({
-      key: index + 1,
-      text: collection.title,
-      value: collection.id.toString(),
-    })));
+    const collectionOptions = [
+      {
+        key: 0,
+        text: this.props.translate('text-entry.text-collection-not-set'),
+        value: 'not-set',
+      },
+    ].concat(
+      this.props.collections.map((collection, index) => ({
+        key: index + 1,
+        text: collection.title,
+        value: collection.id.toString(),
+      })),
+    );
 
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>
-        {this.state.textSelectionOpened ?
-          <TextSelection
-            open={this.state.textSelectionOpened}
-            onClose={this.textSelectionToggleHandler}
-          /> : null}
+        {this.state.textSelectionOpened ? (
+          <TextSelection open={this.state.textSelectionOpened} onClose={this.textSelectionToggleHandler} />
+        ) : null}
         <Button
           primary
           floated="right"
           onClick={this.textSelectionToggleHandler}
-          content={this.props.selectedText ?
-            this.props.translate('text-entry.change-text') :
-            this.props.translate('text-entry.select-text')}
+          content={
+            this.props.selectedText
+              ? this.props.translate('text-entry.change-text')
+              : this.props.translate('text-entry.select-text')
+          }
         />
-        {this.props.selectedText ?
+        {this.props.selectedText ? (
           <Button
             secondary
             floated="right"
             onClick={this.newTextHandler}
             content={this.props.translate('text-entry.new-text')}
-          /> : null
-        }
-        <Header as="h2">
-          {this.props.translate('text-entry.title')}
-        </Header>
-        <p>
-          {this.props.translate('text-entry.description')}
-        </p>
+          />
+        ) : null}
+        <Header as="h2">{this.props.translate('text-entry.title')}</Header>
+        <p>{this.props.translate('text-entry.description')}</p>
         <Form warning error={this.props.textStatus.error !== null} success={this.props.textStatus.message !== null}>
           <Form.Group widths="equal">
             <Form.Input
@@ -359,7 +358,9 @@ export class TextEntry extends Component {
               name="questionsAuthor"
               label={this.props.translate('text-entry.text-questions-author')}
               value={this.state.textEntryForm.questionsAuthor.value}
-              error={!this.state.textEntryForm.questionsAuthor.valid && this.state.textEntryForm.questionsAuthor.touched}
+              error={
+                !this.state.textEntryForm.questionsAuthor.valid && this.state.textEntryForm.questionsAuthor.touched
+              }
               onChange={this.inputChangeHandler}
               placeholder={this.props.translate('text-entry.text-questions-author-placeholder')}
             />
@@ -376,14 +377,16 @@ export class TextEntry extends Component {
           </Form.Group>
           <Form.Field>
             <label htmlFor="text-input">
-              <div>
-                {this.props.translate('text-entry.text-input')}
-              </div>
+              <div>{this.props.translate('text-entry.text-input')}</div>
             </label>
-            <TextEditor
-              id="text-input"
-              ref={(ref) => { this.textEditorRef = ref; }}
-            />
+            <Segment style={{ margin: 0 }}>
+              <TextEditor
+                id="text-input"
+                ref={(ref) => {
+                  this.textEditorRef = ref;
+                }}
+              />
+            </Segment>
           </Form.Field>
           <Form.Field
             id="complexity-rating"
@@ -416,17 +419,10 @@ export class TextEntry extends Component {
                 position="top center"
               />
             </Form.Field>
-            <Label.Group size="large">
-              {keywords}
-            </Label.Group>
+            <Label.Group size="large">{keywords}</Label.Group>
           </Form.Group>
-          <SuccessMessage
-            icon="check"
-            message={this.props.textStatus.message}
-          />
-          <ErrorMessage
-            error={this.props.textStatus.error}
-          />
+          <SuccessMessage icon="check" message={this.props.textStatus.message} />
+          <ErrorMessage error={this.props.textStatus.error} />
           <Button
             positive
             type="button"
@@ -436,37 +432,30 @@ export class TextEntry extends Component {
             onClick={this.onSubmit}
           >
             <Icon fitted name="save" style={{ opacity: 1 }} />
-            {this.props.selectedText && this.props.selectedText.id ?
-              this.props.translate('text-entry.modify-text') :
-              this.props.translate('text-entry.add-text')
-            }
+            {this.props.selectedText && this.props.selectedText.id
+              ? this.props.translate('text-entry.modify-text')
+              : this.props.translate('text-entry.add-text')}
           </Button>
-          {this.state.textTestOpened ?
+          {this.state.textTestOpened ? (
             <TextTestEditor
               open={this.state.textTestOpened}
               onClose={this.textTestToggleHandler}
               readingTextId={this.props.selectedText.id}
-            /> : null}
+            />
+          ) : null}
           <TextAnalysis
-            ref={(ref) => { this.textAnalysisRef = ref; }}
+            ref={(ref) => {
+              this.textAnalysisRef = ref;
+            }}
             open={this.state.textAnalysisOpened}
             onClose={this.textAnalysisToggleHandler}
           />
-          {this.props.selectedText && this.props.selectedText.id ?
-            <Button
-              primary
-              type="button"
-              floated="right"
-              onClick={this.textTestToggleHandler}
-            >
+          {this.props.selectedText && this.props.selectedText.id ? (
+            <Button primary type="button" floated="right" onClick={this.textTestToggleHandler}>
               {this.props.translate('text-entry.change-questions')}
-            </Button> : null}
-          <Button
-            positive
-            type="button"
-            floated="right"
-            onClick={this.textAnalysisToggleHandler}
-          >
+            </Button>
+          ) : null}
+          <Button positive type="button" floated="right" onClick={this.textAnalysisToggleHandler}>
             {this.props.translate('text-entry.analyze-text')}
           </Button>
         </Form>
@@ -475,7 +464,7 @@ export class TextEntry extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   collections: state.text.collections,
   selectedText: state.text.selectedText,
   collectionsStatus: state.text.collectionsStatus,
@@ -483,7 +472,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onFetchTextCollections: () => {
     dispatch(actionCreators.fetchTextCollections());
   },

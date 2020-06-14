@@ -589,7 +589,16 @@ storiesOf('RegressionChart', module)
 
 storiesOf('GroupTable', module).add('Component', () => {
   store.dispatch(actionCreators.fetchGroupExerciseStatistics(4, store.getState().auth.token));
-  return <GroupTable isTeacher data={store.getState().statistics.groupExerciseStatistics} translate={translate} />;
+  return (
+    <GroupTable
+      isTeacher
+      data={store.getState().statistics.groupExerciseStatistics}
+      timeFilter={() => true}
+      filterOutliers={false}
+      minimumAttemptCount={0}
+      translate={translate}
+    />
+  );
 });
 
 storiesOf('Manage', module).add('Container', () => <ManageContainer />);

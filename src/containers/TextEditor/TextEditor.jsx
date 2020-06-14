@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Segment, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js';
 import { getTranslate } from 'react-localize-redux';
 
@@ -50,34 +50,32 @@ export class TextEditor extends Component {
   render() {
     return (
       <>
-        <Segment style={{ margin: 0 }}>
-          <div className="DraftEditor-controls">
-            <InlineStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleInlineStyle}
-              translate={this.props.translate}
-            />
-            <BlockStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleBlockType}
-              translate={this.props.translate}
-            />
-            <Button
-              basic
-              compact
-              style={{ margin: '2px 2px' }}
-              active={this.state.spellCheck}
-              content={this.props.translate('text-editor.spell-check')}
-              onClick={this.toggleSpellCheck}
-            />
-            <TextCounter editorState={this.state.editorState} translate={this.props.translate} />
-          </div>
-          <Editor
+        <div className="DraftEditor-controls">
+          <InlineStyleControls
             editorState={this.state.editorState}
-            onChange={(editorState) => this.setState({ editorState })}
-            spellCheck={this.state.spellCheck}
+            onToggle={this.toggleInlineStyle}
+            translate={this.props.translate}
           />
-        </Segment>
+          <BlockStyleControls
+            editorState={this.state.editorState}
+            onToggle={this.toggleBlockType}
+            translate={this.props.translate}
+          />
+          <Button
+            basic
+            compact
+            style={{ margin: '2px 2px' }}
+            active={this.state.spellCheck}
+            content={this.props.translate('text-editor.spell-check')}
+            onClick={this.toggleSpellCheck}
+          />
+          <TextCounter editorState={this.state.editorState} translate={this.props.translate} />
+        </div>
+        <Editor
+          editorState={this.state.editorState}
+          onChange={(editorState) => this.setState({ editorState })}
+          spellCheck={this.state.spellCheck}
+        />
       </>
     );
   }

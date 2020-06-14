@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Container,
@@ -24,25 +24,13 @@ import RegressionChart from '../../components/Statistics/RegressionChart';
 import GroupTable from '../../components/Statistics/GroupTable';
 import { getExerciseId } from '../../store/reducers/exercise';
 import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
-
-const getPeriodTime = (period) => {
-  switch (period) {
-    case 'one-day':
-      return 24 * 60 * 60 * 1000;
-    case 'one-week':
-      return 7 * 24 * 60 * 60 * 1000;
-    case 'two-weeks':
-      return 14 * 24 * 60 * 60 * 1000;
-    case 'three-weeks':
-      return 21 * 24 * 60 * 60 * 1000;
-    case 'one-month':
-      return 30.4398 * 24 * 60 * 60 * 1000;
-    case 'three-months':
-      return 91.3194 * 24 * 60 * 60 * 1000;
-    default:
-      return 0;
-  }
-};
+import {
+  getPeriodTime,
+  lowerBoundOutlierFilter,
+  upperBoundOutlierFilter,
+  timeFilterByStartEnd,
+  filterStandardDeviation,
+} from './util/statistics';
 
 export class Statistics extends Component {
   exerciseCharts = [
@@ -354,15 +342,6 @@ export class Statistics extends Component {
     }
   };
 
-  outlierFilter = (attempt) =>
-    !this.state.filterOutliers ||
-    !attempt.wordsPerMinute ||
-    attempt.wordsPerMinute <= 500 ||
-    (attempt.wordsPerMinute <= 700 && attempt.date >= new Date('2019-04-02T00:00:00Z')); // Temporary
-
-  timeFilter = (attempt) =>
-    attempt.date >= new Date(this.state.startTime) && attempt.date <= new Date(`${this.state.endTime}T23:59:59Z`);
-
   filterOutliersHandler = () => {
     this.setState({
       filterOutliers: !this.state.filterOutliers,
@@ -390,23 +369,27 @@ export class Statistics extends Component {
         value: user.publicId,
         text: `${user.firstName ? user.firstName : ''} ${user.lastName ? user.lastName : ''} <${user.email}>`,
       }));
-    const userExerciseData = this.props.userExerciseStatistics
+
+    const timeFilter = timeFilterByStartEnd(this.state.startTime, this.state.endTime);
+
+    let filteredData = this.props.userExerciseStatistics
+      .filter((attempt) => !this.state.filterOutliers || upperBoundOutlierFilter(attempt))
+      .filter((attempt) => !this.state.filterOutliers || lowerBoundOutlierFilter(attempt));
+
+    if (this.state.filterOutliers) {
+      filteredData = filterStandardDeviation(this.state.exercise, filteredData);
+    }
+
+    const userExerciseData = filteredData
       .filter((attempt) => getExerciseId(this.state.exercise).indexOf(attempt.exerciseId) !== -1)
-      .filter((attempt) => this.timeFilter(attempt))
-      .filter(this.outlierFilter)
+      .filter(timeFilter)
       .map((attempt, index) => ({ ...attempt, index: index + 1 }));
+
     const totalExerciseTime = userExerciseData.map((exercise) => exercise.elapsedTime).reduce(reduceSumFunc, 0);
     const totalTestTime = userExerciseData.map((exercise) => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
 
-    const groupExerciseData = Object.assign(
-      {},
-      ...Object.keys(this.props.groupExerciseStatistics).map((userId) => ({
-        [userId]: this.props.groupExerciseStatistics[userId].filter(this.timeFilter).filter(this.outlierFilter),
-      })),
-    );
-
-    const groupFilter = (
+    const groupFilterInput = (
       <Form.Field
         id="group-dropdown"
         fluid
@@ -422,7 +405,7 @@ export class Statistics extends Component {
       />
     );
 
-    const exerciseFilter = (
+    const exerciseFilterInput = (
       <Form.Field
         id="attempt-count-input"
         type="number"
@@ -435,7 +418,7 @@ export class Statistics extends Component {
       />
     );
 
-    const userFilter = (
+    const userFilterInput = (
       <Form.Field
         id="user-dropdown"
         fluid
@@ -451,19 +434,19 @@ export class Statistics extends Component {
       />
     );
 
-    const userAndGroupFilter = (
-      <Fragment>
+    const userAndGroupFilterInput = (
+      <>
         {this.props.isTeacher ? (
           <Form.Group widths="equal">
-            {groupFilter}
-            {userFilter}
+            {groupFilterInput}
+            {userFilterInput}
           </Form.Group>
         ) : null}
-      </Fragment>
+      </>
     );
 
-    const timeFilter = (
-      <Fragment>
+    const timeFilterInput = (
+      <>
         <Form.Input
           id="statistics-start"
           name="startTime"
@@ -519,7 +502,7 @@ export class Statistics extends Component {
             />
           </Button.Group>
         </Form.Field>
-      </Fragment>
+      </>
     );
 
     const exerciseStatistics = (
@@ -560,7 +543,7 @@ export class Statistics extends Component {
         render: () => (
           <Tab.Pane>
             <Form>
-              {userAndGroupFilter}
+              {userAndGroupFilterInput}
               <Form.Group widths="equal">
                 <Form.Field
                   id="exercise-dropdown"
@@ -575,7 +558,7 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              <Form.Group widths="equal">{timeFilter}</Form.Group>
+              <Form.Group widths="equal">{timeFilterInput}</Form.Group>
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -612,7 +595,7 @@ export class Statistics extends Component {
         render: () => (
           <Tab.Pane>
             <Form>
-              {userAndGroupFilter}
+              {userAndGroupFilterInput}
               <Form.Group widths="equal">
                 <Form.Field
                   id="exercise-dropdown"
@@ -639,7 +622,7 @@ export class Statistics extends Component {
                   control={Dropdown}
                 />
               </Form.Group>
-              <Form.Group widths="equal">{timeFilter}</Form.Group>
+              <Form.Group widths="equal">{timeFilterInput}</Form.Group>
               <Form.Group style={{ margin: 0 }} inline>
                 <Form.Field
                   id="filter-checkbox"
@@ -699,10 +682,10 @@ export class Statistics extends Component {
           <Tab.Pane>
             <Form>
               <Form.Group widths="equal">
-                {this.props.isTeacher ? groupFilter : null}
-                {this.props.isTeacher ? exerciseFilter : null}
+                {this.props.isTeacher ? groupFilterInput : null}
+                {this.props.isTeacher ? exerciseFilterInput : null}
               </Form.Group>
-              <Form.Group widths="equal">{timeFilter}</Form.Group>
+              <Form.Group widths="equal">{timeFilterInput}</Form.Group>
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
@@ -711,7 +694,9 @@ export class Statistics extends Component {
                 </Dimmer>
                 <GroupTable
                   isTeacher={this.props.isTeacher}
-                  data={groupExerciseData}
+                  data={this.props.groupExerciseStatistics}
+                  timeFilter={timeFilter}
+                  filterOutliers={this.state.filterOutliers}
                   minimumAttemptCount={this.state.minimumAttemptCount}
                   translate={this.props.translate}
                 />
@@ -764,7 +749,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Statistics);
+export default connect(mapStateToProps, mapDispatchToProps)(Statistics);

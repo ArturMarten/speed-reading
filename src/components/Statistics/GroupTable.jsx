@@ -1,27 +1,29 @@
-import React, { Component, Fragment } from 'react';
-import { Table, Button, Icon } from 'semantic-ui-react';
-
+import React, { Component } from 'react';
+import { Button, Icon, Table } from 'semantic-ui-react';
 import { exportFile } from '../../api';
-import { formatMillisecondsInHours, downloadExcelData } from '../../shared/utility';
+import { downloadExcelData, formatMillisecondsInHours } from '../../shared/utility';
 import {
-  readingExerciseNames,
-  helpExerciseNames,
-  filterReadingExercises,
-  filterHelpExercises,
+  aggregateHelpExerciseResults,
+  aggregateReadingExerciseResults,
+  calculateHelpExerciseResults,
+  calculateReadingExerciseResults,
+  exerciseTranslateMapping,
   filterByAttemptCount,
+  filterHelpExercises,
+  filterReadingExercises,
   getUserCount,
   groupDataByExercise,
-  calculateReadingExerciseResults,
-  calculateHelpExerciseResults,
-  aggregateReadingExerciseResults,
-  aggregateHelpExerciseResults,
-  exerciseTranslateMapping,
+  helpExerciseNames,
   prepareResults,
+  readingExerciseNames,
 } from './util/groupTable';
+import {
+  lowerBoundOutlierFilter,
+  upperBoundOutlierFilter,
+  filterStandardDeviation,
+} from '../../containers/Statistics/util/statistics';
 
 export class GroupTable extends Component {
-  state = {};
-
   exportData = (results, translate) => {
     const { filename, filetype, ...rest } = prepareResults(results, translate);
     exportFile({ filename, filetype, ...rest }).then((data) => {
@@ -30,29 +32,43 @@ export class GroupTable extends Component {
   };
 
   render() {
-    let { data } = this.props;
-    const { isTeacher, minimumAttemptCount } = this.props;
-    let readingExerciseData = filterReadingExercises(data);
-    let helpExerciseData = filterHelpExercises(data);
+    const { data, isTeacher, minimumAttemptCount, timeFilter, filterOutliers } = this.props;
+    const filteredGroupData = Object.assign(
+      {},
+      ...Object.keys(data).map((userId) => {
+        let filteredData = data[userId]
+          .filter((attempt) => !filterOutliers || upperBoundOutlierFilter(attempt))
+          .filter((attempt) => !filterOutliers || lowerBoundOutlierFilter(attempt));
+        filteredData = filterOutliers
+          ? [
+              ...filterStandardDeviation('readingExercises', filteredData),
+              ...filterStandardDeviation('schulteTables', filteredData),
+              ...filterStandardDeviation('concentration', filteredData),
+            ]
+          : filteredData;
+        filteredData = filteredData.filter(timeFilter);
+        return {
+          [userId]: filteredData,
+        };
+      }),
+    );
+
+    let readingExerciseData = filterReadingExercises(filteredGroupData);
+    let helpExerciseData = filterHelpExercises(filteredGroupData);
 
     if (isTeacher) {
       readingExerciseData = filterByAttemptCount(readingExerciseData, minimumAttemptCount);
       helpExerciseData = filterByAttemptCount(helpExerciseData, minimumAttemptCount);
-      data = filterByAttemptCount(data, minimumAttemptCount);
     }
-    // const userCount = getUserCount(data);
     const readingExerciseUserCount = getUserCount(readingExerciseData);
     const helpExerciseUserCount = getUserCount(helpExerciseData);
 
-    // const exerciseData = groupDataByExercise(data);
     const groupedReadingExerciseData = groupDataByExercise(readingExerciseData);
     const groupedHelpExerciseData = groupDataByExercise(helpExerciseData);
 
-    // const exerciseResults = calculateExerciseResults(exerciseData);
     const readingExerciseResults = calculateReadingExerciseResults(groupedReadingExerciseData);
     const helpExerciseResults = calculateHelpExerciseResults(groupedHelpExerciseData);
 
-    // const aggregatedResults = aggerateExerciseResults(exerciseResults, userCount);
     const aggregatedReadingExerciseResults = aggregateReadingExerciseResults(
       readingExerciseResults,
       readingExerciseUserCount,
@@ -60,7 +76,7 @@ export class GroupTable extends Component {
     const aggregatedHelpExerciseResults = aggregateHelpExerciseResults(helpExerciseResults, helpExerciseUserCount);
 
     return (
-      <Fragment>
+      <>
         <Table basic celled selectable textAlign="center" compact fixed>
           <Table.Header>
             <Table.Row>
@@ -70,9 +86,9 @@ export class GroupTable extends Component {
                 {this.props.translate('group-statistics-table.total-exercise-elapsed-time')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {`${this.props.translate(
-                  'group-statistics-table.average-exercise-count-per-user',
-                )} (${readingExerciseUserCount})`}
+                {`${this.props.translate('group-statistics-table.average-exercise-count-per-user', {
+                  userCount: readingExerciseUserCount,
+                })}`}
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {this.props.translate('group-statistics-table.average-initial-reading-speed')}
@@ -224,21 +240,10 @@ export class GroupTable extends Component {
                 {this.props.translate('group-statistics-table.total-exercise-elapsed-time')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {`${this.props.translate(
-                  'group-statistics-table.average-exercise-count-per-user',
-                )} (${helpExerciseUserCount})`}
+                {`${this.props.translate('group-statistics-table.average-exercise-count-per-user', {
+                  userCount: helpExerciseUserCount,
+                })}`}
               </Table.HeaderCell>
-              {/*
-              <Table.HeaderCell>
-                {this.props.translate('group-statistics-table.average-initial-exercise-speed')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {this.props.translate('group-statistics-table.average-final-exercise-speed')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {this.props.translate('group-statistics-table.average-exercise-speed-change-percentage')}
-              </Table.HeaderCell>
-              */}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -252,17 +257,6 @@ export class GroupTable extends Component {
               const averageExerciseCount = aggregatedHelpExerciseResults[exercise]
                 ? aggregatedHelpExerciseResults[exercise].averageExerciseCount
                 : 0;
-              /*
-              const averageInitialExerciseSpeed = aggregatedHelpExerciseResults[exercise]
-                ? aggregatedHelpExerciseResults[exercise].averageInitialExerciseSpeed
-                : 0;
-              const averageFinalExerciseSpeed = aggregatedHelpExerciseResults[exercise]
-                ? aggregatedHelpExerciseResults[exercise].averageFinalExerciseSpeed
-                : 0;
-              const averageExerciseSpeedChangePercentage = aggregatedHelpExerciseResults[exercise]
-                ? aggregatedHelpExerciseResults[exercise].averageExerciseSpeedChangePercentage
-                : 0;
-              */
               return (
                 <Table.Row key={exercise}>
                   <Table.Cell>{this.props.translate(`statistics.${exerciseTranslateMapping[exercise]}`)}</Table.Cell>
@@ -271,23 +265,6 @@ export class GroupTable extends Component {
                     {formatMillisecondsInHours(totalExerciseElapsedTime)}
                   </Table.Cell>
                   <Table.Cell warning={averageExerciseCount === 0}>{averageExerciseCount.toFixed(2)}</Table.Cell>
-                  {/*
-                  <Table.Cell warning={averageInitialExerciseSpeed === 0}>
-                    {averageInitialExerciseSpeed.toFixed(0)}
-                  </Table.Cell>
-                  <Table.Cell warning={averageFinalExerciseSpeed === 0}>
-                    {averageFinalExerciseSpeed.toFixed(0)}
-                  </Table.Cell>
-                  <Table.Cell
-                    negative={averageExerciseSpeedChangePercentage < 0}
-                    warning={averageExerciseSpeedChangePercentage === 0}
-                    positive={averageExerciseSpeedChangePercentage > 0}
-                  >
-                    {`${
-                      averageExerciseSpeedChangePercentage > 0 ? '+' : ''
-                    }${averageExerciseSpeedChangePercentage.toFixed(2)}%`}
-                  </Table.Cell>
-                   */}
                 </Table.Row>
               );
             })}
@@ -307,7 +284,7 @@ export class GroupTable extends Component {
             <Icon name="download" />
           </Button>
         ) : null}
-      </Fragment>
+      </>
     );
   }
 }

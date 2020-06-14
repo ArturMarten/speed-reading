@@ -778,7 +778,7 @@
     "exercise": ["Harjutus", "Exercise"],
     "total-exercise-count": ["Harjutuste koguarv", "Exercise total count"],
     "total-exercise-elapsed-time": ["Harjutuste koguaeg", "Exercise total time"],
-    "average-exercise-count-per-user": ["Keskmine harjutuste arv kasutaja kohta", "Average exercise count per user"],
+    "average-exercise-count-per-user": ["Keskmine harjutuste arv ühe kasutaja kohta (${ userCount } kasutajat)", "Average exercise count per one user (${ userCount } users)"],
     "average-initial-reading-speed": ["Keskmine lugemise algkiirus", "Average initial reading speed"],
     "average-final-reading-speed": ["Keskmine lugemise lõppkiirus", "Average final reading speed"],
     "average-reading-speed-change-percentage": ["Keskmine lugemiskiiruse muutus", "Average reading speed change"],
@@ -873,7 +873,7 @@
   },
   "manage-problem-reports": {
     "refresh": ["Värskenda", "Refresh"],
-    "fetching-bug-reports": ["Laen probleemide teateid", "Fetching problem reports"],
+    "fetching-problem-reports": ["Laen probleemide teateid", "Fetching problem reports"],
     "date": ["Kuupäev", "Date"],
     "user": ["Kasutaja", "User"],
     "resolved": ["Staatus", "Status"],
