@@ -47,7 +47,7 @@ import { QuestionTestAnswers } from '../containers/Exercise/TestAnswers/Question
 import { BlankTestAnswers } from '../containers/Exercise/TestAnswers/BlankTestAnswers';
 import StatisticsContainer from '../containers/Statistics/Statistics';
 import RegressionChart from '../components/Statistics/RegressionChart';
-import GroupTable from '../components/Statistics/GroupTable';
+import GroupTable from '../components/Statistics/Group/GroupTable';
 import ManageContainer from '../containers/Manage/Manage';
 import AuthContainer from '../containers/Auth/Auth';
 import ChangePasswordContainer from '../containers/Auth/ChangePassword';

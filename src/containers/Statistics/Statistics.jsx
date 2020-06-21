@@ -21,7 +21,7 @@ import * as actionCreators from '../../store/actions';
 import { rolePermissions } from '../../store/reducers/profile';
 import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import RegressionChart from '../../components/Statistics/RegressionChart';
-import GroupTable from '../../components/Statistics/GroupTable';
+import GroupTable from '../../components/Statistics/Group/GroupTable';
 import { getExerciseId } from '../../store/reducers/exercise';
 import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
 import {
@@ -85,9 +85,31 @@ export class Statistics extends Component {
         yLabel: this.props.translate('regression-chart.result-percentage'),
         legendTitles: [this.props.translate('regression-chart.exercise-result')],
         yFields: ['exerciseResult'],
+        dataStrokeColor: ['#FF4C4C'],
+        dataFillColor: ['#FF9999'],
+        dataLineColor: ['#FF0000'],
+      },
+      {
+        id: 1,
+        title: this.props.translate('regression-chart.group-decision-speed-trend'),
+        yLabel: this.props.translate('regression-chart.ms-per-symbol-group'),
+        legendTitles: [this.props.translate('regression-chart.decision-speed')],
+        yFields: ['msPerSymbolGroup'],
+        dataStrokeColor: ['#009900'],
+        dataFillColor: ['#00FF00'],
+        dataLineColor: ['#007F00'],
+        changeColor: ['red', 'green'],
+      },
+      {
+        id: 2,
+        title: this.props.translate('regression-chart.symbol-decision-speed-trend'),
+        yLabel: this.props.translate('regression-chart.ms-per-symbol'),
+        legendTitles: [this.props.translate('regression-chart.decision-speed')],
+        yFields: ['msPerSymbol'],
         dataStrokeColor: ['#4C4CFF'],
         dataFillColor: ['#9999FF'],
         dataLineColor: ['#0000FF'],
+        changeColor: ['red', 'green'],
       },
     ],
   ];
@@ -647,7 +669,7 @@ export class Statistics extends Component {
                     style={{ display: 'block', textAlign: 'right' }}
                     onChange={(event) => this.setState({ order: +event.target.value })}
                   >
-                    <Label basic>Polünoomi aste</Label>
+                    <Label basic>{this.props.translate('statistics.polynomial-degree')}</Label>
                     <input style={{ width: '5em' }} max="30" />
                   </Input>
                   <div style={{ textAlign: 'center', overflowX: 'auto' }}>

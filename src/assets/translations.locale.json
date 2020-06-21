@@ -428,12 +428,12 @@
   },
   "modification": {
     "default": ["Vaikimisi", "Default"],
-    "numbers": ["Numbrid", "Numbers"],
     "group-highlighted": ["Esiletõstetud", "Highlighted"],
     "group-single": ["Üksik rühm", "Single group"],
     "group-spacing": ["Muudetav vahe", "Changable spacing"],
     "group-vertical": ["Vertikaalne lugemine", "Vertical reading"],
     "group-rsvp": ["Välktehnika", "RSVP"],
+    "numbers": ["Numbrid", "Numbers"],
     "letters-lowercase": ["Väiketähed", "Lowercase letters"],
     "letters-uppercase": ["Suurtähed", "Uppercase letters"],
     "letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
@@ -530,6 +530,9 @@
     "correct": ["Õiget", "Correct"],
     "incorrect": ["Valet", "Incorrect"],
     "unanswered": ["Vastamata", "Unanswered"],
+    "decision-speed": ["Otsustamise kiirus", "Decision speed"],
+    "msPerSymbolGroup": ["Millisek/grupi kohta", "Millisec per group"],
+    "msPerSymbol": ["Millisek/sümboli kohta", "Millisec per symbol"],
     "percentage": ["Tulemus", "Result"],
     "retry": ["Harjuta uuesti", "Exercise again"],
     "end": ["Lõpeta", "Finish"]
@@ -692,6 +695,7 @@
     ],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
+    "polynomial-degree": ["Polünoomi aste", "Polynomial degree"],
     "group-table": ["Grupi tulemused", "Group results"],
     "group": ["Grupp", "Group"],
     "minimum-attempt-count": ["Minimaalne soorituste arv", "Minimal attempt count"],
@@ -747,10 +751,12 @@
     "elapsed-time": ["Kulunud aeg", "Elapsed time"],
     "symbolsPerMinute": ["Sümbolit minutis", "Symbols Per Minute"],
     "exercise-result": ["Harjutuse tulemus", "Exercise result"],
+    "msPerSymbolGroup": ["Millisek/grupi kohta", "Millisec per group"],
+    "msPerSymbol": ["Millisek/sümboli kohta", "Millisec per symbol"],
     "not-finished": ["Lõpetamata", "Unfinished"],
     "not-recorded": ["Salvestamata", "Unsaved"],
     "test-missing": ["Sooritamata", "No attempt"],
-    "export": ["Expordi", "Export"]
+    "export": ["Ekspordi", "Export"]
   },
   "regression-chart": {
     "no-data": ["Valitud perioodil andmed puuduvad", "No data in selected period"],
@@ -771,11 +777,17 @@
     "speed-symbols-per-minute": ["Kiirus (sümbolit minutis)", "Speed (Symbols Per Minute)"],
     "finding-speed": ["Leidmiskiirus", "Finding speed"],
     "exercise-result-trend": ["Harjutuse tulemuse arengujoon", "Exercise result trend"],
+    "group-decision-speed-trend": ["Grupi identsuse üle otsustamise kiirus", "Decision speed over group identity"],
+    "ms-per-symbol-group": ["Millisekundit/grupi kohta", "Milliseconds per group"],
+    "symbol-decision-speed-trend": ["Sümboli identsuse üle otsustamise kiirus", "Decision speed over symbol identity"],
+    "ms-per-symbol": ["Millisekundit/sümboli kohta", "Milliseconds per symbol"],
+    "decision-speed": ["Otsustamise kiirus", "Decision speed"],
     "result-percentage": ["Tulemus (%)", "Result (%)"],
     "exercise-result": ["Harjutuse tulemus", "Exercise result"]
   },
   "group-statistics-table": {
     "exercise": ["Harjutus", "Exercise"],
+    "modification": ["Modifikatsioon", "Modification"],
     "total-exercise-count": ["Harjutuste koguarv", "Exercise total count"],
     "total-exercise-elapsed-time": ["Harjutuste koguaeg", "Exercise total time"],
     "average-exercise-count-per-user": ["Keskmine harjutuste arv ühe kasutaja kohta (${ userCount } kasutajat)", "Average exercise count per one user (${ userCount } users)"],
@@ -794,9 +806,18 @@
       "Keskmine omandamistaseme muutus",
       "Average comprehension level change"
     ],
-    "average-initial-exercise-speed": ["Keskmine algkiirus", "Average initial speed"],
-    "average-final-exercise-speed": ["Keskmine lõppkiirus", "Average final speed"],
-    "average-exercise-speed-change-percentage": ["Keskmine kiiruse muutus", "Average speed change"]
+    "average-initial-exercise-speed": ["Keskmine leidmise algkiirus (sümbolit minutis)", "Average initial finding speed (symbols in minute)"],
+    "average-final-exercise-speed": ["Keskmine leidmise lõppkiirus (sümbolit minutis)", "Average final finding speed (symbols per minute)"],
+    "average-exercise-speed-change-percentage": ["Keskmine leidmise kiiruse muutus", "Average finding speed change"],
+    "average-initial-exercise-result": ["Keskmine algne tulemus", "Average initial result"],
+    "average-final-exercise-result": ["Keskmine lõpp tulemus", "Average final result"],
+    "average-exercise-result-change-percentage": ["Keskmine tulemuse muutus", "Average result change"],
+    "average-initial-symbol-group-speed": ["Keskmine grupi identsuse üle otsustamise algkiirus", "Average initial decision speed over group identity"],
+    "average-final-symbol-group-speed": ["Keskmine grupi identsuse üle otsustamise lõppkiirus", "Average final decision speed over group identity"],
+    "average-symbol-group-speed-change-percentage": ["Keskmine grupi identsuse üle otsustamise kiiruse muutus", "Average initial decision speed change over group identity"],
+    "average-initial-symbol-speed": ["Keskmine sümboli identsuse üle otsustamise algkiirus", "Average initial decision speed over symbol identity"],
+    "average-final-symbol-speed": ["Keskmine sümboli identsuse üle otsustamise lõppkiirus", "Average final decision speed over symbol identity"],
+    "average-symbol-speed-change-percentage": ["Keskmine sümboli identsuse üle otsustamise kiiruse muutus", "Average initial decision speed change over symbol identity"]
   },
   "manage": {
     "title": ["Halda", "Manage"],

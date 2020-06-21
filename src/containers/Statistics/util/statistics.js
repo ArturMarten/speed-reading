@@ -1,7 +1,7 @@
 import { getAverage, getStandardDeviation } from '../../../shared/utility';
 import { getExerciseStatisticsIds } from '../../../store/reducers/exercise';
 
-export const MIN_ATTEMPT_TIME = 10000; // in ms
+export const MIN_ATTEMPT_TIME = 5000; // in ms
 export const WPM_CHANGE_DATE = new Date('2019-04-02T00:00:00Z');
 export const DEVIATION_SIGMA = 3;
 

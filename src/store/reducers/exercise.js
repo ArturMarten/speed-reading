@@ -272,7 +272,7 @@ const reducer = (state = initialState, action) => {
           symbolsPerMinute: Number.parseFloat((symbolCount / (elapsedTime / (1000 * 60))).toFixed(2)),
         };
       } else if (state.type === 'concentration') {
-        const { answers } = action.payload;
+        const { answers, exerciseOptions } = action.payload;
         let total = 0;
         let correct = 0;
         let incorrect = 0;
@@ -290,12 +290,19 @@ const reducer = (state = initialState, action) => {
           }
           total += 1;
         });
+        const msPerSymbolGroup = Math.round(elapsedTime / exerciseOptions.symbolGroupCount);
+        const msPerSymbol = Math.round(
+          elapsedTime / (2 * exerciseOptions.symbolCount * exerciseOptions.symbolGroupCount),
+        );
+
         result = {
           elapsedTime,
           total,
           correct,
           incorrect,
           unanswered,
+          msPerSymbolGroup,
+          msPerSymbol,
         };
       } else {
         result = { elapsedTime };

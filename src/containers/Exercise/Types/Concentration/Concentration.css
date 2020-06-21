@@ -6,6 +6,9 @@
 
 .concentration-row {
   font-size: 1.4em;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: 5px;
 }
 
 .concentration-row.selected {

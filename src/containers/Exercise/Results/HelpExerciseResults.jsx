@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Grid, Statistic, Transition, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
@@ -6,14 +6,12 @@ import { getTranslate } from 'react-localize-redux';
 import { formatMilliseconds } from '../../../shared/utility';
 
 export class HelpExerciseResults extends Component {
-  state = {}
+  state = {};
 
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
-        <Modal.Header>
-          {this.props.translate('help-exercise-results.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('help-exercise-results.modal-header')}</Modal.Header>
         <Modal.Content>
           <Grid>
             <Grid.Row>
@@ -22,89 +20,66 @@ export class HelpExerciseResults extends Component {
                   <Icon name="winner" size="massive" color="yellow" />
                 </Transition>
               </Grid.Column>
-              <Grid.Column width={11}>
+              <Grid.Column width={11} textAlign="center">
                 <Statistic size="small" color="black">
-                  <Statistic.Value>
-                    {formatMilliseconds(this.props.result.elapsedTime)}
-                  </Statistic.Value>
-                  <Statistic.Label>
-                    {this.props.translate('help-exercise-results.elapsed-time')}
-                  </Statistic.Label>
+                  <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
+                  <Statistic.Label>{this.props.translate('help-exercise-results.elapsed-time')}</Statistic.Label>
                 </Statistic>
-                {this.props.result.symbolsPerMinute !== undefined ?
+                {this.props.result.symbolsPerMinute !== undefined ? (
                   <Statistic size="small" color="green">
-                    <Statistic.Value>
-                      {this.props.result.symbolsPerMinute}
-                    </Statistic.Value>
-                    <Statistic.Label>
-                      {this.props.translate('help-exercise-results.symbolsPerMinute')}
-                    </Statistic.Label>
-                  </Statistic> : null}
-                {this.props.result.total !== undefined && this.props.result.correct !== undefined &&
-                this.props.result.incorrect !== undefined && this.props.result.unanswered !== undefined ?
-                  <Fragment>
+                    <Statistic.Value>{this.props.result.symbolsPerMinute}</Statistic.Value>
+                    <Statistic.Label>{this.props.translate('help-exercise-results.symbolsPerMinute')}</Statistic.Label>
+                  </Statistic>
+                ) : null}
+                {this.props.result.total !== undefined &&
+                this.props.result.correct !== undefined &&
+                this.props.result.msPerSymbolGroup !== undefined &&
+                this.props.result.msPerSymbol !== undefined ? (
+                  <>
                     <Statistic size="small" color="blue">
                       <Statistic.Value>
                         {`${Math.round((this.props.result.correct / this.props.result.total) * 100)}%`}
                       </Statistic.Value>
-                      <Statistic.Label>
-                        {this.props.translate('help-exercise-results.percentage')}
-                      </Statistic.Label>
+                      <Statistic.Label>{this.props.translate('help-exercise-results.percentage')}</Statistic.Label>
                     </Statistic>
                     <br />
-                    <Statistic size="small" color="green">
-                      <Statistic.Value>
-                        {this.props.result.correct}
-                      </Statistic.Value>
+                    <Statistic color="green" horizontal>
+                      <Statistic.Value>{this.props.result.msPerSymbolGroup}</Statistic.Value>
                       <Statistic.Label>
-                        {this.props.translate('help-exercise-results.correct')}
+                        {this.props.translate('help-exercise-results.decision-speed')}
+                        <br />
+                        {this.props.translate('help-exercise-results.msPerSymbolGroup')}
                       </Statistic.Label>
                     </Statistic>
-                    <Statistic size="small" color="red">
-                      <Statistic.Value>
-                        {this.props.result.incorrect}
-                      </Statistic.Value>
+                    <Statistic color="red" horizontal>
+                      <Statistic.Value>{this.props.result.msPerSymbol}</Statistic.Value>
                       <Statistic.Label>
-                        {this.props.translate('help-exercise-results.incorrect')}
+                        {this.props.translate('help-exercise-results.decision-speed')}
+                        <br />
+                        {this.props.translate('help-exercise-results.msPerSymbol')}
                       </Statistic.Label>
                     </Statistic>
-                    <Statistic size="small" color="grey">
-                      <Statistic.Value>
-                        {this.props.result.unanswered}
-                      </Statistic.Value>
-                      <Statistic.Label>
-                        {this.props.translate('help-exercise-results.unanswered')}
-                      </Statistic.Label>
-                    </Statistic>
-                  </Fragment> : null}
+                  </>
+                ) : null}
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            positive
-            onClick={this.props.onRetry}
-            content={this.props.translate('help-exercise-results.retry')}
-          />
-          <Button
-            negative
-            onClick={this.props.onEnd}
-            content={this.props.translate('help-exercise-results.end')}
-          />
+          <Button positive onClick={this.props.onRetry} content={this.props.translate('help-exercise-results.retry')} />
+          <Button negative onClick={this.props.onEnd} content={this.props.translate('help-exercise-results.end')} />
         </Modal.Actions>
       </Modal>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   result: state.exercise.result,
   translate: getTranslate(state.locale),
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(HelpExerciseResults);

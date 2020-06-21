@@ -25,7 +25,7 @@ export class Concentration extends Component {
       this.resetExercise();
     } else {
       const { answers } = this.state;
-      const allAnswered = answers.filter(answer => answer === undefined).length === 0;
+      const allAnswered = answers.filter((answer) => answer === undefined).length === 0;
       if (this.props.stringPairs.length === answers.length && allAnswered && this.props.timerState.stopped === false) {
         this.props.onExerciseFinish();
       }
@@ -40,7 +40,7 @@ export class Concentration extends Component {
 
   resetExercise = () => {
     this.setState({ ...initialState });
-  }
+  };
 
   keyPressHandler = (event) => {
     const { keyCode } = event;
@@ -50,14 +50,14 @@ export class Concentration extends Component {
     } else if (key === '-') {
       this.answerSelectHandler(false)();
     }
-  }
+  };
 
   preventDefault = (event) => {
     const { key } = event;
     if (['Backscape', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
       event.preventDefault();
     }
-  }
+  };
 
   keyUpHandler = (event) => {
     event.preventDefault();
@@ -98,7 +98,7 @@ export class Concentration extends Component {
         break;
       }
     }
-  }
+  };
 
   answerSelectHandler = (answer, answerIndex) => () => {
     const index = answerIndex !== undefined ? answerIndex : this.state.selectedIndex;
@@ -107,24 +107,26 @@ export class Concentration extends Component {
       answers: Object.assign([...this.state.answers], { [index]: answer }),
       selectedIndex: nextIndex,
     });
-  }
+  };
 
   render() {
     return (
-      <table className="concentration-grid" style={{ fontFamily: this.props.textOptions.font, fontSize: this.props.textOptions.fontSize }}>
+      <table
+        className="concentration-grid"
+        style={{ fontFamily: this.props.textOptions.font, fontSize: this.props.textOptions.fontSize }}
+      >
         <tbody>
           {this.props.stringPairs.map((row, index) => (
             <tr
               key={row[0] + row[1]}
               className={`concentration-row ${index === this.state.selectedIndex ? 'selected' : ''}`}
             >
-              <td className="concentration-cell concentration-left">
-                {row[0]}
-              </td>
-              <td className="concentration-cell concentration-spacing" style={{ minWidth: `${this.props.exerciseOptions.columnSpacing}px` }} />
-              <td className="concentration-cell concentration-right">
-                {row[1]}
-              </td>
+              <td className="concentration-cell concentration-left">{row[0]}</td>
+              <td
+                className="concentration-cell concentration-spacing"
+                style={{ minWidth: `${this.props.exerciseOptions.columnSpacing}px` }}
+              />
+              <td className="concentration-cell concentration-right">{row[1]}</td>
               <td className="concentration-cell concentration-choices">
                 <Button.Group size="tiny" style={{ verticalAlign: 'middle' }}>
                   <Button
@@ -149,14 +151,13 @@ export class Concentration extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   stringPairs: state.exercise.stringPairs,
   textOptions: state.options.textOptions,
   exerciseOptions: state.options.exerciseOptions,
 });
 
 // eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Concentration);

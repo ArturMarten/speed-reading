@@ -32,11 +32,12 @@ export class RegressionChart extends Component {
     widthScaleType: 'time',
     widthScale: scaleTime().range([0, this.props.width - margin.left - margin.right]),
     heightScale: scaleLinear().range([0, this.props.height - margin.top - margin.bottom]),
+    changeColor: ['green', 'red'],
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let { widthScale } = prevState;
-    const { data } = nextProps;
+    const { data, changeColor } = nextProps;
 
     const width = nextProps.width - margin.left - margin.right;
     if (data.length > 0) {
@@ -50,11 +51,12 @@ export class RegressionChart extends Component {
     return {
       ...prevState,
       widthScale,
+      changeColor: changeColor || prevState.changeColor,
     };
   }
 
   componentDidMount() {
-    const { width, height, widthScale, heightScale } = this.state;
+    const { width, height, widthScale, heightScale, changeColor } = this.state;
     let { data } = this.props;
     const { xField, yFields } = this.props;
 
@@ -175,13 +177,13 @@ export class RegressionChart extends Component {
     legendText
       .append('tspan')
       .attr('class', 'legend-change')
-      .style('fill', change >= 0 ? 'green' : 'red')
+      .style('fill', change >= 0 ? changeColor[0] : changeColor[1])
       .text(`${change > 0 ? '+' : ''}${change.toFixed(0)}`);
     legendText.append('tspan').text(' (');
     legendText
       .append('tspan')
       .attr('class', 'legend-change-percentage')
-      .style('fill', changePercentage >= 0 ? 'green' : 'red')
+      .style('fill', changePercentage >= 0 ? changeColor[0] : changeColor[1])
       .text(`${changePercentage > 0 ? '+' : ''}${changePercentage.toFixed(2)}%`);
     legendText.append('tspan').text(`), ${this.props.translate('regression-chart.average')}: `);
     legendText
@@ -240,7 +242,7 @@ export class RegressionChart extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { width, height } = this.state;
+    const { width, height, changeColor } = this.state;
     let { data } = this.props;
     const { title, xLabel, yLabel, xField, yFields } = this.props;
     const { widthScale, heightScale } = this.state;
@@ -344,13 +346,13 @@ export class RegressionChart extends Component {
         .select('.legend-change')
         .transition()
         .duration(TRANSITION_DURATION)
-        .style('fill', change >= 0 ? 'green' : 'red')
+        .style('fill', change >= 0 ? changeColor[0] : changeColor[1])
         .text(`${change > 0 ? '+' : ''}${change.toFixed(0)}`);
       svg
         .select('.legend-change-percentage')
         .transition()
         .duration(TRANSITION_DURATION)
-        .style('fill', changePercentage >= 0 ? 'green' : 'red')
+        .style('fill', changePercentage >= 0 ? changeColor[0] : changeColor[1])
         .text(`${changePercentage > 0 ? '+' : ''}${changePercentage.toFixed(2)}%`);
       svg
         .select('.legend-average')
@@ -487,6 +489,7 @@ RegressionChart.propTypes = {
   dataStrokeColor: PropTypes.arrayOf(PropTypes.string).isRequired,
   dataFillColor: PropTypes.arrayOf(PropTypes.string).isRequired,
   dataLineColor: PropTypes.arrayOf(PropTypes.string).isRequired,
+  changeColor: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default RegressionChart;

@@ -24,16 +24,17 @@ export class HelpExercise extends Component {
       startTime: new Date(),
     };
     this.props.onExerciseStart(attemptData);
-  }
+  };
 
   onExerciseFinishHandler = () => {
     let data = null;
     if (this.props.type === 'concentration') {
       const { answers } = this.exerciseRef.state;
-      data = { answers };
+      const { exerciseOptions } = this.props;
+      data = { answers, exerciseOptions };
     }
     this.props.onExerciseFinish(this.props.attemptId, data);
-  }
+  };
 
   render() {
     const exercise = ((type) => {
@@ -41,13 +42,17 @@ export class HelpExercise extends Component {
         case 'schulteTables':
           return (
             <SchulteTables
-              ref={(ref) => { this.exerciseRef = ref; }}
+              ref={(ref) => {
+                this.exerciseRef = ref;
+              }}
             />
           );
         case 'concentration':
           return (
             <Concentration
-              ref={(ref) => { this.exerciseRef = ref; }}
+              ref={(ref) => {
+                this.exerciseRef = ref;
+              }}
               onExerciseFinish={this.onExerciseFinishHandler}
               timerState={this.props.timerState}
             />
@@ -71,8 +76,10 @@ export class HelpExercise extends Component {
         <Grid.Row centered style={{ paddingTop: '0.4em' }}>
           <Dimmer.Dimmable
             style={{
-              filter: !this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped ?
-                'blur(20px) grayscale(0.7)' : null,
+              filter:
+                !this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped
+                  ? 'blur(20px) grayscale(0.7)'
+                  : null,
             }}
             blurring
             dimmed={!this.props.timerState.started || this.props.timerState.paused || this.props.timerState.stopped}
@@ -85,11 +92,12 @@ export class HelpExercise extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.auth.userId,
   saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
   exerciseModification: state.exercise.modification,
+  exerciseOptions: state.options.exerciseOptions,
   exerciseStatus: state.exercise.status,
   attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,
@@ -97,7 +105,7 @@ const mapStateToProps = state => ({
   timerState: state.timing.timer,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onExerciseStart: (attemptData) => {
     dispatch(actionCreators.startExercise(attemptData));
   },

@@ -42,7 +42,7 @@ export class TestResults extends Component {
                   <Icon name="graduation" size="massive" color="black" />
                 </Transition>
               </Grid.Column>
-              <Grid.Column width={11}>
+              <Grid.Column width={11} textAlign="center">
                 <Statistic size="small" color="black">
                   <Statistic.Value>{formatMilliseconds(this.props.result.elapsedTime)}</Statistic.Value>
                   <Statistic.Label>{this.props.translate('test-results.elapsed-time')}</Statistic.Label>
@@ -125,7 +125,4 @@ const mapStateToProps = (state) => ({
 // eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TestResults);
+export default connect(mapStateToProps, mapDispatchToProps)(TestResults);

@@ -1,4 +1,4 @@
-import { leastSquares, getAverage, reduceSumFunc, formatMillisecondsInHours } from '../../../shared/utility';
+import { leastSquares, getAverage, reduceSumFunc, formatMillisecondsInHours } from '../../../../shared/utility';
 
 export const readingExerciseNames = [
   'readingExercises',
@@ -8,8 +8,6 @@ export const readingExerciseNames = [
   'disappearing',
   'wordGroups',
 ];
-
-export const helpExerciseNames = ['schulteTables', 'concentration'];
 
 const filterByExercise = (data, attemptFilter) => {
   return Object.keys(data).reduce((previousUsers, userId) => {
@@ -31,32 +29,32 @@ export const filterReadingExercises = (data) => {
   return filterByExercise(data, (attempt) => readingExerciseNames.indexOf(attempt.exercise) !== -1);
 };
 
-export const filterHelpExercises = (data) => {
-  return filterByExercise(data, (attempt) => helpExerciseNames.indexOf(attempt.exercise) !== -1);
+export const filterByExerciseName = (data, exerciseName) => {
+  return filterByExercise(data, (attempt) => attempt.exercise === exerciseName);
 };
 
 export const getUserCount = (data) => {
   return Object.keys(data).filter((userId) => data[userId].length > 0).length;
 };
 
-export const groupDataByExercise = (data) =>
+export const groupDataBy = (data, by) =>
   Object.keys(data).reduce(
     (prevUserArray, currentUserId) =>
       prevUserArray.concat(
-        data[currentUserId].reduce((prevExercisesObject, currentAttempt) => {
-          if (prevExercisesObject[currentAttempt.exercise]) {
+        data[currentUserId].reduce((prevObject, currentAttempt) => {
+          if (prevObject[currentAttempt[by]]) {
             return {
-              ...prevExercisesObject,
-              [currentAttempt.exercise]: prevExercisesObject[currentAttempt.exercise].concat({
+              ...prevObject,
+              [currentAttempt[by]]: prevObject[currentAttempt[by]].concat({
                 ...currentAttempt,
-                index: prevExercisesObject[currentAttempt.exercise].length + 1,
+                index: prevObject[currentAttempt[by]].length + 1,
                 userId: currentUserId,
               }),
             };
           }
           return {
-            ...prevExercisesObject,
-            [currentAttempt.exercise]: [
+            ...prevObject,
+            [currentAttempt[by]]: [
               {
                 ...currentAttempt,
                 index: 1,
@@ -69,13 +67,21 @@ export const groupDataByExercise = (data) =>
     [],
   );
 
+export const groupDataByModification = (data) => {
+  return groupDataBy(data, 'modification');
+};
+
+export const groupDataByExercise = (data) => {
+  return groupDataBy(data, 'exercise');
+};
+
 export const calculateExerciseResults = (exerciseData) =>
   exerciseData.reduce(
     (prevExercises, userExercises) => {
       const { readingExercises, ...rest } = Object.keys(userExercises).reduce(
         (prevUserExercises, currentExercise) => {
           const attempts = userExercises[currentExercise];
-          const { userId } = attempts[0];
+          const { userId, exercise } = attempts[0];
           const exerciseCount = attempts.length;
           const exerciseElapsedTime = attempts.map(({ elapsedTime }) => elapsedTime).reduce(reduceSumFunc, 0);
           const indeces = attempts.map((attempt) => attempt.index);
@@ -110,6 +116,7 @@ export const calculateExerciseResults = (exerciseData) =>
 
             userExerciseResults = {
               ...userExerciseResults,
+              exercise,
               initialReadingSpeed,
               finalReadingSpeed,
               initialComprehensionSpeed,
@@ -117,15 +124,42 @@ export const calculateExerciseResults = (exerciseData) =>
               initialComprehensionLevel,
               finalComprehensionLevel,
             };
-          } else {
+          } else if (exercise === 'schulteTables') {
             const exerciseSpeedResults = attempts.map((attempt) => attempt.symbolsPerMinute);
             const [exerciseSpeedSlope, exerciseSpeedIntercept] = leastSquares(indeces, exerciseSpeedResults);
             const initialExerciseSpeed = exerciseSpeedIntercept + exerciseSpeedSlope;
             const finalExerciseSpeed = exerciseSpeedIntercept + exerciseSpeedSlope * finalIndex;
             userExerciseResults = {
               ...userExerciseResults,
+              exercise,
               initialExerciseSpeed,
               finalExerciseSpeed,
+            };
+          } else if (exercise === 'concentration') {
+            const exerciseResults = attempts.map((attempt) => attempt.exerciseResult);
+            const [exerciseResultSlope, exerciseResultIntercept] = leastSquares(indeces, exerciseResults);
+            const initialExerciseResult = exerciseResultIntercept + exerciseResultSlope;
+            const finalExerciseResult = exerciseResultIntercept + exerciseResultSlope * finalIndex;
+
+            const symbolGroupSpeedResults = attempts.map((attempt) => attempt.msPerSymbolGroup);
+            const [symbolGroupSpeedSlope, symbolGroupSpeedIntercept] = leastSquares(indeces, symbolGroupSpeedResults);
+            const initialSymbolGroupSpeed = symbolGroupSpeedIntercept + symbolGroupSpeedSlope;
+            const finalSymbolGroupSpeed = symbolGroupSpeedIntercept + symbolGroupSpeedSlope * finalIndex;
+
+            const symbolSpeedResults = attempts.map((attempt) => attempt.msPerSymbol);
+            const [symbolSpeedSlope, symbolSpeedIntercept] = leastSquares(indeces, symbolSpeedResults);
+            const initialSymbolSpeed = symbolSpeedIntercept + symbolSpeedSlope;
+            const finalSymbolSpeed = symbolSpeedIntercept + symbolSpeedSlope * finalIndex;
+
+            userExerciseResults = {
+              ...userExerciseResults,
+              exercise,
+              initialExerciseResult,
+              finalExerciseResult,
+              initialSymbolGroupSpeed,
+              finalSymbolGroupSpeed,
+              initialSymbolSpeed,
+              finalSymbolSpeed,
             };
           }
 
@@ -151,19 +185,16 @@ export const calculateExerciseResults = (exerciseData) =>
   );
 
 export const calculateReadingExerciseResults = (exerciseData) => {
-  return calculateExerciseResults(exerciseData); // TODO
+  return calculateExerciseResults(exerciseData);
 };
 
-export const calculateHelpExerciseResults = (exerciseData) => {
-  return calculateExerciseResults(exerciseData); // TODO
-};
-
-export const aggerateExerciseResults = (results, userCount) =>
+export const aggregateExerciseResults = (results, userCount) =>
   Object.keys(results).reduce((prevExercisesResults, currentExercise) => {
     const exerciseResults = results[currentExercise];
     if (exerciseResults.length === 0) {
       return prevExercisesResults;
     }
+    const { exercise } = exerciseResults[0];
     const totalExerciseCount = exerciseResults.map(({ exerciseCount }) => exerciseCount).reduce(reduceSumFunc, 0);
     const totalExerciseElapsedTime = exerciseResults
       .map(({ exerciseElapsedTime }) => exerciseElapsedTime)
@@ -214,7 +245,7 @@ export const aggerateExerciseResults = (results, userCount) =>
         averageFinalComprehensionLevel,
         averageComprehensionLevelChangePercentage,
       };
-    } else {
+    } else if (exercise === 'schulteTables') {
       const averageInitialExerciseSpeed = getAverage(
         exerciseResults.map(({ initialExerciseSpeed }) => initialExerciseSpeed),
       );
@@ -227,6 +258,42 @@ export const aggerateExerciseResults = (results, userCount) =>
         averageFinalExerciseSpeed,
         averageExerciseSpeedChangePercentage,
       };
+    } else if (exercise === 'concentration') {
+      const averageInitialExerciseResult = getAverage(
+        exerciseResults.map(({ initialExerciseResult }) => initialExerciseResult),
+      );
+      const averageFinalExerciseResult = getAverage(
+        exerciseResults.map(({ finalExerciseResult }) => finalExerciseResult),
+      );
+      const averageExerciseResultChange = averageFinalExerciseResult - averageInitialExerciseResult;
+      const averageExerciseResultChangePercentage = (averageExerciseResultChange / averageInitialExerciseResult) * 100;
+
+      const averageInitialSymbolGroupSpeed = getAverage(
+        exerciseResults.map(({ initialSymbolGroupSpeed }) => initialSymbolGroupSpeed),
+      );
+      const averageFinalSymbolGroupSpeed = getAverage(
+        exerciseResults.map(({ finalSymbolGroupSpeed }) => finalSymbolGroupSpeed),
+      );
+      const averageSymbolGroupSpeedChange = averageFinalSymbolGroupSpeed - averageInitialSymbolGroupSpeed;
+      const averageSymbolGroupSpeedChangePercentage =
+        (averageSymbolGroupSpeedChange / averageInitialSymbolGroupSpeed) * 100;
+
+      const averageInitialSymbolSpeed = getAverage(exerciseResults.map(({ initialSymbolSpeed }) => initialSymbolSpeed));
+      const averageFinalSymbolSpeed = getAverage(exerciseResults.map(({ finalSymbolSpeed }) => finalSymbolSpeed));
+      const averageSymbolSpeedChange = averageFinalSymbolSpeed - averageInitialSymbolSpeed;
+      const averageSymbolSpeedChangePercentage = (averageSymbolSpeedChange / averageInitialSymbolSpeed) * 100;
+      aggregatedResult = {
+        ...aggregatedResult,
+        averageInitialExerciseResult,
+        averageFinalExerciseResult,
+        averageExerciseResultChangePercentage,
+        averageInitialSymbolGroupSpeed,
+        averageFinalSymbolGroupSpeed,
+        averageSymbolGroupSpeedChangePercentage,
+        averageInitialSymbolSpeed,
+        averageFinalSymbolSpeed,
+        averageSymbolSpeedChangePercentage,
+      };
     }
 
     return {
@@ -234,14 +301,6 @@ export const aggerateExerciseResults = (results, userCount) =>
       [currentExercise]: aggregatedResult,
     };
   }, {});
-
-export const aggregateReadingExerciseResults = (results, userCount) => {
-  return aggerateExerciseResults(results, userCount); // TODO
-};
-
-export const aggregateHelpExerciseResults = (results, userCount) => {
-  return aggerateExerciseResults(results, userCount); // TODO
-};
 
 export const exerciseTranslateMapping = {
   readingExercises: 'reading-exercises',

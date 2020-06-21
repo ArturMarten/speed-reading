@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GroupTable from './GroupTable';
-import renderWithRedux from '../../utils/testUtils';
+import renderWithRedux from '../../../utils/testUtils';
 
 const exampleData = {
   user1: [
