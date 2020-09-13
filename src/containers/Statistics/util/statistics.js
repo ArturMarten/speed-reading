@@ -30,8 +30,8 @@ export const upperBoundOutlierFilter = (attempt) =>
   (attempt.wordsPerMinute <= 700 && attempt.date >= WPM_CHANGE_DATE);
 
 export const lowerBoundOutlierFilter = (attempt) =>
-  (attempt.elapsedTime === null || attempt.elapsedTime >= MIN_ATTEMPT_TIME) &&
-  (attempt.exerciseResult === null || attempt.exerciseResult > 0);
+  (!attempt.elapsedTime || attempt.elapsedTime >= MIN_ATTEMPT_TIME) &&
+  (!attempt.exerciseResult || attempt.exerciseResult > 0);
 
 export const standardDeviationOutlierFilter = (min, max) => (attempt) =>
   (!attempt.wordsPerMinute || (attempt.wordsPerMinute >= min && attempt.wordsPerMinute <= max)) &&

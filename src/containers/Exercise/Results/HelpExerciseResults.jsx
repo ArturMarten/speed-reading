@@ -4,6 +4,7 @@ import { Modal, Button, Grid, Statistic, Transition, Icon } from 'semantic-ui-re
 import { getTranslate } from 'react-localize-redux';
 
 import { formatMilliseconds } from '../../../shared/utility';
+import AchievementUpdates from '../../Achievements/AchievementUpdates';
 
 export class HelpExerciseResults extends Component {
   state = {};
@@ -63,6 +64,9 @@ export class HelpExerciseResults extends Component {
                 ) : null}
               </Grid.Column>
             </Grid.Row>
+            <div style={{ width: '100%', maxHeight: '260px', overflow: 'auto' }}>
+              <AchievementUpdates />
+            </div>
           </Grid>
         </Modal.Content>
         <Modal.Actions>

@@ -59,6 +59,10 @@ export {
 } from './profile';
 
 export {
+  fetchAchievements,
+} from './achievements';
+
+export {
   fetchApplicationStatistics,
   fetchUserExerciseStatistics,
   fetchGroupExerciseStatistics,

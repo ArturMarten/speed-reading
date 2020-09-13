@@ -14,6 +14,7 @@ import utEstLogo from '../../assets/img/ut_est.png';
 import utEngLogo from '../../assets/img/ut_eng.png';
 import studyEstLogo from '../../assets/img/study_est.jpg';
 import studyEngLogo from '../../assets/img/study_eng.jpg';
+import AchievementUpdates from '../Achievements/AchievementUpdates';
 // import userManual from '../../assets/doc/kasutusjuhend_est.pdf';
 
 export class Home extends Component {
@@ -42,22 +43,27 @@ export class Home extends Component {
                 </a>
               </p>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} translate={this.props.translate} />
-              <Button
-                basic
-                floated="right"
-                icon={<Icon name="info circle" color="blue" />}
-                content={this.props.translate('home.about')}
-                onClick={this.aboutToggleHandler}
-              />
-              <Button
-                basic
-                as="a"
-                positive
-                floated="right"
-                icon="file pdf outline"
-                content={this.props.translate('home.user-manual')}
-                href="https://kiirlugemine.keeleressursid.ee/api/kasutusjuhend_est.pdf"
-              />
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <Button
+                  basic
+                  icon={<Icon name="info circle" color="blue" />}
+                  content={this.props.translate('home.about')}
+                  onClick={this.aboutToggleHandler}
+                />
+                <Button
+                  basic
+                  as="a"
+                  positive
+                  icon="file pdf outline"
+                  content={this.props.translate('home.user-manual')}
+                  href="https://kiirlugemine.keeleressursid.ee/api/kasutusjuhend_est.pdf"
+                />
+              </div>
+              <div
+                style={{ marginTop: '1em', width: '100%', maxHeight: '265px', overflow: 'auto', paddingRight: '10px' }}
+              >
+                <AchievementUpdates />
+              </div>
             </Grid.Column>
             <Grid.Column width={8}>
               <Features translate={this.props.translate} />
@@ -153,7 +159,4 @@ const mapStateToProps = (state) => ({
 // eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

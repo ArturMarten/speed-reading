@@ -4,11 +4,11 @@ module.exports = {
   ],
   addons: [
     '@storybook/preset-create-react-app',
-    '@storybook/addon-links/register',
-    '@storybook/addon-actions/register',
-    '@storybook/addon-knobs/register',
-    '@storybook/addon-viewport/register',
-    '@storybook/addon-a11y/register',
-    '@storybook/addon-notes/register',
+    '@storybook/addon-docs',
+    '@storybook/addon-controls',
+    '@storybook/addon-links',
+    '@storybook/addon-actions',
+    '@storybook/addon-viewport',
+    '@storybook/addon-a11y',
   ],
 };

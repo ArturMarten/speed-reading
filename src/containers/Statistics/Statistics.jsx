@@ -141,7 +141,7 @@ export class Statistics extends Component {
   ];
 
   state = {
-    activeIndex: 0,
+    activeTabIndex: 0,
     groupId: this.props.groupId === null ? 'all-groups' : this.props.groupId,
     userId: this.props.userId,
     exercise: 'readingExercises',
@@ -170,8 +170,8 @@ export class Statistics extends Component {
     }
     // TODO: Group statistics fetching fix
     if (
-      prevState.activeIndex !== this.state.activeIndex &&
-      this.state.activeIndex === 2 &&
+      prevState.activeTabIndex !== this.state.activeTabIndex &&
+      this.state.activeTabIndex === 2 &&
       Object.keys(this.props.groupExerciseStatistics).length === 0
     ) {
       const fetchGroupId = this.state.groupId === 'all-groups' ? null : this.state.groupId;
@@ -196,7 +196,7 @@ export class Statistics extends Component {
     this.props.onFetchUserExerciseStatistics(this.props.userId);
   };
 
-  tabChangeHandler = (event, { activeIndex }) => this.setState({ activeIndex });
+  tabChangeHandler = (event, { activeIndex }) => this.setState({ activeTabIndex: activeIndex });
 
   groupChangeHandler = (event, { value }) => {
     if (this.state.groupId !== value) {
@@ -209,7 +209,7 @@ export class Statistics extends Component {
           this.props.onFetchUserExerciseStatistics(userId);
         }
       }
-      if (this.state.activeIndex === 2) {
+      if (this.state.activeTabIndex === 2) {
         const fetchGroupId = value === 'all-groups' ? null : value;
         this.props.onFetchGroupExerciseStatistics(fetchGroupId);
       }
@@ -411,35 +411,6 @@ export class Statistics extends Component {
     const totalTestTime = userExerciseData.map((exercise) => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
 
-    const groupFilterInput = (
-      <Form.Field
-        id="group-dropdown"
-        fluid
-        inline
-        search
-        selection
-        value={this.state.groupId}
-        onChange={this.groupChangeHandler}
-        options={groupOptions}
-        loading={this.props.groupsStatus.loading || this.props.groupExerciseStatisticsStatus.loading}
-        label={this.props.translate('statistics.group')}
-        control={Dropdown}
-      />
-    );
-
-    const exerciseFilterInput = (
-      <Form.Field
-        id="attempt-count-input"
-        type="number"
-        width={6}
-        value={this.state.minimumAttemptCount}
-        onChange={this.minimumAttemptCountChangeHandler}
-        loading={this.props.groupExerciseStatisticsStatus.loading}
-        label={this.props.translate('statistics.minimum-attempt-count')}
-        control={Input}
-      />
-    );
-
     const userFilterInput = (
       <Form.Field
         id="user-dropdown"
@@ -456,6 +427,22 @@ export class Statistics extends Component {
       />
     );
 
+    const groupFilterInput = (
+      <Form.Field
+        id="group-dropdown"
+        fluid
+        inline
+        search
+        selection
+        value={this.state.groupId}
+        onChange={this.groupChangeHandler}
+        options={groupOptions}
+        loading={this.props.groupsStatus.loading || this.props.groupExerciseStatisticsStatus.loading}
+        label={this.props.translate('statistics.group')}
+        control={Dropdown}
+      />
+    );
+
     const userAndGroupFilterInput = (
       <>
         {this.props.isTeacher ? (
@@ -465,6 +452,19 @@ export class Statistics extends Component {
           </Form.Group>
         ) : null}
       </>
+    );
+
+    const exerciseFilterInput = (
+      <Form.Field
+        id="attempt-count-input"
+        type="number"
+        width={6}
+        value={this.state.minimumAttemptCount}
+        onChange={this.minimumAttemptCountChangeHandler}
+        loading={this.props.groupExerciseStatisticsStatus.loading}
+        label={this.props.translate('statistics.minimum-attempt-count')}
+        control={Input}
+      />
     );
 
     const timeFilterInput = (
@@ -731,7 +731,7 @@ export class Statistics extends Component {
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('statistics.title')}</Header>
         <p>{this.props.translate('statistics.description')}</p>
-        <Tab panes={panes} activeIndex={this.state.activeIndex} onTabChange={this.tabChangeHandler} />
+        <Tab panes={panes} activeIndex={this.state.activeTabIndex} onTabChange={this.tabChangeHandler} />
       </Container>
     );
   }
@@ -741,7 +741,6 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.token !== null,
   role: state.profile.role,
   isTeacher: rolePermissions[state.profile.role] >= rolePermissions.teacher || state.profile.role === 'statistician',
-  isAdmin: rolePermissions[state.profile.role] >= rolePermissions.admin,
   groupId: state.profile.groupId,
   userId: state.auth.userId,
   usersStatus: state.user.usersStatus,

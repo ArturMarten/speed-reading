@@ -81,9 +81,11 @@ export {
 export {
   fetchUserProfile,
   saveUserProfile,
+  updateAchievements,
 } from './profile';
 
 export {
+  fetchExerciseStatistics,
   fetchUserExerciseStatistics,
   fetchGroupExerciseStatistics,
 } from './statistics';

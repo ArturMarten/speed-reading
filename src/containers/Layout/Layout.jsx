@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getTranslate } from 'react-localize-redux';
@@ -140,7 +140,7 @@ export class Layout extends Component {
             <Menu.Menu>
               <Menu.Item>
                 {this.props.isAuthenticated ? (
-                  <Fragment>
+                  <>
                     <Header textAlign="center">{this.props.userEmail}</Header>
                     <Grid>
                       <Grid.Row columns={3} textAlign="center">
@@ -176,7 +176,7 @@ export class Layout extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                  </Fragment>
+                  </>
                 ) : (
                   <Button fluid positive icon labelPosition="right" onClick={this.authToggleHandler}>
                     {this.props.translate('auth.login-button')}
@@ -204,11 +204,11 @@ export class Layout extends Component {
               className={`item ${path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
               openOnFocus
               icon={
-                <Fragment>
+                <>
                   {this.props.translate('menu.exercise')}
-                  <Icon name="winner" color="yellow" size="large" />
+                  <Icon name="university" color="black" size="large" />
                   <Icon name="caret down" />
-                </Fragment>
+                </>
               }
             >
               <Dropdown.Menu style={{ left: '0px', top: '100%', minWidth: 'calc(100% - 1px)' }}>
@@ -272,6 +272,14 @@ export class Layout extends Component {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+            <Menu.Item
+              as="a"
+              active={path === '/achievements'}
+              onClick={(event) => this.itemClickHandler(event, '/achievements')}
+            >
+              <Icon name="winner" color="yellow" size="large" />
+              {this.props.translate('menu.achievements')}
+            </Menu.Item>
             <Menu.Item
               as="a"
               active={path === '/statistics'}
@@ -357,11 +365,11 @@ export class Layout extends Component {
                   as="div"
                   className={`link item ${path.indexOf('/exercise') !== -1 ? 'active' : ''}`}
                   icon={
-                    <Fragment>
-                      <Icon name="winner" color="yellow" size="large" />
+                    <>
+                      <Icon name="university" color="black" size="large" />
                       {this.props.translate('menu.exercise')}
                       <i className="dropdown icon" />
-                    </Fragment>
+                    </>
                   }
                 >
                   <Dropdown.Menu style={{ marginTop: '0em' }}>
@@ -427,6 +435,14 @@ export class Layout extends Component {
                 </Dropdown>
                 <Menu.Item
                   as="a"
+                  active={path === '/achievements'}
+                  onClick={(event) => this.itemClickHandler(event, '/achievements')}
+                >
+                  <Icon name="winner" color="yellow" size="large" />
+                  {this.props.translate('menu.achievements')}
+                </Menu.Item>
+                <Menu.Item
+                  as="a"
                   active={path === '/statistics'}
                   onClick={(event) => this.itemClickHandler(event, '/statistics')}
                 >
@@ -461,6 +477,7 @@ export class Layout extends Component {
                               icon
                               labelPosition="right"
                               onClick={this.profileSettingsToggleHandler}
+                              disabled={this.props.userEmail === credentials.demo.username}
                             >
                               {this.props.translate('profile.user-settings')}
                               <Icon name="setting" style={{ opacity: 1 }} />
@@ -574,7 +591,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withErrorHandler(Layout, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Layout, axios));

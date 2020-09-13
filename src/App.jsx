@@ -34,6 +34,10 @@ const HelpExerciseContainer = Loadable({
   },
 });
 
+const Achievements = Loadable({
+  loader: () => import('./containers/Achievements/Achievements'),
+});
+
 const Statistics = Loadable({
   loader: () => import('./containers/Statistics/Statistics'),
 });
@@ -62,6 +66,7 @@ export class App extends Component {
         <Route path="/exercise/word-groups" render={() => <TextExerciseContainer type="wordGroups" />} />
         <Route path="/exercise/schulte-tables" render={() => <HelpExerciseContainer type="schulteTables" />} />
         <Route path="/exercise/concentration" render={() => <HelpExerciseContainer type="concentration" />} />
+        <Route path="/achievements" component={Achievements} />
         <Route path="/statistics" component={Statistics} />
         {isPermittedToManageUsers ? <Route path="/manage" component={Manage} /> : null}
         <Route path="/logout" component={Logout} />
@@ -85,9 +90,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(App),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -1,0 +1,24 @@
+.flex-grid {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  flex-flow: wrap;
+}
+.col {
+  width: 32%;
+}
+
+@media (max-width: 1400px) {
+  .col {
+    width: 48%;
+  }
+}
+
+@media (max-width: 991px) {
+  .flex-grid {
+    display: block;
+  }
+  .col {
+    width: 100%;
+  }
+}

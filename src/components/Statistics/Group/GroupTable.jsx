@@ -15,15 +15,15 @@ export class GroupTable extends Component {
     const filteredGroupData = Object.assign(
       {},
       ...Object.keys(data).map((userId) => {
-        let filteredData = data[userId]
+        const boundFiltered = data[userId]
           .filter((attempt) => upperBoundOutlierFilter(attempt))
           .filter((attempt) => lowerBoundOutlierFilter(attempt));
-        filteredData = [
-          ...filterStandardDeviation('readingExercises', filteredData),
-          ...filterStandardDeviation('schulteTables', filteredData),
-          ...filterStandardDeviation('concentration', filteredData),
+        const standardDeviationFiltered = [
+          ...filterStandardDeviation('readingExercises', boundFiltered),
+          ...filterStandardDeviation('schulteTables', boundFiltered),
+          ...filterStandardDeviation('concentration', boundFiltered),
         ];
-        filteredData = filteredData.filter(timeFilter);
+        const filteredData = standardDeviationFiltered.filter(timeFilter);
         return {
           [userId]: filteredData,
         };

@@ -4,6 +4,7 @@ import { Modal, Button, Grid, Statistic, Transition, Icon, Rating, Popup } from 
 import { getTranslate } from 'react-localize-redux';
 
 import { formatMilliseconds } from '../../../shared/utility';
+import AchievementUpdates from '../../Achievements/AchievementUpdates';
 
 export class TextExerciseResults extends Component {
   state = {
@@ -59,6 +60,9 @@ export class TextExerciseResults extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
+            <div style={{ width: '100%', maxHeight: '260px', overflow: 'auto' }}>
+              <AchievementUpdates />
+            </div>
             {this.props.selectedText.id ? (
               <Grid.Row style={{ paddingTop: 0, paddingBottom: 0 }} stretched>
                 <Grid.Column width={6} textAlign="right">

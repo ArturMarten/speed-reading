@@ -9,6 +9,12 @@
     "offline-title": ["Probleemid võrguühendusega", "Problems with network connection"],
     "offline-description": [" ", " "]
   },
+  "formatter": {
+    "hour": ["tund", "hour"],
+    "hours": ["tundi", "hours"],
+    "minute": ["minut", "minute"],
+    "minutes": ["minutit", "minutes"]
+  },
   "menu": {
     "title": ["Kiirlugemise tarkvara", "Speedreading software"],
     "home": ["Esileht", "Home"],
@@ -23,6 +29,7 @@
     "help-exercises": ["Abiharjutused", "Help exercises"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
+    "achievements": ["Saavutused", "Achievements"],
     "statistics": ["Statistika", "Statistics"],
     "manage": ["Halda", "Manage"],
     "login-popup": ["Logi sisse", "Log in"],
@@ -172,6 +179,8 @@
       "Peale harjutuste läbimist saab sooritada testi, millega kontrollitakse loetud teksti omandamistaset",
       "After completing the exercises, you can perform a test to verify the comprehension level of the read text"
     ],
+    "achievements-header": ["Personaalsed saavutused", "Personal achievements"],
+    "achievements-description": ["Eesmärkide saavutamine motiveerib veelgi rohkem harjutama", "Achieving goals motivates to exercise even more"],
     "reading-text-selection-header": ["Lugemistekstide valimine", "Reading text selection"],
     "reading-text-selection-description": [
       "Harjutamiseks saab kasutada ligi 200 olemasolevat lugemisteksti kui ka enda tekste",
@@ -686,6 +695,44 @@
     "sentence-count": ["Lausete arv", "Sentence count"],
     "sentence-lengths": ["Lausete pikkused", "Sentence lengths"],
     "refresh": ["Värskenda", "Refresh"]
+  },
+  "achievements": {
+    "title": ["Saavutused", "Achievements"],
+    "description": ["Siin näeb oma saavutusi.", "Here you can see your achievements."],
+    "level": ["tase", "level"],
+    "daily": ["Päeva saavutused", "Daily achievements"],
+    "weekly": ["Nädala saavutused", "Weekly achievements"],
+    "monthly": ["Kuu saavutused", "Monthly achievements"],
+    "progress": ["Üldised saavutused", "General achievements"],
+    "ranking.top": [
+      "Oled ${ temporal}30% kõige rohkem harjutanud kasutaja seas oma grupis!",
+      "You are in top 30% most practiced user in your group${ temporal }!"],
+    "ranking.bottom": [
+      "Oled ${ temporal }30% kõige vähem harjutanud kasutaja seas oma grupis. Veel võimalik harjutada ja keskmisse gruppi jõuda!",
+      "You are in bottom 30% least practiced user in your group${ temporal }. You can still practice and make up for it!"],
+    "temporal.daily": ["täna ", " today"],
+    "temporal.weekly": ["sel nädalal ", " this week"],
+    "temporal.monthly": ["sel kuul ", " this month"],
+    "temporal.exercise.count": ["Soorita ${ temporal }${ value } harjutust", "Complete ${ value } exercises${ temporal }"],
+    "temporal.exercise.time": ["Harjuta ${ temporal }${ value }", "Exercise for ${ count }${ temporal }"],
+    "temporal.readingExercise.count": ["Soorita ${ temporal }${ value } lugemisharjutust", "Complete ${ value } reading exercises${ temporal }"],
+    "temporal.readingExercise.time": ["Harjuta ${ temporal }${ value } lugemisharjutusi", "Exercise reading exercise for ${ value }${ temporal }"],
+    "temporal.helpExercise.count": ["Soorita ${ temporal }${ value } abiharjutust", "Complete ${ value } help exercises${ temporal }"],
+    "temporal.helpExercise.time": ["Harjuta ${ temporal }${ value } abiharjutusi", "Exercise help exercises for ${ value }${ temporal }"],
+    "temporal.readingTest.count": ["Soorita ${ temporal }${ value } lugemistesti", "Complete ${ value } reading tests${ temporal }"],
+    "temporal.readingTest.time": ["Harjuta ${ temporal }${ value } lugemistestiga", "Exercise reading test for ${ value }${ temporal }"],
+    "temporal.readingAid.count": ["Soorita ${ temporal }${ value } lugemise soodustaja harjutust", "Complete ${ value } reading aid exercises${ temporal }"],
+    "temporal.readingAid.time": ["Harjuta ${ temporal }${ value } lugemise soodustajaga", "Exercise reading aid for ${ value }${ temporal }"],
+    "temporal.scrolling.count": ["Soorita ${ temporal }${ value } keriva teksti harjutust", "Complete ${ value } scrolling text exercises${ temporal }"],
+    "temporal.scrolling.time": ["Harjuta ${ temporal }${ value } keriva tekstiga", "Exercise scrolling text for ${ value }${ temporal }"],
+    "temporal.disappearing.count": ["Soorita ${ temporal }${ value } kustuva teksti harjutust", "Complete ${ value } disappearing text exercises${ temporal }"],
+    "temporal.disappearing.time": ["Harjuta ${ temporal }${ value } kustuva tekstiga", "Exercise disappearing text for ${ value }${ temporal }"],
+    "temporal.wordGroups.count": ["Soorita ${ temporal }${ value } sõnarühmade harjutust", "Complete ${ value } word groups exercises${ temporal }"],
+    "temporal.wordGroups.time": ["Harjuta ${ temporal }${ value } sõnarühmadega", "Exercise word groups for ${ value }${ temporal }"],
+    "temporal.schulteTables.count": ["Soorita ${ temporal }${ value } Schulte tabelite harjutust", "Complete ${ value } Schulte tables exercises${ temporal }"],
+    "temporal.schulteTables.time": ["Harjuta ${ temporal }${ value } Schulte tabelitega", "Exercise Schulte tables for ${ value }${ temporal }"],
+    "temporal.concentration.count": ["Soorita ${ temporal }${ value } keskendumise harjutust", "Complete ${ value } concentration exercises${ temporal }"],
+    "temporal.concentration.time": ["Harjuta ${ temporal }${ value } keskendumise harjutusega", "Exercise concentration for ${ value }${ temporal }"]
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],

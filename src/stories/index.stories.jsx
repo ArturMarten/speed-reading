@@ -9,8 +9,6 @@ import '../polyfill';
 
 import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { object } from '@storybook/addon-knobs';
-import { getTranslate, setActiveLanguage } from 'react-localize-redux';
 import MockAdapter from 'axios-mock-adapter';
 
 /* eslint-disable max-len */
@@ -57,6 +55,11 @@ import BugReportContainer, { BugReport } from '../containers/BugReport/BugReport
 import { generateSymbols, generateStringPairs } from '../store/reducers/exercise';
 import UpdateMessage from '../containers/Message/UpdateMessage';
 import OfflineMessage from '../containers/Message/OfflineMessage';
+import Achievements from '../containers/Achievements/Achievements';
+import AchievementUpdates from '../containers/Achievements/AchievementUpdates';
+import ProgressBar from '../components/ProgressBar/ProgressBar';
+import { formatMillisecondsInHours } from '../shared/utility';
+import translate from './utils';
 
 // eslint-disable-next-line
 const blocksFromHTML = convertFromHTML('<p><b>Lorem ipsum dolor sit amet</b></p><p>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc pulvinar sapien et ligula ullamcorper malesuada. Mauris cursus mattis molestie a iaculis at erat. Purus gravida quis blandit turpis cursus in hac. Placerat orci nulla pellentesque dignissim enim. Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Lacus luctus accumsan tortor posuere. Ut sem nulla pharetra diam. Quisque egestas diam in arcu cursus euismod. Vitae semper quis lectus nulla at volutpat diam.</p><p>Lacus vel facilisis volutpat est velit egestas dui id ornare. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Nunc id cursus metus aliquam eleifend mi. A diam maecenas sed enim ut. Est lorem ipsum dolor sit amet consectetur.</p>');
@@ -261,14 +264,10 @@ const testResult = {
   comprehensionPerMinute: 231,
 };
 
-store.dispatch(setActiveLanguage('ee'));
 store.dispatch(actionCreators.login(credentials.admin.username, credentials.admin.password));
 setTimeout(() => store.dispatch(actionCreators.selectText(1, store.getState().auth.token)), 3000);
 
 const { textOptions, exerciseOptions, speedOptions } = store.getState().options;
-
-// store.dispatch(setActiveLanguage('gb'));
-const translate = getTranslate(store.getState().locale);
 
 addDecorator((story) => <Provider story={story()} />);
 
@@ -453,11 +452,11 @@ storiesOf('Text exercise results', module).add('Component', () => (
   <TextExerciseResults
     open
     translate={translate}
-    result={object('Result', {
+    result={{
       elapsedTime: 224200,
       wordsPerMinute: 306,
       charactersPerSecond: 35,
-    })}
+    }}
     selectedText={store.getState().text.selectedText}
   />
 ));
@@ -517,7 +516,7 @@ storiesOf('RegressionChart', module)
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={object('Data', [])}
+      data={[]}
       xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
@@ -534,7 +533,7 @@ storiesOf('RegressionChart', module)
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={object('Data', [{ index: 1, wordsPerMinute: 185 }])}
+      data={[{ index: 1, wordsPerMinute: 185 }]}
       xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
@@ -551,10 +550,10 @@ storiesOf('RegressionChart', module)
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={object('Data', [
+      data={[
         { index: 1, wordsPerMinute: 185 },
         { index: 2, wordsPerMinute: 192 },
-      ])}
+      ]}
       xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
@@ -571,13 +570,13 @@ storiesOf('RegressionChart', module)
       legendTitles={[translate('regression-chart.reading-speed')]}
       width={1000}
       height={400}
-      data={object('Data', [
+      data={[
         { index: 1, wordsPerMinute: 185 },
         { index: 2, wordsPerMinute: 192 },
         { index: 3, wordsPerMinute: 190 },
         { index: 4, wordsPerMinute: 204 },
         { index: 5, wordsPerMinute: 197 },
-      ])}
+      ]}
       xField="index"
       yFields={['wordsPerMinute']}
       dataStrokeColor={['#4C4CFF']}
@@ -650,3 +649,12 @@ storiesOf('Problem report', module)
 storiesOf('Messages', module)
   .add('UpdateMessage', () => <UpdateMessage translate={translate} />)
   .add('OfflineMessage', () => <OfflineMessage translate={translate} />);
+
+storiesOf('ProgressBar', module)
+  .add('Numeric value', () => <ProgressBar min={0} max={100} value={47} color="dodgerblue" />)
+  .add('Date value', () => (
+    <ProgressBar min={0} max={10000000} value={4700000} color="dodgerblue" formatter={formatMillisecondsInHours} />
+  ));
+
+storiesOf('Achievements', module).add('Achievements', () => <Achievements translate={translate} />);
+storiesOf('Achievements', module).add('AchievementUpdates', () => <AchievementUpdates translate={translate} />);

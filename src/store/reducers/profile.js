@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 
 import { updateObject } from '../../shared/utility';
+import { initialAchievements, mergeDeep, checkTemporalAchievements } from '../../containers/Achievements/achievements';
 
 export const rolePermissions = {
   guest: 0,
@@ -18,6 +19,8 @@ const initialState = {
   role: '',
   firstName: '',
   lastName: '',
+  achievements: initialAchievements,
+  achievementsDiff: null,
   profileStatus: {
     loading: false,
     message: null,
@@ -37,6 +40,10 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_USER_PROFILE_SUCCEEDED: {
+      const achievements =
+        action.payload.achievements !== null
+          ? mergeDeep(initialAchievements, action.payload.achievements)
+          : initialAchievements;
       return updateObject(state, {
         profileStatus: {
           loading: false,
@@ -46,6 +53,7 @@ const reducer = (state = initialState, action) => {
         ...action.payload,
         firstName: action.payload.firstName !== null ? action.payload.firstName : '',
         lastName: action.payload.lastName !== null ? action.payload.lastName : '',
+        achievements: checkTemporalAchievements(achievements, new Date()),
       });
     }
     case actionTypes.FETCH_USER_PROFILE_FAILED: {
@@ -83,6 +91,12 @@ const reducer = (state = initialState, action) => {
           message: null,
           error: action.payload,
         },
+      });
+    }
+    case actionTypes.ACHIEVEMENTS_UPDATED: {
+      return updateObject(state, {
+        achievements: action.payload.achievements,
+        achievementsDiff: action.payload.achievementsDiff,
       });
     }
     case actionTypes.AUTH_LOGOUT: {

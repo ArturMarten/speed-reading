@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Header, List } from 'semantic-ui-react';
 
 class Features extends Component {
@@ -6,11 +6,11 @@ class Features extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <Header as="h3">{this.props.translate('features.header')}</Header>
         <List relaxed animated verticalAlign="middle">
           <List.Item>
-            <List.Icon name="trophy" color="yellow" size="large" />
+            <List.Icon name="university" color="black" size="large" />
             <List.Content>
               <List.Header>{this.props.translate('features.reading-speed-development-header')}</List.Header>
               <List.Description>
@@ -23,6 +23,13 @@ class Features extends Component {
             <List.Content>
               <List.Header>{this.props.translate('features.taking-tests-header')}</List.Header>
               <List.Description>{this.props.translate('features.taking-tests-description')}</List.Description>
+            </List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Icon name="trophy" color="yellow" size="large" />
+            <List.Content>
+              <List.Header>{this.props.translate('features.achievements-header')}</List.Header>
+              <List.Description>{this.props.translate('features.achievements-description')}</List.Description>
             </List.Content>
           </List.Item>
           <List.Item>
@@ -63,7 +70,7 @@ class Features extends Component {
             </List.Content>
           </List.Item>
         </List>
-      </Fragment>
+      </>
     );
   }
 }

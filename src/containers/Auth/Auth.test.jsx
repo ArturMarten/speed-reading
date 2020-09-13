@@ -60,7 +60,7 @@ it('logins successfully', async () => {
   fireEvent.change(getByPlaceholderText(translate('auth.password')), { target: { value: 'password' } });
   fireEvent.click(getByText(translate('auth.login-button')));
   await wait(() => expect(queryByText(translate('auth.login-button'))).toBeNull());
-  expect(axiosMock.get).toHaveBeenCalledTimes(2);
+  expect(axiosMock.get).toHaveBeenCalledTimes(3);
   expect(axiosMock.get).toHaveBeenNthCalledWith(
     1,
     '/login',
@@ -111,7 +111,7 @@ it('logins successfully with demo user', async () => {
   const { translate, getByText, queryByText } = renderWithRedux(<Auth />);
   fireEvent.click(getByText(translate('auth.demo')));
   await wait(() => expect(queryByText(translate('auth.login-button'))).toBeNull());
-  expect(axiosMock.get).toBeCalledTimes(2);
+  expect(axiosMock.get).toBeCalledTimes(3);
   expect(axiosMock.get).toHaveBeenNthCalledWith(
     1,
     '/login',

@@ -71,6 +71,25 @@ export const formatMillisecondsInHours = (input) => {
   return `${hours}h ${minutes}m`;
 };
 
+export const formatMillisecondsInText = (input, translate) => {
+  const inputTime = new Date(input);
+  const days = Math.floor(inputTime.getTime() / 86400000);
+  const hours = days * 24 + inputTime.getUTCHours();
+  const minutes = inputTime.getMinutes();
+
+  const formattedHours = `${hours} ${hours === 1 ? translate('formatter.hour') : translate('formatter.hours')}`;
+  const formattedMinutes = `${minutes} ${
+    minutes === 1 ? translate('formatter.minute') : translate('formatter.minutes')
+  }`;
+  if (hours < 1) {
+    return formattedMinutes;
+  }
+  if (minutes === 0) {
+    return formattedHours;
+  }
+  return `${formattedHours} ${formattedMinutes}`;
+};
+
 export const translateSuccess = (translate, message) => {
   switch (message) {
     case 'Success':

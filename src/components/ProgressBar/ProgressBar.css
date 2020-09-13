@@ -1,0 +1,9 @@
+@-webkit-keyframes progress-bar {
+  0% { width: 0%; }
+}
+@-moz-keyframes progress-bar {
+  0% { width: 0%; }
+}
+@keyframes progress-bar {
+  0% { width: 0%; }
+}

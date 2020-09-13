@@ -6,25 +6,27 @@ const fetchUserProfileStart = () => ({
   type: actionTypes.FETCH_USER_PROFILE_START,
 });
 
-const fetchUserProfileSucceeded = user => ({
+const fetchUserProfileSucceeded = (user) => ({
   type: actionTypes.FETCH_USER_PROFILE_SUCCEEDED,
   payload: user,
 });
 
-const fetchUserProfileFailed = error => ({
+const fetchUserProfileFailed = (error) => ({
   type: actionTypes.FETCH_USER_PROFILE_FAILED,
   payload: error,
 });
 
-export const fetchUserProfile = userId => (dispatch) => {
+export const fetchUserProfile = (userId) => (dispatch) => {
   dispatch(fetchUserProfileStart());
-  api.fetchUserProfile(userId)
-    .then((userProfile) => {
+  api.fetchUserProfile(userId).then(
+    (userProfile) => {
       dispatch(fetchUserProfileSucceeded(userProfile));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(fetchUserProfileFailed(errorMessage));
       dispatch(actionCreators.logout(errorMessage));
-    });
+    },
+  );
 };
 
 const saveUserProfileStart = () => ({
@@ -39,19 +41,36 @@ const saveUserProfileSucceeded = (message, userProfile) => ({
   },
 });
 
-const saveUserProfileFailed = error => ({
+const saveUserProfileFailed = (error) => ({
   type: actionTypes.SAVE_USER_PROFILE_FAILED,
   payload: error,
 });
 
 export const saveUserProfile = (userId, userProfileData) => (dispatch) => {
   dispatch(saveUserProfileStart());
-  api.saveUserProfile({ userId, userProfileData })
-    .then((message) => {
+  api.saveUserProfile({ userId, userProfileData }).then(
+    (message) => {
       dispatch(saveUserProfileSucceeded(message, userProfileData));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(saveUserProfileFailed(errorMessage));
-    });
+    },
+  );
+};
+
+const achievementsUpdated = (achievements, achievementsDiff) => ({
+  type: actionTypes.ACHIEVEMENTS_UPDATED,
+  payload: {
+    achievements,
+    achievementsDiff,
+  },
+});
+
+export const updateAchievements = (achievements, diff) => (dispatch, getState) => {
+  dispatch(achievementsUpdated(achievements, diff));
+  const { userId } = getState().auth;
+  const userProfileData = { achievements };
+  api.saveUserProfile({ userId, userProfileData });
 };
 
 export default fetchUserProfile;

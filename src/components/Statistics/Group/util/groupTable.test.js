@@ -4,7 +4,6 @@ import {
   getUserCount,
   groupDataByExercise,
   calculateExerciseResults,
-  aggerateExerciseResults,
 } from './groupTable';
 
 it('filters by exercise', () => {
@@ -147,6 +146,7 @@ it('calculates exercise results', () => {
   expect(result).toEqual({
     readingAid: [
       {
+        exercise: 'readingAid',
         exerciseCount: 1,
         exerciseElapsedTime: 90000,
         initialReadingSpeed: 90,
@@ -160,6 +160,7 @@ it('calculates exercise results', () => {
     ],
     readingExercises: [
       {
+        exercise: 'readingTest',
         exerciseCount: 1,
         exerciseElapsedTime: 85000,
         initialReadingSpeed: 120,
@@ -171,6 +172,7 @@ it('calculates exercise results', () => {
         userId: 'user1',
       },
       {
+        exercise: 'readingAid',
         exerciseCount: 1,
         exerciseElapsedTime: 90000,
         initialReadingSpeed: 90,
@@ -184,6 +186,7 @@ it('calculates exercise results', () => {
     ],
     readingTest: [
       {
+        exercise: 'readingTest',
         exerciseCount: 1,
         exerciseElapsedTime: 85000,
         initialReadingSpeed: 120,
@@ -196,9 +199,4 @@ it('calculates exercise results', () => {
       },
     ],
   });
-});
-
-it('aggregates exercise results', () => {
-  const result = aggerateExerciseResults([]);
-  expect(result).toEqual({});
 });

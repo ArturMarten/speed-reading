@@ -1,6 +1,9 @@
 import * as actionTypes from './actionTypes';
+import * as actionCreators from './index';
 import * as api from '../../api';
 import { getCurrentOptions } from '../reducers/options';
+import { exerciseAttemptMap } from '../reducers/statistics';
+import { calculateAchievements, diffAchievements } from '../../containers/Achievements/achievements';
 
 const timerInit = () => ({
   type: actionTypes.TIMER_INIT,
@@ -18,12 +21,12 @@ const timerStop = () => ({
   type: actionTypes.TIMER_STOP,
 });
 
-const exerciseSelected = type => ({
+const exerciseSelected = (type) => ({
   type: actionTypes.EXERCISE_SELECT,
   payload: type,
 });
 
-const modificationChanged = modification => ({
+const modificationChanged = (modification) => ({
   type: actionTypes.MODIFICATION_CHANGED,
   payload: modification,
 });
@@ -49,14 +52,14 @@ const exerciseStarted = () => ({
   type: actionTypes.EXERCISE_STARTED,
 });
 
-const exerciseStartFailed = error => ({
+const exerciseStartFailed = (error) => ({
   type: actionTypes.EXERCISE_START_FAILED,
   payload: error,
 });
 
-const exerciseAttemptStarted = attemptId => ({
+const exerciseAttemptStarted = (attempt) => ({
   type: actionTypes.EXERCISE_ATTEMPT_START,
-  payload: attemptId,
+  payload: attempt,
 });
 
 const exerciseFinishing = () => ({
@@ -79,12 +82,12 @@ const helpExerciseFinished = (elapsedTime, data) => ({
   },
 });
 
-const exerciseFinishFailed = error => ({
+const exerciseFinishFailed = (error) => ({
   type: actionTypes.EXERCISE_FINISH_FAILED,
   payload: error,
 });
 
-const exerciseRetry = options => ({
+const exerciseRetry = (options) => ({
   type: actionTypes.EXERCISE_RETRY,
   payload: options,
 });
@@ -93,11 +96,27 @@ const exerciseEnd = () => ({
   type: actionTypes.EXERCISE_END,
 });
 
-export const selectExercise = type => (dispatch) => {
+const updateAchievements = (dispatch, state) => {
+  // Get statistics, current attempt and achievements
+  const { achievements } = state.profile;
+  const { exerciseStatistics } = state.statistics;
+  const attempt = exerciseAttemptMap(state.exercise.attempt);
+  // Calculate new achievements & diff
+  console.log('Calculating achievements with new attempt', attempt);
+  const newAchievements = calculateAchievements(achievements, exerciseStatistics, attempt);
+  const diff = diffAchievements(achievements, newAchievements);
+  console.log('Updated achievements', newAchievements);
+  console.log('Achievements diff', diff);
+  // Save attempt to statistics
+
+  dispatch(actionCreators.updateAchievements(newAchievements, diff));
+};
+
+export const selectExercise = (type) => (dispatch) => {
   dispatch(exerciseSelected(type));
 };
 
-export const changeModification = modification => (dispatch) => {
+export const changeModification = (modification) => (dispatch) => {
   dispatch(modificationChanged(modification));
 };
 
@@ -113,20 +132,23 @@ export const prepareHelpExercise = (save, exerciseOptions) => (dispatch) => {
   dispatch(exercisePrepared(save, exerciseOptions));
 };
 
-export const startExercise = attemptData => (dispatch, getState) => {
+export const startExercise = (attemptData) => (dispatch, getState) => {
   dispatch(exerciseStarting());
   const settings = getCurrentOptions(getState().options);
-  api.startExercise({ ...attemptData, settings })
-    .then((attemptId) => {
+  const attempt = { ...attemptData, settings };
+  api.startExercise(attempt).then(
+    (attemptId) => {
       dispatch(timerStart());
       dispatch(exerciseStarted());
-      dispatch(exerciseAttemptStarted(attemptId));
-    }, (errorMessage) => {
+      dispatch(exerciseAttemptStarted({ ...attempt, id: attemptId }));
+    },
+    (errorMessage) => {
       dispatch(exerciseStartFailed(errorMessage));
-    });
+    },
+  );
 };
 
-export const finishReadingExercise = attemptId => (dispatch, getState) => {
+export const finishReadingExercise = (attemptId) => (dispatch, getState) => {
   dispatch(timerStop());
   dispatch(exerciseFinishing());
   let state = getState();
@@ -135,12 +157,15 @@ export const finishReadingExercise = attemptId => (dispatch, getState) => {
   dispatch(readingExerciseFinished(elapsedTime, selectedText));
   state = getState();
   const { result } = state.exercise;
-  api.finishExercise({ attemptId, result })
-    .then(() => {
+  api.finishExercise({ attemptId, result }).then(
+    () => {
       // Dispatch event
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(exerciseFinishFailed(errorMessage));
-    });
+    },
+  );
+  updateAchievements(dispatch, state);
 };
 
 export const finishHelpExercise = (attemptId, data) => (dispatch, getState) => {
@@ -159,12 +184,15 @@ export const finishHelpExercise = (attemptId, data) => (dispatch, getState) => {
   }
   state = getState();
   const { result } = state.exercise;
-  api.finishExercise({ attemptId, result })
-    .then(() => {
+  api.finishExercise({ attemptId, result }).then(
+    () => {
       // Dispatch event
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(exerciseFinishFailed(errorMessage));
-    });
+    },
+  );
+  updateAchievements(dispatch, state);
 };
 
 export const retryExercise = () => (dispatch, getState) => {

@@ -1,0 +1,34 @@
+.achievement-progress {
+  display: flex;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.achievement-progress-level {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-weight: bold;
+}
+
+.achievement-progress-level-number {
+  font-size: 30px;
+  line-height: 25px;
+}
+
+.achievement-progress-level-text {
+  font-size: 8px;
+  line-height: 6px;
+  text-transform: uppercase;
+}
+
+.achievement-progress-content {
+  margin-left: 5px;
+  width: calc(100% - 55px);
+}

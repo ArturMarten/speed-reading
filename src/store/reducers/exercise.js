@@ -125,6 +125,7 @@ export const getExerciseById = (exerciseId) => {
 const initialState = {
   id: null,
   save: true,
+  attempt: null,
   attemptId: null,
   type: '',
   modification: '',
@@ -241,7 +242,8 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.EXERCISE_ATTEMPT_START: {
       return updateObject(state, {
-        attemptId: action.payload,
+        attempt: action.payload,
+        attemptId: action.payload.id,
       });
     }
     case actionTypes.EXERCISE_FINISHING: {
@@ -259,6 +261,7 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         status: 'finished',
         result,
+        attempt: { ...state.attempt, result },
       });
     }
     case actionTypes.HELP_EXERCISE_FINISHED: {
@@ -310,6 +313,7 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         status: 'finished',
         result,
+        attempt: { ...state.attempt, result },
       });
     }
     case actionTypes.EXERCISE_FINISH_FAILED: {
@@ -340,6 +344,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.EXERCISE_END: {
       // Cleanup after exercise end
       return updateObject(state, {
+        attempt: null,
         attemptId: null,
       });
     }

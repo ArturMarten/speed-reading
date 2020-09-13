@@ -6,24 +6,26 @@ const registerStart = () => ({
   type: actionTypes.REGISTER_START,
 });
 
-const registerSucceeded = message => ({
+const registerSucceeded = (message) => ({
   type: actionTypes.REGISTER_SUCCEEDED,
   payload: message,
 });
 
-const registerFailed = error => ({
+const registerFailed = (error) => ({
   type: actionTypes.REGISTER_FAILED,
   payload: error,
 });
 
-export const register = registerData => (dispatch) => {
+export const register = (registerData) => (dispatch) => {
   dispatch(registerStart());
-  api.register(registerData)
-    .then((message) => {
+  api.register(registerData).then(
+    (message) => {
       dispatch(registerSucceeded(message));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(registerFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const authStart = () => ({
@@ -38,7 +40,7 @@ const authSucceeded = (token, userId) => ({
   },
 });
 
-const authFailed = error => ({
+const authFailed = (error) => ({
   type: actionTypes.AUTH_FAILED,
   payload: error,
 });
@@ -54,7 +56,7 @@ export const logout = (error) => {
   };
 };
 
-const checkAuthTimeout = expirationTime => (dispatch) => {
+const checkAuthTimeout = (expirationTime) => (dispatch) => {
   // console.log(`Logging out in ${expirationTime}s`);
   setTimeout(() => {
     dispatch(logout('Authentication expired'));
@@ -63,20 +65,23 @@ const checkAuthTimeout = expirationTime => (dispatch) => {
 
 export const login = (username, password) => (dispatch) => {
   dispatch(authStart());
-  api.login({ username, password })
-    .then((data) => {
+  api.login({ username, password }).then(
+    (data) => {
       const { token, userId, expiresIn } = data;
       api.saveToken(token);
-      const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
+      const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('expirationDate', expirationDate);
       dispatch(authSucceeded(token, userId));
       dispatch(checkAuthTimeout(expiresIn));
       dispatch(actionCreators.fetchUserProfile(userId));
-    }, (errorMessage) => {
+      dispatch(actionCreators.fetchExerciseStatistics(userId));
+    },
+    (errorMessage) => {
       dispatch(authFailed(errorMessage));
-    });
+    },
+  );
 };
 
 export const authCheckState = () => (dispatch) => {
@@ -97,6 +102,7 @@ export const authCheckState = () => (dispatch) => {
       dispatch(authSucceeded(token, userId));
       dispatch(checkAuthTimeout(expiresIn));
       dispatch(actionCreators.fetchUserProfile(userId));
+      dispatch(actionCreators.fetchExerciseStatistics(userId));
     }
   }
 };
@@ -105,22 +111,24 @@ const changePasswordStart = () => ({
   type: actionTypes.CHANGE_PASSWORD_START,
 });
 
-const changePasswordSucceeded = message => ({
+const changePasswordSucceeded = (message) => ({
   type: actionTypes.CHANGE_PASSWORD_SUCCEEDED,
   payload: message,
 });
 
-const changePasswordFailed = error => ({
+const changePasswordFailed = (error) => ({
   type: actionTypes.CHANGE_PASSWORD_FAILED,
   payload: error,
 });
 
 export const changePassword = (oldPassword, newPassword) => (dispatch) => {
   dispatch(changePasswordStart());
-  api.changePassword({ oldPassword, newPassword })
-    .then((message) => {
+  api.changePassword({ oldPassword, newPassword }).then(
+    (message) => {
       dispatch(changePasswordSucceeded(message));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(changePasswordFailed(errorMessage));
-    });
+    },
+  );
 };

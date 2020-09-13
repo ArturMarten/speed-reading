@@ -4,6 +4,11 @@ import { updateObject } from '../../shared/utility';
 import { getExerciseById } from './exercise';
 
 const initialState = {
+  exerciseStatistics: [],
+  exerciseStatisticsStatus: {
+    loading: false,
+    error: null,
+  },
   userExerciseStatistics: [],
   userExerciseStatisticsStatus: {
     loading: false,
@@ -16,9 +21,9 @@ const initialState = {
   },
 };
 
-const exerciseAttemptResultFilter = (attempt) => attempt.result !== null;
+export const exerciseAttemptResultFilter = (attempt) => attempt.result !== null;
 
-const exerciseAttemptMap = (attempt) => ({
+export const exerciseAttemptMap = (attempt) => ({
   id: attempt.id,
   exerciseId: attempt.exerciseId,
   exercise: getExerciseById(attempt.exerciseId),
@@ -45,6 +50,33 @@ const exerciseAttemptMap = (attempt) => ({
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.FETCH_EXERCISE_STATISTICS_START: {
+      return updateObject(state, {
+        exerciseStatisticsStatus: {
+          loading: true,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.FETCH_EXERCISE_STATISTICS_SUCCEEDED: {
+      // Map statistics to specific exercise
+      const exerciseStatistics = action.payload.filter(exerciseAttemptResultFilter).map(exerciseAttemptMap);
+      return updateObject(state, {
+        exerciseStatistics,
+        exerciseStatisticsStatus: {
+          loading: false,
+          error: null,
+        },
+      });
+    }
+    case actionTypes.FETCH_EXERCISE_STATISTICS_FAILED: {
+      return updateObject(state, {
+        exerciseStatisticsStatus: {
+          loading: false,
+          error: action.payload,
+        },
+      });
+    }
     case actionTypes.FETCH_USER_EXERCISE_STATISTICS_START: {
       return updateObject(state, {
         userExerciseStatisticsStatus: {
