@@ -15,6 +15,8 @@
     "minute": ["minut", "minute"],
     "minutes": ["minutit", "minutes"]
   },
+  "show-more": ["Näita rohkem", "Show more"],
+  "show-less": ["Näita vähem", "Show less"],
   "menu": {
     "title": ["Kiirlugemise tarkvara", "Speedreading software"],
     "home": ["Esileht", "Home"],
@@ -698,18 +700,56 @@
   },
   "achievements": {
     "title": ["Saavutused", "Achievements"],
-    "description": ["Siin näeb oma saavutusi.", "Here you can see your achievements."],
+    "description": [
+      "Siin näeb oma saavutusi. Saavutused on jagatud päeva, nädala, kuu ja üldisteks saavutusteks. Iga saavutuse eest saab kollaseid tähti. Kaldkriipsu juures olevad numbrid tähistavad seda, kui palju kollaseid tähti on saavutuse eest seni kogutud ja kui palju on võimalik kokku koguda. Pluss märgiga number näitab, kui palju kollaseid tähti saab selle saavutuse eest.",
+      "Here you can see your achievements. Achievements are divided into daily, weekly, monthly and general achievements. Every achievement gives yellow stars. Numbers near slash symbol show how many yellow start you have collected so far and how many there is in total to collect. Number near plus symbol show how many yellow stars you got for that achievement."
+    ],
+    "statistic-total": ["Kokku kogutud", "Total collected"],
+    "statistic-group-average": [
+      "Grupi keskmine (${ average } kasutajat)",
+      "Group average (${ average } users)"
+    ],
+    "progress-badge": [
+      "Näitab praegust saavutuse taset",
+      "Shows current achievement level"
+    ],
+    "current-and-total-points": [
+      "Näitab kui palju kollaseid tähti on saavutuse eest seni kogutud ja kui palju on võimalik kokku koguda",
+      "Shows how many yellow stars have been collected so far and how many can be collected in total"
+    ],
+    "next-points": [
+      "Näitab kui palju kollaseid tähti saab selle saavutuse eest",
+      "Shows how many yellow stars you get for this achievement"
+    ],
     "level": ["tase", "level"],
     "daily": ["Päeva saavutused", "Daily achievements"],
     "weekly": ["Nädala saavutused", "Weekly achievements"],
     "monthly": ["Kuu saavutused", "Monthly achievements"],
     "progress": ["Üldised saavutused", "General achievements"],
+    "daily-total-points": [
+      "Näitab kui palju kollaseid tähekesi on kogutud päeva saavutustega kokku",
+      "Shows how many yellow stars have been collected with daily achievements"
+    ],
+    "weekly-total-points": [
+      "Näitab kui palju kollaseid tähekesi on kogutud nädala saavutustega kokku",
+      "Shows how many yellow stars have been collected with weekly achievements"
+    ],
+    "monthly-total-points": [
+      "Näitab kui palju kollaseid tähekesi on kogutud kuu saavutustega kokku",
+      "Shows how many yellow stars have been collected with monthly achievements"
+    ],
+    "progress-total-points": [
+      "Näitab kui palju kollaseid tähekesi on kogutud üldiste saavutustega kokku",
+      "Shows how many yellow stars have been collected with general achievements"
+    ],
     "ranking.top": [
-      "Oled ${ temporal}30% kõige rohkem harjutanud kasutaja seas oma grupis!",
-      "You are in top 30% most practiced user in your group${ temporal }!"],
+      "Oled ${ temporal }30% kõige rohkem harjutanud kasutaja seas oma grupis!",
+      "You are in top 30% most practiced user in your group${ temporal }!"
+    ],
     "ranking.bottom": [
       "Oled ${ temporal }30% kõige vähem harjutanud kasutaja seas oma grupis. Veel võimalik harjutada ja keskmisse gruppi jõuda!",
-      "You are in bottom 30% least practiced user in your group${ temporal }. You can still practice and make up for it!"],
+      "You are in bottom 30% least practiced user in your group${ temporal }. You can still practice and make up for it!"
+    ],
     "temporal.daily": ["täna ", " today"],
     "temporal.weekly": ["sel nädalal ", " this week"],
     "temporal.monthly": ["sel kuul ", " this month"],

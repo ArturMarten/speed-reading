@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Icon, Segment, Button, Form, Dropdown, Message } from 'semantic-ui-react';
-import { getTranslate } from 'react-localize-redux';
+import { Container, Header, Icon, Segment, Button, Form, Dropdown, Message, Popup } from 'semantic-ui-react';
+import { getTranslate, getActiveLanguage } from 'react-localize-redux';
 import AchievementProgress from '../../components/AchievementProgress/AchievementProgress';
 import * as actionCreators from '../../store/actions';
 import * as api from '../../api';
@@ -17,6 +17,14 @@ import { rolePermissions } from '../../store/reducers/profile';
 
 import './Achievements.css';
 import AchievementsTable from './AchievementsTable';
+import ShowMore from '../../components/ShowMore/ShowMore';
+
+const calculateGroupAveragePoints = (groupUsers) => {
+  const points = groupUsers.map((user) => (user.achievements ? user.achievements.points : 0));
+  const count = points.length;
+  const average = Math.round(points.reduce((a, b) => a + b, 0) / count);
+  return { average, count };
+};
 
 const calculateRanking = (achievements, groupUsers) => (category) => {
   let top = false;
@@ -31,12 +39,13 @@ const calculateRanking = (achievements, groupUsers) => (category) => {
   if (Math.max(...counts) > 0 && Math.max(...times) > 0) {
     const countRankingIndex = counts.indexOf(achievements[category].exercise.count);
     const timeRankingIndex = times.indexOf(achievements[category].exercise.time);
-    if (achievements[category].exercise.count === 0 || achievements[category].exercise.time === 0) {
-      bottom = true;
-    } else if (countRankingIndex !== -1 && timeRankingIndex !== -1) {
+    if (countRankingIndex !== -1 && timeRankingIndex !== -1) {
       const topIndex = Math.ceil((groupSize - 1) * 0.3);
       const bottomIndex = Math.ceil((groupSize - 1) * 0.7);
-      if (countRankingIndex <= topIndex || timeRankingIndex <= topIndex) {
+      if (
+        (countRankingIndex <= topIndex && achievements[category].exercise.count !== 0) ||
+        (timeRankingIndex <= topIndex && achievements[category].exercise.time !== 0)
+      ) {
         top = true;
       } else if (countRankingIndex >= bottomIndex && timeRankingIndex >= bottomIndex) {
         bottom = true;
@@ -101,7 +110,9 @@ export class Achievements extends Component {
           selectedUser.achievements !== null
             ? mergeDeep(initialAchievements, selectedUser.achievements)
             : initialAchievements;
-        this.setState({ achievements });
+        this.setState({
+          achievements: checkTemporalAchievements(achievements, new Date()),
+        });
       }
 
       this.setState({ groupId: value, userId });
@@ -159,7 +170,7 @@ export class Achievements extends Component {
   }
 
   render() {
-    const { achievements: givenAchievements, translate } = this.props;
+    const { achievements: givenAchievements, language, translate } = this.props;
     const achievements = this.state.achievements || givenAchievements;
     const dailyData = getCategoryAchievementKeys(achievements, 'daily').map((achievementKey) =>
       getAchievement(achievements, achievementKey),
@@ -175,6 +186,8 @@ export class Achievements extends Component {
     );
 
     const { groupId } = this.state;
+    let groupAveragePoints = 0;
+    let groupUserCount = 0;
     const ranking = {
       daily: {
         top: false,
@@ -191,6 +204,9 @@ export class Achievements extends Component {
     };
     if (groupId !== 'all-groups' && this.state.userAchievements) {
       const groupUsers = this.state.userAchievements.filter((user) => user.groupId === groupId);
+      const calculatedAverage = calculateGroupAveragePoints(groupUsers);
+      groupAveragePoints = calculatedAverage.average;
+      groupUserCount = calculatedAverage.count;
       const calculateCategoryRanking = calculateRanking(achievements, groupUsers);
       ranking.daily = calculateCategoryRanking('daily');
       ranking.weekly = calculateCategoryRanking('weekly');
@@ -282,7 +298,50 @@ export class Achievements extends Component {
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{translate('achievements.title')}</Header>
-        <p>{translate('achievements.description')}</p>
+        <ShowMore translate={translate}>
+          {language === 'ee' ? (
+            <>
+              <p>
+                Siin näeb oma saavutusi. Saavutused on süsteem rakenduses, mis aitab hinnata, mida on kasutaja
+                saavutanud. Saavutusi antakse erinevate ülesannete täitmise eest. Ülesandeks võib-olla näiteks sooritada
+                teatud hulk harjutusi või harjutada teatud aeg. Iga saavutuse täitmise eest autasustatakse kollaste
+                tähekestega. Tähekeste kogus sõltub saavutuse keerukusest. Mida keerukam saavutus, seda rohkem tähekesi
+                autasustatakse. Tähekestest võib mõelda kui punktidest või skoorist mõnes mängus. Saavutustega kogutud
+                tähekeste arv liidetakse kokku, mida suurem kogus tähekesi on, seda rohkem erinevaid saavutusi on
+                kasutaja saanud. Kui kasutaja sooritab näiteks ühe lugemisharjutuse, siis seda arvestatakse kõikide
+                saavutuste puhul, mille ülesanne on seotud lugemisharjutustega. Saavutused on jagatud päeva, nädala, kuu
+                ja üldisteks saavutusteks.
+              </p>
+              <p>
+                Päeva, nädala ja kuu saavutused on ajaliselt piiratud. See tähendab, et saavutuse saamiseks tuleb
+                ülesanne täita konkreetse aja jooksul, olgu selleks siis see päev, nädala või kuu. Selle aja lõppedes
+                vastavate saavutuste progress nullitakse ja saavutuse poole püüdlemine võib taas alata. Aja lõppedes
+                seni kogutud tähekeste hulka ei nullita. Iga uus päev, nädal või kuu algab kolme saavutusega, millest
+                kaks tükki on alati samad ja kolmas on juhuslikult valitud. Juhuslikult valitud saavutuse eesmärgiks on
+                kasutaja suunata harjutama erinevaid tüüpi harjutusi. Päeva, nädala ja kuu saavutuste juures antakse ka
+                tagasisidet kui kasutaja on keskmisest rohkem või vähem harjutunud võrreldes teistega samas grupis.
+              </p>
+              <p>
+                Üldised saavutused on ajaliselt piiramatud, seega nende progressi ei nullita. Üldiste saavutuste
+                omapäraks on see, et iga saavutus on jaotatud kümneks tasemeks. Tasemetest võib mõelda kui
+                vaheetappidest saavutuse viimase ülesande ehk kümnenda taseme täitmiseks. Üldine saavutus algab
+                nulltasemelt, iga järgmise taseme saamiseks tuleb täita püstitatud ülesanne. Taseme saavutamisel
+                autasustakse kollaste tähekestega. Iga tasemel on saavutuse ülesande sisu sama, kuid iga uue tasemega
+                kasvab ülesandes olev arvuline väärtus. Nii see arvuline väärtus kui ka antavate kollaste tähekeste hulk
+                kasvab tasemega lineaarselt.
+              </p>
+              <p>
+                Saavutuste süsteemi peamine eesmärk on motiveerida kasutajat rohkem regulaarselt harjutama. Tavapärasele
+                harjutuste läbimisele on seatud eesmärgid, mille poole kasutaja saab igapäevaselt püüelda, muutes
+                harjutamise huvitavamaks ja mitmekülgsemaks. Erinevaid saavutusi on palju, seega alati leiab midagi
+                sellist, mida võiks täita. Saavutuste eesmärgid keskenduvad regulaarsele ja mitmekülgsele lugemise
+                harjutamisele.
+              </p>
+            </>
+          ) : (
+            translate('achievements.description')
+          )}
+        </ShowMore>
         {groupAndUserFilterInput}
         {this.props.isAdmin ? (
           <>
@@ -302,12 +361,34 @@ export class Achievements extends Component {
           </>
         ) : null}
         <Segment>
+          <div className="flex-grid achievements-stats">
+            <div className="col achievements-statistic">
+              <div>{translate('achievements.statistic-total')}</div>
+              &nbsp;
+              <span style={{ fontSize: '30px' }}>{achievements.points}</span>
+              <Icon name="star" color="yellow" size="big" style={{ margin: 0 }} />
+            </div>
+            <div className="col achievements-statistic">
+              <div>{translate('achievements.statistic-group-average', { average: groupUserCount })}</div>
+              &nbsp;
+              <span style={{ fontSize: '30px' }}>{groupAveragePoints}</span>
+              <Icon name="star" color="yellow" size="big" style={{ margin: 0 }} />
+            </div>
+          </div>
+        </Segment>
+        <Segment>
           <h3>
             {translate('achievements.daily')}
-            <span style={{ float: 'right' }}>
-              {achievements.daily.points + achievements.daily.uniquePoints}
-              <Icon name="star" color="yellow" style={{ margin: 0 }} />
-            </span>
+            <Popup
+              content={translate('achievements.daily-total-points')}
+              position="top center"
+              trigger={
+                <span style={{ float: 'right' }}>
+                  {achievements.daily.points + achievements.daily.uniquePoints}
+                  <Icon name="star" color="yellow" style={{ margin: 0 }} />
+                </span>
+              }
+            />
           </h3>
           {ranking.daily.top ? topMessage('daily') : null}
           {ranking.daily.bottom ? bottomMessage('daily') : null}
@@ -325,10 +406,16 @@ export class Achievements extends Component {
         <Segment>
           <h3>
             {translate('achievements.weekly')}
-            <span style={{ float: 'right' }}>
-              {achievements.weekly.points + achievements.weekly.uniquePoints}
-              <Icon name="star" color="yellow" style={{ margin: 0 }} />
-            </span>
+            <Popup
+              content={translate('achievements.weekly-total-points')}
+              position="top center"
+              trigger={
+                <span style={{ float: 'right' }}>
+                  {achievements.weekly.points + achievements.weekly.uniquePoints}
+                  <Icon name="star" color="yellow" style={{ margin: 0 }} />
+                </span>
+              }
+            />
           </h3>
           {ranking.weekly.top ? topMessage('weekly') : null}
           {ranking.weekly.bottom ? bottomMessage('weekly') : null}
@@ -346,10 +433,16 @@ export class Achievements extends Component {
         <Segment>
           <h3>
             {translate('achievements.monthly')}
-            <span style={{ float: 'right' }}>
-              {achievements.monthly.points + achievements.monthly.uniquePoints}
-              <Icon name="star" color="yellow" style={{ margin: 0 }} />
-            </span>
+            <Popup
+              content={translate('achievements.monthly-total-points')}
+              position="top center"
+              trigger={
+                <span style={{ float: 'right' }}>
+                  {achievements.monthly.points + achievements.monthly.uniquePoints}
+                  <Icon name="star" color="yellow" style={{ margin: 0 }} />
+                </span>
+              }
+            />
           </h3>
           {ranking.monthly.top ? topMessage('monthly') : null}
           {ranking.monthly.bottom ? bottomMessage('monthly') : null}
@@ -367,10 +460,16 @@ export class Achievements extends Component {
         <Segment>
           <h3>
             {translate('achievements.progress')}
-            <span style={{ float: 'right' }}>
-              &nbsp; {achievements.progress.points}
-              <Icon name="star" color="yellow" style={{ margin: 0 }} />
-            </span>
+            <Popup
+              content={translate('achievements.progress-total-points')}
+              position="top center"
+              trigger={
+                <span style={{ float: 'right' }}>
+                  {achievements.progress.points}
+                  <Icon name="star" color="yellow" style={{ margin: 0 }} />
+                </span>
+              }
+            />
           </h3>
           <div className="flex-grid">
             {progressData.map((achievementData) => (
@@ -399,6 +498,7 @@ const mapStateToProps = (state) => ({
   groupsStatus: state.group.groupsStatus,
   groups: state.group.groups,
   achievements: state.profile.achievements,
+  language: getActiveLanguage(state.locale).code,
   translate: getTranslate(state.locale),
 });
 

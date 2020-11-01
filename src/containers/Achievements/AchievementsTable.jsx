@@ -41,8 +41,6 @@ function AchievementsTable(props) {
             <Table.HeaderCell>Nädala (unikaalsed)</Table.HeaderCell>
             <Table.HeaderCell>Kuu (unikaalsed)</Table.HeaderCell>
             <Table.HeaderCell>Üldised</Table.HeaderCell>
-            <Table.HeaderCell>Lugemise</Table.HeaderCell>
-            <Table.HeaderCell>Abi</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -65,8 +63,6 @@ function AchievementsTable(props) {
                   : 'null'}
               </Table.Cell>
               <Table.Cell>{achievements.progress ? achievements.progress.points : 'null'}</Table.Cell>
-              <Table.Cell>{achievements.progress ? achievements.progress.readingExercise.points : 'null'}</Table.Cell>
-              <Table.Cell>{achievements.progress ? achievements.progress.helpExercise.points : 'null'}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

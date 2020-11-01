@@ -43,7 +43,8 @@ export class AchievementUpdates extends Component {
     const achievements = this.state.achievements || givenAchievements;
     const achievementsDiff = this.state.achievementsDiff || givenAchievementsDiff;
     const achievementKeys = getAchievementKeys(achievementsDiff);
-    const achievementsData = achievementKeys
+    const progressAchievementsData = achievementKeys
+      .filter((key) => key.split('.')[0] !== 'unique')
       .map((achievementKey) => getAchievement(achievements, achievementKey))
       .sort((a, b) => {
         if (
@@ -66,7 +67,7 @@ export class AchievementUpdates extends Component {
         <Button onClick={() => this.updateHandler()}>Uuenda saavutusi</Button>
         */}
         {achievementKeys.length > 0
-          ? achievementsData.map((achievementData) => (
+          ? progressAchievementsData.map((achievementData) => (
               <AchievementProgress
                 key={achievementData.achievementKey}
                 achievementData={achievementData}

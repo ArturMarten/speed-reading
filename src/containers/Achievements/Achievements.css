@@ -22,3 +22,15 @@
     width: 100%;
   }
 }
+
+.achievements-stats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.achievements-statistic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}

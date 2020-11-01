@@ -1,7 +1,7 @@
+import { achievementData } from './achievementData';
 import {
   calculateAchievements,
   calculatePoints,
-  achievementData,
   diffAchievements,
   getObjectValue,
   mergeDeep,
@@ -206,7 +206,12 @@ test.each(testDayChangesData)('checks day change(%s, %s)', (date1, date2, expect
 
 const testWeekChangesData = [
   ['2020-08-17T00:00:00.000Z', '2020-08-17T00:00:00.000Z', false],
+  ['2020-08-17T00:00:00.000Z', '2020-08-17T01:00:00.000Z', false],
+  ['2020-08-17T00:00:00.000Z', '2020-08-17T23:59:59.999Z', false],
   ['2020-08-17T00:00:00.000Z', '2020-08-18T00:00:00.000Z', false],
+  ['2020-08-17T00:00:00.000Z', '2020-08-18T00:00:00.001Z', false],
+  ['2020-08-17T23:59:59.999Z', '2020-08-18T00:00:00.000Z', false],
+  ['2020-08-17T01:00:00.000Z', '2020-08-19T00:00:00.000Z', false],
   ['2020-08-17T00:00:00.000Z', '2020-08-23T00:00:00.000Z', false],
   ['2020-08-17T00:00:00.000Z', '2020-08-23T23:59:59.999Z', false],
   ['2020-08-17T00:00:00.000Z', '2020-08-24T00:00:00.000Z', true],

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Popup } from 'semantic-ui-react';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { getAchievementData } from '../../containers/Achievements/achievements';
 
@@ -24,23 +24,39 @@ function AchievementProgress(props) {
   const temporalTranslated =
     achievementType !== 'progress' ? translate(`achievements.temporal.${achievementType}`) : '';
 
-  return (
-    <div className={`${className} achievement-progress`}>
+  const achievementBadge =
+    achievementType === 'progress' ? (
+      <Popup
+        content={translate('achievements.progress-badge')}
+        position="top center"
+        trigger={
+          <div
+            className="achievement-progress-level"
+            style={{ backgroundColor: currentLevel > 0 ? color : 'rgb(243, 243, 243)' }}
+          >
+            {currentLevel > 0 ? (
+              <>
+                <div className="achievement-progress-level-text">{translate('achievements.level')}</div>
+                <div className="achievement-progress-level-number">{currentLevel}</div>
+              </>
+            ) : null}
+          </div>
+        }
+      />
+    ) : (
       <div
         className="achievement-progress-level"
         style={{ backgroundColor: currentLevel > 0 ? color : 'rgb(243, 243, 243)' }}
       >
         {currentLevel > 0 ? (
-          <>
-            {achievementType === 'progress' ? (
-              <div className="achievement-progress-level-text">{translate('achievements.level')}</div>
-            ) : null}
-            <div className="achievement-progress-level-number">
-              {percent >= 100 && achievementType !== 'progress' ? '✓' : currentLevel}
-            </div>
-          </>
+          <div className="achievement-progress-level-number">{percent >= 100 ? '✓' : null}</div>
         ) : null}
       </div>
+    );
+
+  return (
+    <div className={`${className} achievement-progress`}>
+      {achievementBadge}
       <div className="achievement-progress-content">
         <div>
           {translate(`achievements.temporal.${achievementCategoryKey}`, {
@@ -57,15 +73,27 @@ function AchievementProgress(props) {
           formatter={formatter}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div>
-            {currentPoints} / {totalPoints}
-            <Icon name="star" color="yellow" style={{ margin: 0 }} />
-          </div>
+          <Popup
+            content={translate('achievements.current-and-total-points')}
+            position="top center"
+            trigger={
+              <div>
+                {currentPoints} / {totalPoints}
+                <Icon name="star" color="yellow" style={{ margin: 0 }} />
+              </div>
+            }
+          />
           {nextPoints > 0 ? (
-            <span>
-              +{nextPoints}
-              <Icon name="star" color="yellow" style={{ margin: 0 }} />
-            </span>
+            <Popup
+              content={translate('achievements.next-points')}
+              position="top center"
+              trigger={
+                <span>
+                  +{nextPoints}
+                  <Icon name="star" color="yellow" style={{ margin: 0 }} />
+                </span>
+              }
+            />
           ) : null}
         </div>
       </div>

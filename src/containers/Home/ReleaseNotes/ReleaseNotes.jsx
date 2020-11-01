@@ -12,6 +12,17 @@ function ReleaseNotes(props) {
         <List verticalAlign="middle" bulleted>
           <List.Item>
             <List.Content>
+              <List.Header>Versioon 5.1.24 (01.11.2020)</List.Header>
+              <List.Description>
+                <List.List>
+                  <List.Item>Lisatud täiendavad selgitused saavutuste lehel</List.Item>
+                  <List.Item>Nädala ja kuu saavutuste tasakaalustamine</List.Item>
+                </List.List>
+              </List.Description>
+            </List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Content>
               <List.Header>Versioon 5.1.23 (14.09.2020)</List.Header>
               <List.Description>
                 <List.List>
