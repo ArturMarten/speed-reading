@@ -11,8 +11,19 @@ function findUserNameByPublicId(users, publicId) {
   return publicId;
 }
 
+function findUserGroupNameByPublicId(users, groups, publicId) {
+  const foundUser = users.find((user) => user.publicId === publicId);
+  if (foundUser) {
+    const foundGroup = groups.find((group) => group.id === foundUser.groupId);
+    if (foundGroup) {
+      return foundGroup.name;
+    }
+  }
+  return 'Puudub';
+}
+
 function AchievementsTable(props) {
-  const { users, userAchievements } = props;
+  const { users, groups, userAchievements } = props;
   const mappedUserAchievements = userAchievements
     ? userAchievements.map(({ achievements, publicId, groupId }) => ({
         ...achievements,
@@ -31,10 +42,11 @@ function AchievementsTable(props) {
   });
   return (
     <div style={{ maxHeight: '50vh', overflow: 'auto' }}>
-      <Table basic celled selectable compact="very" sortable singleLine>
+      <Table basic celled selectable compact="very" sortable singleLine unstackable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Kasutaja</Table.HeaderCell>
+            <Table.HeaderCell>Grupp</Table.HeaderCell>
             <Table.HeaderCell>Punktid</Table.HeaderCell>
             <Table.HeaderCell>Unikaalsed</Table.HeaderCell>
             <Table.HeaderCell>Päeva (unikaalsed)</Table.HeaderCell>
@@ -47,6 +59,7 @@ function AchievementsTable(props) {
           {sortedAchievements.map((achievements) => (
             <Table.Row key={achievements.publicId}>
               <Table.Cell>{findUserNameByPublicId(users, achievements.publicId)}</Table.Cell>
+              <Table.Cell>{findUserGroupNameByPublicId(users, groups, achievements.publicId)}</Table.Cell>
               <Table.Cell>{achievements.points || achievements.points === 0 ? achievements.points : 'null'}</Table.Cell>
               <Table.Cell>{achievements.unique ? achievements.unique.points : 'null'}</Table.Cell>
               <Table.Cell>

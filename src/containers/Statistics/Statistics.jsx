@@ -15,10 +15,11 @@ import {
   Input,
   Label,
 } from 'semantic-ui-react';
-import { getTranslate } from 'react-localize-redux';
+import { getActiveLanguage, getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../store/actions';
 import { rolePermissions } from '../../store/reducers/profile';
+import StatisticsDescription from './StatisticsDescription';
 import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import RegressionChart from '../../components/Statistics/RegressionChart';
 import GroupTable from '../../components/Statistics/Group/GroupTable';
@@ -730,7 +731,7 @@ export class Statistics extends Component {
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{this.props.translate('statistics.title')}</Header>
-        <p>{this.props.translate('statistics.description')}</p>
+        <StatisticsDescription translate={this.props.translate} language={this.props.language} />
         <Tab panes={panes} activeIndex={this.state.activeTabIndex} onTabChange={this.tabChangeHandler} />
       </Container>
     );
@@ -751,6 +752,7 @@ const mapStateToProps = (state) => ({
   userExerciseStatistics: state.statistics.userExerciseStatistics,
   groupExerciseStatisticsStatus: state.statistics.groupExerciseStatisticsStatus,
   groupExerciseStatistics: state.statistics.groupExerciseStatistics,
+  language: getActiveLanguage(state.locale).code,
   translate: getTranslate(state.locale),
 });
 

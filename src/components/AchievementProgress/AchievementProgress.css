@@ -1,8 +1,11 @@
 .achievement-progress {
   display: flex;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   align-items: center;
+  background-color: #fcfcfc;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 .achievement-progress-level {
@@ -24,7 +27,7 @@
 
 .achievement-progress-level-text {
   font-size: 8px;
-  line-height: 6px;
+  line-height: 8px;
   text-transform: uppercase;
 }
 

@@ -727,16 +727,16 @@
     "monthly": ["Kuu saavutused", "Monthly achievements"],
     "progress": ["Üldised saavutused", "General achievements"],
     "daily-total-points": [
-      "Näitab kui palju kollaseid tähekesi on kogutud päeva saavutustega kokku",
-      "Shows how many yellow stars have been collected with daily achievements"
+      "Näitab kui palju kollaseid tähekesi on kogutud nii tänase kui ka eelmiste päevade päeva saavutustega kokku",
+      "Shows how many yellow stars have been collected for today's and previous days' daily achievements"
     ],
     "weekly-total-points": [
-      "Näitab kui palju kollaseid tähekesi on kogutud nädala saavutustega kokku",
-      "Shows how many yellow stars have been collected with weekly achievements"
+      "Näitab kui palju kollaseid tähekesi on kogutud nii selle nädala kui ka eelmiste nädalate nädala saavutustega kokku",
+      "Shows how many yellow stars have been collected for this week's and previous weeks' weekly achievements"
     ],
     "monthly-total-points": [
-      "Näitab kui palju kollaseid tähekesi on kogutud kuu saavutustega kokku",
-      "Shows how many yellow stars have been collected with monthly achievements"
+      "Näitab kui palju kollaseid tähekesi on kogutud nii selle kuu kui ka eelmiste kuude kuu saavutustega kokku",
+      "Shows how many yellow stars have been collected for this month's and previous months' monthly achievements"
     ],
     "progress-total-points": [
       "Näitab kui palju kollaseid tähekesi on kogutud üldiste saavutustega kokku",

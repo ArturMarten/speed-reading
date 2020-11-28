@@ -32,7 +32,7 @@ export class StatisticsTable extends Component {
     const { data } = this.props;
     const sortedAttempts = sortByColumn(data, column, direction);
     return (
-      <Table basic celled selectable compact="very" sortable singleLine>
+      <Table basic celled selectable compact="very" sortable singleLine unstackable>
         <Table.Header>
           <Table.Row>
             {this.props.exercise === 'readingExercises' ? (

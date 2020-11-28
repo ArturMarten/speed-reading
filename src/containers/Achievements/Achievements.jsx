@@ -17,10 +17,13 @@ import { rolePermissions } from '../../store/reducers/profile';
 
 import './Achievements.css';
 import AchievementsTable from './AchievementsTable';
-import ShowMore from '../../components/ShowMore/ShowMore';
+import AchievementsDescription from './AchievementsDescription';
 
 const calculateGroupAveragePoints = (groupUsers) => {
-  const points = groupUsers.map((user) => (user.achievements ? user.achievements.points : 0));
+  const points = groupUsers.map((user) =>
+    // Unique achievements excluded
+    user.achievements ? user.achievements.points - user.achievements.unique.points : 0,
+  );
   const count = points.length;
   const average = Math.round(points.reduce((a, b) => a + b, 0) / count);
   return { average, count };
@@ -202,6 +205,10 @@ export class Achievements extends Component {
         bottom: false,
       },
     };
+
+    // Unique achievements excluded
+    const totalPoints = achievements.points - achievements.unique.points;
+
     if (groupId !== 'all-groups' && this.state.userAchievements) {
       const groupUsers = this.state.userAchievements.filter((user) => user.groupId === groupId);
       const calculatedAverage = calculateGroupAveragePoints(groupUsers);
@@ -298,50 +305,7 @@ export class Achievements extends Component {
     return (
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{translate('achievements.title')}</Header>
-        <ShowMore translate={translate}>
-          {language === 'ee' ? (
-            <>
-              <p>
-                Siin näeb oma saavutusi. Saavutused on süsteem rakenduses, mis aitab hinnata, mida on kasutaja
-                saavutanud. Saavutusi antakse erinevate ülesannete täitmise eest. Ülesandeks võib-olla näiteks sooritada
-                teatud hulk harjutusi või harjutada teatud aeg. Iga saavutuse täitmise eest autasustatakse kollaste
-                tähekestega. Tähekeste kogus sõltub saavutuse keerukusest. Mida keerukam saavutus, seda rohkem tähekesi
-                autasustatakse. Tähekestest võib mõelda kui punktidest või skoorist mõnes mängus. Saavutustega kogutud
-                tähekeste arv liidetakse kokku, mida suurem kogus tähekesi on, seda rohkem erinevaid saavutusi on
-                kasutaja saanud. Kui kasutaja sooritab näiteks ühe lugemisharjutuse, siis seda arvestatakse kõikide
-                saavutuste puhul, mille ülesanne on seotud lugemisharjutustega. Saavutused on jagatud päeva, nädala, kuu
-                ja üldisteks saavutusteks.
-              </p>
-              <p>
-                Päeva, nädala ja kuu saavutused on ajaliselt piiratud. See tähendab, et saavutuse saamiseks tuleb
-                ülesanne täita konkreetse aja jooksul, olgu selleks siis see päev, nädala või kuu. Selle aja lõppedes
-                vastavate saavutuste progress nullitakse ja saavutuse poole püüdlemine võib taas alata. Aja lõppedes
-                seni kogutud tähekeste hulka ei nullita. Iga uus päev, nädal või kuu algab kolme saavutusega, millest
-                kaks tükki on alati samad ja kolmas on juhuslikult valitud. Juhuslikult valitud saavutuse eesmärgiks on
-                kasutaja suunata harjutama erinevaid tüüpi harjutusi. Päeva, nädala ja kuu saavutuste juures antakse ka
-                tagasisidet kui kasutaja on keskmisest rohkem või vähem harjutunud võrreldes teistega samas grupis.
-              </p>
-              <p>
-                Üldised saavutused on ajaliselt piiramatud, seega nende progressi ei nullita. Üldiste saavutuste
-                omapäraks on see, et iga saavutus on jaotatud kümneks tasemeks. Tasemetest võib mõelda kui
-                vaheetappidest saavutuse viimase ülesande ehk kümnenda taseme täitmiseks. Üldine saavutus algab
-                nulltasemelt, iga järgmise taseme saamiseks tuleb täita püstitatud ülesanne. Taseme saavutamisel
-                autasustakse kollaste tähekestega. Iga tasemel on saavutuse ülesande sisu sama, kuid iga uue tasemega
-                kasvab ülesandes olev arvuline väärtus. Nii see arvuline väärtus kui ka antavate kollaste tähekeste hulk
-                kasvab tasemega lineaarselt.
-              </p>
-              <p>
-                Saavutuste süsteemi peamine eesmärk on motiveerida kasutajat rohkem regulaarselt harjutama. Tavapärasele
-                harjutuste läbimisele on seatud eesmärgid, mille poole kasutaja saab igapäevaselt püüelda, muutes
-                harjutamise huvitavamaks ja mitmekülgsemaks. Erinevaid saavutusi on palju, seega alati leiab midagi
-                sellist, mida võiks täita. Saavutuste eesmärgid keskenduvad regulaarsele ja mitmekülgsele lugemise
-                harjutamisele.
-              </p>
-            </>
-          ) : (
-            translate('achievements.description')
-          )}
-        </ShowMore>
+        <AchievementsDescription translate={translate} language={language} />
         {groupAndUserFilterInput}
         {this.props.isAdmin ? (
           <>
@@ -357,7 +321,11 @@ export class Achievements extends Component {
             >
               Uuenda kõigi saavutusi
             </Button>
-            <AchievementsTable users={this.props.users} userAchievements={this.state.userAchievements} />
+            <AchievementsTable
+              users={this.props.users}
+              groups={this.props.groups}
+              userAchievements={this.state.userAchievements}
+            />
           </>
         ) : null}
         <Segment>
@@ -365,7 +333,7 @@ export class Achievements extends Component {
             <div className="col achievements-statistic">
               <div>{translate('achievements.statistic-total')}</div>
               &nbsp;
-              <span style={{ fontSize: '30px' }}>{achievements.points}</span>
+              <span style={{ fontSize: '30px' }}>{totalPoints}</span>
               <Icon name="star" color="yellow" size="big" style={{ margin: 0 }} />
             </div>
             <div className="col achievements-statistic">

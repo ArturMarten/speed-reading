@@ -1,3 +1,18 @@
+.achievements-read-more {
+  display: flex;
+  flex-direction: column;
+}
+
+.achievements-read-more-table {
+  overflow-x: auto;
+  margin: 10px;
+}
+
+.achievements-read-more-table-inner {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .flex-grid {
   display: flex;
   justify-content: space-evenly;
