@@ -4,6 +4,31 @@ import { Button, Icon } from 'semantic-ui-react';
 import { updateObject } from '../../../../shared/utility';
 import { createOffscreenContext, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
+export const nextPage = (currentState, textMetadata, context, offscreenCanvas) => {
+  const { pageIndex } = currentState;
+  const { pagesMetadata } = textMetadata;
+  const nextPageIndex = Math.min(pageIndex + 1, pagesMetadata.length - 1);
+  if (nextPageIndex !== pageIndex) {
+    const pageMetadata = pagesMetadata[nextPageIndex];
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    context.drawImage(
+      offscreenCanvas,
+      0,
+      pageMetadata.rect.top,
+      context.canvas.width,
+      pageMetadata.pageHeight,
+      0,
+      0,
+      context.canvas.width,
+      pageMetadata.pageHeight,
+    );
+    return updateObject(currentState, {
+      pageIndex: nextPageIndex,
+    });
+  }
+  return currentState;
+};
+
 export const previousPage = (currentState, textMetadata, context, offscreenCanvas) => {
   const { pageIndex } = currentState;
   const { pagesMetadata } = textMetadata;
@@ -24,32 +49,6 @@ export const previousPage = (currentState, textMetadata, context, offscreenCanva
     );
     return updateObject(currentState, {
       pageIndex: previousPageIndex,
-    });
-  }
-  return currentState;
-};
-
-export const nextPage = (currentState, textMetadata, context, offscreenCanvas) => {
-  const { pageIndex } = currentState;
-  const { pagesMetadata } = textMetadata;
-  const nextPageIndex = Math.min(pageIndex + 1, pagesMetadata.length - 1);
-
-  if (nextPageIndex !== pageIndex) {
-    const pageMetadata = pagesMetadata[nextPageIndex];
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    context.drawImage(
-      offscreenCanvas,
-      0,
-      pageMetadata.rect.top,
-      context.canvas.width,
-      pageMetadata.pageHeight,
-      0,
-      0,
-      context.canvas.width,
-      pageMetadata.pageHeight,
-    );
-    return updateObject(currentState, {
-      pageIndex: nextPageIndex,
     });
   }
   return currentState;

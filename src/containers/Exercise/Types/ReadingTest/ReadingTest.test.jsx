@@ -87,11 +87,12 @@ describe('Reading test', () => {
   });
 
   it('next page on the last page does not change page index', () => {
+    const lastPageIndex = textMetadata.pagesMetadata.length - 1;
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      pageIndex: 5,
+      pageIndex: lastPageIndex,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.pageIndex).toEqual(5);
+    expect(newState.pageIndex).toEqual(lastPageIndex);
   });
 });
