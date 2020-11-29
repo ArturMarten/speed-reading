@@ -5,78 +5,58 @@ import { updateObject } from '../../../../shared/utility';
 import { createOffscreenContext, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 export const previousPage = (currentState, textMetadata, context, offscreenCanvas) => {
-  const { canvasHeight, marginTop } = currentState;
-  const previousPageTop = Math.min(
-    ...textMetadata.linesMetadata
-      .map((lineMetadata) => lineMetadata.rect.top)
-      .filter((lineTop) => lineTop >= Math.max(marginTop - canvasHeight, 0)),
-  );
-  if (previousPageTop < marginTop) {
-    const previousPageBottom = Math.min(
-      ...textMetadata.linesMetadata
-        .map((lineMetadata) => lineMetadata.rect.top)
-        .filter((lineBottom) => lineBottom >= marginTop),
-    );
+  const { pageIndex } = currentState;
+  const { pagesMetadata } = textMetadata;
+  const previousPageIndex = Math.max(pageIndex - 1, 0);
+  if (previousPageIndex !== pageIndex) {
+    const pageMetadata = pagesMetadata[previousPageIndex];
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    const height = previousPageBottom - previousPageTop;
     context.drawImage(
       offscreenCanvas,
       0,
-      previousPageTop,
+      pageMetadata.rect.top,
       context.canvas.width,
-      height,
+      pageMetadata.pageHeight,
       0,
       0,
       context.canvas.width,
-      height,
+      pageMetadata.pageHeight,
     );
     return updateObject(currentState, {
-      marginTop: marginTop - height,
+      pageIndex: previousPageIndex,
     });
   }
   return currentState;
 };
 
 export const nextPage = (currentState, textMetadata, context, offscreenCanvas) => {
-  const { marginTop, canvasHeight } = currentState;
-  const currentPageBottom = Math.max(
-    ...textMetadata.linesMetadata
-      .map((lineMetadata) => lineMetadata.rect.bottom)
-      .filter((lineBottom) => lineBottom < marginTop + canvasHeight),
-  );
-  const nextPageBottom = Math.max(
-    ...textMetadata.linesMetadata
-      .map((lineMetadata) => lineMetadata.rect.bottom)
-      .filter((lineBottom) => lineBottom < currentPageBottom + canvasHeight),
-  );
-  if (nextPageBottom > currentPageBottom) {
-    const nextPageTop = Math.max(
-      ...textMetadata.linesMetadata
-        .map((lineMetadata) => lineMetadata.rect.bottom)
-        .filter((lineBottom) => lineBottom < canvasHeight + marginTop),
-    );
+  const { pageIndex } = currentState;
+  const { pagesMetadata } = textMetadata;
+  const nextPageIndex = Math.min(pageIndex + 1, pagesMetadata.length - 1);
+
+  if (nextPageIndex !== pageIndex) {
+    const pageMetadata = pagesMetadata[nextPageIndex];
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    const height = nextPageBottom - nextPageTop;
     context.drawImage(
       offscreenCanvas,
       0,
-      nextPageTop,
+      pageMetadata.rect.top,
       context.canvas.width,
-      height,
+      pageMetadata.pageHeight,
       0,
       0,
       context.canvas.width,
-      height,
+      pageMetadata.pageHeight,
     );
     return updateObject(currentState, {
-      marginTop: nextPageTop,
+      pageIndex: nextPageIndex,
     });
   }
   return currentState;
 };
 
 const initialState = {
-  marginTop: 0,
+  pageIndex: 0,
 };
 
 export class ReadingTest extends Component {

@@ -4,7 +4,7 @@ import fs from 'fs';
 import { List } from 'immutable';
 import { ContentState, convertFromHTML, ContentBlock, genKey } from 'draft-js';
 import { createImageData } from 'canvas';
-import { writeText } from './CanvasUtils';
+import { exampleText, writeText } from './CanvasUtils';
 
 // const imgOutputFolder = `${__dirname}/output`;
 
@@ -274,8 +274,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       lineHeight,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns multiple words metadata', () => {
@@ -321,8 +322,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       lineHeight,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns multiple line metadata', () => {
@@ -380,8 +382,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       lineHeight,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata).toEqual(expect.arrayContaining(expectedWordsMetadata));
+    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns multiple paragraph metadata', () => {
@@ -435,8 +438,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       paragraphSpace,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns paragraph wrap metadata', () => {
@@ -455,8 +459,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       paragraphSpace,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata[3]).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns empty paragraph metadata', () => {
@@ -478,8 +483,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       paragraphSpace,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata[0]).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns two empty paragraph metadata', () => {
@@ -501,8 +507,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       paragraphSpace,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata[0]).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(1);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns empty paragraph between metadata', () => {
@@ -538,8 +545,9 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       paragraphSpace,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.linesMetadata.length).toEqual(2);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns two paragraph wrap metadata', () => {
@@ -558,7 +566,14 @@ describe('CanvasUtils', () => {
     const actualTextMetadata = writeText(actualContext, content, {
       paragraphSpace,
     });
-    expect(actualTextMetadata.linesMetadata.length).toEqual(3);
     expect(actualTextMetadata.wordsMetadata[3]).toEqual(expectedWordsMetadata);
+    expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
+  });
+
+  it('returns text metadata', () => {
+    const textMetadata = writeText(actualContext, exampleText.contentState);
+    expect(textMetadata.wordsMetadata.length).toEqual(exampleText.wordCount);
+    expect(textMetadata.linesMetadata.length).toEqual(38);
+    expect(textMetadata.pagesMetadata.length).toEqual(2);
   });
 });

@@ -23,57 +23,75 @@ describe('Reading test', () => {
     // console.log(textMetadata);
   });
 
-  it('next page on first page increases margin top', () => {
+  it('next page on first page increases page index', () => {
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      marginTop: 0,
+      pageIndex: 0,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).toEqual(379);
+    expect(newState.pageIndex).toEqual(1);
   });
 
-  it('previous page on second page decreases margin top', () => {
+  it('previous page on first page does not change page index', () => {
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      marginTop: 379,
+      pageIndex: 0,
     };
     const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).toEqual(0);
+    expect(newState.pageIndex).toEqual(0);
   });
 
-  it('next page on second page increases margin top', () => {
+  it('previous page on second page decreases page index', () => {
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      marginTop: 379,
+      pageIndex: 1,
+    };
+    const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    expect(newState.pageIndex).toEqual(0);
+  });
+
+  it('next page on second page increases page index', () => {
+    const currentState = {
+      canvasHeight: CANVAS_HEIGHT,
+      pageIndex: 1,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).toEqual(753);
+    expect(newState.pageIndex).toEqual(2);
   });
 
-  it('previous page on third page decreases margin top', () => {
+  it('previous page on third page decreases page index', () => {
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      marginTop: 753,
+      pageIndex: 2,
     };
     const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).toEqual(379);
+    expect(newState.pageIndex).toEqual(1);
   });
 
-  it('next page on third page increases margin top', () => {
+  it('next page on third page increases page index', () => {
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      marginTop: 753,
+      pageIndex: 2,
     };
     const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).toEqual(1127);
+    expect(newState.pageIndex).toEqual(3);
   });
 
-  it('previous page on fourth page decreases margin top', () => {
+  it('previous page on fourth page decreases page index', () => {
     const currentState = {
       canvasHeight: CANVAS_HEIGHT,
-      marginTop: 1127,
+      pageIndex: 3,
     };
     const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
-    expect(newState.marginTop).toEqual(753);
+    expect(newState.pageIndex).toEqual(2);
+  });
+
+  it('next page on the last page does not change page index', () => {
+    const currentState = {
+      canvasHeight: CANVAS_HEIGHT,
+      pageIndex: 5,
+    };
+    const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    expect(newState.pageIndex).toEqual(5);
   });
 });

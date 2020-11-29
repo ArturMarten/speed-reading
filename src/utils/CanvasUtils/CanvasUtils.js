@@ -103,30 +103,37 @@ const getLinesMetadata = (wordsMetadata) => {
   return linesMetadata;
 };
 
-const addPageMetadata = (pagesMetadata, rect) => {
+const addPageMetadata = (pagesMetadata, rect, lineIndices) => {
   pagesMetadata.push({
     pageWidth: rect.right - rect.left,
     pageHeight: rect.bottom - rect.top,
     rect,
+    lineIndices,
   });
 };
 
-const getPagesMetadata = (linesMetadata) => {
+const getPagesMetadata = (linesMetadata, canvasHeight) => {
   const pagesMetadata = [];
   if (linesMetadata.length === 0) return pagesMetadata;
   let rect = { ...linesMetadata[0].rect };
-  linesMetadata.forEach((lineMetadata) => {
-    if (rect.bottom <= lineMetadata.rect.bottom) {
+  let lineIndices = [];
+  let marginTop = 0;
+  linesMetadata.forEach((lineMetadata, lineIndex) => {
+    if (marginTop + canvasHeight > lineMetadata.rect.bottom) {
       // Same page
       rect.right = Math.max(rect.right, lineMetadata.rect.right);
       rect.bottom = lineMetadata.rect.bottom;
+      lineIndices.push(lineIndex);
     } else {
       // New page
-      addPageMetadata(pagesMetadata, rect);
+      addPageMetadata(pagesMetadata, rect, lineIndices);
+      marginTop = lineMetadata.rect.top;
       rect = { ...lineMetadata.rect };
+      lineIndices = [lineIndex];
     }
   });
-  addPageMetadata(pagesMetadata, rect);
+  addPageMetadata(pagesMetadata, rect, lineIndices);
+  console.log(pagesMetadata);
   return pagesMetadata;
 };
 
@@ -331,7 +338,7 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
     setCanvasHeight(canvasContext, textHeight);
   }
   const linesMetadata = getLinesMetadata(wordsMetadata);
-  const pagesMetadata = getPagesMetadata(linesMetadata);
+  const pagesMetadata = getPagesMetadata(linesMetadata, canvasHeight);
   return { wordsMetadata, linesMetadata, pagesMetadata };
 };
 
