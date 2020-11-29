@@ -21,28 +21,19 @@ export class HelpExerciseContainer extends Component {
   onExerciseEnd = () => {
     this.props.onExerciseEnd();
     this.setState({ finished: true });
-  }
+  };
 
   onExerciseRetryHandler = () => {
     this.props.onExerciseRetry();
-  }
+  };
 
   getCurrentView() {
     switch (this.state.status) {
       case 'preparation': {
-        return (
-          <HelpExercisePreparation
-            type={this.props.type}
-            onProceed={() => this.switchViewHandler('exercise')}
-          />
-        );
+        return <HelpExercisePreparation type={this.props.type} onProceed={() => this.switchViewHandler('exercise')} />;
       }
       case 'exercise': {
-        return (
-          <HelpExercise
-            type={this.props.type}
-          />
-        );
+        return <HelpExercise type={this.props.type} />;
       }
       default:
         return null;
@@ -51,7 +42,7 @@ export class HelpExerciseContainer extends Component {
 
   switchViewHandler = (status) => {
     this.setState({ status });
-  }
+  };
 
   render() {
     let finishRedirect = null;
@@ -61,25 +52,26 @@ export class HelpExerciseContainer extends Component {
     return (
       <Fragment>
         {finishRedirect}
-        {this.state.status === 'exercise' && this.props.exerciseStatus === 'finished' ?
+        {this.state.status === 'exercise' && this.props.exerciseStatus === 'finished' ? (
           <HelpExerciseResults
             open={this.state.status === 'exercise' && this.props.exerciseStatus === 'finished'}
             onRetry={this.onExerciseRetryHandler}
             onEnd={this.onExerciseEnd}
-          /> : null}
+          />
+        ) : null}
         {this.getCurrentView()}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   testStatus: state.exerciseTest.status,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onExerciseSelect: (type) => {
     dispatch(actionCreators.selectExercise(type));
   },

@@ -11,9 +11,7 @@ export const store = configureStore(history, {});
 export default function Provider({ story }) {
   return (
     <ReduxProvider store={store}>
-      <ConnectedRouter history={history}>
-        {story}
-      </ConnectedRouter>
+      <ConnectedRouter history={history}>{story}</ConnectedRouter>
     </ReduxProvider>
   );
 }

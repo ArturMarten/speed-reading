@@ -179,7 +179,9 @@ test('gets object value', () => {
 });
 
 test('merges deep objects', () => {
-  const merged = mergeDeep(previousAchievements, { progress: { exercise: { count: 2 } } });
+  const merged = mergeDeep(previousAchievements, {
+    progress: { exercise: { count: 2 } },
+  });
   expect(merged).toStrictEqual({
     ...previousAchievements,
     progress: {

@@ -1,4 +1,4 @@
-const errorHandler = store => next => (action) => {
+const errorHandler = (store) => (next) => (action) => {
   try {
     return next(action);
   } catch (error) {

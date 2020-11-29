@@ -8,7 +8,11 @@ it('draws pie chart svg', () => {
       title="Pie Chart title"
       width={700}
       height={250}
-      data={[{ id: 0, x: 'test1', y: 1 }, { id: 1, x: 'test2', y: 2 }, { id: 2, x: 'test3', y: 3 }]}
+      data={[
+        { id: 0, x: 'test1', y: 1 },
+        { id: 1, x: 'test2', y: 2 },
+        { id: 2, x: 'test3', y: 3 },
+      ]}
     />,
   );
   const svg = container.querySelector('svg');

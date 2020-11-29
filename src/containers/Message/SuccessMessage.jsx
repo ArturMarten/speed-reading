@@ -21,35 +21,27 @@ class SuccessMessage extends Component {
 
   onVisibleToggle = (toggle) => {
     this.setState({ visible: toggle });
-  }
+  };
 
   dismissHandler = () => {
     this.onVisibleToggle(false);
-  }
+  };
 
   render() {
-    const {
-      translate,
-      icon,
-      message,
-      timeout,
-      dispatch,
-      ...rest
-    } = this.props;
-    return (
-      this.state.visible && this.props.message !== null ?
-        <Message
-          success
-          icon={icon ? <Icon name={icon} style={{ fontSize: '1.2em' }} /> : null}
-          onDismiss={this.dismissHandler}
-          header={translateSuccess(translate, message)}
-          {...rest}
-        /> : null
-    );
+    const { translate, icon, message, timeout, dispatch, ...rest } = this.props;
+    return this.state.visible && this.props.message !== null ? (
+      <Message
+        success
+        icon={icon ? <Icon name={icon} style={{ fontSize: '1.2em' }} /> : null}
+        onDismiss={this.dismissHandler}
+        header={translateSuccess(translate, message)}
+        {...rest}
+      />
+    ) : null;
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   translate: getTranslate(state.locale),
 });
 

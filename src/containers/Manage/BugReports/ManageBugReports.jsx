@@ -27,24 +27,24 @@ export class ManageBugReports extends Component {
   onRefresh = () => {
     this.props.onFetchUsers();
     this.props.onFetchBugReports();
-  }
+  };
 
   getUserEmailById = (userId) => {
-    const foundUser = this.props.users.filter(user => user.publicId === userId);
+    const foundUser = this.props.users.filter((user) => user.publicId === userId);
     if (foundUser.length > 0) {
       return foundUser[0].email;
     }
     return '';
-  }
+  };
 
-  openScreenshotToggle = screenshotSrc => () => {
+  openScreenshotToggle = (screenshotSrc) => () => {
     this.setState({
       screenshotSrc,
       screenshotOpen: !this.state.screenshotOpen,
     });
-  }
+  };
 
-  sortHandler = selectedColumn => () => {
+  sortHandler = (selectedColumn) => () => {
     const { column, direction } = this.state;
     if (column !== selectedColumn) {
       this.setState({
@@ -60,9 +60,9 @@ export class ManageBugReports extends Component {
 
   resolvedChangeHandler = (bugReportId, resolved) => {
     this.props.onResolveBugReport(bugReportId, resolved);
-  }
+  };
 
-  logBugReportInfo = bugReport => () => {
+  logBugReportInfo = (bugReport) => () => {
     console.log({
       platform: bugReport.platform,
       userAgent: bugReport.userAgent,
@@ -71,7 +71,7 @@ export class ManageBugReports extends Component {
       state: bugReport.state,
       windowDimensions: bugReport.windowDimensions,
     });
-  }
+  };
 
   render() {
     const { column, direction } = this.state;
@@ -106,36 +106,50 @@ export class ManageBugReports extends Component {
           <Icon name="refresh" />
           {this.props.translate('manage-bug-reports.refresh')}
         </Button>
-        {this.props.bugReportsStatus.loading ?
+        {this.props.bugReportsStatus.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>
             <Loader active indeterminate content={this.props.translate('manage-bug-reports.fetching-bug-reports')} />
-          </Segment> :
+          </Segment>
+        ) : (
           <Fragment>
             <Table basic celled selectable compact="very" sortable>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell collapsing sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={column === 'date' ? direction : null}
+                    onClick={this.sortHandler('date')}
+                  >
                     {this.props.translate('manage-bug-reports.date')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing sorted={column === 'userId' ? direction : null} onClick={this.sortHandler('userId')}>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={column === 'userId' ? direction : null}
+                    onClick={this.sortHandler('userId')}
+                  >
                     {this.props.translate('manage-bug-reports.user')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing sorted={column === 'resolved' ? direction : null} onClick={this.sortHandler('resolved')}>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={column === 'resolved' ? direction : null}
+                    onClick={this.sortHandler('resolved')}
+                  >
                     {this.props.translate('manage-bug-reports.resolved')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell sorted={column === 'description' ? direction : null} onClick={this.sortHandler('description')}>
+                  <Table.HeaderCell
+                    sorted={column === 'description' ? direction : null}
+                    onClick={this.sortHandler('description')}
+                  >
                     {this.props.translate('manage-bug-reports.description')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing>
-                    {this.props.translate('manage-bug-reports.actions')}
-                  </Table.HeaderCell>
+                  <Table.HeaderCell collapsing>{this.props.translate('manage-bug-reports.actions')}</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedBugReports.map(bugReport => (
+                {sortedBugReports.map((bugReport) => (
                   <Table.Row key={bugReport.id}>
                     <Table.Cell>
-                      {new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+                      {new Intl.DateTimeFormat(this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB', {
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',
@@ -144,9 +158,7 @@ export class ManageBugReports extends Component {
                         minute: 'numeric',
                       }).format(bugReport.date)}
                     </Table.Cell>
-                    <Table.Cell>
-                      {this.getUserEmailById(bugReport.userId)}
-                    </Table.Cell>
+                    <Table.Cell>{this.getUserEmailById(bugReport.userId)}</Table.Cell>
                     <Table.Cell positive={bugReport.resolved} negative={!bugReport.resolved}>
                       <Dropdown
                         selection
@@ -157,9 +169,7 @@ export class ManageBugReports extends Component {
                         options={resolvedOptions}
                       />
                     </Table.Cell>
-                    <Table.Cell>
-                      {bugReport.description}
-                    </Table.Cell>
+                    <Table.Cell>{bugReport.description}</Table.Cell>
                     <Table.Cell>
                       <Button.Group compact vertical>
                         <Button
@@ -167,25 +177,29 @@ export class ManageBugReports extends Component {
                           content={this.props.translate('manage-bug-reports.log-info')}
                           onClick={this.logBugReportInfo(bugReport)}
                         />
-                        {bugReport.screenshotFilename ?
+                        {bugReport.screenshotFilename ? (
                           <Button
                             primary
                             content={this.props.translate('manage-bug-reports.screenshot')}
-                            onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}submittedScreenshots/${bugReport.screenshotFilename}`)}
-                          /> : null}
+                            onClick={this.openScreenshotToggle(
+                              `${axios.defaults.baseURL}submittedScreenshots/${bugReport.screenshotFilename}`,
+                            )}
+                          />
+                        ) : null}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
             </Table>
-          </Fragment>}
+          </Fragment>
+        )}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   usersStatus: state.user.usersStatus,
   users: state.user.users,
   bugReportsStatus: state.bugReport.bugReportsStatus,
@@ -194,7 +208,7 @@ const mapStateToProps = state => ({
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onFetchUsers: () => {
     dispatch(actionCreators.fetchUsers());
   },

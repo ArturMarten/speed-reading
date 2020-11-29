@@ -91,8 +91,7 @@ describe('CanvasUtils', () => {
     diffContext.clearRect(0, 0, canvasWidth, canvasHeight);
   });
 
-  // eslint-disable-next-line prefer-arrow-callback
-  afterEach(function() {
+  afterEach(function () {
     // Reset any applied styling
     expectedContext.font = `${fontSize}px ${font}`;
     expectedContext.textBaseline = textBaseline;
@@ -272,7 +271,9 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight });
+    const actualTextMetadata = writeText(actualContext, content, {
+      lineHeight,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
   });
@@ -317,7 +318,9 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight });
+    const actualTextMetadata = writeText(actualContext, content, {
+      lineHeight,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
   });
@@ -374,7 +377,9 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, { lineHeight });
+    const actualTextMetadata = writeText(actualContext, content, {
+      lineHeight,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata).toEqual(expect.arrayContaining(expectedWordsMetadata));
   });
@@ -427,7 +432,9 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, {
+      paragraphSpace,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
   });
@@ -445,7 +452,9 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, {
+      paragraphSpace,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata[3]).toEqual(expectedWordsMetadata);
   });
@@ -466,7 +475,9 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, {
+      paragraphSpace,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata[0]).toEqual(expectedWordsMetadata);
   });
@@ -487,7 +498,9 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, {
+      paragraphSpace,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.wordsMetadata[0]).toEqual(expectedWordsMetadata);
   });
@@ -522,7 +535,9 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, {
+      paragraphSpace,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
   });
@@ -540,10 +555,10 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, { paragraphSpace });
+    const actualTextMetadata = writeText(actualContext, content, {
+      paragraphSpace,
+    });
     expect(actualTextMetadata.linesMetadata.length).toEqual(3);
     expect(actualTextMetadata.wordsMetadata[3]).toEqual(expectedWordsMetadata);
   });
 });
-
-export default null;

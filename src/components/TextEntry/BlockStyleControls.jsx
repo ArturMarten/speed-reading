@@ -10,10 +10,7 @@ const BLOCK_STYLES = [
 const BlockStyleControls = (props) => {
   const { editorState } = props;
   const selection = editorState.getSelection();
-  const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
+  const blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
   return (
     <Button.Group basic compact style={{ margin: '0 2px 0 2px' }}>
       {BLOCK_STYLES.map((type, index) => (
@@ -24,10 +21,9 @@ const BlockStyleControls = (props) => {
           active={type.style === blockType}
           onClick={() => props.onToggle(type.style)}
         >
-          <b>
-            {`H${index + 1}`}
-          </b>
-        </Button>))}
+          <b>{`H${index + 1}`}</b>
+        </Button>
+      ))}
     </Button.Group>
   );
 };

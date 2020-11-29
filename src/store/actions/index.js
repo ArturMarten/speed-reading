@@ -1,15 +1,6 @@
-export {
-  dismissExerciseSettingsInfo,
-  dismissSpeedChangeInfo,
-} from './info';
+export { dismissExerciseSettingsInfo, dismissSpeedChangeInfo } from './info';
 
-export {
-  startTimer,
-  pauseTimer,
-  resumeTimer,
-  resetTimer,
-  stopTimer,
-} from './timing';
+export { startTimer, pauseTimer, resumeTimer, resetTimer, stopTimer } from './timing';
 
 export {
   textOptionUpdated,
@@ -48,13 +39,7 @@ export {
   reevaluateTestAttempt,
 } from './exerciseTest';
 
-export {
-  register,
-  login,
-  logout,
-  authCheckState,
-  changePassword,
-} from './auth';
+export { register, login, logout, authCheckState, changePassword } from './auth';
 
 export {
   fetchTextCollections,
@@ -66,43 +51,16 @@ export {
   analyzeText,
 } from './text';
 
-export {
-  fetchGroups,
-  addGroup,
-  changeGroup,
-} from './group';
+export { fetchGroups, addGroup, changeGroup } from './group';
 
-export {
-  fetchUsers,
-  addUser,
-  changeUser,
-} from './user';
+export { fetchUsers, addUser, changeUser } from './user';
 
-export {
-  fetchUserProfile,
-  saveUserProfile,
-  updateAchievements,
-} from './profile';
+export { fetchUserProfile, saveUserProfile, updateAchievements } from './profile';
 
-export {
-  fetchExerciseStatistics,
-  fetchUserExerciseStatistics,
-  fetchGroupExerciseStatistics,
-} from './statistics';
+export { fetchExerciseStatistics, fetchUserExerciseStatistics, fetchGroupExerciseStatistics } from './statistics';
 
-export {
-  sendFeedback,
-  fetchFeedback,
-} from './feedback';
+export { sendFeedback, fetchFeedback } from './feedback';
 
-export {
-  sendProblemReport,
-  fetchProblemReports,
-  resolveProblemReport,
-} from './problemReport';
+export { sendProblemReport, fetchProblemReports, resolveProblemReport } from './problemReport';
 
-export {
-  sendBugReport,
-  fetchBugReports,
-  resolveBugReport,
-} from './bugReport';
+export { sendBugReport, fetchBugReports, resolveBugReport } from './bugReport';

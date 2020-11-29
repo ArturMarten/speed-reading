@@ -406,7 +406,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TextSelection);
+export default connect(mapStateToProps, mapDispatchToProps)(TextSelection);

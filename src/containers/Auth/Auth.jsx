@@ -70,11 +70,11 @@ export class Auth extends Component {
 
   onLogin = () => {
     this.props.onLogin(this.state.loginForm.email.value, this.state.loginForm.password.value);
-  }
+  };
 
   onDemoLogin = () => {
     this.props.onLogin(credentials.demo.username, '');
-  }
+  };
 
   onRegister = () => {
     const registerData = {
@@ -82,14 +82,14 @@ export class Auth extends Component {
       groupId: this.state.registerForm.groupId.value !== '' ? +this.state.registerForm.groupId.value : null,
     };
     this.props.onRegister(registerData);
-  }
+  };
 
   onCreateToggle = () => {
     if (!this.state.isSignup && this.props.groups.length === 0) {
       this.props.onFetchGroups();
     }
     this.setState({ isSignup: !this.state.isSignup });
-  }
+  };
 
   registerInputChangeHandler = (event, { name, value }) => {
     const updatedFormElement = updateObject(this.state.registerForm[name], {
@@ -102,12 +102,11 @@ export class Auth extends Component {
     });
 
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedRegisterForm) {
       formIsValid = updatedRegisterForm[inputName].valid && formIsValid;
     }
     this.setState({ registerForm: updatedRegisterForm, registerFormValid: formIsValid });
-  }
+  };
 
   loginInputChangeHandler = (event, { name, value }) => {
     const updatedFormElement = updateObject(this.state.loginForm[name], {
@@ -120,43 +119,64 @@ export class Auth extends Component {
     });
 
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedLoginForm) {
       formIsValid = updatedLoginForm[inputName].valid && formIsValid;
     }
     this.setState({ loginForm: updatedLoginForm, loginFormValid: formIsValid });
-  }
+  };
 
   keyPressHandler = (event) => {
-    if (!this.state.isSignup && event.key === 'Enter' && this.state.loginFormValid && !this.props.authenticationStatus.loading) {
+    if (
+      !this.state.isSignup &&
+      event.key === 'Enter' &&
+      this.state.loginFormValid &&
+      !this.props.authenticationStatus.loading
+    ) {
       this.onLogin();
-    } else if (this.state.isSignup && event.key === 'Enter' && this.state.registerFormValid && !this.props.registrationStatus.loading) {
+    } else if (
+      this.state.isSignup &&
+      event.key === 'Enter' &&
+      this.state.registerFormValid &&
+      !this.props.registrationStatus.loading
+    ) {
       this.onRegister();
     }
-  }
+  };
 
   render() {
     const matchingEmails = this.state.registerForm.email.value === this.state.registerForm.emailConfirm.value;
-    const groupOptions = [{
-      key: 0,
-      text: this.props.translate('auth.group-not-set'),
-      value: '',
-    }].concat(this.props.groups.map((group, index) => ({
-      key: index + 1,
-      text: group.name,
-      value: group.id.toString(),
-    })));
+    const groupOptions = [
+      {
+        key: 0,
+        text: this.props.translate('auth.group-not-set'),
+        value: '',
+      },
+    ].concat(
+      this.props.groups.map((group, index) => ({
+        key: index + 1,
+        text: group.name,
+        value: group.id.toString(),
+      })),
+    );
     return (
-      <Modal size="mini" open={this.props.open || !this.props.isAuthenticated} onClose={this.props.onClose} closeIcon={this.props.closeIcon}>
+      <Modal
+        size="mini"
+        open={this.props.open || !this.props.isAuthenticated}
+        onClose={this.props.onClose}
+        closeIcon={this.props.closeIcon}
+      >
         <Modal.Header>
-          {this.state.isSignup ? this.props.translate('auth.register-modal-header') : this.props.translate('auth.login-modal-header')}
-          <LanguageSelection
-            style={{ float: 'right' }}
-          />
+          {this.state.isSignup
+            ? this.props.translate('auth.register-modal-header')
+            : this.props.translate('auth.login-modal-header')}
+          <LanguageSelection style={{ float: 'right' }} />
         </Modal.Header>
         <Modal.Content>
-          {this.state.isSignup ?
-            <Form error={this.props.registrationStatus.error !== null} success={this.props.registrationStatus.message !== null}>
+          {this.state.isSignup ? (
+            <Form
+              error={this.props.registrationStatus.error !== null}
+              success={this.props.registrationStatus.message !== null}
+            >
               <Form.Input
                 autoFocus
                 icon="user"
@@ -176,9 +196,9 @@ export class Auth extends Component {
                 name="emailConfirm"
                 value={this.state.registerForm.emailConfirm.value}
                 error={
-                  (!matchingEmails ||
-                   !this.state.registerForm.emailConfirm.valid) &&
-                   this.state.registerForm.emailConfirm.touched}
+                  (!matchingEmails || !this.state.registerForm.emailConfirm.valid) &&
+                  this.state.registerForm.emailConfirm.touched
+                }
                 onChange={this.registerInputChangeHandler}
                 onKeyPress={this.keyPressHandler}
                 placeholder={this.props.translate('auth.confirm-email')}
@@ -194,14 +214,10 @@ export class Auth extends Component {
                 loading={this.props.groupsStatus.loading}
                 placeholder={this.props.translate('auth.group')}
               />
-              <SuccessMessage
-                icon="check"
-                message={this.props.registrationStatus.message}
-              />
-              <ErrorMessage
-                error={this.props.registrationStatus.error}
-              />
-            </Form> :
+              <SuccessMessage icon="check" message={this.props.registrationStatus.message} />
+              <ErrorMessage error={this.props.registrationStatus.error} />
+            </Form>
+          ) : (
             <Form error={this.props.authenticationStatus.error !== null || this.props.logoutStatus.error !== null}>
               <Form.Input
                 aria-label={this.props.translate('auth.username')}
@@ -233,12 +249,17 @@ export class Auth extends Component {
                 required
               />
               <ErrorMessage
-                error={this.props.authenticationStatus.error ? this.props.authenticationStatus.error : this.props.logoutStatus.error}
+                error={
+                  this.props.authenticationStatus.error
+                    ? this.props.authenticationStatus.error
+                    : this.props.logoutStatus.error
+                }
               />
-            </Form>}
+            </Form>
+          )}
         </Modal.Content>
         <Modal.Actions>
-          {this.state.isSignup ?
+          {this.state.isSignup ? (
             <Button.Group fluid>
               <Button
                 fluid
@@ -250,7 +271,8 @@ export class Auth extends Component {
               >
                 {this.props.translate('auth.register-user')}
               </Button>
-            </Button.Group> :
+            </Button.Group>
+          ) : (
             <Button.Group fluid>
               <Popup
                 content={this.props.translate('auth.first-time')}
@@ -277,29 +299,24 @@ export class Auth extends Component {
               >
                 {this.props.translate('auth.login-button')}
               </Button>
-            </Button.Group>}
+            </Button.Group>
+          )}
         </Modal.Actions>
         <Modal.Actions>
-          {this.state.isSignup ?
-            <Button
-              positive
-              type="button"
-              onClick={this.onCreateToggle}
-            >
+          {this.state.isSignup ? (
+            <Button positive type="button" onClick={this.onCreateToggle}>
               <Icon name="left chevron" />
               {this.props.translate('auth.back-to-auth')}
-            </Button> :
+            </Button>
+          ) : (
             <Fragment>
               {this.props.translate('auth.no-user-question')}
-              <Button
-                positive
-                type="button"
-                onClick={this.onCreateToggle}
-              >
+              <Button positive type="button" onClick={this.onCreateToggle}>
                 {this.props.translate('auth.create-button')}
                 <Icon name="right chevron" />
               </Button>
-            </Fragment>}
+            </Fragment>
+          )}
         </Modal.Actions>
       </Modal>
     );
@@ -330,7 +347,7 @@ Auth.propTypes = {
   onRegister: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.token !== null,
   authenticationStatus: state.auth.authenticationStatus,
   groupsStatus: state.group.groupsStatus,
@@ -340,7 +357,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onLogin: (email, password) => {
     dispatch(actionCreators.login(email, password));
   },

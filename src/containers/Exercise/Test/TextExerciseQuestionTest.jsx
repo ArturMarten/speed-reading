@@ -180,7 +180,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TextExerciseQuestionTest);
+export default connect(mapStateToProps, mapDispatchToProps)(TextExerciseQuestionTest);

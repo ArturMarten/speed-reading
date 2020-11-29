@@ -93,30 +93,22 @@ export class Manage extends Component {
     ];
     return (
       <Container style={{ marginTop: '3vh' }}>
-        <Header as="h2">
-          {this.props.translate('manage.title')}
-        </Header>
-        {this.state.isDeveloper ?
-          <Tab
-            defaultActiveIndex={1}
-            panes={developerPanes}
-          /> :
-          <Tab
-            defaultActiveIndex={1}
-            panes={teacherPanes}
-          />}
+        <Header as="h2">{this.props.translate('manage.title')}</Header>
+        {this.state.isDeveloper ? (
+          <Tab defaultActiveIndex={1} panes={developerPanes} />
+        ) : (
+          <Tab defaultActiveIndex={1} panes={teacherPanes} />
+        )}
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   role: state.profile.role,
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Manage);

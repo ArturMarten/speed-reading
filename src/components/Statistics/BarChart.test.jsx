@@ -11,7 +11,11 @@ it('draws bar chart svg with rects', () => {
       fill="blue"
       width={700}
       height={250}
-      data={[{ id: 0, x: 1, y: 1 }, { id: 1, x: 2, y: 3 }, { id: 2, x: 3, y: 2 }]}
+      data={[
+        { id: 0, x: 1, y: 1 },
+        { id: 1, x: 2, y: 3 },
+        { id: 2, x: 3, y: 2 },
+      ]}
     />,
   );
   const svg = container.querySelector('svg');

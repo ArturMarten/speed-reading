@@ -13,115 +13,125 @@ const saveTextSucceeded = (text, message) => ({
   },
 });
 
-const saveTextFailed = error => ({
+const saveTextFailed = (error) => ({
   type: actionTypes.SAVE_TEXT_FAILED,
   payload: error,
 });
 
 export const saveText = (text, textId) => (dispatch) => {
   dispatch(saveTextStart());
-  api.saveText({ text, textId })
-    .then((message) => {
+  api.saveText({ text, textId }).then(
+    (message) => {
       dispatch(saveTextSucceeded(text, message));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(saveTextFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const fetchTextCollectionsStart = () => ({
   type: actionTypes.FETCH_TEXT_COLLECTIONS_START,
 });
 
-const fetchTextCollectionsSucceeded = collections => ({
+const fetchTextCollectionsSucceeded = (collections) => ({
   type: actionTypes.FETCH_TEXT_COLLECTIONS_SUCCEEDED,
   payload: collections,
 });
 
-const fetchTextCollectionsFailed = error => ({
+const fetchTextCollectionsFailed = (error) => ({
   type: actionTypes.FETCH_TEXT_COLLECTIONS_FAILED,
   payload: error,
 });
 
 export const fetchTextCollections = () => (dispatch) => {
   dispatch(fetchTextCollectionsStart());
-  api.fetchTextCollections()
-    .then((textCollections) => {
+  api.fetchTextCollections().then(
+    (textCollections) => {
       dispatch(fetchTextCollectionsSucceeded(textCollections));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(fetchTextCollectionsFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const fetchTextsStart = () => ({
   type: actionTypes.FETCH_TEXTS_START,
 });
 
-const fetchTextsSucceeded = texts => ({
+const fetchTextsSucceeded = (texts) => ({
   type: actionTypes.FETCH_TEXTS_SUCCEEDED,
   payload: texts,
 });
 
-const fetchTextsFailed = error => ({
+const fetchTextsFailed = (error) => ({
   type: actionTypes.FETCH_TEXTS_FAILED,
   payload: error,
 });
 
 export const fetchTexts = () => (dispatch) => {
   dispatch(fetchTextsStart());
-  api.fetchTexts()
-    .then((texts) => {
+  api.fetchTexts().then(
+    (texts) => {
       dispatch(fetchTextsSucceeded(texts));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(fetchTextsFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const fetchReadingTextStart = () => ({
   type: actionTypes.FETCH_READING_TEXT_START,
 });
 
-const fetchReadingTextSucceeded = text => ({
+const fetchReadingTextSucceeded = (text) => ({
   type: actionTypes.FETCH_READING_TEXT_SUCCEEDED,
   payload: text,
 });
 
-const fetchReadingTextFailed = error => ({
+const fetchReadingTextFailed = (error) => ({
   type: actionTypes.FETCH_READING_TEXT_FAILED,
   payload: error,
 });
 
-export const selectText = textId => (dispatch) => {
+export const selectText = (textId) => (dispatch) => {
   dispatch(fetchReadingTextStart());
-  api.selectText(textId)
-    .then((text) => {
+  api.selectText(textId).then(
+    (text) => {
       dispatch(fetchReadingTextSucceeded(text));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(fetchReadingTextFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const selectOwnTextStart = () => ({
   type: actionTypes.SELECT_OWN_TEXT_START,
 });
 
-const selectOwnTextSucceeded = text => ({
+const selectOwnTextSucceeded = (text) => ({
   type: actionTypes.SELECT_OWN_TEXT_SUCCEEDED,
   payload: text,
 });
 
-const selectOwnTextFailed = error => ({
+const selectOwnTextFailed = (error) => ({
   type: actionTypes.SELECT_OWN_TEXT_FAILED,
   payload: error,
 });
 
-export const selectOwnText = textData => (dispatch) => {
+export const selectOwnText = (textData) => (dispatch) => {
   dispatch(selectOwnTextStart());
-  api.analyzeText({ text: textData.plainText, language: textData.language })
-    .then((analysis) => {
+  api.analyzeText({ text: textData.plainText, language: textData.language }).then(
+    (analysis) => {
       dispatch(selectOwnTextSucceeded({ ...textData, ...analysis }));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(selectOwnTextFailed(errorMessage));
-    });
+    },
+  );
 };
 
 export const unselectText = () => ({
@@ -132,22 +142,24 @@ const analyzeTextStart = () => ({
   type: actionTypes.ANALYZE_TEXT_START,
 });
 
-const analyzeTextSucceeded = analysis => ({
+const analyzeTextSucceeded = (analysis) => ({
   type: actionTypes.ANALYZE_TEXT_SUCCEEDED,
   payload: analysis,
 });
 
-const analyzeTextFailed = error => ({
+const analyzeTextFailed = (error) => ({
   type: actionTypes.ANALYZE_TEXT_FAILED,
   payload: error,
 });
 
-export const analyzeText = textData => (dispatch) => {
+export const analyzeText = (textData) => (dispatch) => {
   dispatch(analyzeTextStart());
-  api.analyzeText(textData)
-    .then((analysis) => {
+  api.analyzeText(textData).then(
+    (analysis) => {
       dispatch(analyzeTextSucceeded(analysis));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(analyzeTextFailed(errorMessage));
-    });
+    },
+  );
 };

@@ -25,10 +25,12 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_USERS_SUCCEEDED: {
-      const users = action.payload.map(user => updateObject(user, {
-        registrationDate: user.registrationDate ? new Date(user.registrationDate) : null,
-        lastLogin: user.lastLogin ? new Date(user.lastLogin) : null,
-      }));
+      const users = action.payload.map((user) =>
+        updateObject(user, {
+          registrationDate: user.registrationDate ? new Date(user.registrationDate) : null,
+          lastLogin: user.lastLogin ? new Date(user.lastLogin) : null,
+        }),
+      );
       return updateObject(state, {
         usersStatus: {
           loading: false,
@@ -83,9 +85,9 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.CHANGE_USER_SUCCEEDED: {
-      const updatedUsers = state.users
-        .map(user => (user.publicId === action.payload.publicId ?
-          updateObject(user, action.payload.userData) : user));
+      const updatedUsers = state.users.map((user) =>
+        user.publicId === action.payload.publicId ? updateObject(user, action.payload.userData) : user,
+      );
       return updateObject(state, {
         userStatus: {
           loading: false,

@@ -31,15 +31,17 @@ export class TextSelectionFilter extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if ((prevProps.texts !== this.props.texts && this.props.texts !== []) ||
-        (prevProps.collections !== this.props.collections && this.props.collections !== [])) {
+    if (
+      (prevProps.texts !== this.props.texts && this.props.texts !== []) ||
+      (prevProps.collections !== this.props.collections && this.props.collections !== [])
+    ) {
       this.processFilterData(this.props.texts);
     }
   }
 
   onChangeHandler = (event, { name, value }) => {
     this.props.onFilterChange(name, value);
-  }
+  };
 
   processFilterData = (texts) => {
     // Adding collection options
@@ -90,14 +92,12 @@ export class TextSelectionFilter extends Component {
       authorOptions,
       questionsAuthorOptions,
     });
-  }
+  };
 
   render() {
     return (
       <Modal size="tiny" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('text-selection-filter.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('text-selection-filter.modal-header')}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Field
@@ -200,23 +200,13 @@ export class TextSelectionFilter extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Label
-            basic
-            color="blue"
-          >
+          <Label basic color="blue">
             {`${this.props.translate('text-selection-filter.text-count')}: ${this.props.textCount}`}
           </Label>
-          <Button
-            negative
-            type="button"
-            onClick={this.props.onFilterClear}
-          >
+          <Button negative type="button" onClick={this.props.onFilterClear}>
             {this.props.translate('text-selection-filter.clear-filter')}
           </Button>
-          <Button
-            positive
-            onClick={this.props.onClose}
-          >
+          <Button positive onClick={this.props.onClose}>
             {this.props.translate('text-selection-filter.close')}
           </Button>
         </Modal.Actions>
@@ -225,14 +215,12 @@ export class TextSelectionFilter extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   texts: state.text.texts,
   collections: state.text.collections,
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSelectionFilter);

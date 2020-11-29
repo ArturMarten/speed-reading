@@ -156,7 +156,6 @@ const mapStateToProps = (state) => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

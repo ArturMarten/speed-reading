@@ -17,21 +17,24 @@ import feedbackReducer from './feedback';
 import problemReportReducer from './problemReport';
 import bugReportReducer from './bugReport';
 
-export default history => combineReducers({
-  router: connectRouter(history),
-  info: infoReducer,
-  auth: authReducer,
-  text: textReducer,
-  timing: timingReducer,
-  options: optionsReducer,
-  exercise: exerciseReducer,
-  exerciseTest: exerciseTestReducer,
-  group: groupReducer,
-  user: userReducer,
-  profile: profileReducer,
-  statistics: statisticsReducer,
-  feedback: feedbackReducer,
-  problemReport: problemReportReducer,
-  bugReport: bugReportReducer,
-  locale: localeReducer,
-});
+const createRootReducer = (history) =>
+  combineReducers({
+    router: connectRouter(history),
+    info: infoReducer,
+    auth: authReducer,
+    text: textReducer,
+    timing: timingReducer,
+    options: optionsReducer,
+    exercise: exerciseReducer,
+    exerciseTest: exerciseTestReducer,
+    group: groupReducer,
+    user: userReducer,
+    profile: profileReducer,
+    statistics: statisticsReducer,
+    feedback: feedbackReducer,
+    problemReport: problemReportReducer,
+    bugReport: bugReportReducer,
+    locale: localeReducer,
+  });
+
+export default createRootReducer;

@@ -27,24 +27,24 @@ export class ManageProblemReports extends Component {
   onRefresh = () => {
     this.props.onFetchUsers();
     this.props.onFetchProblemReports();
-  }
+  };
 
   getUserEmailById = (userId) => {
-    const foundUser = this.props.users.filter(user => user.publicId === userId);
+    const foundUser = this.props.users.filter((user) => user.publicId === userId);
     if (foundUser.length > 0) {
       return foundUser[0].email;
     }
     return '';
-  }
+  };
 
-  openScreenshotToggle = screenshotSrc => () => {
+  openScreenshotToggle = (screenshotSrc) => () => {
     this.setState({
       screenshotSrc,
       screenshotOpen: !this.state.screenshotOpen,
     });
-  }
+  };
 
-  sortHandler = selectedColumn => () => {
+  sortHandler = (selectedColumn) => () => {
     const { column, direction } = this.state;
     if (column !== selectedColumn) {
       this.setState({
@@ -60,7 +60,7 @@ export class ManageProblemReports extends Component {
 
   resolvedChangeHandler = (problemReportId, resolved) => {
     this.props.onResolveProblemReport(problemReportId, resolved);
-  }
+  };
 
   render() {
     const { column, direction } = this.state;
@@ -95,24 +95,44 @@ export class ManageProblemReports extends Component {
           <Icon name="refresh" />
           {this.props.translate('manage-problem-reports.refresh')}
         </Button>
-        {this.props.problemReportsStatus.loading ?
+        {this.props.problemReportsStatus.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>
-            <Loader active indeterminate content={this.props.translate('manage-problem-reports.fetching-problem-reports')} />
-          </Segment> :
+            <Loader
+              active
+              indeterminate
+              content={this.props.translate('manage-problem-reports.fetching-problem-reports')}
+            />
+          </Segment>
+        ) : (
           <Fragment>
             <Table basic celled selectable compact="very" sortable>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell collapsing sorted={column === 'date' ? direction : null} onClick={this.sortHandler('date')}>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={column === 'date' ? direction : null}
+                    onClick={this.sortHandler('date')}
+                  >
                     {this.props.translate('manage-problem-reports.date')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing sorted={column === 'userId' ? direction : null} onClick={this.sortHandler('userId')}>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={column === 'userId' ? direction : null}
+                    onClick={this.sortHandler('userId')}
+                  >
                     {this.props.translate('manage-problem-reports.user')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell collapsing sorted={column === 'resolved' ? direction : null} onClick={this.sortHandler('resolved')}>
+                  <Table.HeaderCell
+                    collapsing
+                    sorted={column === 'resolved' ? direction : null}
+                    onClick={this.sortHandler('resolved')}
+                  >
                     {this.props.translate('manage-problem-reports.resolved')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell sorted={column === 'description' ? direction : null} onClick={this.sortHandler('description')}>
+                  <Table.HeaderCell
+                    sorted={column === 'description' ? direction : null}
+                    onClick={this.sortHandler('description')}
+                  >
                     {this.props.translate('manage-problem-reports.description')}
                   </Table.HeaderCell>
                   <Table.HeaderCell collapsing>
@@ -121,10 +141,10 @@ export class ManageProblemReports extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedProblemReports.map(problemReport => (
+                {sortedProblemReports.map((problemReport) => (
                   <Table.Row key={problemReport.id}>
                     <Table.Cell>
-                      {new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+                      {new Intl.DateTimeFormat(this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB', {
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',
@@ -133,9 +153,7 @@ export class ManageProblemReports extends Component {
                         minute: 'numeric',
                       }).format(problemReport.date)}
                     </Table.Cell>
-                    <Table.Cell>
-                      {this.getUserEmailById(problemReport.userId)}
-                    </Table.Cell>
+                    <Table.Cell>{this.getUserEmailById(problemReport.userId)}</Table.Cell>
                     <Table.Cell positive={problemReport.resolved} negative={!problemReport.resolved}>
                       <Dropdown
                         selection
@@ -147,34 +165,39 @@ export class ManageProblemReports extends Component {
                       />
                     </Table.Cell>
                     <Table.Cell>
-                      {problemReport.textTitle !== null ?
+                      {problemReport.textTitle !== null ? (
                         <div>
                           <b>Teksti pealkiri: </b>
                           {problemReport.textTitle}
-                        </div> : null}
+                        </div>
+                      ) : null}
                       {problemReport.description}
                     </Table.Cell>
                     <Table.Cell>
                       <Button.Group compact vertical>
-                        {problemReport.screenshotFilename ?
+                        {problemReport.screenshotFilename ? (
                           <Button
                             primary
                             content={this.props.translate('manage-problem-reports.screenshot')}
-                            onClick={this.openScreenshotToggle(`${axios.defaults.baseURL}submittedScreenshots/${problemReport.screenshotFilename}`)}
-                          /> : null}
+                            onClick={this.openScreenshotToggle(
+                              `${axios.defaults.baseURL}submittedScreenshots/${problemReport.screenshotFilename}`,
+                            )}
+                          />
+                        ) : null}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
             </Table>
-          </Fragment>}
+          </Fragment>
+        )}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   usersStatus: state.user.usersStatus,
   users: state.user.users,
   problemReportsStatus: state.problemReport.problemReportsStatus,
@@ -183,7 +206,7 @@ const mapStateToProps = state => ({
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onFetchUsers: () => {
     dispatch(actionCreators.fetchUsers());
   },

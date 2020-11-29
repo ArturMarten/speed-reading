@@ -53,10 +53,12 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_FEEDBACK_SUCCEEDED: {
-      const feedbackList = action.payload.map(feedback => updateObject(feedback, {
-        date: feedback.date ? new Date(feedback.date) : null,
-        userId: (feedback.userId === null ? '' : feedback.userId),
-      }));
+      const feedbackList = action.payload.map((feedback) =>
+        updateObject(feedback, {
+          date: feedback.date ? new Date(feedback.date) : null,
+          userId: feedback.userId === null ? '' : feedback.userId,
+        }),
+      );
       return updateObject(state, {
         feedbackListStatus: {
           loading: false,

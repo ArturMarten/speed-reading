@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { updateObject } from '../../../../shared/utility';
 import { createOffscreenContext, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
-
 export const drawState = (currentState, context, restoreCanvas) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height);
   context.drawImage(

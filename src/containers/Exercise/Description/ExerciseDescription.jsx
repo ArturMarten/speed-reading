@@ -9,34 +9,27 @@ export class ExerciseDescription extends Component {
     return (
       <Fragment>
         <div style={{ fontSize: '1.1em' }}>
+          <div>{this.props.translate(`exercises.description-${this.props.type}`)}</div>
           <div>
-            {this.props.translate(`exercises.description-${this.props.type}`)}
-          </div>
-          <div>
-            <b>
-              {`${this.props.translate('exercises.goal')}: `}
-            </b>
+            <b>{`${this.props.translate('exercises.goal')}: `}</b>
             {this.props.translate(`exercises.goal-${this.props.type}`)}
           </div>
         </div>
-        {this.props.type === 'concentration' ?
+        {this.props.type === 'concentration' ? (
           <div>
-            <b>
-              {`${this.props.translate('exercises.shortkeys')}: `}
-            </b>
+            <b>{`${this.props.translate('exercises.shortkeys')}: `}</b>
             {this.props.translate('exercises.shortkeys-concentration')}
-          </div> : null}
+          </div>
+        ) : null}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExerciseDescription);

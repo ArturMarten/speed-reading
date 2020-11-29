@@ -5,7 +5,9 @@ import { Achievements } from '../containers/Achievements/Achievements';
 import { translate } from './utils';
 import { checkTemporalAchievements } from '../containers/Achievements/achievements';
 
-export default { title: 'Achievements' };
+const story = { title: 'Achievements' };
+
+export default story;
 
 export const ProgressBarControls = (args) => <ProgressBar {...args} />;
 
@@ -109,7 +111,7 @@ const setObjectValue = (object, key, value) => {
   const [property, ...properties] = key.split('.');
   if (object[property] !== undefined) {
     if (properties.length === 0) {
-      object[property] = value; // eslint-disable-line no-param-reassign
+      object[property] = value;
       return object;
     }
     return setObjectValue(object[property], properties.join('.'), value);

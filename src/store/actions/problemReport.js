@@ -5,51 +5,55 @@ const sendProblemReportStart = () => ({
   type: actionTypes.SEND_PROBLEM_REPORT_START,
 });
 
-const sendProblemReportSucceeded = message => ({
+const sendProblemReportSucceeded = (message) => ({
   type: actionTypes.SEND_PROBLEM_REPORT_SUCCEEDED,
   payload: message,
 });
 
-const sendProblemReportFailed = error => ({
+const sendProblemReportFailed = (error) => ({
   type: actionTypes.SEND_PROBLEM_REPORT_FAILED,
   payload: error,
 });
 
-export const sendProblemReport = problemReportData => (dispatch) => {
+export const sendProblemReport = (problemReportData) => (dispatch) => {
   dispatch(sendProblemReportStart());
-  api.sendProblemReport(problemReportData)
-    .then((message) => {
+  api.sendProblemReport(problemReportData).then(
+    (message) => {
       dispatch(sendProblemReportSucceeded(message));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(sendProblemReportFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const fetchProblemReportsStart = () => ({
   type: actionTypes.FETCH_PROBLEM_REPORTS_START,
 });
 
-const fetchProblemReportsSucceeded = problemReports => ({
+const fetchProblemReportsSucceeded = (problemReports) => ({
   type: actionTypes.FETCH_PROBLEM_REPORTS_SUCCEEDED,
   payload: problemReports,
 });
 
-const fetchProblemReportsFailed = error => ({
+const fetchProblemReportsFailed = (error) => ({
   type: actionTypes.FETCH_PROBLEM_REPORTS_FAILED,
   payload: error,
 });
 
 export const fetchProblemReports = () => (dispatch) => {
   dispatch(fetchProblemReportsStart());
-  api.fetchProblemReports()
-    .then((problemReports) => {
+  api.fetchProblemReports().then(
+    (problemReports) => {
       dispatch(fetchProblemReportsSucceeded(problemReports));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(fetchProblemReportsFailed(errorMessage));
-    });
+    },
+  );
 };
 
-const resolveProblemReportStart = problemReportId => ({
+const resolveProblemReportStart = (problemReportId) => ({
   type: actionTypes.RESOLVE_PROBLEM_REPORT_START,
   payload: {
     problemReportId,
@@ -74,10 +78,12 @@ const resolveProblemReportFailed = (problemReportId, errorMessage) => ({
 
 export const resolveProblemReport = (problemReportId, resolved) => (dispatch) => {
   dispatch(resolveProblemReportStart(problemReportId));
-  api.resolveProblemReport(problemReportId, resolved)
-    .then(() => {
+  api.resolveProblemReport(problemReportId, resolved).then(
+    () => {
       dispatch(resolveProblemReportSucceeded(problemReportId, resolved));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(resolveProblemReportFailed(problemReportId, errorMessage));
-    });
+    },
+  );
 };

@@ -48,7 +48,7 @@ export class ChangePassword extends Component {
   onPasswordChange = () => {
     const { oldPassword, newPassword } = this.state.passwordChangeForm;
     this.props.onPasswordChange(oldPassword.value, newPassword.value);
-  }
+  };
 
   inputChangeHandler = (event, { name, value }) => {
     const updatedPasswordChangeForm = { ...this.state.passwordChangeForm };
@@ -58,7 +58,6 @@ export class ChangePassword extends Component {
     updatedFormElement.touched = true;
     updatedPasswordChangeForm[name] = updatedFormElement;
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedPasswordChangeForm) {
       formIsValid = updatedPasswordChangeForm[inputName].valid && formIsValid;
     }
@@ -66,17 +65,19 @@ export class ChangePassword extends Component {
       passwordChangeForm: updatedPasswordChangeForm,
       passwordChangeFormValid: formIsValid,
     });
-  }
+  };
 
   render() {
-    const matchingPasswords = this.state.passwordChangeForm.newPassword.value === this.state.passwordChangeForm.newPasswordConfirm.value;
+    const matchingPasswords =
+      this.state.passwordChangeForm.newPassword.value === this.state.passwordChangeForm.newPasswordConfirm.value;
     return (
       <Modal size="mini" open={this.props.open} closeOnDimmerClick={false} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('change-password.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('change-password.modal-header')}</Modal.Header>
         <Modal.Content>
-          <Form error={this.props.passwordChangeStatus.error !== null} success={this.props.passwordChangeStatus.message !== null}>
+          <Form
+            error={this.props.passwordChangeStatus.error !== null}
+            success={this.props.passwordChangeStatus.message !== null}
+          >
             <Form.Input
               aria-label={this.props.translate('change-password.old-password')}
               icon="lock"
@@ -84,7 +85,9 @@ export class ChangePassword extends Component {
               iconPosition="left"
               name="oldPassword"
               value={this.state.passwordChangeForm.oldPassword.value}
-              error={!this.state.passwordChangeForm.oldPassword.valid && this.state.passwordChangeForm.oldPassword.touched}
+              error={
+                !this.state.passwordChangeForm.oldPassword.valid && this.state.passwordChangeForm.oldPassword.touched
+              }
               onChange={this.inputChangeHandler}
               placeholder={this.props.translate('change-password.old-password')}
               type="password"
@@ -97,7 +100,9 @@ export class ChangePassword extends Component {
               iconPosition="left"
               name="newPassword"
               value={this.state.passwordChangeForm.newPassword.value}
-              error={!this.state.passwordChangeForm.newPassword.valid && this.state.passwordChangeForm.newPassword.touched}
+              error={
+                !this.state.passwordChangeForm.newPassword.valid && this.state.passwordChangeForm.newPassword.touched
+              }
               onChange={this.inputChangeHandler}
               placeholder={this.props.translate('change-password.new-password')}
               type="password"
@@ -111,22 +116,17 @@ export class ChangePassword extends Component {
               name="newPasswordConfirm"
               value={this.state.passwordChangeForm.newPasswordConfirm.value}
               error={
-               (!matchingPasswords ||
-                !this.state.passwordChangeForm.newPasswordConfirm.valid) &&
-                this.state.passwordChangeForm.newPasswordConfirm.touched}
+                (!matchingPasswords || !this.state.passwordChangeForm.newPasswordConfirm.valid) &&
+                this.state.passwordChangeForm.newPasswordConfirm.touched
+              }
               onChange={this.inputChangeHandler}
               placeholder={this.props.translate('change-password.confirm-new-password')}
               type="password"
               autoComplete="new-password"
               required
             />
-            <SuccessMessage
-              icon="check"
-              message={this.props.passwordChangeStatus.message}
-            />
-            <ErrorMessage
-              error={this.props.passwordChangeStatus.error}
-            />
+            <SuccessMessage icon="check" message={this.props.passwordChangeStatus.message} />
+            <ErrorMessage error={this.props.passwordChangeStatus.error} />
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -134,7 +134,9 @@ export class ChangePassword extends Component {
             primary
             type="submit"
             loading={this.props.passwordChangeStatus.loading}
-            disabled={!this.state.passwordChangeFormValid || !matchingPasswords || this.props.passwordChangeStatus.loading}
+            disabled={
+              !this.state.passwordChangeFormValid || !matchingPasswords || this.props.passwordChangeStatus.loading
+            }
             onClick={this.onPasswordChange}
           >
             {this.props.translate('change-password.change')}
@@ -155,12 +157,12 @@ ChangePassword.propTypes = {
   onPasswordChange: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   passwordChangeStatus: state.auth.passwordChangeStatus,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onPasswordChange: (oldPassword, newPassword) => {
     dispatch(actionCreators.changePassword(oldPassword, newPassword));
   },

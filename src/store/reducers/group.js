@@ -25,9 +25,11 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_GROUPS_SUCCEEDED: {
-      const groups = action.payload.map(group => updateObject(group, {
-        creationDate: group.creationDate ? new Date(group.creationDate) : null,
-      }));
+      const groups = action.payload.map((group) =>
+        updateObject(group, {
+          creationDate: group.creationDate ? new Date(group.creationDate) : null,
+        }),
+      );
       return updateObject(state, {
         groupsStatus: {
           loading: false,
@@ -81,9 +83,9 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.CHANGE_GROUP_SUCCEEDED: {
-      const updatedGroups = state.groups
-        .map(group => (group.id === action.payload.groupId ?
-          updateObject(group, action.payload.groupData) : group));
+      const updatedGroups = state.groups.map((group) =>
+        group.id === action.payload.groupId ? updateObject(group, action.payload.groupData) : group,
+      );
       return updateObject(state, {
         groupStatus: {
           loading: false,

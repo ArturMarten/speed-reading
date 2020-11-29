@@ -13,7 +13,7 @@ export class ErrorBoundary extends Component {
 
   errorConfirmedHandler = () => {
     this.setState({ error: null });
-  }
+  };
 
   componentDidCatch(error) {
     const submittedForm = {
@@ -37,24 +37,20 @@ export class ErrorBoundary extends Component {
   render() {
     if (this.state.error !== null) {
       const errorMessage = this.state.error ? this.state.error.message : 'Unknown';
-      return (<ErrorPopup
-        open={this.state.error !== null}
-        onClose={this.errorConfirmedHandler}
-        errorMessage={errorMessage}
-      />);
+      return (
+        <ErrorPopup open={this.state.error !== null} onClose={this.errorConfirmedHandler} errorMessage={errorMessage} />
+      );
     }
     return this.props.children;
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   state,
   userId: state.auth.userId,
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSubmit: (bugReport) => {
     dispatch(actionCreators.sendBugReport(bugReport));
   },

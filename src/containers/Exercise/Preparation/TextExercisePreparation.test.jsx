@@ -1,4 +1,4 @@
-import { fireEvent, wait } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import axiosMock from 'axios';
 import React from 'react';
 import renderWithRedux from '../../../utils/testUtils';
@@ -13,7 +13,7 @@ it('stores own text', async () => {
     },
   });
 
-  const { translate, getByText, queryByText, getByRole, getAllByRole } = renderWithRedux(
+  const { translate, getByText, queryByText, getAllByRole } = renderWithRedux(
     <TextExercisePreparation type="readingTest" onProceed={jest.fn()} />,
   );
   expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument();
@@ -31,7 +31,7 @@ it('stores own text', async () => {
     },
   });
 
-  await wait(() => expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text));
+  await waitFor(() => expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text));
 
   fireEvent.click(getByText(translate('own-text-editor.use')));
   expect(axiosMock.post).toBeCalledTimes(1);
@@ -40,7 +40,7 @@ it('stores own text', async () => {
     text,
   });
 
-  await wait(() => expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
+  await waitFor(() => expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
 
   fireEvent.click(getByText(translate('exercise-preparation.use-own-text')));
   expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text);

@@ -24,27 +24,30 @@ export class HelpExercisePreparation extends Component {
 
   saveChangeHandler = (event, data) => {
     this.setState({ saveStatistics: data.checked });
-  }
+  };
 
   exercisePreparationHandler = () => {
     this.props.onExercisePrepare(this.state.saveStatistics, this.props.exerciseOptions);
-  }
+  };
 
   modificationChangeHandler = (event, data) => {
     this.props.onModificationChange(data.value);
-  }
+  };
 
   exerciseOptionsResetHandler = () => {
     this.props.onExerciseOptionsReset();
-  }
+  };
 
   textOptionsResetHandler = () => {
     this.props.onTextOptionsReset();
-  }
+  };
 
   render() {
-    const modificationOptions = this.props.modificationOptions
-      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`modification.${option.value}`) }));
+    const modificationOptions = this.props.modificationOptions.map((option, index) => ({
+      ...option,
+      key: index,
+      text: this.props.translate(`modification.${option.value}`),
+    }));
     const startCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.start-automatically')}
@@ -52,7 +55,8 @@ export class HelpExercisePreparation extends Component {
           position="left center"
           content={this.props.translate('exercise-preparation.start-automatically-description')}
         />
-      </Fragment>);
+      </Fragment>
+    );
     const saveCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.save-statistics')}
@@ -60,7 +64,8 @@ export class HelpExercisePreparation extends Component {
           position="left center"
           content={this.props.translate('exercise-preparation.save-statistics-description')}
         />
-      </Fragment>);
+      </Fragment>
+    );
     return (
       <Fragment>
         <Container style={{ marginTop: '3vh' }}>
@@ -88,9 +93,7 @@ export class HelpExercisePreparation extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={13}>
-                <ExerciseDescription
-                  type={this.props.type}
-                />
+                <ExerciseDescription type={this.props.type} />
               </Grid.Column>
               <Grid.Column width={3} verticalAlign="bottom">
                 <Button
@@ -103,10 +106,7 @@ export class HelpExercisePreparation extends Component {
                   {this.props.translate('exercise-preparation.proceed')}
                   <Icon name="right chevron" />
                 </Button>
-                <Checkbox
-                  style={{ float: 'right', margin: '2px' }}
-                  label={{ children: startCheckboxLabel }}
-                />
+                <Checkbox style={{ float: 'right', margin: '2px' }} label={{ children: startCheckboxLabel }} />
                 <Checkbox
                   checked={this.state.saveStatistics}
                   onChange={this.saveChangeHandler}
@@ -115,7 +115,7 @@ export class HelpExercisePreparation extends Component {
                 />
               </Grid.Column>
             </Grid.Row>
-            {this.props.info.exerciseSettingsInfo ?
+            {this.props.info.exerciseSettingsInfo ? (
               <Grid.Row columns={1}>
                 <Grid.Column>
                   <Message info onDismiss={this.props.onExerciseSettingsInfoDismiss}>
@@ -123,7 +123,8 @@ export class HelpExercisePreparation extends Component {
                     {this.props.translate('exercise-preparation.info-content')}
                   </Message>
                 </Grid.Column>
-              </Grid.Row> : null}
+              </Grid.Row>
+            ) : null}
           </Grid>
           <Grid stackable>
             <Grid.Row columns={2}>
@@ -133,27 +134,21 @@ export class HelpExercisePreparation extends Component {
                     {this.props.translate('exercise-preparation.exercise-options')}
                     <Popup
                       trigger={
-                        <Icon
-                          size="small"
-                          name="repeat"
-                          color="grey"
-                          onClick={this.exerciseOptionsResetHandler}
-                        />
+                        <Icon size="small" name="repeat" color="grey" onClick={this.exerciseOptionsResetHandler} />
                       }
                       content={this.props.translate('exercise-preparation.reset-exercise-options')}
                       position="bottom center"
                     />
                   </Header>
-                  {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ?
-                    <p>
-                      {this.props.translate('exercise-preparation.exercise-options-missing')}
-                    </p> :
+                  {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ? (
+                    <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p>
+                  ) : (
                     <table>
                       <tbody>
                         <ExerciseOptions />
                       </tbody>
                     </table>
-                  }
+                  )}
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -161,43 +156,33 @@ export class HelpExercisePreparation extends Component {
                   <Header as="h4" textAlign="center">
                     {this.props.translate('exercise-preparation.text-options')}
                     <Popup
-                      trigger={
-                        <Icon
-                          size="small"
-                          name="repeat"
-                          color="grey"
-                          onClick={this.textOptionsResetHandler}
-                        />
-                      }
+                      trigger={<Icon size="small" name="repeat" color="grey" onClick={this.textOptionsResetHandler} />}
                       content={this.props.translate('exercise-preparation.reset-text-options')}
                       position="bottom center"
                     />
                   </Header>
-                  {this.props.visibleTextOptions.length === 0 ?
-                    <p>
-                      {this.props.translate('exercise-preparation.text-options-missing')}
-                    </p> :
+                  {this.props.visibleTextOptions.length === 0 ? (
+                    <p>{this.props.translate('exercise-preparation.text-options-missing')}</p>
+                  ) : (
                     <table>
                       <tbody>
                         <TextOptions exerciseType={this.props.type} />
                       </tbody>
                     </table>
-                  }
+                  )}
                 </Segment>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Container>
-        {this.props.type === 'schulteTables' ?
-          <SchulteTablesPreview /> : null}
-        {this.props.type === 'concentration' ?
-          <ConcentrationPreview /> : null}
+        {this.props.type === 'schulteTables' ? <SchulteTablesPreview /> : null}
+        {this.props.type === 'concentration' ? <ConcentrationPreview /> : null}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   info: state.info,
   exerciseModification: state.exercise.modification,
   modificationOptions: state.exercise.modificationOptions,
@@ -209,7 +194,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onExerciseSettingsInfoDismiss: () => {
     dispatch(actionCreators.dismissExerciseSettingsInfo());
   },

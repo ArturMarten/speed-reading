@@ -21,35 +21,27 @@ class ErrorMessage extends Component {
 
   onVisibleToggle = (toggle) => {
     this.setState({ visible: toggle });
-  }
+  };
 
   dismissHandler = () => {
     this.onVisibleToggle(false);
-  }
+  };
 
   render() {
-    const {
-      translate,
-      icon,
-      error,
-      timeout,
-      dispatch,
-      ...rest
-    } = this.props;
-    return (
-      this.state.visible && this.props.error !== null ?
-        <Message
-          error
-          icon={icon ? <Icon name={icon} style={{ fontSize: '1.2em' }} /> : null}
-          onDismiss={this.dismissHandler}
-          header={translateError(translate, error)}
-          {...rest}
-        /> : null
-    );
+    const { translate, icon, error, timeout, dispatch, ...rest } = this.props;
+    return this.state.visible && this.props.error !== null ? (
+      <Message
+        error
+        icon={icon ? <Icon name={icon} style={{ fontSize: '1.2em' }} /> : null}
+        onDismiss={this.dismissHandler}
+        header={translateError(translate, error)}
+        {...rest}
+      />
+    ) : null;
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   translate: getTranslate(state.locale),
 });
 

@@ -123,7 +123,4 @@ const mapDispatchToProps = (dispatch) => ({
   onSubmit: (option) => dispatch(actionCreators.textOptionUpdated(option)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TextOptions);
+export default connect(mapStateToProps, mapDispatchToProps)(TextOptions);

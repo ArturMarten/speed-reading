@@ -110,9 +110,9 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.CHANGE_QUESTION_SUCCEEDED: {
-      const updatedQuestions = state.questions
-        .map(question => (question.id === action.payload.questionId ?
-          updateObject(question, action.payload.questionData) : question));
+      const updatedQuestions = state.questions.map((question) =>
+        question.id === action.payload.questionId ? updateObject(question, action.payload.questionData) : question,
+      );
       return updateObject(state, {
         questions: updatedQuestions,
         questionStatus: {
@@ -143,8 +143,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.REMOVE_QUESTION_SUCCEEDED: {
       return updateObject(state, {
-        questions: state.questions
-          .filter(question => question.id !== action.payload.id),
+        questions: state.questions.filter((question) => question.id !== action.payload.id),
         questionStatus: {
           loading: false,
           message: action.payload.message,
@@ -175,9 +174,13 @@ const reducer = (state = initialState, action) => {
       const newAnswer = updateObject(action.payload.answerData, {
         id: action.payload.answerId,
       });
-      const updatedQuestions = state.questions
-        .map(question => (question.id === newAnswer.questionId ?
-          updateObject(question, { answers: question.answers.concat(newAnswer) }) : question));
+      const updatedQuestions = state.questions.map((question) =>
+        question.id === newAnswer.questionId
+          ? updateObject(question, {
+              answers: question.answers.concat(newAnswer),
+            })
+          : question,
+      );
 
       return updateObject(state, {
         questions: updatedQuestions,
@@ -208,12 +211,15 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.CHANGE_ANSWER_SUCCEEDED: {
-      const updatedQuestions = state.questions
-        .map(question => (question.id === action.payload.questionId ?
-          updateObject(question, {
-            answers: question.answers
-              .map(answer => (answer.id === action.payload.answerId ? updateObject(answer, action.payload.answerData) : answer)),
-          }) : question));
+      const updatedQuestions = state.questions.map((question) =>
+        question.id === action.payload.questionId
+          ? updateObject(question, {
+              answers: question.answers.map((answer) =>
+                answer.id === action.payload.answerId ? updateObject(answer, action.payload.answerData) : answer,
+              ),
+            })
+          : question,
+      );
       return updateObject(state, {
         questions: updatedQuestions,
         answerStatus: {
@@ -243,12 +249,13 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.REMOVE_ANSWER_SUCCEEDED: {
-      const updatedQuestions = state.questions
-        .map(question => (question.id === action.payload.questionId ?
-          updateObject(question, {
-            answers: question.answers
-              .filter(answer => answer.id !== action.payload.answerId),
-          }) : question));
+      const updatedQuestions = state.questions.map((question) =>
+        question.id === action.payload.questionId
+          ? updateObject(question, {
+              answers: question.answers.filter((answer) => answer.id !== action.payload.answerId),
+            })
+          : question,
+      );
       return updateObject(state, {
         questions: updatedQuestions,
         answerStatus: {
@@ -281,8 +288,10 @@ const reducer = (state = initialState, action) => {
           loading: false,
           error: null,
         },
-        blankExercises: action.payload
-          .map((blankExercise, index) => ({ id: index, ...blankExercise })),
+        blankExercises: action.payload.map((blankExercise, index) => ({
+          id: index,
+          ...blankExercise,
+        })),
       });
     }
     case actionTypes.GENERATE_BLANK_EXERCISES_FAILED: {

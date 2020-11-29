@@ -139,7 +139,6 @@ export class TextEntry extends Component {
 
   setForm = (selectedText) => {
     const updatedTextEntryForm = { ...this.state.textEntryForm };
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedTextEntryForm) {
       const updatedFormElement = { ...updatedTextEntryForm[inputName] };
       if (selectedText[inputName]) {
@@ -157,7 +156,6 @@ export class TextEntry extends Component {
     }
     this.textEditorRef.setContent(selectedText.contentState);
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedTextEntryForm) {
       formIsValid = updatedTextEntryForm[inputName].valid && formIsValid;
     }
@@ -215,7 +213,6 @@ export class TextEntry extends Component {
     updatedFormElement.touched = true;
     updatedTextEntryForm[name] = updatedFormElement;
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedTextEntryForm) {
       formIsValid = updatedTextEntryForm[inputName].valid && formIsValid;
     }

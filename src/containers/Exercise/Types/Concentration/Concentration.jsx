@@ -157,7 +157,6 @@ const mapStateToProps = (state) => ({
   exerciseOptions: state.options.exerciseOptions,
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Concentration);

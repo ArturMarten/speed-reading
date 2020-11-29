@@ -11,7 +11,7 @@ const InlineStyleControls = (props) => {
   const currentStyle = editorState.getCurrentInlineStyle();
   return (
     <Button.Group basic compact style={{ margin: '2px 2px' }}>
-      {INLINE_STYLES.map(type => (
+      {INLINE_STYLES.map((type) => (
         <Button
           key={type.style}
           title={props.translate(type.translate)}
@@ -19,7 +19,8 @@ const InlineStyleControls = (props) => {
           onClick={() => props.onToggle(type.style)}
         >
           <Icon name={type.icon} />
-        </Button>))}
+        </Button>
+      ))}
     </Button.Group>
   );
 };

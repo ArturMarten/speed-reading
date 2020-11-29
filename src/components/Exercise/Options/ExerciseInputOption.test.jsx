@@ -1,4 +1,4 @@
-import { fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import React from 'react';
 import ExerciseInputOption from './ExerciseInputOption';
 
@@ -28,10 +28,10 @@ it('calls function on change', async () => {
   expect(input.value).toEqual('95');
   fireEvent.click(minusButton);
   expect(input.value).toEqual('90');
-  await wait(() => expect(updateValue).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(updateValue).toHaveBeenCalledTimes(1));
   expect(updateValue).toHaveBeenNthCalledWith(1, 90);
   fireEvent.click(plusButton);
   expect(input.value).toEqual('95');
-  await wait(() => expect(updateValue).toHaveBeenCalledTimes(2));
+  await waitFor(() => expect(updateValue).toHaveBeenCalledTimes(2));
   expect(updateValue).toHaveBeenNthCalledWith(2, 95);
 });

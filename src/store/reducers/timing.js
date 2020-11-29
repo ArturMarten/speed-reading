@@ -14,7 +14,7 @@ const initialState = {
   timer: initialTimer,
 };
 
-const calculateElapsedTime = state => state.elapsedTime + (Date.now() - state.startTime);
+const calculateElapsedTime = (state) => state.elapsedTime + (Date.now() - state.startTime);
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {

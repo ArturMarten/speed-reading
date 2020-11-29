@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { updateObject } from '../../../../shared/utility';
 import { createOffscreenContext, drawPage, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
-
 export const drawState = (currentState, context) => {
   const { clearRects } = currentState;
   clearRects.forEach((clearRect) => {

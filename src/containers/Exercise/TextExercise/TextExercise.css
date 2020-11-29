@@ -1,6 +1,6 @@
-.blurring.dimmable>:not(.dimmer) {
-  -webkit-transition:.1s -webkit-filter ease !important;
-  transition:.1s -webkit-filter ease !important;
-  transition:.1s filter ease !important;
-  transition:.1s filter ease,.1s -webkit-filter ease !important;
+.blurring.dimmable > :not(.dimmer) {
+  -webkit-transition: 0.1s -webkit-filter ease !important;
+  transition: 0.1s -webkit-filter ease !important;
+  transition: 0.1s filter ease !important;
+  transition: 0.1s filter ease, 0.1s -webkit-filter ease !important;
 }

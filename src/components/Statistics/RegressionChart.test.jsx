@@ -1,9 +1,13 @@
-import { wait } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
 import RegressionChart from './RegressionChart';
 
-const exampleData = [{ id: 0, x: 1, y: 1 }, { id: 1, x: 2, y: 3 }, { id: 2, x: 3, y: 2 }];
+const exampleData = [
+  { id: 0, x: 1, y: 1 },
+  { id: 1, x: 2, y: 3 },
+  { id: 2, x: 3, y: 2 },
+];
 
 it('draws regression chart', () => {
   const { translate, container, getByText } = renderWithRedux(
@@ -96,6 +100,6 @@ it('updates regression chart', async () => {
     />,
   );
   const legend = container.querySelector('g.legend');
-  await wait(() => expect(noDataElement.style.opacity).toEqual('0'));
+  await waitFor(() => expect(noDataElement.style.opacity).toEqual('0'));
   expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');
 });

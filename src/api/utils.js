@@ -6,12 +6,16 @@ export const exportFile = ({ filename, filetype, columns, rows, headings }) => {
     responseType: 'arraybuffer',
   };
   return new Promise((resolve, reject) => {
-    axios.post('exportFile', { filename, filetype, columns, rows, headings }, config)
-      .then((response) => {
-        resolve(response.data);
-      }, (error) => {
-        reject(serverErrorMessage(error));
-      })
+    axios
+      .post('exportFile', { filename, filetype, columns, rows, headings }, config)
+      .then(
+        (response) => {
+          resolve(response.data);
+        },
+        (error) => {
+          reject(serverErrorMessage(error));
+        },
+      )
       .catch((error) => {
         reject(error.message);
       });

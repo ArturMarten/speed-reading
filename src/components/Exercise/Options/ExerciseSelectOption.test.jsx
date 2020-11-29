@@ -10,7 +10,10 @@ it('calls function on change', async () => {
         <ExerciseSelectOption
           name="OptionName"
           value="Option1"
-          options={[{ key: 0, value: 'Option1', text: 'Option1' }, { key: 1, value: 'Option2', text: 'Option2' }]}
+          options={[
+            { key: 0, value: 'Option1', text: 'Option1' },
+            { key: 1, value: 'Option2', text: 'Option2' },
+          ]}
           updateValue={updateValue}
         />
       </tbody>

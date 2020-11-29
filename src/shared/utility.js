@@ -6,7 +6,6 @@ export const updateObject = (oldObject, newValues) => ({
 });
 
 export const isEmail = (value) => {
-  // eslint-disable-next-line
   const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   return pattern.test(value);
 };

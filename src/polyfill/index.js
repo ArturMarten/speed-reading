@@ -1,4 +1,3 @@
-
 // This file will be used to load any polyfills that are required by the site.
 //   If you are adding one then make sure you do the following:
 //

@@ -97,7 +97,6 @@ export class ProblemReport extends Component {
     updatedFormElement.touched = true;
     updatedProblemReportForm[name] = updatedFormElement;
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedProblemReportForm) {
       formIsValid = updatedProblemReportForm[inputName].valid && formIsValid;
     }
@@ -230,7 +229,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProblemReport);
+export default connect(mapStateToProps, mapDispatchToProps)(ProblemReport);

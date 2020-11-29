@@ -44,13 +44,19 @@ export class ExerciseOptions extends PureComponent {
   state = {};
 
   render() {
-    const cursorTypeOptionsTranslated = cursorTypeOptions
-      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`exercise-options.cursor-${option.value}`) }));
-    const cursorColorOptionsTranslated = cursorColorOptions
-      .map((option, index) => ({ ...option, key: index, text: this.props.translate(`colors.${option.value}`) }));
+    const cursorTypeOptionsTranslated = cursorTypeOptions.map((option, index) => ({
+      ...option,
+      key: index,
+      text: this.props.translate(`exercise-options.cursor-${option.value}`),
+    }));
+    const cursorColorOptionsTranslated = cursorColorOptions.map((option, index) => ({
+      ...option,
+      key: index,
+      text: this.props.translate(`colors.${option.value}`),
+    }));
     return (
       <Fragment>
-        {this.props.visibleOptions.indexOf('startDelay') !== -1 ?
+        {this.props.visibleOptions.indexOf('startDelay') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.start-delay')}
             description={this.props.translate('exercise-options.start-delay-description')}
@@ -59,9 +65,10 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_START_DELAY}
             max={MAX_START_DELAY}
             step={STEP_START_DELAY}
-            updateValue={value => this.props.onSubmit({ startDelay: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('lineBreakDelay') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ startDelay: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('lineBreakDelay') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.line-break-delay')}
             description={this.props.translate('exercise-options.line-break-delay-description')}
@@ -70,9 +77,10 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_LINE_BREAK_DELAY}
             max={MAX_LINE_BREAK_DELAY}
             step={STEP_LINE_BREAK_DELAY}
-            updateValue={value => this.props.onSubmit({ lineBreakDelay: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('pageBreakDelay') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ lineBreakDelay: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('pageBreakDelay') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.page-break-delay')}
             description={this.props.translate('exercise-options.page-break-delay-description')}
@@ -81,23 +89,26 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_PAGE_BREAK_DELAY}
             max={MAX_PAGE_BREAK_DELAY}
             step={STEP_PAGE_BREAK_DELAY}
-            updateValue={value => this.props.onSubmit({ pageBreakDelay: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('cursorType') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ pageBreakDelay: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('cursorType') !== -1 ? (
           <ExerciseSelectOption
             name={this.props.translate('exercise-options.cursor-type')}
             value={this.props.options.cursorType}
             options={cursorTypeOptionsTranslated}
-            updateValue={value => this.props.onSubmit({ cursorType: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('cursorColor') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ cursorType: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('cursorColor') !== -1 ? (
           <ExerciseSelectOption
             name={this.props.translate('exercise-options.cursor-color')}
             value={this.props.options.cursorColor}
             options={cursorColorOptionsTranslated}
-            updateValue={value => this.props.onSubmit({ cursorColor: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('groupCharacterCount') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ cursorColor: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('groupCharacterCount') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.word-group-length')}
             description={this.props.translate('exercise-options.word-group-length-description')}
@@ -106,9 +117,10 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_GROUP_CHARACTER_COUNT}
             max={MAX_GROUP_CHARACTER_COUNT}
             step={STEP_GROUP_CHARACTER_COUNT}
-            updateValue={value => this.props.onSubmit({ groupCharacterCount: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('groupSpacing') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ groupCharacterCount: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('groupSpacing') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.word-group-spacing')}
             description={this.props.translate('exercise-options.word-group-spacing-description')}
@@ -117,16 +129,18 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_GROUP_SPACING}
             max={MAX_GROUP_SPACING}
             step={STEP_GROUP_SPACING}
-            updateValue={value => this.props.onSubmit({ groupSpacing: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ groupSpacing: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('tableDimensions') !== -1 ? (
           <ExerciseSelectOption
             name={this.props.translate('exercise-options.table-dimensions')}
             value={this.props.options.tableDimensions}
             options={tableDimensionOptions}
-            updateValue={value => this.props.onSubmit({ tableDimensions: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('tableSize') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ tableDimensions: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('tableSize') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.table-size')}
             unit={this.props.translate('exercise-options.percentage')}
@@ -134,15 +148,17 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_TABLE_SIZE}
             max={MAX_TABLE_SIZE}
             step={STEP_TABLE_SIZE}
-            updateValue={value => this.props.onSubmit({ tableSize: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('tableCheck') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ tableSize: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('tableCheck') !== -1 ? (
           <ExerciseCheckOption
             name={this.props.translate('exercise-options.table-check')}
             value={this.props.options.tableCheck}
-            updateValue={value => this.props.onSubmit({ tableCheck: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('symbolGroupCount') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ tableCheck: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('symbolGroupCount') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.symbol-group-count')}
             unit={this.props.translate('exercise-options.groups')}
@@ -150,9 +166,10 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_SYMBOL_GROUP_COUNT}
             max={MAX_SYMBOL_GROUP_COUNT}
             step={STEP_SYMBOL_GROUP_COUNT}
-            updateValue={value => this.props.onSubmit({ symbolGroupCount: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('symbolCount') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ symbolGroupCount: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('symbolCount') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.symbol-count')}
             unit={this.props.translate('exercise-options.symbols')}
@@ -160,9 +177,10 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_SYMBOL_COUNT}
             max={MAX_SYMBOL_COUNT}
             step={STEP_SYMBOL_COUNT}
-            updateValue={value => this.props.onSubmit({ symbolCount: value })}
-          /> : null}
-        {this.props.visibleOptions.indexOf('columnSpacing') !== -1 ?
+            updateValue={(value) => this.props.onSubmit({ symbolCount: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('columnSpacing') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.column-spacing')}
             unit={this.props.translate('exercise-options.px')}
@@ -170,21 +188,22 @@ export class ExerciseOptions extends PureComponent {
             min={MIN_COLUMN_SPACING}
             max={MAX_COLUMN_SPACING}
             step={STEP_COLUMN_SPACING}
-            updateValue={value => this.props.onSubmit({ columnSpacing: value })}
-          /> : null}
+            updateValue={(value) => this.props.onSubmit({ columnSpacing: value })}
+          />
+        ) : null}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   options: state.options.exerciseOptions,
   visibleOptions: state.options.visibleExerciseOptions,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: option => dispatch(actionCreators.exerciseOptionUpdated(option)),
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: (option) => dispatch(actionCreators.exerciseOptionUpdated(option)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExerciseOptions);

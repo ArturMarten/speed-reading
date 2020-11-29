@@ -4,7 +4,6 @@ import { updateObject } from '../../../../shared/utility';
 import { getColorRGBA } from '../../../../store/reducers/options';
 import { createOffscreenContext, drawPage, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
-
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRect, drawRect } = currentState;
   if (restoreRect && restoreRect.width > 0 && restoreRect.height > 0) {

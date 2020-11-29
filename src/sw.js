@@ -12,7 +12,7 @@ if (typeof importScripts === 'function') {
     /* custom cache rules */
     const handler = workbox.precaching.createHandlerBoundToURL('/index.html');
     const navigationRoute = new workbox.routing.NavigationRoute(handler, {
-      denylist: [/^\/_/, /\/[^\/]+\.[^\/]+$/],
+      denylist: [/^\/_/, /\/[^/]+\.[^/]+$/],
     });
 
     workbox.routing.registerRoute(navigationRoute);

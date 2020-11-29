@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { getAchievementData } from '../../containers/Achievements/achievements';
@@ -35,10 +35,10 @@ function AchievementProgress(props) {
             style={{ backgroundColor: currentLevel > 0 ? color : 'rgb(243, 243, 243)' }}
           >
             {currentLevel > 0 ? (
-              <>
+              <Fragment>
                 <div className="achievement-progress-level-text">{translate('achievements.level')}</div>
                 <div className="achievement-progress-level-number">{currentLevel}</div>
-              </>
+              </Fragment>
             ) : null}
           </div>
         }

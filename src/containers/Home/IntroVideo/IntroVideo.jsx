@@ -9,9 +9,7 @@ class IntroVideo extends Component {
   render() {
     return (
       <Fragment>
-        <Header as="h3">
-          {this.props.translate('intro-video.header')}
-        </Header>
+        <Header as="h3">{this.props.translate('intro-video.header')}</Header>
         <Embed
           hd
           autoplay

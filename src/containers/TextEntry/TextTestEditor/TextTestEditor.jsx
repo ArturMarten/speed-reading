@@ -18,7 +18,7 @@ export class TextTestEditor extends Component {
     selectedAnswer: null,
     removedQuestionId: null,
     removedAnswerId: null,
-  }
+  };
 
   componentDidMount() {
     this.props.onFetchQuestions(this.props.readingTextId);
@@ -26,17 +26,17 @@ export class TextTestEditor extends Component {
 
   onSubmit = () => {
     this.props.onClose();
-  }
+  };
 
   removeQuestionHandler = (questionId) => {
     this.setState({ removedQuestionId: questionId });
     this.props.onRemoveQuestion(questionId);
-  }
+  };
 
   removeAnswerHandler = (questionId, answerId) => {
     this.setState({ removedAnswerId: answerId });
     this.props.onRemoveAnswer(questionId, answerId);
-  }
+  };
 
   questionEditorToggleHandler = (event, data) => {
     stopPropagation(event);
@@ -44,7 +44,7 @@ export class TextTestEditor extends Component {
       questionEditorOpened: !this.state.questionEditorOpened,
       selectedQuestion: data && data.question ? data.question : null,
     });
-  }
+  };
 
   answerEditorToggleHandler = (event, data) => {
     stopPropagation(event);
@@ -53,29 +53,29 @@ export class TextTestEditor extends Component {
       selectedQuestion: data && data.question ? data.question : null,
       selectedAnswer: data && data.answer ? data.answer : null,
     });
-  }
+  };
 
   render() {
     return (
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('text-test-editor.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('text-test-editor.modal-header')}</Modal.Header>
         <Modal.Content scrolling style={{ height: '65vh', maxHeight: '65vh' }}>
-          {this.state.questionEditorOpened ?
+          {this.state.questionEditorOpened ? (
             <QuestionEditor
               open={this.state.questionEditorOpened}
               onClose={this.questionEditorToggleHandler}
               readingTextId={this.props.readingTextId}
               question={this.state.selectedQuestion}
-            /> : null}
-          {this.state.answerEditorOpened ?
+            />
+          ) : null}
+          {this.state.answerEditorOpened ? (
             <AnswerEditor
               open={this.state.answerEditorOpened}
               onClose={this.answerEditorToggleHandler}
               questionId={this.state.selectedQuestion ? this.state.selectedQuestion.id : null}
               answer={this.state.selectedAnswer}
-            /> : null}
+            />
+          ) : null}
           <Grid verticalAlign="middle">
             {this.props.questions.map((question, questionIndex) => (
               <Fragment key={question.id}>
@@ -106,7 +106,7 @@ export class TextTestEditor extends Component {
                       primary
                       content={this.props.translate('text-test-editor.change')}
                       floated="right"
-                      onClick={event => this.questionEditorToggleHandler(event, { question })}
+                      onClick={(event) => this.questionEditorToggleHandler(event, { question })}
                     />
                   </Grid.Column>
                 </Grid.Row>
@@ -123,13 +123,9 @@ export class TextTestEditor extends Component {
                     }}
                   >
                     <Grid.Column mobile={1} tablet={1} computer={1} textAlign="center">
-                      {answer.correct ?
-                        <Icon
-                          fitted
-                          name="check"
-                          size="large"
-                          color={answer.correct ? 'green' : 'grey'}
-                        /> : null}
+                      {answer.correct ? (
+                        <Icon fitted name="check" size="large" color={answer.correct ? 'green' : 'grey'} />
+                      ) : null}
                     </Grid.Column>
                     <Grid.Column mobile={14} tablet={10} computer={11}>
                       {`${String.fromCharCode(65 + answerIndex)} ) ${answer.answerText}`}
@@ -149,7 +145,7 @@ export class TextTestEditor extends Component {
                         compact
                         content={this.props.translate('text-test-editor.change')}
                         floated="right"
-                        onClick={event => this.answerEditorToggleHandler(event, { question, answer })}
+                        onClick={(event) => this.answerEditorToggleHandler(event, { question, answer })}
                       />
                     </Grid.Column>
                   </Grid.Row>
@@ -165,7 +161,7 @@ export class TextTestEditor extends Component {
                       positive
                       compact
                       floated="right"
-                      onClick={event => this.answerEditorToggleHandler(event, { question })}
+                      onClick={(event) => this.answerEditorToggleHandler(event, { question })}
                       content={this.props.translate('text-test-editor.add-answer')}
                     />
                   </Grid.Column>
@@ -177,11 +173,17 @@ export class TextTestEditor extends Component {
         <SuccessMessage
           icon="check"
           style={{ margin: '0 0' }}
-          message={this.props.questionStatus.message !== null ? this.props.questionStatus.message : this.props.answerStatus.message}
+          message={
+            this.props.questionStatus.message !== null
+              ? this.props.questionStatus.message
+              : this.props.answerStatus.message
+          }
         />
         <ErrorMessage
           style={{ margin: '0 0' }}
-          error={this.props.questionStatus.error !== null ? this.props.questionStatus.error : this.props.answerStatus.error}
+          error={
+            this.props.questionStatus.error !== null ? this.props.questionStatus.error : this.props.answerStatus.error
+          }
         />
         <Modal.Actions>
           <Button
@@ -189,25 +191,21 @@ export class TextTestEditor extends Component {
             content={this.props.translate('text-test-editor.add-question')}
             onClick={this.questionEditorToggleHandler}
           />
-          <Button
-            primary
-            content={this.props.translate('text-test-editor.ok')}
-            onClick={this.onSubmit}
-          />
+          <Button primary content={this.props.translate('text-test-editor.ok')} onClick={this.onSubmit} />
         </Modal.Actions>
       </Modal>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   questions: state.exerciseTest.questions,
   questionStatus: state.exerciseTest.questionStatus,
   answerStatus: state.exerciseTest.answerStatus,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onFetchQuestions: (readingTextId) => {
     dispatch(actionCreators.fetchTestEditorQuestions(readingTextId));
   },

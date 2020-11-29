@@ -66,7 +66,7 @@ export class ProfileSettings extends Component {
         },
       });
     }
-  }
+  };
 
   onSaveUserProfile = () => {
     console.log('Saving profile');
@@ -75,7 +75,7 @@ export class ProfileSettings extends Component {
       lastName: this.state.userProfileForm.lastName.value,
     };
     this.props.onUserProfileSave(this.props.userId, userProfileData);
-  }
+  };
 
   inputChangeHandler = (event, { name, value }) => {
     const updatedUserProfileForm = { ...this.state.userProfileForm };
@@ -85,7 +85,6 @@ export class ProfileSettings extends Component {
     updatedFormElement.touched = true;
     updatedUserProfileForm[name] = updatedFormElement;
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedUserProfileForm) {
       formIsValid = updatedUserProfileForm[inputName].valid && formIsValid;
     }
@@ -93,15 +92,12 @@ export class ProfileSettings extends Component {
       userProfileForm: updatedUserProfileForm,
       userProfileFormValid: formIsValid,
     });
-  }
-
+  };
 
   render() {
     return (
       <Modal size="small" open={this.props.open} closeOnDimmerClick={false} onClose={this.props.onClose} closeIcon>
-        <Modal.Header>
-          {this.props.translate('profile-settings.modal-header')}
-        </Modal.Header>
+        <Modal.Header>{this.props.translate('profile-settings.modal-header')}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Input
@@ -151,7 +147,7 @@ export class ProfileSettings extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.auth.userId,
   profileStatus: state.profile.profileStatus,
   firstName: state.profile.firstName,
@@ -159,8 +155,7 @@ const mapStateToProps = state => ({
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onUserProfileSave: (userId, userProfileData) => {
     dispatch(actionCreators.saveUserProfile(userId, userProfileData));
   },

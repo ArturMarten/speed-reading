@@ -114,10 +114,7 @@ export class RegressionChart extends Component {
       .attr('y', margin.top + height / 2)
       .text(this.props.translate('regression-chart.no-data'));
 
-    const chart = svg
-      .append('g')
-      .attr('class', 'chart')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`);
+    const chart = svg.append('g').attr('class', 'chart').attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Append axis
     chart
@@ -127,9 +124,7 @@ export class RegressionChart extends Component {
       .style('font-size', FONT_SIZE)
       .call(
         data[0] && data[0][this.props.xField] instanceof Date
-          ? axisBottom(this.xScale)
-              .tickFormat(timeFormat('%d/%m'))
-              .tickSizeInner(-height)
+          ? axisBottom(this.xScale).tickFormat(timeFormat('%d/%m')).tickSizeInner(-height)
           : axisBottom(this.xScale).tickSizeInner(-height),
       )
       .append('text')
@@ -141,11 +136,7 @@ export class RegressionChart extends Component {
       .append('g')
       .attr('class', 'y-axis')
       .style('font-size', FONT_SIZE)
-      .call(
-        axisLeft(this.yScale)
-          .ticks(10)
-          .tickSizeInner(-width),
-      )
+      .call(axisLeft(this.yScale).ticks(10).tickSizeInner(-width))
       .append('text')
       .attr('class', 'label')
       .attr('transform', 'rotate(-90)')
@@ -165,14 +156,8 @@ export class RegressionChart extends Component {
       .attr('width', 12)
       .attr('height', 12)
       .style('fill', this.props.dataLineColor[0]);
-    const legendText = legend
-      .append('text')
-      .attr('x', 20)
-      .attr('y', 10);
-    legendText
-      .append('tspan')
-      .attr('class', 'legend-title')
-      .text(this.props.legendTitles[0]);
+    const legendText = legend.append('text').attr('x', 20).attr('y', 10);
+    legendText.append('tspan').attr('class', 'legend-title').text(this.props.legendTitles[0]);
     legendText.append('tspan').text(` [${this.props.translate('regression-chart.change')}: `);
     legendText
       .append('tspan')
@@ -199,9 +184,7 @@ export class RegressionChart extends Component {
 
     // Append tooltip
     if (select('#tooltip').empty()) {
-      select('#root')
-        .append('div')
-        .attr('id', 'tooltip');
+      select('#root').append('div').attr('id', 'tooltip');
     }
     select('#tooltip').style('visibility', 'hidden');
 
@@ -252,23 +235,13 @@ export class RegressionChart extends Component {
       svg.select('.title').text(title);
     }
     if (prevProps.xField !== xField) {
-      chart
-        .select('.x-axis .label')
-        .transition()
-        .duration(TRANSITION_DURATION)
-        .text(xLabel);
+      chart.select('.x-axis .label').transition().duration(TRANSITION_DURATION).text(xLabel);
     }
     if (prevProps.yFields !== yFields) {
-      chart
-        .select('.y-axis .label')
-        .transition()
-        .duration(TRANSITION_DURATION)
-        .text(yLabel);
+      chart.select('.y-axis .label').transition().duration(TRANSITION_DURATION).text(yLabel);
     }
     if (select('#tooltip').empty()) {
-      select('#root')
-        .append('div')
-        .attr('id', 'tooltip');
+      select('#root').append('div').attr('id', 'tooltip');
     }
     // console.log('Regression chart update');
     // Move data from render method to parent state
@@ -316,11 +289,7 @@ export class RegressionChart extends Component {
           .select('.x-axis')
           .transition()
           .duration(TRANSITION_DURATION)
-          .call(
-            axisBottom(this.xScale)
-              .tickFormat(timeFormat('%d/%m'))
-              .tickSizeInner(-height),
-          );
+          .call(axisBottom(this.xScale).tickFormat(timeFormat('%d/%m')).tickSizeInner(-height));
       } else {
         chart
           .select('.x-axis')
@@ -333,11 +302,7 @@ export class RegressionChart extends Component {
         .select('.y-axis')
         .transition()
         .duration(TRANSITION_DURATION)
-        .call(
-          axisLeft(this.yScale)
-            .ticks(10)
-            .tickSizeInner(-width),
-        );
+        .call(axisLeft(this.yScale).ticks(10).tickSizeInner(-width));
 
       // Update legend
       svg.select('.legend-title').text(this.props.legendTitles[0]);

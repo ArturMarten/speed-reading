@@ -22,9 +22,9 @@ export class ManageGroups extends Component {
 
   onRefresh = () => {
     this.props.onFetchGroups();
-  }
+  };
 
-  sortHandler = selectedColumn => () => {
+  sortHandler = (selectedColumn) => () => {
     const { column, direction } = this.state;
     if (column !== selectedColumn) {
       this.setState({
@@ -42,18 +42,16 @@ export class ManageGroups extends Component {
     this.setState({
       groupEditorOpened: !this.state.groupEditorOpened,
     });
-  }
+  };
 
   render() {
     const { column, direction } = this.state;
     const sortedGroups = sortByColumn(this.props.groups, column, direction);
     return (
       <Fragment>
-        {this.state.groupEditorOpened ?
-          <GroupEditor
-            open={this.state.groupEditorOpened}
-            onClose={this.groupEditorToggleHandler}
-          /> : null}
+        {this.state.groupEditorOpened ? (
+          <GroupEditor open={this.state.groupEditorOpened} onClose={this.groupEditorToggleHandler} />
+        ) : null}
         <Button
           positive
           compact
@@ -66,10 +64,11 @@ export class ManageGroups extends Component {
           <Icon name="refresh" />
           {this.props.translate('manage-groups.refresh')}
         </Button>
-        {this.props.groupsStatus.loading ?
+        {this.props.groupsStatus.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>
             <Loader active indeterminate content={this.props.translate('manage-groups.fetching-groups')} />
-          </Segment> :
+          </Segment>
+        ) : (
           <Fragment>
             <Table basic celled selectable compact="very" sortable>
               <Table.Header>
@@ -77,30 +76,32 @@ export class ManageGroups extends Component {
                   <Table.HeaderCell sorted={column === 'id' ? direction : null} onClick={this.sortHandler('id')}>
                     {this.props.translate('manage-groups.group')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell sorted={column === 'creationDate' ? direction : null} onClick={this.sortHandler('creationDate')}>
+                  <Table.HeaderCell
+                    sorted={column === 'creationDate' ? direction : null}
+                    onClick={this.sortHandler('creationDate')}
+                  >
                     {this.props.translate('manage-groups.creation-date')}
                   </Table.HeaderCell>
-                  <Table.HeaderCell sorted={column === 'userCount' ? direction : null} onClick={this.sortHandler('userCount')}>
+                  <Table.HeaderCell
+                    sorted={column === 'userCount' ? direction : null}
+                    onClick={this.sortHandler('userCount')}
+                  >
                     {this.props.translate('manage-groups.user-count')}
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedGroups.map(group => (
+                {sortedGroups.map((group) => (
                   <Table.Row key={group.id}>
+                    <Table.Cell>{group.name}</Table.Cell>
                     <Table.Cell>
-                      {group.name}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {new Intl.DateTimeFormat((this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB'), {
+                      {new Intl.DateTimeFormat(this.props.currentLanguage === 'ee' ? 'et-EE' : 'en-GB', {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric',
                       }).format(group.creationDate)}
                     </Table.Cell>
-                    <Table.Cell>
-                      {group.userCount}
-                    </Table.Cell>
+                    <Table.Cell>{group.userCount}</Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -117,20 +118,21 @@ export class ManageGroups extends Component {
                 </Table.Row>
               </Table.Footer>
             </Table>
-          </Fragment>}
+          </Fragment>
+        )}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   groupsStatus: state.group.groupsStatus,
   groups: state.group.groups,
   translate: getTranslate(state.locale),
   currentLanguage: getActiveLanguage(state.locale).code,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onFetchGroups: () => {
     dispatch(actionCreators.fetchGroups());
   },

@@ -39,7 +39,9 @@ const generateRandomString = (array, length) =>
 const swapRandomSymbol = (string) => {
   const array = string.split('');
   const randomIndex = Math.floor(Math.random() * array.length);
-  return Object.assign([...array], { [randomIndex]: getSimilarSymbol(array[randomIndex]) }).join('');
+  return Object.assign([...array], {
+    [randomIndex]: getSimilarSymbol(array[randomIndex]),
+  }).join('');
 };
 
 export const generateStringPairs = (count, length, modification) => {

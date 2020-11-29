@@ -164,7 +164,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(QuestionEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionEditor);

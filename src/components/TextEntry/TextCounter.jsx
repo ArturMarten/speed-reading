@@ -19,21 +19,15 @@ const TextCounter = (props) => {
     <Fragment>
       <Label as="a" basic style={{ margin: '2px 2px' }}>
         {props.translate('text-editor.characters')}
-        <Label.Detail>
-          {characterCount}
-        </Label.Detail>
+        <Label.Detail>{characterCount}</Label.Detail>
       </Label>
       <Label as="a" basic style={{ margin: '2px 2px' }}>
         {props.translate('text-editor.words')}
-        <Label.Detail>
-          {wordCount}
-        </Label.Detail>
+        <Label.Detail>{wordCount}</Label.Detail>
       </Label>
       <Label as="a" basic style={{ margin: '2px 2px' }}>
         {props.translate('text-editor.sentences')}
-        <Label.Detail>
-          {sentenceCount}
-        </Label.Detail>
+        <Label.Detail>{sentenceCount}</Label.Detail>
       </Label>
     </Fragment>
   );

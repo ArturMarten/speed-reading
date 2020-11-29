@@ -53,10 +53,12 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_BUG_REPORTS_SUCCEEDED: {
-      const bugReports = action.payload.map(bugReport => updateObject(bugReport, {
-        date: bugReport.date ? new Date(bugReport.date) : null,
-        loading: false,
-      }));
+      const bugReports = action.payload.map((bugReport) =>
+        updateObject(bugReport, {
+          date: bugReport.date ? new Date(bugReport.date) : null,
+          loading: false,
+        }),
+      );
       return updateObject(state, {
         bugReportsStatus: {
           loading: false,
@@ -75,26 +77,28 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.RESOLVE_BUG_REPORT_START: {
       return updateObject(state, {
-        bugReports: state.bugReports
-          .map(bugReport => (bugReport.id === action.payload.bugReportId ?
-            updateObject(bugReport, { loading: true }) : bugReport)),
+        bugReports: state.bugReports.map((bugReport) =>
+          bugReport.id === action.payload.bugReportId ? updateObject(bugReport, { loading: true }) : bugReport,
+        ),
       });
     }
     case actionTypes.RESOLVE_BUG_REPORT_SUCCEEDED: {
       return updateObject(state, {
-        bugReports: state.bugReports
-          .map(bugReport => (bugReport.id === action.payload.bugReportId ?
-            updateObject(bugReport, {
-              loading: false,
-              resolved: action.payload.resolved,
-            }) : bugReport)),
+        bugReports: state.bugReports.map((bugReport) =>
+          bugReport.id === action.payload.bugReportId
+            ? updateObject(bugReport, {
+                loading: false,
+                resolved: action.payload.resolved,
+              })
+            : bugReport,
+        ),
       });
     }
     case actionTypes.RESOLVE_BUG_REPORT_FAILED: {
       return updateObject(state, {
-        bugReports: state.bugReports
-          .map(bugReport => (bugReport.id === action.payload.bugReportId ?
-            updateObject(bugReport, { loading: false }) : bugReport)),
+        bugReports: state.bugReports.map((bugReport) =>
+          bugReport.id === action.payload.bugReportId ? updateObject(bugReport, { loading: false }) : bugReport,
+        ),
       });
     }
     default:

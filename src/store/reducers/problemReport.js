@@ -53,10 +53,12 @@ const reducer = (state = initialState, action) => {
       });
     }
     case actionTypes.FETCH_PROBLEM_REPORTS_SUCCEEDED: {
-      const problemReports = action.payload.map(problemReport => updateObject(problemReport, {
-        date: problemReport.date ? new Date(problemReport.date) : null,
-        loading: false,
-      }));
+      const problemReports = action.payload.map((problemReport) =>
+        updateObject(problemReport, {
+          date: problemReport.date ? new Date(problemReport.date) : null,
+          loading: false,
+        }),
+      );
       return updateObject(state, {
         problemReportsStatus: {
           loading: false,
@@ -75,26 +77,32 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.RESOLVE_PROBLEM_REPORT_START: {
       return updateObject(state, {
-        problemReports: state.problemReports
-          .map(problemReport => (problemReport.id === action.payload.problemReportId ?
-            updateObject(problemReport, { loading: true }) : problemReport)),
+        problemReports: state.problemReports.map((problemReport) =>
+          problemReport.id === action.payload.problemReportId
+            ? updateObject(problemReport, { loading: true })
+            : problemReport,
+        ),
       });
     }
     case actionTypes.RESOLVE_PROBLEM_REPORT_SUCCEEDED: {
       return updateObject(state, {
-        problemReports: state.problemReports
-          .map(problemReport => (problemReport.id === action.payload.problemReportId ?
-            updateObject(problemReport, {
-              loading: false,
-              resolved: action.payload.resolved,
-            }) : problemReport)),
+        problemReports: state.problemReports.map((problemReport) =>
+          problemReport.id === action.payload.problemReportId
+            ? updateObject(problemReport, {
+                loading: false,
+                resolved: action.payload.resolved,
+              })
+            : problemReport,
+        ),
       });
     }
     case actionTypes.RESOLVE_PROBLEM_REPORT_FAILED: {
       return updateObject(state, {
-        problemReports: state.problemReports
-          .map(problemReport => (problemReport.id === action.payload.problemReportId ?
-            updateObject(problemReport, { loading: false }) : problemReport)),
+        problemReports: state.problemReports.map((problemReport) =>
+          problemReport.id === action.payload.problemReportId
+            ? updateObject(problemReport, { loading: false })
+            : problemReport,
+        ),
       });
     }
     default:

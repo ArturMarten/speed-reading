@@ -11,30 +11,31 @@ export class QuestionTestAnswers extends Component {
   };
 
   componentDidMount() {
-    api.fetchTestQuestionAnswers(this.props.testAttemptId)
-      .then((testQuestionAnswers) => {
+    api.fetchTestQuestionAnswers(this.props.testAttemptId).then(
+      (testQuestionAnswers) => {
         this.setState({
           loading: false,
           testQuestionAnswers,
         });
-      }, () => {
+      },
+      () => {
         this.setState({
           loading: false,
           testQuestionAnswers: [],
         });
-      });
+      },
+    );
   }
 
   render() {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>
-        <Header as="h2">
-          {this.props.translate('question-test-answers.header')}
-        </Header>
-        {this.state.loading ?
+        <Header as="h2">{this.props.translate('question-test-answers.header')}</Header>
+        {this.state.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>
             <Loader active indeterminate content={this.props.translate('question-test-answers.loading')} />
-          </Segment> :
+          </Segment>
+        ) : (
           <Grid verticalAlign="middle">
             {this.state.testQuestionAnswers.map((testQuestionAnswer, testQuestionAnswerIndex) => (
               <Fragment key={testQuestionAnswer.id}>
@@ -72,34 +73,30 @@ export class QuestionTestAnswers extends Component {
                       }}
                     >
                       <Grid.Column mobile={1} tablet={1} computer={1} textAlign="center">
-                        {answer.correct ?
-                          <Icon
-                            fitted
-                            name="check"
-                            size="large"
-                            color={answer.correct ? 'green' : 'grey'}
-                          /> : null}
+                        {answer.correct ? (
+                          <Icon fitted name="check" size="large" color={answer.correct ? 'green' : 'grey'} />
+                        ) : null}
                       </Grid.Column>
                       <Grid.Column mobile={10} tablet={13} computer={15}>
                         {`${String.fromCharCode(65 + answerIndex)} ) ${answer.answerText}`}
                       </Grid.Column>
-                    </Grid.Row>);
+                    </Grid.Row>
+                  );
                 })}
               </Fragment>
             ))}
-          </Grid>}
+          </Grid>
+        )}
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   testAttemptId: state.exerciseTest.attemptId,
   translate: getTranslate(state.locale),
 });
 
-// eslint-disable-next-line no-unused-vars
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionTestAnswers);

@@ -1,4 +1,4 @@
-import { fireEvent, wait } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import axiosMock from 'axios';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
@@ -21,7 +21,7 @@ it('changes password', async () => {
     target: { value: 'newPassword' },
   });
   fireEvent.click(getByText(translate('change-password.change')));
-  await wait(() => expect(queryByText(translate('success.password-changed'))).not.toBeNull());
+  await waitFor(() => expect(queryByText(translate('success.password-changed'))).not.toBeNull());
   expect(axiosMock.get).toBeCalledTimes(1);
   expect(axiosMock.get).toBeCalledWith(
     '/changePassword',

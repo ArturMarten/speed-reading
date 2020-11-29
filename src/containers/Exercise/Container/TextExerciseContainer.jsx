@@ -27,39 +27,26 @@ export class TextExerciseContainer extends Component {
   onExerciseEnd = () => {
     this.props.onExerciseEnd();
     this.setState({ finished: true });
-  }
+  };
 
   onTestEnd = () => {
     this.props.onTestEnd();
     this.setState({ finished: true });
-  }
+  };
 
   getCurrentView() {
     switch (this.state.status) {
       case 'preparation': {
-        return (
-          <TextExercisePreparation
-            type={this.props.type}
-            onProceed={() => this.switchViewHandler('exercise')}
-          />
-        );
+        return <TextExercisePreparation type={this.props.type} onProceed={() => this.switchViewHandler('exercise')} />;
       }
       case 'exercise': {
-        return (
-          <TextExercise
-            type={this.props.type}
-          />
-        );
+        return <TextExercise type={this.props.type} />;
       }
       case 'test': {
-        return (
-          this.props.selectedText.id ? <TextExerciseQuestionTest /> : <TextExerciseBlankTest />
-        );
+        return this.props.selectedText.id ? <TextExerciseQuestionTest /> : <TextExerciseBlankTest />;
       }
       case 'testAnswers': {
-        return (
-          this.props.selectedText.id ? <QuestionTestAnswers /> : <BlankTestAnswers />
-        );
+        return this.props.selectedText.id ? <QuestionTestAnswers /> : <BlankTestAnswers />;
       }
       default:
         return null;
@@ -67,18 +54,26 @@ export class TextExerciseContainer extends Component {
   }
 
   textInterestingnessRating = (interestingnessRating) => {
-    api.addTextRating({ readingTextId: this.props.selectedText.id, interestingnessRating })
-      .then(() => {}, (errorMessage) => { console.log(errorMessage); });
-  }
+    api.addTextRating({ readingTextId: this.props.selectedText.id, interestingnessRating }).then(
+      () => {},
+      (errorMessage) => {
+        console.log(errorMessage);
+      },
+    );
+  };
 
   testDifficultyRating = (difficultyRating) => {
-    api.addTestRating({ readingTextId: this.props.selectedText.id, difficultyRating })
-      .then(() => {}, (errorMessage) => { console.log(errorMessage); });
-  }
+    api.addTestRating({ readingTextId: this.props.selectedText.id, difficultyRating }).then(
+      () => {},
+      (errorMessage) => {
+        console.log(errorMessage);
+      },
+    );
+  };
 
   switchViewHandler = (status) => {
     this.setState({ status });
-  }
+  };
 
   render() {
     let finishRedirect = null;
@@ -88,34 +83,36 @@ export class TextExerciseContainer extends Component {
     return (
       <Fragment>
         {finishRedirect}
-        {this.state.status === 'exercise' && this.props.exerciseStatus === 'finished' ?
+        {this.state.status === 'exercise' && this.props.exerciseStatus === 'finished' ? (
           <TextExerciseResults
             open={this.state.status === 'exercise' && this.props.exerciseStatus === 'finished'}
             onProceed={() => this.switchViewHandler('test')}
             onRate={this.textInterestingnessRating}
             onEnd={this.onExerciseEnd}
-          /> : null}
-        {this.state.status === 'test' && this.props.testStatus === 'finished' ?
+          />
+        ) : null}
+        {this.state.status === 'test' && this.props.testStatus === 'finished' ? (
           <TestResults
             open={this.state.status === 'test' && this.props.testStatus === 'finished'}
             onRate={this.testDifficultyRating}
             onCheckAnswers={() => this.switchViewHandler('testAnswers')}
             onEnd={this.onTestEnd}
-          /> : null}
+          />
+        ) : null}
         {this.getCurrentView()}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   selectedText: state.text.selectedText,
   testStatus: state.exerciseTest.status,
   exerciseStatus: state.exercise.status,
   translate: getTranslate(state.locale),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onExerciseSelect: (type) => {
     dispatch(actionCreators.selectExercise(type));
   },

@@ -16,7 +16,7 @@ test:
     - build
   script:
     - cp src/credentials.js.example src/credentials.js # Credentials are required
-    - npm run test-no-watch
+    - npm run test:no-watch
 
 coverage:
   stage: test
@@ -25,7 +25,7 @@ coverage:
   script:
     - cp src/credentials.js.example src/credentials.js # Credentials are required
     - npm install -g codecov
-    - npm run test-coverage
+    - npm run test:coverage
     - codecov
   artifacts:
     paths:

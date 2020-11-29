@@ -1,20 +1,8 @@
-export {
-  register,
-  login,
-  saveToken,
-  changePassword,
-} from './auth';
+export { register, login, saveToken, changePassword } from './auth';
 
-export {
-  sendBugReport,
-  fetchBugReports,
-  resolveBugReport,
-} from './bugReport';
+export { sendBugReport, fetchBugReports, resolveBugReport } from './bugReport';
 
-export {
-  startExercise,
-  finishExercise,
-} from './exercise';
+export { startExercise, finishExercise } from './exercise';
 
 export {
   fetchTestEditorQuestions,
@@ -36,51 +24,20 @@ export {
   reevaluateTestAttempt,
 } from './exerciseTest';
 
-export {
-  sendFeedback,
-  fetchFeedback,
-} from './feedback';
+export { sendFeedback, fetchFeedback } from './feedback';
 
-export {
-  fetchGroups,
-  addGroup,
-  changeGroup,
-} from './group';
+export { fetchGroups, addGroup, changeGroup } from './group';
 
-export {
-  sendProblemReport,
-  fetchProblemReports,
-  resolveProblemReport,
-} from './problemReport';
+export { sendProblemReport, fetchProblemReports, resolveProblemReport } from './problemReport';
 
-export {
-  fetchUserProfile,
-  saveUserProfile,
-} from './profile';
+export { fetchUserProfile, saveUserProfile } from './profile';
 
-export {
-  fetchAchievements,
-} from './achievements';
+export { fetchAchievements } from './achievements';
 
-export {
-  fetchApplicationStatistics,
-  fetchUserExerciseStatistics,
-  fetchGroupExerciseStatistics,
-} from './statistics';
+export { fetchApplicationStatistics, fetchUserExerciseStatistics, fetchGroupExerciseStatistics } from './statistics';
 
-export {
-  saveText,
-  fetchTextCollections,
-  fetchTexts,
-  selectText,
-  analyzeText,
-  addTextRating,
-} from './text';
+export { saveText, fetchTextCollections, fetchTexts, selectText, analyzeText, addTextRating } from './text';
 
-export {
-  fetchUsers,
-  addUser,
-  changeUser,
-} from './user';
+export { fetchUsers, addUser, changeUser } from './user';
 
 export { exportFile } from './utils';

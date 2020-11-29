@@ -1,4 +1,4 @@
-import { fireEvent, wait } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import axiosMock from 'axios';
 import React from 'react';
 import credentials from '../../credentials';
@@ -21,7 +21,7 @@ it('registers successfully', async () => {
   fireEvent.change(getByPlaceholderText(translate('auth.email')), { target: { value: 'username@test.com' } });
   fireEvent.change(getByPlaceholderText(translate('auth.confirm-email')), { target: { value: 'username@test.com' } });
   fireEvent.click(getByText(translate('auth.register-user')));
-  await wait(() => expect(queryByText(translate('success.account-registered-password-sent'))).not.toBeNull());
+  await waitFor(() => expect(queryByText(translate('success.account-registered-password-sent'))).not.toBeNull());
   expect(axiosMock.post).toBeCalledTimes(1);
   expect(axiosMock.post).toBeCalledWith(
     '/register',
@@ -59,7 +59,7 @@ it('logins successfully', async () => {
   fireEvent.change(getByPlaceholderText(translate('auth.username')), { target: { value: 'username@test.com' } });
   fireEvent.change(getByPlaceholderText(translate('auth.password')), { target: { value: 'password' } });
   fireEvent.click(getByText(translate('auth.login-button')));
-  await wait(() => expect(queryByText(translate('auth.login-button'))).toBeNull());
+  await waitFor(() => expect(queryByText(translate('auth.login-button'))).toBeNull());
   expect(axiosMock.get).toHaveBeenCalledTimes(3);
   expect(axiosMock.get).toHaveBeenNthCalledWith(
     1,
@@ -86,7 +86,7 @@ it('shows error when user does not exist', async () => {
   fireEvent.change(getByPlaceholderText(translate('auth.username')), { target: { value: 'username@test.com' } });
   fireEvent.change(getByPlaceholderText(translate('auth.password')), { target: { value: 'password' } });
   fireEvent.click(getByText(translate('auth.login-button')));
-  await wait(() => expect(queryByText(translate('error.user-not-found'))).not.toBeNull());
+  await waitFor(() => expect(queryByText(translate('error.user-not-found'))).not.toBeNull());
 });
 
 it('shows error when incorrect password', async () => {
@@ -101,7 +101,7 @@ it('shows error when incorrect password', async () => {
   fireEvent.change(getByPlaceholderText(translate('auth.username')), { target: { value: 'username@test.com' } });
   fireEvent.change(getByPlaceholderText(translate('auth.password')), { target: { value: 'password' } });
   fireEvent.click(getByText(translate('auth.login-button')));
-  await wait(() => expect(queryByText(translate('error.incorrect-password'))).not.toBeNull());
+  await waitFor(() => expect(queryByText(translate('error.incorrect-password'))).not.toBeNull());
 });
 
 it('logins successfully with demo user', async () => {
@@ -110,7 +110,7 @@ it('logins successfully with demo user', async () => {
   });
   const { translate, getByText, queryByText } = renderWithRedux(<Auth />);
   fireEvent.click(getByText(translate('auth.demo')));
-  await wait(() => expect(queryByText(translate('auth.login-button'))).toBeNull());
+  await waitFor(() => expect(queryByText(translate('auth.login-button'))).toBeNull());
   expect(axiosMock.get).toBeCalledTimes(3);
   expect(axiosMock.get).toHaveBeenNthCalledWith(
     1,

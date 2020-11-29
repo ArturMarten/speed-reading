@@ -148,7 +148,12 @@ export const getAchievementData = (achievementKey) => {
       textFormatter: formatMillisecondsInText,
     };
   }
-  return { achievementType, color: countColor, formatter: null, textFormatter: null };
+  return {
+    achievementType,
+    color: countColor,
+    formatter: null,
+    textFormatter: null,
+  };
 };
 
 export const isAchievementKey = (key) => {
@@ -379,9 +384,14 @@ export const calculateAchievements = (previousAchievements, statistics, attempt,
   const uniqueDailyPoints = updateTemporalUnique ? dailyUniquePoints + dailyUniqueTypePoints : 0;
   newAchievements.daily = {
     ...checkedTemporalAchievements.daily,
-    ...(updateTemporalUnique && !isEmptyObject(incrementedDailyUnique) && { [exercise]: incrementedDailyUnique }),
     ...(updateTemporalUnique &&
-      !isEmptyObject(incrementedDailyUniqueType) && { [exerciseType]: incrementedDailyUniqueType }),
+      !isEmptyObject(incrementedDailyUnique) && {
+        [exercise]: incrementedDailyUnique,
+      }),
+    ...(updateTemporalUnique &&
+      !isEmptyObject(incrementedDailyUniqueType) && {
+        [exerciseType]: incrementedDailyUniqueType,
+      }),
     exercise: {
       ...checkedTemporalAchievements.daily.exercise,
       ...incrementedDailyExercise,
@@ -400,9 +410,14 @@ export const calculateAchievements = (previousAchievements, statistics, attempt,
   const uniqueWeeklyPoints = updateTemporalUnique ? weeklyUniquePoints + weeklyUniqueTypePoints : 0;
   newAchievements.weekly = {
     ...checkedTemporalAchievements.weekly,
-    ...(updateTemporalUnique && !isEmptyObject(incrementedWeeklyUnique) && { [exercise]: incrementedWeeklyUnique }),
     ...(updateTemporalUnique &&
-      !isEmptyObject(incrementedWeeklyUniqueType) && { [exerciseType]: incrementedWeeklyUniqueType }),
+      !isEmptyObject(incrementedWeeklyUnique) && {
+        [exercise]: incrementedWeeklyUnique,
+      }),
+    ...(updateTemporalUnique &&
+      !isEmptyObject(incrementedWeeklyUniqueType) && {
+        [exerciseType]: incrementedWeeklyUniqueType,
+      }),
     exercise: {
       ...checkedTemporalAchievements.weekly.exercise,
       ...incrementedWeeklyExercise,
@@ -421,9 +436,14 @@ export const calculateAchievements = (previousAchievements, statistics, attempt,
   const uniqueMonthlyPoints = updateTemporalUnique ? monthlyUniquePoints + monthlyUniqueTypePoints : 0;
   newAchievements.monthly = {
     ...checkedTemporalAchievements.monthly,
-    ...(updateTemporalUnique && !isEmptyObject(incrementedMonthlyUnique) && { [exercise]: incrementedMonthlyUnique }),
     ...(updateTemporalUnique &&
-      !isEmptyObject(incrementedMonthlyUniqueType) && { [exerciseType]: incrementedMonthlyUniqueType }),
+      !isEmptyObject(incrementedMonthlyUnique) && {
+        [exercise]: incrementedMonthlyUnique,
+      }),
+    ...(updateTemporalUnique &&
+      !isEmptyObject(incrementedMonthlyUniqueType) && {
+        [exerciseType]: incrementedMonthlyUniqueType,
+      }),
     exercise: {
       ...checkedTemporalAchievements.monthly.exercise,
       ...incrementedMonthlyExercise,

@@ -66,7 +66,6 @@ export class Feedback extends Component {
     updatedFormElement.touched = true;
     updatedFeedbackForm[name] = updatedFormElement;
     let formIsValid = true;
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const inputName in updatedFeedbackForm) {
       formIsValid = updatedFeedbackForm[inputName].valid && formIsValid;
     }
@@ -189,7 +188,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Feedback);
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback);

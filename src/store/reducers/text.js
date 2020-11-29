@@ -100,7 +100,10 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.FETCH_TEXTS_SUCCEEDED: {
       return updateObject(state, {
-        texts: action.payload.map(({ statistics, ...rest }) => ({ ...statistics, ...rest })),
+        texts: action.payload.map(({ statistics, ...rest }) => ({
+          ...statistics,
+          ...rest,
+        })),
         textsStatus: {
           loading: false,
           error: null,

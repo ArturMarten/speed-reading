@@ -5,46 +5,50 @@ const sendFeedbackStart = () => ({
   type: actionTypes.SEND_FEEDBACK_START,
 });
 
-const sendFeedbackSucceeded = message => ({
+const sendFeedbackSucceeded = (message) => ({
   type: actionTypes.SEND_FEEDBACK_SUCCEEDED,
   payload: message,
 });
 
-const sendFeedbackFailed = error => ({
+const sendFeedbackFailed = (error) => ({
   type: actionTypes.SEND_FEEDBACK_FAILED,
   payload: error,
 });
 
-export const sendFeedback = feedbackData => (dispatch) => {
+export const sendFeedback = (feedbackData) => (dispatch) => {
   dispatch(sendFeedbackStart());
-  api.sendFeedback(feedbackData)
-    .then((message) => {
+  api.sendFeedback(feedbackData).then(
+    (message) => {
       dispatch(sendFeedbackSucceeded(message));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(sendFeedbackFailed(errorMessage));
-    });
+    },
+  );
 };
 
 const fetchFeedbackStart = () => ({
   type: actionTypes.FETCH_FEEDBACK_START,
 });
 
-const fetchFeedbackSucceeded = feedbackList => ({
+const fetchFeedbackSucceeded = (feedbackList) => ({
   type: actionTypes.FETCH_FEEDBACK_SUCCEEDED,
   payload: feedbackList,
 });
 
-const fetchFeedbackFailed = error => ({
+const fetchFeedbackFailed = (error) => ({
   type: actionTypes.FETCH_FEEDBACK_FAILED,
   payload: error,
 });
 
 export const fetchFeedback = () => (dispatch) => {
   dispatch(fetchFeedbackStart());
-  api.fetchFeedback()
-    .then((feedback) => {
+  api.fetchFeedback().then(
+    (feedback) => {
       dispatch(fetchFeedbackSucceeded(feedback));
-    }, (errorMessage) => {
+    },
+    (errorMessage) => {
       dispatch(fetchFeedbackFailed(errorMessage));
-    });
+    },
+  );
 };

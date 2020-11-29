@@ -85,7 +85,9 @@ serviceWorker.register({
     const root = document.getElementById('root');
     root.insertBefore(offlineMessage, root.firstChild);
     ReactDOM.render(
-      React.createElement(OfflineMessage, { translate: getTranslate(store.getState().locale) }),
+      React.createElement(OfflineMessage, {
+        translate: getTranslate(store.getState().locale),
+      }),
       document.getElementById(offlineMessage.id),
     );
   },

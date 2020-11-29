@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateObject } from '../../../../shared/utility';
-import { createOffscreenContext, drawPage, getGroupsMetadata, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
-
+import {
+  createOffscreenContext,
+  drawPage,
+  getGroupsMetadata,
+  pixelRatio,
+  writeText,
+} from '../../../../utils/CanvasUtils/CanvasUtils';
 
 export const drawState = (currentState, context, restoreCanvas) => {
   const { restoreRects, drawRects } = currentState;

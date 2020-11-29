@@ -126,10 +126,7 @@
       "Rakendus on võitnud 2019.a kasvatusteaduslike tööde riiklikul konkursil didaktilis-rakenduslike tööde kategoorias I preemia.",
       "The application has won the 1st prize in the didactic-applied works category at the national competition for educational work in 2019."
     ],
-    "rewards-more-information": [
-      "Rohkem infot",
-      "More information"
-    ],
+    "rewards-more-information": ["Rohkem infot", "More information"],
     "about": ["Tarkvara kohta", "About software"],
     "user-manual": ["Kasutusjuhend", "User manual (only in Estonian)"],
     "problem-report-title": ["Probleem mõne tekstiga?", "Problem with some text?"],
@@ -182,7 +179,10 @@
       "After completing the exercises, you can perform a test to verify the comprehension level of the read text"
     ],
     "achievements-header": ["Personaalsed saavutused", "Personal achievements"],
-    "achievements-description": ["Eesmärkide saavutamine motiveerib veelgi rohkem harjutama", "Achieving goals motivates to exercise even more"],
+    "achievements-description": [
+      "Eesmärkide saavutamine motiveerib veelgi rohkem harjutama",
+      "Achieving goals motivates to exercise even more"
+    ],
     "reading-text-selection-header": ["Lugemistekstide valimine", "Reading text selection"],
     "reading-text-selection-description": [
       "Harjutamiseks saab kasutada ligi 200 olemasolevat lugemisteksti kui ka enda tekste",
@@ -705,14 +705,8 @@
       "Here you can see your achievements. Achievements are divided into daily, weekly, monthly and general achievements. Every achievement gives yellow stars. Numbers near slash symbol show how many yellow start you have collected so far and how many there is in total to collect. Number near plus symbol show how many yellow stars you got for that achievement."
     ],
     "statistic-total": ["Kokku kogutud", "Total collected"],
-    "statistic-group-average": [
-      "Grupi keskmine (${ average } kasutajat)",
-      "Group average (${ average } users)"
-    ],
-    "progress-badge": [
-      "Näitab praegust saavutuse taset",
-      "Shows current achievement level"
-    ],
+    "statistic-group-average": ["Grupi keskmine (${ average } kasutajat)", "Group average (${ average } users)"],
+    "progress-badge": ["Näitab praegust saavutuse taset", "Shows current achievement level"],
     "current-and-total-points": [
       "Näitab kui palju kollaseid tähti on saavutuse eest seni kogutud ja kui palju on võimalik kokku koguda",
       "Shows how many yellow stars have been collected so far and how many can be collected in total"
@@ -753,26 +747,83 @@
     "temporal.daily": ["täna ", " today"],
     "temporal.weekly": ["sel nädalal ", " this week"],
     "temporal.monthly": ["sel kuul ", " this month"],
-    "temporal.exercise.count": ["Soorita ${ temporal }${ value } harjutust", "Complete ${ value } exercises${ temporal }"],
+    "temporal.exercise.count": [
+      "Soorita ${ temporal }${ value } harjutust",
+      "Complete ${ value } exercises${ temporal }"
+    ],
     "temporal.exercise.time": ["Harjuta ${ temporal }${ value }", "Exercise for ${ count }${ temporal }"],
-    "temporal.readingExercise.count": ["Soorita ${ temporal }${ value } lugemisharjutust", "Complete ${ value } reading exercises${ temporal }"],
-    "temporal.readingExercise.time": ["Harjuta ${ temporal }${ value } lugemisharjutusi", "Exercise reading exercise for ${ value }${ temporal }"],
-    "temporal.helpExercise.count": ["Soorita ${ temporal }${ value } abiharjutust", "Complete ${ value } help exercises${ temporal }"],
-    "temporal.helpExercise.time": ["Harjuta ${ temporal }${ value } abiharjutusi", "Exercise help exercises for ${ value }${ temporal }"],
-    "temporal.readingTest.count": ["Soorita ${ temporal }${ value } lugemistesti", "Complete ${ value } reading tests${ temporal }"],
-    "temporal.readingTest.time": ["Harjuta ${ temporal }${ value } lugemistestiga", "Exercise reading test for ${ value }${ temporal }"],
-    "temporal.readingAid.count": ["Soorita ${ temporal }${ value } lugemise soodustaja harjutust", "Complete ${ value } reading aid exercises${ temporal }"],
-    "temporal.readingAid.time": ["Harjuta ${ temporal }${ value } lugemise soodustajaga", "Exercise reading aid for ${ value }${ temporal }"],
-    "temporal.scrolling.count": ["Soorita ${ temporal }${ value } keriva teksti harjutust", "Complete ${ value } scrolling text exercises${ temporal }"],
-    "temporal.scrolling.time": ["Harjuta ${ temporal }${ value } keriva tekstiga", "Exercise scrolling text for ${ value }${ temporal }"],
-    "temporal.disappearing.count": ["Soorita ${ temporal }${ value } kustuva teksti harjutust", "Complete ${ value } disappearing text exercises${ temporal }"],
-    "temporal.disappearing.time": ["Harjuta ${ temporal }${ value } kustuva tekstiga", "Exercise disappearing text for ${ value }${ temporal }"],
-    "temporal.wordGroups.count": ["Soorita ${ temporal }${ value } sõnarühmade harjutust", "Complete ${ value } word groups exercises${ temporal }"],
-    "temporal.wordGroups.time": ["Harjuta ${ temporal }${ value } sõnarühmadega", "Exercise word groups for ${ value }${ temporal }"],
-    "temporal.schulteTables.count": ["Soorita ${ temporal }${ value } Schulte tabelite harjutust", "Complete ${ value } Schulte tables exercises${ temporal }"],
-    "temporal.schulteTables.time": ["Harjuta ${ temporal }${ value } Schulte tabelitega", "Exercise Schulte tables for ${ value }${ temporal }"],
-    "temporal.concentration.count": ["Soorita ${ temporal }${ value } keskendumise harjutust", "Complete ${ value } concentration exercises${ temporal }"],
-    "temporal.concentration.time": ["Harjuta ${ temporal }${ value } keskendumise harjutusega", "Exercise concentration for ${ value }${ temporal }"]
+    "temporal.readingExercise.count": [
+      "Soorita ${ temporal }${ value } lugemisharjutust",
+      "Complete ${ value } reading exercises${ temporal }"
+    ],
+    "temporal.readingExercise.time": [
+      "Harjuta ${ temporal }${ value } lugemisharjutusi",
+      "Exercise reading exercise for ${ value }${ temporal }"
+    ],
+    "temporal.helpExercise.count": [
+      "Soorita ${ temporal }${ value } abiharjutust",
+      "Complete ${ value } help exercises${ temporal }"
+    ],
+    "temporal.helpExercise.time": [
+      "Harjuta ${ temporal }${ value } abiharjutusi",
+      "Exercise help exercises for ${ value }${ temporal }"
+    ],
+    "temporal.readingTest.count": [
+      "Soorita ${ temporal }${ value } lugemistesti",
+      "Complete ${ value } reading tests${ temporal }"
+    ],
+    "temporal.readingTest.time": [
+      "Harjuta ${ temporal }${ value } lugemistestiga",
+      "Exercise reading test for ${ value }${ temporal }"
+    ],
+    "temporal.readingAid.count": [
+      "Soorita ${ temporal }${ value } lugemise soodustaja harjutust",
+      "Complete ${ value } reading aid exercises${ temporal }"
+    ],
+    "temporal.readingAid.time": [
+      "Harjuta ${ temporal }${ value } lugemise soodustajaga",
+      "Exercise reading aid for ${ value }${ temporal }"
+    ],
+    "temporal.scrolling.count": [
+      "Soorita ${ temporal }${ value } keriva teksti harjutust",
+      "Complete ${ value } scrolling text exercises${ temporal }"
+    ],
+    "temporal.scrolling.time": [
+      "Harjuta ${ temporal }${ value } keriva tekstiga",
+      "Exercise scrolling text for ${ value }${ temporal }"
+    ],
+    "temporal.disappearing.count": [
+      "Soorita ${ temporal }${ value } kustuva teksti harjutust",
+      "Complete ${ value } disappearing text exercises${ temporal }"
+    ],
+    "temporal.disappearing.time": [
+      "Harjuta ${ temporal }${ value } kustuva tekstiga",
+      "Exercise disappearing text for ${ value }${ temporal }"
+    ],
+    "temporal.wordGroups.count": [
+      "Soorita ${ temporal }${ value } sõnarühmade harjutust",
+      "Complete ${ value } word groups exercises${ temporal }"
+    ],
+    "temporal.wordGroups.time": [
+      "Harjuta ${ temporal }${ value } sõnarühmadega",
+      "Exercise word groups for ${ value }${ temporal }"
+    ],
+    "temporal.schulteTables.count": [
+      "Soorita ${ temporal }${ value } Schulte tabelite harjutust",
+      "Complete ${ value } Schulte tables exercises${ temporal }"
+    ],
+    "temporal.schulteTables.time": [
+      "Harjuta ${ temporal }${ value } Schulte tabelitega",
+      "Exercise Schulte tables for ${ value }${ temporal }"
+    ],
+    "temporal.concentration.count": [
+      "Soorita ${ temporal }${ value } keskendumise harjutust",
+      "Complete ${ value } concentration exercises${ temporal }"
+    ],
+    "temporal.concentration.time": [
+      "Harjuta ${ temporal }${ value } keskendumise harjutusega",
+      "Exercise concentration for ${ value }${ temporal }"
+    ]
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],
@@ -877,7 +928,10 @@
     "modification": ["Modifikatsioon", "Modification"],
     "total-exercise-count": ["Harjutuste koguarv", "Exercise total count"],
     "total-exercise-elapsed-time": ["Harjutuste koguaeg", "Exercise total time"],
-    "average-exercise-count-per-user": ["Keskmine harjutuste arv ühe kasutaja kohta (${ userCount } kasutajat)", "Average exercise count per one user (${ userCount } users)"],
+    "average-exercise-count-per-user": [
+      "Keskmine harjutuste arv ühe kasutaja kohta (${ userCount } kasutajat)",
+      "Average exercise count per one user (${ userCount } users)"
+    ],
     "average-initial-reading-speed": ["Keskmine lugemise algkiirus", "Average initial reading speed"],
     "average-final-reading-speed": ["Keskmine lugemise lõppkiirus", "Average final reading speed"],
     "average-reading-speed-change-percentage": ["Keskmine lugemiskiiruse muutus", "Average reading speed change"],
@@ -893,18 +947,42 @@
       "Keskmine omandamistaseme muutus",
       "Average comprehension level change"
     ],
-    "average-initial-exercise-speed": ["Keskmine leidmise algkiirus (sümbolit minutis)", "Average initial finding speed (symbols in minute)"],
-    "average-final-exercise-speed": ["Keskmine leidmise lõppkiirus (sümbolit minutis)", "Average final finding speed (symbols per minute)"],
+    "average-initial-exercise-speed": [
+      "Keskmine leidmise algkiirus (sümbolit minutis)",
+      "Average initial finding speed (symbols in minute)"
+    ],
+    "average-final-exercise-speed": [
+      "Keskmine leidmise lõppkiirus (sümbolit minutis)",
+      "Average final finding speed (symbols per minute)"
+    ],
     "average-exercise-speed-change-percentage": ["Keskmine leidmise kiiruse muutus", "Average finding speed change"],
     "average-initial-exercise-result": ["Keskmine algne tulemus", "Average initial result"],
     "average-final-exercise-result": ["Keskmine lõpp tulemus", "Average final result"],
     "average-exercise-result-change-percentage": ["Keskmine tulemuse muutus", "Average result change"],
-    "average-initial-symbol-group-speed": ["Keskmine grupi identsuse üle otsustamise algkiirus", "Average initial decision speed over group identity"],
-    "average-final-symbol-group-speed": ["Keskmine grupi identsuse üle otsustamise lõppkiirus", "Average final decision speed over group identity"],
-    "average-symbol-group-speed-change-percentage": ["Keskmine grupi identsuse üle otsustamise kiiruse muutus", "Average initial decision speed change over group identity"],
-    "average-initial-symbol-speed": ["Keskmine sümboli identsuse üle otsustamise algkiirus", "Average initial decision speed over symbol identity"],
-    "average-final-symbol-speed": ["Keskmine sümboli identsuse üle otsustamise lõppkiirus", "Average final decision speed over symbol identity"],
-    "average-symbol-speed-change-percentage": ["Keskmine sümboli identsuse üle otsustamise kiiruse muutus", "Average initial decision speed change over symbol identity"]
+    "average-initial-symbol-group-speed": [
+      "Keskmine grupi identsuse üle otsustamise algkiirus",
+      "Average initial decision speed over group identity"
+    ],
+    "average-final-symbol-group-speed": [
+      "Keskmine grupi identsuse üle otsustamise lõppkiirus",
+      "Average final decision speed over group identity"
+    ],
+    "average-symbol-group-speed-change-percentage": [
+      "Keskmine grupi identsuse üle otsustamise kiiruse muutus",
+      "Average initial decision speed change over group identity"
+    ],
+    "average-initial-symbol-speed": [
+      "Keskmine sümboli identsuse üle otsustamise algkiirus",
+      "Average initial decision speed over symbol identity"
+    ],
+    "average-final-symbol-speed": [
+      "Keskmine sümboli identsuse üle otsustamise lõppkiirus",
+      "Average final decision speed over symbol identity"
+    ],
+    "average-symbol-speed-change-percentage": [
+      "Keskmine sümboli identsuse üle otsustamise kiiruse muutus",
+      "Average initial decision speed change over symbol identity"
+    ]
   },
   "manage": {
     "title": ["Halda", "Manage"],

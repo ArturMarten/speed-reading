@@ -1,5 +1,9 @@
 /* Override disabled buttons styling */
-.ui.buttons .disabled.button, .ui.disabled.button, .ui.button:disabled, .ui.disabled.button:hover, .ui.disabled.active.button {
+.ui.buttons .disabled.button,
+.ui.disabled.button,
+.ui.button:disabled,
+.ui.disabled.button:hover,
+.ui.disabled.active.button {
   cursor: not-allowed !important;
   opacity: 0.45 !important;
   background-image: none !important;
@@ -9,15 +13,19 @@
 }
 
 /* Override disabled checkbox styling */
-.ui.disabled.checkbox .box:after, .ui.disabled.checkbox label, .ui.checkbox input[disabled] ~ .box:after, .ui.checkbox input[disabled] ~ label {
+.ui.disabled.checkbox .box:after,
+.ui.disabled.checkbox label,
+.ui.checkbox input[disabled] ~ .box:after,
+.ui.checkbox input[disabled] ~ label {
   cursor: not-allowed !important;
   opacity: 0.45 !important;
   pointer-events: initial !important;
-  color: #000000
+  color: #000000;
 }
 
 /* Override disabled dropdown styling */
-.ui.disabled.dropdown, .ui.dropdown .menu > .disabled.item {
+.ui.disabled.dropdown,
+.ui.dropdown .menu > .disabled.item {
   cursor: not-allowed !important;
   opacity: 0.45 !important;
   pointer-events: initial !important;

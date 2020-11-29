@@ -64,7 +64,4 @@ const mapDispatchToProps = (dispatch) => ({
   onSubmit: (option) => dispatch(actionCreators.speedOptionUpdated(option)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SpeedOptions);
+export default connect(mapStateToProps, mapDispatchToProps)(SpeedOptions);

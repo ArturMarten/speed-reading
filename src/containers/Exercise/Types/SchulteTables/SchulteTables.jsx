@@ -46,10 +46,6 @@ const mapStateToProps = (state) => ({
   symbols: state.exercise.symbols,
 });
 
-// eslint-disable-next-line no-unused-vars
 const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SchulteTables);
+export default connect(mapStateToProps, mapDispatchToProps)(SchulteTables);
