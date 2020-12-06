@@ -151,9 +151,11 @@ const reducer = (state = initialState, action) => {
           modificationOptions = [
             { value: 'group-highlighted' },
             { value: 'group-single' },
+            /*
             { value: 'group-spacing', disabled: true },
             { value: 'group-vertical', disabled: true },
             { value: 'group-rsvp', disabled: true },
+            */
           ];
           break;
         }

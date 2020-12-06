@@ -8,8 +8,28 @@ import AchievementUpdates from '../../Achievements/AchievementUpdates';
 
 export class TextExerciseResults extends Component {
   state = {
+    scroll: true,
     interestingnessRating: 0,
   };
+
+  componentDidMount() {
+    setTimeout(this.scrollAchievements.bind(this), 2000);
+  }
+
+  scrollAchievements() {
+    if (this.achievementsRef) {
+      const currentScrollTop = this.achievementsRef.scrollTop;
+      this.achievementsRef.scrollTop = currentScrollTop + 1;
+      if (currentScrollTop === this.achievementsRef.scrollTop) {
+        console.log('test');
+        this.setState({ scroll: false });
+        return;
+      }
+    }
+    if (this.state.scroll) {
+      setTimeout(this.scrollAchievements.bind(this), 50);
+    }
+  }
 
   onRateHandler = (event, data) => {
     this.setState({
@@ -60,7 +80,15 @@ export class TextExerciseResults extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid.Row>
-            <div style={{ width: '100%', maxHeight: '260px', overflow: 'auto' }}>
+            <div
+              ref={(ref) => {
+                this.achievementsRef = ref;
+              }}
+              onMouseEnter={() => {
+                this.setState({ scroll: false });
+              }}
+              style={{ width: '100%', maxHeight: '190px', overflow: 'auto' }}
+            >
               <AchievementUpdates />
             </div>
             {this.props.selectedText.id ? (
@@ -94,7 +122,7 @@ export class TextExerciseResults extends Component {
           <Button negative onClick={this.onEndHandler} content={this.props.translate('text-exercise-results.end')} />
           <Button positive onClick={this.onProceedHandler}>
             {this.props.translate('text-exercise-results.proceed')}
-            <Icon name="right chevron" />
+            <Icon name="chevron right" />
           </Button>
         </Modal.Actions>
       </Modal>

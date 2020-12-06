@@ -1,17 +1,44 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button, Icon } from 'semantic-ui-react';
 import { updateObject } from '../../../../shared/utility';
 import { getColorRGBA } from '../../../../store/reducers/options';
-import { createOffscreenContext, drawPage, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+import {
+  createOffscreenContext,
+  drawPage,
+  drawPageLines,
+  pixelRatio,
+  writeText,
+} from '../../../../utils/CanvasUtils/CanvasUtils';
 
-export const drawState = (currentState, context, restoreCanvas) => {
-  const { restoreRect, drawRect } = currentState;
+export const pageChange = (change, currentState, textMetadata, context, offscreenCanvas) => {
+  const { pageIndex } = currentState;
+  const { pagesMetadata } = textMetadata;
+  const newPageIndex = Math.min(Math.max(pageIndex + change, 0), pagesMetadata.length - 1);
+  if (newPageIndex !== pageIndex) {
+    // Page change
+    const pageMetadata = pagesMetadata[newPageIndex];
+    drawPage(pageMetadata, context, offscreenCanvas);
+    const lineIndex = pageMetadata.lineIndices[0];
+    return updateObject(currentState, {
+      pageIndex: newPageIndex,
+      lineIndex,
+      linePosition: 0,
+    });
+  }
+  return currentState;
+};
+
+export const drawState = (currentState, textMetadata, context, restoreCanvas) => {
+  const { pageIndex, restoreRect, drawRect } = currentState;
+  const { pagesMetadata } = textMetadata;
+  const pageMetadata = pagesMetadata[pageIndex];
   if (restoreRect && restoreRect.width > 0 && restoreRect.height > 0) {
     context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
     context.drawImage(
       restoreCanvas,
       restoreRect.x,
-      restoreRect.y + currentState.marginTop,
+      restoreRect.y + pageMetadata.rect.top,
       restoreRect.width,
       restoreRect.height,
       restoreRect.x,
@@ -30,7 +57,7 @@ export const drawState = (currentState, context, restoreCanvas) => {
   context.drawImage(
     restoreCanvas,
     drawRect.x,
-    drawRect.y + currentState.marginTop,
+    drawRect.y + pageMetadata.rect.top,
     drawRect.width,
     drawRect.height,
     drawRect.x,
@@ -41,7 +68,7 @@ export const drawState = (currentState, context, restoreCanvas) => {
 };
 
 export const updateStateFunction = (textMetadata, options, state) => {
-  const { wordsMetadata, linesMetadata } = textMetadata;
+  const { wordsMetadata, linesMetadata, pagesMetadata } = textMetadata;
   const { wordsPerMinute } = options;
   let speed = 0;
 
@@ -66,8 +93,7 @@ export const updateStateFunction = (textMetadata, options, state) => {
     nextState,
     (currentState, updateTime) => {
       // Calculate next state
-      const { canvasHeight } = currentState;
-      let { lineIndex, linePosition, marginTop } = currentState;
+      let { pageIndex, lineIndex, linePosition } = currentState;
       let newLine = false;
       let newPage = false;
       let finished = false;
@@ -77,19 +103,21 @@ export const updateStateFunction = (textMetadata, options, state) => {
 
       linePosition += widthProgress;
 
+      let pageMetadata = pagesMetadata[pageIndex];
       let lineMetadata = linesMetadata[lineIndex];
 
       if (linePosition >= lineMetadata.lineWidth) {
         if (lineIndex !== linesMetadata.length - 1) {
           // New line
           newLine = true;
-          linePosition -= lineMetadata.lineWidth;
           lineIndex += 1;
           lineMetadata = linesMetadata[lineIndex];
-          if (lineMetadata.rect.bottom - marginTop > canvasHeight) {
+          linePosition = lineMetadata.rect.left;
+          if (lineMetadata.rect.bottom > pageMetadata.rect.bottom) {
             // New page
             newPage = true;
-            marginTop = lineMetadata.rect.top;
+            pageIndex += 1;
+            pageMetadata = pagesMetadata[pageIndex];
           }
         } else {
           finished = true;
@@ -97,18 +125,10 @@ export const updateStateFunction = (textMetadata, options, state) => {
       }
 
       const restoreRect = { ...currentState.drawRect };
-
-      const MAX_WIDTH = 20;
-      const maxWidth = MAX_WIDTH;
-      const drawRect = {
-        x: Math.ceil(linePosition),
-        y: lineMetadata.rect.top - marginTop,
-        width: Math.ceil(Math.min(maxWidth, lineMetadata.lineWidth - linePosition)),
-        height: lineMetadata.rect.bottom - lineMetadata.rect.top,
-      };
+      const drawRect = getDrawRect(lineMetadata, pageMetadata, linePosition);
 
       return updateObject(currentState, {
-        marginTop,
+        pageIndex,
         lineIndex,
         linePosition,
         restoreRect,
@@ -122,13 +142,24 @@ export const updateStateFunction = (textMetadata, options, state) => {
   ];
 };
 
+export const getDrawRect = (lineMetadata, pageMetadata, linePosition) => {
+  const MAX_WIDTH = 20;
+  const maxWidth = MAX_WIDTH;
+  return {
+    x: Math.ceil(linePosition),
+    y: lineMetadata.rect.top - pageMetadata.rect.top,
+    width: Math.ceil(Math.min(maxWidth, lineMetadata.lineWidth - linePosition)),
+    height: lineMetadata.rect.bottom - lineMetadata.rect.top,
+  };
+};
+
 let timeout = null;
 let animationFrame = null;
 
 const initialState = {
+  pageIndex: 0,
   lineIndex: 0,
   linePosition: 0,
-  marginTop: 0,
   drawRect: { x: 0, y: 0, width: 0, height: 0 },
 };
 
@@ -137,6 +168,8 @@ export class ReadingAid extends Component {
 
   componentDidMount() {
     this.init();
+    document.addEventListener('keydown', this.preventDefault);
+    document.addEventListener('keyup', this.keyPressHandler);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -146,7 +179,7 @@ export class ReadingAid extends Component {
     ) {
       // Exercise started
       this.currentState = this.updateState(this.currentState, 0);
-      drawState(this.currentState, this.shownContext, this.offscreenCanvas);
+      drawState(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
       this.delayedLoop(this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
@@ -178,6 +211,8 @@ export class ReadingAid extends Component {
   componentWillUnmount() {
     clearTimeout(timeout);
     cancelAnimationFrame(animationFrame);
+    document.removeEventListener('keydown', this.preventDefault);
+    document.removeEventListener('keyup', this.keyPressHandler);
   }
 
   init() {
@@ -193,7 +228,7 @@ export class ReadingAid extends Component {
     // Draw text
     if (this.offscreenCanvas.height > this.shownCanvas.height) {
       // Multi page
-      drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas);
+      drawPageLines(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas);
     } else {
       this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
       this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
@@ -204,13 +239,54 @@ export class ReadingAid extends Component {
     this.updateState = updateState;
   }
 
+  preventDefault = (event) => {
+    const { key } = event;
+    if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
+      event.preventDefault();
+    }
+  };
+
+  keyPressHandler = (event) => {
+    const { key } = event;
+    if (key === 'ArrowRight') {
+      this.onNextPage();
+    } else if (key === 'ArrowLeft') {
+      this.onPreviousPage();
+    }
+  };
+
+  onNextPage = () => {
+    this.onPageChange(1);
+  };
+
+  onPreviousPage = () => {
+    this.onPageChange(-1);
+  };
+
+  onPageChange = (change) => {
+    const newState = pageChange(change, this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+    if (this.currentState.pageIndex !== newState.pageIndex) {
+      const { linesMetadata, pagesMetadata } = this.textMetadata;
+      const lineMetadata = linesMetadata[newState.lineIndex];
+      const pageMetadata = pagesMetadata[newState.pageIndex];
+      newState.drawRect = getDrawRect(lineMetadata, pageMetadata, newState.linePosition);
+      drawState(newState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+      clearTimeout(timeout);
+      cancelAnimationFrame(animationFrame);
+      this.delayedLoop(this.props.exerciseOptions.pageBreakDelay);
+    }
+    this.currentState = newState;
+  };
+
   loop() {
     const updateTime = performance.now() - this.currentState.lastUpdate;
     this.currentState = this.updateState(this.currentState, updateTime);
     if (this.currentState.newPage) {
-      drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas, this.currentState.marginTop);
+      const { linesMetadata, pagesMetadata } = this.textMetadata;
+      const marginTop = pagesMetadata[this.currentState.pageIndex].rect.top;
+      drawPageLines(linesMetadata, this.shownContext, this.offscreenCanvas, marginTop);
     }
-    drawState(this.currentState, this.shownContext, this.offscreenCanvas);
+    drawState(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
     if (this.currentState.finished) {
       this.props.onExerciseFinish();
     } else if (this.currentState.newPage) {
@@ -233,13 +309,25 @@ export class ReadingAid extends Component {
 
   render() {
     return (
-      <canvas
-        ref={(ref) => {
-          this.shownCanvas = ref;
-        }}
-        width={this.props.canvasWidth}
-        height={this.props.canvasHeight}
-      />
+      <>
+        <canvas
+          ref={(ref) => {
+            this.shownCanvas = ref;
+          }}
+          width={this.props.canvasWidth}
+          height={this.props.canvasHeight}
+        />
+        <Button.Group fluid basic>
+          <Button onClick={this.onPreviousPage}>
+            <Icon name="chevron left" />
+            {this.props.translate('text-exercise.previous-page')}
+          </Button>
+          <Button onClick={this.onNextPage}>
+            {this.props.translate('text-exercise.next-page')}
+            <Icon name="chevron right" />
+          </Button>
+        </Button.Group>
+      </>
     );
   }
 }

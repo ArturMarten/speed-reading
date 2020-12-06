@@ -30,7 +30,7 @@ describe('Disappearing updateState', () => {
 
   const initialState = {
     canvasHeight: CANVAS_HEIGHT,
-    marginTop: 0,
+    pageIndex: 0,
     lineIndex: 0,
     linePosition: 0,
   };
@@ -133,7 +133,7 @@ describe('Disappearing updateState', () => {
       {
         x: 0,
         y: 19,
-        width: 1,
+        width: 0,
         height: 19,
       },
     ]);
@@ -152,7 +152,7 @@ describe('Disappearing updateState', () => {
     expect(nextState.newPage).toEqual(true);
   });
 
-  it('increases margin top on new page', () => {
+  it('increases page index on new page', () => {
     const pageFirstLineIndex = textMetadata.linesMetadata.findIndex((line) => line.rect.bottom > CANVAS_HEIGHT);
     const pageLastLineIndex = pageFirstLineIndex - 1;
     const pageLastLineMetadata = textMetadata.linesMetadata[pageLastLineIndex];
@@ -162,7 +162,7 @@ describe('Disappearing updateState', () => {
       linePosition: pageLastLineMetadata.lineWidth - 2,
     };
     const nextState = updateState(state, 8);
-    expect(nextState.marginTop).toEqual(385);
+    expect(nextState.pageIndex).toEqual(1);
   });
 
   it('returns single clear rect on new page', () => {
@@ -179,7 +179,7 @@ describe('Disappearing updateState', () => {
       {
         x: 0,
         y: 0,
-        width: 1,
+        width: 0,
         height: 19,
       },
     ]);

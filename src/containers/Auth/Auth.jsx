@@ -305,7 +305,7 @@ export class Auth extends Component {
         <Modal.Actions>
           {this.state.isSignup ? (
             <Button positive type="button" onClick={this.onCreateToggle}>
-              <Icon name="left chevron" />
+              <Icon name="chevron left" />
               {this.props.translate('auth.back-to-auth')}
             </Button>
           ) : (
@@ -313,7 +313,7 @@ export class Auth extends Component {
               {this.props.translate('auth.no-user-question')}
               <Button positive type="button" onClick={this.onCreateToggle}>
                 {this.props.translate('auth.create-button')}
-                <Icon name="right chevron" />
+                <Icon name="chevron right" />
               </Button>
             </Fragment>
           )}

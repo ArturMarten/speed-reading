@@ -84,6 +84,7 @@ class ExerciseInputOption extends PureComponent {
       <Table.Row verticalAlign="middle">
         <Table.Cell>
           {this.props.name}
+          &nbsp;
           <HelpPopup position="right center" content={this.props.description} />
         </Table.Cell>
         <Table.Cell>

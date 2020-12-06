@@ -50,7 +50,7 @@ export class ConcentrationPreview extends Component {
               : this.props.translate('exercise-preview.show')}
           </Button>
         </Grid.Row>
-        <Grid.Row style={{ visibility: this.state.show ? 'visible' : 'hidden' }}>
+        <Grid.Row style={{ marginBottom: '1em', visibility: this.state.show ? 'visible' : 'hidden' }}>
           <Concentration
             exerciseOptions={this.props.exerciseOptions}
             textOptions={this.props.textOptions}

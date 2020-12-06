@@ -48,7 +48,7 @@ export const drawText = (canvasContext, textMetadata) => {
   });
 };
 
-export const drawPage = (linesMetadata, context, offscreenCanvas, marginTop = 0) => {
+export const drawPageLines = (linesMetadata, context, offscreenCanvas, marginTop = 0) => {
   const { canvas } = context;
   context.clearRect(0, 0, canvas.width, canvas.height);
   const copyHeight = Math.max(
@@ -57,6 +57,21 @@ export const drawPage = (linesMetadata, context, offscreenCanvas, marginTop = 0)
       .filter((lineBottom) => lineBottom <= canvas.height),
   );
   context.drawImage(offscreenCanvas, 0, marginTop, canvas.width, copyHeight, 0, 0, canvas.width, copyHeight);
+};
+
+export const drawPage = (pageMetadata, context, offscreenCanvas) => {
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  context.drawImage(
+    offscreenCanvas,
+    0,
+    pageMetadata.rect.top,
+    context.canvas.width,
+    pageMetadata.pageHeight,
+    0,
+    0,
+    context.canvas.width,
+    pageMetadata.pageHeight,
+  );
 };
 
 const setCanvasHeight = (oldContext, newHeight) => {

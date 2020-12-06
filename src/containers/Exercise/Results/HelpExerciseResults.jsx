@@ -7,7 +7,28 @@ import { formatMilliseconds } from '../../../shared/utility';
 import AchievementUpdates from '../../Achievements/AchievementUpdates';
 
 export class HelpExerciseResults extends Component {
-  state = {};
+  state = {
+    scroll: true,
+  };
+
+  componentDidMount() {
+    setTimeout(this.scrollAchievements.bind(this), 2000);
+  }
+
+  scrollAchievements() {
+    if (this.achievementsRef) {
+      const currentScrollTop = this.achievementsRef.scrollTop;
+      this.achievementsRef.scrollTop = currentScrollTop + 1;
+      if (currentScrollTop === this.achievementsRef.scrollTop) {
+        console.log('test');
+        this.setState({ scroll: false });
+        return;
+      }
+    }
+    if (this.state.scroll) {
+      setTimeout(this.scrollAchievements.bind(this), 50);
+    }
+  }
 
   render() {
     return (
@@ -64,7 +85,15 @@ export class HelpExerciseResults extends Component {
                 ) : null}
               </Grid.Column>
             </Grid.Row>
-            <div style={{ width: '100%', maxHeight: '260px', overflow: 'auto' }}>
+            <div
+              ref={(ref) => {
+                this.achievementsRef = ref;
+              }}
+              onMouseEnter={() => {
+                this.setState({ scroll: false });
+              }}
+              style={{ width: '100%', maxHeight: '190px', overflow: 'auto' }}
+            >
               <AchievementUpdates />
             </div>
           </Grid>

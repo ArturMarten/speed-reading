@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Form, Button, Dropdown, Rating, Label } from 'semantic-ui-react';
+import { Modal, Form, Button, Dropdown, Rating, Label, Checkbox } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import './TextSelectionFilter.css';
@@ -41,6 +41,10 @@ export class TextSelectionFilter extends Component {
 
   onChangeHandler = (event, { name, value }) => {
     this.props.onFilterChange(name, value);
+  };
+
+  onCheckHandler = (event, { name, checked }) => {
+    this.props.onFilterChange(name, checked);
   };
 
   processFilterData = (texts) => {
@@ -184,19 +188,29 @@ export class TextSelectionFilter extends Component {
               onChange={this.onChangeHandler}
               control={Dropdown}
             />
-            <Form.Field
-              id="language-dropdown"
-              name="language"
-              inline
-              fluid
-              selection
-              value={this.props.filter.language}
-              options={this.state.languageOptions}
-              label={this.props.translate('text-selection-filter.language')}
-              placeholder={this.props.translate('text-selection-filter.language')}
-              onChange={this.onChangeHandler}
-              control={Dropdown}
-            />
+            <Form.Group widths="equal">
+              <Form.Field
+                id="language-dropdown"
+                name="language"
+                inline
+                fluid
+                selection
+                value={this.props.filter.language}
+                options={this.state.languageOptions}
+                label={this.props.translate('text-selection-filter.language')}
+                placeholder={this.props.translate('text-selection-filter.language')}
+                onChange={this.onChangeHandler}
+                control={Dropdown}
+              />
+              <Form.Field id="unread-selection" style={{ textAlign: 'center', alignSelf: 'center' }}>
+                <Checkbox
+                  name="unread"
+                  label={this.props.translate('text-selection-filter.only-unread')}
+                  checked={this.props.filter.unread}
+                  onChange={this.onCheckHandler}
+                />
+              </Form.Field>
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -207,7 +221,7 @@ export class TextSelectionFilter extends Component {
             {this.props.translate('text-selection-filter.clear-filter')}
           </Button>
           <Button positive onClick={this.props.onClose}>
-            {this.props.translate('text-selection-filter.close')}
+            {this.props.translate('text-selection-filter.show')}
           </Button>
         </Modal.Actions>
       </Modal>

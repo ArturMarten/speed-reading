@@ -20,6 +20,7 @@ const initialState = {
     authors: [],
     questionsAuthors: [],
     language: 'estonian',
+    unread: false,
   },
   filterApplied: false,
   column: 'averageInterestingnessRating',
@@ -177,7 +178,8 @@ export class TextSelection extends Component {
         (this.state.filter.authors.length === 0 || this.state.filter.authors.indexOf(text.author) !== -1) &&
         (this.state.filter.questionsAuthors.length === 0 ||
           this.state.filter.questionsAuthors.indexOf(text.questionsAuthor) !== -1) &&
-        text.language === this.state.filter.language,
+        text.language === this.state.filter.language &&
+        (!this.state.filter.unread || !text.userReadingAttemptCount || text.userReadingAttemptCount === 0),
     );
     const sortedTexts = sortByColumn(filteredTexts, column, direction);
     const textTableRows = sortedTexts.map((text) => {
@@ -278,6 +280,7 @@ export class TextSelection extends Component {
                 <Button.Group>
                   <Button basic onClick={this.textSelectionFilterToggleHandler}>
                     <Icon fitted color={this.state.filterApplied ? 'red' : null} size="large" name="filter" />
+                    &nbsp;
                     {this.props.translate('text-selection.filter')}
                   </Button>
                   <TextSelectionFilter
@@ -287,11 +290,12 @@ export class TextSelection extends Component {
                     textCount={textTableRows.length}
                     onFilterChange={this.onFilterChange}
                     onFilterClear={this.onFilterClear}
-                  />{' '}
+                  />
                   <Popup
                     trigger={
                       <Button basic>
                         <Icon fitted size="large" name="sort" />
+                        &nbsp;
                         {this.props.translate('text-selection.sort')}
                       </Button>
                     }
@@ -326,7 +330,7 @@ export class TextSelection extends Component {
             </Grid.Row>
           </Grid>
           <div style={{ height: '60vh', maxHeight: '60vh', overflow: 'auto' }}>
-            <Table selectable compact="very" textAlign="center" verticalAlign="middle" basic sortable>
+            <Table selectable compact="very" textAlign="center" verticalAlign="middle" basic sortable unstackable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell sorted={column === 'title' ? direction : null} onClick={this.sortHandler('title')}>

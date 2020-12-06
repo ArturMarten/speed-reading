@@ -2,53 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
 import { updateObject } from '../../../../shared/utility';
-import { createOffscreenContext, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
+import { createOffscreenContext, drawPage, pixelRatio, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
-export const nextPage = (currentState, textMetadata, context, offscreenCanvas) => {
+export const pageChange = (change, currentState, textMetadata, context, offscreenCanvas) => {
   const { pageIndex } = currentState;
   const { pagesMetadata } = textMetadata;
-  const nextPageIndex = Math.min(pageIndex + 1, pagesMetadata.length - 1);
-  if (nextPageIndex !== pageIndex) {
-    const pageMetadata = pagesMetadata[nextPageIndex];
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    context.drawImage(
-      offscreenCanvas,
-      0,
-      pageMetadata.rect.top,
-      context.canvas.width,
-      pageMetadata.pageHeight,
-      0,
-      0,
-      context.canvas.width,
-      pageMetadata.pageHeight,
-    );
+  const newPageIndex = Math.min(Math.max(pageIndex + change, 0), pagesMetadata.length - 1);
+  if (newPageIndex !== pageIndex) {
+    const pageMetadata = pagesMetadata[newPageIndex];
+    drawPage(pageMetadata, context, offscreenCanvas);
     return updateObject(currentState, {
-      pageIndex: nextPageIndex,
-    });
-  }
-  return currentState;
-};
-
-export const previousPage = (currentState, textMetadata, context, offscreenCanvas) => {
-  const { pageIndex } = currentState;
-  const { pagesMetadata } = textMetadata;
-  const previousPageIndex = Math.max(pageIndex - 1, 0);
-  if (previousPageIndex !== pageIndex) {
-    const pageMetadata = pagesMetadata[previousPageIndex];
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    context.drawImage(
-      offscreenCanvas,
-      0,
-      pageMetadata.rect.top,
-      context.canvas.width,
-      pageMetadata.pageHeight,
-      0,
-      0,
-      context.canvas.width,
-      pageMetadata.pageHeight,
-    );
-    return updateObject(currentState, {
-      pageIndex: previousPageIndex,
+      pageIndex: newPageIndex,
     });
   }
   return currentState;
@@ -71,30 +35,6 @@ export class ReadingTest extends Component {
     document.removeEventListener('keydown', this.preventDefault);
     document.removeEventListener('keyup', this.keyPressHandler);
   }
-
-  onNextPage = () => {
-    this.currentState = nextPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
-  };
-
-  onPreviousPage = () => {
-    this.currentState = previousPage(this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
-  };
-
-  keyPressHandler = (event) => {
-    const { key } = event;
-    if (key === 'ArrowRight') {
-      this.onNextPage();
-    } else if (key === 'ArrowLeft') {
-      this.onPreviousPage();
-    }
-  };
-
-  preventDefault = (event) => {
-    const { key } = event;
-    if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
-      event.preventDefault();
-    }
-  };
 
   init() {
     this.currentState.canvasHeight = this.props.canvasHeight * pixelRatio;
@@ -129,6 +69,30 @@ export class ReadingTest extends Component {
     }
   }
 
+  preventDefault = (event) => {
+    const { key } = event;
+    if (['ArrowLeft', 'ArrowRight'].indexOf(key) !== -1) {
+      event.preventDefault();
+    }
+  };
+
+  keyPressHandler = (event) => {
+    const { key } = event;
+    if (key === 'ArrowRight') {
+      this.onNextPage();
+    } else if (key === 'ArrowLeft') {
+      this.onPreviousPage();
+    }
+  };
+
+  onNextPage = () => {
+    this.currentState = pageChange(1, this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+  };
+
+  onPreviousPage = () => {
+    this.currentState = pageChange(-1, this.currentState, this.textMetadata, this.shownContext, this.offscreenCanvas);
+  };
+
   render() {
     return (
       <>
@@ -141,12 +105,12 @@ export class ReadingTest extends Component {
         />
         <Button.Group fluid basic>
           <Button onClick={this.onPreviousPage}>
-            <Icon name="left chevron" />
+            <Icon name="chevron left" />
             {this.props.translate('text-exercise.previous-page')}
           </Button>
           <Button onClick={this.onNextPage}>
             {this.props.translate('text-exercise.next-page')}
-            <Icon name="right chevron" />
+            <Icon name="chevron right" />
           </Button>
         </Button.Group>
       </>

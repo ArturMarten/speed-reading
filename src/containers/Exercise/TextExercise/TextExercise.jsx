@@ -71,6 +71,7 @@ export class TextExercise extends Component {
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
+              translate={this.props.translate}
             />
           );
         case 'scrolling':
@@ -91,6 +92,7 @@ export class TextExercise extends Component {
               selectedText={this.props.selectedText}
               timerState={this.props.timerState}
               onExerciseFinish={this.onExerciseFinishHandler}
+              translate={this.props.translate}
             />
           );
         case 'wordGroups':

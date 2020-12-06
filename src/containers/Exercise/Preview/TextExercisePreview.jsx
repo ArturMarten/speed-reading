@@ -106,6 +106,7 @@ export class TextExercisePreview extends Component {
               textOptions={this.props.textOptions}
               exerciseOptions={this.props.exerciseOptions}
               speedOptions={this.props.speedOptions}
+              translate={this.props.translate}
             />
           );
         case 'scrolling':
@@ -131,6 +132,7 @@ export class TextExercisePreview extends Component {
               textOptions={this.props.textOptions}
               exerciseOptions={this.props.exerciseOptions}
               speedOptions={this.props.speedOptions}
+              translate={this.props.translate}
             />
           );
         case 'wordGroups':
@@ -170,7 +172,7 @@ export class TextExercisePreview extends Component {
               : this.props.translate('text-exercise-preview.show')}
           </Button>
         </Grid.Row>
-        <Grid.Row>
+        <Grid.Row style={{ marginBottom: '1em' }}>
           {this.state.show ? (
             <Segment compact>
               <div

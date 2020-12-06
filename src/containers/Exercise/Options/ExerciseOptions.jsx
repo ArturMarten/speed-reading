@@ -151,6 +151,7 @@ export class ExerciseOptions extends PureComponent {
             updateValue={(value) => this.props.onSubmit({ tableSize: value })}
           />
         ) : null}
+        {/*
         {this.props.visibleOptions.indexOf('tableCheck') !== -1 ? (
           <ExerciseCheckOption
             name={this.props.translate('exercise-options.table-check')}
@@ -158,6 +159,7 @@ export class ExerciseOptions extends PureComponent {
             updateValue={(value) => this.props.onSubmit({ tableCheck: value })}
           />
         ) : null}
+         */}
         {this.props.visibleOptions.indexOf('symbolGroupCount') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.symbol-group-count')}

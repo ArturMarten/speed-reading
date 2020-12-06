@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { updateObject } from '../../../../shared/utility';
 import {
   createOffscreenContext,
-  drawPage,
+  drawPageLines,
   getGroupsMetadata,
   pixelRatio,
   writeText,
@@ -233,7 +233,7 @@ export class WordGroups extends Component {
       // Draw text
       if (this.offscreenCanvas.height > this.shownCanvas.height) {
         // Multi page
-        drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas);
+        drawPageLines(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas);
       } else {
         this.shownContext.clearRect(0, 0, this.shownCanvas.width, this.shownCanvas.height);
         this.shownContext.drawImage(this.offscreenCanvas, 0, 0);
@@ -254,7 +254,12 @@ export class WordGroups extends Component {
         this.currentState.modification === 'group-spacing' ||
         this.currentState.modification === 'group-vertical'
       ) {
-        drawPage(this.textMetadata.linesMetadata, this.shownContext, this.offscreenCanvas, this.currentState.marginTop);
+        drawPageLines(
+          this.textMetadata.linesMetadata,
+          this.shownContext,
+          this.offscreenCanvas,
+          this.currentState.marginTop,
+        );
       } else {
         const { canvas } = this.shownContext;
         this.shownContext.clearRect(0, 0, canvas.width, canvas.height);

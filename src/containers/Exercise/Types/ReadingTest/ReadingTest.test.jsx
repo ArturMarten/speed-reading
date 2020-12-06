@@ -1,4 +1,4 @@
-import { nextPage, previousPage } from './ReadingTest';
+import { pageChange } from './ReadingTest';
 import { exampleText, writeText } from '../../../../utils/CanvasUtils/CanvasUtils';
 
 const CANVAS_HEIGHT = 400;
@@ -28,7 +28,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 0,
     };
-    const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(1);
   });
 
@@ -37,7 +37,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 0,
     };
-    const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(-1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(0);
   });
 
@@ -46,7 +46,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 1,
     };
-    const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(-1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(0);
   });
 
@@ -55,7 +55,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 1,
     };
-    const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(2);
   });
 
@@ -64,7 +64,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 2,
     };
-    const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(-1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(1);
   });
 
@@ -73,7 +73,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 2,
     };
-    const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(3);
   });
 
@@ -82,7 +82,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: 3,
     };
-    const newState = previousPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(-1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(2);
   });
 
@@ -92,7 +92,7 @@ describe('Reading test', () => {
       canvasHeight: CANVAS_HEIGHT,
       pageIndex: lastPageIndex,
     };
-    const newState = nextPage(currentState, textMetadata, offscreenContext, offscreenCanvas);
+    const newState = pageChange(1, currentState, textMetadata, offscreenContext, offscreenCanvas);
     expect(newState.pageIndex).toEqual(lastPageIndex);
   });
 });

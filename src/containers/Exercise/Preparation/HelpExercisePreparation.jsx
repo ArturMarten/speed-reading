@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Button, Message, Grid, Segment, Icon, Dropdown, Checkbox, Popup } from 'semantic-ui-react';
+import { Container, Header, Button, Grid, Segment, Icon, Dropdown, Checkbox, Popup } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
@@ -14,6 +14,7 @@ import ConcentrationPreview from '../Preview/ConcentrationPreview';
 export class HelpExercisePreparation extends Component {
   state = {
     saveStatistics: true,
+    moreSettingsOpened: false,
   };
 
   componentDidUpdate(prevProps) {
@@ -24,6 +25,10 @@ export class HelpExercisePreparation extends Component {
 
   saveChangeHandler = (event, data) => {
     this.setState({ saveStatistics: data.checked });
+  };
+
+  moreSettingsToggleHandler = () => {
+    this.setState({ moreSettingsOpened: !this.state.moreSettingsOpened });
   };
 
   exercisePreparationHandler = () => {
@@ -67,117 +72,148 @@ export class HelpExercisePreparation extends Component {
       </Fragment>
     );
     return (
-      <Fragment>
-        <Container style={{ marginTop: '3vh' }}>
-          <Grid stackable>
-            <Grid.Row verticalAlign="bottom">
-              <Grid.Column width={10}>
-                <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
+      <Container style={{ marginTop: '3vh' }}>
+        <Header as="h2" content={this.props.translate(`exercises.title-${this.props.type}`)} />
+        <ExerciseDescription type={this.props.type} />
+        <Grid stackable style={{ marginTop: '5px', boxShadow: 'none' }} as={Segment} divided>
+          <Grid.Row columns="equal" style={{ padding: 0 }}>
+            {modificationOptions.length > 1 ? (
+              <Grid.Column>
+                <Header as="h4" textAlign="center">
+                  <Popup
+                    trigger={<span>{this.props.translate('exercise-preparation.exercise-modification')}</span>}
+                    content={this.props.translate('exercise-preparation.exercise-modification-description')}
+                  />
+                </Header>
+                <div style={{ margin: '10px' }}>
+                  <Dropdown
+                    fluid
+                    selection
+                    scrolling
+                    disabled={modificationOptions.length === 1}
+                    value={this.props.exerciseModification}
+                    options={modificationOptions}
+                    onChange={this.modificationChangeHandler}
+                  />
+                </div>
               </Grid.Column>
-              <Grid.Column width={6}>
-                {this.props.translate('exercise-preparation.exercise-modification')}
-                <HelpPopup
-                  position="bottom left"
-                  content={this.props.translate('exercise-preparation.exercise-modification-description')}
-                />
-                <Dropdown
-                  fluid
-                  selection
-                  scrolling
-                  disabled={modificationOptions.length === 1}
-                  value={this.props.exerciseModification}
-                  options={modificationOptions}
-                  onChange={this.modificationChangeHandler}
-                />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={13}>
-                <ExerciseDescription type={this.props.type} />
-              </Grid.Column>
-              <Grid.Column width={3} verticalAlign="bottom">
-                <Button
-                  positive
-                  floated="right"
-                  loading={this.props.exerciseStatus === 'preparing'}
-                  disabled={this.props.exerciseStatus === 'preparing'}
-                  onClick={this.exercisePreparationHandler}
-                >
-                  {this.props.translate('exercise-preparation.proceed')}
-                  <Icon name="right chevron" />
-                </Button>
-                <Checkbox style={{ float: 'right', margin: '2px' }} label={{ children: startCheckboxLabel }} />
+            ) : null}
+            <Grid.Column>
+              <Header as="h4" textAlign="center">
+                {this.props.translate('exercise-preparation.exercise')}
+              </Header>
+              <div style={{ textAlign: 'center', margin: '1em' }}>
+                <Button.Group>
+                  <Button style={{ margin: '2px' }} onClick={this.moreSettingsToggleHandler}>
+                    <Icon name={this.state.moreSettingsOpened ? 'chevron up' : 'chevron down'} />
+                    {this.props.translate('exercise-preparation.more-settings')}
+                  </Button>
+                  <Button
+                    positive
+                    style={{ margin: '2px' }}
+                    loading={this.props.exerciseStatus === 'preparing'}
+                    disabled={this.props.exerciseStatus === 'preparing'}
+                    onClick={this.exercisePreparationHandler}
+                  >
+                    {this.props.translate('exercise-preparation.proceed')}
+                    <Icon name="chevron right" />
+                  </Button>
+                </Button.Group>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                {/*
+                <Checkbox style={{ margin: '2px' }} label={{ children: startCheckboxLabel }} />
+                <br />
+                 */}
                 <Checkbox
                   checked={this.state.saveStatistics}
                   onChange={this.saveChangeHandler}
-                  style={{ float: 'right', marginTop: '5px' }}
+                  style={{ margin: '2px' }}
                   label={{ children: saveCheckboxLabel }}
                 />
-              </Grid.Column>
-            </Grid.Row>
-            {this.props.info.exerciseSettingsInfo ? (
-              <Grid.Row columns={1}>
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        {this.state.moreSettingsOpened ? (
+          <>
+            <Grid stackable>
+              <Grid.Row columns={2}>
                 <Grid.Column>
-                  <Message info onDismiss={this.props.onExerciseSettingsInfoDismiss}>
-                    <Icon name="settings" size="large" />
-                    {this.props.translate('exercise-preparation.info-content')}
-                  </Message>
+                  <Segment>
+                    <Header as="h4" textAlign="center">
+                      {this.props.translate('exercise-preparation.exercise-options')}
+                      &nbsp;
+                      <Popup
+                        trigger={
+                          <Button
+                            inverted
+                            circular
+                            compact
+                            size="tiny"
+                            color="orange"
+                            icon="repeat"
+                            floated="right"
+                            content={this.props.translate('exercise-preparation.reset')}
+                            onClick={this.exerciseOptionsResetHandler}
+                          />
+                        }
+                        content={this.props.translate('exercise-preparation.reset-exercise-options')}
+                        position="bottom center"
+                      />
+                    </Header>
+                    {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ? (
+                      <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p>
+                    ) : (
+                      <table>
+                        <tbody>
+                          <ExerciseOptions />
+                        </tbody>
+                      </table>
+                    )}
+                  </Segment>
+                </Grid.Column>
+                <Grid.Column>
+                  <Segment>
+                    <Header as="h4" textAlign="center">
+                      {this.props.translate('exercise-preparation.text-options')}
+                      &nbsp;
+                      <Popup
+                        trigger={
+                          <Button
+                            inverted
+                            circular
+                            compact
+                            size="tiny"
+                            color="orange"
+                            icon="repeat"
+                            floated="right"
+                            content={this.props.translate('exercise-preparation.reset')}
+                            onClick={this.textOptionsResetHandler}
+                          />
+                        }
+                        content={this.props.translate('exercise-preparation.reset-text-options')}
+                        position="bottom center"
+                      />
+                    </Header>
+                    {this.props.visibleTextOptions.length === 0 ? (
+                      <p>{this.props.translate('exercise-preparation.text-options-missing')}</p>
+                    ) : (
+                      <table>
+                        <tbody>
+                          <TextOptions exerciseType={this.props.type} />
+                        </tbody>
+                      </table>
+                    )}
+                  </Segment>
                 </Grid.Column>
               </Grid.Row>
-            ) : null}
-          </Grid>
-          <Grid stackable>
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <Segment>
-                  <Header as="h4" textAlign="center">
-                    {this.props.translate('exercise-preparation.exercise-options')}
-                    <Popup
-                      trigger={
-                        <Icon size="small" name="repeat" color="grey" onClick={this.exerciseOptionsResetHandler} />
-                      }
-                      content={this.props.translate('exercise-preparation.reset-exercise-options')}
-                      position="bottom center"
-                    />
-                  </Header>
-                  {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ? (
-                    <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p>
-                  ) : (
-                    <table>
-                      <tbody>
-                        <ExerciseOptions />
-                      </tbody>
-                    </table>
-                  )}
-                </Segment>
-              </Grid.Column>
-              <Grid.Column>
-                <Segment>
-                  <Header as="h4" textAlign="center">
-                    {this.props.translate('exercise-preparation.text-options')}
-                    <Popup
-                      trigger={<Icon size="small" name="repeat" color="grey" onClick={this.textOptionsResetHandler} />}
-                      content={this.props.translate('exercise-preparation.reset-text-options')}
-                      position="bottom center"
-                    />
-                  </Header>
-                  {this.props.visibleTextOptions.length === 0 ? (
-                    <p>{this.props.translate('exercise-preparation.text-options-missing')}</p>
-                  ) : (
-                    <table>
-                      <tbody>
-                        <TextOptions exerciseType={this.props.type} />
-                      </tbody>
-                    </table>
-                  )}
-                </Segment>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-        {this.props.type === 'schulteTables' ? <SchulteTablesPreview /> : null}
-        {this.props.type === 'concentration' ? <ConcentrationPreview /> : null}
-      </Fragment>
+            </Grid>
+            {this.props.type === 'schulteTables' ? <SchulteTablesPreview /> : null}
+            {this.props.type === 'concentration' ? <ConcentrationPreview /> : null}
+          </>
+        ) : null}
+      </Container>
     );
   }
 }

@@ -8,7 +8,7 @@ export class HelpPopup extends Component {
   render() {
     return (
       <Fragment>
-        {this.props.content ? <Popup trigger={<Icon name="question circle outline" />} {...this.props} /> : null}
+        {this.props.content ? <Popup trigger={<Icon color="blue" name="info circle" />} {...this.props} /> : null}
       </Fragment>
     );
   }

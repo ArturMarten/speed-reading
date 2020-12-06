@@ -288,11 +288,7 @@ export class TextEntry extends Component {
           primary
           floated="right"
           onClick={this.textSelectionToggleHandler}
-          content={
-            this.props.selectedText
-              ? this.props.translate('text-entry.change-text')
-              : this.props.translate('text-entry.select-text')
-          }
+          content={this.props.translate('text-entry.select-text')}
         />
         {this.props.selectedText ? (
           <Button
