@@ -13,7 +13,7 @@ it('stores own text', async () => {
     },
   });
 
-  const { translate, getByText, queryByText, getAllByRole } = renderWithRedux(
+  const { translate, getByText, queryByText, baseElement } = renderWithRedux(
     <TextExercisePreparation type="readingTest" onProceed={jest.fn()} />,
   );
   expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument();
@@ -22,16 +22,14 @@ it('stores own text', async () => {
 
   const text = 'Test';
 
-  const editorIndex = 6;
-
-  fireEvent.paste(getAllByRole('textbox')[editorIndex], {
+  fireEvent.paste(baseElement.querySelector('.public-DraftEditor-content'), {
     clipboardData: {
       types: ['text/plain'],
       getData: () => text,
     },
   });
 
-  await waitFor(() => expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text));
+  await waitFor(() => expect(baseElement.querySelector('.public-DraftEditor-content').textContent).toEqual(text));
 
   fireEvent.click(getByText(translate('own-text-editor.use')));
   expect(axiosMock.post).toBeCalledTimes(1);
@@ -43,5 +41,5 @@ it('stores own text', async () => {
   await waitFor(() => expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
 
   fireEvent.click(getByText(translate('exercise-preparation.use-own-text')));
-  expect(getAllByRole('textbox')[editorIndex].textContent).toEqual(text);
+  expect(baseElement.querySelector('.public-DraftEditor-content').textContent).toEqual(text);
 });
