@@ -152,7 +152,7 @@ test('data contains equaling levels and points', () => {
 
   expect(maxProgressPoints).toEqual(1283);
 
-  console.log('Maximum progress points:', maxProgressPoints);
+  // console.log('Maximum progress points:', maxProgressPoints);
 });
 
 test('calculates achievement points correctly', () => {

@@ -9,7 +9,7 @@ const exampleData = [
   { id: 2, x: 3, y: 2 },
 ];
 
-it('draws regression chart', () => {
+test('draws regression chart', () => {
   const { translate, container, getByText } = renderWithRedux(
     <RegressionChart
       title="Regression Chart title"
@@ -36,10 +36,10 @@ it('draws regression chart', () => {
   expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');
   expect(getByText('X Label')).toBeInTheDocument();
   expect(getByText('Y Label')).toBeInTheDocument();
-  expect(getByText(translate('regression-chart.no-data')).style.opacity).toEqual('0');
+  expect(getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('0');
 });
 
-it('shows message when no data', () => {
+test('shows message when no data', () => {
   const { translate, getByText } = renderWithRedux(
     <RegressionChart
       title="Regression Chart title"
@@ -58,10 +58,10 @@ it('shows message when no data', () => {
     />,
     { useTranslate: true },
   );
-  expect(getByText(translate('regression-chart.no-data')).style.opacity).toEqual('1');
+  expect(getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('1');
 });
 
-it('updates regression chart', async () => {
+test('updates regression chart', async () => {
   const { translate, getByText, container, rerender } = renderWithRedux(
     <RegressionChart
       title="Regression Chart title"
@@ -81,7 +81,7 @@ it('updates regression chart', async () => {
     { useTranslate: true },
   );
   const noDataElement = getByText(translate('regression-chart.no-data'));
-  expect(noDataElement.style.opacity).toEqual('1');
+  expect(noDataElement.style.opacity.charAt(0)).toEqual('1');
   rerender(
     <RegressionChart
       title="Regression Chart title"
@@ -100,6 +100,6 @@ it('updates regression chart', async () => {
     />,
   );
   const legend = container.querySelector('g.legend');
-  await waitFor(() => expect(noDataElement.style.opacity).toEqual('0'));
+  await waitFor(() => expect(noDataElement.style.opacity.charAt(0)).toEqual('0'));
   expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');
 });

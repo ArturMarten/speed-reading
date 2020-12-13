@@ -1,10 +1,10 @@
 import { fireEvent, waitFor } from '@testing-library/react';
-import axiosMock from 'axios';
 import React from 'react';
+import { server, apiURL, rest } from '../../test/server';
 import renderWithRedux from '../../utils/testUtils';
 import Feedback from './Feedback';
 
-it('opens and closes the modal', () => {
+test('opens and closes the modal', () => {
   const onClose = jest.fn();
   const { translate, queryByText, queryAllByText, baseElement, rerender } = renderWithRedux(
     <Feedback open onClose={onClose} />,
@@ -16,37 +16,30 @@ it('opens and closes the modal', () => {
   expect(queryByText(translate('feedback.modal-header'))).toBeNull();
 });
 
-it('submits feedback', async () => {
-  axiosMock.post.mockResolvedValueOnce({
-    data: {
-      message: 'Feedback added',
-    },
-  });
+test('submits feedback', async () => {
   const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
   fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('feedback.send')));
   await waitFor(() => getByText(translate('success.feedback-added')));
-  expect(axiosMock.post).toHaveBeenCalledTimes(1);
-  expect(axiosMock.post).toHaveBeenCalledWith('/feedback', {
+  /*
+  expect(submit).toHaveBeenCalledWith('/feedback', {
     userId: null,
     message: 'test',
     functionalityRating: 0,
     usabilityRating: 0,
     designRating: 0,
   });
+  */
 });
 
-it('shows error', async () => {
-  axiosMock.post.mockRejectedValueOnce({
-    response: {
-      data: {
-        error: 'Network Error',
-      },
-    },
-  });
+test('shows error', async () => {
+  server.use(
+    rest.post(`${apiURL}/feedback`, async (req, res, ctx) => {
+      return res(500, ctx.json({ error: 'Network Error' }));
+    }),
+  );
   const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
   fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('feedback.send')));
   await waitFor(() => getByText(translate('error.network-error')));
-  expect(axiosMock.post).toHaveBeenCalledTimes(1);
 });

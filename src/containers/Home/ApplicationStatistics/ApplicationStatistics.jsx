@@ -6,6 +6,8 @@ import { updateObject, formatMillisecondsInHours } from '../../../shared/utility
 import { EXERCISE_COUNT } from '../../../store/reducers/exercise';
 
 export class ApplicationStatistics extends Component {
+  _isMounted = false;
+
   state = {
     loading: true,
     statistics: {
@@ -23,23 +25,32 @@ export class ApplicationStatistics extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     // console.log(navigator.userAgent, navigator.platform);
     api.fetchApplicationStatistics().then(
       (statistics) => {
-        const updatedStatistics = updateObject(this.state.statistics, {
-          ...statistics,
-        });
-        this.setState({
-          loading: false,
-          statistics: updatedStatistics,
-        });
+        if (this._isMounted) {
+          const updatedStatistics = updateObject(this.state.statistics, {
+            ...statistics,
+          });
+          this.setState({
+            loading: false,
+            statistics: updatedStatistics,
+          });
+        }
       },
       () => {
-        this.setState({
-          loading: false,
-        });
+        if (this._isMounted) {
+          this.setState({
+            loading: false,
+          });
+        }
       },
     );
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
