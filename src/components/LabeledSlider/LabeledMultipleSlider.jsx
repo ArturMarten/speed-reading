@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Rheostat from 'rheostat';
+import { Range } from 'rc-slider';
 
 import './LabeledSlider.css';
 
@@ -10,39 +10,27 @@ export class LabeledMultipleSlider extends Component {
 
   componentDidUpdate() {
     if (this.props.min > this.state.values[0] || this.props.max < this.state.values[1]) {
-      this.updateValues({ values: [this.props.min, this.props.max] });
+      this.onChange([this.props.min, this.props.max]);
     }
   }
 
-  updateValues = (sliderState) => {
-    this.setState({
-      values: sliderState.values,
-    });
+  onChange = (values) => {
+    this.setState({ values });
+    this.props.onChange(values);
   };
-
-  progressBar = (color) => ({ style, ...passProps }) => (
-    <div
-      {...passProps}
-      style={{
-        ...style,
-        backgroundColor: color,
-      }}
-    />
-  );
 
   render() {
     const { formatValues } = this.props;
     const { values } = this.state;
     return (
       <div>
-        <Rheostat
+        <Range
           min={this.props.min}
           max={this.props.max}
-          onChange={this.props.onChange}
-          snap={this.props.snap}
-          onValuesUpdated={this.updateValues}
-          values={this.state.values}
-          progressBar={this.progressBar(this.props.color || null)}
+          onChange={this.onChange}
+          value={this.state.values}
+          allowCross={false}
+          trackStyle={[{ backgroundColor: this.props.color || 'rgb(47, 141, 255)' }]}
         />
         {formatValues ? formatValues(values) : null}
       </div>

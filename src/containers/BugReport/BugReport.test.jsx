@@ -1,4 +1,4 @@
-import { fireEvent, waitForElement } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import axiosMock from 'axios';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
@@ -23,7 +23,7 @@ it('submits bug report', async () => {
   const { translate, getByText, getByLabelText } = renderWithRedux(<BugReport open />);
   fireEvent.change(getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('bug-report.send')));
-  await waitForElement(() => getByText(translate('success.bug-report-added')));
+  await waitFor(() => getByText(translate('success.bug-report-added')));
   expect(axiosMock.post).toHaveBeenCalledTimes(1);
   expect(axiosMock.post).toHaveBeenCalledWith(
     '/bugReports',
@@ -53,6 +53,6 @@ it('shows error', async () => {
   const { translate, getByText, getByLabelText } = renderWithRedux(<BugReport open />);
   fireEvent.change(getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('bug-report.send')));
-  await waitForElement(() => getByText(translate('error.network-error')));
+  await waitFor(() => getByText(translate('error.network-error')));
   expect(axiosMock.post).toHaveBeenCalledTimes(1);
 });

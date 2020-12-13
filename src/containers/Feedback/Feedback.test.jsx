@@ -1,4 +1,4 @@
-import { fireEvent, waitForElement } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import axiosMock from 'axios';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
@@ -25,7 +25,7 @@ it('submits feedback', async () => {
   const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
   fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('feedback.send')));
-  await waitForElement(() => getByText(translate('success.feedback-added')));
+  await waitFor(() => getByText(translate('success.feedback-added')));
   expect(axiosMock.post).toHaveBeenCalledTimes(1);
   expect(axiosMock.post).toHaveBeenCalledWith('/feedback', {
     userId: null,
@@ -47,6 +47,6 @@ it('shows error', async () => {
   const { translate, getByText, getByLabelText } = renderWithRedux(<Feedback open />);
   fireEvent.change(getByLabelText(translate('feedback.textarea-message')), { target: { value: 'test' } });
   fireEvent.click(getByText(translate('feedback.send')));
-  await waitForElement(() => getByText(translate('error.network-error')));
+  await waitFor(() => getByText(translate('error.network-error')));
   expect(axiosMock.post).toHaveBeenCalledTimes(1);
 });

@@ -5,7 +5,6 @@ import { getTranslate } from 'react-localize-redux';
 import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 import ExerciseSelectOption from '../../../components/Exercise/Options/ExerciseSelectOption';
-import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
 import {
   cursorTypeOptions,

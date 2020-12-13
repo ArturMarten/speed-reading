@@ -1,4 +1,4 @@
-import { fireEvent, waitForElement } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
 import Layout from './Layout';
@@ -22,19 +22,19 @@ it('opens and closes feedback modal', () => {
 });
 
 it('opens and closes problem report modal', async () => {
-  const { translate, queryByText, baseElement } = renderWithRedux(<Layout />);
+  const { translate, queryByText, getByText, baseElement } = renderWithRedux(<Layout />);
   expect(queryByText(translate('problem-report.modal-header'))).toBeNull();
   fireEvent.click(baseElement.querySelector('i.triangle'));
-  await waitForElement(() => queryByText(translate('problem-report.modal-header')));
+  await waitFor(() => getByText(translate('problem-report.modal-header')));
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(queryByText(translate('problem-report.modal-header'))).toBeNull();
 });
 
 it('opens and closes bug report modal', async () => {
-  const { translate, queryByText, baseElement } = renderWithRedux(<Layout />);
+  const { translate, queryByText, getByText, baseElement } = renderWithRedux(<Layout />);
   expect(queryByText(translate('bug-report.modal-header'))).toBeNull();
   fireEvent.click(baseElement.querySelector('i.bug'));
-  await waitForElement(() => queryByText(translate('bug-report.modal-header')));
+  await waitFor(() => getByText(translate('bug-report.modal-header')));
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(queryByText(translate('bug-report.modal-header'))).toBeNull();
 });

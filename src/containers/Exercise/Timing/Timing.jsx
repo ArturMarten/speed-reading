@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Button, Label, Icon, Responsive } from 'semantic-ui-react';
+import { Button, Label, Icon } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 
 import * as actionCreators from '../../../store/actions';
+import MediaQuery from 'react-responsive';
 
 let update = null;
 
@@ -114,7 +115,7 @@ export class Timing extends Component {
 
     return (
       <Fragment>
-        <Responsive maxWidth={991}>
+        <MediaQuery maxWidth={991}>
           <Button
             circular
             positive={!this.props.timerState.started || this.props.timerState.paused}
@@ -146,8 +147,8 @@ export class Timing extends Component {
             <Icon name="clock outline" />
             {format(this.state.elapsedTime)}
           </Label>
-        </Responsive>
-        <Responsive minWidth={992}>
+        </MediaQuery>
+        <MediaQuery minWidth={992}>
           <Button
             circular
             positive={!this.props.timerState.started || this.props.timerState.paused}
@@ -182,7 +183,7 @@ export class Timing extends Component {
             <Icon name="clock outline" />
             {format(this.state.elapsedTime)}
           </Label>
-        </Responsive>
+        </MediaQuery>
       </Fragment>
     );
   }

@@ -42,6 +42,8 @@ import 'semantic-ui-css/components/loader.css';
 import 'semantic-ui-css/components/dropdown.css';
 import 'semantic-ui-css/components/segment.css';
 
+import 'rc-slider/assets/index.css';
+
 // Override global styling
 import './index.css';
 

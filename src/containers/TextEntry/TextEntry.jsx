@@ -425,6 +425,7 @@ export class TextEntry extends Component {
             onClick={this.onSubmit}
           >
             <Icon fitted name="save" style={{ opacity: 1 }} />
+            &nbsp;
             {this.props.selectedText && this.props.selectedText.id
               ? this.props.translate('text-entry.modify-text')
               : this.props.translate('text-entry.add-text')}

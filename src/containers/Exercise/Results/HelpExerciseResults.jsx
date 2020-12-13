@@ -20,7 +20,6 @@ export class HelpExerciseResults extends Component {
       const currentScrollTop = this.achievementsRef.scrollTop;
       this.achievementsRef.scrollTop = currentScrollTop + 1;
       if (currentScrollTop === this.achievementsRef.scrollTop) {
-        console.log('test');
         this.setState({ scroll: false });
         return;
       }

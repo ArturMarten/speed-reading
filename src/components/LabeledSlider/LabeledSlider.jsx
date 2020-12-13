@@ -1,52 +1,38 @@
 import React, { Component } from 'react';
-import Rheostat from 'rheostat';
+import Slider from 'rc-slider';
 
 import './LabeledSlider.css';
 
 export class LabeledSlider extends Component {
   state = {
-    values: this.props.values || [this.props.max],
+    value: this.props.value || this.props.max,
   };
 
   componentDidUpdate() {
-    if (this.props.min > this.state.values[0]) {
-      this.updateValues({ values: [this.props.min] });
-    } else if (this.props.max < this.state.values[0]) {
-      this.updateValues({ values: [this.props.max] });
+    if (this.props.min > this.state.value) {
+      this.onChange(this.props.min);
+    } else if (this.props.max < this.state.value) {
+      this.onChange(this.props.max);
     }
   }
-
-  updateValues = (sliderState) => {
-    this.setState({
-      values: sliderState.values,
-    });
+  onChange = (value) => {
+    this.setState({ value });
+    this.props.onChange(value);
   };
 
-  progressBar = (color) => ({ style, ...passProps }) => (
-    <div
-      {...passProps}
-      style={{
-        ...style,
-        backgroundColor: color,
-      }}
-    />
-  );
-
   render() {
-    const { formatValues } = this.props;
-    const { values } = this.state;
+    const { formatValue } = this.props;
+    const { value } = this.state;
     return (
       <div>
-        <Rheostat
+        <Slider
           min={this.props.min}
           max={this.props.max}
-          onChange={this.props.onChange}
-          snap={this.props.snap}
-          onValuesUpdated={this.updateValues}
-          values={this.state.values}
-          progressBar={this.progressBar(this.props.color || null)}
+          onChange={this.onChange}
+          value={value}
+          trackStyle={[{ backgroundColor: this.props.color || 'rgb(47, 141, 255)' }]}
         />
-        {formatValues ? formatValues(values) : null}
+        {formatValue ? formatValue(value) : null}
       </div>
     );
   }

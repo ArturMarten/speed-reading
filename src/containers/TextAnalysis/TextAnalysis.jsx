@@ -21,7 +21,7 @@ const initialState = {
   sentenceMinLength: 1,
   sentenceMaxLength: 30,
   currentSentenceLengths: [1, 30],
-  currentWordFrequency: [100],
+  currentWordFrequency: 100,
 };
 
 export class TextAnalysis extends Component {
@@ -47,22 +47,17 @@ export class TextAnalysis extends Component {
     this.props.onAnalyzeText(textData);
   };
 
-  onWordLengthChangeHandler = (data) => {
-    const currentWordLengths = data.values;
-    this.setState({ currentWordLengths });
+  onWordLengthChangeHandler = (values) => {
+    this.setState({ currentWordLengths: values });
   };
 
-  onSentenceLengthChangeHandler = (data) => {
-    const currentSentenceLengths = data.values;
-    this.setState({ currentSentenceLengths });
+  onSentenceLengthChangeHandler = (values) => {
+    this.setState({ currentSentenceLengths: values });
   };
 
-  /*
-  onWordFrequencyChangeHandler = (data) => {
-    const currentWordFrequency = data.values;
-    this.setState({ currentWordFrequency });
-  }
-  */
+  onWordFrequencyChangeHandler = (values) => {
+    this.setState({ currentWordFrequency: values });
+  };
 
   setInitialLengths = (analysis) => {
     const { wordLengths, sentenceLengths } = analysis;
@@ -117,15 +112,11 @@ export class TextAnalysis extends Component {
   );
 
   /*
-  formatWordFrequencyValue = wordFrequencyPercentage => wordFrequency => (
+  formatWordFrequencyValue = (wordFrequencyPercentage) => (wordFrequency) => (
     <div style={{ textAlign: 'center' }}>
-      <span style={{ fontSize: '1.5em' }}>
-        {`${wordFrequencyPercentage.toFixed(1)}% `}
-      </span>
+      <span style={{ fontSize: '1.5em' }}>{`${wordFrequencyPercentage.toFixed(1)}% `}</span>
       {this.props.translate('text-analysis.of-text-words-are-in')}
-      <span style={{ fontSize: '1.5em' }}>
-        {`TOP ${wordFrequency[0]}% `}
-      </span>
+      <span style={{ fontSize: '1.5em' }}>{`TOP ${wordFrequency}% `}</span>
       {this.props.translate('text-analysis.of-most-frequent-words')}
     </div>
   );
@@ -235,7 +226,6 @@ export class TextAnalysis extends Component {
             </Statistic.Group>
             <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
               <LabeledMultipleSlider
-                snap
                 color={WORD_LENGTH_COLOR}
                 min={this.state.wordMinLength}
                 max={this.state.wordMaxLength}
@@ -257,17 +247,16 @@ export class TextAnalysis extends Component {
               </div>
             )}
             {/*
-              <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
-                <LabeledSlider
-                  snap
-                  color={WORD_FREQ_COLOR}
-                  min={1}
-                  max={100}
-                  onChange={this.onWordFrequencyChangeHandler}
-                  formatValues={this.formatWordFrequencyValue(wordFrequencyPercentage)}
-                />
-              </div>
-              */}
+            <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
+              <LabeledSlider
+                color={WORD_FREQ_COLOR}
+                min={1}
+                max={100}
+                onChange={this.onWordFrequencyChangeHandler}
+                formatValue={this.formatWordFrequencyValue(wordFrequencyPercentage)}
+              />
+            </div>
+            */}
             {this.props.analyzeStatus.loading || this.props.analysis === null ? null : (
               <div style={{ overflowX: 'auto', textAlign: 'center' }}>
                 <PieChart
@@ -327,7 +316,6 @@ export class TextAnalysis extends Component {
             </Statistic.Group>
             <div style={{ paddingTop: '2em', paddingBottom: '2em' }}>
               <LabeledMultipleSlider
-                snap
                 color={SENTENCE_LENGTH_COLOR}
                 min={this.state.sentenceMinLength}
                 max={this.state.sentenceMaxLength}

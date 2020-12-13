@@ -7,7 +7,6 @@ it('formats values', () => {
   const formatValues = jest.fn();
   render(
     <LabeledMultipleSlider
-      snap
       color="blue"
       min={1}
       max={100}

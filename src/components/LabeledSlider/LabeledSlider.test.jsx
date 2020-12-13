@@ -2,12 +2,10 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import LabeledSlider from './LabeledSlider';
 
-it('formats values', () => {
+it('formats value', () => {
   const onChange = jest.fn();
-  const formatValues = jest.fn();
-  render(
-    <LabeledSlider snap color="blue" min={1} max={100} values={[50]} onChange={onChange} formatValues={formatValues} />,
-  );
-  expect(formatValues).toBeCalledTimes(1);
-  expect(formatValues).toBeCalledWith([50]);
+  const formatValue = jest.fn();
+  render(<LabeledSlider color="blue" min={1} max={100} value={50} onChange={onChange} formatValue={formatValue} />);
+  expect(formatValue).toBeCalledTimes(1);
+  expect(formatValue).toBeCalledWith(50);
 });

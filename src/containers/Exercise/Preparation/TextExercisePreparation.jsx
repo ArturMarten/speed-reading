@@ -121,15 +121,6 @@ export class TextExercisePreparation extends Component {
       key: index,
       text: this.props.translate(`modification.${option.value}`),
     }));
-    const startCheckboxLabel = (
-      <Fragment>
-        {this.props.translate('exercise-preparation.start-automatically')}
-        <HelpPopup
-          position="left center"
-          content={this.props.translate('exercise-preparation.start-automatically-description')}
-        />
-      </Fragment>
-    );
     const saveCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.save-statistics')}
@@ -197,11 +188,11 @@ export class TextExercisePreparation extends Component {
               <Header as="h4" textAlign="center">
                 {this.props.translate('exercise-preparation.exercise')}
               </Header>
-              <div style={{ textAlign: 'center' }}>
-                <span>
+              <table style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                <tbody>
                   <SpeedOptions />
-                </span>
-              </div>
+                </tbody>
+              </table>
               <div style={{ textAlign: 'center', margin: '1em' }}>
                 <Button.Group>
                   <Button style={{ margin: '2px' }} onClick={this.moreSettingsToggleHandler}>

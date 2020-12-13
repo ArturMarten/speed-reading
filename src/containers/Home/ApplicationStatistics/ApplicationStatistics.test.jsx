@@ -1,4 +1,4 @@
-import { waitForElement } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import axiosMock from 'axios';
 import React from 'react';
 import renderWithRedux from '../../../utils/testUtils';
@@ -19,5 +19,5 @@ it('fetches application statistics', async () => {
     },
   });
   const { getByText } = renderWithRedux(<ApplicationStatistics translate={jest.fn()} />);
-  await waitForElement(() => getByText(/138h 53m/i));
+  await waitFor(() => getByText(/138h 53m/i));
 });

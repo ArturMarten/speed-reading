@@ -53,15 +53,6 @@ export class HelpExercisePreparation extends Component {
       key: index,
       text: this.props.translate(`modification.${option.value}`),
     }));
-    const startCheckboxLabel = (
-      <Fragment>
-        {this.props.translate('exercise-preparation.start-automatically')}
-        <HelpPopup
-          position="left center"
-          content={this.props.translate('exercise-preparation.start-automatically-description')}
-        />
-      </Fragment>
-    );
     const saveCheckboxLabel = (
       <Fragment>
         {this.props.translate('exercise-preparation.save-statistics')}

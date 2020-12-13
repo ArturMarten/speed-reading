@@ -148,7 +148,6 @@ const getPagesMetadata = (linesMetadata, canvasHeight) => {
     }
   });
   addPageMetadata(pagesMetadata, rect, lineIndices);
-  console.log(pagesMetadata);
   return pagesMetadata;
 };
 

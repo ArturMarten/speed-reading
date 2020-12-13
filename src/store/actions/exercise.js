@@ -102,11 +102,11 @@ const updateAchievements = (dispatch, state) => {
   const { exerciseStatistics } = state.statistics;
   const attempt = exerciseAttemptMap(state.exercise.attempt);
   // Calculate new achievements & diff
-  console.log('Calculating achievements with new attempt', attempt);
+  // console.log('Calculating achievements with new attempt', attempt);
   const newAchievements = calculateAchievements(achievements, exerciseStatistics, attempt);
   const diff = diffAchievements(achievements, newAchievements);
-  console.log('Updated achievements', newAchievements);
-  console.log('Achievements diff', diff);
+  // console.log('Updated achievements', newAchievements);
+  // console.log('Achievements diff', diff);
   // Save attempt to statistics
 
   dispatch(actionCreators.updateAchievements(newAchievements, diff));
