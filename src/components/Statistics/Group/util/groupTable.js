@@ -97,6 +97,7 @@ export const calculateExerciseResults = (exerciseData) =>
             const [readingSpeedSlope, readingSpeedIntercept] = leastSquares(indeces, readingSpeedResults);
             const initialReadingSpeed = readingSpeedIntercept + readingSpeedSlope;
             const finalReadingSpeed = readingSpeedIntercept + readingSpeedSlope * finalIndex;
+            const readingSpeedChange = finalReadingSpeed - initialReadingSpeed;
 
             const comprehensionSpeedResults = attempts.map((attempt) => attempt.comprehensionPerMinute);
             const [comprehensionSpeedSlope, comprehensionSpeedIntercept] = leastSquares(
@@ -105,6 +106,7 @@ export const calculateExerciseResults = (exerciseData) =>
             );
             const initialComprehensionSpeed = comprehensionSpeedIntercept + comprehensionSpeedSlope;
             const finalComprehensionSpeed = comprehensionSpeedIntercept + comprehensionSpeedSlope * finalIndex;
+            const comprehensionSpeedChange = finalComprehensionSpeed - initialComprehensionSpeed;
 
             const comprehensionLevelResults = attempts.map((attempt) => attempt.comprehensionResult);
             const [comprehensionLevelSlope, comprehensionLevelIntercept] = leastSquares(
@@ -113,53 +115,65 @@ export const calculateExerciseResults = (exerciseData) =>
             );
             const initialComprehensionLevel = comprehensionLevelIntercept + comprehensionLevelSlope;
             const finalComprehensionLevel = comprehensionLevelIntercept + comprehensionLevelSlope * finalIndex;
+            const comprehensionLevelChange = finalComprehensionLevel - initialComprehensionLevel;
 
             userExerciseResults = {
               ...userExerciseResults,
               exercise,
               initialReadingSpeed,
               finalReadingSpeed,
+              readingSpeedChange,
               initialComprehensionSpeed,
               finalComprehensionSpeed,
+              comprehensionSpeedChange,
               initialComprehensionLevel,
               finalComprehensionLevel,
+              comprehensionLevelChange,
             };
           } else if (exercise === 'schulteTables') {
             const exerciseSpeedResults = attempts.map((attempt) => attempt.symbolsPerMinute);
             const [exerciseSpeedSlope, exerciseSpeedIntercept] = leastSquares(indeces, exerciseSpeedResults);
             const initialExerciseSpeed = exerciseSpeedIntercept + exerciseSpeedSlope;
             const finalExerciseSpeed = exerciseSpeedIntercept + exerciseSpeedSlope * finalIndex;
+            const exerciseSpeedChange = finalExerciseSpeed - initialExerciseSpeed;
             userExerciseResults = {
               ...userExerciseResults,
               exercise,
               initialExerciseSpeed,
               finalExerciseSpeed,
+              exerciseSpeedChange,
             };
           } else if (exercise === 'concentration') {
             const exerciseResults = attempts.map((attempt) => attempt.exerciseResult);
             const [exerciseResultSlope, exerciseResultIntercept] = leastSquares(indeces, exerciseResults);
             const initialExerciseResult = exerciseResultIntercept + exerciseResultSlope;
-            const finalExerciseResult = exerciseResultIntercept + exerciseResultSlope * finalIndex;
+            const finalExerciseResult = Math.min(exerciseResultIntercept + exerciseResultSlope * finalIndex, 100);
+            const exerciseResultChange = finalExerciseResult - initialExerciseResult;
 
             const symbolGroupSpeedResults = attempts.map((attempt) => attempt.msPerSymbolGroup);
             const [symbolGroupSpeedSlope, symbolGroupSpeedIntercept] = leastSquares(indeces, symbolGroupSpeedResults);
             const initialSymbolGroupSpeed = symbolGroupSpeedIntercept + symbolGroupSpeedSlope;
             const finalSymbolGroupSpeed = symbolGroupSpeedIntercept + symbolGroupSpeedSlope * finalIndex;
+            const symbolGroupSpeedChange = finalSymbolGroupSpeed - initialSymbolGroupSpeed;
 
             const symbolSpeedResults = attempts.map((attempt) => attempt.msPerSymbol);
             const [symbolSpeedSlope, symbolSpeedIntercept] = leastSquares(indeces, symbolSpeedResults);
             const initialSymbolSpeed = symbolSpeedIntercept + symbolSpeedSlope;
             const finalSymbolSpeed = symbolSpeedIntercept + symbolSpeedSlope * finalIndex;
+            const symbolSpeedChange = finalSymbolSpeed - initialSymbolSpeed;
 
             userExerciseResults = {
               ...userExerciseResults,
               exercise,
               initialExerciseResult,
               finalExerciseResult,
+              exerciseResultChange,
               initialSymbolGroupSpeed,
               finalSymbolGroupSpeed,
+              symbolGroupSpeedChange,
               initialSymbolSpeed,
               finalSymbolSpeed,
+              symbolSpeedChange,
             };
           }
 

@@ -113,14 +113,14 @@ export class TextExercise extends Component {
     return (
       <Grid container>
         <Grid.Row verticalAlign="middle" style={{ paddingBottom: 0 }}>
-          <Grid.Column textAlign="center" width={8}>
-            <table>
+          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8}>
+            <table style={{ height: '46px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
               <tbody>
                 <SpeedOptions exerciseType={this.props.type} />
               </tbody>
             </table>
           </Grid.Column>
-          <Grid.Column textAlign="center" width={8}>
+          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8}>
             <Timing
               loading={this.props.exerciseStatus === 'starting' || this.props.exerciseStatus === 'finishing'}
               onStart={this.onExerciseStartHandler}

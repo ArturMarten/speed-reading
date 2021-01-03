@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Icon, Button } from 'semantic-ui-react';
 import { formatMillisecondsInHours, downloadExcelData } from '../../../shared/utility';
 import {
@@ -11,6 +11,7 @@ import {
   prepareResults,
 } from './util/groupTable';
 import { exportFile } from '../../../api';
+import DistributionChart from './DistributionChart';
 
 function exportData(results, translate) {
   const { filename, filetype, ...rest } = prepareResults(results, translate);
@@ -19,14 +20,49 @@ function exportData(results, translate) {
   });
 }
 
+function getSelectedData(exerciseData, { exercise, field }, userCount) {
+  if (!exercise || !field) return null;
+  let selectedData = [];
+  if (!exerciseData[exercise]) return selectedData;
+  if (exercise === 'readingExercises' && field === 'exerciseCount') {
+    selectedData = Object.values(
+      exerciseData[exercise].reduce((previous, user) => {
+        if (previous[user.userId]) {
+          previous[user.userId] += user[field];
+        } else {
+          previous[user.userId] = user[field];
+        }
+        return previous;
+      }, {}),
+    );
+  } else {
+    selectedData = exerciseData[exercise].map((user) => user[field]);
+  }
+  if (field === 'exerciseCount') {
+    const zeros = [...Array(userCount - selectedData.length)].map(() => 0);
+    selectedData = [...selectedData, ...zeros];
+  }
+  return selectedData;
+}
+
 function ReadingGroupTable(props) {
-  const { readingExerciseData, isTeacher, translate } = props;
+  const {
+    readingExerciseData,
+    minimumAttemptCount,
+    minimumAttemptCountChangeHandler,
+    groupName,
+    isTeacher,
+    translate,
+  } = props;
+  const [selection, setSelection] = useState({ exercise: null, field: null });
 
   const userCount = getUserCount(readingExerciseData);
 
   const groupedExerciseData = groupDataByExercise(readingExerciseData);
 
   const exerciseResults = calculateExerciseResults(groupedExerciseData);
+
+  const selectedData = getSelectedData(exerciseResults, selection, userCount);
 
   const aggregatedExerciseResults = aggregateExerciseResults(exerciseResults, userCount);
 
@@ -77,15 +113,33 @@ function ReadingGroupTable(props) {
                 <Table.Cell warning={totalExerciseElapsedTime === 0}>
                   {formatMillisecondsInHours(totalExerciseElapsedTime)}
                 </Table.Cell>
-                <Table.Cell warning={averageExerciseCount === 0}>{averageExerciseCount.toFixed(2)}</Table.Cell>
-                <Table.Cell warning={averageInitialReadingSpeed === 0}>
+                <Table.Cell
+                  warning={averageExerciseCount === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'exerciseCount' })}
+                >
+                  {averageExerciseCount.toFixed(2)}
+                </Table.Cell>
+                <Table.Cell
+                  warning={averageInitialReadingSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'initialReadingSpeed' })}
+                >
                   {averageInitialReadingSpeed.toFixed(0)}
                 </Table.Cell>
-                <Table.Cell warning={averageFinalReadingSpeed === 0}>{averageFinalReadingSpeed.toFixed(0)}</Table.Cell>
+                <Table.Cell
+                  warning={averageFinalReadingSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'finalReadingSpeed' })}
+                >
+                  {averageFinalReadingSpeed.toFixed(0)}
+                </Table.Cell>
                 <Table.Cell
                   negative={averageReadingSpeedChangePercentage < 0}
                   warning={averageReadingSpeedChangePercentage === 0}
                   positive={averageReadingSpeedChangePercentage > 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'readingSpeedChange' })}
                 >
                   {`${averageReadingSpeedChangePercentage > 0 ? '+' : ''}${averageReadingSpeedChangePercentage.toFixed(
                     2,
@@ -139,31 +193,51 @@ function ReadingGroupTable(props) {
             return (
               <Table.Row key={exercise}>
                 <Table.Cell>{translate(`statistics.${exerciseTranslateMapping[exercise]}`)}</Table.Cell>
-                <Table.Cell warning={averageInitialComprehensionSpeed === 0}>
+                <Table.Cell
+                  warning={averageInitialComprehensionSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'initialComprehensionSpeed' })}
+                >
                   {averageInitialComprehensionSpeed.toFixed(0)}
                 </Table.Cell>
-                <Table.Cell warning={averageFinalComprehensionSpeed === 0}>
+                <Table.Cell
+                  warning={averageFinalComprehensionSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'finalComprehensionSpeed' })}
+                >
                   {averageFinalComprehensionSpeed.toFixed(0)}
                 </Table.Cell>
                 <Table.Cell
                   negative={averageComprehensionSpeedChangePercentage < 0}
                   warning={averageComprehensionSpeedChangePercentage === 0}
                   positive={averageComprehensionSpeedChangePercentage > 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'comprehensionSpeedChange' })}
                 >
                   {`${
                     averageComprehensionSpeedChangePercentage > 0 ? '+' : ''
                   }${averageComprehensionSpeedChangePercentage.toFixed(2)}%`}
                 </Table.Cell>
-                <Table.Cell warning={averageInitialComprehensionLevel === 0}>
+                <Table.Cell
+                  warning={averageInitialComprehensionLevel === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'initialComprehensionLevel' })}
+                >
                   {averageInitialComprehensionLevel.toFixed(0)}%
                 </Table.Cell>
-                <Table.Cell warning={averageFinalComprehensionLevel === 0}>
+                <Table.Cell
+                  warning={averageFinalComprehensionLevel === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'finalComprehensionLevel' })}
+                >
                   {averageFinalComprehensionLevel.toFixed(0)}%
                 </Table.Cell>
                 <Table.Cell
                   negative={averageComprehensionLevelChangePercentage < 0}
                   warning={averageComprehensionLevelChangePercentage === 0}
                   positive={averageComprehensionLevelChangePercentage > 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, field: 'comprehensionLevelChange' })}
                 >
                   {`${
                     averageComprehensionLevelChangePercentage > 0 ? '+' : ''
@@ -189,6 +263,19 @@ function ReadingGroupTable(props) {
           &nbsp;
           <Icon name="download" />
         </Button>
+      ) : null}
+      {selectedData ? (
+        <DistributionChart
+          data={selectedData}
+          exercise={selection.exercise}
+          groupName={groupName}
+          userCount={userCount}
+          field={selection.field}
+          minimumAttemptCount={minimumAttemptCount}
+          minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
+          onClose={() => setSelection({ exercise: null, field: null })}
+          translate={translate}
+        />
       ) : null}
     </>
   );

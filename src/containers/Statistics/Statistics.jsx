@@ -411,6 +411,7 @@ export class Statistics extends Component {
     const totalExerciseTime = userExerciseData.map((exercise) => exercise.elapsedTime).reduce(reduceSumFunc, 0);
     const totalTestTime = userExerciseData.map((exercise) => exercise.testElapsedTime).reduce(reduceSumFunc, 0);
     const xField = this.state.scale === 'index' ? 'index' : 'date';
+    const group = this.props.groups.find((group) => group.id === this.state.groupId);
 
     const userFilterInput = (
       <Form.Field
@@ -720,6 +721,8 @@ export class Statistics extends Component {
                   data={this.props.groupExerciseStatistics}
                   timeFilter={timeFilter}
                   minimumAttemptCount={this.state.minimumAttemptCount}
+                  minimumAttemptCountChangeHandler={this.minimumAttemptCountChangeHandler}
+                  groupName={group ? group.name : this.props.translate('statistics.all-groups')}
                   translate={this.props.translate}
                 />
               </Segment>

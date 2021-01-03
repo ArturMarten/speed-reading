@@ -86,6 +86,9 @@ export class TextExerciseResults extends Component {
               onMouseEnter={() => {
                 this.setState({ scroll: false });
               }}
+              onTouchMove={() => {
+                this.setState({ scroll: false });
+              }}
               style={{ width: '100%', maxHeight: '190px', overflow: 'auto' }}
             >
               <AchievementUpdates />

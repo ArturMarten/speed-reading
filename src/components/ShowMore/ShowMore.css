@@ -33,3 +33,7 @@
   box-shadow: none;
   vertical-align: middle;
 }
+
+.paragraph {
+  margin-bottom: 1em;
+}

@@ -7,11 +7,11 @@ function StatisticsDescription(props) {
     <ShowMore translate={translate}>
       {language === 'ee' ? (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <p>
+          <div className="paragraph">
             Statistikas näidatakse kõigi sooritatud harjutuste andmeid nii tabeli kui ka graafiku puhul. Lisaks on
             võimalik näha kasutaja grupi koondstatistikat.
-          </p>
-          <p>
+          </div>
+          <div className="paragraph">
             Lugemisharjutuste statistika puhul toimub andmete töötlemine sellises järjekorras:
             <ol>
               <li>Alustatakse kasutaja kõigi lugemisandmetega</li>
@@ -54,7 +54,7 @@ function StatisticsDescription(props) {
                 Leitud andmete põhjal arvutatakse uuesti tulemuse (%) keskväärtus ja SD ning kuvatakse graafiku kohal
               </li>
             </ol>
-          </p>
+          </div>
         </div>
       ) : (
         translate('statistics.description')

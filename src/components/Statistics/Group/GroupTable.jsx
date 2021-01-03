@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { filterByAttemptCount, filterReadingExercises, filterByExerciseName } from './util/groupTable';
 import {
   lowerBoundOutlierFilter,
@@ -9,45 +9,71 @@ import ConcentrationGroupTable from './ConcentrationGroupTable';
 import SchulteGroupTable from './SchulteGroupTable';
 import ReadingGroupTable from './ReadingGroupTable';
 
-export class GroupTable extends Component {
-  render() {
-    const { data, isTeacher, minimumAttemptCount, timeFilter, translate } = this.props;
-    const filteredGroupData = Object.assign(
-      {},
-      ...Object.keys(data).map((userId) => {
-        const boundFiltered = data[userId]
-          .filter((attempt) => upperBoundOutlierFilter(attempt))
-          .filter((attempt) => lowerBoundOutlierFilter(attempt));
-        const standardDeviationFiltered = [
-          ...filterStandardDeviation('readingExercises', boundFiltered),
-          ...filterStandardDeviation('schulteTables', boundFiltered),
-          ...filterStandardDeviation('concentration', boundFiltered),
-        ];
-        const filteredData = standardDeviationFiltered.filter(timeFilter);
-        return {
-          [userId]: filteredData,
-        };
-      }),
-    );
+function GroupTable(props) {
+  const {
+    data,
+    isTeacher,
+    minimumAttemptCount,
+    minimumAttemptCountChangeHandler,
+    groupName,
+    timeFilter,
+    translate,
+  } = props;
 
-    let readingExerciseData = filterReadingExercises(filteredGroupData);
-    let concentrationExerciseData = filterByExerciseName(filteredGroupData, 'concentration');
-    let schulteTablesExerciseData = filterByExerciseName(filteredGroupData, 'schulteTables');
+  const filteredGroupData = Object.assign(
+    {},
+    ...Object.keys(data).map((userId) => {
+      const boundFiltered = data[userId]
+        .filter((attempt) => upperBoundOutlierFilter(attempt))
+        .filter((attempt) => lowerBoundOutlierFilter(attempt));
+      const standardDeviationFiltered = [
+        ...filterStandardDeviation('readingExercises', boundFiltered),
+        ...filterStandardDeviation('schulteTables', boundFiltered),
+        ...filterStandardDeviation('concentration', boundFiltered),
+      ];
+      const filteredData = standardDeviationFiltered.filter(timeFilter);
+      return {
+        [userId]: filteredData,
+      };
+    }),
+  );
 
-    if (isTeacher) {
-      readingExerciseData = filterByAttemptCount(readingExerciseData, minimumAttemptCount);
-      concentrationExerciseData = filterByAttemptCount(concentrationExerciseData, minimumAttemptCount);
-      schulteTablesExerciseData = filterByAttemptCount(schulteTablesExerciseData, minimumAttemptCount);
-    }
+  let readingExerciseData = filterReadingExercises(filteredGroupData);
+  let concentrationExerciseData = filterByExerciseName(filteredGroupData, 'concentration');
+  let schulteTablesExerciseData = filterByExerciseName(filteredGroupData, 'schulteTables');
 
-    return (
-      <>
-        <ReadingGroupTable readingExerciseData={readingExerciseData} isTeacher={isTeacher} translate={translate} />
-        <SchulteGroupTable schulteTablesExerciseData={schulteTablesExerciseData} translate={translate} />
-        <ConcentrationGroupTable concentrationExerciseData={concentrationExerciseData} translate={translate} />
-      </>
-    );
+  if (isTeacher) {
+    readingExerciseData = filterByAttemptCount(readingExerciseData, minimumAttemptCount);
+    concentrationExerciseData = filterByAttemptCount(concentrationExerciseData, minimumAttemptCount);
+    schulteTablesExerciseData = filterByAttemptCount(schulteTablesExerciseData, minimumAttemptCount);
   }
+
+  return (
+    <>
+      <ReadingGroupTable
+        readingExerciseData={readingExerciseData}
+        minimumAttemptCount={minimumAttemptCount}
+        minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
+        groupName={groupName}
+        isTeacher={isTeacher}
+        translate={translate}
+      />
+      <SchulteGroupTable
+        schulteTablesExerciseData={schulteTablesExerciseData}
+        minimumAttemptCount={minimumAttemptCount}
+        minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
+        groupName={groupName}
+        translate={translate}
+      />
+      <ConcentrationGroupTable
+        concentrationExerciseData={concentrationExerciseData}
+        minimumAttemptCount={minimumAttemptCount}
+        minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
+        groupName={groupName}
+        translate={translate}
+      />
+    </>
+  );
 }
 
 export default GroupTable;

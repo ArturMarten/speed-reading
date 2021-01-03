@@ -12,6 +12,16 @@ function ReleaseNotes(props) {
         <List verticalAlign="middle" bulleted>
           <List.Item>
             <List.Content>
+              <List.Header>Versioon 5.1.26 (03.01.2021)</List.Header>
+              <List.Description>
+                <List.List>
+                  <List.Item>Lisatud sageduste jaotusdiagramm grupi statistika väärtusele vajutamisel</List.Item>
+                </List.List>
+              </List.Description>
+            </List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Content>
               <List.Header>Versioon 5.1.25 (06.12.2020)</List.Header>
               <List.Description>
                 <List.List>

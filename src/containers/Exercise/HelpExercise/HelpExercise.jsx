@@ -40,13 +40,7 @@ export class HelpExercise extends Component {
     const exercise = ((type) => {
       switch (type) {
         case 'schulteTables':
-          return (
-            <SchulteTables
-              ref={(ref) => {
-                this.exerciseRef = ref;
-              }}
-            />
-          );
+          return <SchulteTables />;
         case 'concentration':
           return (
             <Concentration
@@ -64,8 +58,8 @@ export class HelpExercise extends Component {
     return (
       <Grid container>
         <Grid.Row verticalAlign="middle" style={{ paddingBottom: 0 }}>
-          <Grid.Column textAlign="center" width={8} />
-          <Grid.Column textAlign="center" width={8}>
+          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8} />
+          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8}>
             <Timing
               loading={this.props.exerciseStatus === 'starting' || this.props.exerciseStatus === 'finishing'}
               onStart={this.onExerciseStartHandler}

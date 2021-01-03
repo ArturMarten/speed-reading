@@ -216,7 +216,6 @@ export class ProblemReport extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  state,
   userId: state.auth.userId,
   selectedText: state.text.selectedText,
   problemReportStatus: state.problemReport.problemReportStatus,

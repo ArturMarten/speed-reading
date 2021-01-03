@@ -3,9 +3,13 @@
     "new-update-title": ["Uuendus on saadaval", "Update is available"],
     "new-update-description": [
       "Hetkel on kasutusel vana versioon, probleemide vältimiseks on soovitav koheselt uuendada",
-      " "
+      "Currently The old version is in use, it is recommended to upgrade immediately to avoid any problems"
     ],
     "update": ["Uuenda", "Update"],
+    "update-popup": [
+      "Juhul kui nupp ei tööta, vajutage klaviatuuril klahvi F5 või tehke käsitsi lehele värskendus",
+      "If the button does not work, press F5 on the keyboard or manually refresh the page"
+    ],
     "offline-title": ["Probleemid võrguühendusega", "Problems with network connection"],
     "offline-description": [" ", " "]
   },
@@ -985,6 +989,66 @@
       "Keskmine sümboli identsuse üle otsustamise kiiruse muutus",
       "Average initial decision speed change over symbol identity"
     ]
+  },
+  "distribution": {
+    "title": ["Sageduste jaotusdiagramm", "Frequency distribution diagram"],
+    "tick-count": ["Vahemike arv", "Bin count"],
+    "frequency": ["Sagedus", "Frequency"],
+    "group": ["Grupp", "Group"],
+    "user-count": ["Kasutajate arv", "User count"],
+    "average": ["keskmine", "average"],
+    "standard-deviation": ["standardhälve", "standard deviation"],
+    "readingExercises": ["Lugemisharjutused", "Reading exercises"],
+    "readingTest": ["Lugemistest", "Reading test"],
+    "readingAid": ["Lugemise soodustaja", "Reading aid"],
+    "scrolling": ["Keriv tekst", "Scrolling text"],
+    "disappearing": ["Kustuv tekst", "Disappearing text"],
+    "wordGroups": ["Sõnarühmad", "Word groups"],
+    "schulteTables": ["Schulte tabelid", "Schulte tables"],
+    "schulteTables.numbers": ["Numbrid", "Numbers"],
+    "schulteTables.letters-lowercase": ["Väiketähed", "Lowercase letters"],
+    "schulteTables.letters-uppercase": ["Suurtähed", "Uppercase letters"],
+    "schulteTables.letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
+    "concentration": ["Keskendumine", "Concentration"],
+    "concentration.concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
+    "concentration.concentration-letters-only": ["Ainult tähed", "Only letters"],
+    "concentration.concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"],
+    "exerciseCount": ["Harjutuste arv", "Exercise counts"],
+    "initialReadingSpeed": ["Lugemise algkiirus", "Initial reading speed"],
+    "finalReadingSpeed": ["Lugemise lõppkiirus", "Final reading speed"],
+    "readingSpeedChange": ["Lugemiskiiruse muutus", "Reading speed change"],
+    "initialComprehensionSpeed": ["Omandamise algkiirus", "Initial comprehension speed"],
+    "finalComprehensionSpeed": ["Omandamise lõppkiirus", "Final comprehension speed"],
+    "comprehensionSpeedChange": ["Omandamiskiiruse muutus", "Comprehension speed change"],
+    "initialComprehensionLevel": ["Algne omandamistase", "Initial comprehension level"],
+    "finalComprehensionLevel": ["Lõpp omandamistase", "Final comprehension level"],
+    "comprehensionLevelChange": ["Omandamistaseme muutus", "Comprehension level change"],
+    "initialExerciseSpeed": ["Leidmise algkiirus (sümbolit minutis)", "Initial finding speed (symbols per minute)"],
+    "finalExerciseSpeed": ["Leidmise lõppkiirus (sümbolit minutis)", "Final finding speed (symbols per minute)"],
+    "exerciseSpeedChange": ["Leidmise kiiruse muutus (sümbolit minutis)", "Finding speed change (symbols per minute)"],
+    "initialExerciseResult": ["Algne tulemus", "Initial result"],
+    "finalExerciseResult": ["Lõpp tulemus", "Final result"],
+    "exerciseResultChange": ["Tulemuse muutus", "Result change"],
+    "initialSymbolGroupSpeed": [
+      "Grupi identsuse üle otsustamise algkiirus",
+      "Initial decision speed over group identity"
+    ],
+    "finalSymbolGroupSpeed": ["Grupi identsuse üle otsustamise lõppkiirus", "Final decision speed over group identity"],
+    "symbolGroupSpeedChange": [
+      "Grupi identsuse üle otsustamise kiiruse muutus",
+      "Decision speed change over group identity"
+    ],
+    "initialSymbolSpeed": [
+      "Sümboli identsuse üle otsustamise algkiirus",
+      "Initial decision speed over symbol identity"
+    ],
+    "finalSymbolSpeed": ["Sümboli identsuse üle otsustamise lõppkiirus", "Final decision speed over symbol identity"],
+    "symbolSpeedChange": [
+      "Sümboli identsuse üle otsustamise kiiruse muutus",
+      "Decision speed change over symbol identity"
+    ],
+    "no-data": ["Andmed puuduvad", "No data"],
+    "close": ["Sulge", "Close"]
   },
   "manage": {
     "title": ["Halda", "Manage"],

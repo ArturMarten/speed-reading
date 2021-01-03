@@ -8,13 +8,13 @@ function AchievementsDescription(props) {
     <ShowMore translate={translate}>
       {language === 'ee' ? (
         <div className="achievements-read-more">
-          <p>
+          <div className="paragraph">
             Saavutuste süsteemi peamine eesmärk on motiveerida kasutajat rohkem regulaarselt harjutama. Tavapärasele
             harjutuste läbimisele on seatud vahe-eesmärgid, mille poole kasutaja saab igapäevaselt püüelda, muutes
             harjutamise huvitavamaks ja mitmekülgsemaks. Erinevaid saavutusi on palju, seega alati leiab midagi sellist,
             mida võiks täita. Saavutused keskenduvad regulaarsele ja mitmekülgsele lugemise harjutamisele.
-          </p>
-          <p>
+          </div>
+          <div className="paragraph">
             Harjutamise hulka iseloomustame saavutustega. Saavutusi antakse erinevate ülesannete täitmise eest.
             Ülesandeks võib-olla näiteks sooritada teatud hulk harjutusi või harjutada teatud aeg. Iga saavutuse
             ülesande täitmise eest antakse kollane tähekene. Tähekeste kogus sõltub ülesande keerukusest: mida keerukam
@@ -25,7 +25,7 @@ function AchievementsDescription(props) {
             kõikides saavutustes, mis on seotud harjutuste, lugemisharjutuste ja lugemistestidega. Või näiteks ühe
             Schulte tabelite harjutuse läbimisel arvestatakse seda kõikide harjutustega, abiharjutustega ja Schulte
             tabelitega seotud saavutustes. Järgnevas tabelis on harjutustega seotud saavutuste jaotumine.
-          </p>
+          </div>
           <div className="achievements-read-more-table">
             <div className="achievements-read-more-table-inner" style={{ width: '733px' }}>
               <Table basic celled structured textAlign="center" compact="very" singleLine unstackable>
@@ -50,7 +50,7 @@ function AchievementsDescription(props) {
               </Table>
             </div>
           </div>
-          <p>
+          <div className="paragraph">
             Saavutuste lehe esimene pool näitab detailsemalt, kui palju Te olete harjutanud käesoleval päeval, nädalal
             ja kuul. Päeva, nädala ja kuu saavutused on ajaliselt piiratud. See tähendab, et saavutuse saamiseks tuleb
             ülesanne täita konkreetse aja jooksul, olgu selleks siis see päev, nädal või kuu. Selle aja lõppedes
@@ -59,8 +59,8 @@ function AchievementsDescription(props) {
             Juhuslikult valitud saavutuse eesmärgiks on suunata kasutaja tegema erinevaid harjutusi. Päeva, nädala ja
             kuu saavutuste juures antakse ka tagasisidet kui kasutaja on keskmisest rohkem või vähem harjutanud
             võrreldes teiste kasutajatega samas grupis.
-          </p>
-          <p>
+          </div>
+          <div className="paragraph">
             Saavutuste lehe teises pooles on üldised saavutused, mis näitavad kogu õpingute ajal tehtud tööd. Üldiste
             saavutuste omapäraks on see, et iga saavutus on jaotatud kümneks tasemeks. Tasemetest võib mõelda kui
             vaheetappidest saavutuse viimase ülesande täitmiseks. Üldine saavutus algab nulltasemelt, iga järgmise
@@ -68,7 +68,7 @@ function AchievementsDescription(props) {
             Mida kõrgem tase saavutatakse, seda rohkem tähekesi antakse. Iga tasemel on saavutuse ülesande sisu sama,
             kuid iga uue tasemega kasvab ülesandes olev arvuline väärtus. Nii see arvuline väärtus kui ka antavate
             kollaste tähekeste hulk kasvab tasemega lineaarselt. Näiteks harjutuste tasemed alljärgnevas tabelis.
-          </p>
+          </div>
           <div className="achievements-read-more-table">
             <div className="achievements-read-more-table-inner" style={{ width: '440px' }}>
               <Table basic celled structured textAlign="center" compact="very" fixed unstackable>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table } from 'semantic-ui-react';
 import { formatMillisecondsInHours } from '../../../shared/utility';
+import DistributionChart from './DistributionChart';
 import {
   getUserCount,
   calculateExerciseResults,
@@ -12,8 +13,33 @@ import {
 const exercise = 'concentration';
 const modificationNames = ['concentration-numbers-only', 'concentration-letters-only', 'concentration-mixed'];
 
+function getSelectedData(exerciseData, modificationData, { exercise, modification, field }, userCount) {
+  if (!exercise || !modification || !field) return null;
+  let selectedData = [];
+  if (exercise !== modification) {
+    if (!modificationData[modification]) return selectedData;
+    selectedData = modificationData[modification].map((user) => user[field]);
+    if (field === 'exerciseCount') {
+      const zeros = [...Array(userCount - selectedData.length)].map(() => 0);
+      selectedData = [...selectedData, ...zeros];
+    }
+    return selectedData;
+  } else {
+    if (!exerciseData[exercise]) return selectedData;
+    selectedData = exerciseData[exercise].map((user) => user[field]);
+  }
+  return selectedData;
+}
+
 function ConcentrationGroupTable(props) {
-  const { concentrationExerciseData, translate } = props;
+  const {
+    concentrationExerciseData,
+    minimumAttemptCount,
+    minimumAttemptCountChangeHandler,
+    groupName,
+    translate,
+  } = props;
+  const [selection, setSelection] = useState({ exercise: null, modification: null, field: null });
 
   const userCount = getUserCount(concentrationExerciseData);
 
@@ -22,6 +48,8 @@ function ConcentrationGroupTable(props) {
 
   const exerciseResults = calculateExerciseResults(groupedExerciseData);
   const modificationResults = calculateExerciseResults(groupedModificationData);
+
+  const selectedData = getSelectedData(exerciseResults, modificationResults, selection, userCount);
 
   const aggregatedExerciseResults = aggregateExerciseResults(exerciseResults, userCount);
   const aggregatedModificationResults = aggregateExerciseResults(modificationResults, userCount);
@@ -72,17 +100,33 @@ function ConcentrationGroupTable(props) {
                 <Table.Cell warning={totalModificationElapsedTime === 0}>
                   {formatMillisecondsInHours(totalModificationElapsedTime)}
                 </Table.Cell>
-                <Table.Cell warning={averageModificationCount === 0}>{averageModificationCount.toFixed(2)}</Table.Cell>
-                <Table.Cell warning={averageInitialExerciseResult === 0}>
+                <Table.Cell
+                  warning={averageModificationCount === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'exerciseCount' })}
+                >
+                  {averageModificationCount.toFixed(2)}
+                </Table.Cell>
+                <Table.Cell
+                  warning={averageInitialExerciseResult === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'initialExerciseResult' })}
+                >
                   {averageInitialExerciseResult.toFixed(0)}%
                 </Table.Cell>
-                <Table.Cell warning={averageFinalExerciseResult === 0}>
+                <Table.Cell
+                  warning={averageFinalExerciseResult === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'finalExerciseResult' })}
+                >
                   {averageFinalExerciseResult.toFixed(0)}%
                 </Table.Cell>
                 <Table.Cell
                   negative={averageExerciseResultChangePercentage < 0}
                   warning={averageExerciseResultChangePercentage === 0}
                   positive={averageExerciseResultChangePercentage > 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'exerciseResultChange' })}
                 >
                   {`${
                     averageExerciseResultChangePercentage > 0 ? '+' : ''
@@ -138,31 +182,51 @@ function ConcentrationGroupTable(props) {
               <Table.Row key={name}>
                 <Table.Cell>{translate(`statistics.${exercise}`)}</Table.Cell>
                 <Table.Cell>{name !== exercise ? translate(`modification.${name}`) : ''}</Table.Cell>
-                <Table.Cell warning={averageInitialSymbolGroupSpeed === 0}>
+                <Table.Cell
+                  warning={averageInitialSymbolGroupSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'initialSymbolGroupSpeed' })}
+                >
                   {averageInitialSymbolGroupSpeed.toFixed(0)}&nbsp;ms
                 </Table.Cell>
-                <Table.Cell warning={averageFinalSymbolGroupSpeed === 0}>
+                <Table.Cell
+                  warning={averageFinalSymbolGroupSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'finalSymbolGroupSpeed' })}
+                >
                   {averageFinalSymbolGroupSpeed.toFixed(0)}&nbsp;ms
                 </Table.Cell>
                 <Table.Cell
                   negative={averageSymbolGroupSpeedChangePercentage > 0}
                   warning={averageSymbolGroupSpeedChangePercentage === 0}
                   positive={averageSymbolGroupSpeedChangePercentage < 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'symbolGroupSpeedChange' })}
                 >
                   {`${
                     averageSymbolGroupSpeedChangePercentage > 0 ? '+' : ''
                   }${averageSymbolGroupSpeedChangePercentage.toFixed(2)}%`}
                 </Table.Cell>
-                <Table.Cell warning={averageInitialSymbolSpeed === 0}>
+                <Table.Cell
+                  warning={averageInitialSymbolSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'initialSymbolSpeed' })}
+                >
                   {averageInitialSymbolSpeed.toFixed(0)}&nbsp;ms
                 </Table.Cell>
-                <Table.Cell warning={averageFinalSymbolSpeed === 0}>
+                <Table.Cell
+                  warning={averageFinalSymbolSpeed === 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'finalSymbolSpeed' })}
+                >
                   {averageFinalSymbolSpeed.toFixed(0)}&nbsp;ms
                 </Table.Cell>
                 <Table.Cell
                   negative={averageSymbolSpeedChangePercentage > 0}
                   warning={averageSymbolSpeedChangePercentage === 0}
                   positive={averageSymbolSpeedChangePercentage < 0}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSelection({ exercise, modification: name, field: 'symbolSpeedChange' })}
                 >
                   {`${averageSymbolSpeedChangePercentage > 0 ? '+' : ''}${averageSymbolSpeedChangePercentage.toFixed(
                     2,
@@ -173,6 +237,20 @@ function ConcentrationGroupTable(props) {
           })}
         </Table.Body>
       </Table>
+      {selectedData ? (
+        <DistributionChart
+          data={selectedData}
+          exercise={selection.exercise}
+          modification={selection.exercise !== selection.modification ? selection.modification : null}
+          groupName={groupName}
+          userCount={userCount}
+          field={selection.field}
+          minimumAttemptCount={minimumAttemptCount}
+          minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
+          onClose={() => setSelection({ exercise: null, field: null })}
+          translate={translate}
+        />
+      ) : null}
     </>
   );
 }
