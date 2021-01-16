@@ -18,15 +18,21 @@ function getSelectedData(exerciseData, modificationData, { exercise, modificatio
   let selectedData = [];
   if (exercise !== modification) {
     if (!modificationData[modification]) return selectedData;
-    selectedData = modificationData[modification].map((user) => user[field]);
+    selectedData = modificationData[modification].map((user) => ({
+      userId: user.userId,
+      value: user[field],
+    }));
     if (field === 'exerciseCount') {
-      const zeros = [...Array(userCount - selectedData.length)].map(() => 0);
+      const zeros = [...Array(userCount - selectedData.length)].map(() => ({ value: 0 }));
       selectedData = [...selectedData, ...zeros];
     }
     return selectedData;
   } else {
     if (!exerciseData[exercise]) return selectedData;
-    selectedData = exerciseData[exercise].map((user) => user[field]);
+    selectedData = exerciseData[exercise].map((user) => ({
+      userId: user.userId,
+      value: user[field],
+    }));
   }
   return selectedData;
 }

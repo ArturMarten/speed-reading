@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
+import React, { useRef, useEffect, useState, useMemo, Fragment } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { bin, min, max } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
@@ -12,7 +12,7 @@ const margin = {
   left: 40,
 };
 
-function Histogram({ width, height, fill, title, yLabel, xLabel, data, ticks, translate }) {
+function Histogram({ width, height, fill, title, yLabel, xLabel, data, onSelect, ticks, translate }) {
   const yAxisRef = useRef();
   const xAxisRef = useRef();
   const graphWidth = width - margin.left - margin.right;
@@ -22,7 +22,7 @@ function Histogram({ width, height, fill, title, yLabel, xLabel, data, ticks, tr
     if (data.length > 0) {
       return scaleLinear()
         .range([0, graphWidth])
-        .domain([min(data) - 1, max(data) + 2]);
+        .domain([min(data, (d) => d.value) - 1, max(data, (d) => d.value) + 2]);
     } else {
       return scaleLinear().range([0, graphWidth]).domain([0, 0]);
     }
@@ -43,7 +43,10 @@ function Histogram({ width, height, fill, title, yLabel, xLabel, data, ticks, tr
   }, [heightScale, widthScale, ticks]);
 
   useEffect(() => {
-    const histogram = bin().domain(widthScale.domain()).thresholds(widthScale.ticks(ticks));
+    const histogram = bin()
+      .value((d) => d.value)
+      .domain(widthScale.domain())
+      .thresholds(widthScale.ticks(ticks));
     let bins = [];
     if (data.length > 0) {
       bins = histogram(data);
@@ -53,7 +56,7 @@ function Histogram({ width, height, fill, title, yLabel, xLabel, data, ticks, tr
 
   return (
     <svg width={width} height={height}>
-      <text y="10" fontWeight="bold">
+      <text y="15" fontWeight="bold">
         {title}
       </text>
       <g transform={`translate(${margin.left}, ${margin.top})`}>
@@ -77,14 +80,24 @@ function Histogram({ width, height, fill, title, yLabel, xLabel, data, ticks, tr
           </text>
         ) : null}
         {bins.map((d) => (
-          <rect
-            key={d.x0}
-            fill={fill || 'black'}
-            x={widthScale(d.x0) + 1}
-            y={heightScale(d.length)}
-            width={Math.max(widthScale(d.x1) - widthScale(d.x0) - 1, 0)}
-            height={graphHeight - heightScale(d.length)}
-          />
+          <Fragment key={d.x0}>
+            <rect
+              fill="transparent"
+              onClick={() => onSelect(d)}
+              x={widthScale(d.x0) + 1}
+              y={0}
+              width={Math.max(widthScale(d.x1) - widthScale(d.x0) - 1, 0)}
+              height={heightScale(d.length)}
+            />
+            <rect
+              fill={fill || 'black'}
+              onClick={() => onSelect(d)}
+              x={widthScale(d.x0) + 1}
+              y={heightScale(d.length)}
+              width={Math.max(widthScale(d.x1) - widthScale(d.x0) - 1, 0)}
+              height={graphHeight - heightScale(d.length)}
+            />
+          </Fragment>
         ))}
       </g>
     </svg>

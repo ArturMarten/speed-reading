@@ -42,25 +42,26 @@ export const groupDataBy = (data, by) =>
     (prevUserArray, currentUserId) =>
       prevUserArray.concat(
         data[currentUserId].reduce((prevObject, currentAttempt) => {
-          if (prevObject[currentAttempt[by]]) {
-            return {
-              ...prevObject,
-              [currentAttempt[by]]: prevObject[currentAttempt[by]].concat({
-                ...currentAttempt,
-                index: prevObject[currentAttempt[by]].length + 1,
-                userId: currentUserId,
-              }),
-            };
-          }
-          return {
-            ...prevObject,
-            [currentAttempt[by]]: [
+          let attempts = [];
+          const field = currentAttempt[by];
+          if (prevObject[field]) {
+            attempts = prevObject[field].concat({
+              ...currentAttempt,
+              index: prevObject[field].length + 1,
+              userId: currentUserId,
+            });
+          } else {
+            attempts = [
               {
                 ...currentAttempt,
                 index: 1,
                 userId: currentUserId,
               },
-            ],
+            ];
+          }
+          return {
+            ...prevObject,
+            [field]: attempts,
           };
         }, {}),
       ),
@@ -75,128 +76,169 @@ export const groupDataByExercise = (data) => {
   return groupDataBy(data, 'exercise');
 };
 
-export const calculateExerciseResults = (exerciseData) =>
-  exerciseData.reduce(
-    (prevExercises, userExercises) => {
-      const { readingExercises, ...rest } = Object.keys(userExercises).reduce(
-        (prevUserExercises, currentExercise) => {
-          const attempts = userExercises[currentExercise];
-          const { userId, exercise } = attempts[0];
-          const exerciseCount = attempts.length;
-          const exerciseElapsedTime = attempts.map(({ elapsedTime }) => elapsedTime).reduce(reduceSumFunc, 0);
-          const indeces = attempts.map((attempt) => attempt.index);
-          const finalIndex = Math.max(...indeces);
-          const isReadingExercise = readingExerciseNames.indexOf(currentExercise) !== -1;
-          let userExerciseResults = {
-            userId,
-            exerciseCount,
-            exerciseElapsedTime,
-          };
-          if (isReadingExercise) {
-            const readingSpeedResults = attempts.map((attempt) => attempt.wordsPerMinute);
-            const [readingSpeedSlope, readingSpeedIntercept] = leastSquares(indeces, readingSpeedResults);
-            const initialReadingSpeed = readingSpeedIntercept + readingSpeedSlope;
-            const finalReadingSpeed = readingSpeedIntercept + readingSpeedSlope * finalIndex;
-            const readingSpeedChange = finalReadingSpeed - initialReadingSpeed;
-
-            const comprehensionSpeedResults = attempts.map((attempt) => attempt.comprehensionPerMinute);
-            const [comprehensionSpeedSlope, comprehensionSpeedIntercept] = leastSquares(
-              indeces,
-              comprehensionSpeedResults,
-            );
-            const initialComprehensionSpeed = comprehensionSpeedIntercept + comprehensionSpeedSlope;
-            const finalComprehensionSpeed = comprehensionSpeedIntercept + comprehensionSpeedSlope * finalIndex;
-            const comprehensionSpeedChange = finalComprehensionSpeed - initialComprehensionSpeed;
-
-            const comprehensionLevelResults = attempts.map((attempt) => attempt.comprehensionResult);
-            const [comprehensionLevelSlope, comprehensionLevelIntercept] = leastSquares(
-              indeces,
-              comprehensionLevelResults,
-            );
-            const initialComprehensionLevel = comprehensionLevelIntercept + comprehensionLevelSlope;
-            const finalComprehensionLevel = comprehensionLevelIntercept + comprehensionLevelSlope * finalIndex;
-            const comprehensionLevelChange = finalComprehensionLevel - initialComprehensionLevel;
-
-            userExerciseResults = {
-              ...userExerciseResults,
-              exercise,
-              initialReadingSpeed,
-              finalReadingSpeed,
-              readingSpeedChange,
-              initialComprehensionSpeed,
-              finalComprehensionSpeed,
-              comprehensionSpeedChange,
-              initialComprehensionLevel,
-              finalComprehensionLevel,
-              comprehensionLevelChange,
-            };
-          } else if (exercise === 'schulteTables') {
-            const exerciseSpeedResults = attempts.map((attempt) => attempt.symbolsPerMinute);
-            const [exerciseSpeedSlope, exerciseSpeedIntercept] = leastSquares(indeces, exerciseSpeedResults);
-            const initialExerciseSpeed = exerciseSpeedIntercept + exerciseSpeedSlope;
-            const finalExerciseSpeed = exerciseSpeedIntercept + exerciseSpeedSlope * finalIndex;
-            const exerciseSpeedChange = finalExerciseSpeed - initialExerciseSpeed;
-            userExerciseResults = {
-              ...userExerciseResults,
-              exercise,
-              initialExerciseSpeed,
-              finalExerciseSpeed,
-              exerciseSpeedChange,
-            };
-          } else if (exercise === 'concentration') {
-            const exerciseResults = attempts.map((attempt) => attempt.exerciseResult);
-            const [exerciseResultSlope, exerciseResultIntercept] = leastSquares(indeces, exerciseResults);
-            const initialExerciseResult = exerciseResultIntercept + exerciseResultSlope;
-            const finalExerciseResult = Math.min(exerciseResultIntercept + exerciseResultSlope * finalIndex, 100);
-            const exerciseResultChange = finalExerciseResult - initialExerciseResult;
-
-            const symbolGroupSpeedResults = attempts.map((attempt) => attempt.msPerSymbolGroup);
-            const [symbolGroupSpeedSlope, symbolGroupSpeedIntercept] = leastSquares(indeces, symbolGroupSpeedResults);
-            const initialSymbolGroupSpeed = symbolGroupSpeedIntercept + symbolGroupSpeedSlope;
-            const finalSymbolGroupSpeed = symbolGroupSpeedIntercept + symbolGroupSpeedSlope * finalIndex;
-            const symbolGroupSpeedChange = finalSymbolGroupSpeed - initialSymbolGroupSpeed;
-
-            const symbolSpeedResults = attempts.map((attempt) => attempt.msPerSymbol);
-            const [symbolSpeedSlope, symbolSpeedIntercept] = leastSquares(indeces, symbolSpeedResults);
-            const initialSymbolSpeed = symbolSpeedIntercept + symbolSpeedSlope;
-            const finalSymbolSpeed = symbolSpeedIntercept + symbolSpeedSlope * finalIndex;
-            const symbolSpeedChange = finalSymbolSpeed - initialSymbolSpeed;
-
-            userExerciseResults = {
-              ...userExerciseResults,
-              exercise,
-              initialExerciseResult,
-              finalExerciseResult,
-              exerciseResultChange,
-              initialSymbolGroupSpeed,
-              finalSymbolGroupSpeed,
-              symbolGroupSpeedChange,
-              initialSymbolSpeed,
-              finalSymbolSpeed,
-              symbolSpeedChange,
-            };
+export const groupDataByReadingExercise = (data) =>
+  Object.keys(data).reduce(
+    (prevUserArray, currentUserId) =>
+      prevUserArray.concat(
+        data[currentUserId].reduce((prevObject, currentAttempt) => {
+          let exerciseAttempts = [];
+          const exerciseName = currentAttempt['exercise'];
+          if (prevObject[exerciseName]) {
+            exerciseAttempts = prevObject[exerciseName].concat({
+              ...currentAttempt,
+              index: prevObject[exerciseName].length + 1,
+              userId: currentUserId,
+            });
+          } else {
+            exerciseAttempts = [
+              {
+                ...currentAttempt,
+                index: 1,
+                userId: currentUserId,
+              },
+            ];
           }
-
+          let readingExerciseAttempts = [];
+          if (prevObject['readingExercises']) {
+            readingExerciseAttempts = prevObject['readingExercises'].concat({
+              ...currentAttempt,
+              index: prevObject['readingExercises'].length + 1,
+              userId: currentUserId,
+            });
+          } else {
+            readingExerciseAttempts = [
+              {
+                ...currentAttempt,
+                index: 1,
+                userId: currentUserId,
+              },
+            ];
+          }
           return {
-            ...prevUserExercises,
-            [currentExercise]: prevExercises[currentExercise]
-              ? prevExercises[currentExercise].concat(userExerciseResults)
-              : [userExerciseResults],
-            readingExercises: isReadingExercise
-              ? prevUserExercises.readingExercises.concat(userExerciseResults)
-              : prevUserExercises.readingExercises,
+            ...prevObject,
+            [exerciseName]: exerciseAttempts,
+            readingExercises: readingExerciseAttempts,
           };
-        },
-        { readingExercises: [] },
-      );
-      return {
-        ...prevExercises,
-        readingExercises: prevExercises.readingExercises.concat(...readingExercises),
-        ...rest,
-      };
-    },
-    { readingExercises: [] },
+        }, {}),
+      ),
+    [],
   );
+
+const calculateFieldResult = (attempts, field) => {
+  const fieldResults = attempts.map((attempt) => attempt[field]);
+  const indeces = attempts.map((attempt) => attempt.index);
+  const finalIndex = Math.max(...indeces, 0);
+  const [slope, intercept] = leastSquares(indeces, fieldResults);
+  const initialResult = intercept + slope;
+  const finalResult = intercept + slope * finalIndex;
+  const resultChange = finalResult - initialResult;
+  return [initialResult, finalResult, resultChange];
+};
+export const calculateExerciseResults = (exerciseData) =>
+  exerciseData.reduce((prevExercises, userExercises) => {
+    const { ...rest } = Object.keys(userExercises).reduce((prevUserExercises, currentExercise) => {
+      const attempts = userExercises[currentExercise];
+      const { userId, exercise } = attempts[0];
+      const exerciseCount = attempts.length;
+      const exerciseElapsedTime = attempts.map(({ elapsedTime }) => elapsedTime).reduce(reduceSumFunc, 0);
+      const isReadingExercise =
+        currentExercise === 'readingExercises' || readingExerciseNames.indexOf(currentExercise) !== -1;
+      let userExerciseResults = {
+        userId,
+        exerciseCount,
+        exerciseElapsedTime,
+      };
+      if (isReadingExercise) {
+        const readingSpeedAttempts = attempts.filter((attempt) => attempt.wordsPerMinute !== null);
+        const [initialReadingSpeed, finalReadingSpeed, readingSpeedChange] = calculateFieldResult(
+          readingSpeedAttempts,
+          'wordsPerMinute',
+        );
+
+        const comprehensionSpeedAttempts = attempts.filter((attempt) => attempt.comprehensionPerMinute !== null);
+        const [initialComprehensionSpeed, finalComprehensionSpeed, comprehensionSpeedChange] = calculateFieldResult(
+          comprehensionSpeedAttempts,
+          'comprehensionPerMinute',
+        );
+
+        const comprehensionLevelAttempts = attempts.filter((attempt) => attempt.comprehensionResult !== null);
+        const [initialComprehensionLevel, finalComprehensionLevel, comprehensionLevelChange] = calculateFieldResult(
+          comprehensionLevelAttempts,
+          'comprehensionResult',
+        );
+
+        userExerciseResults = {
+          ...userExerciseResults,
+          exercise,
+          initialReadingSpeed,
+          finalReadingSpeed,
+          readingSpeedChange,
+          initialComprehensionSpeed,
+          finalComprehensionSpeed,
+          comprehensionSpeedChange,
+          initialComprehensionLevel,
+          finalComprehensionLevel,
+          comprehensionLevelChange,
+        };
+      } else if (exercise === 'schulteTables') {
+        const exerciseSpeedAttempts = attempts.filter((attempt) => attempt.symbolsPerMinute !== null);
+        const [initialExerciseSpeed, finalExerciseSpeed, exerciseSpeedChange] = calculateFieldResult(
+          exerciseSpeedAttempts,
+          'symbolsPerMinute',
+        );
+        userExerciseResults = {
+          ...userExerciseResults,
+          exercise,
+          initialExerciseSpeed,
+          finalExerciseSpeed,
+          exerciseSpeedChange,
+        };
+      } else if (exercise === 'concentration') {
+        const exerciseResultAttempts = attempts.filter((attempt) => attempt.exerciseResult !== null);
+        const [initialExerciseResult, finalExerciseResult, exerciseResultChange] = calculateFieldResult(
+          exerciseResultAttempts,
+          'exerciseResult',
+        );
+
+        const symbolGroupSpeedAttempts = attempts.filter((attempt) => attempt.msPerSymbolGroup !== null);
+        const [initialSymbolGroupSpeed, finalSymbolGroupSpeed, symbolGroupSpeedChange] = calculateFieldResult(
+          symbolGroupSpeedAttempts,
+          'msPerSymbolGroup',
+        );
+
+        const symbolSpeedAttempts = attempts.filter((attempt) => attempt.msPerSymbol !== null);
+        const [initialSymbolSpeed, finalSymbolSpeed, symbolSpeedChange] = calculateFieldResult(
+          symbolSpeedAttempts,
+          'msPerSymbol',
+        );
+
+        userExerciseResults = {
+          ...userExerciseResults,
+          exercise,
+          initialExerciseResult,
+          finalExerciseResult,
+          exerciseResultChange,
+          initialSymbolGroupSpeed,
+          finalSymbolGroupSpeed,
+          symbolGroupSpeedChange,
+          initialSymbolSpeed,
+          finalSymbolSpeed,
+          symbolSpeedChange,
+        };
+      }
+
+      return {
+        ...prevUserExercises,
+        [currentExercise]: prevExercises[currentExercise]
+          ? prevExercises[currentExercise].concat(userExerciseResults)
+          : [userExerciseResults],
+      };
+    }, {});
+    return {
+      ...prevExercises,
+      ...rest,
+    };
+  }, {});
 
 export const calculateReadingExerciseResults = (exerciseData) => {
   return calculateExerciseResults(exerciseData);

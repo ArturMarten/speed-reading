@@ -991,7 +991,7 @@
     ]
   },
   "distribution": {
-    "title": ["Sageduste jaotusdiagramm", "Frequency distribution diagram"],
+    "chart-title": ["Sageduste jaotusdiagramm", "Frequency distribution diagram"],
     "tick-count": ["Vahemike arv", "Bin count"],
     "frequency": ["Sagedus", "Frequency"],
     "group": ["Grupp", "Group"],
@@ -1048,6 +1048,10 @@
       "Decision speed change over symbol identity"
     ],
     "no-data": ["Andmed puuduvad", "No data"],
+    "values-title": ["Sageduste väärtused", "Frequency values"],
+    "user": ["Kasutaja", "User"],
+    "value": ["Väärtus", "Value"],
+    "unknown": ["Teadmata", "Unknown"],
     "close": ["Sulge", "Close"]
   },
   "manage": {

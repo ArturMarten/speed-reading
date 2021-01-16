@@ -69,14 +69,12 @@ it('renders table with data', () => {
     queryByText(`${translate('group-statistics-table.average-exercise-count-per-user', { userCount: 2 })}`),
   ).not.toBeNull();
   expect(queryByText('0h 05m')).not.toBeNull();
-  expect(queryByText('+3.23%')).not.toBeNull();
   expect(queryByText('0h 04m')).not.toBeNull();
   expect(queryByText('+4.55%')).not.toBeNull();
   expect(queryByText('0h 01m')).not.toBeNull();
-  expect(queryByText('+5.62%')).not.toBeNull();
-  expect(queryByText('+1.92%')).not.toBeNull();
+  expect(queryByText('+3.23%')).not.toBeNull();
   expect(queryByText('+8.06%')).not.toBeNull();
-  expect(queryByText('+2.94%')).not.toBeNull();
+  expect(queryAllByText('+2.94%').length).toBe(2);
   expect(queryAllByText('0h 00m').length).toBe(12);
-  expect(queryAllByText('0.00%').length).toBe(29);
+  expect(queryAllByText('0.00%').length).toBe(30);
 });

@@ -4,6 +4,7 @@ import {
   getUserCount,
   groupDataByExercise,
   calculateExerciseResults,
+  groupDataByReadingExercise,
 } from './groupTable';
 
 it('filters by exercise', () => {
@@ -90,6 +91,40 @@ it('calculates user count', () => {
 });
 
 it('groups data by exercise', () => {
+  const result = groupDataByReadingExercise({
+    user1: [
+      {
+        id: 1,
+        exercise: 'readingTest',
+        wordsPerMinute: 120,
+      },
+    ],
+  });
+  expect(result).toEqual([
+    {
+      readingTest: [
+        {
+          id: 1,
+          index: 1,
+          userId: 'user1',
+          wordsPerMinute: 120,
+          exercise: 'readingTest',
+        },
+      ],
+      readingExercises: [
+        {
+          id: 1,
+          index: 1,
+          userId: 'user1',
+          wordsPerMinute: 120,
+          exercise: 'readingTest',
+        },
+      ],
+    },
+  ]);
+});
+
+it('groups data by exercise', () => {
   const result = groupDataByExercise({
     user1: [
       {
@@ -145,38 +180,6 @@ it('calculates exercise results', () => {
   ]);
   expect(result).toEqual({
     readingAid: [
-      {
-        exercise: 'readingAid',
-        exerciseCount: 1,
-        exerciseElapsedTime: 90000,
-        initialReadingSpeed: 90,
-        initialComprehensionLevel: 90,
-        initialComprehensionSpeed: 81,
-        finalReadingSpeed: 90,
-        finalComprehensionLevel: 90,
-        finalComprehensionSpeed: 81,
-        readingSpeedChange: 0,
-        comprehensionLevelChange: 0,
-        comprehensionSpeedChange: 0,
-        userId: 'user2',
-      },
-    ],
-    readingExercises: [
-      {
-        exercise: 'readingTest',
-        exerciseCount: 1,
-        exerciseElapsedTime: 85000,
-        initialReadingSpeed: 120,
-        initialComprehensionLevel: 80,
-        initialComprehensionSpeed: 96,
-        finalReadingSpeed: 120,
-        finalComprehensionLevel: 80,
-        finalComprehensionSpeed: 96,
-        readingSpeedChange: 0,
-        comprehensionLevelChange: 0,
-        comprehensionSpeedChange: 0,
-        userId: 'user1',
-      },
       {
         exercise: 'readingAid',
         exerciseCount: 1,

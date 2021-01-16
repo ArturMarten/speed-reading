@@ -5,7 +5,7 @@ import {
   getUserCount,
   calculateExerciseResults,
   aggregateExerciseResults,
-  groupDataByExercise,
+  groupDataByReadingExercise,
   readingExerciseNames,
   exerciseTranslateMapping,
   prepareResults,
@@ -28,18 +28,24 @@ function getSelectedData(exerciseData, { exercise, field }, userCount) {
     selectedData = Object.values(
       exerciseData[exercise].reduce((previous, user) => {
         if (previous[user.userId]) {
-          previous[user.userId] += user[field];
+          previous[user.userId].value += user[field];
         } else {
-          previous[user.userId] = user[field];
+          previous[user.userId] = {
+            userId: user.userId,
+            value: user[field],
+          };
         }
         return previous;
       }, {}),
     );
   } else {
-    selectedData = exerciseData[exercise].map((user) => user[field]);
+    selectedData = exerciseData[exercise].map((user) => ({
+      userId: user.userId,
+      value: user[field],
+    }));
   }
   if (field === 'exerciseCount') {
-    const zeros = [...Array(userCount - selectedData.length)].map(() => 0);
+    const zeros = [...Array(userCount - selectedData.length)].map(() => ({ value: 0 }));
     selectedData = [...selectedData, ...zeros];
   }
   return selectedData;
@@ -58,7 +64,7 @@ function ReadingGroupTable(props) {
 
   const userCount = getUserCount(readingExerciseData);
 
-  const groupedExerciseData = groupDataByExercise(readingExerciseData);
+  const groupedExerciseData = groupDataByReadingExercise(readingExerciseData);
 
   const exerciseResults = calculateExerciseResults(groupedExerciseData);
 
