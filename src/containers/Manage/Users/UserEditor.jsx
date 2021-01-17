@@ -23,13 +23,17 @@ export class UserEditor extends Component {
     if (this.props.user) {
       this.setUser(this.props.user);
     }
-    focusInput(this.inputRef);
+    this.focusTimeout = setTimeout(() => focusInput(this.inputRef), 100);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.userStatus.loading && !this.props.userStatus.loading && this.props.userStatus.error === null) {
       this.props.onClose();
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.focusTimeout);
   }
 
   setUser(user) {

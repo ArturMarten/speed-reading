@@ -702,7 +702,8 @@
     "sentence-lengths-distribution": ["Lause pikkuste jaotus", "Sentence lengths distribution"],
     "sentence-count": ["Lausete arv", "Sentence count"],
     "sentence-lengths": ["Lausete pikkused", "Sentence lengths"],
-    "refresh": ["Värskenda", "Refresh"]
+    "refresh": ["Värskenda", "Refresh"],
+    "close": ["Sulge", "Close"]
   },
   "achievements": {
     "title": ["Saavutused", "Achievements"],

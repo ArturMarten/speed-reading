@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import ExerciseSelectOption from './ExerciseSelectOption';
 
-it('calls function on change', async () => {
+test('calls function on change', async () => {
   const updateValue = jest.fn();
   const { getByText, getAllByText } = render(
     <table>

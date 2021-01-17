@@ -3,7 +3,7 @@ import renderWithRedux from '../../../utils/testUtils';
 
 import SpeedOptions from './SpeedOptions';
 
-it('renders default options', () => {
+test('renders default options', () => {
   renderWithRedux(
     <table>
       <tbody>

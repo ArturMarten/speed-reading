@@ -7,7 +7,7 @@ import {
   groupDataByReadingExercise,
 } from './groupTable';
 
-it('filters by exercise', () => {
+test('filters by exercise', () => {
   const result = filterReadingExercises({
     user1: [
       {
@@ -35,7 +35,7 @@ it('filters by exercise', () => {
   });
 });
 
-it('filters by attempt count', () => {
+test('filters by attempt count', () => {
   const result = filterByAttemptCount(
     {
       user1: [
@@ -76,7 +76,7 @@ it('filters by attempt count', () => {
   });
 });
 
-it('calculates user count', () => {
+test('calculates user count', () => {
   const userCount = getUserCount({
     user1: [
       {
@@ -90,7 +90,7 @@ it('calculates user count', () => {
   expect(userCount).toBe(1);
 });
 
-it('groups data by exercise', () => {
+test('groups data by exercise', () => {
   const result = groupDataByReadingExercise({
     user1: [
       {
@@ -124,7 +124,7 @@ it('groups data by exercise', () => {
   ]);
 });
 
-it('groups data by exercise', () => {
+test('groups data by exercise', () => {
   const result = groupDataByExercise({
     user1: [
       {
@@ -149,7 +149,7 @@ it('groups data by exercise', () => {
   ]);
 });
 
-it('calculates exercise results', () => {
+test('calculates exercise results', () => {
   const result = calculateExerciseResults([
     {
       readingTest: [

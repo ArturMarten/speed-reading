@@ -1,4 +1,5 @@
 import React from 'react';
+import { screen } from '@testing-library/react';
 
 import GroupTable from './GroupTable';
 import { getExerciseId } from '../../../store/reducers/exercise';
@@ -47,34 +48,34 @@ const exampleData = {
   ],
 };
 
-it('renders empty table', () => {
-  const { container, queryAllByText } = renderWithRedux(
+test('renders empty table', () => {
+  const { container } = renderWithRedux(
     <GroupTable data={{}} timeFilter={() => true} isTeacher={false} minimumAttemptCount={0} />,
     { useTranslate: true },
   );
   const rows = container.querySelectorAll('tr');
   expect(rows.length).toBe(30);
-  expect(queryAllByText('0').length).toBe(49);
-  expect(queryAllByText('0h 00m').length).toBe(15);
-  expect(queryAllByText('0.00').length).toBe(15);
-  expect(queryAllByText('0.00%').length).toBe(35);
+  expect(screen.queryAllByText('0').length).toBe(49);
+  expect(screen.queryAllByText('0h 00m').length).toBe(15);
+  expect(screen.queryAllByText('0.00').length).toBe(15);
+  expect(screen.queryAllByText('0.00%').length).toBe(35);
 });
 
-it('renders table with data', () => {
-  const { translate, queryByText, queryAllByText } = renderWithRedux(
+test('renders table with data', () => {
+  const { translate } = renderWithRedux(
     <GroupTable data={exampleData} timeFilter={() => true} isTeacher={false} minimumAttemptCount={0} />,
     { useTranslate: true },
   );
   expect(
-    queryByText(`${translate('group-statistics-table.average-exercise-count-per-user', { userCount: 2 })}`),
+    screen.queryByText(`${translate('group-statistics-table.average-exercise-count-per-user', { userCount: 2 })}`),
   ).not.toBeNull();
-  expect(queryByText('0h 05m')).not.toBeNull();
-  expect(queryByText('0h 04m')).not.toBeNull();
-  expect(queryByText('+4.55%')).not.toBeNull();
-  expect(queryByText('0h 01m')).not.toBeNull();
-  expect(queryByText('+3.23%')).not.toBeNull();
-  expect(queryByText('+8.06%')).not.toBeNull();
-  expect(queryAllByText('+2.94%').length).toBe(2);
-  expect(queryAllByText('0h 00m').length).toBe(12);
-  expect(queryAllByText('0.00%').length).toBe(30);
+  expect(screen.queryByText('0h 05m')).not.toBeNull();
+  expect(screen.queryByText('0h 04m')).not.toBeNull();
+  expect(screen.queryByText('+4.55%')).not.toBeNull();
+  expect(screen.queryByText('0h 01m')).not.toBeNull();
+  expect(screen.queryByText('+3.23%')).not.toBeNull();
+  expect(screen.queryByText('+8.06%')).not.toBeNull();
+  expect(screen.queryAllByText('+2.94%').length).toBe(2);
+  expect(screen.queryAllByText('0h 00m').length).toBe(12);
+  expect(screen.queryAllByText('0.00%').length).toBe(30);
 });

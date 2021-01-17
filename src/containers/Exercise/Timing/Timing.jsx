@@ -123,6 +123,7 @@ export class Timing extends Component {
             icon={!this.props.timerState.started || this.props.timerState.paused ? 'play' : 'pause'}
             disabled={this.props.timerState.stopped || this.props.loading}
             loading={this.props.loading}
+            aria-label={startButtonContent()}
             onClick={clickHandler}
           />
           <Button
@@ -132,6 +133,7 @@ export class Timing extends Component {
             inverted
             disabled={!this.props.timerState.started}
             loading={this.props.loading}
+            aria-label={this.props.translate('timing.reset')}
             onClick={this.resetClickHandler}
           />
           <Button
@@ -141,6 +143,7 @@ export class Timing extends Component {
             inverted
             disabled={!this.props.timerState.started || this.props.timerState.stopped}
             loading={this.props.loading}
+            aria-label={this.props.translate('timing.stop')}
             onClick={this.stopClickHandler}
           />
           <Label basic size="big" style={{ marginTop: '5px' }}>
@@ -157,6 +160,7 @@ export class Timing extends Component {
             content={startButtonContent()}
             disabled={this.props.timerState.stopped || this.props.loading}
             loading={this.props.loading}
+            aria-label={startButtonContent()}
             onClick={clickHandler}
           />
           <Button
@@ -167,6 +171,7 @@ export class Timing extends Component {
             content={this.props.translate('timing.reset')}
             disabled={!this.props.timerState.started}
             loading={this.props.loading}
+            aria-label={this.props.translate('timing.reset')}
             onClick={this.resetClickHandler}
           />
           <Button
@@ -177,6 +182,7 @@ export class Timing extends Component {
             content={this.props.translate('timing.stop')}
             disabled={!this.props.timerState.started || this.props.timerState.stopped}
             loading={this.props.loading}
+            aria-label={this.props.translate('timing.stop')}
             onClick={this.stopClickHandler}
           />
           <Label basic size="big" style={{ marginTop: '5px' }}>

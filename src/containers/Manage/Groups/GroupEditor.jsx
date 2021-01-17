@@ -19,13 +19,17 @@ export class GroupEditor extends Component {
     if (this.props.group) {
       this.setGroup(this.props.group);
     }
-    focusInput(this.inputRef);
+    this.focusTimeout = setTimeout(() => focusInput(this.inputRef), 100);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.groupStatus.loading && !this.props.groupStatus.loading && this.props.groupStatus.error === null) {
       this.props.onClose();
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.focusTimeout);
   }
 
   setGroup(group) {

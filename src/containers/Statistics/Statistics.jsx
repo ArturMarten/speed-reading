@@ -596,9 +596,11 @@ export class Statistics extends Component {
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
-                <Dimmer inverted active={this.props.userExerciseStatisticsStatus.loading}>
-                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
-                </Dimmer>
+                {this.props.userExerciseStatisticsStatus.loading ? (
+                  <Dimmer inverted active>
+                    <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                  </Dimmer>
+                ) : null}
                 <StatisticsTable
                   exercise={this.state.exercise}
                   data={userExerciseData}
@@ -661,9 +663,11 @@ export class Statistics extends Component {
             <div style={{ margin: '1em 0em' }}>
               {this.exerciseCharts[this.state.chartIndex].map(({ id, ...chartProps }) => (
                 <Segment key={id}>
-                  <Dimmer inverted active={this.props.userExerciseStatisticsStatus.loading}>
-                    <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
-                  </Dimmer>
+                  {this.props.userExerciseStatisticsStatus.loading ? (
+                    <Dimmer inverted active>
+                      <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                    </Dimmer>
+                  ) : null}
                   <Input
                     type="number"
                     labelPosition="left"
@@ -713,9 +717,11 @@ export class Statistics extends Component {
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
-                <Dimmer inverted active={this.props.groupExerciseStatisticsStatus.loading}>
-                  <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
-                </Dimmer>
+                {this.props.groupExerciseStatisticsStatus.loading ? (
+                  <Dimmer inverted active>
+                    <Loader indeterminate content={this.props.translate('statistics.fetching-data')} />
+                  </Dimmer>
+                ) : null}
                 <GroupTable
                   isTeacher={this.props.isTeacher}
                   data={this.props.groupExerciseStatistics}

@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
 import RegressionChart from './RegressionChart';
@@ -10,7 +10,7 @@ const exampleData = [
 ];
 
 test('draws regression chart', () => {
-  const { translate, container, getByText } = renderWithRedux(
+  const { translate, container } = renderWithRedux(
     <RegressionChart
       title="Regression Chart title"
       width={1000}
@@ -31,16 +31,16 @@ test('draws regression chart', () => {
   const svg = container.querySelector('svg');
   expect(svg.getAttribute('width')).toEqual('1000');
   expect(svg.getAttribute('height')).toEqual('400');
-  expect(getByText('Regression Chart title')).toBeInTheDocument();
+  expect(screen.getByText('Regression Chart title')).toBeInTheDocument();
   const legend = container.querySelector('g.legend');
   expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');
-  expect(getByText('X Label')).toBeInTheDocument();
-  expect(getByText('Y Label')).toBeInTheDocument();
-  expect(getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('0');
+  expect(screen.getByText('X Label')).toBeInTheDocument();
+  expect(screen.getByText('Y Label')).toBeInTheDocument();
+  expect(screen.getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('0');
 });
 
 test('shows message when no data', () => {
-  const { translate, getByText } = renderWithRedux(
+  const { translate } = renderWithRedux(
     <RegressionChart
       title="Regression Chart title"
       width={1000}
@@ -58,11 +58,11 @@ test('shows message when no data', () => {
     />,
     { useTranslate: true },
   );
-  expect(getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('1');
+  expect(screen.getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('1');
 });
 
 test('updates regression chart', async () => {
-  const { translate, getByText, container, rerender } = renderWithRedux(
+  const { translate, container, rerender } = renderWithRedux(
     <RegressionChart
       title="Regression Chart title"
       width={1000}
@@ -80,7 +80,7 @@ test('updates regression chart', async () => {
     />,
     { useTranslate: true },
   );
-  const noDataElement = getByText(translate('regression-chart.no-data'));
+  const noDataElement = screen.getByText(translate('regression-chart.no-data'));
   expect(noDataElement.style.opacity.charAt(0)).toEqual('1');
   rerender(
     <RegressionChart

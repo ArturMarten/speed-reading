@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { server, apiURL, rest } from '../../test/server';
 import renderWithRedux from '../../utils/testUtils';
@@ -6,19 +6,19 @@ import BugReport from './BugReport';
 
 test('opens and closes the modal', () => {
   const onClose = jest.fn();
-  const { translate, queryByText, baseElement, rerender } = renderWithRedux(<BugReport open onClose={onClose} />);
-  expect(queryByText(translate('bug-report.modal-header'))).not.toBeNull();
+  const { translate, baseElement, rerender } = renderWithRedux(<BugReport open onClose={onClose} />);
+  expect(screen.queryByText(translate('bug-report.modal-header'))).not.toBeNull();
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(onClose).toHaveBeenCalledTimes(1);
   rerender(<BugReport open={false} />);
-  expect(queryByText(translate('bug-report.modal-header'))).toBeNull();
+  expect(screen.queryByText(translate('bug-report.modal-header'))).toBeNull();
 });
 
 test('submits bug report', async () => {
-  const { translate, getByText, getByLabelText } = renderWithRedux(<BugReport open />);
-  fireEvent.change(getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
-  fireEvent.click(getByText(translate('bug-report.send')));
-  await waitFor(() => getByText(translate('success.bug-report-added')));
+  const { translate } = renderWithRedux(<BugReport open />);
+  fireEvent.change(screen.getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
+  fireEvent.click(screen.getByText(translate('bug-report.send')));
+  await waitFor(() => screen.getByText(translate('success.bug-report-added')));
   /*
   expect(submit).toHaveBeenCalledWith(
     '/bugReports',
@@ -44,8 +44,8 @@ test('shows error', async () => {
       return res(500, ctx.json({ error: 'Network Error' }));
     }),
   );
-  const { translate, getByText, getByLabelText } = renderWithRedux(<BugReport open />);
-  fireEvent.change(getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
-  fireEvent.click(getByText(translate('bug-report.send')));
-  await waitFor(() => getByText(translate('error.network-error')));
+  const { translate } = renderWithRedux(<BugReport open />);
+  fireEvent.change(screen.getByLabelText(translate('bug-report.textarea-description')), { target: { value: 'test' } });
+  fireEvent.click(screen.getByText(translate('bug-report.send')));
+  await waitFor(() => screen.getByText(translate('error.network-error')));
 });

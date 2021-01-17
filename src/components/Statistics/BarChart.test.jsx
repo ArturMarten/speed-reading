@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import BarChart from './BarChart';
 
-it('draws bar chart svg with rects', () => {
+test('draws bar chart svg with rects', () => {
   const { container, getByText } = render(
     <BarChart
       title="Bar Chart title"

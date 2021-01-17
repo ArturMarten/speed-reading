@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import LabeledMultipleSlider from './LabeledMultipleSlider';
 
-it('formats values', () => {
+test('formats values', () => {
   const onChange = jest.fn();
   const formatValues = jest.fn();
   render(

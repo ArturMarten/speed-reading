@@ -1,15 +1,15 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import renderWithRedux from '../../../utils/testUtils';
 import TextExercisePreparation from './TextExercisePreparation';
 
 test('stores own text', async () => {
-  const { translate, getByText, queryByText, baseElement } = renderWithRedux(
+  const { translate, baseElement } = renderWithRedux(
     <TextExercisePreparation type="readingTest" onProceed={jest.fn()} />,
   );
-  expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument();
-  fireEvent.click(getByText(translate('exercise-preparation.use-own-text')));
-  expect(queryByText(translate('own-text-editor.modal-header'))).toBeInTheDocument();
+  expect(screen.queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument();
+  fireEvent.click(screen.getByText(translate('exercise-preparation.use-own-text')));
+  expect(screen.queryByText(translate('own-text-editor.modal-header'))).toBeInTheDocument();
 
   const text = 'Test';
 
@@ -22,7 +22,7 @@ test('stores own text', async () => {
 
   await waitFor(() => expect(baseElement.querySelector('.public-DraftEditor-content').textContent).toEqual(text));
 
-  fireEvent.click(getByText(translate('own-text-editor.use')));
+  fireEvent.click(screen.getByText(translate('own-text-editor.use')));
   /*
   expect(submit).toBeCalledWith('/analyze', {
     language: 'estonian',
@@ -30,8 +30,8 @@ test('stores own text', async () => {
   });
   */
 
-  await waitFor(() => expect(queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
+  await waitFor(() => expect(screen.queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
 
-  fireEvent.click(getByText(translate('exercise-preparation.use-own-text')));
+  fireEvent.click(screen.getByText(translate('exercise-preparation.use-own-text')));
   expect(baseElement.querySelector('.public-DraftEditor-content').textContent).toEqual(text);
 });

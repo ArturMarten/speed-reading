@@ -37,13 +37,11 @@ export const stopPropagation = (event) => {
 };
 
 export const focusInput = (ref) => {
-  setTimeout(() => {
-    ref.focus();
-    const { inputRef } = ref;
-    const { current } = inputRef;
-    const { length } = current.value;
-    current.setSelectionRange(length, length);
-  }, 100);
+  ref.focus();
+  const { inputRef } = ref;
+  const { current } = inputRef;
+  const { length } = current.value;
+  current.setSelectionRange(length, length);
 };
 
 const pad = (time, length) => {

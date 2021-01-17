@@ -13,7 +13,7 @@ export const rolePermissions = {
   admin: 6,
 };
 
-const initialState = {
+export const initialState = {
   groupId: null,
   email: '',
   role: '',

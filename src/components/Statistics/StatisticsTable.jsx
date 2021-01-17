@@ -232,6 +232,7 @@ export class StatisticsTable extends Component {
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan="10">
+              {/*
               <Popup
                 content={this.props.translate('statistics.not-implemented')}
                 position="left center"
@@ -246,6 +247,7 @@ export class StatisticsTable extends Component {
                   </Menu>
                 }
               />
+               */}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Footer>

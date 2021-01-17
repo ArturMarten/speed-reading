@@ -348,6 +348,7 @@ export class TextAnalysis extends Component {
           >
             {this.props.translate('text-analysis.refresh')}
           </Button>
+          <Button positive onClick={this.props.onClose} content={this.props.translate('text-analysis.close')} />
         </Modal.Actions>
       </Modal>
     ) : null;

@@ -15,10 +15,11 @@ export class ErrorBoundary extends Component {
     this.setState({ error: null });
   };
 
-  componentDidCatch(error) {
+  componentDidCatch(error, errorInfo) {
+    const description = `${errorInfo} ${error && error.stack ? error.stack.toString() : error.toString()}`;
     const submittedForm = {
       userId: this.props.userId,
-      description: error && error.stack ? error.stack.toString() : error.toString(),
+      description,
       version: environment.version,
       userAgent: window && window.navigator ? window.navigator.userAgent : 'Unknown',
       platform: window && window.navigator ? window.navigator.platform : 'Unknown',

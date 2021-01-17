@@ -260,9 +260,11 @@ export class TextSelection extends Component {
       <Modal size="large" open={this.props.open} onClose={this.props.onClose} closeIcon>
         <Modal.Header>{this.props.translate('text-selection.modal-header')}</Modal.Header>
         <Modal.Content style={{ paddingBottom: 0 }}>
-          <Dimmer active={this.props.textsStatus.loading} inverted>
-            <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
-          </Dimmer>
+          {this.props.textsStatus.loading ? (
+            <Dimmer active inverted>
+              <Loader active inline="centered" content={this.props.translate('text-selection.fetching')} />
+            </Dimmer>
+          ) : null}
           <Grid centered style={{ paddingBottom: '2px' }}>
             <Grid.Row columns={2} style={{ paddingTop: 0 }}>
               <Grid.Column mobile={10} computer={8}>

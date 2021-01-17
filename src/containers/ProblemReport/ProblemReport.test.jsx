@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { server, apiURL, rest } from '../../test/server';
 import renderWithRedux from '../../utils/testUtils';
@@ -6,19 +6,21 @@ import ProblemReport from './ProblemReport';
 
 test('opens and closes the modal', () => {
   const onClose = jest.fn();
-  const { translate, queryByText, baseElement, rerender } = renderWithRedux(<ProblemReport open onClose={onClose} />);
-  expect(queryByText(translate('problem-report.modal-header'))).not.toBeNull();
+  const { translate, baseElement, rerender } = renderWithRedux(<ProblemReport open onClose={onClose} />);
+  expect(screen.queryByText(translate('problem-report.modal-header'))).not.toBeNull();
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(onClose).toHaveBeenCalledTimes(1);
   rerender(<ProblemReport open={false} />);
-  expect(queryByText(translate('problem-report.modal-header'))).toBeNull();
+  expect(screen.queryByText(translate('problem-report.modal-header'))).toBeNull();
 });
 
 test('submits problem report', async () => {
-  const { translate, getByText, getByLabelText } = renderWithRedux(<ProblemReport open />);
-  fireEvent.change(getByLabelText(translate('problem-report.textarea-description')), { target: { value: 'test' } });
-  fireEvent.click(getByText(translate('problem-report.send')));
-  await waitFor(() => getByText(translate('success.problem-report-added')));
+  const { translate } = renderWithRedux(<ProblemReport open />);
+  fireEvent.change(screen.getByLabelText(translate('problem-report.textarea-description')), {
+    target: { value: 'test' },
+  });
+  fireEvent.click(screen.getByText(translate('problem-report.send')));
+  await waitFor(() => screen.getByText(translate('success.problem-report-added')));
   /*
   expect(submit).toHaveBeenCalledWith('/problemReports', {
     userId: null,
@@ -36,8 +38,10 @@ test('shows error', async () => {
       return res(500, ctx.json({ error: 'Network Error' }));
     }),
   );
-  const { translate, getByText, getByLabelText } = renderWithRedux(<ProblemReport open />);
-  fireEvent.change(getByLabelText(translate('problem-report.textarea-description')), { target: { value: 'test' } });
-  fireEvent.click(getByText(translate('problem-report.send')));
-  await waitFor(() => getByText(translate('error.network-error')));
+  const { translate } = renderWithRedux(<ProblemReport open />);
+  fireEvent.change(screen.getByLabelText(translate('problem-report.textarea-description')), {
+    target: { value: 'test' },
+  });
+  fireEvent.click(screen.getByText(translate('problem-report.send')));
+  await waitFor(() => screen.getByText(translate('error.network-error')));
 });

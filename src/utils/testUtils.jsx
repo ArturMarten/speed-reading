@@ -6,6 +6,8 @@ import { getTranslate } from 'react-localize-redux';
 import { Provider } from 'react-redux';
 import { updateObject } from '../shared/utility';
 import configureStore from '../store/configureStore';
+import { initialState as authInitialState } from '../store/reducers/auth';
+import { initialState as profileInitialState } from '../store/reducers/profile';
 
 const addTranslateProp = (component, translate) =>
   updateObject(component, { props: updateObject(component.props, { translate }) });
@@ -13,7 +15,10 @@ const addTranslateProp = (component, translate) =>
 export default function renderWithRedux(
   inputComponent,
   {
-    initialState,
+    role = 'student',
+    token = null,
+    groupId = null,
+    initialState = { auth: { ...authInitialState, token }, profile: { ...profileInitialState, role, groupId } },
     route = '/',
     history = createMemoryHistory({ initialEntries: [route] }),
     store = configureStore(history, initialState),
