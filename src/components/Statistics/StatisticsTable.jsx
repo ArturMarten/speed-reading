@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Menu, Icon, Popup } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 import HelpPopup from '../HelpPopup/HelpPopup';
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';

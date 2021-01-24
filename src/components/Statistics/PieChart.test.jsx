@@ -16,8 +16,8 @@ test('draws pie chart svg', () => {
     />,
   );
   const svg = container.querySelector('svg');
-  expect(svg.getAttribute('width')).toEqual('680');
-  expect(svg.getAttribute('height')).toEqual('210');
+  expect(svg).toHaveAttribute('width', '680');
+  expect(svg).toHaveAttribute('height', '210');
   expect(getByText('Pie Chart title')).toBeInTheDocument();
   expect(container.querySelectorAll('g.arc').length).toEqual(3);
   expect(getByText('test1 (17%)')).toBeInTheDocument();

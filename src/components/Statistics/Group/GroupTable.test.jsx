@@ -68,13 +68,13 @@ test('renders table with data', () => {
   );
   expect(
     screen.queryByText(`${translate('group-statistics-table.average-exercise-count-per-user', { userCount: 2 })}`),
-  ).not.toBeNull();
-  expect(screen.queryByText('0h 05m')).not.toBeNull();
-  expect(screen.queryByText('0h 04m')).not.toBeNull();
-  expect(screen.queryByText('+4.55%')).not.toBeNull();
-  expect(screen.queryByText('0h 01m')).not.toBeNull();
-  expect(screen.queryByText('+3.23%')).not.toBeNull();
-  expect(screen.queryByText('+8.06%')).not.toBeNull();
+  ).toBeInTheDocument();
+  expect(screen.queryByText('0h 05m')).toBeInTheDocument();
+  expect(screen.queryByText('0h 04m')).toBeInTheDocument();
+  expect(screen.queryByText('+4.55%')).toBeInTheDocument();
+  expect(screen.queryByText('0h 01m')).toBeInTheDocument();
+  expect(screen.queryByText('+3.23%')).toBeInTheDocument();
+  expect(screen.queryByText('+8.06%')).toBeInTheDocument();
   expect(screen.queryAllByText('+2.94%').length).toBe(2);
   expect(screen.queryAllByText('0h 00m').length).toBe(12);
   expect(screen.queryAllByText('0.00%').length).toBe(30);

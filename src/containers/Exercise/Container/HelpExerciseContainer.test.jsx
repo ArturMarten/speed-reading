@@ -10,12 +10,12 @@ jest.mock('react-responsive', () => {
 test('shows schulte tables exercise', async () => {
   const { translate } = renderWithRedux(<HelpExerciseContainer type="schulteTables" />);
   expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(translate('exercises.title-schulteTables'));
-  screen.getByText(translate('exercises.description-schulteTables'));
+  expect(screen.getByText(translate('exercises.description-schulteTables'))).toBeInTheDocument();
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.proceed')));
 
   const finishButton = screen.getByLabelText(translate('timing.stop'));
-  await waitFor(() => expect(finishButton).not.toBeDisabled());
+  await waitFor(() => expect(finishButton).toBeEnabled());
   fireEvent.click(finishButton);
 
   await waitFor(() => expect(screen.queryByText(translate('help-exercise-results.modal-header'))).toBeInTheDocument());
@@ -23,7 +23,7 @@ test('shows schulte tables exercise', async () => {
   expect(screen.queryByText(translate('help-exercise-results.modal-header'))).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByLabelText(translate('timing.start')));
-  await waitFor(() => expect(finishButton).not.toBeDisabled());
+  await waitFor(() => expect(finishButton).toBeEnabled());
   fireEvent.click(finishButton);
 
   await waitFor(() => expect(screen.queryByText(translate('help-exercise-results.modal-header'))).toBeInTheDocument());
@@ -33,12 +33,17 @@ test('shows schulte tables exercise', async () => {
 test('shows concentration exercise', async () => {
   const { translate } = renderWithRedux(<HelpExerciseContainer type="concentration" />);
   expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(translate('exercises.title-concentration'));
-  screen.getByText(translate('exercises.description-concentration'));
+  expect(screen.getByText(translate('exercises.description-concentration'))).toBeInTheDocument();
+
+  fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
+  fireEvent.click(screen.getByText(translate('exercise-preview.show')));
+  fireEvent.click(screen.getByText(translate('exercise-preview.hide')));
+  fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.proceed')));
 
   const finishButton = screen.getByLabelText(translate('timing.stop'));
-  await waitFor(() => expect(finishButton).not.toBeDisabled());
+  await waitFor(() => expect(finishButton).toBeEnabled());
   fireEvent.click(finishButton);
 
   await waitFor(() => expect(screen.queryByText(translate('help-exercise-results.modal-header'))).toBeInTheDocument());
@@ -46,7 +51,7 @@ test('shows concentration exercise', async () => {
   expect(screen.queryByText(translate('help-exercise-results.modal-header'))).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByLabelText(translate('timing.start')));
-  await waitFor(() => expect(finishButton).not.toBeDisabled());
+  await waitFor(() => expect(finishButton).toBeEnabled());
   fireEvent.click(finishButton);
 
   await waitFor(() => expect(screen.queryByText(translate('help-exercise-results.modal-header'))).toBeInTheDocument());

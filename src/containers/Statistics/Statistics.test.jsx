@@ -43,7 +43,7 @@ test('shows group table tab when clicked as a teacher', async () => {
   await waitFor(() => expect(screen.queryByText(translate('statistics.fetching-data'))).not.toBeInTheDocument());
 
   const exportButton = screen.getByText(translate('statistics-table.export'));
-  expect(exportButton).not.toBeDisabled();
+  expect(exportButton).toBeEnabled();
 
   utility.downloadExcelData = jest.fn();
   fireEvent.click(exportButton);

@@ -6,8 +6,8 @@ import TextSelection from './TextSelection';
 test('shows text selection', async () => {
   const onClose = jest.fn();
   const { translate } = renderWithRedux(<TextSelection open onClose={onClose} />);
-  screen.getByText(translate('text-selection.modal-header'));
-  screen.getByText(translate('text-selection.fetching'));
+  expect(screen.getByText(translate('text-selection.modal-header'))).toBeInTheDocument();
+  expect(screen.getByText(translate('text-selection.fetching'))).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText(translate('text-selection.fetching'))).not.toBeInTheDocument());
 
   const table = screen.getByRole('table');

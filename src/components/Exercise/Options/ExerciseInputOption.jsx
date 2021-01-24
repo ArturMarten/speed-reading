@@ -1,118 +1,140 @@
-import React, { PureComponent } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Button, Table } from 'semantic-ui-react';
 
 import HelpPopup from '../../HelpPopup/HelpPopup';
 
-const UPDATE_DELAY = 300;
+function ExerciseInputOption({
+  name,
+  description,
+  unit,
+  value,
+  min,
+  max,
+  step,
+  updateValue,
+  updateDelay,
+  keyboardChangesEnabled,
+}) {
+  const [inputValue, setInputValue] = useState('');
+  const timeout = useRef(null);
 
-class ExerciseInputOption extends PureComponent {
-  state = {
-    value: '',
-  };
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-  componentDidMount() {
-    this.setValue(this.props.value);
-  }
+  const onSubmit = useCallback(
+    (submittedValue) => {
+      if (value !== submittedValue) {
+        clearTimeout(timeout.current);
+        timeout.current = setTimeout(() => {
+          updateValue(submittedValue);
+        }, updateDelay);
+      }
+      setInputValue(submittedValue);
+    },
+    [updateDelay, updateValue, value],
+  );
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value && this.state.value !== this.props.value) {
-      this.setValue(this.props.value);
-    }
-  }
-
-  onSubmit = (value = this.state.value) => {
-    const correctedValue = value === '' || value < this.props.min ? this.props.min : value;
-    if (correctedValue !== this.props.value) {
-      clearTimeout(this.update);
-      this.update = setTimeout(() => {
-        this.props.updateValue(correctedValue);
-      }, UPDATE_DELAY);
-    }
-    this.setValue(correctedValue);
-  };
-
-  setValue = (newValue) => {
-    this.setState({ value: newValue });
-  };
-
-  changeHandler = (event) => {
+  const changeHandler = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
       let updatedValue = +event.target.value;
-      if (updatedValue > this.props.max) {
-        updatedValue = this.props.max;
+      if (updatedValue > max) {
+        updatedValue = max;
+      } else if (updatedValue < min) {
+        updatedValue = min;
       }
-      if (updatedValue !== this.state.value) {
-        this.setValue(updatedValue);
+      if (updatedValue !== inputValue) {
+        setInputValue(updatedValue);
       }
     }
   };
 
-  decreaseHandler = () => {
-    this.changeValue(this.state.value - this.props.step);
-  };
+  const changeValue = useCallback(
+    (newValue) => {
+      let updatedValue = inputValue;
+      if (newValue > max) {
+        updatedValue = max;
+      } else if (newValue < min) {
+        updatedValue = min;
+      } else {
+        updatedValue = newValue;
+      }
+      onSubmit(updatedValue);
+      setInputValue(updatedValue);
+    },
+    [inputValue, max, min, onSubmit],
+  );
 
-  increaseHandler = () => {
-    this.changeValue(this.state.value + this.props.step);
-  };
+  const decreaseHandler = useCallback(() => {
+    changeValue(inputValue - step);
+  }, [changeValue, inputValue, step]);
 
-  changeValue = (newValue) => {
-    let updatedValue = this.state.value;
-    if (newValue > this.props.max) {
-      updatedValue = this.props.max;
-    } else if (newValue < this.props.min) {
-      updatedValue = this.props.min;
+  const increaseHandler = useCallback(() => {
+    changeValue(inputValue + step);
+  }, [changeValue, inputValue, step]);
+
+  const keyPressHandler = useCallback(
+    (event) => {
+      const { key } = event;
+      if (key === 'Enter') {
+        onSubmit(inputValue);
+      } else if (key === '+') {
+        increaseHandler(event);
+      } else if (key === '-') {
+        decreaseHandler(event);
+      }
+    },
+    [decreaseHandler, increaseHandler, inputValue, onSubmit],
+  );
+
+  useEffect(() => {
+    if (keyboardChangesEnabled) {
+      document.addEventListener('keypress', keyPressHandler);
     } else {
-      updatedValue = newValue;
+      document.removeEventListener('keypress', keyPressHandler);
     }
-    this.onSubmit(updatedValue);
-    this.setValue(updatedValue);
+    return () => document.removeEventListener('keypress', keyPressHandler);
+  }, [keyPressHandler, keyboardChangesEnabled]);
+
+  const blurHandler = () => {
+    onSubmit(inputValue);
   };
 
-  keyPressHandler = (event) => {
-    if (event.key === 'Enter') {
-      this.onSubmit();
-    }
-  };
-
-  blurHandler = () => {
-    this.onSubmit();
-  };
-
-  render() {
-    return (
-      <Table.Row verticalAlign="middle">
-        <Table.Cell>
-          {this.props.name}
-          &nbsp;
-          <HelpPopup position="right center" content={this.props.description} />
-        </Table.Cell>
-        <Table.Cell>
-          <Button.Group size="mini" fluid basic>
-            <Button icon="minus" disabled={this.state.value <= this.props.min} onClick={this.decreaseHandler} />
-            <Button icon="plus" disabled={this.state.value >= this.props.max} onClick={this.increaseHandler} />
-          </Button.Group>
-        </Table.Cell>
-        <Table.Cell>
-          <Input
-            type="text"
-            transparent
-            value={this.state.value}
-            onChange={this.changeHandler}
-            onKeyPress={this.keyPressHandler}
-            onBlur={this.blurHandler}
-          >
-            <input style={{ textAlign: 'center' }} size={5} />
-          </Input>
-        </Table.Cell>
-        <Table.Cell>{this.props.unit}</Table.Cell>
-      </Table.Row>
-    );
-  }
+  return (
+    <Table.Row verticalAlign="middle">
+      <Table.Cell>
+        {name}
+        &nbsp;
+        <HelpPopup position="right center" content={description} />
+      </Table.Cell>
+      <Table.Cell>
+        <Button.Group size="mini" fluid basic>
+          <Button icon="minus" disabled={inputValue <= min} onClick={decreaseHandler} />
+          <Button icon="plus" disabled={inputValue >= max} onClick={increaseHandler} />
+        </Button.Group>
+      </Table.Cell>
+      <Table.Cell>
+        <Input
+          type="text"
+          transparent
+          value={inputValue}
+          onChange={changeHandler}
+          onKeyPress={keyPressHandler}
+          onBlur={blurHandler}
+        >
+          <input style={{ textAlign: 'center' }} size={5} />
+        </Input>
+      </Table.Cell>
+      <Table.Cell>{unit}</Table.Cell>
+    </Table.Row>
+  );
 }
 
 ExerciseInputOption.defaultProps = {
   description: null,
+  updateDelay: 300,
+  keyboardChangesEnabled: false,
 };
 
 ExerciseInputOption.propTypes = {
@@ -124,6 +146,8 @@ ExerciseInputOption.propTypes = {
   max: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   updateValue: PropTypes.func.isRequired,
+  updateDelay: PropTypes.number,
+  keyboardChangesEnabled: PropTypes.bool,
 };
 
 export default ExerciseInputOption;

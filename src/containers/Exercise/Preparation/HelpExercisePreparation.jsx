@@ -210,7 +210,6 @@ export class HelpExercisePreparation extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  info: state.info,
   exerciseModification: state.exercise.modification,
   modificationOptions: state.exercise.modificationOptions,
   exerciseOptions: state.options.exerciseOptions,
@@ -222,9 +221,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onExerciseSettingsInfoDismiss: () => {
-    dispatch(actionCreators.dismissExerciseSettingsInfo());
-  },
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
   },

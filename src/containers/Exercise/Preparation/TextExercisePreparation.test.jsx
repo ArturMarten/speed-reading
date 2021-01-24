@@ -20,7 +20,7 @@ test('stores own text', async () => {
     },
   });
 
-  await waitFor(() => expect(baseElement.querySelector('.public-DraftEditor-content').textContent).toEqual(text));
+  await waitFor(() => expect(baseElement.querySelector('.public-DraftEditor-content')).toHaveTextContent(text));
 
   fireEvent.click(screen.getByText(translate('own-text-editor.use')));
   /*
@@ -33,5 +33,5 @@ test('stores own text', async () => {
   await waitFor(() => expect(screen.queryByText(translate('own-text-editor.modal-header'))).not.toBeInTheDocument());
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.use-own-text')));
-  expect(baseElement.querySelector('.public-DraftEditor-content').textContent).toEqual(text);
+  expect(baseElement.querySelector('.public-DraftEditor-content')).toHaveTextContent(text);
 });

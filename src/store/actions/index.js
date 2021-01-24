@@ -1,5 +1,3 @@
-export { dismissExerciseSettingsInfo, dismissSpeedChangeInfo } from './info';
-
 export { startTimer, pauseTimer, resumeTimer, resetTimer, stopTimer } from './timing';
 
 export {

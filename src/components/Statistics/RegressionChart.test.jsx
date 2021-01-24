@@ -29,8 +29,8 @@ test('draws regression chart', () => {
     { useTranslate: true },
   );
   const svg = container.querySelector('svg');
-  expect(svg.getAttribute('width')).toEqual('1000');
-  expect(svg.getAttribute('height')).toEqual('400');
+  expect(svg).toHaveAttribute('width', '1000');
+  expect(svg).toHaveAttribute('height', '400');
   expect(screen.getByText('Regression Chart title')).toBeInTheDocument();
   const legend = container.querySelector('g.legend');
   expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');

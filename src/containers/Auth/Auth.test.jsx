@@ -11,7 +11,9 @@ test('registers successfully', async () => {
     target: { value: 'username@test.com' },
   });
   fireEvent.click(screen.getByText(translate('auth.register-user')));
-  await waitFor(() => expect(screen.queryByText(translate('success.account-registered-password-sent'))).not.toBeNull());
+  await waitFor(() =>
+    expect(screen.queryByText(translate('success.account-registered-password-sent'))).toBeInTheDocument(),
+  );
 });
 
 test('logins successfully', async () => {
@@ -19,7 +21,7 @@ test('logins successfully', async () => {
   fireEvent.change(screen.getByPlaceholderText(translate('auth.username')), { target: { value: 'username@test.com' } });
   fireEvent.change(screen.getByPlaceholderText(translate('auth.password')), { target: { value: 'password' } });
   fireEvent.click(screen.getByText(translate('auth.login-button')));
-  await waitFor(() => expect(screen.queryByText(translate('auth.login-button'))).toBeNull());
+  await waitFor(() => expect(screen.queryByText(translate('auth.login-button'))).not.toBeInTheDocument());
 });
 
 test('shows error when user does not exist', async () => {
@@ -27,7 +29,7 @@ test('shows error when user does not exist', async () => {
   fireEvent.change(screen.getByPlaceholderText(translate('auth.username')), { target: { value: 'unknown@test.com' } });
   fireEvent.change(screen.getByPlaceholderText(translate('auth.password')), { target: { value: 'password' } });
   fireEvent.click(screen.getByText(translate('auth.login-button')));
-  await waitFor(() => expect(screen.queryByText(translate('error.user-not-found'))).not.toBeNull());
+  await waitFor(() => expect(screen.queryByText(translate('error.user-not-found'))).toBeInTheDocument());
 });
 
 test('shows error with incorrect password', async () => {
@@ -35,11 +37,11 @@ test('shows error with incorrect password', async () => {
   fireEvent.change(screen.getByPlaceholderText(translate('auth.username')), { target: { value: 'username@test.com' } });
   fireEvent.change(screen.getByPlaceholderText(translate('auth.password')), { target: { value: 'wrong_password' } });
   fireEvent.click(screen.getByText(translate('auth.login-button')));
-  await waitFor(() => expect(screen.queryByText(translate('error.incorrect-password'))).not.toBeNull());
+  await waitFor(() => expect(screen.queryByText(translate('error.incorrect-password'))).toBeInTheDocument());
 });
 
 test('logins successfully with demo user', async () => {
   const { translate } = renderWithRedux(<Auth />);
   fireEvent.click(screen.getByText(translate('auth.demo')));
-  await waitFor(() => expect(screen.queryByText(translate('auth.login-button'))).toBeNull());
+  await waitFor(() => expect(screen.queryByText(translate('auth.login-button'))).not.toBeInTheDocument());
 });

@@ -19,8 +19,8 @@ test('draws bar chart svg with rects', () => {
     />,
   );
   const svg = container.querySelector('svg');
-  expect(svg.getAttribute('width')).toEqual('700');
-  expect(svg.getAttribute('height')).toEqual('250');
+  expect(svg).toHaveAttribute('width', '700');
+  expect(svg).toHaveAttribute('height', '250');
   expect(getByText('Bar Chart title')).toBeInTheDocument();
   expect(getByText('X Label')).toBeInTheDocument();
   expect(getByText('Y Label')).toBeInTheDocument();

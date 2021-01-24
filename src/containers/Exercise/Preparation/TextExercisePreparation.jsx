@@ -309,7 +309,6 @@ export class TextExercisePreparation extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  info: state.info,
   selectedText: state.text.selectedText,
   exerciseModification: state.exercise.modification,
   modificationOptions: state.exercise.modificationOptions,
@@ -322,12 +321,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onExerciseSettingsInfoDismiss: () => {
-    dispatch(actionCreators.dismissExerciseSettingsInfo());
-  },
-  onSpeedChangeInfoDismiss: () => {
-    dispatch(actionCreators.dismissSpeedChangeInfo());
-  },
   onModificationChange: (modification) => {
     dispatch(actionCreators.changeModification(modification));
   },

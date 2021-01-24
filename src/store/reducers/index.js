@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { localeReducer } from 'react-localize-redux';
 
-import infoReducer from './info';
 import authReducer from './auth';
 import textReducer from './text';
 import timingReducer from './timing';
@@ -20,7 +19,6 @@ import bugReportReducer from './bugReport';
 const createRootReducer = (history) =>
   combineReducers({
     router: connectRouter(history),
-    info: infoReducer,
     auth: authReducer,
     text: textReducer,
     timing: timingReducer,

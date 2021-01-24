@@ -10,28 +10,6 @@ import { MIN_WORDS_PER_MINUTE, MAX_WORDS_PER_MINUTE, STEP_WORDS_PER_MINUTE } fro
 export class SpeedOptions extends PureComponent {
   state = {};
 
-  componentDidMount() {
-    document.addEventListener('keypress', this.keyPressHandler);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keypress', this.keyPressHandler);
-  }
-
-  keyPressHandler = (event) => {
-    const { keyCode } = event;
-    const key = String.fromCharCode(keyCode);
-    if (key === '+') {
-      if (this.wordsPerMinuteSpeedRef) {
-        this.wordsPerMinuteSpeedRef.increaseHandler(event);
-      }
-    } else if (key === '-') {
-      if (this.wordsPerMinuteSpeedRef) {
-        this.wordsPerMinuteSpeedRef.decreaseHandler(event);
-      }
-    }
-  };
-
   render() {
     return (
       <Fragment>
@@ -44,9 +22,7 @@ export class SpeedOptions extends PureComponent {
             max={MAX_WORDS_PER_MINUTE}
             step={STEP_WORDS_PER_MINUTE}
             updateValue={(value) => this.props.onSubmit(Object.assign({}, { wordsPerMinute: value }))}
-            ref={(ref) => {
-              this.wordsPerMinuteSpeedRef = ref;
-            }}
+            keyboardChangesEnabled
           />
         ) : null}
       </Fragment>

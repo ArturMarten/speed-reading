@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { server, apiURL, rest } from '../../test/server';
 import renderWithRedux from '../../utils/testUtils';
@@ -7,11 +7,11 @@ import ProblemReport from './ProblemReport';
 test('opens and closes the modal', () => {
   const onClose = jest.fn();
   const { translate, baseElement, rerender } = renderWithRedux(<ProblemReport open onClose={onClose} />);
-  expect(screen.queryByText(translate('problem-report.modal-header'))).not.toBeNull();
+  expect(screen.queryByText(translate('problem-report.modal-header'))).toBeInTheDocument();
   fireEvent.click(baseElement.querySelector('i.close.icon'));
   expect(onClose).toHaveBeenCalledTimes(1);
   rerender(<ProblemReport open={false} />);
-  expect(screen.queryByText(translate('problem-report.modal-header'))).toBeNull();
+  expect(screen.queryByText(translate('problem-report.modal-header'))).not.toBeInTheDocument();
 });
 
 test('submits problem report', async () => {
@@ -20,7 +20,7 @@ test('submits problem report', async () => {
     target: { value: 'test' },
   });
   fireEvent.click(screen.getByText(translate('problem-report.send')));
-  await waitFor(() => screen.getByText(translate('success.problem-report-added')));
+  await screen.findByText(translate('success.problem-report-added'));
   /*
   expect(submit).toHaveBeenCalledWith('/problemReports', {
     userId: null,
@@ -43,5 +43,5 @@ test('shows error', async () => {
     target: { value: 'test' },
   });
   fireEvent.click(screen.getByText(translate('problem-report.send')));
-  await waitFor(() => screen.getByText(translate('error.network-error')));
+  await screen.findByText(translate('error.network-error'));
 });

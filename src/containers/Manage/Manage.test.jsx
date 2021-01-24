@@ -1,4 +1,4 @@
-import { fireEvent, waitFor, screen, getByText } from '@testing-library/react';
+import { fireEvent, waitFor, screen, getByText, findByText } from '@testing-library/react';
 import React from 'react';
 import renderWithRedux from '../../utils/testUtils';
 import Manage from './Manage';
@@ -8,13 +8,13 @@ test('shows users tab initially', async () => {
   expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(translate('manage.title'));
   expect(screen.queryByText(translate('manage.bug-reports'))).not.toBeInTheDocument();
   // getByLabelText(translate('manage-users.group'));
-  screen.getByText(translate('manage.users'));
+  expect(screen.getByText(translate('manage.users'))).toBeInTheDocument();
 
-  screen.getByText(translate('manage-users.fetching-users'));
+  expect(screen.getByText(translate('manage-users.fetching-users'))).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText(translate('manage-users.fetching-users'))).not.toBeInTheDocument());
 
   fireEvent.click(screen.getByText(translate('manage-users.refresh')));
-  screen.getByText(translate('manage-users.fetching-users'));
+  expect(screen.getByText(translate('manage-users.fetching-users'))).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText(translate('manage-users.fetching-users'))).not.toBeInTheDocument());
 
   const table = screen.getByRole('table');
@@ -23,23 +23,23 @@ test('shows users tab initially', async () => {
   getByText(table, translate('manage-users.last-name'));
 
   fireEvent.click(screen.getByText(translate('manage-users.add-user')));
-  screen.getByText(translate('user-editor.modal-header-new'));
+  expect(screen.getByText(translate('user-editor.modal-header-new'))).toBeInTheDocument();
   fireEvent.change(screen.getByPlaceholderText(translate('user-editor.insert-new-placeholder')), {
     target: { value: 'test@test.com' },
   });
   fireEvent.click(screen.getByText(translate('user-editor.add-user')));
-  await waitFor(() => getByText(table, 'test@test.com'));
+  await findByText(table, 'test@test.com');
 });
 
 test('shows groups tab when clicked', async () => {
   const { translate } = renderWithRedux(<Manage />);
   fireEvent.click(screen.getByText(translate('manage.groups')));
 
-  screen.getByText(translate('manage-groups.fetching-groups'));
+  expect(screen.getByText(translate('manage-groups.fetching-groups'))).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText(translate('manage-groups.fetching-groups'))).not.toBeInTheDocument());
 
   fireEvent.click(screen.getByText(translate('manage-groups.refresh')));
-  screen.getByText(translate('manage-groups.fetching-groups'));
+  expect(screen.getByText(translate('manage-groups.fetching-groups'))).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText(translate('manage-groups.fetching-groups'))).not.toBeInTheDocument());
 
   const table = screen.getByRole('table');
@@ -49,25 +49,25 @@ test('shows groups tab when clicked', async () => {
   getByText(table, 'Group 1');
 
   fireEvent.click(screen.getByText(translate('manage-groups.add-group')));
-  screen.getByText(translate('group-editor.modal-header-new'));
+  expect(screen.getByText(translate('group-editor.modal-header-new'))).toBeInTheDocument();
   fireEvent.change(screen.getByPlaceholderText(translate('group-editor.insert-new-placeholder')), {
     target: { value: 'Group 2' },
   });
   fireEvent.click(screen.getByText(translate('group-editor.add-group')));
-  await waitFor(() => getByText(table, 'Group 2'));
+  await findByText(table, 'Group 2');
 });
 
 test('shows feedback tab when clicked', async () => {
   const { translate } = renderWithRedux(<Manage />);
   fireEvent.click(screen.getByText(translate('manage.feedback')));
 
-  screen.getByText(translate('manage-feedback.fetching-feedback'));
+  expect(screen.getByText(translate('manage-feedback.fetching-feedback'))).toBeInTheDocument();
   await waitFor(() =>
     expect(screen.queryByText(translate('manage-feedback.fetching-feedback'))).not.toBeInTheDocument(),
   );
 
   fireEvent.click(screen.getByText(translate('manage-feedback.refresh')));
-  screen.getByText(translate('manage-feedback.fetching-feedback'));
+  expect(screen.getByText(translate('manage-feedback.fetching-feedback'))).toBeInTheDocument();
   await waitFor(() =>
     expect(screen.queryByText(translate('manage-feedback.fetching-feedback'))).not.toBeInTheDocument(),
   );
@@ -89,13 +89,13 @@ test('shows problem reports tab when clicked', async () => {
   const { translate } = renderWithRedux(<Manage />);
   fireEvent.click(screen.getByText(translate('manage.problem-reports')));
 
-  screen.getByText(translate('manage-problem-reports.fetching-problem-reports'));
+  expect(screen.getByText(translate('manage-problem-reports.fetching-problem-reports'))).toBeInTheDocument();
   await waitFor(() =>
     expect(screen.queryByText(translate('manage-problem-reports.fetching-problem-reports'))).not.toBeInTheDocument(),
   );
 
   fireEvent.click(screen.getByText(translate('manage-problem-reports.refresh')));
-  screen.getByText(translate('manage-problem-reports.fetching-problem-reports'));
+  expect(screen.getByText(translate('manage-problem-reports.fetching-problem-reports'))).toBeInTheDocument();
   await waitFor(() =>
     expect(screen.queryByText(translate('manage-problem-reports.fetching-problem-reports'))).not.toBeInTheDocument(),
   );
@@ -114,13 +114,13 @@ test('shows bug reports tab to admin when clicked', async () => {
   const { translate } = renderWithRedux(<Manage />, { role: 'admin' });
   fireEvent.click(screen.getByText(translate('manage.bug-reports')));
 
-  screen.getByText(translate('manage-bug-reports.fetching-bug-reports'));
+  expect(screen.getByText(translate('manage-bug-reports.fetching-bug-reports'))).toBeInTheDocument();
   await waitFor(() =>
     expect(screen.queryByText(translate('manage-bug-reports.fetching-bug-reports'))).not.toBeInTheDocument(),
   );
 
   fireEvent.click(screen.getByText(translate('manage-bug-reports.refresh')));
-  screen.getByText(translate('manage-bug-reports.fetching-bug-reports'));
+  expect(screen.getByText(translate('manage-bug-reports.fetching-bug-reports'))).toBeInTheDocument();
   await waitFor(() =>
     expect(screen.queryByText(translate('manage-bug-reports.fetching-bug-reports'))).not.toBeInTheDocument(),
   );

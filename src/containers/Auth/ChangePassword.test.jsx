@@ -17,5 +17,5 @@ test('changes password', async () => {
     target: { value: 'newPassword' },
   });
   fireEvent.click(screen.getByText(translate('change-password.change')));
-  await waitFor(() => expect(screen.queryByText(translate('success.password-changed'))).not.toBeNull());
+  await waitFor(() => expect(screen.queryByText(translate('success.password-changed'))).toBeInTheDocument());
 });

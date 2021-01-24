@@ -6,7 +6,7 @@ import TextEntry from './TextEntry';
 test('can submit new text', async () => {
   const { translate } = renderWithRedux(<TextEntry />);
   expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(translate('text-entry.title'));
-  screen.getByText(translate('text-entry.description'));
+  expect(screen.getByText(translate('text-entry.description'))).toBeInTheDocument();
 
   fireEvent.change(screen.getByLabelText(translate('text-entry.text-title')), { target: { value: 'title' } });
   fireEvent.change(screen.getByLabelText(translate('text-entry.text-author')), { target: { value: 'author' } });
@@ -18,15 +18,15 @@ test('can submit new text', async () => {
     },
   });
 
-  await waitFor(() => expect(document.querySelector('.public-DraftEditor-content').textContent).toEqual(text));
+  await waitFor(() => expect(document.querySelector('.public-DraftEditor-content')).toHaveTextContent(text));
 
   fireEvent.click(screen.getByText(translate('text-entry.analyze-text')));
-  await waitFor(() => screen.getByText(translate('text-analysis.modal-header')));
+  await screen.findByText(translate('text-analysis.modal-header'));
   fireEvent.click(screen.getByText(translate('text-analysis.close')));
   await waitFor(() => expect(screen.queryByText(translate('text-analysis.modal-header'))).not.toBeInTheDocument());
 
   fireEvent.click(screen.getByText(translate('text-entry.add-text')));
-  await waitFor(() => screen.getByText(translate('success.reading-text-added')));
+  await screen.findByText(translate('success.reading-text-added'));
 });
 
 test('can change existing text', async () => {
@@ -42,7 +42,7 @@ test('can change existing text', async () => {
 
   fireEvent.click(screen.getByText(translate('text-entry.change-questions')));
 
-  screen.getByText(translate('text-test-editor.modal-header'));
+  expect(screen.getByText(translate('text-test-editor.modal-header'))).toBeInTheDocument();
 
   fireEvent.click(screen.getByText(translate('text-test-editor.add-question')));
 
@@ -61,10 +61,10 @@ test('can change existing text', async () => {
   fireEvent.click(screen.getByText(translate('text-test-editor.ok')));
 
   fireEvent.click(screen.getByText(translate('text-entry.analyze-text')));
-  await waitFor(() => screen.getByText(translate('text-analysis.modal-header')));
+  await screen.findByText(translate('text-analysis.modal-header'));
   fireEvent.click(screen.getByText(translate('text-analysis.close')));
   await waitFor(() => expect(screen.queryByText(translate('text-analysis.modal-header'))).not.toBeInTheDocument());
 
   fireEvent.click(screen.getByText(translate('text-entry.modify-text')));
-  await waitFor(() => screen.getByText(translate('success.reading-text-updated')));
+  await screen.findByText(translate('success.reading-text-updated'));
 });

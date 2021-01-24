@@ -1,54 +1,33 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Dropdown } from 'semantic-ui-react';
 
 import HelpPopup from '../../HelpPopup/HelpPopup';
 
-class ExerciseSelectOption extends Component {
-  state = {
-    value: '',
-  };
+function ExerciseSelectOption({ name, description, options, value, updateValue }) {
+  const [selectedValue, setSelectedValue] = useState('');
 
-  componentDidMount() {
-    this.setValue(this.props.value);
-  }
+  useEffect(() => {
+    setSelectedValue(value);
+  }, [value]);
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value && this.state.value !== this.props.value) {
-      this.setValue(this.props.value);
-    }
-  }
-
-  setValue = (newValue) => {
-    this.setState({ value: newValue });
-  };
-
-  selectionChangeHandler = (event, data) => {
+  const selectionChangeHandler = (event, data) => {
     const updatedValue = data.value;
-    this.props.updateValue(updatedValue);
-    this.setValue(updatedValue);
+    updateValue(updatedValue);
+    setSelectedValue(updatedValue);
   };
 
-  render() {
-    return (
-      <Table.Row verticalAlign="middle">
-        <Table.Cell>
-          {this.props.name}
-          <HelpPopup position="right center" content={this.props.description} />
-        </Table.Cell>
-        <Table.Cell colSpan={3}>
-          <Dropdown
-            fluid
-            selection
-            scrolling
-            value={this.state.value}
-            options={this.props.options}
-            onChange={this.selectionChangeHandler}
-          />
-        </Table.Cell>
-      </Table.Row>
-    );
-  }
+  return (
+    <Table.Row verticalAlign="middle">
+      <Table.Cell>
+        {name}
+        <HelpPopup position="right center" content={description} />
+      </Table.Cell>
+      <Table.Cell colSpan={3}>
+        <Dropdown fluid selection scrolling value={selectedValue} options={options} onChange={selectionChangeHandler} />
+      </Table.Cell>
+    </Table.Row>
+  );
 }
 
 ExerciseSelectOption.defaultProps = {

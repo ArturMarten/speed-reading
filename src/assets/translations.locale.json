@@ -503,10 +503,6 @@
     "and": ["ja", "and"],
     "can-be-used": ["saab kasutada kiiruse muutmiseks harjutuse ajal", "can be used to change speed during exercise"]
   },
-  "text-preview": {
-    "show": ["Näita teksti eelvaadet", "Show text preview"],
-    "hide": ["Peida teksti eelvaade", "Hide text preview"]
-  },
   "text-exercise-preview": {
     "show": ["Näita tekstiharjutuse eelvaadet", "Show text exercise preview"],
     "hide": ["Peida tekstiharjutuse eelvaade", "Hide text exercise preview"]

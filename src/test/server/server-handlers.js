@@ -65,8 +65,8 @@ const handlers = [
   rest.get(`${apiURL}/exerciseAttempts`, async (req, res, ctx) => {
     const { searchParams } = req.url;
     const userId = searchParams.get('userId');
-    const groupId = searchParams.get('groupId');
-    const embed = searchParams.get('embed');
+    // const groupId = searchParams.get('groupId');
+    // const embed = searchParams.get('embed');
     const groupBy = searchParams.get('groupBy');
     if (groupBy) {
       const attempts = await attemptsDB.getExerciseAttemptsGroupedByUserId();
@@ -89,6 +89,9 @@ const handlers = [
         message: 'Exercise attempt patched',
       }),
     );
+  }),
+  rest.get(`${apiURL}/achievements`, async (req, res, ctx) => {
+    return res(ctx.json([]));
   }),
   rest.get(`${apiURL}/users`, async (req, res, ctx) => {
     return res(ctx.json([]));
