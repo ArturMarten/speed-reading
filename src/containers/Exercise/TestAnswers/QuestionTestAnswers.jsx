@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Grid, Icon, Segment, Loader } from 'semantic-ui-react';
+import { Container, Header, Grid, Icon, Segment, Loader, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 import * as api from '../../../api';
 
@@ -30,7 +30,11 @@ export class QuestionTestAnswers extends Component {
   render() {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>
+        <Button positive floated="right" onClick={() => this.props.onRetry()}>
+          {this.props.translate('text-exercise-results.retry')}
+        </Button>
         <Header as="h2">{this.props.translate('question-test-answers.header')}</Header>
+        <p>{this.props.translate('question-test-answers.description')}</p>
         {this.state.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>
             <Loader active indeterminate content={this.props.translate('question-test-answers.loading')} />

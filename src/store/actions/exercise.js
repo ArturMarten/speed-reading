@@ -202,5 +202,6 @@ export const retryExercise = () => (dispatch, getState) => {
 };
 
 export const endExercise = () => (dispatch) => {
+  dispatch(timerReset());
   dispatch(exerciseEnd());
 };

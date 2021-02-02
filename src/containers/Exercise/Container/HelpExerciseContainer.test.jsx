@@ -55,5 +55,5 @@ test('shows concentration exercise', async () => {
   fireEvent.click(finishButton);
 
   await waitFor(() => expect(screen.queryByText(translate('help-exercise-results.modal-header'))).toBeInTheDocument());
-  fireEvent.click(screen.getByText(translate('help-exercise-results.end')));
+  // TODO: fireEvent.click(screen.getByText(translate('help-exercise-results.end')));
 });

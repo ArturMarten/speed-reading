@@ -24,6 +24,14 @@ export class TextExerciseContainer extends Component {
     this.props.onExerciseSelect(this.props.type);
   }
 
+  onPreparationProceed = () => {
+    this.setState({ status: 'exercise' });
+  };
+
+  onExerciseProceed = () => {
+    this.setState({ status: 'test' });
+  };
+
   onExerciseEnd = () => {
     this.props.onExerciseEnd();
     this.setState({ finished: true });
@@ -34,10 +42,19 @@ export class TextExerciseContainer extends Component {
     this.setState({ finished: true });
   };
 
+  onCheckAnswers = () => {
+    this.setState({ status: 'testAnswers' });
+  };
+
+  onExerciseRetry = () => {
+    this.props.onExerciseEnd();
+    this.setState({ status: 'preparation' });
+  };
+
   getCurrentView() {
     switch (this.state.status) {
       case 'preparation': {
-        return <TextExercisePreparation type={this.props.type} onProceed={() => this.switchViewHandler('exercise')} />;
+        return <TextExercisePreparation type={this.props.type} onProceed={this.onPreparationProceed} />;
       }
       case 'exercise': {
         return <TextExercise type={this.props.type} />;
@@ -46,7 +63,11 @@ export class TextExerciseContainer extends Component {
         return this.props.selectedText.id ? <TextExerciseQuestionTest /> : <TextExerciseBlankTest />;
       }
       case 'testAnswers': {
-        return this.props.selectedText.id ? <QuestionTestAnswers /> : <BlankTestAnswers />;
+        return this.props.selectedText.id ? (
+          <QuestionTestAnswers onRetry={this.onExerciseRetry} />
+        ) : (
+          <BlankTestAnswers onRetry={this.onExerciseRetry} />
+        );
       }
       default:
         return null;
@@ -57,7 +78,7 @@ export class TextExerciseContainer extends Component {
     api.addTextRating({ readingTextId: this.props.selectedText.id, interestingnessRating }).then(
       () => {},
       (errorMessage) => {
-        console.log(errorMessage);
+        console.error(errorMessage);
       },
     );
   };
@@ -66,13 +87,9 @@ export class TextExerciseContainer extends Component {
     api.addTestRating({ readingTextId: this.props.selectedText.id, difficultyRating }).then(
       () => {},
       (errorMessage) => {
-        console.log(errorMessage);
+        console.error(errorMessage);
       },
     );
-  };
-
-  switchViewHandler = (status) => {
-    this.setState({ status });
   };
 
   render() {
@@ -86,7 +103,7 @@ export class TextExerciseContainer extends Component {
         {this.state.status === 'exercise' && this.props.exerciseStatus === 'finished' ? (
           <TextExerciseResults
             open={this.state.status === 'exercise' && this.props.exerciseStatus === 'finished'}
-            onProceed={() => this.switchViewHandler('test')}
+            onProceed={this.onExerciseProceed}
             onRate={this.textInterestingnessRating}
             onEnd={this.onExerciseEnd}
           />
@@ -95,7 +112,8 @@ export class TextExerciseContainer extends Component {
           <TestResults
             open={this.state.status === 'test' && this.props.testStatus === 'finished'}
             onRate={this.testDifficultyRating}
-            onCheckAnswers={() => this.switchViewHandler('testAnswers')}
+            onCheckAnswers={this.onCheckAnswers}
+            onRetry={this.onExerciseRetry}
             onEnd={this.onTestEnd}
           />
         ) : null}

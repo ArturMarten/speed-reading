@@ -32,6 +32,7 @@ import HelpExercisePreparationContainer from '../containers/Exercise/Preparation
 import { HelpExercise } from '../containers/Exercise/HelpExercise/HelpExercise';
 import { SchulteTables } from '../containers/Exercise/Types/SchulteTables/SchulteTables';
 import { Concentration } from '../containers/Exercise/Types/Concentration/Concentration';
+import { HelpExerciseResults } from '../containers/Exercise/Results/HelpExerciseResults';
 import { TextExerciseResults } from '../containers/Exercise/Results/TextExerciseResults';
 import TextTestEditorContainer from '../containers/TextEntry/TextTestEditor/TextTestEditor';
 import TextExerciseQuestionTestContainer, {
@@ -461,6 +462,31 @@ storiesOf('Text exercise results', module).add('Component', () => (
     selectedText={store.getState().text.selectedText}
   />
 ));
+
+storiesOf('Help exercise results', module)
+  .add('Schulte Tables', () => (
+    <HelpExerciseResults
+      open
+      translate={translate}
+      result={{
+        elapsedTime: 66904,
+        symbolsPerMinute: 22.42,
+      }}
+    />
+  ))
+  .add('Concentration', () => (
+    <HelpExerciseResults
+      open
+      translate={translate}
+      result={{
+        elapsedTime: 52750,
+        total: 25,
+        correct: 24,
+        msPerSymbolGroup: 2635,
+        msPerSymbol: 188,
+      }}
+    />
+  ));
 
 storiesOf('Text test editor', module).add('Container', () => <TextTestEditorContainer open readingTextId={9} />);
 

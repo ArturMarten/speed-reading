@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { timeFormat } from 'd3-time-format';
-// eslint-disable-next-line no-unused-vars
-import { transition } from 'd3-transition';
-import { select, event } from 'd3-selection';
+import 'd3-transition';
+import { select } from 'd3-selection';
 import { interpolatePath } from 'd3-interpolate-path';
 import { line, curveBasis } from 'd3-shape';
 
@@ -215,8 +214,8 @@ export class RegressionChart extends Component {
         .attr('r', DATA_POINT_RADIUS)
         .style('fill', this.props.dataFillColor[index])
         .style('stroke', this.props.dataStrokeColor[index])
-        .on('mouseover', (d) => {
-          this.updateTooltip(d, yField);
+        .on('mouseover', (event, d) => {
+          this.updateTooltip(event, d, yField);
         })
         .on('mouseout', () => {
           select('#tooltip').style('visibility', 'hidden');
@@ -399,8 +398,8 @@ export class RegressionChart extends Component {
           .attr('cx', (d) => this.xScale(d[xField]))
           .attr('cy', (d) => this.yScale(d[yField]))
           .attr('r', DATA_POINT_RADIUS)
-          .on('mouseover', (d) => {
-            this.updateTooltip(d, yField);
+          .on('mouseover', (event, d) => {
+            this.updateTooltip(event, d, yField);
           })
           .on('mouseout', () => {
             select('#tooltip').style('visibility', 'hidden');
@@ -420,7 +419,7 @@ export class RegressionChart extends Component {
     }
   }
 
-  updateTooltip = (d, yField) => {
+  updateTooltip = (event, d, yField) => {
     select('#tooltip')
       .style('visibility', 'visible')
       .style('left', `${event.pageX + 20}px`)

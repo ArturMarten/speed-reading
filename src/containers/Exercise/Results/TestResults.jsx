@@ -30,6 +30,13 @@ export class TestResults extends Component {
     this.props.onCheckAnswers();
   };
 
+  onExerciseRetryHandler = () => {
+    if (this.state.difficultyRating) {
+      this.props.onRate(this.state.difficultyRating);
+    }
+    this.props.onRetry();
+  };
+
   render() {
     return (
       <Modal open={this.props.open} size="tiny">
@@ -103,13 +110,16 @@ export class TestResults extends Component {
           </Grid>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            primary
-            icon="tasks"
-            onClick={this.onCheckTestAnswersHandler}
-            content={this.props.translate('test-results.check-correct-answers')}
-          />
-          <Button negative onClick={this.onEndHandler} content={this.props.translate('test-results.end')} />
+          <Button negative onClick={this.onEndHandler}>
+            {this.props.translate('test-results.end')}
+          </Button>
+          <Button primary onClick={this.onCheckTestAnswersHandler}>
+            <Icon name="tasks" />
+            {this.props.translate('test-results.check-correct-answers')}
+          </Button>
+          <Button positive onClick={this.onExerciseRetryHandler}>
+            {this.props.translate('text-exercise-results.retry')}
+          </Button>
         </Modal.Actions>
       </Modal>
     );

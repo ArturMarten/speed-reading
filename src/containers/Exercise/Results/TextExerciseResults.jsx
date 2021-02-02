@@ -121,7 +121,9 @@ export class TextExerciseResults extends Component {
           </Grid>
         </Modal.Content>
         <Modal.Actions>
-          <Button negative onClick={this.onEndHandler} content={this.props.translate('text-exercise-results.end')} />
+          <Button negative onClick={this.onEndHandler}>
+            {this.props.translate('text-exercise-results.end')}
+          </Button>
           <Button positive onClick={this.onProceedHandler}>
             {this.props.translate('text-exercise-results.proceed')}
             <Icon name="chevron right" />

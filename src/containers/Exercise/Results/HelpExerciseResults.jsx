@@ -101,8 +101,12 @@ export class HelpExerciseResults extends Component {
           </Grid>
         </Modal.Content>
         <Modal.Actions>
-          <Button positive onClick={this.props.onRetry} content={this.props.translate('help-exercise-results.retry')} />
-          <Button negative onClick={this.props.onEnd} content={this.props.translate('help-exercise-results.end')} />
+          <Button negative onClick={this.props.onEnd}>
+            {this.props.translate('help-exercise-results.end')}
+          </Button>
+          <Button positive onClick={this.props.onRetry}>
+            {this.props.translate('help-exercise-results.retry')}
+          </Button>
         </Modal.Actions>
       </Modal>
     );

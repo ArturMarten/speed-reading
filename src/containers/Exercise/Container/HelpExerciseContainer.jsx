@@ -18,19 +18,24 @@ export class HelpExerciseContainer extends Component {
     this.props.onExerciseSelect(this.props.type);
   }
 
+  onPreparationProceed = () => {
+    this.setState({ status: 'exercise' });
+  };
+
   onExerciseEnd = () => {
     this.props.onExerciseEnd();
     this.setState({ finished: true });
   };
 
   onExerciseRetryHandler = () => {
+    this.props.onExerciseEnd();
     this.props.onExerciseRetry();
   };
 
   getCurrentView() {
     switch (this.state.status) {
       case 'preparation': {
-        return <HelpExercisePreparation type={this.props.type} onProceed={() => this.switchViewHandler('exercise')} />;
+        return <HelpExercisePreparation type={this.props.type} onProceed={this.onPreparationProceed} />;
       }
       case 'exercise': {
         return <HelpExercise type={this.props.type} />;
@@ -39,10 +44,6 @@ export class HelpExerciseContainer extends Component {
         return null;
     }
   }
-
-  switchViewHandler = (status) => {
-    this.setState({ status });
-  };
 
   render() {
     let finishRedirect = null;

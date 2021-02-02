@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Grid, Loader, Segment, Dropdown } from 'semantic-ui-react';
+import { Container, Header, Grid, Loader, Segment, Dropdown, Button } from 'semantic-ui-react';
 import { getTranslate } from 'react-localize-redux';
 import * as api from '../../../api';
 import * as actionCreators from '../../../store/actions';
@@ -47,7 +47,7 @@ export class BlankTestAnswers extends Component {
         this.props.reevaluateTestAttempt(this.props.testAttemptId);
       },
       (errorMessage) => {
-        console.log(errorMessage);
+        console.error(errorMessage);
       },
     );
   };
@@ -55,7 +55,11 @@ export class BlankTestAnswers extends Component {
   render() {
     return (
       <Container style={{ marginTop: '3vh', marginBottom: '10vh' }}>
+        <Button positive floated="right" onClick={() => this.props.onRetry()}>
+          {this.props.translate('text-exercise-results.retry')}
+        </Button>
         <Header as="h2">{this.props.translate('blank-test-answers.header')}</Header>
+        <p>{this.props.translate('blank-test-answers.description')}</p>
         <Grid stackable style={{ fontSize: '1.2em' }}>
           <Grid.Row columns="equal">
             <Grid.Column textAlign="center">

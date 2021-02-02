@@ -350,6 +350,11 @@ const reducer = (state = initialState, action) => {
       return updateObject(state, {
         attempt: null,
         attemptId: null,
+        status: 'preparation',
+        wordGroups: [],
+        symbols: [],
+        stringPairs: [],
+        result: {},
       });
     }
     default:

@@ -534,6 +534,7 @@
       "1 star - very boring, 10 stars - very interesting"
     ],
     "proceed": ["Jätka testiga", "Proceed with test"],
+    "retry": ["Harjuta uuesti", "Exercise again"],
     "end": ["Lõpeta", "Finish"]
   },
   "help-exercise-results": {
@@ -603,10 +604,18 @@
   },
   "question-test-answers": {
     "header": ["Testi vastused", "Test answers"],
+    "description": [
+      "Valitud vastusevariant on märgitud taustavärviga. Õige vastus on märgitud rohelise linnukesega vastusevariandi ees.",
+      "The selected answer is marked with a background color. The correct answer is marked with a green tick in front of the answer option."
+    ],
     "loading": ["Laen vastuseid", "Loading answers"]
   },
   "blank-test-answers": {
     "header": ["Testi vastused", "Test answers"],
+    "description": [
+      "Juhul kui lünkülesanne on valesti hinnatud, siis on võimalik tulemust käsitsi ümber hinnata. Selleks tuleb vajutada lünkülesandest paremal alloleval rippmenüül ja valides sobiva hinnangu.",
+      "If the blank exercise is incorrectly assesed, the result can be re-evaluated manually. To do this, click on the drop-down menu to the right of the blank exercise and select the appropriate rating."
+    ],
     "loading": ["Laen vastuseid", "Loading answers"],
     "correct-answer": ["õige vastus", "correct answer"],
     "unanswered": ["Vastamata", "Unanswered"],
