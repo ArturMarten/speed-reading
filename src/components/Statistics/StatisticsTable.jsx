@@ -55,8 +55,8 @@ export class StatisticsTable extends Component {
             {readingExercises.indexOf(this.props.exercise) !== -1 ? (
               <>
                 <Table.HeaderCell
-                  sorted={column === 'userReadingAttemptCount' ? direction : null}
-                  onClick={this.sortHandler('userReadingAttemptCount')}
+                  sorted={column === 'textReadingAttemptCount' ? direction : null}
+                  onClick={this.sortHandler('textReadingAttemptCount')}
                 >
                   {this.props.translate('statistics-table.reading-attempt')}
                   <HelpPopup
@@ -160,8 +160,8 @@ export class StatisticsTable extends Component {
               {readingExercises.indexOf(this.props.exercise) !== -1 ? (
                 <>
                   <Table.Cell collapsing>
-                    {attempt.userReadingAttemptCount
-                      ? attempt.userReadingAttemptCount
+                    {attempt.textReadingAttemptCount
+                      ? attempt.textReadingAttemptCount
                       : this.props.translate('statistics.own-text')}
                   </Table.Cell>
                   <Table.Cell>{attempt.wordsPerMinute}</Table.Cell>

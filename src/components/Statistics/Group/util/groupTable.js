@@ -1,4 +1,10 @@
-import { leastSquares, getAverage, reduceSumFunc, formatMillisecondsInHours } from '../../../../shared/utility';
+import {
+  leastSquares,
+  getAverage,
+  getChangePercentage,
+  reduceSumFunc,
+  formatMillisecondsInHours,
+} from '../../../../shared/utility';
 
 export const readingExerciseNames = [
   'readingExercises',
@@ -267,8 +273,10 @@ export const aggregateExerciseResults = (results, userCount) =>
         exerciseResults.map(({ initialReadingSpeed }) => initialReadingSpeed),
       );
       const averageFinalReadingSpeed = getAverage(exerciseResults.map(({ finalReadingSpeed }) => finalReadingSpeed));
-      const averageReadingSpeedChange = averageFinalReadingSpeed - averageInitialReadingSpeed;
-      const averageReadingSpeedChangePercentage = (averageReadingSpeedChange / averageInitialReadingSpeed) * 100;
+      const averageReadingSpeedChangePercentage = getChangePercentage(
+        averageInitialReadingSpeed,
+        averageFinalReadingSpeed,
+      );
 
       const averageInitialComprehensionSpeed = getAverage(
         exerciseResults.map(({ initialComprehensionSpeed }) => initialComprehensionSpeed),
@@ -276,9 +284,10 @@ export const aggregateExerciseResults = (results, userCount) =>
       const averageFinalComprehensionSpeed = getAverage(
         exerciseResults.map(({ finalComprehensionSpeed }) => finalComprehensionSpeed),
       );
-      const averageComprehensionSpeedChange = averageFinalComprehensionSpeed - averageInitialComprehensionSpeed;
-      const averageComprehensionSpeedChangePercentage =
-        (averageComprehensionSpeedChange / averageInitialComprehensionSpeed) * 100;
+      const averageComprehensionSpeedChangePercentage = getChangePercentage(
+        averageInitialComprehensionSpeed,
+        averageFinalComprehensionSpeed,
+      );
 
       const averageInitialComprehensionLevel = getAverage(
         exerciseResults.map(({ initialComprehensionLevel }) => initialComprehensionLevel),
@@ -286,9 +295,10 @@ export const aggregateExerciseResults = (results, userCount) =>
       const averageFinalComprehensionLevel = getAverage(
         exerciseResults.map(({ finalComprehensionLevel }) => finalComprehensionLevel),
       );
-      const averageComprehensionLevelChange = averageFinalComprehensionLevel - averageInitialComprehensionLevel;
-      const averageComprehensionLevelChangePercentage =
-        (averageComprehensionLevelChange / averageInitialComprehensionLevel) * 100;
+      const averageComprehensionLevelChangePercentage = getChangePercentage(
+        averageInitialComprehensionLevel,
+        averageFinalComprehensionLevel,
+      );
       aggregatedResult = {
         ...aggregatedResult,
         averageInitialReadingSpeed,
@@ -306,8 +316,10 @@ export const aggregateExerciseResults = (results, userCount) =>
         exerciseResults.map(({ initialExerciseSpeed }) => initialExerciseSpeed),
       );
       const averageFinalExerciseSpeed = getAverage(exerciseResults.map(({ finalExerciseSpeed }) => finalExerciseSpeed));
-      const averageExerciseSpeedChange = averageFinalExerciseSpeed - averageInitialExerciseSpeed;
-      const averageExerciseSpeedChangePercentage = (averageExerciseSpeedChange / averageInitialExerciseSpeed) * 100;
+      const averageExerciseSpeedChangePercentage = getChangePercentage(
+        averageInitialExerciseSpeed,
+        averageFinalExerciseSpeed,
+      );
       aggregatedResult = {
         ...aggregatedResult,
         averageInitialExerciseSpeed,
@@ -321,8 +333,10 @@ export const aggregateExerciseResults = (results, userCount) =>
       const averageFinalExerciseResult = getAverage(
         exerciseResults.map(({ finalExerciseResult }) => finalExerciseResult),
       );
-      const averageExerciseResultChange = averageFinalExerciseResult - averageInitialExerciseResult;
-      const averageExerciseResultChangePercentage = (averageExerciseResultChange / averageInitialExerciseResult) * 100;
+      const averageExerciseResultChangePercentage = getChangePercentage(
+        averageInitialExerciseResult,
+        averageFinalExerciseResult,
+      );
 
       const averageInitialSymbolGroupSpeed = getAverage(
         exerciseResults.map(({ initialSymbolGroupSpeed }) => initialSymbolGroupSpeed),
@@ -330,14 +344,17 @@ export const aggregateExerciseResults = (results, userCount) =>
       const averageFinalSymbolGroupSpeed = getAverage(
         exerciseResults.map(({ finalSymbolGroupSpeed }) => finalSymbolGroupSpeed),
       );
-      const averageSymbolGroupSpeedChange = averageFinalSymbolGroupSpeed - averageInitialSymbolGroupSpeed;
-      const averageSymbolGroupSpeedChangePercentage =
-        (averageSymbolGroupSpeedChange / averageInitialSymbolGroupSpeed) * 100;
+      const averageSymbolGroupSpeedChangePercentage = getChangePercentage(
+        averageInitialSymbolGroupSpeed,
+        averageFinalSymbolGroupSpeed,
+      );
 
       const averageInitialSymbolSpeed = getAverage(exerciseResults.map(({ initialSymbolSpeed }) => initialSymbolSpeed));
       const averageFinalSymbolSpeed = getAverage(exerciseResults.map(({ finalSymbolSpeed }) => finalSymbolSpeed));
-      const averageSymbolSpeedChange = averageFinalSymbolSpeed - averageInitialSymbolSpeed;
-      const averageSymbolSpeedChangePercentage = (averageSymbolSpeedChange / averageInitialSymbolSpeed) * 100;
+      const averageSymbolSpeedChangePercentage = getChangePercentage(
+        averageInitialSymbolSpeed,
+        averageFinalSymbolSpeed,
+      );
       aggregatedResult = {
         ...aggregatedResult,
         averageInitialExerciseResult,

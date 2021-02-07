@@ -244,6 +244,15 @@ export const getAverage = (values) => {
   return sum / values.length;
 };
 
+export const getChange = (initial, final) => {
+  return final - initial || 0;
+};
+
+export const getChangePercentage = (initial, final) => {
+  const change = getChange(initial, final);
+  return change !== 0 ? (change / initial) * 100 : 0;
+};
+
 export const getStandardDeviation = (values, average = getAverage(values)) => {
   const squareDiffs = values.map((value) => {
     const difference = value - average;

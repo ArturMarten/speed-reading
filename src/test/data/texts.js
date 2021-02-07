@@ -23,7 +23,7 @@ const texts = [
       totalReadingAttemptCount: 54,
       wordCount: 700,
       wordLengthClassRating: 10,
-      userReadingAttemptCount: 0,
+      textReadingAttemptCount: 0,
     },
   },
 ];

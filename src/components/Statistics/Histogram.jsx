@@ -90,7 +90,7 @@ function Histogram({ width, height, fill, title, yLabel, xLabel, data, onSelect,
               height={heightScale(d.length)}
             />
             <rect
-              fill={fill || 'black'}
+              fill={typeof fill === 'function' ? fill(d) : fill || 'black'}
               onClick={() => onSelect(d)}
               x={widthScale(d.x0) + 1}
               y={heightScale(d.length)}

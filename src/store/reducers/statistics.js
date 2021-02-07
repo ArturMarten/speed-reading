@@ -30,7 +30,7 @@ export const exerciseAttemptMap = (attempt) => ({
   modification: attempt.modification,
   date: new Date(attempt.startTime),
   readingTextTitle: attempt.readingTextTitle,
-  userReadingAttemptCount: attempt.userReadingAttemptCount,
+  textReadingAttemptCount: attempt.textReadingAttemptCount,
   wordsPerMinute: attempt.result.wordsPerMinute,
   symbolsPerMinute: attempt.result.symbolsPerMinute,
   msPerSymbolGroup: attempt.result.msPerSymbolGroup,

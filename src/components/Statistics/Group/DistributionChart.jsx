@@ -36,6 +36,7 @@ function DistributionChart(props) {
   const averageLabel = `${translate('distribution.average')}: ${average.toFixed(2)}`;
   const standardDeviationLabel = `${translate('distribution.standard-deviation')}: ${standardDeviation.toFixed(2)}`;
   const statisticsLabel = `[${averageLabel}, ${standardDeviationLabel}]`;
+  const userId = useSelector((state) => state.auth.userId);
   const isTeacher = useSelector(
     (state) => rolePermissions[state.profile.role] >= rolePermissions.teacher || state.profile.role === 'statistician',
   );
@@ -73,7 +74,10 @@ function DistributionChart(props) {
             xLabel={translate(`distribution.${field}`)}
             yLabel={translate('distribution.frequency')}
             title={`${exerciseLabel} - ${groupLabel} - ${userCountLabel} ${statisticsLabel}`}
-            fill="rgb(47, 141, 255)"
+            fill={(values) => {
+              const found = values.find((value) => value.userId === userId);
+              return found ? 'rgb(247, 94, 37)' : 'rgb(47, 141, 255)';
+            }}
             onSelect={(values) => setSelectedValues(values)}
             width={850}
             height={300}

@@ -5,7 +5,7 @@ const attempts = [
     modification: 'default',
     startTime: Date.now(),
     readingTextTitle: 'Reading text',
-    userReadingAttemptCount: 1,
+    textReadingAttemptCount: 1,
     result: {
       wordsPerMinute: 300,
       elapsedTime: 12345,

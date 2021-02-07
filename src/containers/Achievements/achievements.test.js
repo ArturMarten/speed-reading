@@ -98,7 +98,7 @@ const readingTestAttempt = {
   modification: 'default',
   date: new Date('2020-08-20T05:27:44.000Z'),
   readingTextTitle: 'Mis määrab hea ja kurja',
-  userReadingAttemptCount: null,
+  textReadingAttemptCount: null,
   wordsPerMinute: 1834,
   exerciseResult: null,
   elapsedTime: 21262,

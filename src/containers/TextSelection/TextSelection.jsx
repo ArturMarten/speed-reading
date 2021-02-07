@@ -51,7 +51,7 @@ export class TextSelection extends Component {
       { key: 2, value: 'wordCount', text: this.props.translate('text-selection.by-word-count') },
       {
         key: 3,
-        value: 'userReadingAttemptCount',
+        value: 'textReadingAttemptCount',
         text: this.props.translate('text-selection.by-user-reading-attempt'),
       },
       {
@@ -179,7 +179,7 @@ export class TextSelection extends Component {
         (this.state.filter.questionsAuthors.length === 0 ||
           this.state.filter.questionsAuthors.indexOf(text.questionsAuthor) !== -1) &&
         text.language === this.state.filter.language &&
-        (!this.state.filter.unread || !text.userReadingAttemptCount || text.userReadingAttemptCount === 0),
+        (!this.state.filter.unread || !text.textReadingAttemptCount || text.textReadingAttemptCount === 0),
     );
     const sortedTexts = sortByColumn(filteredTexts, column, direction);
     const textTableRows = sortedTexts.map((text) => {
@@ -203,8 +203,8 @@ export class TextSelection extends Component {
           </Table.Cell>
           <Table.Cell>
             <div style={{ fontSize: '1.2em' }}>
-              {text.userReadingAttemptCount
-                ? `${text.userReadingAttemptCount}`
+              {text.textReadingAttemptCount
+                ? `${text.textReadingAttemptCount}`
                 : `${this.props.translate('text-selection.not-read')}`}
             </div>
             <div style={{ fontSize: '0.8em' }}>
@@ -339,8 +339,8 @@ export class TextSelection extends Component {
                     {this.props.translate('text-selection.title-and-author')}
                   </Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={column === 'userReadingAttemptCount' ? direction : null}
-                    onClick={this.sortHandler('userReadingAttemptCount')}
+                    sorted={column === 'textReadingAttemptCount' ? direction : null}
+                    onClick={this.sortHandler('textReadingAttemptCount')}
                   >
                     {this.props.translate('text-selection.user-reading-attempt-count')}
                   </Table.HeaderCell>

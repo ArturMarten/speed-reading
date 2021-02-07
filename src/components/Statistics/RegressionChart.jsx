@@ -9,7 +9,14 @@ import { interpolatePath } from 'd3-interpolate-path';
 import { line, curveBasis } from 'd3-shape';
 
 import './RegressionChart.css';
-import { getAverage, getStandardDeviation, polynomial, calculateY } from '../../shared/utility';
+import {
+  getAverage,
+  getStandardDeviation,
+  polynomial,
+  calculateY,
+  getChangePercentage,
+  getChange,
+} from '../../shared/utility';
 
 const margin = {
   top: 50,
@@ -84,9 +91,9 @@ export class RegressionChart extends Component {
     const equation = calculateY(result.equation);
 
     const initial = this.yScale.invert(equation(this.xScale(minXValue)));
-    const end = this.yScale.invert(equation(this.xScale(maxXValue)));
-    const change = end - initial || 0;
-    const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
+    const final = this.yScale.invert(equation(this.xScale(maxXValue)));
+    const change = getChange(initial, final);
+    const changePercentage = getChangePercentage(initial, final);
     const average = getAverage(yValues) || 0;
     const standardDeviation = getStandardDeviation(yValues, average) || 0;
 
@@ -269,9 +276,9 @@ export class RegressionChart extends Component {
       const result = polynomial(xSeries, ySeries, this.props.order);
       const equation = calculateY(result.equation);
       const initial = this.yScale.invert(equation(this.xScale(minXValue)));
-      const end = this.yScale.invert(equation(this.xScale(maxXValue)));
-      const change = end - initial || 0;
-      const changePercentage = initial > 0 ? (change / initial) * 100 : 0;
+      const final = this.yScale.invert(equation(this.xScale(maxXValue)));
+      const change = getChange(initial, final);
+      const changePercentage = getChangePercentage(initial, final);
       const average = getAverage(yValues) || 0;
       const standardDeviation = getStandardDeviation(yValues, average) || 0;
 
