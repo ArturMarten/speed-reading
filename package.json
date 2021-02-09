@@ -104,7 +104,7 @@
     "docker-start": "npm run docker-build && npm run docker-run",
     "docker-build": "docker build -t speed-reading .",
     "docker-run": "docker run speed-reading",
-    "build": "react-scripts build --profile",
+    "build": "react-scripts build --profile && cp build/service-worker.js build/sw.js",
     "build-patch": "npm version patch --no-commit-hooks --no-git-tag-version && node ./replace.build.js && npm run build",
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "eslint . --ext .js,.jsx",
