@@ -1,7 +1,7 @@
 {
   "name": "kiirlugemine",
   "description": "Software for improving reading speed",
-  "version": "5.1.26",
+  "version": "5.1.27",
   "main": "index.js",
   "private": true,
   "author": {
@@ -40,7 +40,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-testing-library": "^3.10.1",
-    "husky": "^4.3.8",
+    "husky": "^5.0.9",
     "immutable": "^3.8.2",
     "jest-environment-jsdom-with-canvas": "git+https://github.com/arcatdmz/jest-environment-jsdom-with-canvas.git",
     "jsdom": "^13.2.0",
@@ -58,11 +58,6 @@
     "serve": "^11.3.2",
     "source-map-explorer": "^2.5.2",
     "workbox-build": "^6.1.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run build"
-    }
   },
   "lint-staged": {
     "*.+(js,jsx)": [
@@ -101,15 +96,15 @@
     "redux-thunk": "^2.3.0",
     "regression": "^2.0.1",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.3"
+    "semantic-ui-react": "^2.0.3",
+    "web-vitals": "^1.1.0"
   },
   "scripts": {
     "start": "cross-env BROWSER=none react-scripts start",
     "docker-start": "npm run docker-build && npm run docker-run",
     "docker-build": "docker build -t speed-reading .",
     "docker-run": "docker run speed-reading",
-    "build-sw": "node ./src/sw-build.js",
-    "build": "react-scripts build --profile && npm run build-sw",
+    "build": "react-scripts build --profile",
     "build-patch": "npm version patch --no-commit-hooks --no-git-tag-version && node ./replace.build.js && npm run build",
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "eslint . --ext .js,.jsx",
@@ -126,16 +121,17 @@
     "serve": "serve -s build",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "postinstall": "husky install"
   },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!/node_modules/",
       "!src/index.js",
-      "!src/serviceWorker.js",
-      "!src/sw.js",
-      "!src/sw-build.js",
+      "!src/serviceWorkerRegistration.js",
+      "!src/service-worker.js",
+      "!src/reportWebVitals.js",
       "!src/polyfill/*",
       "!src/stories/*",
       "!src/utils/logger.js",

@@ -24,7 +24,7 @@ import StatisticsTable from '../../components/Statistics/StatisticsTable';
 import RegressionChart from '../../components/Statistics/RegressionChart';
 import GroupTable from '../../components/Statistics/Group/GroupTable';
 import { getExerciseId } from '../../store/reducers/exercise';
-import { reduceSumFunc, formatMillisecondsInHours } from '../../shared/utility';
+import { reduceSumFunc, formatMillisecondsInHours, debounce } from '../../shared/utility';
 import {
   getPeriodTime,
   lowerBoundOutlierFilter,
@@ -34,6 +34,7 @@ import {
 } from './util/statistics';
 
 export class Statistics extends Component {
+  debouncedSetState = debounce(this.setState, 500);
   exerciseCharts = [
     [
       {
@@ -256,7 +257,7 @@ export class Statistics extends Component {
   };
 
   minimumAttemptCountChangeHandler = (event, { value }) => {
-    this.setState({
+    this.debouncedSetState({
       minimumAttemptCount: value,
     });
   };
@@ -461,7 +462,7 @@ export class Statistics extends Component {
         id="attempt-count-input"
         type="number"
         width={6}
-        value={this.state.minimumAttemptCount}
+        defaultValue={this.state.minimumAttemptCount}
         onChange={this.minimumAttemptCountChangeHandler}
         loading={this.props.groupExerciseStatisticsStatus.loading}
         label={this.props.translate('statistics.minimum-attempt-count')}

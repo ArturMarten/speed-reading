@@ -50,21 +50,34 @@ import './index.css';
 // Polyfills
 import './polyfill';
 
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import configureStore from './store/configureStore';
 import App from './App';
 import UpdateMessage from './containers/Message/UpdateMessage';
 import OfflineMessage from './containers/Message/OfflineMessage';
+import reportWebVitals from './reportWebVitals';
 
 const history = createMemoryHistory({
   basename: '/~arturmar/',
 });
+
+function sendToAnalytics({ id, name, value }) {
+  ReactGA.event({
+    category: 'Web Vitals',
+    action: name,
+    value: Math.round(name === 'CLS' ? value * 1000 : value), // values must be integers
+    label: id, // id unique to current page load
+    nonInteraction: true, // avoids affecting bounce rate
+  });
+}
 
 // Google Analytics
 if (process.env.NODE_ENV !== 'development') {
   ReactGA.initialize('UA-129049943-1');
   ReactGA.pageview('/');
   history.listen((location) => ReactGA.pageview(location.pathname));
+  // Web vitals
+  reportWebVitals(sendToAnalytics);
 }
 
 const store = configureStore(history);
@@ -80,7 +93,7 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-serviceWorker.register({
+serviceWorkerRegistration.register({
   onOffline: () => {
     const offlineMessage = document.createElement('div');
     offlineMessage.id = 'offline-message';
@@ -108,7 +121,7 @@ serviceWorker.register({
         category: 'User',
         action: 'Applied installed update',
       });
-      registration.waiting.postMessage('skipWaiting');
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
     };
 
     const updateMessage = document.createElement('div');
