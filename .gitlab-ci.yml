@@ -1,4 +1,4 @@
-image: node:10.13.0
+image: node:14.15.5
 
 # Cache modules between builds
 cache:
@@ -8,7 +8,7 @@ cache:
 build:
   stage: build
   script:
-    - npm ci
+    - npm install
 
 test:
   stage: test

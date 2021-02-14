@@ -248,7 +248,6 @@ describe('CanvasUtils', () => {
   });
 
   it('resizes canvas to fit text', () => {
-    actualCanvas.height = lineHeight;
     expectedContext.fillText('Visible', 0, lineHeight);
     expectedContext.fillText('Overflow', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>Visible</p><p>Overflow</p>');
@@ -574,6 +573,6 @@ describe('CanvasUtils', () => {
     const textMetadata = writeText(actualContext, exampleText.contentState);
     expect(textMetadata.wordsMetadata.length).toEqual(exampleText.wordCount);
     expect(textMetadata.linesMetadata.length).toEqual(38);
-    expect(textMetadata.pagesMetadata.length).toEqual(2);
+    expect(textMetadata.pagesMetadata.length).toEqual(10);
   });
 });
