@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Divider, Image, Message, Grid, Button, Icon } from 'semantic-ui-react';
 import { getTranslate, getActiveLanguage } from 'react-localize-redux';
+import { importMDX } from 'mdx.macro';
 
 import About from './About/About';
 import ReleaseNotes from './ReleaseNotes/ReleaseNotes';
@@ -16,6 +17,9 @@ import studyEstLogo from '../../assets/img/study_est.jpg';
 import studyEngLogo from '../../assets/img/study_eng.jpg';
 import AchievementUpdates from '../Achievements/AchievementUpdates';
 // import userManual from '../../assets/doc/kasutusjuhend_est.pdf';
+
+const HomeDescriptionEt = React.lazy(() => importMDX('./home-description-et.md'));
+const HomeDescriptionEn = React.lazy(() => importMDX('./home-description-en.md'));
 
 export class Home extends Component {
   state = {
@@ -33,17 +37,11 @@ export class Home extends Component {
         <Grid stackable>
           <Grid.Row style={{ paddingBottom: '1em' }}>
             <Grid.Column width={8}>
-              <p>{this.props.translate('home.description')}</p>
-              <p>{this.props.translate('home.course-description')}</p>
-              <p>
-                {this.props.translate('home.rewards')}
-                &nbsp;
-                <a href="https://www.etag.ee/tegevused/konkursid/kasvatusteaduslike-toode-konkurss/varasemad-konkursid/">
-                  {this.props.translate('home.rewards-more-information')}
-                </a>
-              </p>
+              <Suspense fallback={this.props.translate('home.loading')}>
+                {this.props.currentLanguage === 'ee' ? <HomeDescriptionEt /> : <HomeDescriptionEn />}
+              </Suspense>
               <About open={this.state.aboutOpened} onClose={this.aboutToggleHandler} translate={this.props.translate} />
-              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-around', margin: '10px' }}>
                 <Button
                   basic
                   icon={<Icon name="info circle" color="blue" />}
@@ -72,7 +70,7 @@ export class Home extends Component {
           <Divider />
           <Grid.Row style={{ paddingBottom: '2em' }}>
             <Grid.Column width={8}>
-              <ReleaseNotes translate={this.props.translate} />
+              <ReleaseNotes currentLanguage={this.props.currentLanguage} translate={this.props.translate} />
             </Grid.Column>
             <Grid.Column width={8}>
               <IntroVideo translate={this.props.translate} />

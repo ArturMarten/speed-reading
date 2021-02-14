@@ -113,27 +113,45 @@ serviceWorkerRegistration.register({
     });
 
     const onUpdateHandler = () => {
-      if (!registration.waiting) {
-        // Just to ensure registration.waiting is available before calling postMessage()
-        return;
+      const registrationWaiting = registration.waiting;
+      if (registrationWaiting) {
+        registrationWaiting.onstatechange = () => {
+          if (registrationWaiting.state === 'activated') {
+            window.location.reload();
+          }
+        };
+        ReactGA.event({
+          category: 'User',
+          action: 'Applied installed update',
+        });
+        registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
+      } else {
+        ReactGA.event({
+          category: 'Service worker',
+          action: 'No registration waiting',
+        });
       }
-      ReactGA.event({
-        category: 'User',
-        action: 'Applied installed update',
-      });
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
     };
 
+    // Render update message twice - one will move with scroll, other pushes down the content with correct height
     const updateMessage = document.createElement('div');
     updateMessage.id = 'update-message';
+    const fixedUpdateMessage = document.createElement('div');
+    fixedUpdateMessage.id = 'fixed-update-message';
+    fixedUpdateMessage.style.position = 'fixed';
+    fixedUpdateMessage.style.zIndex = '9999';
+    fixedUpdateMessage.style.width = '100%';
+    const updateComponent = React.createElement(UpdateMessage, {
+      translate: getTranslate(store.getState().locale),
+      onUpdate: onUpdateHandler,
+    });
     const root = document.getElementById('root');
-    root.insertBefore(updateMessage, root.firstChild);
-    ReactDOM.render(
-      React.createElement(UpdateMessage, {
-        translate: getTranslate(store.getState().locale),
-        onUpdate: onUpdateHandler,
-      }),
-      document.getElementById(updateMessage.id),
-    );
+    // Check if already in the document
+    if (!document.getElementById(updateMessage.id) && !document.getElementById(fixedUpdateMessage.id)) {
+      root.insertBefore(updateMessage, root.firstChild);
+      root.insertBefore(fixedUpdateMessage, root.firstChild);
+      ReactDOM.render(updateComponent, document.getElementById(updateMessage.id));
+      ReactDOM.render(updateComponent, document.getElementById(fixedUpdateMessage.id));
+    }
   },
 });

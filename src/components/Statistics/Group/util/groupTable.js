@@ -1,3 +1,4 @@
+import { readingExerciseNames } from '../../../../containers/Statistics/util/statistics';
 import {
   leastSquares,
   getAverage,
@@ -6,16 +7,7 @@ import {
   formatMillisecondsInHours,
 } from '../../../../shared/utility';
 
-export const readingExerciseNames = [
-  'readingExercises',
-  'readingTest',
-  'readingAid',
-  'scrolling',
-  'disappearing',
-  'wordGroups',
-];
-
-const filterByExercise = (data, attemptFilter) => {
+const filterAttempts = (data, attemptFilter) => {
   return Object.keys(data).reduce((previousUsers, userId) => {
     const filteredAttempts = data[userId].filter(attemptFilter);
     return { ...previousUsers, [userId]: filteredAttempts };
@@ -32,11 +24,19 @@ export const filterByAttemptCount = (data, attemptCount) => {
 };
 
 export const filterReadingExercises = (data) => {
-  return filterByExercise(data, (attempt) => readingExerciseNames.indexOf(attempt.exercise) !== -1);
+  return filterAttempts(data, (attempt) => readingExerciseNames.indexOf(attempt.exercise) !== -1);
+};
+
+export const filterOwnTextAttempts = (data, filterOwnTexts) => {
+  return filterOwnTexts ? filterAttempts(data, (attempt) => attempt.readingTextTitle !== null) : data;
+};
+
+export const filterFirstReadingAttempts = (data, filterFirstReadingAttempt) => {
+  return filterFirstReadingAttempt ? filterAttempts(data, (attempt) => attempt.textReadingAttemptCount === 1) : data;
 };
 
 export const filterByExerciseName = (data, exerciseName) => {
-  return filterByExercise(data, (attempt) => attempt.exercise === exerciseName);
+  return filterAttempts(data, (attempt) => attempt.exercise === exerciseName);
 };
 
 export const getUserCount = (data) => {

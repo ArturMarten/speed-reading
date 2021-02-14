@@ -66,7 +66,7 @@ export class TextExercisePreparation extends Component {
           <Message.Content>
             <Message.Header style={{ textAlign: 'center', marginBottom: '0.5em' }}>
               <Icon name="check" />
-              Valitud tekst: {this.props.selectedText.title}
+              {this.props.translate('exercise-preparation.text-selected')}: {this.props.selectedText.title}
             </Message.Header>
             <div style={{ wordBreak: 'break-word' }}>
               <div>

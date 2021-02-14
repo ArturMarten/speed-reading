@@ -24,6 +24,15 @@ export const getPeriodTime = (period) => {
   }
 };
 
+export const readingExerciseNames = [
+  'readingExercises',
+  'readingTest',
+  'readingAid',
+  'scrolling',
+  'disappearing',
+  'wordGroups',
+];
+
 export const upperBoundOutlierFilter = (attempt) =>
   !attempt.wordsPerMinute ||
   attempt.wordsPerMinute <= 500 ||

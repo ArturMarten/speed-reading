@@ -674,7 +674,7 @@ storiesOf('Problem report', module)
   ));
 
 storiesOf('Messages', module)
-  .add('UpdateMessage', () => <UpdateMessage translate={translate} />)
+  .add('UpdateMessage', () => <UpdateMessage onUpdate={() => console.log('onUpdate')} translate={translate} />)
   .add('OfflineMessage', () => <OfflineMessage translate={translate} />);
 
 storiesOf('ProgressBar', module)

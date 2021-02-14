@@ -31,6 +31,7 @@ import {
   upperBoundOutlierFilter,
   timeFilterByStartEnd,
   filterStandardDeviation,
+  readingExerciseNames,
 } from './util/statistics';
 
 export class Statistics extends Component {
@@ -154,6 +155,8 @@ export class Statistics extends Component {
     endTime: new Date().toISOString().split('T')[0],
     period: 'not-defined',
     filterOutliers: true,
+    filterOwnTexts: false,
+    filterFirstReadingAttempt: false,
     minimumAttemptCount: 0,
     order: 1,
   };
@@ -372,6 +375,18 @@ export class Statistics extends Component {
     });
   };
 
+  filterOwnTextsHandler = () => {
+    this.setState({
+      filterOwnTexts: !this.state.filterOwnTexts,
+    });
+  };
+
+  filterFirstReadingAttemptHandler = () => {
+    this.setState({
+      filterFirstReadingAttempt: !this.state.filterFirstReadingAttempt,
+    });
+  };
+
   render() {
     const groupOptions = [
       {
@@ -402,6 +417,19 @@ export class Statistics extends Component {
 
     if (this.state.filterOutliers) {
       filteredData = filterStandardDeviation(this.state.exercise, filteredData);
+    }
+
+    const readingExerciseSelected = readingExerciseNames.indexOf(this.state.exercise) !== -1;
+
+    if (readingExerciseSelected) {
+      if (this.state.filterOwnTexts) {
+        filteredData = filteredData.filter((attempt) => !this.state.filterOwnTexts || attempt.readingTextTitle);
+      }
+      if (this.state.filterFirstReadingAttempt) {
+        filteredData = filteredData.filter(
+          (attempt) => !this.state.filterFirstReadingAttempt || attempt.textReadingAttemptCount === 1,
+        );
+      }
     }
 
     const userExerciseData = filteredData
@@ -530,6 +558,35 @@ export class Statistics extends Component {
       </>
     );
 
+    const outlierFilter = (
+      <Form.Field
+        id="filter-outliers-checkbox"
+        checked={this.state.filterOutliers}
+        onChange={this.filterOutliersHandler}
+        label={this.props.translate('statistics.filter-outliers')}
+        control={Checkbox}
+      />
+    );
+
+    const readingExerciseFilters = readingExerciseSelected ? (
+      <>
+        <Form.Field
+          id="filter-own-texts-checkbox"
+          checked={this.state.filterOwnTexts}
+          onChange={this.filterOwnTextsHandler}
+          label={this.props.translate('statistics.filter-own-texts')}
+          control={Checkbox}
+        />
+        <Form.Field
+          id="filter-first-reading-attempt-checkbox"
+          checked={this.state.filterFirstReadingAttempt}
+          onChange={this.filterFirstReadingAttemptHandler}
+          label={this.props.translate('statistics.filter-first-reading-attempt')}
+          control={Checkbox}
+        />
+      </>
+    ) : null;
+
     const exerciseStatistics = (
       <Grid style={{ width: '75%' }} textAlign="center">
         <Grid.Row columns={4}>
@@ -584,14 +641,11 @@ export class Statistics extends Component {
                 />
               </Form.Group>
               <Form.Group widths="equal">{timeFilterInput}</Form.Group>
-              <Form.Group style={{ margin: 0 }} inline>
-                <Form.Field
-                  id="filter-checkbox"
-                  checked={this.state.filterOutliers}
-                  onChange={this.filterOutliersHandler}
-                  label={this.props.translate('statistics.filter-outliers')}
-                  control={Checkbox}
-                />
+              <Form.Group style={{ margin: 0, justifyContent: 'center' }} inline>
+                <Form.Group grouped>
+                  {outlierFilter}
+                  {readingExerciseFilters}
+                </Form.Group>
                 {exerciseStatistics}
               </Form.Group>
             </Form>
@@ -650,14 +704,11 @@ export class Statistics extends Component {
                 />
               </Form.Group>
               <Form.Group widths="equal">{timeFilterInput}</Form.Group>
-              <Form.Group style={{ margin: 0 }} inline>
-                <Form.Field
-                  id="filter-checkbox"
-                  checked={this.state.filterOutliers}
-                  onChange={this.filterOutliersHandler}
-                  label={this.props.translate('statistics.filter-outliers')}
-                  control={Checkbox}
-                />
+              <Form.Group style={{ margin: 0, justifyContent: 'center' }} inline>
+                <Form.Group grouped>
+                  {outlierFilter}
+                  {readingExerciseFilters}
+                </Form.Group>
                 {exerciseStatistics}
               </Form.Group>
             </Form>
@@ -715,6 +766,9 @@ export class Statistics extends Component {
                 {this.props.isTeacher ? exerciseFilterInput : null}
               </Form.Group>
               <Form.Group widths="equal">{timeFilterInput}</Form.Group>
+              <Form.Group style={{ justifyContent: 'flex-end' }} inline>
+                {readingExerciseFilters}
+              </Form.Group>
             </Form>
             <div style={{ overflowX: 'auto' }}>
               <Segment basic style={{ padding: 0 }}>
@@ -727,6 +781,8 @@ export class Statistics extends Component {
                   isTeacher={this.props.isTeacher}
                   data={this.props.groupExerciseStatistics}
                   timeFilter={timeFilter}
+                  filterOwnTexts={this.state.filterOwnTexts}
+                  filterFirstReadingAttempt={this.state.filterFirstReadingAttempt}
                   minimumAttemptCount={this.state.minimumAttemptCount}
                   minimumAttemptCountChangeHandler={this.minimumAttemptCountChangeHandler}
                   groupName={group ? group.name : this.props.translate('statistics.all-groups')}

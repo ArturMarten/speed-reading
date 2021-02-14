@@ -118,19 +118,7 @@
   },
   "home": {
     "title": ["Kiirlugemise tarkvara", "Speed reading software"],
-    "description": [
-      "Tegemist on tasuta veebipõhise kiirlugemise rakendusega. Alustamiseks vali endale sobiv harjutus menüüst. Esmasel kasutamisel on soovitav alustada lugemistestiga, et selgitada oma hetke lugemiskiirus.",
-      "This is a free web-based speed reading application. To get started, choose an exercise from the menu. When using application for the first time, it is advised to start with reading test to get current reading speed"
-    ],
-    "course-description": [
-      "Rakendus on kasutusel Tartu Ülikoolis kiirlugemise kursusel, mis toimub nii sügis- kui ka kevadsemestril. Täpsemalt ÕISis.",
-      "The application is used in a speed reading course at University of Tartu every autumn and spring semester. More information in SIS."
-    ],
-    "rewards": [
-      "Rakendus on võitnud 2019.a kasvatusteaduslike tööde riiklikul konkursil didaktilis-rakenduslike tööde kategoorias I preemia.",
-      "The application has won the 1st prize in the didactic-applied works category at the national competition for educational work in 2019."
-    ],
-    "rewards-more-information": ["Rohkem infot", "More information"],
+    "loading": ["Laen...", "Loading..."],
     "about": ["Tarkvara kohta", "About software"],
     "user-manual": ["Kasutusjuhend", "User manual (only in Estonian)"],
     "problem-report-title": ["Probleem mõne tekstiga?", "Problem with some text?"],
@@ -211,7 +199,8 @@
     ]
   },
   "release-notes": {
-    "header": ["Viimased uuendused", "Recent updates"]
+    "header": ["Viimased uuendused", "Recent updates"],
+    "loading": ["Laen...", "Loading..."]
   },
   "intro-video": {
     "header": ["Võimalusi tutvustav video", "Introduction video"],
@@ -763,7 +752,7 @@
       "Soorita ${ temporal }${ value } harjutust",
       "Complete ${ value } exercises${ temporal }"
     ],
-    "temporal.exercise.time": ["Harjuta ${ temporal }${ value }", "Exercise for ${ count }${ temporal }"],
+    "temporal.exercise.time": ["Harjuta ${ temporal }${ value }", "Exercise for ${ value }${ temporal }"],
     "temporal.readingExercise.count": [
       "Soorita ${ temporal }${ value } lugemisharjutust",
       "Complete ${ value } reading exercises${ temporal }"
@@ -839,10 +828,7 @@
   },
   "statistics": {
     "title": ["Statistika", "Statistics"],
-    "description": [
-      "Siin saab harjutuse valikul näha selle statistikat. Andmeid näidatakse nii tabeli kui ka graafiku kujul.",
-      "Here you can select an exercise and see your statistics. Data is shown as a table or on a chart."
-    ],
+    "loading": ["Laen...", "Loading..."],
     "table": ["Tabel", "Table"],
     "regression": ["Regressioon", "Regression"],
     "polynomial-degree": ["Polünoomi aste", "Polynomial degree"],
@@ -863,6 +849,8 @@
     "period-one-month": ["Üks kuu", "One month"],
     "period-three-months": ["Kolm kuud", "Three months"],
     "filter-outliers": ["Eemalda ebarealistlikud väärtused", "Remove unrealistic values"],
+    "filter-own-texts": ["Eemalda oma tekstiga harjutused", "Remove exercises with own text"],
+    "filter-first-reading-attempt": ["Ainult esimene lugemise katse", "Only first reading attempt"],
     "total-attempt-count": ["Soorituste koguarv", "Total attempts"],
     "total-attempt-time": ["Harjutuste koguaeg", "Total attempts time"],
     "total-test-time": ["Testide koguaeg", "Total test time"],

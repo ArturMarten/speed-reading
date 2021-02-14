@@ -6,12 +6,12 @@ import {
   calculateExerciseResults,
   aggregateExerciseResults,
   groupDataByReadingExercise,
-  readingExerciseNames,
   exerciseTranslateMapping,
   prepareResults,
 } from './util/groupTable';
 import { exportFile } from '../../../api';
 import DistributionChart from './DistributionChart';
+import { readingExerciseNames } from '../../../containers/Statistics/util/statistics';
 
 function exportData(results, translate) {
   const { filename, filetype, ...rest } = prepareResults(results, translate);

@@ -1,5 +1,11 @@
 import React from 'react';
-import { filterByAttemptCount, filterReadingExercises, filterByExerciseName } from './util/groupTable';
+import {
+  filterByAttemptCount,
+  filterReadingExercises,
+  filterOwnTextAttempts,
+  filterFirstReadingAttempts,
+  filterByExerciseName,
+} from './util/groupTable';
 import {
   lowerBoundOutlierFilter,
   upperBoundOutlierFilter,
@@ -15,6 +21,8 @@ function GroupTable(props) {
     isTeacher,
     minimumAttemptCount,
     minimumAttemptCountChangeHandler,
+    filterOwnTexts = false,
+    filterFirstReadingAttempt = false,
     groupName,
     timeFilter,
     translate,
@@ -39,6 +47,8 @@ function GroupTable(props) {
   );
 
   let readingExerciseData = filterReadingExercises(filteredGroupData);
+  readingExerciseData = filterOwnTextAttempts(readingExerciseData, filterOwnTexts);
+  readingExerciseData = filterFirstReadingAttempts(readingExerciseData, filterFirstReadingAttempt);
   let concentrationExerciseData = filterByExerciseName(filteredGroupData, 'concentration');
   let schulteTablesExerciseData = filterByExerciseName(filteredGroupData, 'schulteTables');
 

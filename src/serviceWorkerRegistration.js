@@ -10,8 +10,6 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://cra.link/PWA
 
-import ReactGA from 'react-ga';
-
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
@@ -58,21 +56,18 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
-      if (registration.waiting && registration.waiting.state === 'installed') {
+      const waitingWorker = registration.waiting;
+      if (waitingWorker && waitingWorker.state === 'installed') {
         // Previously installed
         if (config && config.onUpdate) {
           config.onUpdate(registration);
         }
       }
-      const waitingWorker = registration.waiting;
+
       if (waitingWorker) {
         waitingWorker.onstatechange = () => {
           if (waitingWorker.state === 'activated') {
             // Previously installed activated
-            ReactGA.event({
-              category: 'Service worker',
-              action: 'Activated previously installed update',
-            });
             window.location.reload();
           }
         };
@@ -109,12 +104,6 @@ function registerValidSW(swUrl, config) {
                 config.onSuccess(registration);
               }
             }
-          } else if (installingWorker.state === 'activated') {
-            ReactGA.event({
-              category: 'Service worker',
-              action: 'Activated installed update',
-            });
-            window.location.reload();
           }
         };
       };
