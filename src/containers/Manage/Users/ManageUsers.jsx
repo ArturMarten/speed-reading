@@ -15,6 +15,7 @@ export class ManageUsers extends Component {
     column: 'lastLogin',
     direction: 'descending',
     groupId: 'all-groups',
+    userId: 'not-set',
   };
 
   componentDidMount() {
@@ -40,7 +41,11 @@ export class ManageUsers extends Component {
   };
 
   groupChangeHandler = (event, { value }) => {
-    this.setState({ groupId: value });
+    this.setState({ groupId: value, userId: 'not-set' });
+  };
+
+  userChangeHandler = (event, { value }) => {
+    this.setState({ groupId: 'all-groups', userId: value });
   };
 
   sortHandler = (selectedColumn) => () => {
@@ -75,9 +80,24 @@ export class ManageUsers extends Component {
         value: 'all-groups',
       },
     ].concat(this.props.groups.map((group, index) => ({ key: index, value: group.id, text: group.name })));
-    const users = this.props.users.filter(
-      (user) => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId,
+
+    const userOptions = [
+      {
+        key: -1,
+        value: 'not-set',
+        text: this.props.translate('manage-users.user-not-set'),
+      },
+    ].concat(
+      this.props.users.map((user, index) => ({
+        key: index,
+        value: user.publicId,
+        text: `${user.firstName ? user.firstName : ''} ${user.lastName ? user.lastName : ''} <${user.email}>`,
+      })),
     );
+
+    const users = this.props.users
+      .filter((user) => this.state.groupId === 'all-groups' || user.groupId === this.state.groupId)
+      .filter((user) => this.state.userId === 'not-set' || user.publicId === this.state.userId);
     const sortedUsers = sortByColumn(users, column, direction);
     return (
       <Fragment>
@@ -101,19 +121,34 @@ export class ManageUsers extends Component {
           {this.props.translate('manage-users.refresh')}
         </Button>
         <Form>
-          <Form.Field
-            id="group-dropdown"
-            fluid
-            inline
-            search
-            selection
-            value={this.state.groupId}
-            onChange={this.groupChangeHandler}
-            options={groupOptions}
-            loading={this.props.groupsStatus.loading}
-            label={this.props.translate('manage-users.group')}
-            control={Dropdown}
-          />
+          <Form.Group inline widths="equal" style={{ clear: 'both' }}>
+            <Form.Field
+              id="group-dropdown"
+              fluid
+              inline
+              search
+              selection
+              value={this.state.groupId}
+              onChange={this.groupChangeHandler}
+              options={groupOptions}
+              loading={this.props.groupsStatus.loading}
+              label={this.props.translate('manage-users.group')}
+              control={Dropdown}
+            />
+            <Form.Field
+              id="group-dropdown"
+              fluid
+              inline
+              search
+              selection
+              value={this.state.userId}
+              onChange={this.userChangeHandler}
+              options={userOptions}
+              loading={this.props.usersStatus.loading}
+              label={this.props.translate('manage-users.user')}
+              control={Dropdown}
+            />
+          </Form.Group>
         </Form>
         {this.props.usersStatus.loading || this.props.groupsStatus.loading ? (
           <Segment basic style={{ minHeight: '15vh' }}>

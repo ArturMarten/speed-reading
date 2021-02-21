@@ -22,8 +22,8 @@ async function existingTextExercise(translate) {
   );
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
-  fireEvent.click(screen.getByText(translate('text-exercise-preview.show')));
   fireEvent.click(screen.getByText(translate('text-exercise-preview.hide')));
+  fireEvent.click(screen.getByText(translate('text-exercise-preview.show')));
   fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.proceed')));

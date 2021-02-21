@@ -12,6 +12,11 @@ test('shows schulte tables exercise', async () => {
   expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(translate('exercises.title-schulteTables'));
   expect(screen.getByText(translate('exercises.description-schulteTables'))).toBeInTheDocument();
 
+  fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
+  fireEvent.click(screen.getByText(translate('exercise-preview.hide')));
+  fireEvent.click(screen.getByText(translate('exercise-preview.show')));
+  fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
+
   fireEvent.click(screen.getByText(translate('exercise-preparation.proceed')));
 
   const finishButton = screen.getByLabelText(translate('timing.stop'));
@@ -36,8 +41,8 @@ test('shows concentration exercise', async () => {
   expect(screen.getByText(translate('exercises.description-concentration'))).toBeInTheDocument();
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
-  fireEvent.click(screen.getByText(translate('exercise-preview.show')));
   fireEvent.click(screen.getByText(translate('exercise-preview.hide')));
+  fireEvent.click(screen.getByText(translate('exercise-preview.show')));
   fireEvent.click(screen.getByText(translate('exercise-preparation.more-settings')));
 
   fireEvent.click(screen.getByText(translate('exercise-preparation.proceed')));

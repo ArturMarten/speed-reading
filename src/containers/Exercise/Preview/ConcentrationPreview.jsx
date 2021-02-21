@@ -8,7 +8,7 @@ import { generateStringPairs } from '../../../store/reducers/exercise';
 
 export class ConcentrationPreview extends Component {
   state = {
-    show: false,
+    show: true,
     stringPairs: [],
   };
 

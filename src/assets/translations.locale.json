@@ -200,7 +200,26 @@
   },
   "release-notes": {
     "header": ["Viimased uuendused", "Recent updates"],
-    "loading": ["Laen...", "Loading..."]
+    "loading": ["Laen...", "Loading..."],
+    "last-update": ["Viimane uuendus oli", "Last update was"]
+  },
+  "time-since": {
+    "ago": ["tagasi", "ago"],
+    "few-moments-ago": ["mõni hetk tagasi", "few moments ago"],
+    "a-second": ["sekund", "a second"],
+    "a-minute": ["minut aega", "a minute"],
+    "an-hour": ["tund aega", "an hour"],
+    "a-day": ["päev", "a day"],
+    "a-week": ["nädal aega", "a week"],
+    "a-month": ["kuu aega", "a month"],
+    "a-year": ["aasta aega", "a year"],
+    "seconds": ["sekundit", "seconds"],
+    "minutes": ["minutit", "minutes"],
+    "hours": ["tundi", "hours"],
+    "days": ["päeva", "days"],
+    "weeks": ["nädalat", "weeks"],
+    "months": ["kuud", "months"],
+    "years": ["aastat", "years"]
   },
   "intro-video": {
     "header": ["Võimalusi tutvustav video", "Introduction video"],
@@ -1074,6 +1093,8 @@
     "all-groups": ["Kõik grupid", "All groups"],
     "group": ["Grupp", "Group"],
     "group-not-set": ["Määramata", "Not specified"],
+    "user": ["Kasutaja", "User"],
+    "user-not-set": ["Määramata", "Not specified"],
     "first-name": ["Eesnimi", "First name"],
     "last-name": ["Perekonnanimi", "Last name"],
     "email": ["E-posti aadress", "E-mail address"],

@@ -38,7 +38,7 @@ const initialTimerState = {
 
 export class TextExercisePreview extends Component {
   state = {
-    show: false,
+    show: true,
     timerState: initialTimerState,
     restarting: false,
   };

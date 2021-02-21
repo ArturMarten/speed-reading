@@ -9,7 +9,7 @@ import { getSymbolCount } from '../../../shared/utility';
 
 export class SchulteTablesPreview extends Component {
   state = {
-    show: false,
+    show: true,
     symbols: [],
   };
 

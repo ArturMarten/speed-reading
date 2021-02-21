@@ -35,7 +35,7 @@ export class Home extends Component {
       <Container style={{ marginTop: '3vh' }}>
         <Header as="h2">{`${this.props.translate('home.title')}`}</Header>
         <Grid stackable>
-          <Grid.Row style={{ paddingBottom: '1em' }}>
+          <Grid.Row>
             <Grid.Column width={8}>
               <Suspense fallback={this.props.translate('home.loading')}>
                 {this.props.currentLanguage === 'ee' ? <HomeDescriptionEt /> : <HomeDescriptionEn />}
@@ -68,7 +68,7 @@ export class Home extends Component {
             </Grid.Column>
           </Grid.Row>
           <Divider />
-          <Grid.Row style={{ paddingBottom: '2em' }}>
+          <Grid.Row>
             <Grid.Column width={8}>
               <ReleaseNotes currentLanguage={this.props.currentLanguage} translate={this.props.translate} />
             </Grid.Column>
