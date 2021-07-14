@@ -382,6 +382,7 @@ export const exerciseTranslateMapping = {
   scrolling: 'scrolling-text',
   disappearing: 'disappearing-text',
   wordGroups: 'word-groups',
+  verticalReading: 'vertical-reading',
   schulteTables: 'schulte-tables',
   concentration: 'concentration',
 };

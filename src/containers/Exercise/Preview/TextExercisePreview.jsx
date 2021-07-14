@@ -8,6 +8,8 @@ import { Disappearing } from '../Types/Disappearing/Disappearing';
 import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
 import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
 import { Scrolling } from '../Types/Scrolling/Scrolling';
+import HorizontalWordGroups from '../Types/WordGroups/HorizontalWordGroups';
+import VerticalReading from '../Types/VerticalReading/VerticalReading';
 import { WordGroups } from '../Types/WordGroups/WordGroups';
 
 const TEXT_VERTICAL_PADDING = 15;
@@ -91,6 +93,7 @@ export class TextExercisePreview extends Component {
               canvasHeight={CANVAS_HEIGHT - 40}
               canvasWidth={canvasWidth}
               selectedText={selectedText}
+              timerState={this.state.timerState}
               textOptions={this.props.textOptions}
               translate={this.props.translate}
             />
@@ -136,8 +139,39 @@ export class TextExercisePreview extends Component {
             />
           );
         case 'wordGroups':
+          if (this.props.modification === 'group-horizontal') {
+            return (
+              <HorizontalWordGroups
+                canvasHeight={CANVAS_HEIGHT}
+                canvasWidth={canvasWidth}
+                modification={this.props.modification}
+                selectedText={selectedText}
+                wordGroups={wordGroups}
+                timerState={this.state.timerState}
+                onExerciseFinish={this.restart}
+                textOptions={this.props.textOptions}
+                exerciseOptions={this.props.exerciseOptions}
+                speedOptions={this.props.speedOptions}
+              />
+            );
+          }
           return (
             <WordGroups
+              canvasHeight={CANVAS_HEIGHT}
+              canvasWidth={canvasWidth}
+              modification={this.props.modification}
+              selectedText={selectedText}
+              wordGroups={wordGroups}
+              timerState={this.state.timerState}
+              onExerciseFinish={this.restart}
+              textOptions={this.props.textOptions}
+              exerciseOptions={this.props.exerciseOptions}
+              speedOptions={this.props.speedOptions}
+            />
+          );
+        case 'verticalReading':
+          return (
+            <VerticalReading
               canvasHeight={CANVAS_HEIGHT}
               canvasWidth={canvasWidth}
               modification={this.props.modification}
@@ -156,6 +190,7 @@ export class TextExercisePreview extends Component {
               canvasHeight={CANVAS_HEIGHT - 40}
               canvasWidth={canvasWidth}
               selectedText={selectedText}
+              timerState={this.state.timerState}
               textOptions={this.props.textOptions}
               translate={this.props.translate}
             />

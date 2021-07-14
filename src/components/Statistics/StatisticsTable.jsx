@@ -5,7 +5,15 @@ import { Table } from 'semantic-ui-react';
 import HelpPopup from '../HelpPopup/HelpPopup';
 import { sortByColumn, formatMilliseconds } from '../../shared/utility';
 
-const readingExercises = ['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'];
+const readingExercises = [
+  'readingExercises',
+  'readingTest',
+  'readingAid',
+  'scrolling',
+  'disappearing',
+  'wordGroups',
+  'verticalReading',
+];
 
 export class StatisticsTable extends Component {
   state = {

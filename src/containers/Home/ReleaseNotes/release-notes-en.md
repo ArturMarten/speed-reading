@@ -1,3 +1,7 @@
+#### Version 5.1.30 (28.04.2021)
+- Added word groups vertical and horizontal reading modifications
+#### Version 5.1.29 (07.03.2021)
+- Added word groups "blurry" modification
 #### Version 5.1.28 (14.02.2021)
 - Added the possibility to filter out your own text exercise in statistics
 - Added the possibility to filter statistics by first reading attempt only

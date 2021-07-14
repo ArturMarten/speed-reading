@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateObject } from '../../../../shared/utility';
+import * as glur from 'glur';
 import {
   createOffscreenContext,
   drawPageLines,
@@ -9,16 +10,12 @@ import {
   writeText,
 } from '../../../../utils/CanvasUtils/CanvasUtils';
 
-export const drawState = (currentState, context, restoreCanvas) => {
+export const drawState = (currentState, context, restoreCanvas, clearCanvas) => {
   const { restoreRects, drawRects } = currentState;
 
   restoreRects.forEach((restoreRect) => {
     context.clearRect(restoreRect.x, restoreRect.y, restoreRect.width, restoreRect.height);
-    if (
-      currentState.modification === 'group-highlighted' ||
-      currentState.modification === 'group-spacing' ||
-      currentState.modification === 'group-vertical'
-    ) {
+    if (currentState.modification === 'group-highlighted' || currentState.modification === 'group-blurry') {
       context.drawImage(
         restoreCanvas,
         restoreRect.x,
@@ -33,6 +30,20 @@ export const drawState = (currentState, context, restoreCanvas) => {
     }
   });
   drawRects.forEach((drawRect) => {
+    if (currentState.modification === 'group-blurry') {
+      context.clearRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
+      context.drawImage(
+        clearCanvas,
+        drawRect.x,
+        drawRect.y + currentState.marginTop,
+        drawRect.width,
+        drawRect.height,
+        drawRect.x,
+        drawRect.y,
+        drawRect.width,
+        drawRect.height,
+      );
+    }
     if (currentState.modification === 'group-single') {
       context.drawImage(
         restoreCanvas,
@@ -45,7 +56,7 @@ export const drawState = (currentState, context, restoreCanvas) => {
         drawRect.width,
         drawRect.height,
       );
-    } else {
+    } else if (currentState.modification === 'group-highlighted') {
       const underlineHeight = drawRect.height * 0.1;
       context.fillRect(drawRect.x, drawRect.y + (drawRect.height - underlineHeight), drawRect.width, underlineHeight);
     }
@@ -165,6 +176,7 @@ const initialState = {
   drawRects: [],
 };
 
+const BLUR_RADIUS = 9;
 export class WordGroups extends Component {
   currentState = { ...initialState };
 
@@ -179,7 +191,7 @@ export class WordGroups extends Component {
     ) {
       // Exercise started
       this.currentState = this.updateState(this.currentState, 0);
-      drawState(this.currentState, this.shownContext, this.offscreenCanvas);
+      drawState(this.currentState, this.shownContext, this.offscreenCanvas, this.clearOffscreenCanvas);
       this.delayedLoop(this.props.exerciseOptions.startDelay);
     } else if (!this.props.timerState.resetted && nextProps.timerState.resetted) {
       // Exercise resetted
@@ -223,13 +235,24 @@ export class WordGroups extends Component {
     const { wordsMetadata, linesMetadata } = writeText(this.offscreenContext, this.props.selectedText.contentState);
     const groupsMetadata = getGroupsMetadata(wordsMetadata, this.props.wordGroups);
     this.textMetadata = { wordsMetadata, linesMetadata, groupsMetadata };
+
+    if (this.currentState.modification === 'group-blurry') {
+      this.clearOffscreenContext = createOffscreenContext(this.offscreenCanvas, this.props.textOptions);
+      this.clearOffscreenCanvas = this.clearOffscreenContext.canvas;
+      const imageData = this.offscreenContext.getImageData(
+        0,
+        0,
+        this.offscreenCanvas.width,
+        this.offscreenCanvas.height,
+      );
+      this.clearOffscreenContext.putImageData(imageData, 0, 0);
+      glur(imageData.data, this.offscreenCanvas.width, this.offscreenCanvas.height, BLUR_RADIUS);
+      this.offscreenContext.putImageData(imageData, 0, 0);
+    }
+
     // Prepare visible canvas
     this.shownContext = this.shownCanvas.getContext('2d');
-    if (
-      this.currentState.modification === 'group-highlighted' ||
-      this.currentState.modification === 'group-spacing' ||
-      this.currentState.modification === 'group-vertical'
-    ) {
+    if (this.currentState.modification === 'group-highlighted' || this.currentState.modification === 'group-blurry') {
       // Draw text
       if (this.offscreenCanvas.height > this.shownCanvas.height) {
         // Multi page
@@ -249,25 +272,21 @@ export class WordGroups extends Component {
     const updateTime = performance.now() - this.currentState.lastUpdate;
     this.currentState = this.updateState(this.currentState, updateTime);
     if (this.currentState.newPage) {
-      if (
-        this.currentState.modification === 'group-highlighted' ||
-        this.currentState.modification === 'group-spacing' ||
-        this.currentState.modification === 'group-vertical'
-      ) {
+      if (this.currentState.modification === 'group-highlighted' || this.currentState.modification === 'group-blurry') {
         drawPageLines(
           this.textMetadata.linesMetadata,
           this.shownContext,
           this.offscreenCanvas,
           this.currentState.marginTop,
         );
-      } else {
+      } else if (this.currentState.modification === 'group-single') {
         const { canvas } = this.shownContext;
         this.shownContext.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
     if (this.currentState.newGroup) {
       // Optimization
-      drawState(this.currentState, this.shownContext, this.offscreenCanvas);
+      drawState(this.currentState, this.shownContext, this.offscreenCanvas, this.clearOffscreenCanvas);
     }
     if (this.currentState.finished) {
       this.props.onExerciseFinish();

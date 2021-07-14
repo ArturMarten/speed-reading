@@ -247,6 +247,13 @@ export class Layout extends Component {
                   >
                     {this.props.translate('menu.word-groups')}
                   </Dropdown.Item>
+                  <Dropdown.Item
+                    as="a"
+                    active={path === '/exercise/vertical-reading'}
+                    onClick={(event) => this.itemClickHandler(event, '/exercise/vertical-reading')}
+                  >
+                    {this.props.translate('menu.vertical-reading')}
+                  </Dropdown.Item>
                   <Dropdown.Divider style={{ margin: 0 }} />
                   <Dropdown.Header
                     style={{ color: 'rgba(0, 76, 255, 0.85)' }}
@@ -407,6 +414,13 @@ export class Layout extends Component {
                         onClick={(event) => this.itemClickHandler(event, '/exercise/word-groups')}
                       >
                         {this.props.translate('menu.word-groups')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="a"
+                        active={path === '/exercise/vertical-reading'}
+                        onClick={(event) => this.itemClickHandler(event, '/exercise/vertical-reading')}
+                      >
+                        {this.props.translate('menu.vertical-reading')}
                       </Dropdown.Item>
                       <Dropdown.Divider style={{ margin: 0 }} />
                       <Dropdown.Header

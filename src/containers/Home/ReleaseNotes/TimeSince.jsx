@@ -12,7 +12,7 @@ const timeUnits = [
   { single: 'a-second', multiple: 'seconds', value: SECOND, max: 50 },
   { single: 'a-minute', multiple: 'minutes', value: MINUTE, max: 50 },
   { single: 'an-hour', multiple: 'hours', value: HOUR, max: 22 },
-  { single: 'a-day', multiple: 'days', value: DAY, max: 22 },
+  { single: 'a-day', multiple: 'days', value: DAY, max: 6 },
   { single: 'a-week', multiple: 'weeks', value: WEEK, max: 3.5 },
   { single: 'a-month', multiple: 'months', value: MONTH, max: 11 },
   { single: 'a-year', multiple: 'years', value: YEAR, max: Infinity },

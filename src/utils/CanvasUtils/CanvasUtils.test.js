@@ -4,7 +4,7 @@ import fs from 'fs';
 import { List } from 'immutable';
 import { ContentState, convertFromHTML, ContentBlock, genKey } from 'draft-js';
 import { createImageData } from 'canvas';
-import { exampleText, writeText } from './CanvasUtils';
+import { exampleText, writeText2 } from './CanvasUtils';
 
 // const imgOutputFolder = `${__dirname}/output`;
 
@@ -66,6 +66,13 @@ describe('CanvasUtils', () => {
   const paragraphSpace = 5;
   const font = 'sans-serif';
   const textBaseline = 'bottom';
+  const textOptions = {
+    width: canvasWidth,
+    height: canvasHeight,
+    font,
+    fontSize,
+    fontSizeInPx: fontSize,
+  };
   const expectedContext = expectedCanvas.getContext('2d');
   const actualContext = actualCanvas.getContext('2d');
   const diffContext = diffCanvas.getContext('2d');
@@ -102,10 +109,9 @@ describe('CanvasUtils', () => {
 
     /*
     // When required, output diff images
-    const testName = `CanvasUtils ${this.currentTest.title}`;
+    const testName = `${expect.getState().currentTestName}`;
     outputCanvasAsPNG(diffCanvas, `${imgOutputFolder}/diff/${testName}.png`);
-    */
-    /*
+
     // When required, output actual and expected images
     outputCanvasAsPNG(actualCanvas, `${imgOutputFolder}/actual/${testName}.png`);
     outputCanvasAsPNG(expectedCanvas, `${imgOutputFolder}/expected/${testName}.png`);
@@ -131,32 +137,32 @@ describe('CanvasUtils', () => {
   it('passes letter-by-letter test', () => {
     expectedContext.fillText('letter-by-letter', 0, lineHeight);
     const content = ContentState.createFromText('letter-by-letter');
-    writeText(actualContext, content, { lineHeight });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes bold style test', () => {
     expectedContext.font = `bold ${expectedContext.font}`;
     expectedContext.fillText('bold test', 0, lineHeight);
     const content = getDraftJSContentFromHTML('<b>bold test</b>');
-    writeText(actualContext, content, { lineHeight });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes italic style test', () => {
     expectedContext.font = `italic ${expectedContext.font}`;
     expectedContext.fillText('italic test', 0, lineHeight);
     const content = getDraftJSContentFromHTML('<i>italic test</i>');
-    writeText(actualContext, content, { lineHeight });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes bold italic style test', () => {
     expectedContext.font = `bold italic ${expectedContext.font}`;
     expectedContext.fillText('bold italic test', 0, lineHeight);
     const content = getDraftJSContentFromHTML('<b><i>bold italic test</i></b>');
-    writeText(actualContext, content, { lineHeight });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes style change test', () => {
@@ -170,32 +176,32 @@ describe('CanvasUtils', () => {
     expectedContext.font = `italic ${defaultStyle}`;
     expectedContext.fillText('test', position, lineHeight);
     const content = getDraftJSContentFromHTML('<b>style</b> change <i>test</i>');
-    writeText(actualContext, content, { lineHeight });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes text wrap test', () => {
     expectedContext.fillText('this is a multiline text', 0, lineHeight);
     expectedContext.fillText('that should be wrapped', 0, lineHeight + lineHeight);
     const content = getDraftJSContentFromHTML('this is a multiline text that should be wrapped');
-    writeText(actualContext, content, { lineHeight });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes multiple paragraph test', () => {
     expectedContext.fillText('paragraph1 text', 0, lineHeight);
     expectedContext.fillText('paragraph2 text', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>paragraph1 text</p><p>paragraph2 text</p>');
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes paragraph wrap test', () => {
     expectedContext.fillText('paragraph text should', 0, lineHeight);
     expectedContext.fillText('be wrapped', 0, lineHeight + lineHeight);
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p>');
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes two paragraph wrap test', () => {
@@ -203,8 +209,8 @@ describe('CanvasUtils', () => {
     expectedContext.fillText('be wrapped', 0, lineHeight + lineHeight);
     expectedContext.fillText('paragraph', 0, lineHeight + lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>paragraph text should be wrapped</p><p>paragraph</p>');
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes empty paragraph test', () => {
@@ -213,8 +219,8 @@ describe('CanvasUtils', () => {
     const secondBlock = convertFromHTML('<p>Second line</p>').contentBlocks;
     const mergedBlocks = emptyBlock.concat(secondBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes two empty paragraph test', () => {
@@ -223,8 +229,8 @@ describe('CanvasUtils', () => {
     const thirdBlock = convertFromHTML('<p>Third line</p>').contentBlocks;
     const mergedBlocks = emptyBlocks.concat(thirdBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes empty paragraph between test', () => {
@@ -235,24 +241,24 @@ describe('CanvasUtils', () => {
     const thirdBlock = convertFromHTML('<p>Third line</p>').contentBlocks;
     const mergedBlocks = firstBlock.concat(emptyBlock).concat(thirdBlock);
     const content = ContentState.createFromBlockArray(mergedBlocks, {});
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('passes paragraph extra spaces test', () => {
     expectedContext.fillText('Paragraph', 0, lineHeight);
     expectedContext.fillText('with space', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>Paragraph </p><p>with space</p>');
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('resizes canvas to fit text', () => {
     expectedContext.fillText('Visible', 0, lineHeight);
     expectedContext.fillText('Overflow', 0, lineHeight + lineHeight + paragraphSpace);
     const content = getDraftJSContentFromHTML('<p>Visible</p><p>Overflow</p>');
-    writeText(actualContext, content, { paragraphSpace });
-    expect(getPixelDifference(expectedContext, actualContext, diffContext, canvasWidth, canvasHeight)).toEqual(0);
+    const { offscreens } = writeText2(actualCanvas, content, textOptions);
+    expect(getPixelDifference(expectedContext, offscreens[0], diffContext, canvasWidth, canvasHeight)).toEqual(0);
   });
 
   it('returns single word metadata', () => {
@@ -270,9 +276,7 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, {
-      lineHeight,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -318,9 +322,7 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, {
-      lineHeight,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -378,9 +380,7 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, {
-      lineHeight,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata).toEqual(expect.arrayContaining(expectedWordsMetadata));
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -434,9 +434,7 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, {
-      paragraphSpace,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -455,9 +453,7 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, {
-      paragraphSpace,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata[3]).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -479,9 +475,7 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, {
-      paragraphSpace,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata[0]).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -503,9 +497,7 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, {
-      paragraphSpace,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata[0]).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(1);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -541,9 +533,7 @@ describe('CanvasUtils', () => {
         },
       },
     ];
-    const actualTextMetadata = writeText(actualContext, content, {
-      paragraphSpace,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.linesMetadata.length).toEqual(2);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
@@ -562,17 +552,16 @@ describe('CanvasUtils', () => {
         left: 0,
       },
     };
-    const actualTextMetadata = writeText(actualContext, content, {
-      paragraphSpace,
-    });
+    const actualTextMetadata = writeText2(actualCanvas, content, textOptions, { paragraphSpace });
     expect(actualTextMetadata.wordsMetadata[3]).toEqual(expectedWordsMetadata);
     expect(actualTextMetadata.pagesMetadata.length).toEqual(1);
   });
 
   it('returns text metadata', () => {
-    const textMetadata = writeText(actualContext, exampleText.contentState);
+    const textMetadata = writeText2(actualCanvas, exampleText.contentState, textOptions, { paragraphSpace });
     expect(textMetadata.wordsMetadata.length).toEqual(exampleText.wordCount);
     expect(textMetadata.linesMetadata.length).toEqual(38);
-    expect(textMetadata.pagesMetadata.length).toEqual(10);
+    expect(textMetadata.pagesMetadata.length).toEqual(8);
+    expect(textMetadata.offscreens.length).toEqual(8);
   });
 });

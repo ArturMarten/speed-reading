@@ -18,7 +18,10 @@ export default function renderWithRedux(
     role = 'student',
     token = null,
     groupId = null,
-    initialState = { auth: { ...authInitialState, token }, profile: { ...profileInitialState, role, groupId } },
+    initialState = {
+      auth: { ...authInitialState, token },
+      profile: { ...profileInitialState, role, groupId },
+    },
     route = '/',
     history = createMemoryHistory({ initialEntries: [route] }),
     store = configureStore(history, initialState),

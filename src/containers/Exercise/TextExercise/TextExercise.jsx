@@ -9,6 +9,8 @@ import Disappearing from '../Types/Disappearing/Disappearing';
 import ReadingAid from '../Types/ReadingAid/ReadingAid';
 import ReadingTest from '../Types/ReadingTest/ReadingTest';
 import Scrolling from '../Types/Scrolling/Scrolling';
+import HorizontalWordGroups from '../Types/WordGroups/HorizontalWordGroups';
+import VerticalReading from '../Types/VerticalReading/VerticalReading';
 import WordGroups from '../Types/WordGroups/WordGroups';
 import './TextExercise.css';
 
@@ -60,6 +62,7 @@ export class TextExercise extends Component {
               canvasHeight={this.state.canvasHeight - 40}
               canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}
+              timerState={this.props.timerState}
               translate={this.props.translate}
             />
           );
@@ -96,8 +99,31 @@ export class TextExercise extends Component {
             />
           );
         case 'wordGroups':
+          if (this.props.exerciseModification === 'group-horizontal') {
+            return (
+              <HorizontalWordGroups
+                canvasHeight={this.state.canvasHeight}
+                canvasWidth={this.state.canvasWidth}
+                selectedText={this.props.selectedText}
+                wordGroups={this.props.wordGroups}
+                timerState={this.props.timerState}
+                onExerciseFinish={this.onExerciseFinishHandler}
+              />
+            );
+          }
           return (
             <WordGroups
+              canvasHeight={this.state.canvasHeight}
+              canvasWidth={this.state.canvasWidth}
+              selectedText={this.props.selectedText}
+              wordGroups={this.props.wordGroups}
+              timerState={this.props.timerState}
+              onExerciseFinish={this.onExerciseFinishHandler}
+            />
+          );
+        case 'verticalReading':
+          return (
+            <VerticalReading
               canvasHeight={this.state.canvasHeight}
               canvasWidth={this.state.canvasWidth}
               selectedText={this.props.selectedText}

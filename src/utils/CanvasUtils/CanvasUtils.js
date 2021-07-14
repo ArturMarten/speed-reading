@@ -18,10 +18,14 @@ export const createOffscreenContext = (canvas, textOptions) => {
   offscreenCanvas.width = canvas.width;
   offscreenCanvas.height = canvas.height;
   const offscreenContext = offscreenCanvas.getContext('2d');
-  offscreenContext.font = `${Math.ceil((textOptions.fontSize / 0.75) * pixelRatio)}px ${textOptions.font}`;
+  offscreenContext.font = `${textOptions.fontSizeInPx || getFontSizeInPx(textOptions.fontSize)}px ${textOptions.font}`;
   offscreenContext.textBaseline = 'bottom';
   offscreenContext.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
   return offscreenContext;
+};
+
+export const getFontSizeInPx = (fontSize) => {
+  return Math.ceil((fontSize / 0.75) * pixelRatio);
 };
 
 /*
@@ -151,6 +155,28 @@ const getPagesMetadata = (linesMetadata, canvasHeight) => {
   return pagesMetadata;
 };
 
+const getPagesMetadata2 = (linesMetadata) => {
+  const pagesMetadata = [];
+  if (linesMetadata.length === 0) return pagesMetadata;
+  let rect = { ...linesMetadata[0].rect };
+  let lineIndices = [];
+  linesMetadata.forEach((lineMetadata, lineIndex) => {
+    if (lineMetadata.rect.bottom >= rect.bottom) {
+      // Same page
+      rect.right = Math.max(rect.right, lineMetadata.rect.right);
+      rect.bottom = lineMetadata.rect.bottom;
+      lineIndices.push(lineIndex);
+    } else {
+      // New page
+      addPageMetadata(pagesMetadata, rect, lineIndices);
+      rect = { ...lineMetadata.rect };
+      lineIndices = [lineIndex];
+    }
+  });
+  addPageMetadata(pagesMetadata, rect, lineIndices);
+  return pagesMetadata;
+};
+
 export const getGroupsMetadata = (wordsMetadata, wordGroups) => {
   const groupsMetadata = [];
   let wordIndex = 0;
@@ -200,7 +226,7 @@ const addWordMetadata = (wordsMetadata, word, context, lineNumber, wordStartPosi
   });
 };
 
-export const writeText = (canvasContext, contentState, textOptions = { lineSpacing: 1, paragraphSpace: 5 }) => {
+export const writeText = (canvasContext, contentState, textOptions = { paragraphSpace: 5 }) => {
   // Canvas data
   const canvasWidth = canvasContext.canvas.width;
   const canvasHeight = canvasContext.canvas.height;
@@ -354,6 +380,333 @@ export const writeText = (canvasContext, contentState, textOptions = { lineSpaci
   const linesMetadata = getLinesMetadata(wordsMetadata);
   const pagesMetadata = getPagesMetadata(linesMetadata, canvasHeight);
   return { wordsMetadata, linesMetadata, pagesMetadata };
+};
+
+export const writeText2 = (shownCanvas, contentState, textOptions, writeOptions = { paragraphSpace: 5 }) => {
+  // Canvas data
+  let offscreenContext = createOffscreenContext(shownCanvas, textOptions);
+  const canvasWidth = offscreenContext.canvas.width;
+  const defaultStyle = offscreenContext.font;
+  let currentStyle = defaultStyle;
+  const lineHeight = +defaultStyle.match(/\d+(\.\d+)?(?=px)/)[0];
+  let spaceWidth = offscreenContext.measureText(' ').width;
+
+  // Text data
+  const text = contentState.getPlainText('\n').replace(/\n/g, '');
+  let currentBlock = contentState.getFirstBlock();
+  let currentBlockKey = currentBlock.getKey();
+  let characterMetadata = currentBlock.getCharacterList();
+  let currentBlockLength = currentBlock.getText().length;
+  let previousBlocksLength = 0;
+  const letters = text.split('');
+  const textLength = letters.length;
+
+  // Initializing
+  const wordsMetadata = [];
+  const offscreens = [];
+  let currentWord = '';
+  let lineNumber = 0;
+  let wordStartPosition = 0;
+  let fillXStart = 0;
+  let fillYStart = lineHeight; // Bottom of the word
+  let fillText = '';
+
+  const nextBlock = () => {
+    previousBlocksLength += currentBlockLength;
+    currentBlock = contentState.getBlockAfter(currentBlockKey);
+    currentBlockKey = currentBlock.getKey();
+    characterMetadata = currentBlock.getCharacterList();
+    currentBlockLength = currentBlock.getText().length;
+  };
+
+  const newWord = () => {
+    addWordMetadata(
+      wordsMetadata,
+      currentWord,
+      offscreenContext,
+      lineNumber,
+      wordStartPosition,
+      fillYStart,
+      lineHeight,
+    );
+    currentWord = '';
+  };
+
+  const newLine = ({ additionalSpacing = 0, overflowText = '' }) => {
+    const { canvas } = offscreenContext;
+    fillXStart = 0;
+    fillYStart += lineHeight + additionalSpacing;
+    // Check if new page
+    if (fillYStart > canvas.height) {
+      fillYStart = lineHeight;
+      // Create new canvas for new page
+      offscreens.push(offscreenContext);
+      offscreenContext = createOffscreenContext(shownCanvas, textOptions);
+    }
+    fillText = overflowText;
+    wordStartPosition = 0;
+  };
+
+  const drawText = () => {
+    offscreenContext.fillText(fillText, fillXStart, fillYStart);
+  };
+
+  const checkOverflowingText = () => {
+    const fillTextWidth = offscreenContext.measureText(fillText).width;
+    if (fillXStart + fillTextWidth > canvasWidth) {
+      const word = fillText.substring(fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1, fillText.length);
+      fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
+      drawText();
+      lineNumber += 1;
+      newLine({ overflowText: word });
+    }
+  };
+
+  // console.log(content.getBlockMap().toArray()[0].getCharacterList());
+
+  letters.forEach((currentLetter, letterIndex) => {
+    // Check if block has ended
+    if (letterIndex === previousBlocksLength + currentBlockLength) {
+      if (fillText !== '') {
+        checkOverflowingText();
+        drawText();
+        newWord();
+        lineNumber += 1;
+      }
+      nextBlock();
+      newLine({ additionalSpacing: writeOptions.paragraphSpace });
+      while (currentBlockLength === 0) {
+        nextBlock();
+        newLine({});
+      }
+    }
+    // Check if style has changed
+    const styledBlock = characterMetadata.get(letterIndex - previousBlocksLength);
+    const nextStyle = styledBlock.getStyle();
+    if (currentStyle !== nextStyle) {
+      // Draw previous styled text
+      drawText();
+      const fillTextWidth = offscreenContext.measureText(fillText).width;
+      fillXStart += fillTextWidth;
+      fillText = currentLetter;
+      // Update with new style
+      offscreenContext.font = getCanvasFont(defaultStyle, nextStyle);
+      spaceWidth = offscreenContext.measureText(' ').width;
+      currentStyle = nextStyle;
+    } else {
+      fillText += currentLetter;
+    }
+
+    // Check if word has ended
+    if (currentLetter === ' ') {
+      // Check if it fits in current line
+      const wordWidth = offscreenContext.measureText(currentWord).width;
+      if (wordStartPosition + wordWidth > canvasWidth) {
+        fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
+        drawText();
+        lineNumber += 1;
+        newLine({ overflowText: `${currentWord} ` });
+      }
+      newWord();
+      wordStartPosition = wordStartPosition + spaceWidth + wordWidth;
+    } else {
+      currentWord += currentLetter;
+      // Check if text has ended
+      if (letterIndex === textLength - 1) {
+        // Draw all remaining text
+        checkOverflowingText();
+        drawText();
+        // Add remaining word metadata
+        newWord();
+      }
+    }
+  });
+  offscreens.push(offscreenContext);
+  const linesMetadata = getLinesMetadata(wordsMetadata);
+  const pagesMetadata = getPagesMetadata2(linesMetadata);
+  return { offscreens, wordsMetadata, linesMetadata, pagesMetadata };
+};
+
+export const writeGroups = (shownCanvas, contentState, groups, textOptions, writeOptions = { paragraphSpace: 5 }) => {
+  // Canvas data
+  let offscreenContext = createOffscreenContext(shownCanvas, textOptions);
+  const canvasWidth = offscreenContext.canvas.width;
+  const defaultStyle = offscreenContext.font;
+  let currentStyle = defaultStyle;
+  const lineHeight = +defaultStyle.match(/\d+(\.\d+)?(?=px)/)[0];
+  let spaceWidth = offscreenContext.measureText(' ').width;
+
+  // Text data
+  const text = contentState.getPlainText('\n').replace(/\n/g, '');
+  let currentBlock = contentState.getFirstBlock();
+  let currentBlockKey = currentBlock.getKey();
+  let characterMetadata = currentBlock.getCharacterList();
+  let currentBlockLength = currentBlock.getText().length;
+  let previousBlocksLength = 0;
+  const letters = text.split('');
+  const textLength = letters.length;
+
+  // Initializing
+  const groupsMetadata = [];
+  const offscreens = [];
+
+  let currentWord = '';
+  let wordStartPosition = 0;
+  let fillXStart = wordStartPosition;
+  let fillYStart = lineHeight; // Bottom of the word
+  let fillText = '';
+
+  let groupIndex = 0;
+  let groupWordIndex = 0;
+  let groupRects = [];
+  let groupRect = {
+    top: fillYStart - lineHeight,
+    right: 0,
+    bottom: fillYStart,
+    left: wordStartPosition,
+  };
+
+  const nextBlock = () => {
+    previousBlocksLength += currentBlockLength;
+    currentBlock = contentState.getBlockAfter(currentBlockKey);
+    currentBlockKey = currentBlock.getKey();
+    characterMetadata = currentBlock.getCharacterList();
+    currentBlockLength = currentBlock.getText().length;
+  };
+
+  const newWord = () => {
+    const wordWidth = offscreenContext.measureText(currentWord).width;
+    groupRect.right = Math.ceil(wordStartPosition + wordWidth);
+    currentWord = '';
+  };
+
+  const newLine = ({ additionalSpacing = 0, overflowText = '' }) => {
+    if (overflowText !== '') {
+      // debugger;
+      groupRects.push(groupRect);
+    }
+    fillXStart = 0;
+    fillYStart += lineHeight + additionalSpacing;
+    fillText = overflowText;
+    wordStartPosition = 0;
+    groupRect = {
+      top: fillYStart - lineHeight,
+      right: 0,
+      bottom: fillYStart,
+      left: wordStartPosition,
+    };
+  };
+
+  const newGroup = () => {
+    offscreens.push(offscreenContext);
+    offscreenContext = createOffscreenContext(shownCanvas, textOptions);
+
+    groupRects.push(groupRect);
+    groupsMetadata.push({
+      group: groups[groupIndex],
+      rects: groupRects,
+    });
+    fillXStart = 0;
+    fillYStart = lineHeight;
+    wordStartPosition = 0;
+    groupRects = [];
+    groupRect = {
+      top: fillYStart - lineHeight,
+      right: 0,
+      bottom: fillYStart,
+      left: wordStartPosition,
+    };
+  };
+
+  const drawText = () => {
+    offscreenContext.fillText(fillText, fillXStart, fillYStart);
+  };
+
+  const checkOverflowingText = () => {
+    const fillTextWidth = offscreenContext.measureText(fillText).width;
+    if (fillXStart + fillTextWidth > canvasWidth) {
+      const word = fillText.substring(fillText.substring(0, fillText.length - 1).lastIndexOf(' ') + 1, fillText.length);
+      fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
+      drawText();
+      newLine({ overflowText: word });
+    }
+  };
+
+  const checkGroup = () => {
+    if (groups[groupIndex][groupWordIndex] === currentWord) {
+      groupWordIndex += 1;
+      if (groupWordIndex === groups[groupIndex].length) {
+        newGroup();
+        groupIndex += 1;
+        groupWordIndex = 0;
+      }
+    } else {
+      console.warn('Words and word groups do not match', currentWord, groups[groupIndex]);
+    }
+  };
+
+  // console.log(content.getBlockMap().toArray()[0].getCharacterList());
+
+  letters.forEach((currentLetter, letterIndex) => {
+    // Check if block has ended
+    if (letterIndex === previousBlocksLength + currentBlockLength) {
+      // Draw the text
+      if (fillText !== '') {
+        checkOverflowingText();
+        drawText();
+        checkGroup();
+        newWord();
+      }
+      nextBlock();
+      newLine({ additionalSpacing: writeOptions.paragraphSpace });
+      while (currentBlockLength === 0) {
+        nextBlock();
+        newLine({});
+      }
+    }
+
+    // Check if style has changed
+    const styledBlock = characterMetadata.get(letterIndex - previousBlocksLength);
+    const nextStyle = styledBlock.getStyle();
+    if (currentStyle !== nextStyle) {
+      // Draw previous styled text
+      drawText();
+      const fillTextWidth = offscreenContext.measureText(fillText).width;
+      fillXStart += fillTextWidth;
+      fillText = currentLetter;
+      // Update with new style
+      offscreenContext.font = getCanvasFont(defaultStyle, nextStyle);
+      spaceWidth = offscreenContext.measureText(' ').width;
+      currentStyle = nextStyle;
+    } else {
+      fillText += currentLetter;
+    }
+
+    // Check if word has ended
+    if (currentLetter === ' ') {
+      const wordWidth = offscreenContext.measureText(currentWord).width;
+      if (wordStartPosition + wordWidth > canvasWidth) {
+        fillText = fillText.substring(0, fillText.substring(0, fillText.length - 1).lastIndexOf(' '));
+        drawText();
+        newLine({ overflowText: `${currentWord} ` });
+      }
+      checkGroup();
+      newWord();
+      wordStartPosition = wordStartPosition + spaceWidth + wordWidth;
+    } else {
+      currentWord += currentLetter;
+      // Check if text has ended
+      if (letterIndex === textLength - 1) {
+        // Draw all remaining text
+        checkOverflowingText();
+        drawText();
+        checkGroup();
+        newWord();
+      }
+    }
+  });
+
+  return { offscreens, groupsMetadata };
 };
 
 const blocksFromHTML = convertFromHTML(

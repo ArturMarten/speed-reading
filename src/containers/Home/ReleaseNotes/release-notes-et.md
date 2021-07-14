@@ -1,3 +1,7 @@
+#### Versioon 5.1.30 (28.04.2021)
+- Lisatud sõnarühmade harjutuse vertikaalse ja horisontaalse lugemise modifikatsioonid
+#### Versioon 5.1.29 (07.03.2021)
+- Lisatud sõnarühmade harjutuse "hägus" modifikatsioon
 #### Versioon 5.1.28 (14.02.2021)
 - Lisatud võimalus statistikas välja filtreerida oma tekstiga harjutused
 - Lisatud võimalus statistikas filtreerida ainult esimene lugemise katse järgi

@@ -80,6 +80,10 @@ const previousAchievements = {
       count: 0,
       time: 0,
     },
+    verticalReading: {
+      count: 0,
+      time: 0,
+    },
     schulteTables: {
       count: 0,
       time: 0,
@@ -150,7 +154,7 @@ test('data contains equaling levels and points', () => {
   testEquals(achievementData, 'monthly');
   testEquals(achievementData, 'progress');
 
-  expect(maxProgressPoints).toEqual(1283);
+  expect(maxProgressPoints).toEqual(1393);
 
   // console.log('Maximum progress points:', maxProgressPoints);
 });
@@ -257,6 +261,8 @@ test('returns achievement keys', () => {
     'progress.disappearing.time',
     'progress.wordGroups.count',
     'progress.wordGroups.time',
+    'progress.verticalReading.count',
+    'progress.verticalReading.time',
     'progress.schulteTables.count',
     'progress.schulteTables.time',
     'progress.concentration.count',

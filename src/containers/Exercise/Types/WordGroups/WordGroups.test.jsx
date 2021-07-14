@@ -49,7 +49,7 @@ describe('Wordgroups updateState', () => {
   });
 
   it('calculates initial speed', () => {
-    expect(currentState.speed).toBeCloseTo(0.24611, 5);
+    expect(currentState.speed).toBeCloseTo(0.24549, 5);
   });
 
   it('returns initial group index', () => {
@@ -98,29 +98,29 @@ describe('Wordgroups updateState', () => {
   it('calculates speed change', () => {
     const updatedOptions = { wordsPerMinute: 300 };
     const [updatedState] = updateStateFunction(textMetadata, updatedOptions, CANVAS_HEIGHT, currentState);
-    expect(updatedState.speed).toBeCloseTo(0.29533, 5);
+    expect(updatedState.speed).toBeCloseTo(0.29459, 5);
   });
 
   it('calculates updated group position', () => {
     const nextState = updateState(currentState, 250);
-    expect(nextState.groupPosition).toBeCloseTo(62, 0);
+    expect(nextState.groupPosition).toBeCloseTo(61, 0);
   });
 
   it('increases line index on new group', () => {
-    const nextState = updateState(currentState, 569);
+    const nextState = updateState(currentState, 571);
     expect(nextState.groupIndex).toEqual(1);
   });
 
   it('detects new line', () => {
-    const nextState = updateState(currentState, 569);
+    const nextState = updateState(currentState, 571);
     expect(nextState.newLine).toEqual(true);
   });
 
   it('detects new page', () => {
     const state = {
       ...currentState,
-      groupIndex: 35,
-      groupPosition: 80,
+      groupIndex: 36,
+      groupPosition: 90,
       marginTop: 0,
       drawRects: [
         {
@@ -138,8 +138,8 @@ describe('Wordgroups updateState', () => {
   it('increases margin top on new page', () => {
     const state = {
       ...currentState,
-      groupIndex: 35,
-      groupPosition: 80,
+      groupIndex: 36,
+      groupPosition: 90,
       marginTop: 0,
       drawRects: [
         {
@@ -157,8 +157,8 @@ describe('Wordgroups updateState', () => {
   it('returns no restore rects on new page', () => {
     const state = {
       ...currentState,
-      groupIndex: 35,
-      groupPosition: 80,
+      groupIndex: 36,
+      groupPosition: 90,
       marginTop: 0,
       drawRects: [
         {

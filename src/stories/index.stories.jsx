@@ -375,6 +375,11 @@ storiesOf('ReadingTest', module).add('Component', () => (
   <ReadingTest
     canvasHeight={400}
     canvasWidth={600}
+    timerState={{
+      started: true,
+      paused: false,
+      stopped: false,
+    }}
     selectedText={exampleText}
     translate={translate}
     exerciseOptions={exerciseOptions}

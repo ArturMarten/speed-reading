@@ -9,7 +9,8 @@ const DISAPPEARING_ID = 4;
 const WORD_GROUPS_ID = 5;
 const SCHULTE_TABLES_ID = 6;
 const CONCENTRATION_ID = 7;
-export const EXERCISE_COUNT = 7;
+const VERTICAL_READING_ID = 8;
+export const EXERCISE_COUNT = 8;
 
 const letters = 'abcdefghijklmnopqrsztuvwõäöüxy'.split('');
 const numbers = '0123456789'.split('');
@@ -68,7 +69,7 @@ export const generateStringPairs = (count, length, modification) => {
 export const getExerciseId = (exerciseType) => {
   switch (exerciseType) {
     case 'readingExercises':
-      return [READING_TEST_ID, READING_AID_ID, SCROLLING_ID, DISAPPEARING_ID, WORD_GROUPS_ID];
+      return [READING_TEST_ID, READING_AID_ID, SCROLLING_ID, DISAPPEARING_ID, WORD_GROUPS_ID, VERTICAL_READING_ID];
     case 'readingTest':
       return [READING_TEST_ID];
     case 'readingAid':
@@ -79,6 +80,8 @@ export const getExerciseId = (exerciseType) => {
       return [DISAPPEARING_ID];
     case 'wordGroups':
       return [WORD_GROUPS_ID];
+    case 'verticalReading':
+      return [VERTICAL_READING_ID];
     case 'schulteTables':
       return [SCHULTE_TABLES_ID];
     case 'concentration':
@@ -90,9 +93,17 @@ export const getExerciseId = (exerciseType) => {
 
 export const getExerciseStatisticsIds = (exerciseType) => {
   if (
-    ['readingExercises', 'readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups'].includes(exerciseType)
+    [
+      'readingExercises',
+      'readingTest',
+      'readingAid',
+      'scrolling',
+      'disappearing',
+      'wordGroups',
+      'verticalReading',
+    ].includes(exerciseType)
   ) {
-    return [READING_TEST_ID, READING_AID_ID, SCROLLING_ID, DISAPPEARING_ID, WORD_GROUPS_ID];
+    return [READING_TEST_ID, READING_AID_ID, SCROLLING_ID, DISAPPEARING_ID, WORD_GROUPS_ID, VERTICAL_READING_ID];
   }
   if (exerciseType === 'schulteTables') {
     return [SCHULTE_TABLES_ID];
@@ -115,6 +126,8 @@ export const getExerciseById = (exerciseId) => {
       return 'disappearing';
     case WORD_GROUPS_ID:
       return 'wordGroups';
+    case VERTICAL_READING_ID:
+      return 'verticalReading';
     case SCHULTE_TABLES_ID:
       return 'schulteTables';
     case CONCENTRATION_ID:
@@ -150,12 +163,9 @@ const reducer = (state = initialState, action) => {
           modification = 'group-highlighted';
           modificationOptions = [
             { value: 'group-highlighted' },
+            { value: 'group-blurry' },
             { value: 'group-single' },
-            /*
-            { value: 'group-spacing', disabled: true },
-            { value: 'group-vertical', disabled: true },
-            { value: 'group-rsvp', disabled: true },
-            */
+            { value: 'group-horizontal' },
           ];
           break;
         }
@@ -205,7 +215,7 @@ const reducer = (state = initialState, action) => {
     }
     case actionTypes.EXERCISE_PREPARED: {
       let preparation = {};
-      if (state.type === 'wordGroups') {
+      if (state.type === 'wordGroups' || state.type === 'verticalReading') {
         const wordGroups = splitIntoWordGroups(
           action.payload.selectedText.plainText,
           action.payload.exerciseOptions.groupCharacterCount,
