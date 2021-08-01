@@ -1,9 +1,12 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { usePrevious } from '../../../../utils/hooks';
+import { useEvent, useKeypress, usePrevious } from '../../../../utils/hooks';
 
-function HorizontalWordGroups(props) {
+const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+
+function MovingWordGroups(props) {
   const offscreenRef = useRef(null);
+  const alphabetRef = useRef(null);
   const timeoutRef = useRef();
   const requestRef = useRef();
   const previousTimeRef = useRef();
@@ -18,49 +21,90 @@ function HorizontalWordGroups(props) {
   const previousWordPerMinute = usePrevious(speedOptions.wordsPerMinute);
   const previousTimerState = usePrevious(props.timerState);
   const [wordGroups, setWordGroups] = useState([]);
+  const [averageCharacterWidth, setAverageCharacterWidth] = useState(0);
+  const [fixatorPosition, setFixatorPosition] = useState(0);
 
-  const loop = () => {
+  useKeypress('ArrowRight', () => {
+    if (speedOptions.manualMode) {
+      nextGroup();
+    }
+  });
+
+  useKeypress('Space', () => {
+    if (speedOptions.manualMode) {
+      nextGroup();
+    }
+  });
+
+  useEvent('touchend', () => {
+    if (speedOptions.manualMode) {
+      nextGroup();
+    }
+  });
+
+  const nextGroup = () => {
+    // New group
+    let finished = false;
+    setWordGroups((wordGroups) =>
+      wordGroups.map((group, index) => (index === groupIndexRef.current ? { ...group } : group)),
+    );
+    groupIndexRef.current += 1;
+    const newGroup = wordGroups[groupIndexRef.current];
+    if (!newGroup) {
+      // Exercise finished
+      finished = true;
+      props.onExerciseFinish();
+    }
+    return { finished };
+  };
+
+  const loop = useCallback(() => {
+    if (speedOptions.manualMode || wordGroups.length === 0) {
+      return;
+    }
     const time = performance.now();
-    let newPage = false;
     let finished = false;
     if (previousTimeRef.current !== undefined) {
       const deltaTime = time - previousTimeRef.current;
       const widthProgress = speedRef.current * deltaTime;
-      // const widthProgress = 0;
       groupPositionRef.current += widthProgress;
       const group = wordGroups[groupIndexRef.current];
-      if (groupPositionRef.current > group.text.length) {
-        // New group
-        setWordGroups((wordGroups) =>
-          wordGroups.map((group, index) => (index === groupIndexRef.current ? { ...group } : group)),
-        );
+      if (groupPositionRef.current >= group.text.length) {
         groupPositionRef.current -= group.text.length;
-        groupIndexRef.current += 1;
-        const newGroup = wordGroups[groupIndexRef.current];
-        if (!newGroup) {
-          // Exercise finished
-          finished = true;
-        }
+        ({ finished } = nextGroup());
       }
     }
     previousTimeRef.current = time;
-    if (newPage) {
-      delayedLoop(exerciseOptions.pageBreakDelay);
-    } else if (finished) {
-      props.onExerciseFinish();
-    } else {
+    if (!finished) {
       requestRef.current = requestAnimationFrame(loop);
     }
-  };
+  }, [wordGroups, speedOptions.manualMode]);
 
-  const delayedLoop = (delay) => {
-    timeoutRef.current = setTimeout(() => {
+  const delayedLoop = useCallback(
+    (delay) => {
+      timeoutRef.current = setTimeout(() => {
+        previousTimeRef.current = performance.now();
+        requestRef.current = requestAnimationFrame(loop);
+      }, delay);
+    },
+    [loop],
+  );
+
+  useEffect(() => {
+    if (speedOptions.manualMode) {
+      clearTimeout(timeoutRef.current);
+      cancelAnimationFrame(requestRef.current);
+    } else if (!props.timerState.stopped && !props.timerState.paused) {
       previousTimeRef.current = performance.now();
       requestRef.current = requestAnimationFrame(loop);
-    }, delay);
-  };
+    }
+    return () => {
+      clearTimeout(timeoutRef.current);
+      cancelAnimationFrame(requestRef.current);
+    };
+  }, [speedOptions.manualMode]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (previousTimerState) {
       if (
         (!previousTimerState.started && props.timerState.started) ||
@@ -93,16 +137,21 @@ function HorizontalWordGroups(props) {
   useEffect(() => {
     const wordCount = props.wordGroups.reduce((acc, group) => acc + group.length, 0);
     const totalTime = Math.round((wordCount / speedOptions.wordsPerMinute) * 60 * 1000);
-    // const totalWidth = children.reduce((acc, child) => acc + child.children[0].offsetWidth, 0);
     const totalCharacterCount = props.wordGroups.reduce((acc, group) => acc + group.join(' ').length, 0);
     speedRef.current = totalCharacterCount / totalTime;
     const node = [...offscreenRef.current.childNodes][0];
     const children = [...node.childNodes];
-    // console.log('totalCharacterCount', totalCharacterCount);
+    let maxWidth = 0;
+    props.wordGroups.forEach((_, index) => {
+      const groupElement = children[index];
+      maxWidth = Math.max(maxWidth, groupElement.offsetWidth);
+    });
+    const averageCharacterWidth = alphabetRef.current.children[0].offsetWidth / ALPHABET.length;
+    const fixatorPosition = props.canvasWidth / 2 - maxWidth / 2 + 5 * averageCharacterWidth;
     let margin = 0;
     const wordGroups = props.wordGroups.map((wordGroup, index) => {
       const groupElement = children[index];
-      const translateX = margin + props.canvasWidth / 2 - groupElement.offsetWidth / 2;
+      const translateX = margin + props.canvasWidth / 2 - maxWidth / 2;
       margin -= groupElement.offsetWidth;
       return {
         translateX,
@@ -110,6 +159,8 @@ function HorizontalWordGroups(props) {
       };
     });
     setWordGroups(wordGroups);
+    setAverageCharacterWidth(averageCharacterWidth);
+    setFixatorPosition(fixatorPosition);
   }, [props.wordGroups, props.canvasHeight]);
 
   useEffect(() => {
@@ -123,6 +174,21 @@ function HorizontalWordGroups(props) {
 
   return (
     <>
+      <div
+        ref={alphabetRef}
+        style={{
+          visibility: 'hidden',
+          width: props.canvasWidth,
+          height: 0,
+          fontSize: `${textOptions.fontSize / 0.75}px`,
+          fontFamily: textOptions.font,
+          lineHeight: `${textOptions.fontSize / 0.75}px`,
+          whiteSpace: 'pre',
+          overflow: 'hidden',
+        }}
+      >
+        <span>{ALPHABET}</span>
+      </div>
       <div
         ref={offscreenRef}
         style={{
@@ -139,7 +205,9 @@ function HorizontalWordGroups(props) {
       >
         <div>
           {props.wordGroups.map((wordGroup, index) => (
-            <span key={`${index} ${wordGroup.join(' ')}`}>{wordGroup.join(' ')}&nbsp;</span>
+            <span key={`${index} ${wordGroup.join(' ')}`} style={{ marginRight: `${averageCharacterWidth * 5}px` }}>
+              {wordGroup.join(' ')}&nbsp;&nbsp;&nbsp;
+            </span>
           ))}
         </div>
       </div>
@@ -157,13 +225,23 @@ function HorizontalWordGroups(props) {
           alignItems: 'center',
         }}
       >
+        <div
+          style={{
+            transform: `translateX(${fixatorPosition}px) translateY(${averageCharacterWidth}px)`,
+            background: 'greenyellow',
+            height: averageCharacterWidth,
+            width: averageCharacterWidth,
+            borderRadius: '100%',
+            flex: '0 0 auto',
+          }}
+        ></div>
         <div style={{ transform: `translateX(${group ? group.translateX : 0}px)` }}>
           {wordGroups.map((wordGroup, index) => (
             <span
               key={`${index} ${wordGroup.text}`}
               style={{ color: groupIndexRef.current === index ? 'black' : 'gray' }}
             >
-              {wordGroup.text}&nbsp;
+              {wordGroup.text}&nbsp;&nbsp;&nbsp;
             </span>
           ))}
         </div>
@@ -172,4 +250,4 @@ function HorizontalWordGroups(props) {
   );
 }
 
-export default HorizontalWordGroups;
+export default MovingWordGroups;

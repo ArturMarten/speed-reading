@@ -1,5 +1,7 @@
+#### Version 5.1.31 (01.08.2021)
+- Improvements to vertical reading and moving text exercises
 #### Version 5.1.30 (28.04.2021)
-- Added word groups vertical and horizontal reading modifications
+- Added vertical reading and moving text exercises
 #### Version 5.1.29 (07.03.2021)
 - Added word groups "blurry" modification
 #### Version 5.1.28 (14.02.2021)

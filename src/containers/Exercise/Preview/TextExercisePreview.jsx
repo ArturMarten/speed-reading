@@ -8,7 +8,7 @@ import { Disappearing } from '../Types/Disappearing/Disappearing';
 import { ReadingAid } from '../Types/ReadingAid/ReadingAid';
 import { ReadingTest } from '../Types/ReadingTest/ReadingTest';
 import { Scrolling } from '../Types/Scrolling/Scrolling';
-import HorizontalWordGroups from '../Types/WordGroups/HorizontalWordGroups';
+import MovingWordGroups from '../Types/MovingWordGroups/MovingWordGroups';
 import VerticalReading from '../Types/VerticalReading/VerticalReading';
 import { WordGroups } from '../Types/WordGroups/WordGroups';
 
@@ -139,22 +139,6 @@ export class TextExercisePreview extends Component {
             />
           );
         case 'wordGroups':
-          if (this.props.modification === 'group-horizontal') {
-            return (
-              <HorizontalWordGroups
-                canvasHeight={CANVAS_HEIGHT}
-                canvasWidth={canvasWidth}
-                modification={this.props.modification}
-                selectedText={selectedText}
-                wordGroups={wordGroups}
-                timerState={this.state.timerState}
-                onExerciseFinish={this.restart}
-                textOptions={this.props.textOptions}
-                exerciseOptions={this.props.exerciseOptions}
-                speedOptions={this.props.speedOptions}
-              />
-            );
-          }
           return (
             <WordGroups
               canvasHeight={CANVAS_HEIGHT}
@@ -172,6 +156,21 @@ export class TextExercisePreview extends Component {
         case 'verticalReading':
           return (
             <VerticalReading
+              canvasHeight={CANVAS_HEIGHT}
+              canvasWidth={canvasWidth}
+              modification={this.props.modification}
+              selectedText={selectedText}
+              wordGroups={wordGroups}
+              timerState={this.state.timerState}
+              onExerciseFinish={this.restart}
+              textOptions={this.props.textOptions}
+              exerciseOptions={this.props.exerciseOptions}
+              speedOptions={this.props.speedOptions}
+            />
+          );
+        case 'movingWordGroups':
+          return (
+            <MovingWordGroups
               canvasHeight={CANVAS_HEIGHT}
               canvasWidth={canvasWidth}
               modification={this.props.modification}

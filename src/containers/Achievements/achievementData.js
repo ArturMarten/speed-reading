@@ -107,6 +107,16 @@ export const achievementData = {
         points: [0, 1],
       },
     },
+    movingWordGroups: {
+      count: {
+        levels: [0, 2],
+        points: [0, 1],
+      },
+      time: {
+        levels: [0, m(5)],
+        points: [0, 1],
+      },
+    },
     schulteTables: {
       count: {
         levels: [0, 5],
@@ -311,6 +321,16 @@ export const achievementData = {
       },
     },
     verticalReading: {
+      count: {
+        levels: [0, 2, 5, 10, 15, 25, 35, 50, 65, 80, 100],
+        points: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      },
+      time: {
+        levels: [0, m(5), m(10), m(25), m(45), hm(1, 10), hm(1, 40), hm(2, 15), h(3), hm(3, 45), hm(4, 30)],
+        points: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      },
+    },
+    movingWordGroups: {
       count: {
         levels: [0, 2, 5, 10, 15, 25, 35, 50, 65, 80, 100],
         points: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],

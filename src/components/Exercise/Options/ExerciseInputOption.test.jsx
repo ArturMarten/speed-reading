@@ -21,7 +21,7 @@ afterEach(() => {
   updateValue.mockReset();
 });
 
-test('updates value on change', () => {
+test('does update value on change', () => {
   const { container, rerender } = render(
     <table>
       <tbody>
@@ -65,7 +65,7 @@ test('calls function on enter and on blur', async () => {
   updateValue.mockReset();
 
   fireEvent.change(input, { target: { value: '105' } });
-  expect(input.value).toEqual('100');
+  expect(input.value).toEqual('105');
   fireEvent.change(input, { target: { value: '95' } });
   expect(input.value).toEqual('95');
   fireEvent.keyPress(input, enterKeyOptions);
@@ -74,7 +74,7 @@ test('calls function on enter and on blur', async () => {
   updateValue.mockReset();
 
   fireEvent.change(input, { target: { value: '-5' } });
-  expect(input.value).toEqual('0');
+  expect(input.value).toEqual('-5');
   fireEvent.blur(input);
   await waitFor(() => expect(updateValue).toHaveBeenCalledTimes(1));
   expect(updateValue).toHaveBeenCalledWith(0);

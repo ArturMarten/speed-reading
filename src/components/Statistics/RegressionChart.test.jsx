@@ -33,7 +33,9 @@ test('draws regression chart', () => {
   expect(svg).toHaveAttribute('height', '400');
   expect(screen.getByText('Regression Chart title')).toBeInTheDocument();
   const legend = container.querySelector('g.legend');
-  expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');
+  expect(legend).toHaveTextContent(
+    'Legend [algne: 1, lõpp: 3, muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]',
+  );
   expect(screen.getByText('X Label')).toBeInTheDocument();
   expect(screen.getByText('Y Label')).toBeInTheDocument();
   expect(screen.getByText(translate('regression-chart.no-data')).style.opacity.charAt(0)).toEqual('0');
@@ -101,5 +103,7 @@ test('updates regression chart', async () => {
   );
   const legend = container.querySelector('g.legend');
   await waitFor(() => expect(noDataElement.style.opacity.charAt(0)).toEqual('0'));
-  expect(legend).toHaveTextContent('Legend [muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]');
+  expect(legend).toHaveTextContent(
+    'Legend [algne: 1, lõpp: 3, muutus: +1 (+66.67%), keskmine: 2.00, standardhälve: 0.82]',
+  );
 });

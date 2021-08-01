@@ -138,6 +138,7 @@ export const STEP_WORDS_PER_MINUTE = 10;
 
 const initialSpeedOptions = {
   wordsPerMinute: 200,
+  manualMode: false,
 };
 
 const defaultVisibleSpeedOptions = ['wordsPerMinute'];
@@ -252,6 +253,18 @@ const reducer = (state = initialState, action) => {
             visibleTextOptions: [...defaultVisibleTextOptions],
             visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'groupCharacterCount'],
             visibleSpeedOptions: [...defaultVisibleSpeedOptions],
+          });
+        case 'verticalReading':
+          return updateObject(state, {
+            visibleTextOptions: [...defaultVisibleTextOptions],
+            visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'groupCharacterCount'],
+            visibleSpeedOptions: [...defaultVisibleSpeedOptions, 'manualMode'],
+          });
+        case 'movingWordGroups':
+          return updateObject(state, {
+            visibleTextOptions: [...defaultVisibleTextOptions],
+            visibleExerciseOptions: [...defaultVisibleExerciseOptions, 'groupCharacterCount'],
+            visibleSpeedOptions: [...defaultVisibleSpeedOptions, 'manualMode'],
           });
         case 'schulteTables':
           return updateObject(state, {

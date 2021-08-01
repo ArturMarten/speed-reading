@@ -13,6 +13,7 @@ const readingExercises = [
   'disappearing',
   'wordGroups',
   'verticalReading',
+  'movingWordGroups',
 ];
 
 export class StatisticsTable extends Component {

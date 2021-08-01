@@ -18,9 +18,10 @@ function ExerciseCheckOption({ name, description, value, updateValue }) {
   };
 
   return (
-    <Table.Row verticalAlign="middle">
+    <Table.Row verticalAlign="middle" style={{ whiteSpace: 'nowrap' }}>
       <Table.Cell>
         {name}
+        &nbsp;
         <HelpPopup position="right center" content={description} />
       </Table.Cell>
       <Table.Cell colSpan={3}>

@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { usePrevious } from '../../../../utils/hooks';
+import { useEvent, useKeypress, usePrevious } from '../../../../utils/hooks';
 
 function VerticalReading(props) {
   const offscreenRef = useRef(null);
@@ -19,8 +19,53 @@ function VerticalReading(props) {
   const previousTimerState = usePrevious(props.timerState);
   const [pageIndex, setPageIndex] = useState(0);
   const [wordGroups, setWordGroups] = useState([]);
+  const [maxWidth, setMaxWidth] = useState(0);
 
-  const loop = () => {
+  useKeypress('ArrowRight', (event) => {
+    if (speedOptions.manualMode) {
+      event.preventDefault();
+      nextGroup();
+    }
+  });
+
+  useKeypress('Space', (event) => {
+    if (speedOptions.manualMode) {
+      event.preventDefault();
+      nextGroup();
+    }
+  });
+
+  useEvent('touchend', () => {
+    if (speedOptions.manualMode) {
+      nextGroup();
+    }
+  });
+
+  const nextGroup = () => {
+    const currentGroup = wordGroups[groupIndexRef.current];
+    let finished = false;
+    let newPage = false;
+    setWordGroups((wordGroups) =>
+      wordGroups.map((group, index) => (index === groupIndexRef.current ? { ...group, read: true } : group)),
+    );
+    groupIndexRef.current += 1;
+    const newGroup = wordGroups[groupIndexRef.current];
+    if (!newGroup) {
+      // Exercise finished
+      finished = true;
+      props.onExerciseFinish();
+    } else if (currentGroup.pageIndex !== newGroup.pageIndex) {
+      // New page
+      newPage = true;
+      setPageIndex(newGroup.pageIndex);
+    }
+    return { finished, newPage };
+  };
+
+  const loop = useCallback(() => {
+    if (speedOptions.manualMode || wordGroups.length === 0) {
+      return;
+    }
     const time = performance.now();
     let newPage = false;
     let finished = false;
@@ -29,42 +74,44 @@ function VerticalReading(props) {
       const widthProgress = speedRef.current * deltaTime;
       groupPositionRef.current += widthProgress;
       const group = wordGroups[groupIndexRef.current];
-      if (groupPositionRef.current > group.text.length) {
-        // New group
-        setWordGroups((wordGroups) =>
-          wordGroups.map((group, index) => (index === groupIndexRef.current ? { ...group, read: true } : group)),
-        );
+      if (groupPositionRef.current >= group.text.length) {
         groupPositionRef.current -= group.text.length;
-        groupIndexRef.current += 1;
-        const newGroup = wordGroups[groupIndexRef.current];
-        if (!newGroup) {
-          // Exercise finished
-          finished = true;
-        } else if (group.pageIndex !== newGroup.pageIndex) {
-          // New page
-          newPage = true;
-          setPageIndex(newGroup.pageIndex);
-        }
+        ({ finished, newPage } = nextGroup());
       }
     }
     previousTimeRef.current = time;
     if (newPage) {
       delayedLoop(exerciseOptions.pageBreakDelay);
-    } else if (finished) {
-      props.onExerciseFinish();
-    } else {
+    } else if (!finished) {
       requestRef.current = requestAnimationFrame(loop);
     }
-  };
+  }, [exerciseOptions.pageBreakDelay, wordGroups, speedOptions.manualMode]);
 
-  const delayedLoop = (delay) => {
-    timeoutRef.current = setTimeout(() => {
+  const delayedLoop = useCallback(
+    (delay) => {
+      timeoutRef.current = setTimeout(() => {
+        previousTimeRef.current = performance.now();
+        requestRef.current = requestAnimationFrame(loop);
+      }, delay);
+    },
+    [loop],
+  );
+
+  useEffect(() => {
+    if (speedOptions.manualMode) {
+      clearTimeout(timeoutRef.current);
+      cancelAnimationFrame(requestRef.current);
+    } else if (!props.timerState.stopped && !props.timerState.paused) {
       previousTimeRef.current = performance.now();
       requestRef.current = requestAnimationFrame(loop);
-    }, delay);
-  };
+    }
+    return () => {
+      clearTimeout(timeoutRef.current);
+      cancelAnimationFrame(requestRef.current);
+    };
+  }, [speedOptions.manualMode]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (previousTimerState) {
       if (
         (!previousTimerState.started && props.timerState.started) ||
@@ -100,19 +147,19 @@ function VerticalReading(props) {
 
     const wordCount = props.wordGroups.reduce((acc, group) => acc + group.length, 0);
     const totalTime = Math.round((wordCount / speedOptions.wordsPerMinute) * 60 * 1000);
-    // const totalWidth = children.reduce((acc, child) => acc + child.children[0].offsetWidth, 0);
     const totalCharacterCount = props.wordGroups.reduce((acc, group) => acc + group.join(' ').length, 0);
     speedRef.current = totalCharacterCount / totalTime;
 
-    // console.log('totalCharacterCount', totalCharacterCount);
     const marginTop = children[0].offsetTop;
     let pageMargin = 0;
     let pageIndex = 0;
+    let maxWidth = 0;
     const wordGroups = props.wordGroups.map((wordGroup, index) => {
-      const node = children[index];
-      if (node.offsetTop - marginTop - pageMargin + node.offsetHeight > props.canvasHeight) {
+      const groupElement = children[index];
+      maxWidth = Math.max(maxWidth, groupElement.children[0].offsetWidth);
+      if (groupElement.offsetTop - marginTop - pageMargin + groupElement.offsetHeight > props.canvasHeight) {
         pageIndex += 1;
-        pageMargin = node.offsetTop;
+        pageMargin = groupElement.offsetTop;
       }
       return {
         text: wordGroup.join(' '),
@@ -121,6 +168,7 @@ function VerticalReading(props) {
       };
     });
     setWordGroups(wordGroups);
+    setMaxWidth(maxWidth + 1);
   }, [props.wordGroups, props.canvasHeight]);
 
   useEffect(() => {
@@ -163,7 +211,15 @@ function VerticalReading(props) {
         {wordGroups
           .filter((wordGroup) => wordGroup.pageIndex === pageIndex)
           .map((wordGroup, index) => (
-            <div key={`${index} ${wordGroup.text}`} style={{ visibility: wordGroup.read ? 'hidden' : 'visible' }}>
+            <div
+              key={`${index} ${wordGroup.text}`}
+              style={{
+                visibility: wordGroup.read ? 'hidden' : 'visible',
+                width: maxWidth,
+                margin: '0 auto',
+                textAlign: 'left',
+              }}
+            >
               <span>{wordGroup.text}</span>
             </div>
           ))}

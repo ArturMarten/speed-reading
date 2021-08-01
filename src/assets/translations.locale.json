@@ -33,6 +33,7 @@
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "vertical-reading": ["Vertikaalne lugemine", "Vertical reading"],
+    "moving-word-groups": ["Liikuv tekst", "Moving text"],
     "help-exercises": ["Abiharjutused", "Help exercises"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
@@ -423,13 +424,19 @@
       "See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.",
       "This exercise increases perceptual span, decreases fixation time and eliminates regressions."
     ],
-    "goal-verticalReading": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
+    "goal-wordGroups": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
     "title-verticalReading": ["Vertikaalse lugemise harjutus", "Vertical reading exercise"],
     "description-verticalReading": [
       "See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.",
       "This exercise increases perceptual span, decreases fixation time and eliminates regressions."
     ],
-    "goal-wordGroups": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
+    "goal-verticalReading": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
+    "title-movingWordGroups": ["Liikuva teksti harjutus", "Moving text exercise"],
+    "description-movingWordGroups": [
+      "See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.",
+      "This exercise increases perceptual span, decreases fixation time and eliminates regressions."
+    ],
+    "goal-movingWordGroups": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
     "title-schulteTables": ["Schulte tabelite harjutus", "Schulte tables exercise"],
     "description-schulteTables": [
       "See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.",
@@ -458,9 +465,8 @@
     "group-highlighted": ["Esiletõstetud", "Highlighted"],
     "group-blurry": ["Hägus", "Blurry"],
     "group-single": ["Üksik rühm", "Single group"],
-    "group-spacing": ["Muudetav vahe", "Changable spacing"],
-    "group-horizontal": ["Horisontaalselt", "Horizontal"],
-    "group-rsvp": ["Välktehnika", "RSVP"],
+    "group-vertical": ["Vertikaalne lugemine", "Vertical reading"],
+    "group-horizontal": ["Liikuv tekst", "Moving text"],
     "numbers": ["Numbrid", "Numbers"],
     "letters-lowercase": ["Väiketähed", "Lowercase letters"],
     "letters-uppercase": ["Suurtähed", "Uppercase letters"],
@@ -687,7 +693,9 @@
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
-    "words-per-minute": ["sõna minutis", "words per minute"]
+    "words-per-minute": ["sõna minutis", "words per minute"],
+    "manual-mode": ["Manuaalne režiim", "Manual mode"],
+    "manual-mode-description": ["Sisekõne mahasurumine", "Inner speech suppression"]
   },
   "text-analysis": {
     "modal-header": ["Lugemisteksti keerukuse hindamine", "Reading text complexity estimation"],
@@ -844,6 +852,14 @@
       "Harjuta ${ temporal }${ value } vertikaalset lugemist",
       "Exercise vertical reading for ${ value }${ temporal }"
     ],
+    "temporal.movingWordGroups.count": [
+      "Soorita ${ temporal }${ value } liikuva teksti harjutust",
+      "Complete ${ value } moving text exercises${ temporal }"
+    ],
+    "temporal.movingWordGroups.time": [
+      "Harjuta ${ temporal }${ value } liikuva tekstiga",
+      "Exercise moving text for ${ value }${ temporal }"
+    ],
     "temporal.schulteTables.count": [
       "Soorita ${ temporal }${ value } Schulte tabelite harjutust",
       "Complete ${ value } Schulte tables exercises${ temporal }"
@@ -898,6 +914,7 @@
     "disappearing-text": ["Kustuv tekst", "Disappearing text"],
     "word-groups": ["Sõnarühmad", "Word groups"],
     "vertical-reading": ["Vertikaalne lugemine", "Vertical reading"],
+    "moving-word-groups": ["Liikuv tekst", "Moving text"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
     "exercise-index": ["Harjutuse järjekorranumber", "Exercise index"],
@@ -934,6 +951,8 @@
   },
   "regression-chart": {
     "no-data": ["Valitud perioodil andmed puuduvad", "No data in selected period"],
+    "initial": ["algne", "initial"],
+    "final": ["lõpp", "final"],
     "change": ["muutus", "change"],
     "average": ["keskmine", "average"],
     "standard-deviation": ["standardhälve", "standard deviation"],

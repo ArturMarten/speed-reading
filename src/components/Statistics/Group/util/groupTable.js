@@ -383,6 +383,7 @@ export const exerciseTranslateMapping = {
   disappearing: 'disappearing-text',
   wordGroups: 'word-groups',
   verticalReading: 'vertical-reading',
+  movingWordGroups: 'moving-word-groups',
   schulteTables: 'schulte-tables',
   concentration: 'concentration',
 };

@@ -188,7 +188,7 @@ export class TextExercisePreparation extends Component {
               <Header as="h4" textAlign="center">
                 {this.props.translate('exercise-preparation.exercise')}
               </Header>
-              <table style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+              <table>
                 <tbody>
                   <SpeedOptions />
                 </tbody>
@@ -253,10 +253,10 @@ export class TextExercisePreparation extends Component {
                         position="bottom center"
                       />
                     </Header>
-                    {this.props.visibleSpeedOptions.length === 0 && this.props.visibleExerciseOptions.length === 0 ? (
+                    {this.props.visibleExerciseOptions.length === 0 ? (
                       <p>{this.props.translate('exercise-preparation.exercise-options-missing')}</p>
                     ) : (
-                      <table>
+                      <table style={{ width: '100%' }}>
                         <tbody>
                           <ExerciseOptions />
                         </tbody>
@@ -290,7 +290,7 @@ export class TextExercisePreparation extends Component {
                     {this.props.visibleTextOptions.length === 0 ? (
                       <p>{this.props.translate('exercise-preparation.text-options-missing')}</p>
                     ) : (
-                      <table>
+                      <table style={{ width: '100%' }}>
                         <tbody>
                           <TextOptions exerciseType={this.props.type} />
                         </tbody>

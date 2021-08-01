@@ -125,6 +125,7 @@ export class Statistics extends Component {
     { text: this.props.translate('statistics.disappearing-text'), value: 'disappearing' },
     { text: this.props.translate('statistics.word-groups'), value: 'wordGroups' },
     { text: this.props.translate('statistics.vertical-reading'), value: 'verticalReading' },
+    { text: this.props.translate('statistics.moving-word-groups'), value: 'movingWordGroups' },
     { text: this.props.translate('statistics.schulte-tables'), value: 'schulteTables' },
     { text: this.props.translate('statistics.concentration'), value: 'concentration' },
   ];

@@ -6,6 +6,7 @@ import * as actionCreators from '../../../store/actions';
 import ExerciseInputOption from '../../../components/Exercise/Options/ExerciseInputOption';
 
 import { MIN_WORDS_PER_MINUTE, MAX_WORDS_PER_MINUTE, STEP_WORDS_PER_MINUTE } from '../../../store/reducers/options';
+import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
 export class SpeedOptions extends PureComponent {
   state = {};
@@ -13,8 +14,17 @@ export class SpeedOptions extends PureComponent {
   render() {
     return (
       <Fragment>
+        {this.props.visibleOptions.indexOf('manualMode') !== -1 ? (
+          <ExerciseCheckOption
+            name={this.props.translate('speed-options.manual-mode')}
+            description={this.props.translate('speed-options.manual-mode-description')}
+            value={this.props.options.manualMode}
+            updateValue={(value) => this.props.onSubmit(Object.assign({}, { manualMode: value }))}
+          />
+        ) : null}
         {this.props.visibleOptions.indexOf('wordsPerMinute') !== -1 ? (
           <ExerciseInputOption
+            style={{ visibility: this.props.options.manualMode ? 'hidden' : 'visible' }}
             name={this.props.translate('speed-options.reading-speed')}
             unit={this.props.translate('speed-options.words-per-minute')}
             value={this.props.options.wordsPerMinute}

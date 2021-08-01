@@ -15,8 +15,9 @@ function ExerciseInputOption({
   updateValue,
   updateDelay,
   keyboardChangesEnabled,
+  style,
 }) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value);
   const timeout = useRef(null);
 
   useEffect(() => {
@@ -31,21 +32,22 @@ function ExerciseInputOption({
           updateValue(submittedValue);
         }, updateDelay);
       }
-      setInputValue(submittedValue);
     },
     [updateDelay, updateValue, value],
   );
 
   const changeHandler = (event) => {
     if (/^-?\d*$/.test(event.target.value)) {
-      let updatedValue = +event.target.value;
+      const newValue = +event.target.value;
+      let updatedValue = newValue;
       if (updatedValue > max) {
         updatedValue = max;
       } else if (updatedValue < min) {
         updatedValue = min;
       }
+      setInputValue(newValue);
       if (updatedValue !== inputValue) {
-        setInputValue(updatedValue);
+        onSubmit(updatedValue);
       }
     }
   };
@@ -60,8 +62,10 @@ function ExerciseInputOption({
       } else {
         updatedValue = newValue;
       }
-      onSubmit(updatedValue);
       setInputValue(updatedValue);
+      if (updatedValue !== inputValue) {
+        onSubmit(updatedValue);
+      }
     },
     [inputValue, max, min, onSubmit],
   );
@@ -98,11 +102,18 @@ function ExerciseInputOption({
   }, [keyPressHandler, keyboardChangesEnabled]);
 
   const blurHandler = () => {
-    onSubmit(inputValue);
+    let updatedValue = inputValue;
+    if (inputValue > max) {
+      updatedValue = max;
+    } else if (inputValue < min) {
+      updatedValue = min;
+    }
+    setInputValue(updatedValue);
+    onSubmit(updatedValue);
   };
 
   return (
-    <Table.Row verticalAlign="middle">
+    <Table.Row verticalAlign="middle" style={{ whiteSpace: 'nowrap', ...style }}>
       <Table.Cell>
         {name}
         &nbsp;
@@ -118,6 +129,7 @@ function ExerciseInputOption({
         <Input
           type="text"
           transparent
+          style={{ width: '100%' }}
           value={inputValue}
           onChange={changeHandler}
           onKeyPress={keyPressHandler}

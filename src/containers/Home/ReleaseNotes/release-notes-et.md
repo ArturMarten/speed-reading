@@ -1,5 +1,7 @@
+#### Versioon 5.1.31 (01.08.2021)
+- Täiendused vertikaalse lugemise ja liikuva teksti harjutustele
 #### Versioon 5.1.30 (28.04.2021)
-- Lisatud sõnarühmade harjutuse vertikaalse ja horisontaalse lugemise modifikatsioonid
+- Lisatud vertikaalse lugemise ja liikuva teksti harjutused
 #### Versioon 5.1.29 (07.03.2021)
 - Lisatud sõnarühmade harjutuse "hägus" modifikatsioon
 #### Versioon 5.1.28 (14.02.2021)

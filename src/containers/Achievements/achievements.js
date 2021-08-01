@@ -3,7 +3,15 @@ import { exerciseAttemptResultFilter, exerciseAttemptMap } from '../../store/red
 import * as api from '../../api';
 import { achievementData } from './achievementData';
 
-const readingExercises = ['readingTest', 'readingAid', 'scrolling', 'disappearing', 'wordGroups', 'verticalReading'];
+const readingExercises = [
+  'readingTest',
+  'readingAid',
+  'scrolling',
+  'disappearing',
+  'wordGroups',
+  'verticalReading',
+  'movingWordGroups',
+];
 
 export const initialAchievements = {
   points: 0,
@@ -73,6 +81,10 @@ export const initialAchievements = {
       time: 0,
     },
     verticalReading: {
+      count: 0,
+      time: 0,
+    },
+    movingWordGroups: {
       count: 0,
       time: 0,
     },

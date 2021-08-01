@@ -9,7 +9,7 @@ import Disappearing from '../Types/Disappearing/Disappearing';
 import ReadingAid from '../Types/ReadingAid/ReadingAid';
 import ReadingTest from '../Types/ReadingTest/ReadingTest';
 import Scrolling from '../Types/Scrolling/Scrolling';
-import HorizontalWordGroups from '../Types/WordGroups/HorizontalWordGroups';
+import MovingWordGroups from '../Types/MovingWordGroups/MovingWordGroups';
 import VerticalReading from '../Types/VerticalReading/VerticalReading';
 import WordGroups from '../Types/WordGroups/WordGroups';
 import './TextExercise.css';
@@ -99,18 +99,6 @@ export class TextExercise extends Component {
             />
           );
         case 'wordGroups':
-          if (this.props.exerciseModification === 'group-horizontal') {
-            return (
-              <HorizontalWordGroups
-                canvasHeight={this.state.canvasHeight}
-                canvasWidth={this.state.canvasWidth}
-                selectedText={this.props.selectedText}
-                wordGroups={this.props.wordGroups}
-                timerState={this.props.timerState}
-                onExerciseFinish={this.onExerciseFinishHandler}
-              />
-            );
-          }
           return (
             <WordGroups
               canvasHeight={this.state.canvasHeight}
@@ -132,6 +120,17 @@ export class TextExercise extends Component {
               onExerciseFinish={this.onExerciseFinishHandler}
             />
           );
+        case 'movingWordGroups':
+          return (
+            <MovingWordGroups
+              canvasHeight={this.state.canvasHeight}
+              canvasWidth={this.state.canvasWidth}
+              selectedText={this.props.selectedText}
+              wordGroups={this.props.wordGroups}
+              timerState={this.props.timerState}
+              onExerciseFinish={this.onExerciseFinishHandler}
+            />
+          );
         default:
           return null;
       }
@@ -139,8 +138,8 @@ export class TextExercise extends Component {
     return (
       <Grid container>
         <Grid.Row verticalAlign="middle" style={{ paddingBottom: 0 }}>
-          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8}>
-            <table style={{ height: '46px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+          <Grid.Column mobile={16} tablet={8} computer={8}>
+            <table style={{ marginTop: '11px' }}>
               <tbody>
                 <SpeedOptions exerciseType={this.props.type} />
               </tbody>

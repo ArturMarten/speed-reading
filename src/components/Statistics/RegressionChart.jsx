@@ -153,7 +153,7 @@ export class RegressionChart extends Component {
     const legend = svg
       .append('g')
       .attr('class', 'legend')
-      .attr('transform', `translate(${width * 0.4}, ${FONT_SIZE})`);
+      .attr('transform', `translate(${width * 0.33}, ${FONT_SIZE + 10})`);
     legend
       .append('rect')
       .attr('class', 'legend-color')
@@ -164,7 +164,17 @@ export class RegressionChart extends Component {
       .style('fill', this.props.dataLineColor[0]);
     const legendText = legend.append('text').attr('x', 20).attr('y', 10);
     legendText.append('tspan').attr('class', 'legend-title').text(this.props.legendTitles[0]);
-    legendText.append('tspan').text(` [${this.props.translate('regression-chart.change')}: `);
+    legendText.append('tspan').text(` [${this.props.translate('regression-chart.initial')}: `);
+    legendText
+      .append('tspan')
+      .attr('class', 'legend-initial')
+      .text(`${initial.toFixed(0)}`);
+    legendText.append('tspan').text(`, ${this.props.translate('regression-chart.final')}: `);
+    legendText
+      .append('tspan')
+      .attr('class', 'legend-final')
+      .text(`${final.toFixed(0)}`);
+    legendText.append('tspan').text(`, ${this.props.translate('regression-chart.change')}: `);
     legendText
       .append('tspan')
       .attr('class', 'legend-change')
@@ -313,6 +323,16 @@ export class RegressionChart extends Component {
       // Update legend
       svg.select('.legend-title').text(this.props.legendTitles[0]);
       svg.select('.legend-color').style('fill', this.props.dataLineColor[0]);
+      svg
+        .select('.legend-initial')
+        .transition()
+        .duration(TRANSITION_DURATION)
+        .text(`${initial.toFixed(0)}`);
+      svg
+        .select('.legend-final')
+        .transition()
+        .duration(TRANSITION_DURATION)
+        .text(`${final.toFixed(0)}`);
       svg
         .select('.legend-change')
         .transition()
