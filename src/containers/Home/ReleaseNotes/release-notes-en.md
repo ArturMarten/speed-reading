@@ -1,3 +1,12 @@
+#### Versioon 5.1.34 (05.02.2022)
+- Changes based on the feedback
+  - Added confirmation when manually stopping exercise
+  - Added option to hide stopwatch in exercise options
+  - Fixed typos in reading texts
+#### Versioon 5.1.33 (26.01.2022)
+- Minor changes
+#### Version 5.1.32 (07.08.2021)
+- Added Estonian tetragrams modification to concentration exercise
 #### Version 5.1.31 (01.08.2021)
 - Improvements to vertical reading and moving text exercises
 #### Version 5.1.30 (28.04.2021)

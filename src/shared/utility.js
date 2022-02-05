@@ -6,7 +6,8 @@ export const updateObject = (oldObject, newValues) => ({
 });
 
 export const isEmail = (value) => {
-  const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  const pattern =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   return pattern.test(value);
 };
 
@@ -186,6 +187,10 @@ export const serverSuccessMessage = (response) =>
 
 export const serverErrorMessage = (error) =>
   error.response && error.response.data && error.response.data.error ? error.response.data.error : error.message;
+
+export const getRandomBoolean = () => {
+  return Math.random() < 0.5;
+};
 
 export const shuffle = (array) => {
   const shuffled = array;

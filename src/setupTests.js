@@ -9,6 +9,10 @@ afterEach(() => server.resetHandlers());
 
 jest.mock('html2canvas', () => () => Promise.resolve({ toDataURL: () => {} }));
 
+global.beforeEach(() => {
+  global.confirm = jest.fn().mockImplementation((_) => true);
+});
+
 global.afterEach(() => {
   jest.resetAllMocks();
 });

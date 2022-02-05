@@ -2,9 +2,9 @@ Tegemist on **tasuta** veebipõhise **kiirlugemise** rakendusega. Alustamiseks v
 
 Rakendus on kasutusel **Tartu Ülikoolis** kiirlugemise kursusel, mis toimub nii sügis- kui ka kevadsemestril. Täpsemalt **ÕISis**.
 
-Rakenduse kasutajatel, kes on sooritanud vähemalt **80 lugemisharjutust**, on:
-- keskmine teksti **lugemiskiirus** tõusnud **üle 30%**
-- keskmine teksti **omandamise kiirus** tõusnud **üle 30%**
-- keskmine teksti **omandamise tase** püsinud **70%** juures
+Rakenduse kasutajatel, kes on sooritanud vähemalt **50 esmalugemise harjutust**, on:
+- keskmine teksti **lugemiskiirus** tõusnud **üle 35%**
+- keskmine teksti **omandamise kiirus** tõusnud **üle 40%**
+- keskmine teksti **omandamise tase** tõusnud **3%**
 
 Rakendus on võitnud **I preemia** 2019.a kasvatusteaduslike tööde **riiklikul konkursil** didaktilis-rakenduslike tööde kategoorias. [Rohkem infot](https://www.etag.ee/tegevused/konkursid/kasvatusteaduslike-toode-konkurss/varasemad-konkursid/).

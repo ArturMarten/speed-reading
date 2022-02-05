@@ -108,13 +108,14 @@ export const MIN_SYMBOL_GROUP_COUNT = 20;
 export const MAX_SYMBOL_GROUP_COUNT = 40;
 export const STEP_SYMBOL_GROUP_COUNT = 1;
 export const MIN_SYMBOL_COUNT = 2;
-export const MAX_SYMBOL_COUNT = 15;
+export const MAX_SYMBOL_COUNT = 25;
 export const STEP_SYMBOL_COUNT = 1;
 export const MIN_COLUMN_SPACING = 10;
 export const MAX_COLUMN_SPACING = 200;
 export const STEP_COLUMN_SPACING = 10;
 
 const initialExerciseOptions = {
+  showStopwatch: true,
   startDelay: 300,
   lineBreakDelay: 100,
   pageBreakDelay: 400,
@@ -130,7 +131,7 @@ const initialExerciseOptions = {
   columnSpacing: 30,
 };
 
-const defaultVisibleExerciseOptions = ['startDelay', 'lineBreakDelay', 'pageBreakDelay'];
+const defaultVisibleExerciseOptions = ['showStopwatch', 'startDelay', 'lineBreakDelay', 'pageBreakDelay'];
 
 export const MIN_WORDS_PER_MINUTE = 10;
 export const MAX_WORDS_PER_MINUTE = 700;
@@ -227,7 +228,7 @@ const reducer = (state = initialState, action) => {
         case 'readingTest':
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions],
-            visibleExerciseOptions: [],
+            visibleExerciseOptions: ['showStopwatch'],
             visibleSpeedOptions: [],
           });
         case 'readingAid':
@@ -239,7 +240,7 @@ const reducer = (state = initialState, action) => {
         case 'scrolling':
           return updateObject(state, {
             visibleTextOptions: [...defaultVisibleTextOptions, 'lineCount'],
-            visibleExerciseOptions: ['startDelay'],
+            visibleExerciseOptions: ['showStopwatch', 'startDelay'],
             visibleSpeedOptions: [...defaultVisibleSpeedOptions],
           });
         case 'disappearing':
@@ -269,13 +270,13 @@ const reducer = (state = initialState, action) => {
         case 'schulteTables':
           return updateObject(state, {
             visibleTextOptions: ['font', 'symbolSize'],
-            visibleExerciseOptions: ['tableDimensions', 'tableSize', 'tableCheck'],
+            visibleExerciseOptions: ['showStopwatch', 'tableDimensions', 'tableSize', 'tableCheck'],
             visibleSpeedOptions: [],
           });
         case 'concentration':
           return updateObject(state, {
             visibleTextOptions: ['font', 'fontSize'],
-            visibleExerciseOptions: ['symbolGroupCount', 'symbolCount', 'columnSpacing'],
+            visibleExerciseOptions: ['showStopwatch', 'symbolGroupCount', 'symbolCount', 'columnSpacing'],
             visibleSpeedOptions: [],
           });
         default:

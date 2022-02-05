@@ -80,6 +80,10 @@ export class Timing extends Component {
   };
 
   stopClickHandler = () => {
+    const confirmedStop = window.confirm(this.props.translate('timing.confirm'));
+    if (!confirmedStop) {
+      return;
+    }
     clearInterval(update);
     if (!this.props.timerState.paused) {
       this.calculateElapsedTime();
@@ -146,10 +150,12 @@ export class Timing extends Component {
             aria-label={this.props.translate('timing.stop')}
             onClick={this.stopClickHandler}
           />
-          <Label basic size="big" style={{ marginTop: '5px' }}>
-            <Icon name="clock outline" />
-            {format(this.state.elapsedTime)}
-          </Label>
+          {this.props.showStopwatch ? (
+            <Label basic size="big">
+              <Icon name="clock outline" />
+              {format(this.state.elapsedTime)}
+            </Label>
+          ) : null}
         </MediaQuery>
         <MediaQuery minWidth={992}>
           <Button
@@ -185,10 +191,12 @@ export class Timing extends Component {
             aria-label={this.props.translate('timing.stop')}
             onClick={this.stopClickHandler}
           />
-          <Label basic size="big" style={{ marginTop: '5px' }}>
-            <Icon name="clock outline" />
-            {format(this.state.elapsedTime)}
-          </Label>
+          {this.props.showStopwatch ? (
+            <Label basic size="big">
+              <Icon name="clock outline" />
+              {format(this.state.elapsedTime)}
+            </Label>
+          ) : null}
         </MediaQuery>
       </Fragment>
     );

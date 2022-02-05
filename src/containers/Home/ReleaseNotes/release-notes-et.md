@@ -1,3 +1,12 @@
+#### Versioon 5.1.34 (05.02.2022)
+- Muudatused tagasiside põhjal
+  - Lisatud kinnitus harjutuse käsitsi lõpetamisel
+  - Lisatud võimalus stopperi peitmiseks harjutuse sätetesse
+  - Kirjavigade parandused lugemistekstides
+#### Versioon 5.1.33 (26.01.2022)
+- Pisimuudatused
+#### Versioon 5.1.32 (07.08.2021)
+- Lisatud sõnavormide nelikute modifikatsioon keskendumise harjutusele
 #### Versioon 5.1.31 (01.08.2021)
 - Täiendused vertikaalse lugemise ja liikuva teksti harjutustele
 #### Versioon 5.1.30 (28.04.2021)

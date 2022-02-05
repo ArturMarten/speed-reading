@@ -145,9 +145,10 @@ export class TextExercise extends Component {
               </tbody>
             </table>
           </Grid.Column>
-          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8}>
+          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8} style={{ marginTop: '5px' }}>
             <Timing
               loading={this.props.exerciseStatus === 'starting' || this.props.exerciseStatus === 'finishing'}
+              showStopwatch={this.props.exerciseOptions.showStopwatch}
               onStart={this.onExerciseStartHandler}
               onStop={this.onExerciseFinishHandler}
             />
@@ -180,6 +181,7 @@ const mapStateToProps = (state) => ({
   saveExercise: state.exercise.save,
   exerciseId: state.exercise.id,
   exerciseModification: state.exercise.modification,
+  exerciseOptions: state.options.exerciseOptions,
   exerciseStatus: state.exercise.status,
   attemptId: state.exercise.attemptId,
   selectedText: state.text.selectedText,

@@ -12,7 +12,7 @@ import TextCounter from '../../components/TextEntry/TextCounter';
 export class TextEditor extends Component {
   state = {
     editorState: EditorState.createEmpty(),
-    spellCheck: false,
+    spellCheck: true,
   };
 
   getPlainText = () => {

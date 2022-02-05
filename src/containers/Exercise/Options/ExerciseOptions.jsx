@@ -38,6 +38,7 @@ import {
   MAX_COLUMN_SPACING,
   STEP_COLUMN_SPACING,
 } from '../../../store/reducers/options';
+import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
 export class ExerciseOptions extends PureComponent {
   state = {};
@@ -55,6 +56,13 @@ export class ExerciseOptions extends PureComponent {
     }));
     return (
       <Fragment>
+        {this.props.visibleOptions.indexOf('showStopwatch') !== -1 ? (
+          <ExerciseCheckOption
+            name={this.props.translate('exercise-options.show-stopwatch')}
+            value={this.props.options.showStopwatch}
+            updateValue={(value) => this.props.onSubmit({ showStopwatch: value })}
+          />
+        ) : null}
         {this.props.visibleOptions.indexOf('startDelay') !== -1 ? (
           <ExerciseInputOption
             name={this.props.translate('exercise-options.start-delay')}

@@ -99,17 +99,18 @@ export class TextAnalysis extends Component {
     this.setState({ ...initialState });
   };
 
-  formatWordLengthValues = (wordPercentage) => (wordLengths) => (
-    <div style={{ textAlign: 'center' }}>
-      {this.props.translate('text-analysis.words-with-length-from')}
-      <span style={{ fontSize: '1.5em' }}>{` ${wordLengths[0]} `}</span>
-      {this.props.translate('text-analysis.to')}
-      <span style={{ fontSize: '1.5em' }}>{` ${wordLengths[1]} `}</span>
-      {this.props.translate('text-analysis.characters-make-up')}
-      <span style={{ fontSize: '1.5em' }}>{` ${wordPercentage.toFixed(1)}% `}</span>
-      {this.props.translate('text-analysis.of-all-text-words')}
-    </div>
-  );
+  formatWordLengthValues = (wordPercentage) => (wordLengths) =>
+    (
+      <div style={{ textAlign: 'center' }}>
+        {this.props.translate('text-analysis.words-with-length-from')}
+        <span style={{ fontSize: '1.5em' }}>{` ${wordLengths[0]} `}</span>
+        {this.props.translate('text-analysis.to')}
+        <span style={{ fontSize: '1.5em' }}>{` ${wordLengths[1]} `}</span>
+        {this.props.translate('text-analysis.characters-make-up')}
+        <span style={{ fontSize: '1.5em' }}>{` ${wordPercentage.toFixed(1)}% `}</span>
+        {this.props.translate('text-analysis.of-all-text-words')}
+      </div>
+    );
 
   /*
   formatWordFrequencyValue = (wordFrequencyPercentage) => (wordFrequency) => (
@@ -122,17 +123,18 @@ export class TextAnalysis extends Component {
   );
   */
 
-  formatSentenceLengthValues = (sentencePercentage) => (sentenceLengths) => (
-    <div style={{ textAlign: 'center' }}>
-      {this.props.translate('text-analysis.sentences-with-length-from')}
-      <span style={{ fontSize: '1.5em' }}>{` ${sentenceLengths[0]} `}</span>
-      {this.props.translate('text-analysis.to')}
-      <span style={{ fontSize: '1.5em' }}>{` ${sentenceLengths[1]} `}</span>
-      {this.props.translate('text-analysis.words-make-up')}
-      <span style={{ fontSize: '1.5em' }}>{` ${sentencePercentage.toFixed(1)}% `}</span>
-      {this.props.translate('text-analysis.of-all-text-sentences')}
-    </div>
-  );
+  formatSentenceLengthValues = (sentencePercentage) => (sentenceLengths) =>
+    (
+      <div style={{ textAlign: 'center' }}>
+        {this.props.translate('text-analysis.sentences-with-length-from')}
+        <span style={{ fontSize: '1.5em' }}>{` ${sentenceLengths[0]} `}</span>
+        {this.props.translate('text-analysis.to')}
+        <span style={{ fontSize: '1.5em' }}>{` ${sentenceLengths[1]} `}</span>
+        {this.props.translate('text-analysis.words-make-up')}
+        <span style={{ fontSize: '1.5em' }}>{` ${sentencePercentage.toFixed(1)}% `}</span>
+        {this.props.translate('text-analysis.of-all-text-sentences')}
+      </div>
+    );
 
   render() {
     const { currentWordLengths, currentSentenceLengths } = this.state;

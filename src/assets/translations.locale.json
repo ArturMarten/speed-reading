@@ -430,13 +430,19 @@
       "See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.",
       "This exercise increases perceptual span, decreases fixation time and eliminates regressions."
     ],
-    "goal-verticalReading": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
+    "goal-verticalReading": [
+      "Lugege teksti ühe sõnarühma kaupa.",
+      "Read text by looking at a single word group at a time."
+    ],
     "title-movingWordGroups": ["Liikuva teksti harjutus", "Moving text exercise"],
     "description-movingWordGroups": [
       "See harjutus laiendab nägemisvälja, vähendab fiksatsiooniaega ja välistab tagasivaatamised ehk regressioonid.",
       "This exercise increases perceptual span, decreases fixation time and eliminates regressions."
     ],
-    "goal-movingWordGroups": ["Lugege teksti ühe sõnarühma kaupa.", "Read text by looking at a single word group at a time."],
+    "goal-movingWordGroups": [
+      "Lugege teksti ühe sõnarühma kaupa.",
+      "Read text by looking at a single word group at a time."
+    ],
     "title-schulteTables": ["Schulte tabelite harjutus", "Schulte tables exercise"],
     "description-schulteTables": [
       "See harjutus aitab laiendada nägemisvälja ning arendada keskendumist.",
@@ -471,6 +477,7 @@
     "letters-lowercase": ["Väiketähed", "Lowercase letters"],
     "letters-uppercase": ["Suurtähed", "Uppercase letters"],
     "letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
+    "concentration-visual-vocabulary": ["Sõnavormide nelikud", "Tetragrams"],
     "concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
     "concentration-letters-only": ["Ainult tähed", "Only letters"],
     "concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"]
@@ -538,6 +545,7 @@
     "pause": ["Peata", "Pause"],
     "resume": ["Jätka", "Resume"],
     "reset": ["Lähtesta", "Reset"],
+    "confirm": ["Oled kindel, et soovid harjutuse lõpetada?", "Are you sure you want to end the exercise?"],
     "stop": ["Lõpeta", "Finish"]
   },
   "text-exercise": {
@@ -661,7 +669,7 @@
     "percentage": ["%", "%"]
   },
   "exercise-options": {
-    "characters": ["tähemärki", "characters"],
+    "show-stopwatch": ["Näita stopperit", "Show stopwatch"],
     "start-delay": ["Alustamise viide", "Starting delay"],
     "start-delay-description": [
       "Ooteaeg harjutuse alustamise ja harjutuse käivitamise vahel",
@@ -680,6 +688,7 @@
     "cursor-background": ["Taust", "Background"],
     "cursor-underline": ["Alajoon", "Underline"],
     "cursor-color": ["Pilgujuhtija värv", "Moving cursor color"],
+    "characters": ["tähemärki", "characters"],
     "table-size": ["Tabeli suurus", "Table size"],
     "percentage": ["%", "%"],
     "table-dimensions": ["Tabeli mõõtmed", "Table dimensions"],
@@ -1059,6 +1068,7 @@
     "schulteTables.letters-uppercase": ["Suurtähed", "Uppercase letters"],
     "schulteTables.letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
     "concentration": ["Keskendumine", "Concentration"],
+    "concentration.concentration-visual-vocabulary": ["Sõnavormide nelikud", "Tetragrams"],
     "concentration.concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
     "concentration.concentration-letters-only": ["Ainult tähed", "Only letters"],
     "concentration.concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"],

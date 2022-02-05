@@ -117,10 +117,7 @@ export class Concentration extends Component {
       >
         <tbody>
           {this.props.stringPairs.map((row, index) => (
-            <tr
-              key={row[0] + row[1]}
-              className={`concentration-row ${index === this.state.selectedIndex ? 'selected' : ''}`}
-            >
+            <tr key={index} className={`concentration-row ${index === this.state.selectedIndex ? 'selected' : ''}`}>
               <td className="concentration-cell concentration-left">{row[0]}</td>
               <td
                 className="concentration-cell concentration-spacing"

@@ -7,16 +7,8 @@ import './AchievementProgress.css';
 
 function AchievementProgress(props) {
   const { achievementData, className, translate } = props;
-  const {
-    achievementKey,
-    percent,
-    progress,
-    currentLevel,
-    nextProgress,
-    currentPoints,
-    nextPoints,
-    totalPoints,
-  } = achievementData;
+  const { achievementKey, percent, progress, currentLevel, nextProgress, currentPoints, nextPoints, totalPoints } =
+    achievementData;
   const { achievementType, color, formatter, textFormatter } = getAchievementData(achievementKey);
 
   const formattedNextProgress = textFormatter ? textFormatter(nextProgress, translate) : nextProgress;

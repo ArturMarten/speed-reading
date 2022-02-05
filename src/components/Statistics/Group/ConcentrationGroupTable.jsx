@@ -38,13 +38,8 @@ function getSelectedData(exerciseData, modificationData, { exercise, modificatio
 }
 
 function ConcentrationGroupTable(props) {
-  const {
-    concentrationExerciseData,
-    minimumAttemptCount,
-    minimumAttemptCountChangeHandler,
-    groupName,
-    translate,
-  } = props;
+  const { concentrationExerciseData, minimumAttemptCount, minimumAttemptCountChangeHandler, groupName, translate } =
+    props;
   const [selection, setSelection] = useState({ exercise: null, modification: null, field: null });
 
   const userCount = getUserCount(concentrationExerciseData);

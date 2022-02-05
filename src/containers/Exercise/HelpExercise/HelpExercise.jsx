@@ -59,9 +59,10 @@ export class HelpExercise extends Component {
       <Grid container>
         <Grid.Row verticalAlign="middle" style={{ paddingBottom: 0 }}>
           <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8} />
-          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8}>
+          <Grid.Column textAlign="center" mobile={16} tablet={8} computer={8} style={{ marginTop: '5px' }}>
             <Timing
               loading={this.props.exerciseStatus === 'starting' || this.props.exerciseStatus === 'finishing'}
+              showStopwatch={this.props.exerciseOptions.showStopwatch}
               onStart={this.onExerciseStartHandler}
               onStop={this.onExerciseFinishHandler}
             />
