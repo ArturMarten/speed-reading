@@ -21,6 +21,12 @@ export class ExerciseDescription extends Component {
             {this.props.translate('exercises.shortkeys-concentration')}
           </div>
         ) : null}
+        {this.props.type === 'visualVocabulary' ? (
+          <div>
+            <b>{`${this.props.translate('exercises.shortkeys')}: `}</b>
+            {this.props.translate('exercises.shortkeys-visualVocabulary')}
+          </div>
+        ) : null}
       </Fragment>
     );
   }

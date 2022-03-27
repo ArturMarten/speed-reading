@@ -96,6 +96,10 @@ export const initialAchievements = {
       count: 0,
       time: 0,
     },
+    visualVocabulary: {
+      count: 0,
+      time: 0,
+    },
   },
 };
 

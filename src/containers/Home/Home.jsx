@@ -18,8 +18,8 @@ import studyEngLogo from '../../assets/img/study_eng.jpg';
 import AchievementUpdates from '../Achievements/AchievementUpdates';
 // import userManual from '../../assets/doc/kasutusjuhend_est.pdf';
 
-const HomeDescriptionEt = React.lazy(() => importMDX('./home-description-et.md'));
-const HomeDescriptionEn = React.lazy(() => importMDX('./home-description-en.md'));
+const HomeDescriptionEt = React.lazy(() => importMDX('./home-description-et.mdx'));
+const HomeDescriptionEn = React.lazy(() => importMDX('./home-description-en.mdx'));
 
 export class Home extends Component {
   state = {

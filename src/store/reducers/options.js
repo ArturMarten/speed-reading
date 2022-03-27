@@ -113,6 +113,9 @@ export const STEP_SYMBOL_COUNT = 1;
 export const MIN_COLUMN_SPACING = 10;
 export const MAX_COLUMN_SPACING = 200;
 export const STEP_COLUMN_SPACING = 10;
+export const MIN_FIXATION_TIME = 200;
+export const MAX_FIXATION_TIME = 350;
+export const STEP_FIXATION_TIME = 50;
 
 const initialExerciseOptions = {
   showStopwatch: true,
@@ -129,6 +132,7 @@ const initialExerciseOptions = {
   symbolCount: 7,
   symbolGroupCount: 20,
   columnSpacing: 30,
+  fixationTime: 300,
 };
 
 const defaultVisibleExerciseOptions = ['showStopwatch', 'startDelay', 'lineBreakDelay', 'pageBreakDelay'];
@@ -277,6 +281,12 @@ const reducer = (state = initialState, action) => {
           return updateObject(state, {
             visibleTextOptions: ['font', 'fontSize'],
             visibleExerciseOptions: ['showStopwatch', 'symbolGroupCount', 'symbolCount', 'columnSpacing'],
+            visibleSpeedOptions: [],
+          });
+        case 'visualVocabulary':
+          return updateObject(state, {
+            visibleTextOptions: ['font', 'fontSize'],
+            visibleExerciseOptions: ['showStopwatch', 'symbolGroupCount', 'symbolCount', 'startDelay', 'fixationTime'],
             visibleSpeedOptions: [],
           });
         default:

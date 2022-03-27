@@ -78,7 +78,7 @@ function MovingWordGroups(props) {
     if (!finished) {
       requestRef.current = requestAnimationFrame(loop);
     }
-  }, [wordGroups, speedOptions.manualMode]);
+  }, [wordGroups, speedOptions.manualMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const delayedLoop = useCallback(
     (delay) => {
@@ -102,7 +102,7 @@ function MovingWordGroups(props) {
       clearTimeout(timeoutRef.current);
       cancelAnimationFrame(requestRef.current);
     };
-  }, [speedOptions.manualMode]);
+  }, [speedOptions.manualMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (previousTimerState) {
@@ -132,7 +132,7 @@ function MovingWordGroups(props) {
       clearTimeout(timeoutRef.current);
       cancelAnimationFrame(requestRef.current);
     };
-  }, [props.timerState]);
+  }, [props.timerState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const wordCount = props.wordGroups.reduce((acc, group) => acc + group.length, 0);
@@ -161,14 +161,14 @@ function MovingWordGroups(props) {
     setWordGroups(wordGroups);
     setAverageCharacterWidth(averageCharacterWidth);
     setFixatorPosition(fixatorPosition);
-  }, [props.wordGroups, props.canvasHeight]);
+  }, [props.wordGroups, props.canvasHeight]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (previousWordPerMinute) {
       const change = speedOptions.wordsPerMinute / previousWordPerMinute;
       speedRef.current = speedRef.current * change;
     }
-  }, [speedOptions.wordsPerMinute]);
+  }, [speedOptions.wordsPerMinute]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const group = wordGroups[groupIndexRef.current];
 

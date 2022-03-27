@@ -179,6 +179,8 @@ export const finishHelpExercise = (attemptId, data) => (dispatch, getState) => {
     dispatch(helpExerciseFinished(elapsedTime, { tableDimensions }));
   } else if (type === 'concentration') {
     dispatch(helpExerciseFinished(elapsedTime, data));
+  } else if (type === 'visualVocabulary') {
+    dispatch(helpExerciseFinished(elapsedTime, data));
   } else {
     dispatch(helpExerciseFinished(elapsedTime));
   }

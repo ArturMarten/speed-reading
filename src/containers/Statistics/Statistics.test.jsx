@@ -33,7 +33,7 @@ test('shows group table tab when clicked', async () => {
   await waitFor(() => expect(screen.queryByText(translate('statistics.fetching-data'))).not.toBeInTheDocument());
 
   const groupTables = screen.getAllByRole('table');
-  expect(groupTables.length).toBe(5);
+  expect(groupTables.length).toBe(6);
 });
 
 test('shows group table tab when clicked as a teacher', async () => {

@@ -1,6 +1,6 @@
 export const environment = {
-  version: '5.1.34',
-  date: '2022-02-05T10:02:34.683Z',
+  version: '5.1.35',
+  date: '2022-03-01T06:55:36.828Z',
 };
 
 export default environment;

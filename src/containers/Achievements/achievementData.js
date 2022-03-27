@@ -137,6 +137,16 @@ export const achievementData = {
         points: [0, 1],
       },
     },
+    visualVocabulary: {
+      count: {
+        levels: [0, 4],
+        points: [0, 1],
+      },
+      time: {
+        levels: [0, m(4)],
+        points: [0, 1],
+      },
+    },
   },
   weekly: {
     exercise: {
@@ -363,6 +373,16 @@ export const achievementData = {
       perfectResults: {
         levels: [0, 1],
         points: [0, 1],
+      },
+    },
+    visualVocabulary: {
+      count: {
+        levels: [0, 2, 6, 14, 25, 40, 55, 75, 100, 125, 150],
+        points: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      },
+      time: {
+        levels: [0, m(2), m(6), m(15), m(25), m(40), h(1), hm(1, 20), hm(1, 40), hm(2, 10), hm(2, 40)],
+        points: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       },
     },
   },

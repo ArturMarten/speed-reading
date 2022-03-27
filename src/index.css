@@ -30,3 +30,8 @@
   opacity: 0.45 !important;
   pointer-events: initial !important;
 }
+
+iframe {
+  /* https://github.com/facebook/create-react-app/issues/11773 */
+  pointer-events: none;
+}

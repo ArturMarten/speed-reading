@@ -96,6 +96,10 @@ const previousAchievements = {
       count: 1,
       time: 30000,
     },
+    visualVocabulary: {
+      count: 0,
+      time: 0,
+    },
   },
 };
 
@@ -158,7 +162,7 @@ test('data contains equaling levels and points', () => {
   testEquals(achievementData, 'monthly');
   testEquals(achievementData, 'progress');
 
-  expect(maxProgressPoints).toEqual(1503);
+  expect(maxProgressPoints).toEqual(1613);
 
   // console.log('Maximum progress points:', maxProgressPoints);
 });
@@ -273,6 +277,8 @@ test('returns achievement keys', () => {
     'progress.schulteTables.time',
     'progress.concentration.count',
     'progress.concentration.time',
+    'progress.visualVocabulary.count',
+    'progress.visualVocabulary.time',
   ]);
 });
 

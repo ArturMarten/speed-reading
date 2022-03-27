@@ -1,6 +1,12 @@
 import * as actionTypes from '../actions/actionTypes';
 import { splitIntoWordGroups } from '../../utils/TextUtils';
-import { updateObject, shuffle, getSimilarSymbol, getSymbolCount } from '../../shared/utility';
+import { updateObject, shuffle, getSimilarSymbol, getSymbolCount, getRandomBoolean } from '../../shared/utility';
+import tetragrams from '../../assets/doc/tetragrams.json';
+import trigrams from '../../assets/doc/trigrams.json';
+import bigrams from '../../assets/doc/bigrams.json';
+
+const ngrams = [...tetragrams, ...trigrams, ...bigrams].sort((a, b) => b.length - a.length);
+const ngramWords = ngrams.flatMap((ngram) => ngram.split(' '));
 
 const READING_TEST_ID = 1;
 const READING_AID_ID = 2;
@@ -11,7 +17,9 @@ const SCHULTE_TABLES_ID = 6;
 const CONCENTRATION_ID = 7;
 const VERTICAL_READING_ID = 8;
 const MOVING_WORD_GROUPS_ID = 9;
-export const EXERCISE_COUNT = 9;
+const VISUAL_VOCABULARY_ID = 10;
+
+export const EXERCISE_COUNT = 10;
 
 const letters = 'abcdefghijklmnopqrsztuvwõäöüxy'.split('');
 const numbers = '0123456789'.split('');
@@ -26,9 +34,7 @@ export const generateSymbols = (count, modification) => {
       return shuffle([...Array(count)].map((e, index) => letters[index].toUpperCase()));
     case 'letters-mixed':
       return shuffle(
-        [...Array(count)].map((e, index) =>
-          Math.floor(Math.random() * 2) === 0 ? letters[index].toUpperCase() : letters[index],
-        ),
+        [...Array(count)].map((_, index) => (getRandomBoolean() ? letters[index].toUpperCase() : letters[index])),
       );
     default:
       return shuffle([...Array(count)].map((e, index) => index + 1));
@@ -46,25 +52,50 @@ const swapRandomSymbol = (string) => {
   }).join('');
 };
 
+const swapRandomWord = (string) => {
+  const array = string.split(' ');
+  const randomIndex = Math.floor(Math.random() * array.length);
+  const currentWord = array[randomIndex];
+  const swapWords = ngramWords.filter((word) => word.length === currentWord.length && word !== currentWord);
+  const swapWord = getArrayRandom(swapWords);
+  return Object.assign([...array], {
+    [randomIndex]: swapWord,
+  }).join(' ');
+};
+
+const getArrayRandom = (array) => {
+  return array[Math.floor(Math.random() * array.length)];
+};
+
 export const generateStringPairs = (count, length, modification) => {
-  let first = [];
+  let strings = [];
   switch (modification) {
+    case 'concentration-visual-vocabulary':
+      const NGRAM_COUNT = 100;
+      const filtered = ngrams.filter((ngram) => ngram.replace(/\s/g, '').length <= length).slice(0, NGRAM_COUNT);
+      strings = [...Array(count)].map(() => getArrayRandom(filtered));
+      break;
     case 'concentration-numbers-only':
-      first = [...Array(count)].map(() => generateRandomString(numbers, length));
+      strings = [...Array(count)].map(() => generateRandomString(numbers, length));
       break;
     case 'concentration-letters-only':
-      first = [...Array(count)].map(() => generateRandomString(letters, length));
+      strings = [...Array(count)].map(() => generateRandomString(letters, length));
       break;
     case 'concentration-mixed':
-      first = [...Array(count)].map(() =>
-        generateRandomString(Math.floor(Math.random() * 2) === 0 ? numbers : letters, length),
-      );
+      strings = [...Array(count)].map(() => generateRandomString(getRandomBoolean() ? numbers : letters, length));
       break;
     default:
-      first = [...Array(count)].map(() => generateRandomString(numbers, length));
+      strings = [...Array(count)].map(() => generateRandomString(numbers, length));
       break;
   }
-  return first.map((string) => [string, Math.floor(Math.random() * 2) === 0 ? string : swapRandomSymbol(string)]);
+  return strings.map((string) => shuffle([string, getRandomBoolean() ? string : swapRandomSymbol(string)]));
+};
+
+export const generateWordPairs = (count, length) => {
+  const NGRAM_COUNT = 100;
+  const filtered = ngrams.filter((ngram) => ngram.replace(/\s/g, '').length <= length).slice(0, NGRAM_COUNT);
+  const strings = [...Array(count)].map(() => getArrayRandom(filtered));
+  return strings.map((string) => [string, getRandomBoolean() ? string : swapRandomWord(string)]);
 };
 
 export const getExerciseId = (exerciseType) => {
@@ -97,6 +128,8 @@ export const getExerciseId = (exerciseType) => {
       return [SCHULTE_TABLES_ID];
     case 'concentration':
       return [CONCENTRATION_ID];
+    case 'visualVocabulary':
+      return [VISUAL_VOCABULARY_ID];
     default:
       return null;
   }
@@ -123,6 +156,9 @@ export const getExerciseStatisticsIds = (exerciseType) => {
   if (exerciseType === 'concentration') {
     return [CONCENTRATION_ID];
   }
+  if (exerciseType === 'visualVocabulary') {
+    return [VISUAL_VOCABULARY_ID];
+  }
   return null;
 };
 
@@ -146,6 +182,8 @@ export const getExerciseById = (exerciseId) => {
       return 'schulteTables';
     case CONCENTRATION_ID:
       return 'concentration';
+    case VISUAL_VOCABULARY_ID:
+      return 'visualVocabulary';
     default:
       return null;
   }
@@ -189,8 +227,9 @@ const reducer = (state = initialState, action) => {
           break;
         }
         case 'concentration': {
-          modification = 'concentration-numbers-only';
+          modification = 'concentration-visual-vocabulary';
           modificationOptions = [
+            { value: 'concentration-visual-vocabulary' },
             { value: 'concentration-numbers-only' },
             { value: 'concentration-letters-only' },
             { value: 'concentration-mixed' },
@@ -239,6 +278,12 @@ const reducer = (state = initialState, action) => {
           action.payload.exerciseOptions.symbolGroupCount,
           action.payload.exerciseOptions.symbolCount,
           state.modification,
+        );
+        preparation = { stringPairs };
+      } else if (state.type === 'visualVocabulary') {
+        const stringPairs = generateWordPairs(
+          action.payload.exerciseOptions.symbolGroupCount,
+          action.payload.exerciseOptions.symbolCount,
         );
         preparation = { stringPairs };
       }
@@ -330,6 +375,33 @@ const reducer = (state = initialState, action) => {
           msPerSymbolGroup,
           msPerSymbol,
         };
+      } else if (state.type === 'visualVocabulary') {
+        const { answers } = action.payload;
+        let total = 0;
+        let correct = 0;
+        let incorrect = 0;
+        let unanswered = 0;
+        state.stringPairs.forEach((pair, index) => {
+          if (answers[index] !== undefined) {
+            const match = pair[0] === pair[1];
+            if (answers[index] === match) {
+              correct += 1;
+            } else {
+              incorrect += 1;
+            }
+          } else {
+            unanswered += 1;
+          }
+          total += 1;
+        });
+
+        result = {
+          elapsedTime,
+          total,
+          correct,
+          incorrect,
+          unanswered,
+        };
       } else {
         result = { elapsedTime };
       }
@@ -358,6 +430,15 @@ const reducer = (state = initialState, action) => {
             action.payload.exerciseOptions.symbolGroupCount,
             action.payload.exerciseOptions.symbolCount,
             state.modification,
+          ),
+          status: 'prepared',
+        });
+      }
+      if (state.type === 'visualVocabulary') {
+        return updateObject(state, {
+          stringPairs: generateWordPairs(
+            action.payload.exerciseOptions.symbolGroupCount,
+            action.payload.exerciseOptions.symbolCount,
           ),
           status: 'prepared',
         });

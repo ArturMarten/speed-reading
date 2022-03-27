@@ -147,6 +147,22 @@ export class StatisticsTable extends Component {
                 </Table.HeaderCell>
               </>
             ) : null}
+            {this.props.exercise === 'visualVocabulary' ? (
+              <>
+                <Table.HeaderCell
+                  sorted={column === 'elapsedTime' ? direction : null}
+                  onClick={this.sortHandler('elapsedTime')}
+                >
+                  {this.props.translate('statistics-table.elapsed-time')}
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={column === 'exerciseResult' ? direction : null}
+                  onClick={this.sortHandler('exerciseResult')}
+                >
+                  {this.props.translate('statistics-table.exercise-result')}
+                </Table.HeaderCell>
+              </>
+            ) : null}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -232,6 +248,24 @@ export class StatisticsTable extends Component {
                   </Table.Cell>
                   <Table.Cell negative={!attempt.msPerSymbol}>
                     {attempt.msPerSymbol ? attempt.msPerSymbol : this.props.translate('statistics-table.not-recorded')}
+                  </Table.Cell>
+                </>
+              ) : null}
+              {this.props.exercise === 'visualVocabulary' ? (
+                <>
+                  <Table.Cell negative={!attempt.elapsedTime}>
+                    {attempt.elapsedTime !== null
+                      ? formatMilliseconds(attempt.elapsedTime)
+                      : this.props.translate('statistics-table.not-recorded')}
+                  </Table.Cell>
+                  <Table.Cell
+                    negative={!attempt.exerciseResult || attempt.exerciseResult < 50}
+                    warning={attempt.exerciseResult >= 50 && attempt.exerciseResult < 90}
+                    positive={attempt.exerciseResult >= 90}
+                  >
+                    {attempt.exerciseResult !== null
+                      ? `${attempt.exerciseResult}%`
+                      : this.props.translate('statistics-table.not-recorded')}
                   </Table.Cell>
                 </>
               ) : null}

@@ -37,6 +37,9 @@ import {
   MIN_COLUMN_SPACING,
   MAX_COLUMN_SPACING,
   STEP_COLUMN_SPACING,
+  MIN_FIXATION_TIME,
+  MAX_FIXATION_TIME,
+  STEP_FIXATION_TIME,
 } from '../../../store/reducers/options';
 import ExerciseCheckOption from '../../../components/Exercise/Options/ExerciseCheckOption';
 
@@ -198,6 +201,17 @@ export class ExerciseOptions extends PureComponent {
             max={MAX_COLUMN_SPACING}
             step={STEP_COLUMN_SPACING}
             updateValue={(value) => this.props.onSubmit({ columnSpacing: value })}
+          />
+        ) : null}
+        {this.props.visibleOptions.indexOf('fixationTime') !== -1 ? (
+          <ExerciseInputOption
+            name={this.props.translate('exercise-options.fixation-time')}
+            unit={this.props.translate('exercise-options.ms')}
+            value={this.props.options.fixationTime}
+            min={MIN_FIXATION_TIME}
+            max={MAX_FIXATION_TIME}
+            step={STEP_FIXATION_TIME}
+            updateValue={(value) => this.props.onSubmit({ fixationTime: value })}
           />
         ) : null}
       </Fragment>

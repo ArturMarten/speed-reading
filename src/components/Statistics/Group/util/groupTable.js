@@ -231,6 +231,20 @@ export const calculateExerciseResults = (exerciseData) =>
           finalSymbolSpeed,
           symbolSpeedChange,
         };
+      } else if (exercise === 'visualVocabulary') {
+        const exerciseResultAttempts = attempts.filter((attempt) => attempt.exerciseResult !== null);
+        const [initialExerciseResult, finalExerciseResult, exerciseResultChange] = calculateFieldResult(
+          exerciseResultAttempts,
+          'exerciseResult',
+        );
+
+        userExerciseResults = {
+          ...userExerciseResults,
+          exercise,
+          initialExerciseResult,
+          finalExerciseResult,
+          exerciseResultChange,
+        };
       }
 
       return {
@@ -367,7 +381,26 @@ export const aggregateExerciseResults = (results, userCount) =>
         averageFinalSymbolSpeed,
         averageSymbolSpeedChangePercentage,
       };
+    } else if (exercise === 'visualVocabulary') {
+      const averageInitialExerciseResult = getAverage(
+        exerciseResults.map(({ initialExerciseResult }) => initialExerciseResult),
+      );
+      const averageFinalExerciseResult = getAverage(
+        exerciseResults.map(({ finalExerciseResult }) => finalExerciseResult),
+      );
+      const averageExerciseResultChangePercentage = getChangePercentage(
+        averageInitialExerciseResult,
+        averageFinalExerciseResult,
+      );
+
+      aggregatedResult = {
+        ...aggregatedResult,
+        averageInitialExerciseResult,
+        averageFinalExerciseResult,
+        averageExerciseResultChangePercentage,
+      };
     }
+    console.log(exercise);
 
     return {
       ...prevExercisesResults,
@@ -386,6 +419,7 @@ export const exerciseTranslateMapping = {
   movingWordGroups: 'moving-word-groups',
   schulteTables: 'schulte-tables',
   concentration: 'concentration',
+  visualVocabulary: 'visual-vocabulary',
 };
 
 const columns = [

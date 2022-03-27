@@ -10,6 +10,7 @@ import TextOptions from '../Options/TextOptions';
 import ExerciseOptions from '../Options/ExerciseOptions';
 import SchulteTablesPreview from '../Preview/SchulteTablesPreview';
 import ConcentrationPreview from '../Preview/ConcentrationPreview';
+import VisualVocabularyPreview from '../Preview/VisualVocabularyPreview';
 
 export class HelpExercisePreparation extends Component {
   state = {
@@ -202,6 +203,7 @@ export class HelpExercisePreparation extends Component {
             </Grid>
             {this.props.type === 'schulteTables' ? <SchulteTablesPreview /> : null}
             {this.props.type === 'concentration' ? <ConcentrationPreview /> : null}
+            {this.props.type === 'visualVocabulary' ? <VisualVocabularyPreview /> : null}
           </>
         ) : null}
       </Container>

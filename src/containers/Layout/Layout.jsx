@@ -280,6 +280,13 @@ export class Layout extends Component {
                   >
                     {this.props.translate('menu.concentration')}
                   </Dropdown.Item>
+                  <Dropdown.Item
+                    as="a"
+                    active={path === '/exercise/visual-vocabulary'}
+                    onClick={(event) => this.itemClickHandler(event, '/exercise/visual-vocabulary')}
+                  >
+                    {this.props.translate('menu.visual-vocabulary')}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Menu.Item
@@ -454,6 +461,13 @@ export class Layout extends Component {
                         onClick={(event) => this.itemClickHandler(event, '/exercise/concentration')}
                       >
                         {this.props.translate('menu.concentration')}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="a"
+                        active={path === '/exercise/visual-vocabulary'}
+                        onClick={(event) => this.itemClickHandler(event, '/exercise/visual-vocabulary')}
+                      >
+                        {this.props.translate('menu.visual-vocabulary')}
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

@@ -115,6 +115,18 @@ export class Statistics extends Component {
         changeColor: ['red', 'green'],
       },
     ],
+    [
+      {
+        id: 0,
+        title: this.props.translate('regression-chart.exercise-result-trend'),
+        yLabel: this.props.translate('regression-chart.result-percentage'),
+        legendTitles: [this.props.translate('regression-chart.exercise-result')],
+        yFields: ['exerciseResult'],
+        dataStrokeColor: ['#FF4C4C'],
+        dataFillColor: ['#FF9999'],
+        dataLineColor: ['#FF0000'],
+      },
+    ],
   ];
 
   exerciseOptions = [
@@ -128,6 +140,7 @@ export class Statistics extends Component {
     { text: this.props.translate('statistics.moving-word-groups'), value: 'movingWordGroups' },
     { text: this.props.translate('statistics.schulte-tables'), value: 'schulteTables' },
     { text: this.props.translate('statistics.concentration'), value: 'concentration' },
+    { text: this.props.translate('statistics.visual-vocabulary'), value: 'visualVocabulary' },
   ];
 
   scaleOptions = [
@@ -242,6 +255,8 @@ export class Statistics extends Component {
         chartIndex = 1;
       } else if (value === 'concentration') {
         chartIndex = 2;
+      } else if (value === 'visualVocabulary') {
+        chartIndex = 3;
       } else {
         chartIndex = 0;
       }

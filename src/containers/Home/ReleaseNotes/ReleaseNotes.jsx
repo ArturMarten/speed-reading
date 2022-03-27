@@ -4,8 +4,8 @@ import { importMDX } from 'mdx.macro';
 import environment from '../../../environment';
 import TimeSince from './TimeSince';
 
-const ReleaseNotesEt = React.lazy(() => importMDX('./release-notes-et.md'));
-const ReleaseNotesEn = React.lazy(() => importMDX('./release-notes-en.md'));
+const ReleaseNotesEt = React.lazy(() => importMDX('./release-notes-et.mdx'));
+const ReleaseNotesEn = React.lazy(() => importMDX('./release-notes-en.mdx'));
 
 function ReleaseNotes(props) {
   return (

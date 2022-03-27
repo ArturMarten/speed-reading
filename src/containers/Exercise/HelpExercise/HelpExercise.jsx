@@ -7,9 +7,12 @@ import * as actionCreators from '../../../store/actions';
 import Timing from '../Timing/Timing';
 import SchulteTables from '../Types/SchulteTables/SchulteTables';
 import Concentration from '../Types/Concentration/Concentration';
+import VisualVocabulary from '../Types/VisualVocabulary/VisualVocabulary';
 
 export class HelpExercise extends Component {
-  state = {};
+  state = {
+    answers: [],
+  };
 
   componentDidMount() {
     this.onExerciseStartHandler();
@@ -32,7 +35,12 @@ export class HelpExercise extends Component {
       const { answers } = this.exerciseRef.state;
       const { exerciseOptions } = this.props;
       data = { answers, exerciseOptions };
+    } else if (this.props.type === 'visualVocabulary') {
+      const { answers } = this.state;
+      const { exerciseOptions } = this.props;
+      data = { answers, exerciseOptions };
     }
+
     this.props.onExerciseFinish(this.props.attemptId, data);
   };
 
@@ -47,6 +55,15 @@ export class HelpExercise extends Component {
               ref={(ref) => {
                 this.exerciseRef = ref;
               }}
+              onExerciseFinish={this.onExerciseFinishHandler}
+              timerState={this.props.timerState}
+            />
+          );
+        case 'visualVocabulary':
+          return (
+            <VisualVocabulary
+              answers={this.state.answers}
+              setAnswers={(answers) => this.setState({ answers })}
               onExerciseFinish={this.onExerciseFinishHandler}
               timerState={this.props.timerState}
             />

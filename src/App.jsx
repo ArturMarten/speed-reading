@@ -41,6 +41,7 @@ export class App extends Component {
           <Route path="/exercise/moving-word-groups" render={() => <TextExerciseContainer type="movingWordGroups" />} />
           <Route path="/exercise/schulte-tables" render={() => <HelpExerciseContainer type="schulteTables" />} />
           <Route path="/exercise/concentration" render={() => <HelpExerciseContainer type="concentration" />} />
+          <Route path="/exercise/visual-vocabulary" render={() => <HelpExerciseContainer type="visualVocabulary" />} />
           <Route path="/achievements" component={Achievements} />
           <Route path="/statistics" component={Statistics} />
           {isPermittedToManageUsers ? <Route path="/manage" component={Manage} /> : null}

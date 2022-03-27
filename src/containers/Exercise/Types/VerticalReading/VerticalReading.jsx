@@ -85,7 +85,7 @@ function VerticalReading(props) {
     } else if (!finished) {
       requestRef.current = requestAnimationFrame(loop);
     }
-  }, [exerciseOptions.pageBreakDelay, wordGroups, speedOptions.manualMode]);
+  }, [exerciseOptions.pageBreakDelay, wordGroups, speedOptions.manualMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const delayedLoop = useCallback(
     (delay) => {
@@ -109,7 +109,7 @@ function VerticalReading(props) {
       clearTimeout(timeoutRef.current);
       cancelAnimationFrame(requestRef.current);
     };
-  }, [speedOptions.manualMode]);
+  }, [speedOptions.manualMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (previousTimerState) {
@@ -140,7 +140,7 @@ function VerticalReading(props) {
       clearTimeout(timeoutRef.current);
       cancelAnimationFrame(requestRef.current);
     };
-  }, [props.timerState]);
+  }, [props.timerState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const children = [...offscreenRef.current.childNodes];
@@ -169,14 +169,14 @@ function VerticalReading(props) {
     });
     setWordGroups(wordGroups);
     setMaxWidth(maxWidth + 1);
-  }, [props.wordGroups, props.canvasHeight]);
+  }, [props.wordGroups, props.canvasHeight]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (previousWordPerMinute) {
       const change = speedOptions.wordsPerMinute / previousWordPerMinute;
       speedRef.current = speedRef.current * change;
     }
-  }, [speedOptions.wordsPerMinute]);
+  }, [speedOptions.wordsPerMinute]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

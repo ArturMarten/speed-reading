@@ -14,6 +14,7 @@ import {
 import ConcentrationGroupTable from './ConcentrationGroupTable';
 import SchulteGroupTable from './SchulteGroupTable';
 import ReadingGroupTable from './ReadingGroupTable';
+import VisualVocabularyGroupTable from './VisualVocabularyGroupTable';
 
 function GroupTable(props) {
   const {
@@ -38,6 +39,7 @@ function GroupTable(props) {
         ...filterStandardDeviation('readingExercises', boundFiltered),
         ...filterStandardDeviation('schulteTables', boundFiltered),
         ...filterStandardDeviation('concentration', boundFiltered),
+        ...filterStandardDeviation('visualVocabulary', boundFiltered),
       ];
       const filteredData = standardDeviationFiltered.filter(timeFilter);
       return {
@@ -49,13 +51,15 @@ function GroupTable(props) {
   let readingExerciseData = filterReadingExercises(filteredGroupData);
   readingExerciseData = filterOwnTextAttempts(readingExerciseData, filterOwnTexts);
   readingExerciseData = filterFirstReadingAttempts(readingExerciseData, filterFirstReadingAttempt);
-  let concentrationExerciseData = filterByExerciseName(filteredGroupData, 'concentration');
   let schulteTablesExerciseData = filterByExerciseName(filteredGroupData, 'schulteTables');
+  let concentrationExerciseData = filterByExerciseName(filteredGroupData, 'concentration');
+  let visualVocabularyExerciseData = filterByExerciseName(filteredGroupData, 'visualVocabulary');
 
   if (isTeacher) {
     readingExerciseData = filterByAttemptCount(readingExerciseData, minimumAttemptCount);
-    concentrationExerciseData = filterByAttemptCount(concentrationExerciseData, minimumAttemptCount);
     schulteTablesExerciseData = filterByAttemptCount(schulteTablesExerciseData, minimumAttemptCount);
+    concentrationExerciseData = filterByAttemptCount(concentrationExerciseData, minimumAttemptCount);
+    visualVocabularyExerciseData = filterByAttemptCount(visualVocabularyExerciseData, minimumAttemptCount);
   }
 
   return (
@@ -77,6 +81,13 @@ function GroupTable(props) {
       />
       <ConcentrationGroupTable
         concentrationExerciseData={concentrationExerciseData}
+        minimumAttemptCount={minimumAttemptCount}
+        minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
+        groupName={groupName}
+        translate={translate}
+      />
+      <VisualVocabularyGroupTable
+        visualVocabularyExerciseData={visualVocabularyExerciseData}
         minimumAttemptCount={minimumAttemptCount}
         minimumAttemptCountChangeHandler={minimumAttemptCountChangeHandler}
         groupName={groupName}

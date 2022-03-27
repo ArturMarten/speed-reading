@@ -52,17 +52,16 @@ export class HelpExerciseResults extends Component {
                     <Statistic.Label>{this.props.translate('help-exercise-results.symbolsPerMinute')}</Statistic.Label>
                   </Statistic>
                 ) : null}
-                {this.props.result.total !== undefined &&
-                this.props.result.correct !== undefined &&
-                this.props.result.msPerSymbolGroup !== undefined &&
-                this.props.result.msPerSymbol !== undefined ? (
+                {this.props.result.total !== undefined && this.props.result.correct !== undefined ? (
+                  <Statistic size="small" color="blue">
+                    <Statistic.Value>
+                      {`${Math.round((this.props.result.correct / this.props.result.total) * 100)}%`}
+                    </Statistic.Value>
+                    <Statistic.Label>{this.props.translate('help-exercise-results.percentage')}</Statistic.Label>
+                  </Statistic>
+                ) : null}
+                {this.props.result.msPerSymbolGroup !== undefined && this.props.result.msPerSymbol !== undefined ? (
                   <>
-                    <Statistic size="small" color="blue">
-                      <Statistic.Value>
-                        {`${Math.round((this.props.result.correct / this.props.result.total) * 100)}%`}
-                      </Statistic.Value>
-                      <Statistic.Label>{this.props.translate('help-exercise-results.percentage')}</Statistic.Label>
-                    </Statistic>
                     <br />
                     <Statistic color="green" horizontal>
                       <Statistic.Value>{this.props.result.msPerSymbolGroup}</Statistic.Value>

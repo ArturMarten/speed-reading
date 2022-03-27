@@ -37,6 +37,7 @@
     "help-exercises": ["Abiharjutused", "Help exercises"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
+    "visual-vocabulary": ["Nägemissõnavara", "Visual vocabulary"],
     "achievements": ["Saavutused", "Achievements"],
     "statistics": ["Statistika", "Statistics"],
     "manage": ["Halda", "Manage"],
@@ -464,6 +465,19 @@
     "shortkeys-concentration": [
       "Klahvidega + ja - ning vasaku ja parema nooreklahviga saab vastata. Backspace'iga saab kustutada eelmise vastuse. Üles ja alla nooleklahvidega saab liigutada valitud gruppi.",
       "Keyboard keys + and -, left and right arrow keys can be used to answer. Backspace allows to remove last answer. Up and down arrow can be used to move currently selected group."
+    ],
+    "title-visualVocabulary": ["Nägemissõnavara harjutus", "Visual vocabulary exercise"],
+    "description-visualVocabulary": [
+      "See harjutus aitab arendada nägemissõnavara.",
+      "This exercise helps to extend visual vocabulary."
+    ],
+    "goal-visualVocabulary": [
+      "Vaadata helerohelise punkti kohale tekkivaid kahte järjestikust sõnarühma ja otsustada, kas need on identsed või mitte. Otsustamiseks on aega kuni <b>kaks sekundit</b>.",
+      "Look at two sequential word groups appearing above light green point and decide whether they are identical or not."
+    ],
+    "shortkeys-visualVocabulary": [
+      "Klahvidega + ja - ning vasaku ja parema nooreklahviga saab vastata.",
+      "Keyboard keys + and -, left and right arrow keys can be used to answer."
     ]
   },
   "modification": {
@@ -477,7 +491,7 @@
     "letters-lowercase": ["Väiketähed", "Lowercase letters"],
     "letters-uppercase": ["Suurtähed", "Uppercase letters"],
     "letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
-    "concentration-visual-vocabulary": ["Sõnavormide nelikud", "Tetragrams"],
+    "concentration-visual-vocabulary": ["Sõnavormide mitmikud", "Word form n-grams"],
     "concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
     "concentration-letters-only": ["Ainult tähed", "Only letters"],
     "concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"]
@@ -698,7 +712,8 @@
     "symbol-count": ["Sümbolite arv", "Symbol count"],
     "symbols": ["sümbolit", "symbols"],
     "column-spacing": ["Tulpade vahe", "Column spacing"],
-    "px": ["pikslit", "px"]
+    "px": ["pikslit", "px"],
+    "fixation-time": ["Fiksatsiooni aeg", "Fixation time"]
   },
   "speed-options": {
     "reading-speed": ["Lugemiskiirus", "Reading speed"],
@@ -884,6 +899,14 @@
     "temporal.concentration.time": [
       "Harjuta ${ temporal }${ value } keskendumise harjutusega",
       "Exercise concentration for ${ value }${ temporal }"
+    ],
+    "temporal.visualVocabulary.count": [
+      "Soorita ${ temporal }${ value } nägemissõnavara harjutust",
+      "Complete ${ value } visual vocabulary exercises${ temporal }"
+    ],
+    "temporal.visualVocabulary.time": [
+      "Harjuta ${ temporal }${ value } nägemissõnavara harjutusega",
+      "Exercise visual vocabulary for ${ value }${ temporal }"
     ]
   },
   "statistics": {
@@ -926,6 +949,7 @@
     "moving-word-groups": ["Liikuv tekst", "Moving text"],
     "schulte-tables": ["Schulte tabelid", "Schulte tables"],
     "concentration": ["Keskendumine", "Concentration"],
+    "visual-vocabulary": ["Nägemissõnavara", "Visual vocabulary"],
     "exercise-index": ["Harjutuse järjekorranumber", "Exercise index"],
     "exercise-date": ["Harjutuse kuupäev", "Exercise date"],
     "exercise-time-spent": ["Harjutamisele kulunud aeg", "Spent time on exercises"],
@@ -1068,10 +1092,11 @@
     "schulteTables.letters-uppercase": ["Suurtähed", "Uppercase letters"],
     "schulteTables.letters-mixed": ["Väike ja suurtähed segamini", "Lower and uppercase mixed"],
     "concentration": ["Keskendumine", "Concentration"],
-    "concentration.concentration-visual-vocabulary": ["Sõnavormide nelikud", "Tetragrams"],
+    "concentration.concentration-visual-vocabulary": ["Sõnavormide mitmikud", "Word form n-grams"],
     "concentration.concentration-numbers-only": ["Ainult numbrid", "Only numbers"],
     "concentration.concentration-letters-only": ["Ainult tähed", "Only letters"],
     "concentration.concentration-mixed": ["Numbrid ja tähed segamini", "Mixed numbers and letters"],
+    "visualVocabulary": ["Nägemissõnavara", "Visual vocabulary"],
     "exerciseCount": ["Harjutuste arv", "Exercise counts"],
     "initialReadingSpeed": ["Lugemise algkiirus", "Initial reading speed"],
     "finalReadingSpeed": ["Lugemise lõppkiirus", "Final reading speed"],

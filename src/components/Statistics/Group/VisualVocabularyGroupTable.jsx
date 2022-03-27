@@ -10,13 +10,8 @@ import {
   groupDataByModification,
 } from './util/groupTable';
 
-const exercise = 'concentration';
-const modificationNames = [
-  'concentration-visual-vocabulary',
-  'concentration-numbers-only',
-  'concentration-letters-only',
-  'concentration-mixed',
-];
+const exercise = 'visualVocabulary';
+const modificationNames = [];
 
 function getSelectedData(exerciseData, modificationData, { exercise, modification, field }, userCount) {
   if (!exercise || !modification || !field) return null;
@@ -42,15 +37,15 @@ function getSelectedData(exerciseData, modificationData, { exercise, modificatio
   return selectedData;
 }
 
-function ConcentrationGroupTable(props) {
-  const { concentrationExerciseData, minimumAttemptCount, minimumAttemptCountChangeHandler, groupName, translate } =
+function VisualVocabularyGroupTable(props) {
+  const { visualVocabularyExerciseData, minimumAttemptCount, minimumAttemptCountChangeHandler, groupName, translate } =
     props;
   const [selection, setSelection] = useState({ exercise: null, modification: null, field: null });
 
-  const userCount = getUserCount(concentrationExerciseData);
+  const userCount = getUserCount(visualVocabularyExerciseData);
 
-  const groupedExerciseData = groupDataByExercise(concentrationExerciseData);
-  const groupedModificationData = groupDataByModification(concentrationExerciseData);
+  const groupedExerciseData = groupDataByExercise(visualVocabularyExerciseData);
+  const groupedModificationData = groupDataByModification(visualVocabularyExerciseData);
 
   const exerciseResults = calculateExerciseResults(groupedExerciseData);
   const modificationResults = calculateExerciseResults(groupedModificationData);
@@ -100,7 +95,7 @@ function ConcentrationGroupTable(props) {
               : 0;
             return (
               <Table.Row key={name}>
-                <Table.Cell>{translate('statistics.concentration')}</Table.Cell>
+                <Table.Cell>{translate('statistics.visual-vocabulary')}</Table.Cell>
                 <Table.Cell>{name !== exercise ? translate(`modification.${name}`) : ''}</Table.Cell>
                 <Table.Cell warning={totalModificationCount === 0}>{totalModificationCount.toFixed(0)}</Table.Cell>
                 <Table.Cell warning={totalModificationElapsedTime === 0}>
@@ -143,106 +138,6 @@ function ConcentrationGroupTable(props) {
           })}
         </Table.Body>
       </Table>
-      <Table basic celled selectable textAlign="center" compact fixed>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>{translate('group-statistics-table.exercise')}</Table.HeaderCell>
-            <Table.HeaderCell>{translate('group-statistics-table.modification')}</Table.HeaderCell>
-            <Table.HeaderCell>
-              {translate('group-statistics-table.average-initial-symbol-group-speed')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>{translate('group-statistics-table.average-final-symbol-group-speed')}</Table.HeaderCell>
-            <Table.HeaderCell>
-              {translate('group-statistics-table.average-symbol-group-speed-change-percentage')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>{translate('group-statistics-table.average-initial-symbol-speed')}</Table.HeaderCell>
-            <Table.HeaderCell>{translate('group-statistics-table.average-final-symbol-speed')}</Table.HeaderCell>
-            <Table.HeaderCell>
-              {translate('group-statistics-table.average-symbol-speed-change-percentage')}
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {[exercise, ...modificationNames].map((name) => {
-            const aggregatedResults = name === exercise ? aggregatedExerciseResults : aggregatedModificationResults;
-
-            const averageInitialSymbolGroupSpeed = aggregatedResults[name]
-              ? aggregatedResults[name].averageInitialSymbolGroupSpeed
-              : 0;
-            const averageFinalSymbolGroupSpeed = aggregatedResults[name]
-              ? aggregatedResults[name].averageFinalSymbolGroupSpeed
-              : 0;
-            const averageSymbolGroupSpeedChangePercentage = aggregatedResults[name]
-              ? aggregatedResults[name].averageSymbolGroupSpeedChangePercentage
-              : 0;
-            const averageInitialSymbolSpeed = aggregatedResults[name]
-              ? aggregatedResults[name].averageInitialSymbolSpeed
-              : 0;
-            const averageFinalSymbolSpeed = aggregatedResults[name]
-              ? aggregatedResults[name].averageFinalSymbolSpeed
-              : 0;
-            const averageSymbolSpeedChangePercentage = aggregatedResults[name]
-              ? aggregatedResults[name].averageSymbolSpeedChangePercentage
-              : 0;
-            return (
-              <Table.Row key={name}>
-                <Table.Cell>{translate(`statistics.${exercise}`)}</Table.Cell>
-                <Table.Cell>{name !== exercise ? translate(`modification.${name}`) : ''}</Table.Cell>
-                <Table.Cell
-                  warning={averageInitialSymbolGroupSpeed === 0}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelection({ exercise, modification: name, field: 'initialSymbolGroupSpeed' })}
-                >
-                  {averageInitialSymbolGroupSpeed.toFixed(0)}&nbsp;ms
-                </Table.Cell>
-                <Table.Cell
-                  warning={averageFinalSymbolGroupSpeed === 0}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelection({ exercise, modification: name, field: 'finalSymbolGroupSpeed' })}
-                >
-                  {averageFinalSymbolGroupSpeed.toFixed(0)}&nbsp;ms
-                </Table.Cell>
-                <Table.Cell
-                  negative={averageSymbolGroupSpeedChangePercentage > 0}
-                  warning={averageSymbolGroupSpeedChangePercentage === 0}
-                  positive={averageSymbolGroupSpeedChangePercentage < 0}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelection({ exercise, modification: name, field: 'symbolGroupSpeedChange' })}
-                >
-                  {`${
-                    averageSymbolGroupSpeedChangePercentage > 0 ? '+' : ''
-                  }${averageSymbolGroupSpeedChangePercentage.toFixed(2)}%`}
-                </Table.Cell>
-                <Table.Cell
-                  warning={averageInitialSymbolSpeed === 0}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelection({ exercise, modification: name, field: 'initialSymbolSpeed' })}
-                >
-                  {averageInitialSymbolSpeed.toFixed(0)}&nbsp;ms
-                </Table.Cell>
-                <Table.Cell
-                  warning={averageFinalSymbolSpeed === 0}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelection({ exercise, modification: name, field: 'finalSymbolSpeed' })}
-                >
-                  {averageFinalSymbolSpeed.toFixed(0)}&nbsp;ms
-                </Table.Cell>
-                <Table.Cell
-                  negative={averageSymbolSpeedChangePercentage > 0}
-                  warning={averageSymbolSpeedChangePercentage === 0}
-                  positive={averageSymbolSpeedChangePercentage < 0}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelection({ exercise, modification: name, field: 'symbolSpeedChange' })}
-                >
-                  {`${averageSymbolSpeedChangePercentage > 0 ? '+' : ''}${averageSymbolSpeedChangePercentage.toFixed(
-                    2,
-                  )}%`}
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
       {selectedData ? (
         <DistributionChart
           data={selectedData}
@@ -261,4 +156,4 @@ function ConcentrationGroupTable(props) {
   );
 }
 
-export default ConcentrationGroupTable;
+export default VisualVocabularyGroupTable;

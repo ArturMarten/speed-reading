@@ -54,11 +54,11 @@ test('renders empty table', () => {
     { useTranslate: true },
   );
   const rows = container.querySelectorAll('tr');
-  expect(rows.length).toBe(30);
-  expect(screen.queryAllByText('0').length).toBe(49);
-  expect(screen.queryAllByText('0h 00m').length).toBe(15);
-  expect(screen.queryAllByText('0.00').length).toBe(15);
-  expect(screen.queryAllByText('0.00%').length).toBe(35);
+  expect(rows.length).toBe(34);
+  expect(screen.queryAllByText('0').length).toBe(51);
+  expect(screen.queryAllByText('0h 00m').length).toBe(17);
+  expect(screen.queryAllByText('0.00').length).toBe(17);
+  expect(screen.queryAllByText('0.00%').length).toBe(39);
 });
 
 test('renders table with data', () => {
@@ -76,6 +76,6 @@ test('renders table with data', () => {
   expect(screen.queryByText('+3.23%')).toBeInTheDocument();
   expect(screen.queryByText('+8.06%')).toBeInTheDocument();
   expect(screen.queryAllByText('+2.94%').length).toBe(2);
-  expect(screen.queryAllByText('0h 00m').length).toBe(12);
-  expect(screen.queryAllByText('0.00%').length).toBe(30);
+  expect(screen.queryAllByText('0h 00m').length).toBe(14);
+  expect(screen.queryAllByText('0.00%').length).toBe(34);
 });

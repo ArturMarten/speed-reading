@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import { importMDX } from 'mdx.macro';
 import ShowMore from '../../components/ShowMore/ShowMore';
 
-const StatisticsDescriptionEt = React.lazy(() => importMDX('./statistics-description-et.md'));
-const StatisticsDescriptionEn = React.lazy(() => importMDX('./statistics-description-en.md'));
+const StatisticsDescriptionEt = React.lazy(() => importMDX('./statistics-description-et.mdx'));
+const StatisticsDescriptionEn = React.lazy(() => importMDX('./statistics-description-en.mdx'));
 
 function StatisticsDescription(props) {
   const { language, translate } = props;

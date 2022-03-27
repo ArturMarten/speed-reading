@@ -67,13 +67,11 @@ export class RegressionChart extends Component {
     const { xField, yFields } = this.props;
 
     data = data.filter((d) => d[xField] !== null && d[yFields[0]] !== null);
-    // console.log(data);
     const xValues = data.map((d) => d[xField]);
     const yValues = data.map((d) => d[yFields[0]]);
     const minXValue = Math.min(...xValues);
     const maxXValue = Math.max(...xValues);
     const maxYValue = Math.max(...yValues);
-    // const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
     const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING || 1;
     const verticalSpacing = maxYValue * VERTICAL_SPACING;
     if (data[0] && data[0][xField] instanceof Date) {
@@ -259,7 +257,6 @@ export class RegressionChart extends Component {
     if (select('#tooltip').empty()) {
       select('#root').append('div').attr('id', 'tooltip');
     }
-    // console.log('Regression chart update');
     // Move data from render method to parent state
     if (prevProps.data !== data) {
       data = data.filter((d) => d[xField] !== null && d[yFields[0]] !== null);
@@ -269,7 +266,6 @@ export class RegressionChart extends Component {
       const minXValue = Math.min(...xValues);
       const maxXValue = Math.max(...xValues);
       const maxYValue = Math.max(...yValues);
-      // const linePoints = Number.isFinite(minXValue) && Number.isFinite(maxXValue) ? [[minXValue, maxXValue]] : [];
       const horizontalSpacing = (maxXValue - minXValue) * HORIZONTAL_SPACING || 1;
       const verticalSpacing = maxYValue * VERTICAL_SPACING;
       if (data[0] && data[0][xField] instanceof Date) {
@@ -436,7 +432,7 @@ export class RegressionChart extends Component {
           .style('opacity', 1);
       });
     } else {
-      // console.log('Props changed');
+      console.log('Unknown props changed');
     }
   }
 
